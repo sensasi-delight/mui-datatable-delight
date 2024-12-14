@@ -1,9 +1,9 @@
-import Enzyme from 'enzyme';
-import React from 'react';
-import Adapter from 'enzyme-adapter-react-16';
+// import Enzyme from 'enzyme';
+// import React from 'react';
+// import Adapter from 'enzyme-adapter-react-16';
 
 /* required when running >= 16.0 */
-Enzyme.configure({ adapter: new Adapter() });
+// Enzyme.configure({ adapter: new Adapter() });
 
 function setupDom() {
   const { JSDOM } = require('jsdom');
