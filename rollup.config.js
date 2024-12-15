@@ -2,9 +2,15 @@ import babel from '@rollup/plugin-babel';
 import commonjs from '@rollup/plugin-commonjs';
 import replace from '@rollup/plugin-replace';
 import uglify from '@lopatnov/rollup-plugin-uglify';
+import typescript from '@rollup/plugin-typescript';
 
+/**
+ * Rollup Configuration
+ *
+ * @type {import('rollup').RollupOptions}
+ */
 export default {
-  input: 'src/index.js',
+  input: 'src/index.ts',
   plugins: [
     replace({
       'process.env.NODE_ENV': JSON.stringify('production'),
@@ -30,6 +36,10 @@ export default {
       output: {
         comments: false,
       },
+    }),
+    typescript({
+      project: './tsconfig.json',
+      outDir: './dist',
     }),
   ],
   output: {
