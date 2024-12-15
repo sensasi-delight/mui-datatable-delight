@@ -1,8 +1,8 @@
-import PropTypes from 'prop-types';
-import MuiTablePagination from '@mui/material/TablePagination';
-import JumpToPage from './JumpToPage';
-import { makeStyles } from 'tss-react/mui';
-import { getPageValue } from '../utils';
+import React from 'react'
+import MuiTablePagination from '@mui/material/TablePagination'
+import JumpToPage from './JumpToPage'
+import { makeStyles } from 'tss-react/mui'
+import { getPageValue } from '../utils'
 
 const useStyles = makeStyles({ name: 'MUIDataTablePagination' })(() => ({
   root: {},
@@ -23,21 +23,21 @@ const useStyles = makeStyles({ name: 'MUIDataTablePagination' })(() => ({
       marginRight: '8px',
     },
   },
-}));
+}))
 
-function TablePagination(props) {
-  const { classes } = useStyles();
+function TablePagination(props: TablePaginationProps) {
+  const { classes } = useStyles()
 
   const handleRowChange = event => {
-    props.changeRowsPerPage(event.target.value);
-  };
+    props.changeRowsPerPage(event.target.value)
+  }
 
   const handlePageChange = (_, page) => {
-    props.changePage(page);
-  };
+    props.changePage(page)
+  }
 
-  const { count, options, rowsPerPage, page } = props;
-  const textLabels = options.textLabels.pagination;
+  const { count, options, rowsPerPage, page } = props
+  const textLabels = options.textLabels.pagination
 
   return (
     <div className={classes.navContainer}>
@@ -52,10 +52,12 @@ function TablePagination(props) {
         />
       ) : null}
 
+      {/* @ts-expect-error - MUI TablePagination component is not typed */}
       <MuiTablePagination
         component="div"
         className={classes.root}
         classes={{
+          // @ts-expect-error - MUI TablePagination component is not typed
           caption: classes.caption,
           toolbar: classes.toolbar,
           selectRoot: classes.selectRoot,
@@ -91,20 +93,27 @@ function TablePagination(props) {
         onRowsPerPageChange={handleRowChange}
       />
     </div>
-  );
+  )
 }
 
-TablePagination.propTypes = {
+interface TablePaginationProps {
   /** Total number of table rows */
-  count: PropTypes.number.isRequired,
-  /** Options used to describe table */
-  options: PropTypes.object.isRequired,
-  /** Current page index */
-  page: PropTypes.number.isRequired,
-  /** Total number allowed of rows per page */
-  rowsPerPage: PropTypes.number.isRequired,
-  /** Callback to trigger rows per page change */
-  changeRowsPerPage: PropTypes.func.isRequired,
-};
+  count: number
 
-export default TablePagination;
+  /** Options used to describe table */
+  options: any
+
+  /** Current page index */
+  page: number
+
+  /** Total number allowed of rows per page */
+  rowsPerPage: number
+
+  /** Callback to trigger page change */
+  changePage: (page: number) => void
+
+  /** Callback to trigger rows per page change */
+  changeRowsPerPage: (rows: number) => void
+}
+
+export default TablePagination
