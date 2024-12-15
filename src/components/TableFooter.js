@@ -1,5 +1,4 @@
 import React from 'react';
-import MuiTable from '@mui/material/Table';
 import TablePagination from './TablePagination';
 import { makeStyles } from 'tss-react/mui';
 import PropTypes from 'prop-types';
@@ -17,33 +16,28 @@ const TableFooter = ({ options, rowCount, page, rowsPerPage, changeRowsPerPage, 
   const { customFooter, pagination = true } = options;
 
   if (customFooter) {
-    return (
-      <MuiTable className={classes.root}>
-        {options.customFooter(
-          rowCount,
-          page,
-          rowsPerPage,
-          changeRowsPerPage,
-          changePage,
-          options.textLabels.pagination,
-        )}
-      </MuiTable>
+    return options.customFooter(
+      rowCount,
+      page,
+      rowsPerPage,
+      changeRowsPerPage,
+      changePage,
+      options.textLabels.pagination,
     );
   }
 
   if (pagination) {
     return (
-      <MuiTable className={classes.root}>
-        <TablePagination
-          count={rowCount}
-          page={page}
-          rowsPerPage={rowsPerPage}
-          changeRowsPerPage={changeRowsPerPage}
-          changePage={changePage}
-          component={'div'}
-          options={options}
-        />
-      </MuiTable>
+      <TablePagination
+        className={classes.root}
+        count={rowCount}
+        page={page}
+        rowsPerPage={rowsPerPage}
+        changeRowsPerPage={changeRowsPerPage}
+        changePage={changePage}
+        component={'div'}
+        options={options}
+      />
     );
   }
 
