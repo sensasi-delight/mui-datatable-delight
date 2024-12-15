@@ -1,13 +1,12 @@
 {
-  "parser": "babel-eslint",
+  "parser": "@babel/eslint-parser",
   "settings": {
     "react": {
-      "version": "latest"
+      "version": "detect"
     },
     "import/extensions": [
       ".js"
     ],
-    "import/parser": "babel-eslint",
     "import/resolver": {
       "node": {
         "extensions": [
