@@ -1,5 +1,10 @@
 const webpack = require('webpack');
 
+/**
+ * Webpack Configuration
+ *
+ * @type {import('webpack').Configuration}
+ */
 module.exports = {
   entry: {
     app: ['core-js/stable', 'regenerator-runtime/runtime', './examples/Router/index.js'],
@@ -23,7 +28,7 @@ module.exports = {
       {
         test: /\.(js|jsx)$/,
         exclude: /(node_modules)/,
-        use: ['babel-loader', 'eslint-loader'],
+        use: ['babel-loader'],
       },
       {
         test: /\.css$/i,
@@ -39,5 +44,6 @@ module.exports = {
         NODE_ENV: JSON.stringify('development'),
       },
     }),
+    new ESLintPlugin(options),
   ],
 };
