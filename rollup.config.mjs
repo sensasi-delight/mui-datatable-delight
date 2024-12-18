@@ -14,6 +14,7 @@ export default {
   plugins: [
     replace({
       'process.env.NODE_ENV': JSON.stringify('production'),
+      preventAssignment: true
     }),
     commonjs({
       include: ['node_modules/**'],
