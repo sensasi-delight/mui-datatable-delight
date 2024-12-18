@@ -1,6 +1,6 @@
 {
   "name": "mui-datatables",
-  "version": "4.3.1-sensasi-delight.8",
+  "version": "4.3.1-sensasi-delight.9",
   "description": "Datatables for React using Material-UI",
   "main": "dist/index.js",
   "type": "module",
@@ -43,6 +43,7 @@
     "@babel/preset-env": "^7.26.0",
     "@babel/preset-react": "^7.26.3",
     "@babel/register": "^7.25.9",
+    "@babel/runtime-corejs3": "^7.26.0",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@mui/icons-material": "^6.2.1",
