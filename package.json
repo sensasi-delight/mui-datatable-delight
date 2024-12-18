@@ -1,6 +1,6 @@
 {
   "name": "mui-datatables",
-  "version": "4.3.1-sensasi-delight.4",
+  "version": "4.3.1-sensasi-delight.5",
   "description": "Datatables for React using Material-UI",
   "main": "dist/index.js",
   "type": "module",
@@ -91,7 +91,6 @@
     "react-dom": "^17.0.2 || ^18.2.0"
   },
   "dependencies": {
-    "@babel/runtime-corejs3": "^7.26.0",
     "clsx": "^1.2.1",
     "lodash.assignwith": "^4.2.0",
     "lodash.clonedeep": "^4.5.0",
