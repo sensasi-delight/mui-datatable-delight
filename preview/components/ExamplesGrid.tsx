@@ -1,88 +1,88 @@
-import {Link} from "react-router-dom";
-import {Card, CardContent, Grid, Typography} from "@mui/material";
-import React from "react";
-import examples from "./example-pages/examples";
-import { withStyles } from "tss-react/mui";
-import TextField from '@mui/material/TextField';
+import React, { useState } from 'react'
+import { Link } from 'react-router'
+import { Card, CardContent, Grid, TextField, Typography } from '@mui/material'
+import EXAMPLES_LIST from './examples/list'
 
-const styles = {
-    container: {
-        flexGrow: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 16,
-    },
-    card: {
-        '&:hover': {
-            background: 'lightgrey',
-            fontWeight: 500,
-        }
-    },
-    cardContent: {
-        '&:last-child': {
-            padding: 8,
-        }
-    },
-    link: {
-        textDecoration: 'none',
-    },
-    label: {
-        fontWeight: 'inherit'
-    }
-};
+/** Examples list in alphabetically sorted */
+const EXAMPLE_SORTED = {}
 
-class ExamplesGrid extends React.Component {
+Object.keys(EXAMPLES_LIST)
+  .sort()
+  .forEach(key => {
+    EXAMPLE_SORTED[key] = EXAMPLES_LIST[key]
+  })
 
-  state = {
-    searchVal: ''
-  }
+export function ExamplesGrid() {
+  const [searchVal, setSearchVal] = useState('')
 
-  setSearchVal = (val) => {
-    this.setState({
-      searchVal: val
-    });
-  }
+  const examplesSortedKeys = Object.keys(EXAMPLE_SORTED).filter(item => {
+    if (searchVal === '') return true
+    console.dir(item)
+    return item.toLowerCase().indexOf(searchVal.toLowerCase()) !== -1
+      ? true
+      : false
+  })
 
-  render() {
-    const {classes} = this.props;
+  return (
+    <>
+      <Typography variant="h5" align="center">
+        Choose an Example
+      </Typography>
+      <Typography variant="subtitle2" align="center">
+        ({examplesSortedKeys.length}) Examples
+      </Typography>
 
-    // Sort Examples alphabetically
-    const examplesSorted = {};
-    Object.keys(examples).sort().forEach(function (key) {
-        examplesSorted[key] = examples[key];
-    });
+      <Typography variant="subtitle2" align="center" style={{ margin: '10px' }}>
+        <TextField
+          placeholder="Search Examples"
+          value={searchVal}
+          onChange={e => setSearchVal(e.target.value)}
+        />
+      </Typography>
 
-    const examplesSortedKeys = Object.keys(examplesSorted).filter((item) => {
-      if (this.state.searchVal === '') return true;
-      console.dir(item);
-      return item.toLowerCase().indexOf( this.state.searchVal.toLowerCase() ) !== -1 ? true : false;
-    });
-
-    return (
-      <React.Fragment>
-        <Typography variant="h5" align="center">Choose an Example</Typography>
-        <Typography variant="subtitle2" align="center">({examplesSortedKeys.length}) Examples</Typography>
-
-        <Typography variant="subtitle2" align="center" style={{margin:'10px'}}>
-          <TextField placeholder="Search Examples" value={this.state.searchVal} onChange={(e) => this.setSearchVal(e.target.value)} />
-        </Typography>
-
-        <Grid container className={classes.container} spacing={1}>
-          {examplesSortedKeys.map((label, index) => (
-            <Grid key={index} item md={2}>
-              <Link className={classes.link} to={`/${label.replace(/\s+/g, '-').toLowerCase()}`}>
-                <Card className={classes.card}>
-                  <CardContent className={classes.cardContent}>
-                    <Typography variant="subtitle1" className={classes.label} align="center">{label}</Typography>
-                  </CardContent>
-                </Card>
-              </Link>
-            </Grid>
-          ))}
-        </Grid>
-      </React.Fragment>
-    );
-  }
+      <Grid container sx={CHILDREN_SX.container} spacing={1}>
+        {examplesSortedKeys.map((label, index) => (
+          <Grid key={index} item md={2}>
+            <Link
+              style={{ textDecoration: 'none' }}
+              to={`/${label.replace(/\s+/g, '-').toLowerCase()}`}>
+              <Card sx={CHILDREN_SX.card}>
+                <CardContent sx={CHILDREN_SX.cardContent}>
+                  <Typography
+                    variant="subtitle1"
+                    sx={CHILDREN_SX.label}
+                    align="center">
+                    {label}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Link>
+          </Grid>
+        ))}
+      </Grid>
+    </>
+  )
 }
 
-export default withStyles(ExamplesGrid, styles);
+const CHILDREN_SX = {
+  container: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 16,
+  },
+  card: {
+    '&:hover': {
+      background: 'lightgrey',
+      fontWeight: 500,
+    },
+  },
+  cardContent: {
+    '&:last-child': {
+      padding: 8,
+    },
+  },
+  label: {
+    fontWeight: 'inherit',
+  },
+}
