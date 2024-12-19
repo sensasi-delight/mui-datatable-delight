@@ -1,74 +1,72 @@
-import React from 'react';
-import { createRoot } from 'react-dom/client';
-import { HashRouter as Router, Route, Switch, withRouter } from 'react-router-dom';
-import { withStyles } from 'tss-react/mui';
-import ExamplesGrid from './_components/ExamplesGrid';
-import examples from './examples/examples';
-import Button from '@mui/material/Button';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import React, { ReactNode, StrictMode } from 'react'
+import { Button } from '@mui/material'
+import { createRoot } from 'react-dom/client'
+import {
+  Route,
+  Routes,
+  useNavigate,
+  useLocation,
+  BrowserRouter,
+} from 'react-router'
+import { ExamplesGrid } from './components/ExamplesGrid'
+import EXAMPLES_LIST from './components/examples/list'
 
-const styles = {
-  root: {
-    display: 'flex',
-    justifyContent: 'center',
-  },
-  contentWrapper: {
-    width: '100%',
-  },
-};
-
-class Examples extends React.Component {
-  returnHome = () => {
-    this.props.history.push('/');
-  };
-
-  render() {
-    const { classes } = this.props;
-
-    var returnHomeStyle = { padding: '0px', margin: '20px 0 20px 0' };
-
-    const defaultTheme = createTheme();
-
-    return (
-      <ThemeProvider theme={defaultTheme}>
-        <main className={classes.root}>
-          <div className={classes.contentWrapper}>
-            <Switch>
-              <Route path="/" exact render={() => <ExamplesGrid examples={examples} />} />
-              {Object.keys(examples).map((label, index) => (
-                <Route
-                  key={index}
-                  path={`/${label.replace(/\s+/g, '-').toLowerCase()}`}
-                  exact
-                  component={examples[label]}
-                />
-              ))}
-            </Switch>
-            <div>
-              {this.props.location.pathname !== '/' && (
-                <div style={returnHomeStyle}>
-                  <Button color="primary" onClick={this.returnHome}>
-                    Back to Example Index
-                  </Button>
-                </div>
-              )}
-            </div>
-          </div>
-        </main>
-      </ThemeProvider>
-    );
-  }
-}
-
-const StyledExamples = withRouter(withStyles(Examples, styles));
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </StrictMode>,
+)
 
 function App() {
   return (
-    <Router hashType="noslash">
-      <StyledExamples />
-    </Router>
-  );
+    <Layout>
+      <Routes>
+        <Route path="/" element={<ExamplesGrid />} />
+
+        {Object.keys(EXAMPLES_LIST).map((label, i) => (
+          <Route
+            key={i}
+            path={`/${label.replace(/\s+/g, '-').toLowerCase()}`}
+            Component={EXAMPLES_LIST[label]}
+          />
+        ))}
+      </Routes>
+    </Layout>
+  )
 }
-const container = document.getElementById('app-root');
-const root = createRoot(container);
-root.render(<App />);
+
+function Layout({ children }: { children: ReactNode }) {
+  const STYLES = {
+    root: {
+      display: 'flex',
+      justifyContent: 'center',
+    },
+    contentWrapper: {
+      width: '100%',
+    },
+    returnHomeStyle: { padding: '0px', margin: '20px 0 20px 0' },
+  }
+
+  const { pathname } = useLocation()
+  const navigation = useNavigate()
+
+  return (
+    <main style={STYLES.root}>
+      <div style={STYLES.contentWrapper}>
+        {children}
+
+        <div>
+          {pathname !== '/' && (
+            <div style={STYLES.returnHomeStyle}>
+              <Button color="primary" onClick={() => navigation('/')}>
+                Back to Example Index
+              </Button>
+            </div>
+          )}
+        </div>
+      </div>
+    </main>
+  )
+}
