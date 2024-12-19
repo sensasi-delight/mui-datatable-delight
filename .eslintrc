@@ -12,9 +12,6 @@
         "extensions": [
           ".js"
         ]
-      },
-      "webpack": {
-        "config": "webpack.config.js"
       }
     }
   },
