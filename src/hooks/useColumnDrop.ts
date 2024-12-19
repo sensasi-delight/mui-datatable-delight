@@ -169,7 +169,7 @@ const handleHover = opts => {
 const useColumnDrop = opts => {
   const [{ isOver, canDrop }, drop] = useDrop({
     accept: 'HEADER',
-    drop: drop,
+    // drop: drop, // DISABLED TO FIX ERROR: ReferenceError: Cannot access 'drop' before initialization
     hover: (item, mon) => handleHover(Object.assign({}, opts, { item, mon })),
     collect: mon => ({
       isOver: !!mon.isOver(),
