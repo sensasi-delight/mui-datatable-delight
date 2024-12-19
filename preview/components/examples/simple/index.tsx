@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import MUIDataTable from '../../../src';
+import MUIDataTable from '../../../../src';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';

@@ -1,7 +1,7 @@
 import { Button, CircularProgress } from '@mui/material';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import MUIDataTable from '../../../src';
+import MUIDataTable from '../../../../src';
 
 const theData = [
   ['Gabby George', 'Business Analyst', 'Minneapolis', 30, '$100,000'],

@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import MUIDataTable from '../../../src';
+import MUIDataTable from '../../../../src';
 import CustomSearchRender from './CustomSearchRender';
 
 class Example extends React.Component {

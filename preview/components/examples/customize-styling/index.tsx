@@ -1,5 +1,5 @@
 import React from 'react';
-import MUIDataTable from '../../../src';
+import MUIDataTable from '../../../../src';
 import { ThemeProvider } from '@mui/material/styles';
 import { withStyles } from 'tss-react/mui';
 import { createTheme } from '@mui/material/styles';

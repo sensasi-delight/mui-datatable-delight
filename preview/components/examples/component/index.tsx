@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import FormControlLabel from '@mui/material/FormControlLabel';
 import TextField from '@mui/material/TextField';
 import Switch from '@mui/material/Switch';
-import MUIDataTable from "../../../src";
+import MUIDataTable from "../../../../src";
 import Cities from "./cities";
 
 class Example extends React.Component {

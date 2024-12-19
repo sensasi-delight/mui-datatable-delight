@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import MUIDataTable from "../../../src";
+import MUIDataTable from "../../../../src";
 import Switch from '@mui/material/Switch';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';

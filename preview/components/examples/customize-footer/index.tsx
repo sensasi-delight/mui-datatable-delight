@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import MUIDataTable from '../../../src';
+import MUIDataTable from '../../../../src';
 import CustomFooter from './CustomFooter';
 import { makeStyles } from "tss-react/mui";
 

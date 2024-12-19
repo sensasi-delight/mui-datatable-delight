@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
-import MUIDataTable from "../../../src";
+import MUIDataTable from "../../../../src";
 
 import FormControl from '@mui/material/FormControl';
 import TextField from '@mui/material/TextField';

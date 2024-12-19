@@ -1,7 +1,7 @@
 import React, { Fragment, Component } from "react";
 import { Waypoint } from "react-waypoint";
 import PropTypes from "prop-types";
-import MUIDataTable from "../../../src";
+import MUIDataTable from "../../../../src";
 import { createTheme } from "@mui/material/styles";
 import {
   Table,

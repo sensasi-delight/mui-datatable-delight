@@ -1,5 +1,5 @@
 import React from 'react';
-import MUIDataTable, { ExpandButton } from '../../../src';
+import MUIDataTable, { ExpandButton } from '../../../../src';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import { createTheme, ThemeProvider } from '@mui/material/styles';

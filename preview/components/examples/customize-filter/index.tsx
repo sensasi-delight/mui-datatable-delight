@@ -12,7 +12,7 @@ import {
   MenuItem
 } from '@mui/material';
 import React from 'react';
-import MUIDataTable from '../../../src';
+import MUIDataTable from '../../../../src';
 
 class Example extends React.Component {
   state = {
