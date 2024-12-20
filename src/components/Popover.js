@@ -45,17 +45,18 @@ const Popover = ({ className, trigger, refExit, hide, content, ...providedProps 
     }
   };
 
-  const triggerProps = {
-    key: 'content',
-    onClick: event => {
-      if (trigger.props.onClick) trigger.props.onClick();
-      handleClick(event);
-    },
-  };
-
   return (
     <>
-      <span {...triggerProps}>{trigger}</span>
+      <span
+        key="content"
+        onClick={event => {
+          if (trigger.props.onClick) {
+            trigger.props.onClick();
+          }
+          handleClick(event);
+        }}>
+        {trigger}
+      </span>
       <MuiPopover
         elevation={2}
         open={isOpen}
