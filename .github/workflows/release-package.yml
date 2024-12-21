@@ -12,7 +12,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 18
-
       - run: npm ci
       # ENABLE THIS IF TEST HAS BEEN REVIVED
       # - run: npm test
@@ -29,14 +28,11 @@ jobs:
         with:
           node-version: 18
           registry-url: https://npm.pkg.github.com/
+      - run: npm ci
+      # - name: Set outputs
+      #   id: vars
+      #   run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+      # - run: npm version 0.0.0-experimental-${{ steps.vars.outputs.sha_short }}
+      - run: npm publish --tag experimental --access public
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
-
-      - run: npm ci
-
-      - name: Set outputs
-        id: vars
-        run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
-
-      - run: npm version 0.0.0-experimental-${{ steps.vars.outputs.sha_short }}
-      - run: npm publish --tag experimental --access public
