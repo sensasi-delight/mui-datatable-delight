@@ -1,6 +1,5 @@
 {
-  "name": "@sensasi-delight/mui-datatables",
-  "version": "0.0.0-experimental-0",
+  "name": "mui-datatable-delight",
   "description": "Datatables for React using Material-UI",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
@@ -35,9 +34,6 @@
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/sensasi-delight/mui-datatables/issues"
-  },
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/sensasi-delight"
   },
   "devDependencies": {
     "@babel/core": "^7.10.2",
