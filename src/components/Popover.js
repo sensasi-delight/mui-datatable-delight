@@ -17,11 +17,6 @@ const Popover = ({ className, trigger, refExit, hide, content, ...providedProps 
     }
   }, [hide, isOpen, open]);
 
-  const handleClick = event => {
-    anchorEl.current = event.currentTarget;
-    open(true);
-  };
-
   const handleRequestClose = () => {
     open(false);
   };
@@ -45,16 +40,18 @@ const Popover = ({ className, trigger, refExit, hide, content, ...providedProps 
     }
   };
 
+  const handleTriggerClick = event => {
+    if (trigger.props.onClick) {
+      trigger.props.onClick();
+    }
+
+    anchorEl.current = event.currentTarget;
+    open(true);
+  };
+
   return (
     <>
-      <span
-        key="content"
-        onClick={event => {
-          if (trigger.props.onClick) {
-            trigger.props.onClick();
-          }
-          handleClick(event);
-        }}>
+      <span key="content" onClick={handleTriggerClick} onKeyDown={handleTriggerClick} role="button" tabIndex={0}>
         {trigger}
       </span>
       <MuiPopover
