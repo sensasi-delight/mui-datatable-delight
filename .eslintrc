@@ -2,7 +2,7 @@
   "parser": "babel-eslint",
   "settings": {
     "react": {
-      "version": "latest"
+      "version": "detect"
     },
     "import/extensions": [
       ".js"
