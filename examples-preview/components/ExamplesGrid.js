@@ -1,7 +1,7 @@
 import {Link} from "react-router-dom";
 import {Card, CardContent, Grid, Typography} from "@mui/material";
 import React from "react";
-import examples from "../examples";
+import examples from "./examples";
 import { withStyles } from "tss-react/mui";
 import TextField from '@mui/material/TextField';
 

@@ -2,8 +2,8 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { HashRouter as Router, Route, Switch, withRouter } from 'react-router-dom';
 import { withStyles } from 'tss-react/mui';
-import ExamplesGrid from './ExamplesGrid';
-import examples from '../examples';
+import ExamplesGrid from './components/ExamplesGrid';
+import examples from './components/examples';
 import Button from '@mui/material/Button';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
