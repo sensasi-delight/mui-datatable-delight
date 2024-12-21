@@ -38,4 +38,4 @@ jobs:
       - run: npm version 0.0.0-experimental-${{ steps.vars.outputs.sha_short }}
       - run: npm publish --tag experimental --access public 
         env:
-          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
