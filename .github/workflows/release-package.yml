@@ -35,6 +35,6 @@ jobs:
         id: vars
         run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
-      - run: npm publish @sensasi-delight/mui-datatables@0.0.0-experimental-${{steps.vars.outputs.sha_short}} --tag experimental --access public
+      - run: npm publish --tag experimental --access public
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
