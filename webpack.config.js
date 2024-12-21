@@ -1,16 +1,22 @@
-const webpack = require('webpack');
+const { DefinePlugin, HotModuleReplacementPlugin, NamedModulesPlugin } = require('webpack');
 
+const APP_DIR = 'examples-preview';
+
+/**
+ * @type {import('webpack').Configuration}
+ */
 module.exports = {
   entry: {
-    app: ['core-js/stable', 'regenerator-runtime/runtime', './examples/Router/index.js'],
+    app: ['core-js/stable', 'regenerator-runtime/runtime', `./${APP_DIR}`],
   },
   stats: 'verbose',
   context: __dirname,
   output: {
-    filename: 'bundle.js',
+    filename: APP_DIR + '-app.js',
   },
   devtool: 'source-map',
   devServer: {
+    contentBase: APP_DIR + '/public',
     disableHostCheck: true,
     host: 'localhost',
     hot: true,
@@ -32,9 +38,9 @@ module.exports = {
     ],
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.NamedModulesPlugin(),
-    new webpack.DefinePlugin({
+    new HotModuleReplacementPlugin(),
+    new NamedModulesPlugin(),
+    new DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify('development'),
       },
