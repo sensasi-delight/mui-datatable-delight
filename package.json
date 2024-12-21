@@ -36,7 +36,7 @@
     "url": "https://github.com/sensasi-delight/mui-datatables/issues"
   },
   "publishConfig": {
-    "@sensasi-delight:registry": "https://npm.pkg.github.com"
+    "registry": "https://npm.pkg.github.com/sensasi-delight"
   },
   "devDependencies": {
     "@babel/core": "^7.10.2",
