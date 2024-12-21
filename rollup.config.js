@@ -3,12 +3,18 @@ import commonjs from '@rollup/plugin-commonjs';
 import filesize from 'rollup-plugin-filesize';
 import replace from '@rollup/plugin-replace';
 import terser from '@rollup/plugin-terser';
-
+// locals
 import pkg from './package.json';
 
+/**
+ * Rollup plugins
+ *
+ * @type {import('rollup').Plugin[]}
+ */
 const PLUGINS = [
   replace({
     'process.env.NODE_ENV': JSON.stringify('production'),
+    preventAssignment: false,
   }),
   commonjs({
     include: ['node_modules/**'],
@@ -21,6 +27,11 @@ const PLUGINS = [
   filesize(),
 ];
 
+/**
+ * Rollup configuration
+ *
+ * @type {import('rollup').RollupOptions}
+ */
 export default {
   input: 'src/index.js',
   plugins: PLUGINS,
