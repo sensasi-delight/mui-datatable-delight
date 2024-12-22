@@ -1,35 +1,35 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import Head from 'next/head';
-import Typography from '@mui/material/Typography';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import Tooltip from '@mui/material/Tooltip';
-import GitHub from '../icons/GitHub';
-import withRoot from '../utils/withRoot';
-import { withStyles } from 'tss-react/mui';
-import Menu from './Menu';
+import React from 'react'
+import PropTypes from 'prop-types'
+import Head from 'next/head'
+import Typography from '@mui/material/Typography'
+import AppBar from '@mui/material/AppBar'
+import Toolbar from '@mui/material/Toolbar'
+import IconButton from '@mui/material/IconButton'
+import MenuIcon from '@mui/icons-material/Menu'
+import Tooltip from '@mui/material/Tooltip'
+import GitHub from '../icons/GitHub'
+import withRoot from '../utils/withRoot'
+import { withStyles } from 'tss-react/mui'
+import Menu from './Menu'
 
 /* eslint-disable import/no-webpack-loader-syntax  */
-import lightTheme from '!raw-loader!prismjs/themes/prism.css';
+import lightTheme from '!raw-loader!prismjs/themes/prism.css'
 
 const styles = theme => ({
   appBar: {
-    backgroundColor: '#23232f',
+    backgroundColor: '#23232f'
   },
   toolBar: {
-    justifyContent: 'space-between',
+    justifyContent: 'space-between'
   },
   logo: {
     display: 'block',
     height: '56px',
     position: 'relative',
-    top: '5px',
+    top: '5px'
   },
   wrapper: {
-    flex: '1 0 100%',
+    flex: '1 0 100%'
   },
   content: {
     flex: '1 0 100%',
@@ -37,55 +37,69 @@ const styles = theme => ({
     padding: '16px 16px 0px 16px',
     marginTop: '64px',
     minHeight: '600px',
-    maxWidth: '960px',
+    maxWidth: '960px'
   },
   footer: {
     flex: '1 0 100%',
-    marginTop: '32px',
-  },
-});
+    marginTop: '32px'
+  }
+})
 
 class Layout extends React.Component {
   state = {
-    drawerIsOpen: false,
-  };
+    drawerIsOpen: false
+  }
 
   componentDidMount() {
-    const styleNode = document.createElement('style');
-    styleNode.setAttribute('data-prism', 'true');
+    const styleNode = document.createElement('style')
+    styleNode.setAttribute('data-prism', 'true')
     if (document.head) {
-      document.head.appendChild(styleNode);
+      document.head.appendChild(styleNode)
     }
 
-    styleNode.textContent = lightTheme;
+    styleNode.textContent = lightTheme
   }
 
   toggleDrawer = () => {
-    const drawerIsOpen = this.state.drawerIsOpen ? false : true;
-    this.setState({ drawerIsOpen });
-  };
+    const drawerIsOpen = this.state.drawerIsOpen ? false : true
+    this.setState({ drawerIsOpen })
+  }
 
   render() {
-    const { classes, children } = this.props;
-    const { drawerIsOpen } = this.state;
+    const { classes, children } = this.props
+    const { drawerIsOpen } = this.state
 
     return (
       <div className={classes.wrapper}>
         <Menu isOpen={drawerIsOpen} toggle={this.toggleDrawer} />
         <AppBar classes={{ root: classes.appBar }}>
           <Toolbar classes={{ root: classes.toolBar }}>
-            <IconButton onClick={this.toggleDrawer} color="inherit" aria-label="open drawer">
+            <IconButton
+              onClick={this.toggleDrawer}
+              color="inherit"
+              aria-label="open drawer"
+            >
               <MenuIcon />
             </IconButton>
             <a href="/">
-              <img className={classes.logo} src="/static/header.png" alt="Home" border="0" />
+              <img
+                className={classes.logo}
+                src="/static/header.png"
+                alt="Home"
+                border="0"
+              />
             </a>
-            <Tooltip id="appbar-github" title="Material-UI Datatables repo" enterDelay={300}>
+            <Tooltip
+              id="appbar-github"
+              title="Material-UI Datatables repo"
+              enterDelay={300}
+            >
               <IconButton
                 component="a"
                 color="inherit"
                 href="https://github.com/gregnb/mui-datatables"
-                aria-labelledby="appbar-github">
+                aria-labelledby="appbar-github"
+              >
                 <GitHub />
               </IconButton>
             </Tooltip>
@@ -96,8 +110,8 @@ class Layout extends React.Component {
         </main>
         <footer className={classes.footer} />
       </div>
-    );
+    )
   }
 }
 
-export default withRoot(withStyles(Layout, styles));
+export default withRoot(withStyles(Layout, styles))

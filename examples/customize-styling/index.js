@@ -1,32 +1,32 @@
-import React from 'react';
-import MUIDataTable from '../../src/';
-import { ThemeProvider } from '@mui/material/styles';
-import { withStyles } from 'tss-react/mui';
-import { createTheme } from '@mui/material/styles';
-import Switch from '@mui/material/Switch';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import clsx from 'clsx';
+import React from 'react'
+import MUIDataTable from '../../src/'
+import { ThemeProvider } from '@mui/material/styles'
+import { withStyles } from 'tss-react/mui'
+import { createTheme } from '@mui/material/styles'
+import Switch from '@mui/material/Switch'
+import FormGroup from '@mui/material/FormGroup'
+import FormControlLabel from '@mui/material/FormControlLabel'
+import clsx from 'clsx'
 
 const customStyles = theme => ({
   BusinessAnalystRow: {
-    '& td': { backgroundColor: '#FAA' },
+    '& td': { backgroundColor: '#FAA' }
   },
   GreyLine: {
-    '& td': { backgroundColor: theme.palette.grey[200] },
+    '& td': { backgroundColor: theme.palette.grey[200] }
   },
   NameCell: {
-    fontWeight: 900,
-  },
-});
+    fontWeight: 900
+  }
+})
 
 class Example extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       denseTable: false,
-      vertical: true,
-    };
+      vertical: true
+    }
   }
 
   getMuiTheme = () =>
@@ -35,57 +35,57 @@ class Example extends React.Component {
         MUIDataTable: {
           styleOverrides: {
             root: {
-              backgroundColor: '#red',
+              backgroundColor: '#red'
             },
             paper: {
-              boxShadow: 'none',
-            },
-          },
+              boxShadow: 'none'
+            }
+          }
         },
         MuiToolbar: {
           styleOverrides: {
             root: {
-              backgroundColor: '#f00',
-            },
-          },
+              backgroundColor: '#f00'
+            }
+          }
         },
         MuiTableCell: {
           styleOverrides: {
             head: {
-              backgroundColor: 'purple',
-            },
-          },
+              backgroundColor: 'purple'
+            }
+          }
         },
         MUIDataTableSelectCell: {
           styleOverrides: {
             headerCell: {
-              backgroundColor: 'blue',
-            },
-          },
+              backgroundColor: 'blue'
+            }
+          }
         },
         MuiTableFooter: {
           styleOverrides: {
             root: {
               '& .MuiToolbar-root': {
-                backgroundColor: 'white',
-              },
-            },
-          },
-        },
-      },
-    });
+                backgroundColor: 'white'
+              }
+            }
+          }
+        }
+      }
+    })
 
   toggleDenseTable = event => {
     this.setState({
-      denseTable: event.target.checked,
-    });
-  };
+      denseTable: event.target.checked
+    })
+  }
 
   toggleResponsive = event => {
     this.setState({
-      vertical: !!event.target.checked,
-    });
-  };
+      vertical: !!event.target.checked
+    })
+  }
 
   render() {
     const columns = [
@@ -96,52 +96,54 @@ class Example extends React.Component {
           setCellProps: value => {
             return {
               className: clsx({
-                [this.props.classes.NameCell]: value === 'Mel Brooks',
+                [this.props.classes.NameCell]: value === 'Mel Brooks'
               }),
               style: {
-                borderRight: '2px solid blue',
-              },
-            };
+                borderRight: '2px solid blue'
+              }
+            }
           },
           setCellHeaderProps: value => {
             return {
               className: clsx({
-                [this.props.classes.NameCell]: true,
+                [this.props.classes.NameCell]: true
               }),
               style: {
-                textDecoration: 'underline',
-              },
-            };
-          },
-        },
+                textDecoration: 'underline'
+              }
+            }
+          }
+        }
       },
       {
         name: 'Title',
         options: {
           filter: true,
-          setCellHeaderProps: value => ({ style: { textDecoration: 'underline' } }),
-        },
+          setCellHeaderProps: value => ({
+            style: { textDecoration: 'underline' }
+          })
+        }
       },
       {
         name: 'Location',
         options: {
-          filter: false,
-        },
+          filter: false
+        }
       },
       {
         name: 'Age',
         options: {
-          filter: true,
-        },
+          filter: true
+        }
       },
       {
         name: 'Salary',
         options: {
           filter: true,
-          sort: false,
-        },
-      },
-    ];
+          sort: false
+        }
+      }
+    ]
 
     const data = [
       ['Gabby George', 'Business Analyst', 'Minneapolis', 30, 100000],
@@ -159,7 +161,13 @@ class Example extends React.Component {
       ['Frankie Long', 'Industrial Analyst', 'Austin', 31, 170000],
       ['Brynn Robbins', 'Business Analyst', 'Norfolk', 22, 90000],
       ['Justice Mann', 'Business Consultant', 'Chicago', 24, 133000],
-      ['Addison Navarro', 'Business Management Analyst', 'New York', 50, 295000],
+      [
+        'Addison Navarro',
+        'Business Management Analyst',
+        'New York',
+        50,
+        295000
+      ],
       ['Jesse Welch', 'Agency Legal Counsel', 'Seattle', 28, 200000],
       ['Eli Mejia', 'Commercial Specialist', 'Long Beach', 65, 400000],
       ['Gene Leblanc', 'Industrial Analyst', 'Hartford', 34, 110000],
@@ -172,9 +180,15 @@ class Example extends React.Component {
       ['Silver Carey', 'Computer Scientist', 'Memphis', 47, 250000],
       ['Franky Miles', 'Industrial Analyst', 'Buffalo', 49, 190000],
       ['Glen Nixon', 'Corporate Counselor', 'Arlington', 44, 80000],
-      ['Gabby Strickland', 'Business Process Consultant', 'Scottsdale', 26, 45000],
-      ['Mason Ray', 'Computer Scientist', 'San Francisco', 39, 142000],
-    ];
+      [
+        'Gabby Strickland',
+        'Business Process Consultant',
+        'Scottsdale',
+        26,
+        45000
+      ],
+      ['Mason Ray', 'Computer Scientist', 'San Francisco', 39, 142000]
+    ]
 
     const options = {
       filter: true,
@@ -186,21 +200,23 @@ class Example extends React.Component {
       setRowProps: (row, dataIndex, rowIndex) => {
         return {
           className: clsx({
-            [this.props.classes.BusinessAnalystRow]: row[1] === 'Business Analyst',
-            [this.props.classes.GreyLine]: rowIndex % 2 === 0 && row[1] !== 'Business Analyst',
+            [this.props.classes.BusinessAnalystRow]:
+              row[1] === 'Business Analyst',
+            [this.props.classes.GreyLine]:
+              rowIndex % 2 === 0 && row[1] !== 'Business Analyst'
           }),
-          style: { border: '3px solid blue' },
-        };
+          style: { border: '3px solid blue' }
+        }
       },
       setTableProps: () => {
         return {
           padding: this.state.denseTable ? 'none' : 'default',
 
           // material ui v4 only
-          size: this.state.denseTable ? 'small' : 'medium',
-        };
-      },
-    };
+          size: this.state.denseTable ? 'small' : 'medium'
+        }
+      }
+    }
 
     return (
       <ThemeProvider theme={this.getMuiTheme()}>
@@ -228,10 +244,15 @@ class Example extends React.Component {
             label="Responsive Vertical Table"
           />
         </FormGroup>
-        <MUIDataTable title={'ACME Employee list'} data={data} columns={columns} options={options} />
+        <MUIDataTable
+          title={'ACME Employee list'}
+          data={data}
+          columns={columns}
+          options={options}
+        />
       </ThemeProvider>
-    );
+    )
   }
 }
 
-export default withStyles(Example, customStyles, { name: 'ExampleCardjs' });
+export default withStyles(Example, customStyles, { name: 'ExampleCardjs' })

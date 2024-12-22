@@ -1,34 +1,34 @@
-import React, { useState } from 'react';
-import MUIDataTable from '../../src/';
-import CustomFooter from './CustomFooter';
-import { makeStyles } from "tss-react/mui";
+import React, { useState } from 'react'
+import MUIDataTable from '../../src/'
+import CustomFooter from './CustomFooter'
+import { makeStyles } from 'tss-react/mui'
 
-import TableFooter from '@mui/material/TableFooter';
-import TableRow from '@mui/material/TableRow';
-import TableCell from '@mui/material/TableCell';
-import Switch from '@mui/material/Switch';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import clsx from 'clsx';
+import TableFooter from '@mui/material/TableFooter'
+import TableRow from '@mui/material/TableRow'
+import TableCell from '@mui/material/TableCell'
+import Switch from '@mui/material/Switch'
+import FormGroup from '@mui/material/FormGroup'
+import FormControlLabel from '@mui/material/FormControlLabel'
+import clsx from 'clsx'
 
 const useStyles = makeStyles()(theme => ({
   footerCell: {
     backgroundColor: theme.palette.background.paper,
-    borderBottom: 'none',
+    borderBottom: 'none'
   },
   stickyFooterCell: {
     position: 'sticky',
     bottom: 0,
-    zIndex: 100,
-  },
-}));
+    zIndex: 100
+  }
+}))
 
 function Example() {
-  const [resizableColumns, setResizableColumns] = useState(false);
-  const [stickyFooter, setStickyFooter] = useState(true);
-  const { classes } = useStyles();
+  const [resizableColumns, setResizableColumns] = useState(false)
+  const [stickyFooter, setStickyFooter] = useState(true)
+  const { classes } = useStyles()
 
-  const columns = ['Name', 'Title', 'Location', 'Age', 'Salary'];
+  const columns = ['Name', 'Title', 'Location', 'Age', 'Salary']
 
   let data = [
     ['Gabby George', 'Business Analyst', 'Minneapolis', 30, 100000],
@@ -59,14 +59,20 @@ function Example() {
     ['Silver Carey', 'Computer Scientist', 'Memphis', 47, 250000],
     ['Franky Miles', 'Industrial Analyst', 'Buffalo', 49, 190000],
     ['Glen Nixon', 'Corporate Counselor', 'Arlington', 44, 80000],
-    ['Gabby Strickland', 'Business Process Consultant', 'Scottsdale', 26, 45000],
-    ['Mason Ray', 'Computer Scientist', 'San Francisco', 39, 142000],
-  ];
+    [
+      'Gabby Strickland',
+      'Business Process Consultant',
+      'Scottsdale',
+      26,
+      45000
+    ],
+    ['Mason Ray', 'Computer Scientist', 'San Francisco', 39, 142000]
+  ]
 
   const footerClasses = clsx({
     [classes.footerCell]: true,
-    [classes.stickyFooterCell]: stickyFooter,
-  });
+    [classes.stickyFooterCell]: stickyFooter
+  })
 
   const options = {
     filter: true,
@@ -75,7 +81,14 @@ function Example() {
     tableBodyHeight: '500px',
     rowsPerPage: 10,
     resizableColumns: resizableColumns,
-    customFooter: (count, page, rowsPerPage, changeRowsPerPage, changePage, textLabels) => {
+    customFooter: (
+      count,
+      page,
+      rowsPerPage,
+      changeRowsPerPage,
+      changePage,
+      textLabels
+    ) => {
       return (
         <CustomFooter
           count={count}
@@ -85,28 +98,30 @@ function Example() {
           changePage={changePage}
           textLabels={textLabels}
         />
-      );
+      )
     },
-    customTableBodyFooterRender: function(opts) {
-      console.dir(opts);
+    customTableBodyFooterRender: function (opts) {
+      console.dir(opts)
 
       let avgAge =
         opts.data.reduce((accu, item) => {
-          return accu + item.data[3];
-        }, 0) / opts.data.length;
+          return accu + item.data[3]
+        }, 0) / opts.data.length
 
       let avgSalary =
         opts.data.reduce((accu, item) => {
-          return accu + item.data[4];
-        }, 0) / opts.data.length;
+          return accu + item.data[4]
+        }, 0) / opts.data.length
 
-      avgAge = Math.round(avgAge);
-      avgSalary = Math.round(avgSalary);
+      avgAge = Math.round(avgAge)
+      avgSalary = Math.round(avgSalary)
 
       return (
         <TableFooter className={footerClasses}>
           <TableRow>
-            {opts.selectableRows !== 'none' ? <TableCell className={footerClasses} /> : null}
+            {opts.selectableRows !== 'none' ? (
+              <TableCell className={footerClasses} />
+            ) : null}
             {opts.columns.map((col, index) => {
               if (col.display === 'true') {
                 if (col.name === 'Age') {
@@ -114,24 +129,24 @@ function Example() {
                     <TableCell key={index} className={footerClasses}>
                       Avg: {avgAge}
                     </TableCell>
-                  );
+                  )
                 } else if (col.name === 'Salary') {
                   return (
                     <TableCell key={index} className={footerClasses}>
                       Avg: {avgSalary}
                     </TableCell>
-                  );
+                  )
                 } else {
-                  return <TableCell key={index} className={footerClasses} />;
+                  return <TableCell key={index} className={footerClasses} />
                 }
               }
-              return null;
+              return null
             })}
           </TableRow>
         </TableFooter>
-      );
-    },
-  };
+      )
+    }
+  }
 
   return (
     <>
@@ -159,9 +174,14 @@ function Example() {
           label="Sticky Footer"
         />
       </FormGroup>
-      <MUIDataTable title={'ACME Employee list'} data={data} columns={columns} options={options} />
+      <MUIDataTable
+        title={'ACME Employee list'}
+        data={data}
+        columns={columns}
+        options={options}
+      />
     </>
-  );
+  )
 }
 
-export default Example;
+export default Example

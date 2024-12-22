@@ -1,42 +1,44 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
-import DownloadIcon from '@mui/icons-material/CloudDownload';
-import BuildIcon from '@mui/icons-material/Build'; // eslint-disable-line import/no-unresolved
-import CodeSnippet from '../utils/CodeSnippet';
-import Layout from '../utils/layout';
-import withRoot from '../utils/withRoot';
-import { withStyles } from 'tss-react/mui';
+import React from 'react'
+import PropTypes from 'prop-types'
+import Typography from '@mui/material/Typography'
+import IconButton from '@mui/material/IconButton'
+import Tooltip from '@mui/material/Tooltip'
+import DownloadIcon from '@mui/icons-material/CloudDownload'
+import BuildIcon from '@mui/icons-material/Build' // eslint-disable-line import/no-unresolved
+import CodeSnippet from '../utils/CodeSnippet'
+import Layout from '../utils/layout'
+import withRoot from '../utils/withRoot'
+import { withStyles } from 'tss-react/mui'
 
 const styles = theme => ({
   stepIcon: {
     fontSize: '30px',
-    marginRight: theme.spacing.unit * 2,
+    marginRight: theme.spacing.unit * 2
   },
   stepWrapper: {
     marginTop: theme.spacing.unit * 4,
     display: 'flex',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   mainImage: {
-    maxWidth: '100%',
-  },
-});
+    maxWidth: '100%'
+  }
+})
 
 class Homepage extends React.Component {
   render() {
-    const { classes } = this.props;
+    const { classes } = this.props
 
     return (
       <Layout>
         <div>
           <p>
-            MUI-Datatables is a data tables component built on <a href="https://www.material-ui.com">Material-UI V3</a>.
-            It comes with features like filtering, view/hide columns, search, export to CSV download, printing,
-            selectable rows, pagination, and sorting. On top of the ability to customize styling on most views, there
-            are two responsive modes "stacked" and "scroll" for mobile/tablet devices.
+            MUI-Datatables is a data tables component built on{' '}
+            <a href="https://www.material-ui.com">Material-UI V3</a>. It comes
+            with features like filtering, view/hide columns, search, export to
+            CSV download, printing, selectable rows, pagination, and sorting. On
+            top of the ability to customize styling on most views, there are two
+            responsive modes "stacked" and "scroll" for mobile/tablet devices.
           </p>
           <img
             src="/static/mui-datatables-main.jpg"
@@ -49,7 +51,11 @@ class Homepage extends React.Component {
             <DownloadIcon className={classes.stepIcon} />
             <Typography variant="h6">Installation</Typography>
           </div>
-          <CodeSnippet withMargin language={'bash'} text={`npm install mui-datatables --save`} />
+          <CodeSnippet
+            withMargin
+            language={'bash'}
+            text={`npm install mui-datatables --save`}
+          />
 
           <div className={classes.stepWrapper}>
             <BuildIcon className={classes.stepIcon} />
@@ -81,8 +87,8 @@ const options = {
           />
         </div>
       </Layout>
-    );
+    )
   }
 }
 
-export default withRoot(withStyles(Homepage, styles));
+export default withRoot(withStyles(Homepage, styles))

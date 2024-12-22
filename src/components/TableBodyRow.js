@@ -1,20 +1,20 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import clsx from 'clsx';
-import TableRow from '@mui/material/TableRow';
-import { withStyles } from 'tss-react/mui';
+import React from 'react'
+import PropTypes from 'prop-types'
+import clsx from 'clsx'
+import TableRow from '@mui/material/TableRow'
+import { withStyles } from 'tss-react/mui'
 
 const defaultBodyRowStyles = theme => ({
   root: {
     // material v4
     '&.Mui-selected': {
-      backgroundColor: theme.palette.action.selected,
+      backgroundColor: theme.palette.action.selected
     },
 
     // material v3 workaround
     '&.mui-row-selected': {
-      backgroundColor: theme.palette.action.selected,
-    },
+      backgroundColor: theme.palette.action.selected
+    }
   },
   hoverCursor: { cursor: 'pointer' },
   responsiveStacked: {
@@ -22,18 +22,18 @@ const defaultBodyRowStyles = theme => ({
       borderTop: 'solid 2px rgba(0, 0, 0, 0.15)',
       borderBottom: 'solid 2px rgba(0, 0, 0, 0.15)',
       padding: 0,
-      margin: 0,
-    },
+      margin: 0
+    }
   },
   responsiveSimple: {
     [theme.breakpoints.down('sm')]: {
       borderTop: 'solid 2px rgba(0, 0, 0, 0.15)',
       borderBottom: 'solid 2px rgba(0, 0, 0, 0.15)',
       padding: 0,
-      margin: 0,
-    },
-  },
-});
+      margin: 0
+    }
+  }
+})
 
 class TableBodyRow extends React.Component {
   static propTypes = {
@@ -44,15 +44,23 @@ class TableBodyRow extends React.Component {
     /** Current row selected or not */
     rowSelected: PropTypes.bool,
     /** Extend the style applied to components */
-    classes: PropTypes.object,
-  };
+    classes: PropTypes.object
+  }
 
   render() {
-    const { classes, options, rowSelected, onClick, className, isRowSelectable, ...rest } = this.props;
+    const {
+      classes,
+      options,
+      rowSelected,
+      onClick,
+      className,
+      isRowSelectable,
+      ...rest
+    } = this.props
 
-    var methods = {};
+    var methods = {}
     if (onClick) {
-      methods.onClick = onClick;
+      methods.onClick = onClick
     }
 
     return (
@@ -63,22 +71,27 @@ class TableBodyRow extends React.Component {
           {
             [classes.root]: true,
             [classes.hover]: options.rowHover,
-            [classes.hoverCursor]: (options.selectableRowsOnClick && isRowSelectable) || options.expandableRowsOnClick,
+            [classes.hoverCursor]:
+              (options.selectableRowsOnClick && isRowSelectable) ||
+              options.expandableRowsOnClick,
             [classes.responsiveSimple]: options.responsive === 'simple',
             [classes.responsiveStacked]:
               options.responsive === 'vertical' ||
               options.responsive === 'stacked' ||
               options.responsive === 'stackedFullWidth',
-            'mui-row-selected': rowSelected,
+            'mui-row-selected': rowSelected
           },
-          className,
+          className
         )}
         selected={rowSelected}
-        {...rest}>
+        {...rest}
+      >
         {this.props.children}
       </TableRow>
-    );
+    )
   }
 }
 
-export default withStyles(TableBodyRow, defaultBodyRowStyles, { name: 'MUIDataTableBodyRow' });
+export default withStyles(TableBodyRow, defaultBodyRowStyles, {
+  name: 'MUIDataTableBodyRow'
+})

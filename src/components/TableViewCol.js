@@ -1,16 +1,16 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import Checkbox from '@mui/material/Checkbox';
-import Typography from '@mui/material/Typography';
-import FormControl from '@mui/material/FormControl';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import { makeStyles } from 'tss-react/mui';
+import React from 'react'
+import PropTypes from 'prop-types'
+import Checkbox from '@mui/material/Checkbox'
+import Typography from '@mui/material/Typography'
+import FormControl from '@mui/material/FormControl'
+import FormGroup from '@mui/material/FormGroup'
+import FormControlLabel from '@mui/material/FormControlLabel'
+import { makeStyles } from 'tss-react/mui'
 
 const useStyles = makeStyles({ name: 'MUIDataTableViewCol' })(theme => ({
   root: {
     padding: '16px 24px 16px 24px',
-    fontFamily: 'Roboto',
+    fontFamily: 'Roboto'
   },
   title: {
     marginLeft: '-7px',
@@ -18,37 +18,47 @@ const useStyles = makeStyles({ name: 'MUIDataTableViewCol' })(theme => ({
     fontSize: '14px',
     color: theme.palette.text.secondary,
     textAlign: 'left',
-    fontWeight: 500,
+    fontWeight: 500
   },
   formGroup: {
-    marginTop: '8px',
+    marginTop: '8px'
   },
   formControl: {},
   checkbox: {
     padding: '0px',
     width: '32px',
-    height: '32px',
+    height: '32px'
   },
   checkboxRoot: {},
   checked: {},
   label: {
     fontSize: '15px',
     marginLeft: '8px',
-    color: theme.palette.text.primary,
-  },
-}));
+    color: theme.palette.text.primary
+  }
+}))
 
-const TableViewCol = ({ columns, options, components = {}, onColumnUpdate, updateColumns }) => {
-  const { classes } = useStyles();
-  const textLabels = options.textLabels.viewColumns;
-  const CheckboxComponent = components.Checkbox || Checkbox;
+const TableViewCol = ({
+  columns,
+  options,
+  components = {},
+  onColumnUpdate,
+  updateColumns
+}) => {
+  const { classes } = useStyles()
+  const textLabels = options.textLabels.viewColumns
+  const CheckboxComponent = components.Checkbox || Checkbox
 
   const handleColChange = index => {
-    onColumnUpdate(index);
-  };
+    onColumnUpdate(index)
+  }
 
   return (
-    <FormControl component={'fieldset'} className={classes.root} aria-label={textLabels.titleAria}>
+    <FormControl
+      component={'fieldset'}
+      className={classes.root}
+      aria-label={textLabels.titleAria}
+    >
       <Typography variant="caption" className={classes.title}>
         {textLabels.title}
       </Typography>
@@ -61,7 +71,7 @@ const TableViewCol = ({ columns, options, components = {}, onColumnUpdate, updat
                 key={index}
                 classes={{
                   root: classes.formControl,
-                  label: classes.label,
+                  label: classes.label
                 }}
                 control={
                   <CheckboxComponent
@@ -70,7 +80,7 @@ const TableViewCol = ({ columns, options, components = {}, onColumnUpdate, updat
                     className={classes.checkbox}
                     classes={{
                       root: classes.checkboxRoot,
-                      checked: classes.checked,
+                      checked: classes.checked
                     }}
                     onChange={() => handleColChange(index)}
                     checked={column.display === 'true'}
@@ -80,12 +90,12 @@ const TableViewCol = ({ columns, options, components = {}, onColumnUpdate, updat
                 label={column.label}
               />
             )
-          );
+          )
         })}
       </FormGroup>
     </FormControl>
-  );
-};
+  )
+}
 
 TableViewCol.propTypes = {
   /** Columns used to describe table */
@@ -95,7 +105,7 @@ TableViewCol.propTypes = {
   /** Callback to trigger View column update */
   onColumnUpdate: PropTypes.func,
   /** Extend the style applied to components */
-  classes: PropTypes.object,
-};
+  classes: PropTypes.object
+}
 
-export default TableViewCol;
+export default TableViewCol

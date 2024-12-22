@@ -1,5 +1,5 @@
 export const save = (storageKey, state) => {
-  const { selectedRows, data, displayData, ...savedState } = state;
+  const { selectedRows, data, displayData, ...savedState } = state
 
-  window.localStorage.setItem(storageKey, JSON.stringify(savedState));
-};
+  window.localStorage.setItem(storageKey, JSON.stringify(savedState))
+}

@@ -1,16 +1,16 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import MUIDataTable from '../../src';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import MUIDataTable from '../../src'
 
 class Example extends React.Component {
   constructor(props) {
-    super(props);
+    super(props)
 
     this.state = {
       table: {}
-    };
-    this.handleTableInit = this.handleTableInit.bind(this);
-    this.handleTableChange = this.handleTableChange.bind(this);
+    }
+    this.handleTableInit = this.handleTableInit.bind(this)
+    this.handleTableChange = this.handleTableChange.bind(this)
   }
 
   /** onTableInit gives access to initial MuiDataTable state
@@ -19,16 +19,16 @@ class Example extends React.Component {
    *  that triggers onTableChange
    */
   handleTableInit = (action, tableState) => {
-    console.log('handleTableInit: ', tableState);
-    this.setState({ table: tableState });
-  };
+    console.log('handleTableInit: ', tableState)
+    this.setState({ table: tableState })
+  }
 
   handleTableChange = (action, tableState) => {
-    console.log('handleTableChange: ', tableState);
-    this.setState({ table: tableState });
-  };
+    console.log('handleTableChange: ', tableState)
+    this.setState({ table: tableState })
+  }
 
-  columns = ['Name', 'Title', 'Location', 'Age', 'Salary'];
+  columns = ['Name', 'Title', 'Location', 'Age', 'Salary']
 
   data = [
     ['Gabby George', 'Business Analyst', 'Minneapolis', 30, 100000],
@@ -59,9 +59,15 @@ class Example extends React.Component {
     ['Silver Carey', 'Computer Scientist', 'Memphis', 47, 250000],
     ['Franky Miles', 'Industrial Analyst', 'Buffalo', 49, 190000],
     ['Glen Nixon', 'Corporate Counselor', 'Arlington', 44, 80000],
-    ['Gabby Strickland', 'Business Process Consultant', 'Scottsdale', 26, 45000],
-    ['Mason Ray', 'Computer Scientist', 'San Francisco', 39, 142000],
-  ];
+    [
+      'Gabby Strickland',
+      'Business Process Consultant',
+      'Scottsdale',
+      26,
+      45000
+    ],
+    ['Mason Ray', 'Computer Scientist', 'San Francisco', 39, 142000]
+  ]
 
   options = {
     filter: true,
@@ -71,12 +77,19 @@ class Example extends React.Component {
     rowsPerPage: 10,
     download: false, // hide csv download option
     onTableInit: this.handleTableInit,
-    onTableChange: this.handleTableChange,
-  };
+    onTableChange: this.handleTableChange
+  }
 
   render() {
-    return <MUIDataTable title={'ACME Employee list'} data={this.data} columns={this.columns} options={this.options} />;
+    return (
+      <MUIDataTable
+        title={'ACME Employee list'}
+        data={this.data}
+        columns={this.columns}
+        options={this.options}
+      />
+    )
   }
 }
 
-export default Example;
+export default Example

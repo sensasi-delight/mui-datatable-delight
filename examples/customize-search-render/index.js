@@ -1,13 +1,11 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import MUIDataTable from '../../src/';
-import CustomSearchRender from './CustomSearchRender';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import MUIDataTable from '../../src/'
+import CustomSearchRender from './CustomSearchRender'
 
 class Example extends React.Component {
-
-  render () {
-
-    const columns = ['Name', 'Title', 'Location', 'Age', 'Salary'];
+  render() {
+    const columns = ['Name', 'Title', 'Location', 'Age', 'Salary']
 
     let data = [
       ['Gabby George', 'Business Analyst', 'Minneapolis', 30, 100000],
@@ -25,7 +23,13 @@ class Example extends React.Component {
       ['Frankie Long', 'Industrial Analyst', 'Austin', 31, 170000],
       ['Brynn Robbins', 'Business Analyst', 'Norfolk', 22, 90000],
       ['Justice Mann', 'Business Consultant', 'Chicago', 24, 133000],
-      ['Addison Navarro', 'Business Management Analyst', 'New York', 50, 295000],
+      [
+        'Addison Navarro',
+        'Business Management Analyst',
+        'New York',
+        50,
+        295000
+      ],
       ['Jesse Welch', 'Agency Legal Counsel', 'Seattle', 28, 200000],
       ['Eli Mejia', 'Commercial Specialist', 'Long Beach', 65, 400000],
       ['Gene Leblanc', 'Industrial Analyst', 'Hartford', 34, 110000],
@@ -38,9 +42,15 @@ class Example extends React.Component {
       ['Silver Carey', 'Computer Scientist', 'Memphis', 47, 250000],
       ['Franky Miles', 'Industrial Analyst', 'Buffalo', 49, 190000],
       ['Glen Nixon', 'Corporate Counselor', 'Arlington', 44, 80000],
-      ['Gabby Strickland', 'Business Process Consultant', 'Scottsdale', 26, 45000],
+      [
+        'Gabby Strickland',
+        'Business Process Consultant',
+        'Scottsdale',
+        26,
+        45000
+      ],
       ['Mason Ray', 'Computer Scientist', 'San Francisco', 39, 142000]
-    ];
+    ]
 
     const options = {
       filter: true,
@@ -56,15 +66,19 @@ class Example extends React.Component {
             onHide={hideSearch}
             options={options}
           />
-        );
+        )
       }
-    };
+    }
 
     return (
-      <MUIDataTable title={'ACME Employee list'} data={data} columns={columns} options={options} />
-    );
-
+      <MUIDataTable
+        title={'ACME Employee list'}
+        data={data}
+        columns={columns}
+        options={options}
+      />
+    )
   }
 }
 
-export default Example;
+export default Example

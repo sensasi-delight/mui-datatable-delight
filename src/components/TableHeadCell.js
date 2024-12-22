@@ -1,14 +1,14 @@
-import Button from '@mui/material/Button';
-import clsx from 'clsx';
-import HelpIcon from '@mui/icons-material/Help';
-import MuiTooltip from '@mui/material/Tooltip';
-import PropTypes from 'prop-types';
-import React, { useState } from 'react';
-import TableCell from '@mui/material/TableCell';
-import TableSortLabel from '@mui/material/TableSortLabel';
-import useColumnDrop from '../hooks/useColumnDrop.js';
-import { makeStyles } from 'tss-react/mui';
-import { useDrag } from 'react-dnd';
+import Button from '@mui/material/Button'
+import clsx from 'clsx'
+import HelpIcon from '@mui/icons-material/Help'
+import MuiTooltip from '@mui/material/Tooltip'
+import PropTypes from 'prop-types'
+import React, { useState } from 'react'
+import TableCell from '@mui/material/TableCell'
+import TableSortLabel from '@mui/material/TableSortLabel'
+import useColumnDrop from '../hooks/useColumnDrop.js'
+import { makeStyles } from 'tss-react/mui'
+import { useDrag } from 'react-dnd'
 
 const useStyles = makeStyles({ name: 'MUIDataTableHeadCell' })(theme => ({
   root: {},
@@ -16,31 +16,31 @@ const useStyles = makeStyles({ name: 'MUIDataTableHeadCell' })(theme => ({
     position: 'sticky',
     top: '0px',
     zIndex: 100,
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: theme.palette.background.paper
   },
   tooltip: {
-    cursor: 'pointer',
+    cursor: 'pointer'
   },
   mypopper: {
     '&[data-x-out-of-boundaries]': {
-      display: 'none',
-    },
+      display: 'none'
+    }
   },
   data: {
-    display: 'inline-block',
+    display: 'inline-block'
   },
   sortAction: {
     display: 'flex',
-    cursor: 'pointer',
+    cursor: 'pointer'
   },
   dragCursor: {
-    cursor: 'grab',
+    cursor: 'grab'
   },
   sortLabelRoot: {
-    height: '20px',
+    height: '20px'
   },
   sortActive: {
-    color: theme.palette.text.primary,
+    color: theme.palette.text.primary
   },
   toolButton: {
     textTransform: 'none',
@@ -48,20 +48,20 @@ const useStyles = makeStyles({ name: 'MUIDataTableHeadCell' })(theme => ({
     minWidth: 0,
     marginRight: '8px',
     paddingLeft: '8px',
-    paddingRight: '8px',
+    paddingRight: '8px'
   },
   contentWrapper: {
     display: 'flex',
-    alignItems: 'center',
+    alignItems: 'center'
   },
   hintIconAlone: {
     marginTop: '-3px',
-    marginLeft: '3px',
+    marginLeft: '3px'
   },
   hintIconWithSortIcon: {
-    marginTop: '-3px',
-  },
-}));
+    marginTop: '-3px'
+  }
+}))
 
 const TableHeadCell = ({
   cellHeaderProps = {},
@@ -84,115 +84,121 @@ const TableHeadCell = ({
   tableId,
   timers,
   toggleSort,
-  updateColumnOrder,
+  updateColumnOrder
 }) => {
-  const [sortTooltipOpen, setSortTooltipOpen] = useState(false);
-  const [hintTooltipOpen, setHintTooltipOpen] = useState(false);
+  const [sortTooltipOpen, setSortTooltipOpen] = useState(false)
+  const [hintTooltipOpen, setHintTooltipOpen] = useState(false)
 
-  const { classes } = useStyles();
+  const { classes } = useStyles()
 
   const handleKeyboardSortInput = e => {
     if (e.key === 'Enter') {
-      toggleSort(index);
+      toggleSort(index)
     }
 
-    return false;
-  };
+    return false
+  }
 
   const handleSortClick = () => {
-    toggleSort(index);
-  };
+    toggleSort(index)
+  }
 
-  const [dragging, setDragging] = draggingHook ? draggingHook : [];
+  const [dragging, setDragging] = draggingHook ? draggingHook : []
 
-  const { className, ...otherProps } = cellHeaderProps;
-  const Tooltip = components.Tooltip || MuiTooltip;
-  const sortActive = sortDirection !== 'none' && sortDirection !== undefined;
-  const ariaSortDirection = sortDirection === 'none' ? false : sortDirection;
+  const { className, ...otherProps } = cellHeaderProps
+  const Tooltip = components.Tooltip || MuiTooltip
+  const sortActive = sortDirection !== 'none' && sortDirection !== undefined
+  const ariaSortDirection = sortDirection === 'none' ? false : sortDirection
 
   const isDraggingEnabled = () => {
-    if (!draggingHook) return false;
-    return options.draggableColumns && options.draggableColumns.enabled && column.draggable !== false;
-  };
+    if (!draggingHook) return false
+    return (
+      options.draggableColumns &&
+      options.draggableColumns.enabled &&
+      column.draggable !== false
+    )
+  }
 
   const sortLabelProps = {
     classes: { root: classes.sortLabelRoot },
     tabIndex: -1,
     active: sortActive,
     hideSortIcon: true,
-    ...(ariaSortDirection ? { direction: sortDirection } : {}),
-  };
+    ...(ariaSortDirection ? { direction: sortDirection } : {})
+  }
 
   const [{ opacity }, dragRef, preview] = useDrag({
     item: {
       type: 'HEADER',
       colIndex: index,
-      headCellRefs: draggableHeadCellRefs,
+      headCellRefs: draggableHeadCellRefs
     },
     begin: monitor => {
       setTimeout(() => {
-        setHintTooltipOpen(false);
-        setSortTooltipOpen(false);
-        setDragging(true);
-      }, 0);
-      return null;
+        setHintTooltipOpen(false)
+        setSortTooltipOpen(false)
+        setDragging(true)
+      }, 0)
+      return null
     },
     end: (item, monitor) => {
-      setDragging(false);
+      setDragging(false)
     },
     collect: monitor => {
       return {
-        opacity: monitor.isDragging() ? 1 : 0,
-      };
-    },
-  });
+        opacity: monitor.isDragging() ? 1 : 0
+      }
+    }
+  })
 
   const [drop] = useColumnDrop({
     drop: (item, mon) => {
-      setSortTooltipOpen(false);
-      setHintTooltipOpen(false);
-      setDragging(false);
+      setSortTooltipOpen(false)
+      setHintTooltipOpen(false)
+      setDragging(false)
     },
     index,
     headCellRefs: draggableHeadCellRefs,
     updateColumnOrder,
     columnOrder,
     columns,
-    transitionTime: options.draggableColumns ? options.draggableColumns.transitionTime : 300,
+    transitionTime: options.draggableColumns
+      ? options.draggableColumns.transitionTime
+      : 300,
     tableRef: tableRef ? tableRef() : null,
     tableId: tableId || 'none',
-    timers,
-  });
+    timers
+  })
 
   const cellClass = clsx({
     [classes.root]: true,
     [classes.fixedHeader]: options.fixedHeader,
     'datatables-noprint': !print,
-    [className]: className,
-  });
+    [className]: className
+  })
 
   const showHintTooltip = () => {
-    setSortTooltipOpen(false);
-    setHintTooltipOpen(true);
-  };
+    setSortTooltipOpen(false)
+    setHintTooltipOpen(true)
+  }
 
   const getTooltipTitle = () => {
-    if (dragging) return '';
-    if (!options.textLabels) return '';
+    if (dragging) return ''
+    if (!options.textLabels) return ''
     return options.textLabels.body.columnHeaderTooltip
       ? options.textLabels.body.columnHeaderTooltip(column)
-      : options.textLabels.body.toolTip;
-  };
+      : options.textLabels.body.toolTip
+  }
 
   const closeTooltip = () => {
-    setSortTooltipOpen(false);
-  };
+    setSortTooltipOpen(false)
+  }
 
   return (
     <TableCell
       ref={ref => {
-        drop && drop(ref);
-        setCellRef && setCellRef(index + 1, colPosition + 1, ref);
+        drop && drop(ref)
+        setCellRef && setCellRef(index + 1, colPosition + 1, ref)
       }}
       className={cellClass}
       scope={'col'}
@@ -200,33 +206,39 @@ const TableHeadCell = ({
       data-colindex={index}
       data-tableid={tableId}
       onMouseDown={closeTooltip}
-      {...otherProps}>
+      {...otherProps}
+    >
       {options.sort && sort ? (
         <span className={classes.contentWrapper}>
           <Tooltip
             title={getTooltipTitle()}
             placement="bottom"
             open={sortTooltipOpen}
-            onOpen={() => (dragging ? setSortTooltipOpen(false) : setSortTooltipOpen(true))}
+            onOpen={() =>
+              dragging ? setSortTooltipOpen(false) : setSortTooltipOpen(true)
+            }
             onClose={() => setSortTooltipOpen(false)}
             classes={{
               tooltip: classes.tooltip,
-              popper: classes.mypopper,
-            }}>
+              popper: classes.mypopper
+            }}
+          >
             <Button
               variant=""
               onKeyUp={handleKeyboardSortInput}
               onClick={handleSortClick}
               className={classes.toolButton}
               data-testid={`headcol-${index}`}
-              ref={isDraggingEnabled() ? dragRef : null}>
+              ref={isDraggingEnabled() ? dragRef : null}
+            >
               <div className={classes.sortAction}>
                 <div
                   className={clsx({
                     [classes.data]: true,
                     [classes.sortActive]: sortActive,
-                    [classes.dragCursor]: isDraggingEnabled(),
-                  })}>
+                    [classes.dragCursor]: isDraggingEnabled()
+                  })}
+                >
                   {children}
                 </div>
                 <div className={classes.sortAction}>
@@ -238,14 +250,21 @@ const TableHeadCell = ({
           {hint && (
             <Tooltip title={hint}>
               <HelpIcon
-                className={!sortActive ? classes.hintIconAlone : classes.hintIconWithSortIcon}
+                className={
+                  !sortActive
+                    ? classes.hintIconAlone
+                    : classes.hintIconWithSortIcon
+                }
                 fontSize="small"
               />
             </Tooltip>
           )}
         </span>
       ) : (
-        <div className={hint ? classes.sortAction : null} ref={isDraggingEnabled() ? dragRef : null}>
+        <div
+          className={hint ? classes.sortAction : null}
+          ref={isDraggingEnabled() ? dragRef : null}
+        >
           {children}
           {hint && (
             <Tooltip
@@ -256,17 +275,18 @@ const TableHeadCell = ({
               onClose={() => setHintTooltipOpen(false)}
               classes={{
                 tooltip: classes.tooltip,
-                popper: classes.mypopper,
+                popper: classes.mypopper
               }}
-              enterDelay={300}>
+              enterDelay={300}
+            >
               <HelpIcon className={classes.hintIconAlone} fontSize="small" />
             </Tooltip>
           )}
         </div>
       )}
     </TableCell>
-  );
-};
+  )
+}
 
 TableHeadCell.propTypes = {
   /** Options used to describe table */
@@ -284,7 +304,7 @@ TableHeadCell.propTypes = {
   /** Optional to be used with `textLabels.body.columnHeaderTooltip` */
   column: PropTypes.object,
   /** Injectable component structure **/
-  components: PropTypes.object,
-};
+  components: PropTypes.object
+}
 
-export default TableHeadCell;
+export default TableHeadCell

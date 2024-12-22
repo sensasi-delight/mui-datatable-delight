@@ -1,8 +1,8 @@
-import React from 'react';
-import MUIDataTable, { ExpandButton } from '../../src/';
-import TableRow from '@mui/material/TableRow';
-import TableCell from '@mui/material/TableCell';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import React from 'react'
+import MUIDataTable, { ExpandButton } from '../../src/'
+import TableRow from '@mui/material/TableRow'
+import TableCell from '@mui/material/TableCell'
+import { createTheme, ThemeProvider } from '@mui/material/styles'
 
 class Example extends React.Component {
   render() {
@@ -10,35 +10,35 @@ class Example extends React.Component {
       {
         name: 'Name',
         options: {
-          filter: true,
-        },
+          filter: true
+        }
       },
       {
         name: 'Title',
         options: {
-          filter: true,
-        },
+          filter: true
+        }
       },
       {
         name: 'Location',
         options: {
-          filter: false,
-        },
+          filter: false
+        }
       },
       {
         name: 'Age',
         options: {
-          filter: true,
-        },
+          filter: true
+        }
       },
       {
         name: 'Salary',
         options: {
           filter: true,
-          sort: false,
-        },
-      },
-    ];
+          sort: false
+        }
+      }
+    ]
 
     const data = [
       ['Gabby George', 'Business Analyst', 'Minneapolis', 30, '$100,000'],
@@ -46,7 +46,13 @@ class Example extends React.Component {
       ['Jaden Collins', 'Attorney', 'Santa Ana', 27, '$500,000'],
       ['Franky Rees', 'Business Analyst', 'St. Petersburg', 22, '$50,000'],
       ['Aaren Rose', 'Business Consultant', 'Toledo', 28, '$75,000'],
-      ['Blake Duncan', 'Business Management Analyst', 'San Diego', 65, '$94,000'],
+      [
+        'Blake Duncan',
+        'Business Management Analyst',
+        'San Diego',
+        65,
+        '$94,000'
+      ],
       ['Frankie Parry', 'Agency Legal Counsel', 'Jacksonville', 71, '$210,000'],
       ['Lane Wilson', 'Commercial Specialist', 'Omaha', 19, '$65,000'],
       ['Robin Duncan', 'Business Analyst', 'Los Angeles', 20, '$77,000'],
@@ -56,7 +62,13 @@ class Example extends React.Component {
       ['Frankie Long', 'Industrial Analyst', 'Austin', 31, '$170,000'],
       ['Brynn Robbins', 'Business Analyst', 'Norfolk', 22, '$90,000'],
       ['Justice Mann', 'Business Consultant', 'Chicago', 24, '$133,000'],
-      ['Addison Navarro', 'Business Management Analyst', 'New York', 50, '$295,000'],
+      [
+        'Addison Navarro',
+        'Business Management Analyst',
+        'New York',
+        50,
+        '$295,000'
+      ],
       ['Jesse Welch', 'Agency Legal Counsel', 'Seattle', 28, '$200,000'],
       ['Eli Mejia', 'Commercial Specialist', 'Long Beach', 65, '$400,000'],
       ['Gene Leblanc', 'Industrial Analyst', 'Hartford', 34, '$110,000'],
@@ -69,9 +81,15 @@ class Example extends React.Component {
       ['Silver Carey', 'Computer Scientist', 'Memphis', 47, '$250,000'],
       ['Franky Miles', 'Industrial Analyst', 'Buffalo', 49, '$190,000'],
       ['Glen Nixon', 'Corporate Counselor', 'Arlington', 44, '$80,000'],
-      ['Gabby Strickland', 'Business Process Consultant', 'Scottsdale', 26, '$45,000'],
-      ['Mason Ray', 'Computer Scientist', 'San Francisco', 39, '$142,000'],
-    ];
+      [
+        'Gabby Strickland',
+        'Business Process Consultant',
+        'Scottsdale',
+        26,
+        '$45,000'
+      ],
+      ['Mason Ray', 'Computer Scientist', 'San Francisco', 39, '$142,000']
+    ]
 
     const options = {
       filter: true,
@@ -81,43 +99,49 @@ class Example extends React.Component {
       expandableRowsHeader: false,
       expandableRowsOnClick: true,
       isRowExpandable: (dataIndex, expandedRows) => {
-        if (dataIndex === 3 || dataIndex === 4) return false;
+        if (dataIndex === 3 || dataIndex === 4) return false
 
         // Prevent expand/collapse of any row if there are 4 rows expanded already (but allow those already expanded to be collapsed)
-        if (expandedRows.data.length > 4 && expandedRows.data.filter(d => d.dataIndex === dataIndex).length === 0)
-          return false;
-        return true;
+        if (
+          expandedRows.data.length > 4 &&
+          expandedRows.data.filter(d => d.dataIndex === dataIndex).length === 0
+        )
+          return false
+        return true
       },
       rowsExpanded: [0, 1],
       renderExpandableRow: (rowData, rowMeta) => {
-        const colSpan = rowData.length + 1;
+        const colSpan = rowData.length + 1
         return (
           <TableRow>
-            <TableCell colSpan={colSpan}>Custom expandable row option. Data: {JSON.stringify(rowData)}</TableCell>
+            <TableCell colSpan={colSpan}>
+              Custom expandable row option. Data: {JSON.stringify(rowData)}
+            </TableCell>
           </TableRow>
-        );
+        )
       },
       onRowExpansionChange: (curExpanded, allExpanded, rowsExpanded) =>
-        console.log(curExpanded, allExpanded, rowsExpanded),
-    };
+        console.log(curExpanded, allExpanded, rowsExpanded)
+    }
 
     const theme = createTheme({
       overrides: {
         MUIDataTableSelectCell: {
           expandDisabled: {
             // Soft hide the button.
-            visibility: 'hidden',
-          },
-        },
-      },
-    });
+            visibility: 'hidden'
+          }
+        }
+      }
+    })
 
     const components = {
-      ExpandButton: function(props) {
-        if (props.dataIndex === 3 || props.dataIndex === 4) return <div style={{ width: '24px' }} />;
-        return <ExpandButton {...props} />;
-      },
-    };
+      ExpandButton: function (props) {
+        if (props.dataIndex === 3 || props.dataIndex === 4)
+          return <div style={{ width: '24px' }} />
+        return <ExpandButton {...props} />
+      }
+    }
 
     return (
       <ThemeProvider theme={theme}>
@@ -129,8 +153,8 @@ class Example extends React.Component {
           components={components}
         />
       </ThemeProvider>
-    );
+    )
   }
 }
 
-export default Example;
+export default Example

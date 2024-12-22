@@ -1,8 +1,8 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import MUIDataTable from '../../src';
-import { CircularProgress, Typography } from '@mui/material';
-import Cities from './cities';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import MUIDataTable from '../../src'
+import { CircularProgress, Typography } from '@mui/material'
+import Cities from './cities'
 
 class Example extends React.Component {
   state = {
@@ -10,29 +10,29 @@ class Example extends React.Component {
     count: 26,
     data: [['Loading Data...']],
     sortOrder: {},
-    loading: false,
-  };
+    loading: false
+  }
 
   componentDidMount() {
-    this.getData();
+    this.getData()
   }
 
   getData = () => {
-    this.setState({ loading: true });
+    this.setState({ loading: true })
     this.xhrRequest().then(data => {
-      this.setState({ data, loading: false });
-    });
-  };
+      this.setState({ data, loading: false })
+    })
+  }
 
   // mock async function
   xhrRequest = url => {
-    let page = 0;
-    let order = '';
-    let column = '';
+    let page = 0
+    let order = ''
+    let column = ''
     if (url != undefined) {
-      page = url.page;
-      order = url.order;
-      column = url.column;
+      page = url.page
+      order = url.order
+      column = url.column
     }
 
     return new Promise((resolve, reject) => {
@@ -42,7 +42,13 @@ class Example extends React.Component {
         ['Jaden Collins', 'Attorney', 'Santa Ana', 20, '$310,000'],
         ['Franky Rees', 'Business Analyst', 'St. Petersburg', 31, '$290,000'],
         ['Aaren Rose', 'Business Analyst', 'Toledo', 61, '$510,000'],
-        ['Frankie Parry', 'Agency Legal Counsel', 'Jacksonville', 71, '$210,000'],
+        [
+          'Frankie Parry',
+          'Agency Legal Counsel',
+          'Jacksonville',
+          71,
+          '$210,000'
+        ],
         ['Lane Wilson', 'Commercial Specialist', 'Omaha', 19, '$65,000'],
         ['Robin Duncan', 'Business Analyst', 'Los Angeles', 20, '$77,000'],
         ['Mel Brooks', 'Business Consultant', 'Oklahoma City', 37, '$135,000'],
@@ -62,58 +68,61 @@ class Example extends React.Component {
         ['Justice Mccarthy', 'Attorney', 'Tucson', 26, '$330,000'],
         ['Silver Carey', 'Computer Scientist', 'Memphis', 47, '$250,000'],
         ['Franky Miles', 'Industrial Analyst', 'Buffalo', 49, '$190,000'],
-        ['Glen Nixon', 'Corporate Counselor', 'Arlington', 44, '$80,000'],
-      ];
+        ['Glen Nixon', 'Corporate Counselor', 'Arlington', 44, '$80,000']
+      ]
 
       // here we're faking the sorting that would happen on the server-side
 
-      var offset = page * 10;
-      var data = [];
+      var offset = page * 10
+      var data = []
 
       if (order !== '') {
-        var sortCol = ['Name', 'Title', 'Location', 'Age', 'Salary'].indexOf(column);
-        if (sortCol === -1) sortCol = 3;
+        var sortCol = ['Name', 'Title', 'Location', 'Age', 'Salary'].indexOf(
+          column
+        )
+        if (sortCol === -1) sortCol = 3
 
         if (order === 'asc') {
           var tempData = srcData.sort((a, b) => {
-            if ( a[sortCol] < b[sortCol] ) return -1;
-            if ( a[sortCol] > b[sortCol] ) return 1;
-            return 0;
-          });
+            if (a[sortCol] < b[sortCol]) return -1
+            if (a[sortCol] > b[sortCol]) return 1
+            return 0
+          })
 
           data =
             offset + 10 >= srcData.length
               ? tempData.slice(offset, srcData.length)
-              : tempData.slice(offset, offset + 10);
+              : tempData.slice(offset, offset + 10)
         } else {
           tempData = srcData.sort((a, b) => {
-            if ( a[sortCol] < b[sortCol] ) return 1;
-            if ( a[sortCol] > b[sortCol] ) return -1;
-            return 0;
-          });
+            if (a[sortCol] < b[sortCol]) return 1
+            if (a[sortCol] > b[sortCol]) return -1
+            return 0
+          })
 
           data =
             offset + 10 >= srcData.length
               ? tempData.slice(offset, srcData.length)
-              : tempData.slice(offset, offset + 10);
+              : tempData.slice(offset, offset + 10)
         }
-
       } else {
         data =
-          offset + 10 >= srcData.length ? srcData.slice(offset, srcData.length) : srcData.slice(offset, offset + 10);
+          offset + 10 >= srcData.length
+            ? srcData.slice(offset, srcData.length)
+            : srcData.slice(offset, offset + 10)
       }
 
       setTimeout(() => {
-        resolve(data);
-      }, 250);
-    });
-  };
+        resolve(data)
+      }, 250)
+    })
+  }
 
   sort = (column, order) => {
-    let temp = {};
-    temp.column = column;
-    temp.order = order;
-    temp.page = this.state.page;
+    let temp = {}
+    temp.column = column
+    temp.order = order
+    temp.page = this.state.page
 
     this.xhrRequest(temp).then(data => {
       this.setState({
@@ -122,9 +131,9 @@ class Example extends React.Component {
           name: column,
           direction: order
         }
-      });
-    });
-  };
+      })
+    })
+  }
 
   render() {
     const columns = [
@@ -132,37 +141,43 @@ class Example extends React.Component {
         name: 'Name',
         options: {
           customFilterListOptions: {
-            render: v => `Name: ${v}`,
+            render: v => `Name: ${v}`
           }
-        },
+        }
       },
       {
         name: 'Title',
         options: {
           customFilterListOptions: {
-            render: v => `Title: ${v}`,
+            render: v => `Title: ${v}`
           }
-        },
+        }
       },
       {
         name: 'Location',
         options: {
           customFilterListOptions: {
-            render: v => `Location: ${v}`,
+            render: v => `Location: ${v}`
           },
           customBodyRender: (value, tableMeta, updateValue) => {
-            return <Cities value={value || ''} index={tableMeta.columnIndex} change={event => updateValue(event)} />;
-          },
-        },
+            return (
+              <Cities
+                value={value || ''}
+                index={tableMeta.columnIndex}
+                change={event => updateValue(event)}
+              />
+            )
+          }
+        }
       },
       {
-        name: 'Age',
+        name: 'Age'
       },
       {
-        name: 'Salary',
-      },
-    ];
-    const { page, count, data } = this.state;
+        name: 'Salary'
+      }
+    ]
+    const { page, count, data } = this.state
 
     const options = {
       filter: true,
@@ -172,19 +187,19 @@ class Example extends React.Component {
       count: count,
       page: page,
       onColumnSortChange: (changedColumn, direction) => {
-        let order = 'desc';
+        let order = 'desc'
         if (direction === 'asc') {
-          order = 'asc';
+          order = 'asc'
         }
 
-        this.sort(changedColumn, order);
+        this.sort(changedColumn, order)
       },
-      onChangePage: (page) => {
-        this.setState({page}, () => {
-          this.sort(this.state.sortOrder.name, this.state.sortOrder.direction);
-        });
+      onChangePage: page => {
+        this.setState({ page }, () => {
+          this.sort(this.state.sortOrder.name, this.state.sortOrder.direction)
+        })
       }
-    };
+    }
 
     return (
       <div>
@@ -193,7 +208,10 @@ class Example extends React.Component {
             <Typography variant="subtitle2">
               ACME Employee list{' '}
               {this.state.loading && (
-                <CircularProgress size={24} style={{ marginLeft: 15, position: 'relative', top: 4 }} />
+                <CircularProgress
+                  size={24}
+                  style={{ marginLeft: 15, position: 'relative', top: 4 }}
+                />
               )}
             </Typography>
           }
@@ -202,8 +220,8 @@ class Example extends React.Component {
           options={options}
         />
       </div>
-    );
+    )
   }
 }
 
-export default Example;
+export default Example
