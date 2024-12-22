@@ -1,18 +1,16 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import MuiTableCell from '@mui/material/TableCell'
-import MuiTableRow from '@mui/material/TableRow'
-import MuiTableFooter from '@mui/material/TableFooter'
-import MuiTablePagination from '@mui/material/TablePagination'
+import MuiTablePagination, {
+    TablePaginationProps as MuiTablePaginationProps
+} from '@mui/material/TablePagination'
 import JumpToPage from './JumpToPage'
 import { makeStyles } from 'tss-react/mui'
 import { getPageValue } from '../utils'
+import {
+    MUIDataTableOptions,
+    MUIDataTableTextLabelsPagination
+} from 'mui-datatables'
 
-const useStyles = makeStyles({ name: 'MUIDataTablePagination' })(theme => ({
+const useStyles = makeStyles({ name: 'MUIDataTablePagination' })(() => ({
     root: {},
-    tableCellContainer: {
-        padding: '0px 24px 0px 24px'
-    },
     navContainer: {
         display: 'flex',
         justifyContent: 'flex-end'
@@ -31,102 +29,125 @@ const useStyles = makeStyles({ name: 'MUIDataTablePagination' })(theme => ({
     }
 }))
 
-function TablePagination(props) {
+function TablePagination({
+    count,
+    options,
+    rowsPerPage,
+    page,
+    changeRowsPerPage,
+    changePage
+}: TablePaginationProps) {
     const { classes } = useStyles()
 
-    const handleRowChange = event => {
-        props.changeRowsPerPage(event.target.value)
+    const handleRowChange: MuiTablePaginationProps['onRowsPerPageChange'] = ({
+        target: { value }
+    }) => {
+        changeRowsPerPage(parseInt(value))
     }
 
-    const handlePageChange = (_, page) => {
-        props.changePage(page)
+    const handlePageChange: MuiTablePaginationProps['onPageChange'] = (
+        _,
+        page
+    ) => {
+        changePage(page)
     }
 
-    const { count, options, rowsPerPage, page } = props
     const textLabels = options.textLabels.pagination
 
     return (
-        <MuiTableFooter>
-            <MuiTableRow>
-                <MuiTableCell
-                    colSpan="1000"
-                    className={classes.tableCellContainer}
-                >
-                    <div className={classes.navContainer}>
-                        {options.jumpToPage ? (
-                            <JumpToPage
-                                count={count}
-                                page={page}
-                                rowsPerPage={rowsPerPage}
-                                textLabels={options.textLabels}
-                                changePage={props.changePage}
-                                changeRowsPerPage={props.changeRowsPerPage}
-                            />
-                        ) : null}
-                        <MuiTablePagination
-                            component="div"
-                            className={classes.root}
-                            classes={{
-                                caption: classes.caption,
-                                toolbar: classes.toolbar,
-                                selectRoot: classes.selectRoot
-                            }}
-                            count={count}
-                            rowsPerPage={rowsPerPage}
-                            page={getPageValue(count, rowsPerPage, page)}
-                            labelRowsPerPage={textLabels.rowsPerPage}
-                            labelDisplayedRows={({ from, to, count }) =>
-                                `${from}-${to} ${textLabels.displayRows} ${count}`
+        <div className={classes.navContainer}>
+            {options.jumpToPage ? (
+                <JumpToPage
+                    count={count}
+                    page={page}
+                    rowsPerPage={rowsPerPage}
+                    textLabels={options.textLabels}
+                    changePage={changePage}
+                    changeRowsPerPage={changeRowsPerPage}
+                />
+            ) : null}
+
+            <MuiTablePagination
+                component="div"
+                className={classes.root}
+                classes={{
+                    // caption: classes.caption,
+                    toolbar: classes.toolbar,
+                    selectRoot: classes.selectRoot
+                }}
+                count={count}
+                rowsPerPage={rowsPerPage}
+                page={getPageValue(count, rowsPerPage, page)}
+                labelRowsPerPage={textLabels.rowsPerPage}
+                labelDisplayedRows={({ from, to, count }) =>
+                    `${from}-${to} ${textLabels.displayRows} ${count}`
+                }
+                slotProps={{
+                    actions: {
+                        previousButton: {
+                            id: 'pagination-back',
+                            // 'data-testid': 'pagination-back',
+                            'aria-label': textLabels.previous,
+                            title: textLabels.previous || ''
+                        },
+
+                        nextButton: {
+                            id: 'pagination-next',
+                            // 'data-testid': 'pagination-next',
+                            'aria-label': textLabels.next,
+                            title: textLabels.next || ''
+                        }
+                    },
+
+                    select: {
+                        id: 'pagination-input',
+                        SelectDisplayProps: {
+                            id: 'pagination-rows'
+                            // 'data-testid': 'pagination-rows'
+                        },
+                        MenuProps: {
+                            id: 'pagination-menu',
+                            // 'data-testid': 'pagination-menu',
+                            MenuListProps: {
+                                id: 'pagination-menu-list'
+                                // 'data-testid': 'pagination-menu-list'
                             }
-                            backIconButtonProps={{
-                                id: 'pagination-back',
-                                'data-testid': 'pagination-back',
-                                'aria-label': textLabels.previous,
-                                title: textLabels.previous || ''
-                            }}
-                            nextIconButtonProps={{
-                                id: 'pagination-next',
-                                'data-testid': 'pagination-next',
-                                'aria-label': textLabels.next,
-                                title: textLabels.next || ''
-                            }}
-                            SelectProps={{
-                                id: 'pagination-input',
-                                SelectDisplayProps: {
-                                    id: 'pagination-rows',
-                                    'data-testid': 'pagination-rows'
-                                },
-                                MenuProps: {
-                                    id: 'pagination-menu',
-                                    'data-testid': 'pagination-menu',
-                                    MenuListProps: {
-                                        id: 'pagination-menu-list',
-                                        'data-testid': 'pagination-menu-list'
-                                    }
-                                }
-                            }}
-                            rowsPerPageOptions={options.rowsPerPageOptions}
-                            onPageChange={handlePageChange}
-                            onRowsPerPageChange={handleRowChange}
-                        />
-                    </div>
-                </MuiTableCell>
-            </MuiTableRow>
-        </MuiTableFooter>
+                        }
+                    }
+                }}
+                rowsPerPageOptions={options.rowsPerPageOptions}
+                onPageChange={handlePageChange}
+                onRowsPerPageChange={handleRowChange}
+            />
+        </div>
     )
 }
 
-TablePagination.propTypes = {
+export interface TablePaginationProps {
     /** Total number of table rows */
-    count: PropTypes.number.isRequired,
+    count: number
+
     /** Options used to describe table */
-    options: PropTypes.object.isRequired,
+    options: {
+        rowsPerPageOptions: MUIDataTableOptions['rowsPerPageOptions']
+        jumpToPage: MUIDataTableOptions['jumpToPage']
+        pagination: boolean
+        textLabels: {
+            pagination: MUIDataTableTextLabelsPagination
+        }
+    }
+
     /** Current page index */
-    page: PropTypes.number.isRequired,
+    page: number
+
     /** Total number allowed of rows per page */
-    rowsPerPage: PropTypes.number.isRequired,
+    rowsPerPage: number
+
     /** Callback to trigger rows per page change */
-    changeRowsPerPage: PropTypes.func.isRequired
+    changeRowsPerPage: (nRows: number) => void
+
+    /** Callback to trigger page change */
+    changePage: (pageNo: number) => void
 }
 
 export default TablePagination

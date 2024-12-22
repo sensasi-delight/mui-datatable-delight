@@ -1,81 +1,77 @@
-import React from 'react'
-import MuiTable from '@mui/material/Table'
-import TablePagination from './TablePagination'
-import { makeStyles } from 'tss-react/mui'
-import PropTypes from 'prop-types'
+import type { ReactNode } from 'react'
+import type {
+    MUIDataTablePagination,
+    MUIDataTableTextLabelsPagination
+} from 'mui-datatables'
+import TablePagination, { type TablePaginationProps } from './TablePagination'
 
-const useStyles = makeStyles({ name: 'MUIDataTableFooter' })(() => ({
-    root: {
-        '@media print': {
-            display: 'none'
-        }
-    }
-}))
-
-const TableFooter = ({
+export default function TableFooter({
     options,
     rowCount,
     page,
     rowsPerPage,
     changeRowsPerPage,
     changePage
-}) => {
-    const { classes } = useStyles()
+}: TableFooterProps) {
     const { customFooter, pagination = true } = options
 
     if (customFooter) {
-        return (
-            <MuiTable className={classes.root}>
-                {options.customFooter(
-                    rowCount,
-                    page,
-                    rowsPerPage,
-                    changeRowsPerPage,
-                    changePage,
-                    options.textLabels.pagination
-                )}
-            </MuiTable>
+        return customFooter(
+            rowCount,
+            page,
+            rowsPerPage,
+            changeRowsPerPage,
+            changePage,
+            options.textLabels.pagination
         )
     }
 
     if (pagination) {
         return (
-            <MuiTable className={classes.root}>
-                <TablePagination
-                    count={rowCount}
-                    page={page}
-                    rowsPerPage={rowsPerPage}
-                    changeRowsPerPage={changeRowsPerPage}
-                    changePage={changePage}
-                    component={'div'}
-                    options={options}
-                />
-            </MuiTable>
+            <TablePagination
+                count={rowCount}
+                page={page}
+                rowsPerPage={rowsPerPage}
+                changeRowsPerPage={changeRowsPerPage}
+                changePage={changePage}
+                options={options}
+            />
         )
     }
 
     return null
 }
 
-TableFooter.propTypes = {
+interface TableFooterProps {
     /** Total number of table rows */
-    rowCount: PropTypes.number.isRequired,
-    /** Options used to describe table */
-    options: PropTypes.shape({
-        customFooter: PropTypes.func,
-        pagination: PropTypes.bool,
-        textLabels: PropTypes.shape({
-            pagination: PropTypes.object
-        })
-    }),
-    /** Current page index */
-    page: PropTypes.number.isRequired,
-    /** Total number allowed of rows per page */
-    rowsPerPage: PropTypes.number.isRequired,
-    /** Callback to trigger rows per page change */
-    changeRowsPerPage: PropTypes.func.isRequired,
-    /** Callback to trigger page change */
-    changePage: PropTypes.func.isRequired
-}
+    rowCount: number
 
-export default TableFooter
+    /** Options used to describe table */
+    options: {
+        customFooter: (
+            rowCount: TableFooterProps['rowCount'],
+            page: TableFooterProps['page'],
+            rowsPerPage: TableFooterProps['rowsPerPage'],
+
+            changeRowsPerPage: TableFooterProps['changeRowsPerPage'],
+            changePage: TableFooterProps['changePage'],
+            paginationTextLabels: MUIDataTableTextLabelsPagination
+        ) => ReactNode
+        pagination: boolean
+        textLabels: {
+            pagination: MUIDataTablePagination
+        }
+    } & TablePaginationProps['options']
+
+    /** Current page index */
+    page: number
+
+    /** Total number allowed of rows per page */
+    rowsPerPage: number
+
+    /** Callback to trigger rows per page change */
+    changeRowsPerPage: (nRows: number) => void
+
+    /** Callback to trigger page change */
+    changePage: (pageNo: number) => void
+}
