@@ -2,7 +2,6 @@ import React from 'react'
 import { spy, stub } from 'sinon'
 import { mount, shallow } from 'enzyme'
 import { assert, expect } from 'chai'
-import cloneDeep from 'lodash.clonedeep'
 import MUIDataTable from '../src/MUIDataTable'
 import TableFilterList from '../src/components/TableFilterList'
 import TablePagination from '../src/components/TablePagination'
@@ -12,9 +11,6 @@ import getTextLabels from '../src/textLabels'
 import Chip from '@mui/material/Chip'
 import Cities from '../examples/component/cities'
 import { getCollatorComparator } from '../src/utils'
-import TableFooter from '@mui/material/TableFooter'
-import TableRow from '@mui/material/TableRow'
-import TableCell from '@mui/material/TableCell'
 
 describe('<MUIDataTable />', function () {
     const tableId = 'tableID'
@@ -1327,7 +1323,7 @@ describe('<MUIDataTable />', function () {
         const instance = mountShallowWrapper.instance()
 
         // now use updated columns props
-        const newColumns = cloneDeep(columns)
+        const newColumns = structuredClone(columns)
         newColumns[0].options.filterList = ['Joe James']
         mountShallowWrapper.setProps({ columns: newColumns })
         mountShallowWrapper.update()
