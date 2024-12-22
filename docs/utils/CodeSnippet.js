@@ -10,31 +10,34 @@ import { withStyles } from 'tss-react/mui'
 const styles = theme => ({})
 
 class CodeSnippet extends React.Component {
-  static propTypes = {
-    classes: PropTypes.object.isRequired,
-    language: PropTypes.string,
-    text: PropTypes.string.isRequired
-  }
+    static propTypes = {
+        classes: PropTypes.object.isRequired,
+        language: PropTypes.string,
+        text: PropTypes.string.isRequired
+    }
 
-  static defaultProps = {
-    language: 'jsx'
-  }
+    static defaultProps = {
+        language: 'jsx'
+    }
 
-  render() {
-    const { classes, language, text } = this.props
-    const hightlightedCode = prism.highlight(text, prism.languages[language])
+    render() {
+        const { classes, language, text } = this.props
+        const hightlightedCode = prism.highlight(
+            text,
+            prism.languages[language]
+        )
 
-    return (
-      <Paper elevation={4}>
-        <pre>
-          <code
-            className={`language-${language}`}
-            dangerouslySetInnerHTML={{ __html: hightlightedCode }}
-          />
-        </pre>
-      </Paper>
-    )
-  }
+        return (
+            <Paper elevation={4}>
+                <pre>
+                    <code
+                        className={`language-${language}`}
+                        dangerouslySetInnerHTML={{ __html: hightlightedCode }}
+                    />
+                </pre>
+            </Paper>
+        )
+    }
 }
 
 export default withStyles(CodeSnippet, styles)

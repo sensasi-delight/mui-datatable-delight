@@ -3,11 +3,12 @@
  * @type {import("prettier").Config}
  */
 export default {
-  arrowParens: 'avoid',
-  bracketSpacing: true,
-  bracketSameLine: false,
-  endOfLine: 'lf',
-  semi: false,
-  singleQuote: true,
-  trailingComma: 'none'
+    arrowParens: 'avoid',
+    bracketSpacing: true,
+    bracketSameLine: false,
+    endOfLine: 'lf',
+    semi: false,
+    singleQuote: true,
+    trailingComma: 'none',
+    tabWidth: 4
 }
