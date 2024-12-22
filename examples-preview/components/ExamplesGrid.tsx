@@ -7,7 +7,7 @@ import {
   TextField,
   Typography
 } from '@mui/material'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 import { useState } from 'react'
 import { withStyles } from 'tss-react/mui'
 // locals
@@ -27,7 +27,7 @@ function ExamplesGrid({ classes }) {
 
   const examplesSortedKeys = Object.keys(EXAMPLE_SORTED).filter(item => {
     if (searchVal === '') return true
-    console.dir(item)
+
     return item.toLowerCase().indexOf(searchVal.toLowerCase()) !== -1
       ? true
       : false

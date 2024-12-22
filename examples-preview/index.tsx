@@ -1,13 +1,18 @@
 import { Box, Button, Container } from '@mui/material'
 import { createRoot } from 'react-dom/client'
-import { HashRouter, Link, Route, Switch } from 'react-router-dom'
+import { HashRouter, Link, Route, Routes } from 'react-router'
 import { Home } from '@mui/icons-material'
+import { ReactNode, StrictMode } from 'react'
 // locals
 import examples from './components/examples'
 import ExamplesGrid from './components/ExamplesGrid'
 
 /** Render the App */
-createRoot(document.getElementById('app-root')).render(<App />)
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
+    <App />
+  </StrictMode>
+)
 
 /**
  * App Component
@@ -24,17 +29,15 @@ function App() {
 
 /**
  * Providers Component
- *
- * @param {ReactNode} props.children
  */
-function Providers({ children }) {
-  return <HashRouter hashType="noslash">{children}</HashRouter>
+function Providers({ children }: { children: ReactNode }) {
+  return <HashRouter>{children}</HashRouter>
 }
 
 /**
  * Layout Component
  */
-function Layout({ children }) {
+function Layout({ children }: { children: ReactNode }) {
   return (
     <Container
       maxWidth="md"
@@ -58,21 +61,16 @@ function Layout({ children }) {
  */
 function ContentSwitcher() {
   return (
-    <Switch>
-      <Route
-        path="/"
-        exact
-        render={() => <ExamplesGrid examples={examples} />}
-      />
+    <Routes>
+      <Route path="/" element={<ExamplesGrid />} />
 
       {Object.keys(examples).map((label, index) => (
         <Route
           key={index}
           path={`/${label.replace(/\s+/g, '-').toLowerCase()}`}
-          exact
-          component={examples[label]}
+          Component={examples[label]}
         />
       ))}
-    </Switch>
+    </Routes>
   )
 }
