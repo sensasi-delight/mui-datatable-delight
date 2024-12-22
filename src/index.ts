@@ -18,6 +18,6 @@ export { default as TableToolbarSelect } from './components/TableToolbarSelect'
 export { default as TableViewCol } from './components/TableViewCol'
 export { default as ExpandButton } from './components/ExpandButton'
 export {
-  debounceSearchRender,
-  DebounceTableSearch
+    debounceSearchRender,
+    DebounceTableSearch
 } from './plug-ins/DebounceSearchRender'

@@ -5,25 +5,25 @@ import TableRow from '@mui/material/TableRow'
 import { makeStyles } from 'tss-react/mui'
 
 const useStyles = makeStyles({ name: 'MUIDataTableHeadRow' })(() => ({
-  root: {}
+    root: {}
 }))
 
 const TableHeadRow = ({ children }) => {
-  const { classes } = useStyles()
+    const { classes } = useStyles()
 
-  return (
-    <TableRow
-      className={clsx({
-        [classes.root]: true
-      })}
-    >
-      {children}
-    </TableRow>
-  )
+    return (
+        <TableRow
+            className={clsx({
+                [classes.root]: true
+            })}
+        >
+            {children}
+        </TableRow>
+    )
 }
 
 TableHeadRow.propTypes = {
-  children: PropTypes.node
+    children: PropTypes.node
 }
 
 export default TableHeadRow

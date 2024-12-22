@@ -6,65 +6,65 @@ import ClearIcon from '@mui/icons-material/Clear'
 import { withStyles } from 'tss-react/mui'
 
 const defaultSearchStyles = theme => ({
-  main: {
-    display: 'flex',
-    flex: '1 0 auto'
-  },
-  searchText: {
-    flex: '0.8 0'
-  },
-  clearIcon: {
-    '&:hover': {
-      color: theme.palette.error.main
+    main: {
+        display: 'flex',
+        flex: '1 0 auto'
+    },
+    searchText: {
+        flex: '0.8 0'
+    },
+    clearIcon: {
+        '&:hover': {
+            color: theme.palette.error.main
+        }
     }
-  }
 })
 
 class CustomSearchRender extends React.Component {
-  handleTextChange = event => {
-    this.props.onSearch(event.target.value)
-  }
-
-  componentDidMount() {
-    document.addEventListener('keydown', this.onKeyDown, false)
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('keydown', this.onKeyDown, false)
-  }
-
-  onKeyDown = event => {
-    if (event.keyCode === 27) {
-      this.props.onHide()
+    handleTextChange = event => {
+        this.props.onSearch(event.target.value)
     }
-  }
 
-  render() {
-    const { classes, options, onHide, searchText } = this.props
+    componentDidMount() {
+        document.addEventListener('keydown', this.onKeyDown, false)
+    }
 
-    return (
-      <Grow appear in={true} timeout={300}>
-        <div className={classes.main} ref={el => (this.rootRef = el)}>
-          <TextField
-            placeholder={'Custom TableSearch without search icon'}
-            className={classes.searchText}
-            InputProps={{
-              'aria-label': options.textLabels.toolbar.search
-            }}
-            value={searchText || ''}
-            onChange={this.handleTextChange}
-            fullWidth={true}
-            inputRef={el => (this.searchField = el)}
-          />
-          <IconButton className={classes.clearIcon} onClick={onHide}>
-            <ClearIcon />
-          </IconButton>
-        </div>
-      </Grow>
-    )
-  }
+    componentWillUnmount() {
+        document.removeEventListener('keydown', this.onKeyDown, false)
+    }
+
+    onKeyDown = event => {
+        if (event.keyCode === 27) {
+            this.props.onHide()
+        }
+    }
+
+    render() {
+        const { classes, options, onHide, searchText } = this.props
+
+        return (
+            <Grow appear in={true} timeout={300}>
+                <div className={classes.main} ref={el => (this.rootRef = el)}>
+                    <TextField
+                        placeholder={'Custom TableSearch without search icon'}
+                        className={classes.searchText}
+                        InputProps={{
+                            'aria-label': options.textLabels.toolbar.search
+                        }}
+                        value={searchText || ''}
+                        onChange={this.handleTextChange}
+                        fullWidth={true}
+                        inputRef={el => (this.searchField = el)}
+                    />
+                    <IconButton className={classes.clearIcon} onClick={onHide}>
+                        <ClearIcon />
+                    </IconButton>
+                </div>
+            </Grow>
+        )
+    }
 }
 
 export default withStyles(CustomSearchRender, defaultSearchStyles, {
-  name: 'CustomSearchRender'
+    name: 'CustomSearchRender'
 })

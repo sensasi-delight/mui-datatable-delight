@@ -9,68 +9,68 @@ import ExamplesGrid from './components/ExamplesGrid'
 
 /** Render the App */
 createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <App />
-  </StrictMode>
+    <StrictMode>
+        <App />
+    </StrictMode>
 )
 
 /**
  * App Component
  */
 function App() {
-  return (
-    <Providers>
-      <Layout>
-        <ContentSwitcher />
-      </Layout>
-    </Providers>
-  )
+    return (
+        <Providers>
+            <Layout>
+                <ContentSwitcher />
+            </Layout>
+        </Providers>
+    )
 }
 
 /**
  * Providers Component
  */
 function Providers({ children }: { children: ReactNode }) {
-  return <HashRouter>{children}</HashRouter>
+    return <HashRouter>{children}</HashRouter>
 }
 
 /**
  * Layout Component
  */
 function Layout({ children }: { children: ReactNode }) {
-  return (
-    <Container
-      maxWidth="md"
-      sx={{
-        mb: 16
-      }}
-    >
-      <Button component={Link} to="/" startIcon={<Home />} sx={{ mb: 2 }}>
-        Home
-      </Button>
+    return (
+        <Container
+            maxWidth="md"
+            sx={{
+                mb: 16
+            }}
+        >
+            <Button component={Link} to="/" startIcon={<Home />} sx={{ mb: 2 }}>
+                Home
+            </Button>
 
-      <Box component="main" sx={{ mt: 4 }}>
-        {children}
-      </Box>
-    </Container>
-  )
+            <Box component="main" sx={{ mt: 4 }}>
+                {children}
+            </Box>
+        </Container>
+    )
 }
 
 /**
  * ContentSwitcher Component
  */
 function ContentSwitcher() {
-  return (
-    <Routes>
-      <Route path="/" element={<ExamplesGrid />} />
+    return (
+        <Routes>
+            <Route path="/" element={<ExamplesGrid />} />
 
-      {Object.keys(examples).map((label, index) => (
-        <Route
-          key={index}
-          path={`/${label.replace(/\s+/g, '-').toLowerCase()}`}
-          Component={examples[label]}
-        />
-      ))}
-    </Routes>
-  )
+            {Object.keys(examples).map((label, index) => (
+                <Route
+                    key={index}
+                    path={`/${label.replace(/\s+/g, '-').toLowerCase()}`}
+                    Component={examples[label]}
+                />
+            ))}
+        </Routes>
+    )
 }
