@@ -10,7 +10,7 @@ import isEqual from 'lodash.isequal'
 import isUndefined from 'lodash.isundefined'
 import merge from 'lodash.merge'
 import PropTypes from 'prop-types'
-import React from 'react'
+import React, { ComponentType } from 'react'
 import DefaultTableBody from './components/TableBody'
 import DefaultTableFilter from './components/TableFilter'
 import DefaultTableFilterList from './components/TableFilterList'
@@ -31,6 +31,7 @@ import {
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { load, save } from './localStorage'
+import { MUIDataTableProps } from 'mui-datatables'
 
 const defaultTableStyles = theme => ({
   root: {
@@ -126,7 +127,7 @@ const STP = {
   ALWAYS: 'always'
 }
 
-class MUIDataTable extends React.Component {
+class MUIDataTableClass extends React.Component {
   static propTypes = {
     /** Title of the table */
     title: PropTypes.oneOfType([PropTypes.string, PropTypes.element])
@@ -2397,6 +2398,8 @@ class MUIDataTable extends React.Component {
   }
 }
 
-export default withStyles(MUIDataTable, defaultTableStyles, {
+const DataTable = withStyles(MUIDataTableClass, defaultTableStyles, {
   name: 'MUIDataTable'
-})
+}) as unknown as ComponentType<MUIDataTableProps>
+
+export default DataTable

@@ -1,4 +1,4 @@
-export { default } from './MUIDataTable'
+export { default } from './DataTable'
 export { default as Popover } from './components/Popover'
 export { default as TableBodyCell } from './components/TableBodyCell'
 export { default as TableBody } from './components/TableBody'
