@@ -1,7 +1,7 @@
-import React from 'react';
-import Document, { Head, Main, NextScript } from 'next/document';
-import JssProvider from 'react-jss/lib/JssProvider';
-import getPageContext from '../utils/getPageContext';
+import React from 'react'
+import Document, { Head, Main, NextScript } from 'next/document'
+import JssProvider from 'react-jss/lib/JssProvider'
+import getPageContext from '../utils/getPageContext'
 
 class MyDocument extends Document {
   render() {
@@ -10,12 +10,17 @@ class MyDocument extends Document {
         <Head>
           <title>Material-UI DataTables</title>
 
-          <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+          <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+          />
           <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
           <meta
             name="description"
-            content={'MUI-Datatables is a data tables component built for React Material-UI V1'}
+            content={
+              'MUI-Datatables is a data tables component built for React Material-UI V1'
+            }
           />
           <meta
             name="keywords"
@@ -27,7 +32,10 @@ class MyDocument extends Document {
           <meta name="author" content="Gregory Nowakowski" />
           <meta name="googlebot" content="noarchive" />
 
-          <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" />
+          <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css?family=Roboto:300,400,500"
+          />
           <link rel="shortcut icon" href="/static/favicon.ico" />
           <style>
             {`
@@ -52,7 +60,10 @@ class MyDocument extends Document {
             `}
           </style>
 
-          <script async src="https://www.googletagmanager.com/gtag/js?id=UA-116686642-1" />
+          <script
+            async
+            src="https://www.googletagmanager.com/gtag/js?id=UA-116686642-1"
+          />
           <script
             dangerouslySetInnerHTML={{
               __html: `
@@ -61,7 +72,7 @@ class MyDocument extends Document {
             gtag('js', new Date());
 
             gtag('config', 'UA-116686642-1');
-          `,
+          `
             }}
           />
         </Head>
@@ -71,17 +82,20 @@ class MyDocument extends Document {
           <NextScript />
         </body>
       </html>
-    );
+    )
   }
 }
 
 MyDocument.getInitialProps = ctx => {
-  const pageContext = getPageContext();
+  const pageContext = getPageContext()
   const page = ctx.renderPage(Component => props => (
-    <JssProvider registry={pageContext.sheetsRegistry} generateClassName={pageContext.generateClassName}>
+    <JssProvider
+      registry={pageContext.sheetsRegistry}
+      generateClassName={pageContext.generateClassName}
+    >
       <Component pageContext={pageContext} {...props} />
     </JssProvider>
-  ));
+  ))
 
   return {
     ...page,
@@ -90,10 +104,12 @@ MyDocument.getInitialProps = ctx => {
       <style
         id="jss-server-side"
         // eslint-disable-next-line react/no-danger
-        dangerouslySetInnerHTML={{ __html: pageContext.sheetsRegistry.toString() }}
+        dangerouslySetInnerHTML={{
+          __html: pageContext.sheetsRegistry.toString()
+        }}
       />
-    ),
-  };
-};
+    )
+  }
+}
 
-export default MyDocument;
+export default MyDocument

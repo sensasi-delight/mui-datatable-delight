@@ -1,7 +1,7 @@
-import { Button, CircularProgress } from '@mui/material';
-import React from 'react';
-import ReactDOM from 'react-dom';
-import MUIDataTable from '../../src';
+import { Button, CircularProgress } from '@mui/material'
+import React from 'react'
+import ReactDOM from 'react-dom'
+import MUIDataTable from '../../src'
 
 const theData = [
   ['Gabby George', 'Business Analyst', 'Minneapolis', 30, '$100,000'],
@@ -19,7 +19,13 @@ const theData = [
   ['Frankie Long', 'Industrial Analyst', 'Austin', 31, '$170,000'],
   ['Brynn Robbins', 'Business Analyst', 'Norfolk', 22, '$90,000'],
   ['Justice Mann', 'Business Consultant', 'Chicago', 24, '$133,000'],
-  ['Addison Navarro', 'Business Management Analyst', 'New York', 50, '$295,000'],
+  [
+    'Addison Navarro',
+    'Business Management Analyst',
+    'New York',
+    50,
+    '$295,000'
+  ],
   ['Jesse Welch', 'Agency Legal Counsel', 'Seattle', 28, '$200,000'],
   ['Eli Mejia', 'Commercial Specialist', 'Long Beach', 65, '$400,000'],
   ['Gene Leblanc', 'Industrial Analyst', 'Hartford', 34, '$110,000'],
@@ -32,98 +38,102 @@ const theData = [
   ['Silver Carey', 'Computer Scientist', 'Memphis', 47, '$250,000'],
   ['Franky Miles', 'Industrial Analyst', 'Buffalo', 49, '$190,000'],
   ['Glen Nixon', 'Corporate Counselor', 'Arlington', 44, '$80,000'],
-  ['Gabby Strickland', 'Business Process Consultant', 'Scottsdale', 26, '$45,000'],
-  ['Mason Ray', 'Computer Scientist', 'San Francisco', 39, '$142,000'],
-];
+  [
+    'Gabby Strickland',
+    'Business Process Consultant',
+    'Scottsdale',
+    26,
+    '$45,000'
+  ],
+  ['Mason Ray', 'Computer Scientist', 'San Francisco', 39, '$142,000']
+]
 
 class Example extends React.Component {
   state = {
     isLoading: false,
     data: theData
-  };
+  }
 
   // mock async function
   xhrRequest = (url, filterList) => {
     return new Promise(resolve => {
-      window.setTimeout(
-        () => {
-          const data = theData;
+      window.setTimeout(() => {
+        const data = theData
 
-          if (
-            filterList.reduce( (accu, cur) => accu + cur.length, 0) === 0
-          ) {
-            resolve({ data });
-          } else {
-
-            /*
+        if (filterList.reduce((accu, cur) => accu + cur.length, 0) === 0) {
+          resolve({ data })
+        } else {
+          /*
               This code simulates filtering that would occur on the back-end
             */
-            var filteredData = data.filter(row => {
-              var ret = true;
+          var filteredData = data.filter(row => {
+            var ret = true
 
-              for (var ii = 0; ii <= 4; ii++) {
-                if (filterList[ii] && filterList[ii].length) {
-                  ret = ret && filterList[ii].filter(ff => {
-                    return row[ii] == ff;
-                  }).length > 0;
-                }
+            for (var ii = 0; ii <= 4; ii++) {
+              if (filterList[ii] && filterList[ii].length) {
+                ret =
+                  ret &&
+                  filterList[ii].filter(ff => {
+                    return row[ii] == ff
+                  }).length > 0
               }
-              return ret;
-            });
+            }
+            return ret
+          })
 
-            resolve({ data: filteredData });
-          }
-        },
-        2000
-      );
-    });
+          resolve({ data: filteredData })
+        }
+      }, 2000)
+    })
   }
 
   handleFilterSubmit = applyFilters => {
-    let filterList = applyFilters();
+    let filterList = applyFilters()
 
-    this.setState({ isLoading: true });
+    this.setState({ isLoading: true })
 
     // fake async request
-    this.xhrRequest(`/myApiServer?filters=${filterList}`, filterList).then(res => {
-      this.setState({ isLoading: false, data: res.data });
-    });
-  };
+    this.xhrRequest(`/myApiServer?filters=${filterList}`, filterList).then(
+      res => {
+        this.setState({ isLoading: false, data: res.data })
+      }
+    )
+  }
 
   render() {
     const columns = [
       {
         name: 'Name',
         options: {
-          filter: true,
-        },
+          filter: true
+        }
       },
       {
         label: 'Title',
         name: 'Title',
         options: {
-          filter: true,
-        },
+          filter: true
+        }
       },
       {
         name: 'Location',
         options: {
-          filter: true,
-        },
+          filter: true
+        }
       },
       {
         name: 'Age',
         options: {
-          filter: true,
-        },
+          filter: true
+        }
       },
       {
         name: 'Salary',
         options: {
-          filter: true,
-        },
-      },
-    ];
+          filter: true
+        }
+      }
+    ]
 
     const options = {
       filter: true, // show the filter icon in the toolbar (true by default)
@@ -133,39 +143,44 @@ class Example extends React.Component {
       rowsPerPage: 50,
       rowsPerPageOptions: [50],
 
-      // makes it so filters have to be "confirmed" before being applied to the 
+      // makes it so filters have to be "confirmed" before being applied to the
       // table's internal filterList
-      confirmFilters: true, 
+      confirmFilters: true,
 
-      // Calling the applyNewFilters parameter applies the selected filters to the table 
+      // Calling the applyNewFilters parameter applies the selected filters to the table
       customFilterDialogFooter: (currentFilterList, applyNewFilters) => {
         return (
           <div style={{ marginTop: '40px' }}>
-            <Button variant="contained" onClick={() => this.handleFilterSubmit(applyNewFilters)}>Apply Filters</Button>
+            <Button
+              variant="contained"
+              onClick={() => this.handleFilterSubmit(applyNewFilters)}
+            >
+              Apply Filters
+            </Button>
           </div>
-        );
+        )
       },
 
       // callback that gets executed when filters are confirmed
-      onFilterConfirm: (filterList) => {
-        console.log('onFilterConfirm');
-        console.dir(filterList);
+      onFilterConfirm: filterList => {
+        console.log('onFilterConfirm')
+        console.dir(filterList)
       },
 
       onFilterDialogOpen: () => {
-        console.log('filter dialog opened');
+        console.log('filter dialog opened')
       },
       onFilterDialogClose: () => {
-        console.log('filter dialog closed');
+        console.log('filter dialog closed')
       },
       onFilterChange: (column, filterList, type) => {
         if (type === 'chip') {
-          var newFilters = () => (filterList);
-          console.log('updating filters via chip');
-          this.handleFilterSubmit(newFilters);
+          var newFilters = () => filterList
+          console.log('updating filters via chip')
+          this.handleFilterSubmit(newFilters)
         }
-      },
-    };
+      }
+    }
 
     return (
       <React.Fragment>
@@ -174,10 +189,15 @@ class Example extends React.Component {
             <CircularProgress />
           </div>
         )}
-        <MUIDataTable title={'ACME Employee list'} data={this.state.data} columns={columns} options={options} />
+        <MUIDataTable
+          title={'ACME Employee list'}
+          data={this.state.data}
+          columns={columns}
+          options={options}
+        />
       </React.Fragment>
-    );
+    )
   }
 }
 
-export default Example;
+export default Example

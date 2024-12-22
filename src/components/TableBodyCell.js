@@ -1,30 +1,30 @@
-import React, { useCallback } from 'react';
-import clsx from 'clsx';
-import TableCell from '@mui/material/TableCell';
-import { makeStyles } from 'tss-react/mui';
+import React, { useCallback } from 'react'
+import clsx from 'clsx'
+import TableCell from '@mui/material/TableCell'
+import { makeStyles } from 'tss-react/mui'
 
 const useStyles = makeStyles({ name: 'MUIDataTableBodyCell' })(theme => ({
   root: {},
   cellHide: {
-    display: 'none',
+    display: 'none'
   },
   simpleHeader: {
     [theme.breakpoints.down('sm')]: {
       display: 'inline-block',
       fontWeight: 'bold',
       width: '100%',
-      boxSizing: 'border-box',
-    },
+      boxSizing: 'border-box'
+    }
   },
   simpleCell: {
     [theme.breakpoints.down('sm')]: {
       display: 'inline-block',
       width: '100%',
-      boxSizing: 'border-box',
-    },
+      boxSizing: 'border-box'
+    }
   },
   stackedHeader: {
-    verticalAlign: 'top',
+    verticalAlign: 'top'
   },
   stackedCommon: {
     [theme.breakpoints.down('md')]: {
@@ -34,12 +34,12 @@ const useStyles = makeStyles({ name: 'MUIDataTableBodyCell' })(theme => ({
       width: 'calc(50%)',
       boxSizing: 'border-box',
       '&:last-child': {
-        borderBottom: 'none',
+        borderBottom: 'none'
       },
       '&:nth-last-of-type(2)': {
-        borderBottom: 'none',
-      },
-    },
+        borderBottom: 'none'
+      }
+    }
   },
   stackedCommonAlways: {
     display: 'inline-block',
@@ -48,11 +48,11 @@ const useStyles = makeStyles({ name: 'MUIDataTableBodyCell' })(theme => ({
     width: 'calc(50%)',
     boxSizing: 'border-box',
     '&:last-child': {
-      borderBottom: 'none',
+      borderBottom: 'none'
     },
     '&:nth-last-of-type(2)': {
-      borderBottom: 'none',
-    },
+      borderBottom: 'none'
+    }
   },
   stackedParent: {
     [theme.breakpoints.down('md')]: {
@@ -60,38 +60,38 @@ const useStyles = makeStyles({ name: 'MUIDataTableBodyCell' })(theme => ({
       fontSize: '16px',
       height: 'auto',
       width: 'calc(100%)',
-      boxSizing: 'border-box',
-    },
+      boxSizing: 'border-box'
+    }
   },
   stackedParentAlways: {
     display: 'inline-block',
     fontSize: '16px',
     height: 'auto',
     width: 'calc(100%)',
-    boxSizing: 'border-box',
+    boxSizing: 'border-box'
   },
   cellStackedSmall: {
     [theme.breakpoints.down('md')]: {
       width: '50%',
-      boxSizing: 'border-box',
-    },
+      boxSizing: 'border-box'
+    }
   },
   responsiveStackedSmall: {
     [theme.breakpoints.down('md')]: {
       width: '50%',
-      boxSizing: 'border-box',
-    },
+      boxSizing: 'border-box'
+    }
   },
   responsiveStackedSmallParent: {
     [theme.breakpoints.down('md')]: {
       width: '100%',
-      boxSizing: 'border-box',
-    },
-  },
-}));
+      boxSizing: 'border-box'
+    }
+  }
+}))
 
 function TableBodyCell(props) {
-  const { classes } = useStyles();
+  const { classes } = useStyles()
   const {
     children,
     colIndex,
@@ -103,20 +103,20 @@ function TableBodyCell(props) {
     print,
     tableId,
     ...otherProps
-  } = props;
-  const onCellClick = options.onCellClick;
+  } = props
+  const onCellClick = options.onCellClick
 
   const handleClick = useCallback(
     event => {
-      onCellClick(children, { colIndex, rowIndex, dataIndex, event });
+      onCellClick(children, { colIndex, rowIndex, dataIndex, event })
     },
-    [onCellClick, children, colIndex, rowIndex, dataIndex],
-  );
+    [onCellClick, children, colIndex, rowIndex, dataIndex]
+  )
 
   // Event listeners. Avoid attaching them if they're not necessary.
-  let methods = {};
+  let methods = {}
   if (onCellClick) {
-    methods.onClick = handleClick;
+    methods.onClick = handleClick
   }
 
   let cells = [
@@ -132,16 +132,19 @@ function TableBodyCell(props) {
             options.responsive === 'vertical' ||
             options.responsive === 'stacked' ||
             options.responsive === 'stackedFullWidth',
-          [classes.stackedCommonAlways]: options.responsive === 'verticalAlways',
+          [classes.stackedCommonAlways]:
+            options.responsive === 'verticalAlways',
           [classes.cellStackedSmall]:
             options.responsive === 'stacked' ||
             (options.responsive === 'stackedFullWidth' &&
-              (options.setTableProps().padding === 'none' || options.setTableProps().size === 'small')),
+              (options.setTableProps().padding === 'none' ||
+                options.setTableProps().size === 'small')),
           [classes.simpleHeader]: options.responsive === 'simple',
-          'datatables-noprint': !print,
+          'datatables-noprint': !print
         },
-        className,
-      )}>
+        className
+      )}
+    >
       {columnHeader}
     </div>,
     <div
@@ -153,27 +156,37 @@ function TableBodyCell(props) {
             options.responsive === 'vertical' ||
             options.responsive === 'stacked' ||
             options.responsive === 'stackedFullWidth',
-          [classes.stackedCommonAlways]: options.responsive === 'verticalAlways',
+          [classes.stackedCommonAlways]:
+            options.responsive === 'verticalAlways',
           [classes.responsiveStackedSmall]:
             options.responsive === 'stacked' ||
             (options.responsive === 'stackedFullWidth' &&
-              (options.setTableProps().padding === 'none' || options.setTableProps().size === 'small')),
+              (options.setTableProps().padding === 'none' ||
+                options.setTableProps().size === 'small')),
           [classes.simpleCell]: options.responsive === 'simple',
-          'datatables-noprint': !print,
+          'datatables-noprint': !print
         },
-        className,
-      )}>
-      {typeof children === 'function' ? children(dataIndex, rowIndex) : children}
-    </div>,
-  ];
+        className
+      )}
+    >
+      {typeof children === 'function'
+        ? children(dataIndex, rowIndex)
+        : children}
+    </div>
+  ]
 
-  var innerCells;
+  var innerCells
   if (
-    ['standard', 'scrollMaxHeight', 'scrollFullHeight', 'scrollFullHeightFullWidth'].indexOf(options.responsive) !== -1
+    [
+      'standard',
+      'scrollMaxHeight',
+      'scrollFullHeight',
+      'scrollFullHeightFullWidth'
+    ].indexOf(options.responsive) !== -1
   ) {
-    innerCells = cells.slice(1, 2);
+    innerCells = cells.slice(1, 2)
   } else {
-    innerCells = cells;
+    innerCells = cells
   }
 
   return (
@@ -188,21 +201,24 @@ function TableBodyCell(props) {
             options.responsive === 'vertical' ||
             options.responsive === 'stacked' ||
             options.responsive === 'stackedFullWidth',
-          [classes.stackedParentAlways]: options.responsive === 'verticalAlways',
+          [classes.stackedParentAlways]:
+            options.responsive === 'verticalAlways',
           [classes.responsiveStackedSmallParent]:
             options.responsive === 'vertical' ||
             options.responsive === 'stacked' ||
             (options.responsive === 'stackedFullWidth' &&
-              (options.setTableProps().padding === 'none' || options.setTableProps().size === 'small')),
+              (options.setTableProps().padding === 'none' ||
+                options.setTableProps().size === 'small')),
           [classes.simpleCell]: options.responsive === 'simple',
-          'datatables-noprint': !print,
+          'datatables-noprint': !print
         },
-        className,
+        className
       )}
-      {...otherProps}>
+      {...otherProps}
+    >
       {innerCells}
     </TableCell>
-  );
+  )
 }
 
-export default TableBodyCell;
+export default TableBodyCell

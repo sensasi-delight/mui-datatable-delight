@@ -1,12 +1,12 @@
-import Button from '@mui/material/Button';
-import React from 'react';
-import ReactDOM from 'react-dom';
-import MUIDataTable from '../../src/';
+import Button from '@mui/material/Button'
+import React from 'react'
+import ReactDOM from 'react-dom'
+import MUIDataTable from '../../src/'
 
 class Example extends React.Component {
   state = {
-    downloadFile: true,
-  };
+    downloadFile: true
+  }
 
   render() {
     const columns = [
@@ -21,19 +21,23 @@ class Example extends React.Component {
       {
         name: 'Age',
         options: {
-          customBodyRenderLite: (dataIndex) => {
-            let value = data[dataIndex][3];
-            return <div><span>{value}</span></div>;
+          customBodyRenderLite: dataIndex => {
+            let value = data[dataIndex][3]
+            return (
+              <div>
+                <span>{value}</span>
+              </div>
+            )
           }
         }
       },
       {
         name: 'Salary',
         options: {
-          download: false,
-        },
-      },
-    ];
+          download: false
+        }
+      }
+    ]
 
     const data = [
       ['Gabby George', 'Business Analyst', 'Minneapolis', 30, 100000],
@@ -51,7 +55,13 @@ class Example extends React.Component {
       ['Frankie Long', 'Industrial Analyst', 'Austin', 31, 170000],
       ['Brynn Robbins', 'Business Analyst', 'Norfolk', 22, 90000],
       ['Justice Mann', 'Business Consultant', 'Chicago', 24, 133000],
-      ['Addison Navarro', 'Business Management Analyst', 'New York', 50, 295000],
+      [
+        'Addison Navarro',
+        'Business Management Analyst',
+        'New York',
+        50,
+        295000
+      ],
       ['Jesse Welch', 'Agency Legal Counsel', 'Seattle', 28, 200000],
       ['Eli Mejia', 'Commercial Specialist', 'Long Beach', 65, 400000],
       ['Gene Leblanc', 'Industrial Analyst', 'Hartford', 34, 110000],
@@ -64,9 +74,15 @@ class Example extends React.Component {
       ['Silver Carey', 'Computer Scientist', 'Memphis', 47, 250000],
       ['Franky Miles', 'Industrial Analyst', 'Buffalo', 49, 190000],
       ['Glen Nixon', 'Corporate Counselor', 'Arlington', 44, 80000],
-      ['Gabby Strickland', 'Business Process Consultant', 'Scottsdale', 26, 45000],
-      ['Mason Ray', 'Computer Scientist', 'San Francisco', 39, 142000],
-    ];
+      [
+        'Gabby Strickland',
+        'Business Process Consultant',
+        'Scottsdale',
+        26,
+        45000
+      ],
+      ['Mason Ray', 'Computer Scientist', 'San Francisco', 39, 142000]
+    ]
 
     const options = {
       filter: true,
@@ -78,49 +94,49 @@ class Example extends React.Component {
       },
       rowsPerPage: 10,
       downloadOptions: {
-          filename: 'excel-format.csv',
-          separator: ';',
-          filterOptions: {
-            useDisplayedColumnsOnly: true,
-            useDisplayedRowsOnly: true,
-          }
+        filename: 'excel-format.csv',
+        separator: ';',
+        filterOptions: {
+          useDisplayedColumnsOnly: true,
+          useDisplayedRowsOnly: true
+        }
       },
       onDownload: (buildHead, buildBody, columns, data) => {
         if (this.state.downloadFile) {
-          let val= `${buildHead(columns)}${buildBody(data)}`.trim();
-          return val;
+          let val = `${buildHead(columns)}${buildBody(data)}`.trim()
+          return val
         }
 
-        return false;
+        return false
       },
       onRowSelectionChange: (currentRowsSelected, allRows, rowsSelected) => {
-        console.log(currentRowsSelected, allRows, rowsSelected);
+        console.log(currentRowsSelected, allRows, rowsSelected)
       },
       onRowsDelete: rowsDeleted => {
-        console.log(rowsDeleted, 'were deleted!');
+        console.log(rowsDeleted, 'were deleted!')
       },
       onChangePage: numberRows => {
-        console.log(numberRows);
+        console.log(numberRows)
       },
       onSearchChange: searchText => {
-        console.log(searchText);
+        console.log(searchText)
       },
       onColumnSortChange: (column, direction) => {
-        console.log(column, direction);
+        console.log(column, direction)
       },
       onViewColumnsChange: (column, action) => {
-        console.log(column, action);
+        console.log(column, action)
       },
       onFilterChange: (column, filters) => {
-        console.log(column, filters);
+        console.log(column, filters)
       },
       onCellClick: (cellIndex, rowIndex) => {
-        console.log(cellIndex, rowIndex);
+        console.log(cellIndex, rowIndex)
       },
       onRowClick: (rowData, rowState) => {
-        console.log(rowData, rowState);
-      },
-    };
+        console.log(rowData, rowState)
+      }
+    }
 
     return (
       <React.Fragment>
@@ -131,15 +147,25 @@ class Example extends React.Component {
             top: '1.5rem',
             background: 'gray',
             color: 'white',
-            zIndex: 10,
+            zIndex: 10
           }}
-          onClick={() => this.setState(prevState => ({ downloadFile: !prevState.downloadFile }))}>
+          onClick={() =>
+            this.setState(prevState => ({
+              downloadFile: !prevState.downloadFile
+            }))
+          }
+        >
           {this.state.downloadFile ? 'Disable' : 'Enable'} Download
         </Button>
-        <MUIDataTable title={'ACME Employee list CSV'} data={data} columns={columns} options={options} />
+        <MUIDataTable
+          title={'ACME Employee list CSV'}
+          data={data}
+          columns={columns}
+          options={options}
+        />
       </React.Fragment>
-    );
+    )
   }
 }
 
-export default Example;
+export default Example

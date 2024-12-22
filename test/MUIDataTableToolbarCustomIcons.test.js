@@ -1,28 +1,28 @@
-import IconButton from '@mui/material/IconButton';
-import DownloadIcon from '@mui/icons-material/CloudDownload';
-import FilterIcon from '@mui/icons-material/FilterList';
-import PrintIcon from '@mui/icons-material/Print';
-import SearchIcon from '@mui/icons-material/Search';
-import ViewColumnIcon from '@mui/icons-material/ViewColumn';
-import Chip from '@mui/material/Chip';
-import { assert } from 'chai';
-import { mount } from 'enzyme';
-import React from 'react';
-import TableToolbar from '../src/components/TableToolbar';
-import getTextLabels from '../src/textLabels';
+import IconButton from '@mui/material/IconButton'
+import DownloadIcon from '@mui/icons-material/CloudDownload'
+import FilterIcon from '@mui/icons-material/FilterList'
+import PrintIcon from '@mui/icons-material/Print'
+import SearchIcon from '@mui/icons-material/Search'
+import ViewColumnIcon from '@mui/icons-material/ViewColumn'
+import Chip from '@mui/material/Chip'
+import { assert } from 'chai'
+import { mount } from 'enzyme'
+import React from 'react'
+import TableToolbar from '../src/components/TableToolbar'
+import getTextLabels from '../src/textLabels'
 
 const CustomChip = props => {
-  return <Chip variant="outlined" color="secondary" label={props.label} />;
-};
+  return <Chip variant="outlined" color="secondary" label={props.label} />
+}
 
 const icons = {
   SearchIcon,
   DownloadIcon,
   PrintIcon,
   ViewColumnIcon,
-  FilterIcon,
-};
-let setTableAction = () => {};
+  FilterIcon
+}
+let setTableAction = () => {}
 const options = {
   print: true,
   download: true,
@@ -35,59 +35,64 @@ const options = {
     filename: 'tableDownload.csv',
     filterOptions: {
       useDisplayedRowsOnly: true,
-      useDisplayedColumnsOnly: true,
-    },
-  },
-};
-const columns = ['First Name', 'Company', 'City', 'State'];
+      useDisplayedColumnsOnly: true
+    }
+  }
+}
+const columns = ['First Name', 'Company', 'City', 'State']
 const data = [
   {
     data: ['Joe James', 'Test Corp', 'Yonkers', 'NY'],
-    dataIndex: 0,
+    dataIndex: 0
   },
   {
     data: ['John Walsh', 'Test Corp', 'Hartford', 'CT'],
-    dataIndex: 1,
+    dataIndex: 1
   },
   {
     data: ['Bob Herm', 'Test Corp', 'Tampa', 'FL'],
-    dataIndex: 2,
+    dataIndex: 2
   },
   {
     data: ['James Houston', 'Test Corp', 'Dallas', 'TX'],
-    dataIndex: 3,
-  },
-];
+    dataIndex: 3
+  }
+]
 
 const testCustomIcon = iconName => {
-  const components = { icons: { [iconName]: CustomChip } };
-  const wrapper = mount(<TableToolbar {...{ columns, data, options, setTableAction, components }} />);
-  assert.strictEqual(wrapper.find(IconButton).length, 5); // All icons show
-  assert.strictEqual(wrapper.find(CustomChip).length, 1); // Custom chip shows once
+  const components = { icons: { [iconName]: CustomChip } }
+  const wrapper = mount(
+    <TableToolbar {...{ columns, data, options, setTableAction, components }} />
+  )
+  assert.strictEqual(wrapper.find(IconButton).length, 5) // All icons show
+  assert.strictEqual(wrapper.find(CustomChip).length, 1) // Custom chip shows once
   Object.keys(icons).forEach(icon => {
     // The original default for the custom icon should be gone, the rest should remain
-    assert.strictEqual(wrapper.find(icons[icon]).length, iconName === icon ? 0 : 1);
-  });
-};
+    assert.strictEqual(
+      wrapper.find(icons[icon]).length,
+      iconName === icon ? 0 : 1
+    )
+  })
+}
 
-describe('<TableToolbar /> with custom icons', function() {
+describe('<TableToolbar /> with custom icons', function () {
   it('should render a toolbar with a custom chip in place of the search icon', () => {
-    testCustomIcon('SearchIcon');
-  });
+    testCustomIcon('SearchIcon')
+  })
 
   it('should render a toolbar with a custom chip in place of the download icon', () => {
-    testCustomIcon('DownloadIcon');
-  });
+    testCustomIcon('DownloadIcon')
+  })
 
   it('should render a toolbar with a custom chip in place of the print icon', () => {
-    testCustomIcon('PrintIcon');
-  });
+    testCustomIcon('PrintIcon')
+  })
 
   it('should render a toolbar with a custom chip in place of the view columns icon', () => {
-    testCustomIcon('ViewColumnIcon');
-  });
+    testCustomIcon('ViewColumnIcon')
+  })
 
   it('should render a toolbar with a custom chip in place of the filter icon', () => {
-    testCustomIcon('FilterIcon');
-  });
-});
+    testCustomIcon('FilterIcon')
+  })
+})

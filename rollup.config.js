@@ -1,25 +1,25 @@
-import babel from '@rollup/plugin-babel';
-import commonjs from '@rollup/plugin-commonjs';
-import filesize from 'rollup-plugin-filesize';
-import replace from '@rollup/plugin-replace';
-import terser from '@rollup/plugin-terser';
+import babel from '@rollup/plugin-babel'
+import commonjs from '@rollup/plugin-commonjs'
+import filesize from 'rollup-plugin-filesize'
+import replace from '@rollup/plugin-replace'
+import terser from '@rollup/plugin-terser'
 
-import pkg from './package.json';
+import pkg from './package.json'
 
 const PLUGINS = [
   replace({
-    'process.env.NODE_ENV': JSON.stringify('production'),
+    'process.env.NODE_ENV': JSON.stringify('production')
   }),
   commonjs({
-    include: ['node_modules/**'],
+    include: ['node_modules/**']
   }),
   babel({
     babelHelpers: 'runtime',
-    babelrc: true,
+    babelrc: true
   }),
   terser(),
-  filesize(),
-];
+  filesize()
+]
 
 export default {
   input: 'src/index.js',
@@ -29,12 +29,12 @@ export default {
       file: pkg.main,
       format: 'cjs',
       exports: 'named',
-      sourcemap: true,
+      sourcemap: true
     },
     {
       file: pkg.module,
       format: 'es',
-      sourcemap: true,
-    },
-  ],
-};
+      sourcemap: true
+    }
+  ]
+}

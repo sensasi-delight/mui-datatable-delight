@@ -1,46 +1,46 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import clsx from 'clsx';
-import Checkbox from '@mui/material/Checkbox';
-import TableCell from '@mui/material/TableCell';
-import { makeStyles } from 'tss-react/mui';
-import ExpandButton from './ExpandButton';
+import React from 'react'
+import PropTypes from 'prop-types'
+import clsx from 'clsx'
+import Checkbox from '@mui/material/Checkbox'
+import TableCell from '@mui/material/TableCell'
+import { makeStyles } from 'tss-react/mui'
+import ExpandButton from './ExpandButton'
 
 const useStyles = makeStyles({ name: 'MUIDataTableSelectCell' })(theme => ({
   root: {
     '@media print': {
-      display: 'none',
-    },
+      display: 'none'
+    }
   },
   fixedHeader: {
     position: 'sticky',
     top: '0px',
-    zIndex: 100,
+    zIndex: 100
   },
   fixedLeft: {
     position: 'sticky',
     left: '0px',
-    zIndex: 100,
+    zIndex: 100
   },
   icon: {
     cursor: 'pointer',
-    transition: 'transform 0.25s',
+    transition: 'transform 0.25s'
   },
   expanded: {
-    transform: 'rotate(90deg)',
+    transform: 'rotate(90deg)'
   },
   hide: {
-    visibility: 'hidden',
+    visibility: 'hidden'
   },
   headerCell: {
     zIndex: 110,
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: theme.palette.background.paper
   },
   expandDisabled: {},
   checkboxRoot: {},
   checked: {},
-  disabled: {},
-}));
+  disabled: {}
+}))
 
 const TableSelectCell = ({
   fixedHeader,
@@ -62,53 +62,59 @@ const TableSelectCell = ({
   components = {},
   ...otherProps
 }) => {
-  const { classes } = useStyles();
-  const CheckboxComponent = components.Checkbox || Checkbox;
-  const ExpandButtonComponent = components.ExpandButton || ExpandButton;
+  const { classes } = useStyles()
+  const CheckboxComponent = components.Checkbox || Checkbox
+  const ExpandButtonComponent = components.ExpandButton || ExpandButton
 
-  if (expandableOn === false && (selectableOn === 'none' || selectableRowsHideCheckboxes === true)) {
-    return null;
+  if (
+    expandableOn === false &&
+    (selectableOn === 'none' || selectableRowsHideCheckboxes === true)
+  ) {
+    return null
   }
 
   const cellClass = clsx({
     [classes.root]: true,
     [classes.fixedHeader]: fixedHeader && isHeaderCell,
     [classes.fixedLeft]: fixedSelectColumn,
-    [classes.headerCell]: isHeaderCell,
-  });
+    [classes.headerCell]: isHeaderCell
+  })
 
   const buttonClass = clsx({
-    [classes.expandDisabled]: hideExpandButton,
-  });
+    [classes.expandDisabled]: hideExpandButton
+  })
 
   const iconClass = clsx({
     [classes.icon]: true,
     [classes.hide]: isHeaderCell && !expandableRowsHeader,
-    [classes.expanded]: isRowExpanded || (isHeaderCell && areAllRowsExpanded()),
-  });
+    [classes.expanded]: isRowExpanded || (isHeaderCell && areAllRowsExpanded())
+  })
   const iconIndeterminateClass = clsx({
     [classes.icon]: true,
-    [classes.hide]: isHeaderCell && !expandableRowsHeader,
-  });
+    [classes.hide]: isHeaderCell && !expandableRowsHeader
+  })
 
-  let refProp = {};
+  let refProp = {}
   if (setHeadCellRef) {
     refProp.ref = el => {
-      setHeadCellRef(0, 0, el);
-    };
+      setHeadCellRef(0, 0, el)
+    }
   }
 
   const renderCheckBox = () => {
-    if (isHeaderCell && (selectableOn !== 'multiple' || selectableRowsHeader === false)) {
+    if (
+      isHeaderCell &&
+      (selectableOn !== 'multiple' || selectableRowsHeader === false)
+    ) {
       // only display the header checkbox for multiple selection.
-      return null;
+      return null
     }
     return (
       <CheckboxComponent
         classes={{
           root: classes.checkboxRoot,
           checked: classes.checked,
-          disabled: classes.disabled,
+          disabled: classes.disabled
         }}
         data-description={isHeaderCell ? 'row-select-header' : 'row-select'}
         data-index={dataIndex || null}
@@ -116,8 +122,8 @@ const TableSelectCell = ({
         disabled={!isRowSelectable}
         {...otherProps}
       />
-    );
-  };
+    )
+  }
 
   return (
     <TableCell className={cellClass} padding="checkbox" {...refProp}>
@@ -135,11 +141,13 @@ const TableSelectCell = ({
             dataIndex={dataIndex}
           />
         )}
-        {selectableOn !== 'none' && selectableRowsHideCheckboxes !== true && renderCheckBox()}
+        {selectableOn !== 'none' &&
+          selectableRowsHideCheckboxes !== true &&
+          renderCheckBox()}
       </div>
     </TableCell>
-  );
-};
+  )
+}
 
 TableSelectCell.propTypes = {
   /** Select cell checked on/off */
@@ -157,7 +165,7 @@ TableSelectCell.propTypes = {
   /** Is selectable option enabled */
   selectableOn: PropTypes.string,
   /** Select cell disabled on/off */
-  isRowSelectable: PropTypes.bool,
-};
+  isRowSelectable: PropTypes.bool
+}
 
-export default TableSelectCell;
+export default TableSelectCell

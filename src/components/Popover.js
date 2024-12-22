@@ -1,57 +1,70 @@
-import React, { useEffect, useRef, useState } from 'react';
-import PropTypes from 'prop-types';
-import MuiPopover from '@mui/material/Popover';
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
+import React, { useEffect, useRef, useState } from 'react'
+import PropTypes from 'prop-types'
+import MuiPopover from '@mui/material/Popover'
+import IconButton from '@mui/material/IconButton'
+import CloseIcon from '@mui/icons-material/Close'
 
-const Popover = ({ className, trigger, refExit, hide, content, ...providedProps }) => {
-  const [isOpen, open] = useState(false);
-  const anchorEl = useRef(null);
+const Popover = ({
+  className,
+  trigger,
+  refExit,
+  hide,
+  content,
+  ...providedProps
+}) => {
+  const [isOpen, open] = useState(false)
+  const anchorEl = useRef(null)
 
   useEffect(() => {
     if (isOpen) {
-      const shouldHide = typeof hide === 'boolean' ? hide : false;
+      const shouldHide = typeof hide === 'boolean' ? hide : false
       if (shouldHide) {
-        open(false);
+        open(false)
       }
     }
-  }, [hide, isOpen, open]);
+  }, [hide, isOpen, open])
 
   const handleRequestClose = () => {
-    open(false);
-  };
+    open(false)
+  }
 
-  const closeIconClass = providedProps.classes.closeIcon;
-  delete providedProps.classes.closeIcon; // remove non-standard class from being passed to the popover component
+  const closeIconClass = providedProps.classes.closeIcon
+  delete providedProps.classes.closeIcon // remove non-standard class from being passed to the popover component
 
   const transformOriginSpecs = {
     vertical: 'top',
-    horizontal: 'center',
-  };
+    horizontal: 'center'
+  }
 
   const anchorOriginSpecs = {
     vertical: 'bottom',
-    horizontal: 'center',
-  };
+    horizontal: 'center'
+  }
 
   const handleOnExit = () => {
     if (refExit) {
-      refExit();
+      refExit()
     }
-  };
+  }
 
   const handleTriggerClick = event => {
     if (trigger.props.onClick) {
-      trigger.props.onClick();
+      trigger.props.onClick()
     }
 
-    anchorEl.current = event.currentTarget;
-    open(true);
-  };
+    anchorEl.current = event.currentTarget
+    open(true)
+  }
 
   return (
     <>
-      <span key="content" onClick={handleTriggerClick} onKeyDown={handleTriggerClick} role="button" tabIndex={0}>
+      <span
+        key="content"
+        onClick={handleTriggerClick}
+        onKeyDown={handleTriggerClick}
+        role="button"
+        tabIndex={0}
+      >
         {trigger}
       </span>
       <MuiPopover
@@ -62,25 +75,32 @@ const Popover = ({ className, trigger, refExit, hide, content, ...providedProps 
         anchorEl={anchorEl.current}
         anchorOrigin={anchorOriginSpecs}
         transformOrigin={transformOriginSpecs}
-        {...providedProps}>
+        {...providedProps}
+      >
         <IconButton
           aria-label="Close"
           onClick={handleRequestClose}
           className={closeIconClass}
-          style={{ position: 'absolute', right: '4px', top: '4px', zIndex: '1000' }}>
+          style={{
+            position: 'absolute',
+            right: '4px',
+            top: '4px',
+            zIndex: '1000'
+          }}
+        >
           <CloseIcon />
         </IconButton>
         {content}
       </MuiPopover>
     </>
-  );
-};
+  )
+}
 
 Popover.propTypes = {
   refExit: PropTypes.func,
   trigger: PropTypes.node.isRequired,
   content: PropTypes.node.isRequired,
-  hide: PropTypes.bool,
-};
+  hide: PropTypes.bool
+}
 
-export default Popover;
+export default Popover

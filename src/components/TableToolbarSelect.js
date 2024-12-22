@@ -1,11 +1,11 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import Paper from '@mui/material/Paper';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import DeleteIcon from '@mui/icons-material/Delete';
-import { withStyles } from 'tss-react/mui';
-import MuiTooltip from '@mui/material/Tooltip';
+import React from 'react'
+import PropTypes from 'prop-types'
+import Paper from '@mui/material/Paper'
+import IconButton from '@mui/material/IconButton'
+import Typography from '@mui/material/Typography'
+import DeleteIcon from '@mui/icons-material/Delete'
+import { withStyles } from 'tss-react/mui'
+import MuiTooltip from '@mui/material/Tooltip'
 
 const defaultToolbarSelectStyles = theme => ({
   root: {
@@ -16,20 +16,26 @@ const defaultToolbarSelectStyles = theme => ({
     zIndex: 120,
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingTop: typeof theme.spacing === 'function' ? theme.spacing(1) : theme.spacing.unit,
-    paddingBottom: typeof theme.spacing === 'function' ? theme.spacing(1) : theme.spacing.unit,
+    paddingTop:
+      typeof theme.spacing === 'function'
+        ? theme.spacing(1)
+        : theme.spacing.unit,
+    paddingBottom:
+      typeof theme.spacing === 'function'
+        ? theme.spacing(1)
+        : theme.spacing.unit,
     '@media print': {
-      display: 'none',
-    },
+      display: 'none'
+    }
   },
   title: {
-    paddingLeft: '26px',
+    paddingLeft: '26px'
   },
   iconButton: {
-    marginRight: '24px',
+    marginRight: '24px'
   },
-  deleteIcon: {},
-});
+  deleteIcon: {}
+})
 
 class TableToolbarSelect extends React.Component {
   static propTypes = {
@@ -40,32 +46,43 @@ class TableToolbarSelect extends React.Component {
     /** Callback to trigger selected rows delete */
     onRowsDelete: PropTypes.func,
     /** Extend the style applied to components */
-    classes: PropTypes.object,
-  };
+    classes: PropTypes.object
+  }
 
   /**
    * @param {number[]} selectedRows Array of rows indexes that are selected, e.g. [0, 2] will select first and third rows in table
    */
   handleCustomSelectedRows = selectedRows => {
     if (!Array.isArray(selectedRows)) {
-      throw new TypeError(`"selectedRows" must be an "array", but it's "${typeof selectedRows}"`);
+      throw new TypeError(
+        `"selectedRows" must be an "array", but it's "${typeof selectedRows}"`
+      )
     }
 
     if (selectedRows.some(row => typeof row !== 'number')) {
-      throw new TypeError(`Array "selectedRows" must contain only numbers`);
+      throw new TypeError(`Array "selectedRows" must contain only numbers`)
     }
 
-    const { options } = this.props;
+    const { options } = this.props
     if (selectedRows.length > 1 && options.selectableRows === 'single') {
-      throw new Error('Can not select more than one row when "selectableRows" is "single"');
+      throw new Error(
+        'Can not select more than one row when "selectableRows" is "single"'
+      )
     }
-    this.props.selectRowUpdate('custom', selectedRows);
-  };
+    this.props.selectRowUpdate('custom', selectedRows)
+  }
 
   render() {
-    const { classes, onRowsDelete, selectedRows, options, displayData, components = {} } = this.props;
-    const textLabels = options.textLabels.selectedRows;
-    const Tooltip = components.Tooltip || MuiTooltip;
+    const {
+      classes,
+      onRowsDelete,
+      selectedRows,
+      options,
+      displayData,
+      components = {}
+    } = this.props
+    const textLabels = options.textLabels.selectedRows
+    const Tooltip = components.Tooltip || MuiTooltip
 
     return (
       <Paper className={classes.root}>
@@ -75,17 +92,27 @@ class TableToolbarSelect extends React.Component {
           </Typography>
         </div>
         {options.customToolbarSelect ? (
-          options.customToolbarSelect(selectedRows, displayData, this.handleCustomSelectedRows)
+          options.customToolbarSelect(
+            selectedRows,
+            displayData,
+            this.handleCustomSelectedRows
+          )
         ) : (
           <Tooltip title={textLabels.delete}>
-            <IconButton className={classes.iconButton} onClick={onRowsDelete} aria-label={textLabels.deleteAria}>
+            <IconButton
+              className={classes.iconButton}
+              onClick={onRowsDelete}
+              aria-label={textLabels.deleteAria}
+            >
               <DeleteIcon className={classes.deleteIcon} />
             </IconButton>
           </Tooltip>
         )}
       </Paper>
-    );
+    )
   }
 }
 
-export default withStyles(TableToolbarSelect, defaultToolbarSelectStyles, { name: 'MUIDataTableToolbarSelect' });
+export default withStyles(TableToolbarSelect, defaultToolbarSelectStyles, {
+  name: 'MUIDataTableToolbarSelect'
+})

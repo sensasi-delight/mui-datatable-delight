@@ -4,36 +4,36 @@
 const getTextLabels = () => ({
   body: {
     noMatch: 'Sorry, no matching records found',
-    toolTip: 'Sort',
+    toolTip: 'Sort'
   },
   pagination: {
     next: 'Next Page',
     previous: 'Previous Page',
     rowsPerPage: 'Rows per page:',
     displayRows: 'of',
-    jumpToPage: 'Jump to Page:',
+    jumpToPage: 'Jump to Page:'
   },
   toolbar: {
     search: 'Search',
     downloadCsv: 'Download CSV',
     print: 'Print',
     viewColumns: 'View Columns',
-    filterTable: 'Filter Table',
+    filterTable: 'Filter Table'
   },
   filter: {
     all: 'All',
     title: 'FILTERS',
-    reset: 'RESET',
+    reset: 'RESET'
   },
   viewColumns: {
     title: 'Show Columns',
-    titleAria: 'Show/Hide Table Columns',
+    titleAria: 'Show/Hide Table Columns'
   },
   selectedRows: {
     text: 'row(s) selected',
     delete: 'Delete',
-    deleteAria: 'Delete Selected Rows',
-  },
-});
+    deleteAria: 'Delete Selected Rows'
+  }
+})
 
-export default getTextLabels;
+export default getTextLabels

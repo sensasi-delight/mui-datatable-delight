@@ -1,11 +1,11 @@
-import React, { Fragment } from 'react';
-import ReactDOM from 'react-dom';
-import MUIDataTable from '../../src/';
+import React, { Fragment } from 'react'
+import ReactDOM from 'react-dom'
+import MUIDataTable from '../../src/'
 
 class Example extends React.Component {
   state = {
     searchText: 'Computer'
-  };
+  }
 
   render() {
     const columns = [
@@ -13,36 +13,36 @@ class Example extends React.Component {
         name: 'Name',
         options: {
           filter: true,
-          display: 'excluded',
-        },
+          display: 'excluded'
+        }
       },
       {
         label: 'Modified Title Label',
         name: 'Title',
         options: {
-          filter: true,
-        },
+          filter: true
+        }
       },
       {
         name: 'Location',
         options: {
-          filter: false,
-        },
+          filter: false
+        }
       },
       {
         name: 'Age',
         options: {
-          filter: true,
-        },
+          filter: true
+        }
       },
       {
         name: 'Salary',
         options: {
           filter: true,
-          sort: false,
-        },
-      },
-    ];
+          sort: false
+        }
+      }
+    ]
 
     const data = [
       ['Gabby George', 'Business Analyst', 'Minneapolis', 30, '$100,000'],
@@ -50,7 +50,13 @@ class Example extends React.Component {
       ['Jaden Collins', 'Attorney', 'Santa Ana', 27, '$500,000'],
       ['Franky Rees', 'Business Analyst', 'St. Petersburg', 22, '$50,000'],
       ['Aaren Rose', 'Business Consultant', 'Toledo', 28, '$75,000'],
-      ['Blake Duncan', 'Business Management Analyst', 'San Diego', 65, '$94,000'],
+      [
+        'Blake Duncan',
+        'Business Management Analyst',
+        'San Diego',
+        65,
+        '$94,000'
+      ],
       ['Frankie Parry', 'Agency Legal Counsel', 'Jacksonville', 71, '$210,000'],
       ['Lane Wilson', 'Commercial Specialist', 'Omaha', 19, '$65,000'],
       ['Robin Duncan', 'Business Analyst', 'Los Angeles', 20, '$77,000'],
@@ -60,7 +66,13 @@ class Example extends React.Component {
       ['Frankie Long', 'Industrial Analyst', 'Austin', 31, '$170,000'],
       ['Brynn Robbins', 'Business Analyst', 'Norfolk', 22, '$90,000'],
       ['Justice Mann', 'Business Consultant', 'Chicago', 24, '$133,000'],
-      ['Addison Navarro', 'Business Management Analyst', 'New York', 50, '$295,000'],
+      [
+        'Addison Navarro',
+        'Business Management Analyst',
+        'New York',
+        50,
+        '$295,000'
+      ],
       ['Jesse Welch', 'Agency Legal Counsel', 'Seattle', 28, '$200,000'],
       ['Eli Mejia', 'Commercial Specialist', 'Long Beach', 65, '$400,000'],
       ['Gene Leblanc', 'Industrial Analyst', 'Hartford', 34, '$110,000'],
@@ -73,9 +85,15 @@ class Example extends React.Component {
       ['Silver Carey', 'Computer Scientist', 'Memphis', 47, '$250,000'],
       ['Franky Miles', 'Industrial Analyst', 'Buffalo', 49, '$190,000'],
       ['Glen Nixon', 'Corporate Counselor', 'Arlington', 44, '$80,000'],
-      ['Gabby Strickland', 'Business Process Consultant', 'Scottsdale', 26, '$45,000'],
-      ['Mason Ray', 'Computer Scientist', 'San Francisco', 39, '$142,000'],
-    ];
+      [
+        'Gabby Strickland',
+        'Business Process Consultant',
+        'Scottsdale',
+        26,
+        '$45,000'
+      ],
+      ['Mason Ray', 'Computer Scientist', 'San Francisco', 39, '$142,000']
+    ]
 
     const options = {
       filter: true,
@@ -84,32 +102,39 @@ class Example extends React.Component {
       page: 0,
       searchText: this.state.searchText,
       searchProps: {
-        onBlur: (e) => {
-          console.log('onBlur!');
+        onBlur: e => {
+          console.log('onBlur!')
         },
-        onKeyUp:(e) => {
-          console.log('onKeyUp!');
+        onKeyUp: e => {
+          console.log('onKeyUp!')
         }
       },
       searchPlaceholder: 'Your Custom Search Placeholder',
       customSearch: (searchQuery, currentRow, columns) => {
-        let isFound = false;
+        let isFound = false
         currentRow.forEach(col => {
           if (col.toString().indexOf(searchQuery) >= 0) {
-            isFound = true;
+            isFound = true
           }
-        });
-        return isFound;
-      },
-    };
+        })
+        return isFound
+      }
+    }
 
     return (
       <Fragment>
-        <button onClick={() => this.setState({ searchText: '' })}>Reset Search</button>
-        <MUIDataTable title={'ACME Employee list'} data={data} columns={columns} options={options} />
+        <button onClick={() => this.setState({ searchText: '' })}>
+          Reset Search
+        </button>
+        <MUIDataTable
+          title={'ACME Employee list'}
+          data={data}
+          columns={columns}
+          options={options}
+        />
       </Fragment>
-    );
+    )
   }
 }
 
-export default Example;
+export default Example

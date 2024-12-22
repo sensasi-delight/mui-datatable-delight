@@ -1,13 +1,13 @@
-import { Box, Button, Container } from '@mui/material';
-import { createRoot } from 'react-dom/client';
-import { HashRouter, Link, Route, Switch } from 'react-router-dom';
-import { Home } from '@mui/icons-material';
+import { Box, Button, Container } from '@mui/material'
+import { createRoot } from 'react-dom/client'
+import { HashRouter, Link, Route, Switch } from 'react-router-dom'
+import { Home } from '@mui/icons-material'
 // locals
-import examples from './components/examples';
-import ExamplesGrid from './components/ExamplesGrid';
+import examples from './components/examples'
+import ExamplesGrid from './components/ExamplesGrid'
 
 /** Render the App */
-createRoot(document.getElementById('app-root')).render(<App />);
+createRoot(document.getElementById('app-root')).render(<App />)
 
 /**
  * App Component
@@ -19,7 +19,7 @@ function App() {
         <ContentSwitcher />
       </Layout>
     </Providers>
-  );
+  )
 }
 
 /**
@@ -28,7 +28,7 @@ function App() {
  * @param {ReactNode} props.children
  */
 function Providers({ children }) {
-  return <HashRouter hashType="noslash">{children}</HashRouter>;
+  return <HashRouter hashType="noslash">{children}</HashRouter>
 }
 
 /**
@@ -39,8 +39,9 @@ function Layout({ children }) {
     <Container
       maxWidth="md"
       sx={{
-        mb: 16,
-      }}>
+        mb: 16
+      }}
+    >
       <Button component={Link} to="/" startIcon={<Home />} sx={{ mb: 2 }}>
         Home
       </Button>
@@ -49,7 +50,7 @@ function Layout({ children }) {
         {children}
       </Box>
     </Container>
-  );
+  )
 }
 
 /**
@@ -58,11 +59,20 @@ function Layout({ children }) {
 function ContentSwitcher() {
   return (
     <Switch>
-      <Route path="/" exact render={() => <ExamplesGrid examples={examples} />} />
+      <Route
+        path="/"
+        exact
+        render={() => <ExamplesGrid examples={examples} />}
+      />
 
       {Object.keys(examples).map((label, index) => (
-        <Route key={index} path={`/${label.replace(/\s+/g, '-').toLowerCase()}`} exact component={examples[label]} />
+        <Route
+          key={index}
+          path={`/${label.replace(/\s+/g, '-').toLowerCase()}`}
+          exact
+          component={examples[label]}
+        />
       ))}
     </Switch>
-  );
+  )
 }
