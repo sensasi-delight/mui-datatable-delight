@@ -1,4 +1,6 @@
 export { default } from './DataTable'
+export type { DataTableProps } from './@types/datatable-props'
+
 export { default as Popover } from './components/Popover'
 export { default as TableBodyCell } from './components/TableBodyCell'
 export { default as TableBody } from './components/TableBody'

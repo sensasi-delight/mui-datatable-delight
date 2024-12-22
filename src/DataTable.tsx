@@ -1,3 +1,5 @@
+import type { DataTableProps } from './@types/datatable-props'
+
 import Paper from '@mui/material/Paper'
 import MuiTable from '@mui/material/Table'
 import MuiTooltip from '@mui/material/Tooltip'
@@ -31,7 +33,6 @@ import {
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { load, save } from './localStorage'
-import { MUIDataTableProps } from 'mui-datatables'
 
 const defaultTableStyles = theme => ({
     root: {
@@ -2545,6 +2546,6 @@ class MUIDataTableClass extends React.Component {
 
 const DataTable = withStyles(MUIDataTableClass, defaultTableStyles, {
     name: 'MUIDataTable'
-}) as unknown as ComponentType<MUIDataTableProps>
+}) as unknown as ComponentType<DataTableProps>
 
 export default DataTable
