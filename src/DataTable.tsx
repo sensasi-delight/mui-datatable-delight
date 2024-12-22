@@ -6,7 +6,6 @@ import MuiTooltip from '@mui/material/Tooltip'
 import { withStyles } from 'tss-react/mui'
 import clsx from 'clsx'
 import assignwith from 'lodash.assignwith'
-import cloneDeep from 'lodash.clonedeep'
 import find from 'lodash.find'
 import isEqual from 'lodash.isequal'
 import isUndefined from 'lodash.isundefined'
@@ -991,23 +990,25 @@ class MUIDataTableClass extends React.Component {
 
             if (column.filterOptions) {
                 if (Array.isArray(column.filterOptions)) {
-                    filterData[colIndex] = cloneDeep(column.filterOptions)
+                    filterData[colIndex] = structuredClone(column.filterOptions)
                     this.warnDep(
                         'filterOptions must now be an object. see https://github.com/gregnb/mui-datatables/tree/master/examples/customize-filter example'
                     )
                 } else if (Array.isArray(column.filterOptions.names)) {
-                    filterData[colIndex] = cloneDeep(column.filterOptions.names)
+                    filterData[colIndex] = structuredClone(
+                        column.filterOptions.names
+                    )
                 }
             }
 
             if (column.filterList) {
-                filterList[colIndex] = cloneDeep(column.filterList)
+                filterList[colIndex] = structuredClone(column.filterList)
             } else if (
                 this.state.filterList &&
                 this.state.filterList[colIndex] &&
                 this.state.filterList[colIndex].length > 0
             ) {
-                filterList[colIndex] = cloneDeep(
+                filterList[colIndex] = structuredClone(
                     this.state.filterList[colIndex]
                 )
             }
@@ -1349,8 +1350,8 @@ class MUIDataTableClass extends React.Component {
 
     updateDataCol = (row, index, value) => {
         this.setState(prevState => {
-            let changedData = cloneDeep(prevState.data)
-            let filterData = cloneDeep(prevState.filterData)
+            let changedData = structuredClone(prevState.data)
+            let filterData = structuredClone(prevState.filterData)
 
             const tableMeta = this.getTableMeta(
                 row,
@@ -1450,7 +1451,7 @@ class MUIDataTableClass extends React.Component {
     toggleViewColumn = index => {
         this.setState(
             prevState => {
-                const columns = cloneDeep(prevState.columns)
+                const columns = structuredClone(prevState.columns)
                 columns[index].display =
                     columns[index].display === 'true' ? 'false' : 'true'
                 return {
@@ -1520,7 +1521,7 @@ class MUIDataTableClass extends React.Component {
     toggleSortColumn = index => {
         this.setState(
             prevState => {
-                let columns = cloneDeep(prevState.columns)
+                let columns = structuredClone(prevState.columns)
                 let data = prevState.data
                 let newOrder = columns[index].sortDescFirst ? 'desc' : 'asc' // default
 
@@ -1757,7 +1758,7 @@ class MUIDataTableClass extends React.Component {
     filterUpdate = (index, value, column, type, customUpdate, next) => {
         this.setState(
             prevState => {
-                const filterList = cloneDeep(prevState.filterList)
+                const filterList = structuredClone(prevState.filterList)
                 this.updateFilterByType(
                     filterList,
                     index,
