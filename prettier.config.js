@@ -1,9 +1,13 @@
-module.exports = {
-  printWidth: 120,
-  singleQuote: true,
-  trailingComma: 'all',
+/**
+ * @see https://prettier.io/docs/en/configuration.html
+ * @type {import("prettier").Config}
+ */
+export default {
+  arrowParens: 'avoid',
   bracketSpacing: true,
-  jsxBracketSameLine: true,
-  parser: 'babel',
-  semi: true,
-};
+  bracketSameLine: false,
+  endOfLine: 'lf',
+  semi: false,
+  singleQuote: true,
+  trailingComma: 'none'
+}
