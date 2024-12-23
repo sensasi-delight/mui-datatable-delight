@@ -11,7 +11,7 @@ import isEqual from 'lodash.isequal'
 import isUndefined from 'lodash.isundefined'
 import merge from 'lodash.merge'
 import PropTypes from 'prop-types'
-import React, { ComponentType } from 'react'
+import React, { JSX } from 'react'
 import DefaultTableBody from './components/TableBody'
 import DefaultTableFilter from './components/TableFilter'
 import DefaultTableFilterList from './components/TableFilterList'
@@ -20,7 +20,7 @@ import DefaultTableHead from './components/TableHead'
 import DefaultTableResize from './components/TableResize'
 import DefaultTableToolbar from './components/TableToolbar'
 import DefaultTableToolbarSelect from './components/TableToolbarSelect'
-import getTextLabels from './textLabels'
+import { getTextLabels } from './textLabels'
 import {
     buildMap,
     getCollatorComparator,
@@ -2545,8 +2545,11 @@ class MUIDataTableClass extends React.Component {
     }
 }
 
-const DataTable = withStyles(MUIDataTableClass, defaultTableStyles, {
+/**
+ * A responsive DataTable component built with MUI for React-based project.
+ *
+ * @see https://github.com/sensasi-delight/mui-datatable-delight
+ */
+export const DataTable = withStyles(MUIDataTableClass, defaultTableStyles, {
     name: 'MUIDataTable'
-}) as unknown as ComponentType<DataTableProps>
-
-export default DataTable
+}) as unknown as (props: DataTableProps) => JSX.Element
