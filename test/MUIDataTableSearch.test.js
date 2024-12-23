@@ -5,7 +5,7 @@ import { mount, shallow } from 'enzyme'
 import { assert, expect, should } from 'chai'
 import TextField from '@mui/material/TextField'
 import TableSearch from '../src/components/TableSearch'
-import getTextLabels from '../src/textLabels'
+import { getTextLabels } from '../src/textLabels'
 
 describe('<TableSearch />', function () {
     it('should render a search bar', () => {

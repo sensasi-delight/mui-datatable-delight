@@ -4,7 +4,7 @@ import { mount, shallow } from 'enzyme'
 import { assert, expect, should } from 'chai'
 import DeleteIcon from '@mui/icons-material/Delete'
 import TableToolbarSelect from '../src/components/TableToolbarSelect'
-import getTextLabels from '../src/textLabels'
+import { getTextLabels } from '../src/textLabels'
 
 describe('<TableToolbarSelect />', function () {
     before(() => {})

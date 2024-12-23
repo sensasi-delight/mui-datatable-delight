@@ -7,7 +7,7 @@ import { mount, shallow } from 'enzyme'
 import React from 'react'
 import { spy } from 'sinon'
 import TableFilterList from '../src/components/TableFilterList'
-import getTextLabels from '../src/textLabels'
+import { getTextLabels } from '../src/textLabels'
 import Chip from '@mui/material/Chip'
 
 describe('<TableFilterList />', function () {
