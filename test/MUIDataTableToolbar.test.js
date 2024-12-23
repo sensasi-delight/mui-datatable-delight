@@ -11,7 +11,7 @@ import React from 'react'
 import { spy } from 'sinon'
 import TableSearch from '../src/components/TableSearch'
 import TableToolbar from '../src/components/TableToolbar'
-import getTextLabels from '../src/textLabels'
+import { getTextLabels } from '../src/textLabels'
 
 describe('<TableToolbar />', function () {
     let data

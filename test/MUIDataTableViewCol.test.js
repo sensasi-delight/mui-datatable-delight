@@ -4,7 +4,7 @@ import { mount, shallow } from 'enzyme'
 import { assert, expect, should } from 'chai'
 import Checkbox from '@mui/material/Checkbox'
 import TableViewCol from '../src/components/TableViewCol'
-import getTextLabels from '../src/textLabels'
+import { getTextLabels } from '../src/textLabels'
 import { FormControlLabel } from '@mui/material'
 
 describe('<TableViewCol />', function () {

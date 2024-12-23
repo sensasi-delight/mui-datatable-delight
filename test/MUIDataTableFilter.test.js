@@ -7,7 +7,7 @@ import { mount, shallow } from 'enzyme'
 import React from 'react'
 import { spy } from 'sinon'
 import TableFilter from '../src/components/TableFilter'
-import getTextLabels from '../src/textLabels'
+import { getTextLabels } from '../src/textLabels'
 
 describe('<TableFilter />', function () {
     let data

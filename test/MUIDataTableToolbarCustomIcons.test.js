@@ -9,7 +9,7 @@ import { assert } from 'chai'
 import { mount } from 'enzyme'
 import React from 'react'
 import TableToolbar from '../src/components/TableToolbar'
-import getTextLabels from '../src/textLabels'
+import { getTextLabels } from '../src/textLabels'
 
 const CustomChip = props => {
     return <Chip variant="outlined" color="secondary" label={props.label} />

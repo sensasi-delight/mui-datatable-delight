@@ -1,7 +1,7 @@
 /*
  * Default text labels.
  */
-const getTextLabels = () => ({
+export const getTextLabels = () => ({
     body: {
         noMatch: 'Sorry, no matching records found',
         toolTip: 'Sort'
@@ -35,5 +35,3 @@ const getTextLabels = () => ({
         deleteAria: 'Delete Selected Rows'
     }
 })
-
-export default getTextLabels
