@@ -1,5 +1,5 @@
 // types
-import type { DataTableProps } from './@types/datatable-props'
+import type { DataTableProps } from './types/data-table-props'
 // vendors
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'

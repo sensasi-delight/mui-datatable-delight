@@ -1,5 +1,5 @@
 import type { MUIDataTableOptions } from 'mui-datatables'
-import type { DataTableData } from './datatable-props'
+import type { DataTableData } from './data-table-props'
 
 type DataType = {
     index: number

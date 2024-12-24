@@ -3,8 +3,8 @@ export type {
     DataTableProps,
     DataTableColumns,
     DataTableData
-} from './@types/datatable-props'
-export type { DataTableOptions } from './@types/data-table-options'
+} from './types/data-table-props'
+export type { DataTableOptions } from './types/data-table-options'
 
 // export { default as Popover } from './components/Popover'
 // export { default as TableBodyCell } from './components/TableBodyCell'
