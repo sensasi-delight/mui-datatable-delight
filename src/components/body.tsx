@@ -10,6 +10,7 @@ import TableSelectCell from './components.shared/select-cell'
 import { withStyles } from 'tss-react/mui'
 import { getPageValue } from '../functions.shared/get-page-value'
 import clsx from 'clsx'
+import { cloneDeep } from '../functions'
 
 const defaultBodyStyles = (theme: Theme) => ({
     root: {},
@@ -155,7 +156,7 @@ class TableBody extends React.Component {
 
             // Create a copy of the selectedRows object. This will be used and modified
             // below when we see if we can add adjacent rows.
-            let selectedRows = structuredClone(this.props.selectedRows)
+            let selectedRows = cloneDeep(this.props.selectedRows)
 
             // Add the clicked on row to our copy of selectedRows (if it isn't already present).
             let clickedDataIndex = this.props.data[data.index].dataIndex

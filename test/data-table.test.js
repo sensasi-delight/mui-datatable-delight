@@ -10,7 +10,7 @@ import TableToolbarSelect from '../src/components/TableToolbarSelect'
 import { TEXT_LABELS } from '../src/statics'
 import Chip from '@mui/material/Chip'
 import Cities from '../examples/component/cities'
-import { getCollatorComparator } from '../src/utils'
+import { cloneDeep, getCollatorComparator } from '../src/functions'
 
 describe('<MUIDataTable />', function () {
     const tableId = 'tableID'
@@ -1323,7 +1323,7 @@ describe('<MUIDataTable />', function () {
         const instance = mountShallowWrapper.instance()
 
         // now use updated columns props
-        const newColumns = structuredClone(columns)
+        const newColumns = cloneDeep(columns)
         newColumns[0].options.filterList = ['Joe James']
         mountShallowWrapper.setProps({ columns: newColumns })
         mountShallowWrapper.update()
