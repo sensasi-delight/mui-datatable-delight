@@ -1,4 +1,3 @@
-import React from 'react'
 import PropTypes from 'prop-types'
 import InputBase from '@mui/material/InputBase'
 import MenuItem from '@mui/material/MenuItem'
@@ -6,7 +5,7 @@ import Select from '@mui/material/Select'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
 import { makeStyles } from 'tss-react/mui'
-import { getPageValue } from '../utils.js'
+import { getPageValue } from '../functions.shared/get-page-value'
 import clsx from 'clsx'
 
 const useStyles = makeStyles({ name: 'MUIDataTableJumpToPage' })(theme => ({
