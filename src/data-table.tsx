@@ -25,7 +25,7 @@ import DefaultTableFooter from './components/footer'
 import DefaultTableHead from './components/head'
 import DefaultTableResize from './components/resize'
 import DefaultTableToolbar from './components/toolbar'
-import DefaultTableToolbarSelect from './components/toolbar-select'
+import { TableToolbarSelect as DefaultTableToolbarSelect } from './components/toolbar-select'
 import { TEXT_LABELS } from './statics/text-labels'
 import { getPageValue } from './functions.shared/get-page-value'
 import {
