@@ -12,6 +12,7 @@ import type {
     ToolbarButton
 } from 'mui-datatables'
 import { Component, JSX, ReactNode } from 'react'
+
 export interface DataTableOptions {
     /** Enable/disable case sensitivity for search */
     caseSensitive?: boolean
@@ -20,7 +21,7 @@ export interface DataTableOptions {
      * Works in conjunction with the customFilterDialogFooter options and make is so filters have to be confirmed before being applied to the table.
      * When this option is true, the customFilterDialogFooter callback will receive an applyFilters function which, when called will apply the filter to the table.
      *
-     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/serverside-filters/index.js)
+     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/serverside-filters/index.tsx
      */
     confirmFilters?: boolean
 
@@ -44,7 +45,7 @@ export interface DataTableOptions {
     /**
      * Render a custom table footer.
      *
-     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-footer/index.js)
+     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-footer/index.tsx
      */
 
     customFooter?: (
@@ -55,30 +56,33 @@ export interface DataTableOptions {
         changePage: (newPage: number) => void,
         textLabels: Partial<MUIDataTableTextLabels>
     ) => ReactNode
+
     /**
      * Override default row rendering with custom function.
      *
-     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-rows/index.js)
+     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-rows/index.tsx
      */
     customRowRender?: (
         data: any[],
         dataIndex: number,
         rowIndex: number
     ) => ReactNode
+
     /**
      * Override default search with custom function.
      *
-     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-search/index.js)
+     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-search/index.tsx
      */
     customSearch?: (
         searchQuery: string,
         currentRow: any[],
         columns: any[]
     ) => boolean
+
     /**
      * Render a custom table search.
      *
-     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-search-render/CustomSearchRender.js)
+     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-search-render/CustomSearchRender.tsx
      */
     customSearchRender?: (
         searchText: string,
@@ -86,18 +90,20 @@ export interface DataTableOptions {
         hideSearch: () => void,
         options: any
     ) => Component | JSX.Element
+
     /**
      * Override default sorting with custom function.
      * If you just need to override the sorting for a particular column, see the sortCompare method in the Column options.
      *
-     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-sorting/index.js)
+     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-sorting/index.tsx
      */
     customSort?: (data: any[], colIndex: number, order: string) => any[]
+
     /**
      * Render a footer under the table body but above the table's standard footer.
      * This is useful for creating footers for individual columns.
      *
-     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-footer/index.js)
+     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-footer/index.tsx
      */
     customTableBodyFooterRender?: (options: {
         data: any[]
@@ -108,14 +114,14 @@ export interface DataTableOptions {
     /**
      * Render a custom Toolbar.
      *
-     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-toolbar/CustomToolbar.js)
+     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-toolbar/CustomToolbar.tsx
      */
     customToolbar?: (data: { displayData: DisplayData }) => ReactNode
 
     /**
      * Render a custom selected row ToolBar.
      *
-     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-toolbarselect/CustomToolbarSelect.js)
+     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-toolbarselect/CustomToolbarSelect.tsx
      */
     customToolbarSelect?: (
         selectedRows: {
@@ -128,17 +134,21 @@ export interface DataTableOptions {
 
     /** @deprecated use `selectToolbarPlacement` instead */
     disableToolbarSelect?: boolean
+
     /**
      * Possible Values:
      * - true       = Button visible and clickable
      * - false      = Button not visible
      * - 'disabled' = Button is visible but not clickable
+     *
      * @default true
      */
     download?: ToolbarButton
+
     /**
      * An object of options to change the output of the csv file.
-     * @default `{ filename: 'tableDownload.csv', separator: ',' }`
+     *
+     * @default downloadOptions.separator = ','
      */
     downloadOptions?: Partial<{
         filename: string
@@ -148,6 +158,7 @@ export interface DataTableOptions {
             useDisplayedRowsOnly: boolean
         }>
     }>
+
     /**
      * An object of options describing how dragging columns should work.
      * The options are:
@@ -158,11 +169,13 @@ export interface DataTableOptions {
      * Dragging a column to a new position updates the columnOrder array and triggers the onColumnOrderChange callback.
      */
     draggableColumns?: MUIDataTableDraggableColumns
+
     /**
      * Shadow depth applied to the `<Paper />` component.
      * @default 4
      */
     elevation?: number
+
     /**
      * If a non-empty string (ex: `"."`) is provided, it will use that value in the column's names to access nested data.
      *
@@ -170,66 +183,81 @@ export interface DataTableOptions {
      *
      * Any amount of nesting will work.
      *
-     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/data-as-objects/index.js)
+     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/data-as-objects/index.tsx
      */
     enableNestedDataAccess?: string
+
     /**
      * Enable/disable expandable rows.
      *
-     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/expandable-rows/index.js)
+     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/expandable-rows/index.tsx
+     *
      * @default false
      */
     expandableRows?: boolean
+
     /**
      * Show/hide the expand all/collapse all row header for expandable row.
+     *
      * @default true
      */
     expandableRowsHeader?: boolean
+
     /**
      * Enable/disable expand trigger when row is clicked.
      * When false, only expand icon will trigger this action.
+     *
      * @default false
      */
     expandableRowsOnClick?: boolean
+
     /**
      * Possible Values:
      * - true       = Button visible and clickable
      * - false      = Button not visible
      * - 'disabled' = Button is visible but not clickable
+     *
      * @default true
      */
     filter?: ToolbarButton
+
     /**
      * For array values, default checks if all the filter values are included in the array.
      * If false, checks if at least one of the filter values is in the array.
      *
-     * [Example](https://github.com/gregnb/mui-datatables/blob/bb0cf931decae7e5bec49a6b5f3343408bc4c0b5/examples/array-value-columns/index.js)
+     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/array-value-columns/index.tsx
+     *
      * @default true
      */
     filterArrayFullMatch?: boolean
+
     /** Choice of filtering view. */
     filterType?: FilterType
+
     /**
      * Enable/disable a fixed header for the table
      *
-     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/fixed-header/index.js)
+     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/fixed-header/index.tsx
      * @default true
      */
-    fixedHeader: boolean
+    fixedHeader?: boolean
+
     /** @deprecated use `fixedHeader` for **X** axis and `fixedSelectColumn` for **Y** axis */
-    fixedHeaderOptions: {
+    fixedHeaderOptions?: {
         /** @deprecated use `fixedHeader` */
         xAxis: boolean
         /** @deprecated use `fixedSelectColumn` */
         yAxis: boolean
     }
+
     /**
      * Enable/disable fined select column.
      *
-     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/fixed-header/index.js)
+     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/fixed-header/index.tsx
      * @default true
      */
     fixedSelectColumn?: boolean
+
     /**
      * Enable/disable expansion or collapse on certain expandable rows with custom function.
      * Returns `true` if not provided.
@@ -238,15 +266,17 @@ export interface DataTableOptions {
         dataIndex: number,
         expandedRows?: MUIDataTableIsRowCheck
     ) => boolean
+
     /** Enable/disable selection on certain rows with custom function. Returns true if not provided. */
     isRowSelectable?: (
         dataIndex: number,
         selectedRows?: MUIDataTableIsRowCheck
     ) => boolean
+
     /**
      * When true, the option adds a dropdown to the table's footer that allows a user to navigate to a specific page.
      *
-     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/large-data-set/index.js)
+     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/large-data-set/index.tsx
      * @default false
      */
     jumpToPage?: boolean
@@ -261,14 +291,17 @@ export interface DataTableOptions {
         }
     ) => void
     onChangePage?: (currentPage: number) => void
+
     /** Callback function that triggers when a page has changed. */
     onChangeRowsPerPage?: (numberOfRows: number) => void
+
     /** Callback function that triggers when a column has been dragged to a new location. */
     onColumnOrderChange?: (
         newColumnOrder: number[],
         columnIndex: number,
         newPosition: number
     ) => void
+
     /** Callback function that triggers when a column has been sorted. */
     onColumnSortChange?: (
         changedColumn: string,
@@ -303,7 +336,7 @@ export interface DataTableOptions {
     /**
      * Callback function that is triggered when a user clicks the "X" on a filter chip.
      *
-     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/serverside-filters/index.js)
+     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/serverside-filters/index.tsx
      */
     onFilterChipClose?: (
         index: number,
@@ -314,7 +347,7 @@ export interface DataTableOptions {
      * Callback function that is triggered when a user presses the "confirm" button on the filter popover.
      * This occurs only if you've set `confirmFilters` option to `true`.
      *
-     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/serverside-filters/index.js)
+     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/serverside-filters/index.tsx
      */
 
     onFilterConfirm?: (filterList: MUIDataTableState['filterList']) => void
@@ -396,7 +429,7 @@ export interface DataTableOptions {
     /**
      * Render Expandable rows.
      *
-     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/expandable-rows/index.js)
+     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/expandable-rows/index.tsx
      */
 
     renderExpandableRow?: (
@@ -404,7 +437,7 @@ export interface DataTableOptions {
         rowMeta: { dataIndex: number; rowIndex: number }
     ) => ReactNode
     /** Enable/disable resizable columns. */
-    resizableColumns: boolean
+    resizableColumns?: boolean
 
     /**
      * Enable/disable responsive table view.
@@ -413,7 +446,7 @@ export interface DataTableOptions {
      * - 'standard': Table will stay in the standard mode but make small changes to better fit the allocated space.
      * - 'simple': On very small devices the table rows will collapse into simple display.
      *
-     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/simple/index.js)
+     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/simple/index.tsx
      * @default 'vertical'
      */
     responsive?:
@@ -448,6 +481,7 @@ export interface DataTableOptions {
      * - true       = Button visible and clickable
      * - false      = Button not visible
      * - 'disabled' = Button is visible but not clickable
+     *
      * @default true
      */
     search?: ToolbarButton
@@ -460,6 +494,7 @@ export interface DataTableOptions {
 
     /**
      * Always displays search bar, and hides search icon in toolbar.
+     *
      * @default false
      */
     searchAlwaysOpen?: boolean
@@ -467,14 +502,14 @@ export interface DataTableOptions {
     /**
      * Props applied to the search text box. You can set method callbacks like onBlur, onKeyUp, etc, this way.
      *
-     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-search/index.js)
+     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-search/index.tsx
      */
     searchProps?: React.HTMLAttributes<HTMLInputElement>
 
     /**
      * Search text placeholder.
      *
-     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-search/index.js)
+     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-search/index.tsx
      */
     searchPlaceholder?: string
 
@@ -527,7 +562,7 @@ export interface DataTableOptions {
     /**
      * Is called for each filter chip and allows you to place custom props on a filter chip.
      *
-     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-filter/index.js)
+     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-filter/index.tsx
      */
     setFilterChipProps?: (
         colIndex: number,
@@ -538,14 +573,14 @@ export interface DataTableOptions {
     /**
      * Is called for each row and allows you to return custom props for this row based on its data.
      *
-     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-styling/index.js)
+     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-styling/index.tsx
      */
     setRowProps?: (row: any[], dataIndex: number, rowIndex: number) => object
 
     /**
      * Is called for the table and allows you to return custom props for the table based on its data.
      *
-     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-styling/index.js)
+     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-styling/index.tsx
      */
     setTableProps?: () => object
 
@@ -566,7 +601,7 @@ export interface DataTableOptions {
      * To remove/reset sorting, input in an empty object.
      * The object options are the column name and the direction.
      *
-     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-columns/index.js)
+     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-columns/index.tsx
      */
     sortOrder?: MUISortOptions
 
@@ -601,6 +636,7 @@ export interface DataTableOptions {
      * @default true
      */
     viewColumns?: ToolbarButton
+
     /**
      * Local storage key used to store the table state.
      */

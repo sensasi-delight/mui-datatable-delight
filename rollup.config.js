@@ -50,12 +50,6 @@ export default {
     plugins: PLUGINS,
     output: [
         {
-            file: pkg.main,
-            format: 'cjs',
-            exports: 'named',
-            sourcemap: true
-        },
-        {
             file: pkg.module,
             format: 'es',
             sourcemap: true,
