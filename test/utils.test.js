@@ -1,32 +1,29 @@
-import {
-    getPageValue,
-    buildCSV,
-    createCSVDownload,
-    escapeDangerousCSVCharacters
-} from '../src/utils'
+import { buildCsv, escapeDangerousCsvCharacters } from '../src/functions'
+import { getPageValue } from '../src/functions.shared'
+import { createCsvDownload } from '../src/components/table-toolbar.functions.create-csv-download'
 import { spy } from 'sinon'
 import { assert } from 'chai'
 
 describe('utils.js', () => {
-    describe('escapeDangerousCSVCharacters', () => {
+    describe('escapeDangerousCsvCharacters', () => {
         it('properly escapes the first character in a string if it can be used for injection', () => {
             assert.strictEqual(
-                escapeDangerousCSVCharacters('+SUM(1+1)'),
+                escapeDangerousCsvCharacters('+SUM(1+1)'),
                 "'+SUM(1+1)"
             )
             assert.strictEqual(
-                escapeDangerousCSVCharacters('-SUM(1+1)'),
+                escapeDangerousCsvCharacters('-SUM(1+1)'),
                 "'-SUM(1+1)"
             )
             assert.strictEqual(
-                escapeDangerousCSVCharacters('=SUM(1+1)'),
+                escapeDangerousCsvCharacters('=SUM(1+1)'),
                 "'=SUM(1+1)"
             )
             assert.strictEqual(
-                escapeDangerousCSVCharacters('@SUM(1+1)'),
+                escapeDangerousCsvCharacters('@SUM(1+1)'),
                 "'@SUM(1+1)"
             )
-            assert.equal(escapeDangerousCSVCharacters(123), 123)
+            assert.equal(escapeDangerousCsvCharacters(123), 123)
         })
     })
 
@@ -86,7 +83,7 @@ describe('utils.js', () => {
         })
     })
 
-    describe('buildCSV', () => {
+    describe('buildCsv', () => {
         const options = {
             downloadOptions: {
                 separator: ';'
@@ -109,7 +106,7 @@ describe('utils.js', () => {
                 { data: ['anton', 'abraham'] },
                 { data: ['berta', 'buchel'] }
             ]
-            const csv = buildCSV(columns, data, options)
+            const csv = buildCsv(columns, data, options)
 
             assert.strictEqual(
                 csv,
@@ -121,13 +118,13 @@ describe('utils.js', () => {
 
         it('returns an empty csv with header when given an empty dataset', () => {
             const data = []
-            const csv = buildCSV(columns, data, options)
+            const csv = buildCsv(columns, data, options)
 
             assert.strictEqual(csv, '"firstname";"lastname"')
         })
     })
 
-    describe('createCSVDownload', () => {
+    describe('createCsvDownload', () => {
         const columns = [
             {
                 name: 'firstname',
@@ -150,11 +147,11 @@ describe('utils.js', () => {
                 },
                 onDownload: () => false
             }
-            const downloadCSV = spy()
+            const downloadCsv = spy()
 
-            createCSVDownload(columns, data, options, downloadCSV)
+            createCsvDownload(columns, data, options, downloadCsv)
 
-            assert.strictEqual(downloadCSV.callCount, 0)
+            assert.strictEqual(downloadCsv.callCount, 0)
         })
 
         it('calls download function if download callback returns truthy', () => {
@@ -164,11 +161,11 @@ describe('utils.js', () => {
                 },
                 onDownload: () => true
             }
-            const downloadCSV = spy()
+            const downloadCsv = spy()
 
-            createCSVDownload(columns, data, options, downloadCSV)
+            createCsvDownload(columns, data, options, downloadCsv)
 
-            assert.strictEqual(downloadCSV.callCount, 1)
+            assert.strictEqual(downloadCsv.callCount, 1)
         })
     })
 })
