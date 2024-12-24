@@ -1,8 +1,9 @@
-import type { MUIDataTableProps, MUIDataTableState } from 'mui-datatables'
+import type { MUIDataTableState } from 'mui-datatables'
 import type { Component, ReactNode, RefObject } from 'react'
 import type { DataTableOptions } from './data-table-options'
 import type { MUIDataTableColumn as DataTableColumn } from 'mui-datatables'
-// import type { SxProps } from '@mui/material'
+import type { DataTableComponents } from './data-table-components'
+import type { SxProps } from '@mui/material'
 
 export type DataTableColumns = (string | DataTableColumn)[]
 export type DataTableData = (number | string | null | undefined)[][]
@@ -10,7 +11,7 @@ export type DataTableData = (number | string | null | undefined)[][]
 export interface DataTableProps {
     columns: DataTableColumns
 
-    components?: MUIDataTableProps['components']
+    components?: DataTableComponents
 
     data: DataTableData
 
@@ -25,6 +26,11 @@ export interface DataTableProps {
           >
         | undefined
 
-    /** Override `<DataTable />` Style */
-    // sx?: SxProps
+    /**
+     * Override `<DataTable />` Style
+     *
+     * @todo WILL IMPLEMENT THIS LATER
+     * @experimental not implemented yet
+     */
+    sx?: SxProps
 }
