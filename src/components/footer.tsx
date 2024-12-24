@@ -3,7 +3,7 @@ import type {
     MUIDataTablePagination,
     MUIDataTableTextLabelsPagination
 } from 'mui-datatables'
-import TablePagination, { type TablePaginationProps } from './TablePagination'
+import TablePagination, { type TablePaginationProps } from './footer.pagination'
 
 export default function TableFooter({
     options,

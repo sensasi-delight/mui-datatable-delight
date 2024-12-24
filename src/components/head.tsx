@@ -1,10 +1,10 @@
 import { makeStyles } from 'tss-react/mui'
 import clsx from 'clsx'
 import MuiTableHead from '@mui/material/TableHead'
-import React, { useState } from 'react'
-import TableHeadCell from './TableHeadCell'
-import TableHeadRow from './TableHeadRow'
-import TableSelectCell from './TableSelectCell'
+import { useState } from 'react'
+import TableHeadCell from './head.cell'
+import TableHeadRow from './head.row'
+import TableSelectCell from './components.shared/select-cell'
 
 const useStyles = makeStyles({ name: 'MUIDataTableHead' })(theme => ({
     main: {},

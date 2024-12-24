@@ -5,7 +5,7 @@ import { Home } from '@mui/icons-material'
 import { ReactNode, StrictMode } from 'react'
 // locals
 import examples from './components/examples'
-import ExamplesGrid from './components/ExamplesGrid'
+import ExamplesGrid from './components/examples-grid'
 
 /** Render the App */
 createRoot(document.getElementById('root')!).render(

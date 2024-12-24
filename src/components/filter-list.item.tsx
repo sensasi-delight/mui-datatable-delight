@@ -1,6 +1,5 @@
 import Chip from '@mui/material/Chip'
 import PropTypes from 'prop-types'
-import React from 'react'
 import clsx from 'clsx'
 
 const TableFilterListItem = ({ label, onDelete, className, filterProps }) => {

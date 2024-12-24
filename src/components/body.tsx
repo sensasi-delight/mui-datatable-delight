@@ -1,15 +1,17 @@
+import type { Theme } from '@mui/material'
+
 import React from 'react'
 import PropTypes from 'prop-types'
 import Typography from '@mui/material/Typography'
 import MuiTableBody from '@mui/material/TableBody'
-import TableBodyCell from './TableBodyCell'
-import TableBodyRow from './TableBodyRow'
-import TableSelectCell from './TableSelectCell'
+import TableBodyCell from './body.cell'
+import TableBodyRow from './body.row'
+import TableSelectCell from './components.shared/select-cell'
 import { withStyles } from 'tss-react/mui'
 import { getPageValue } from '../functions.shared/get-page-value'
 import clsx from 'clsx'
 
-const defaultBodyStyles = theme => ({
+const defaultBodyStyles = (theme: Theme) => ({
     root: {},
     emptyTitle: {
         textAlign: 'center'

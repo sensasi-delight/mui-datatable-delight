@@ -1,8 +1,8 @@
 import type { MUIDataTableState } from 'mui-datatables'
 import type { Component, ReactNode, RefObject } from 'react'
-import type { DataTableOptions } from './data-table-options'
+import type { DataTableOptions } from './options'
 import type { MUIDataTableColumn as DataTableColumn } from 'mui-datatables'
-import type { DataTableComponents } from './data-table-components'
+import type { DataTableComponents } from './components'
 import type { SxProps } from '@mui/material'
 
 export type DataTableColumns = (string | DataTableColumn)[]

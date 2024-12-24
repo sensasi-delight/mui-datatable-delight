@@ -1,7 +1,6 @@
 import { makeStyles } from 'tss-react/mui'
 import PropTypes from 'prop-types'
-import React from 'react'
-import TableFilterListItem from './TableFilterListItem'
+import TableFilterListItem from './filter-list.item'
 
 const useStyles = makeStyles({ name: 'MUIDataTableFilterList' })(() => ({
     root: {

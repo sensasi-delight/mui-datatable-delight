@@ -1,7 +1,5 @@
-import React from 'react'
-import { spy, stub } from 'sinon'
-import { mount, shallow } from 'enzyme'
-import { assert, expect, should } from 'chai'
+import { spy } from 'sinon'
+import { expect } from 'chai'
 import {
     getColModel,
     reorderColumns,
