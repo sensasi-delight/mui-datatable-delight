@@ -17,6 +17,7 @@ import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import clsx from 'clsx'
 import { withStyles } from 'tss-react/mui'
+import { cloneDeep } from '../functions'
 
 export const defaultFilterStyles = (theme: Theme) => ({
     root: {
@@ -102,7 +103,7 @@ class TableFilter extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            filterList: structuredClone(props.filterList)
+            filterList: cloneDeep(props.filterList)
         }
     }
 
