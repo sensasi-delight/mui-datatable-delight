@@ -1,7 +1,7 @@
 import MuiTablePagination, {
     TablePaginationProps as MuiTablePaginationProps
 } from '@mui/material/TablePagination'
-import JumpToPage from './JumpToPage'
+import JumpToPage from './footer.pagination.jump-to-page'
 import { makeStyles } from 'tss-react/mui'
 import { getPageValue } from '../functions.shared/get-page-value'
 import {

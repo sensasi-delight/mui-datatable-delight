@@ -1,7 +1,6 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
 import MUIDataTable from '../../src/'
-import { debounceSearchRender } from '../../src/'
+import { debounceSearchRender } from '../../src/plug-ins'
 import { Button } from '@mui/material'
 
 class Example extends React.Component {

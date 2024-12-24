@@ -1,8 +1,9 @@
 import React from 'react'
-import MUIDataTable, { ExpandButton } from '../../src/'
+import MUIDataTable from '../../src/'
 import TableRow from '@mui/material/TableRow'
 import TableCell from '@mui/material/TableCell'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
+import ExpandButton from '../../src/components/components.shared/select-cell.expand-button'
 
 class Example extends React.Component {
     render() {

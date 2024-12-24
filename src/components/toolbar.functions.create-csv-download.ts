@@ -1,6 +1,6 @@
 import type { MUIDataTableColumnState } from 'mui-datatables'
-import type { DataTableData } from '../types/data-table-props'
-import type { DataTableOptions } from '../types/data-table-options'
+import type { DataTableData } from '../data-table.props.type'
+import type { DataTableOptions } from '../data-table.props.type/options'
 
 type DataType = { index: number; data: DataTableData[0] }
 

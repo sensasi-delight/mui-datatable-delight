@@ -1,10 +1,9 @@
-import React from 'react'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
 import Checkbox from '@mui/material/Checkbox'
 import TableCell from '@mui/material/TableCell'
 import { makeStyles } from 'tss-react/mui'
-import ExpandButton from './ExpandButton'
+import ExpandButton from './select-cell.expand-button'
 
 const useStyles = makeStyles({ name: 'MUIDataTableSelectCell' })(theme => ({
     root: {

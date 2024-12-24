@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import  { useState } from 'react'
 import MUIDataTable from '../../src/'
-import CustomFooter from './CustomFooter'
+import CustomFooter from './custom-footer'
 import { makeStyles } from 'tss-react/mui'
 
 import TableFooter from '@mui/material/TableFooter'

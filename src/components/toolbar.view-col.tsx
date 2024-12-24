@@ -1,4 +1,3 @@
-import React from 'react'
 import PropTypes from 'prop-types'
 import Checkbox from '@mui/material/Checkbox'
 import Typography from '@mui/material/Typography'

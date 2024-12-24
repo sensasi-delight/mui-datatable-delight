@@ -1,7 +1,6 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
 import MUIDataTable from '../../src/'
-import CustomToolbar from './CustomToolbar'
+import CustomToolbar from './custom-toolbar'
 
 class Example extends React.Component {
     render() {

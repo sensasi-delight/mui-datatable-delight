@@ -1,3 +1,5 @@
+import type { Theme } from '@mui/material'
+
 import Button from '@mui/material/Button'
 import Checkbox from '@mui/material/Checkbox'
 import FormControl from '@mui/material/FormControl'
@@ -16,7 +18,7 @@ import Typography from '@mui/material/Typography'
 import clsx from 'clsx'
 import { withStyles } from 'tss-react/mui'
 
-export const defaultFilterStyles = theme => ({
+export const defaultFilterStyles = (theme: Theme) => ({
     root: {
         backgroundColor: theme.palette.background.default,
         padding: '24px 24px 36px 24px',
