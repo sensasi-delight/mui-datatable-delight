@@ -12,6 +12,7 @@ import type {
 } from 'mui-datatables'
 import type { ReactNode } from 'react'
 import type { SvgIconComponent } from '@mui/icons-material'
+import { TooltipProps } from '@mui/material'
 
 export type DataTableComponents = Partial<{
     Checkbox: ((props: MUIDataTableCheckboxProps) => ReactNode) | ReactNode
@@ -26,7 +27,7 @@ export type DataTableComponents = Partial<{
     TableToolbarSelect:
         | ((props: MUIDataTableToolbarSelect) => ReactNode)
         | ReactNode
-    Tooltip: ReactNode
+    Tooltip: (props: TooltipProps) => ReactNode
     icons: Partial<{
         SearchIcon: SvgIconComponent | ReactNode
         DownloadIcon: SvgIconComponent | ReactNode
