@@ -4,10 +4,10 @@ import Chip from '@mui/material/Chip'
 import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
 import TableFilterList from '../../src/components/filter-list'
-import MuiTooltip from '@mui/material/Tooltip'
+import MuiTooltip, { type TooltipProps } from '@mui/material/Tooltip'
 import Fade from '@mui/material/Fade'
 import Checkbox from '@mui/material/Checkbox'
-import Radio from '@mui/material/Radio'
+import Radio, { type RadioProps } from '@mui/material/Radio'
 import TableViewCol from './table-view-col'
 
 const CustomChip = props => {
@@ -26,30 +26,30 @@ const CustomChip = props => {
     )
 }
 
-const CustomTooltip = props => {
+const CustomTooltip = ({ title, children }: TooltipProps) => {
     return (
         <MuiTooltip
-            title={props.title}
-            interactive={true}
+            title={title}
             TransitionComponent={Fade}
             TransitionProps={{ timeout: 250 }}
             leaveDelay={250}
         >
-            {props.children}
+            {children}
         </MuiTooltip>
     )
 }
 
-const CustomCheckbox = props => {
-    let newProps = Object.assign({}, props)
+const CustomCheckbox = (props: RadioProps) => {
+    const newProps = Object.assign({}, props)
+
     newProps.color =
         props['data-description'] === 'row-select' ? 'secondary' : 'primary'
 
-    if (props['data-description'] === 'row-select') {
-        return <Radio {...newProps} />
-    } else {
-        return <Checkbox {...newProps} />
-    }
+    return props['data-description'] === 'row-select' ? (
+        <Radio {...newProps} />
+    ) : (
+        <Checkbox {...newProps} />
+    )
 }
 
 const CustomFilterList = props => {

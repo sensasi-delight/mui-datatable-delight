@@ -14,7 +14,6 @@ import PrintIcon from '@mui/icons-material/Print'
 import ViewColumnIcon from '@mui/icons-material/ViewColumn'
 import FilterIcon from '@mui/icons-material/FilterList'
 import ReactToPrint, { PrintContextConsumer } from 'react-to-print'
-import find from 'lodash.find'
 import { withStyles } from 'tss-react/mui'
 import { createCsvDownload } from './toolbar.functions.create-csv-download'
 import MuiTooltip from '@mui/material/Tooltip'
@@ -161,19 +160,20 @@ class TableToolbar extends React.Component {
                         data: row.data.map(column => {
                             i += 1
 
-                            // if we have a custom render, which will appear as a react element, we must grab the actual value from data
-                            // that matches the dataIndex and column
-                            // TODO: Create a utility function for checking whether or not something is a react object
+                            /**
+                             * if we have a custom render, which will appear as a react element, we must grab the actual value from data that matches the dataIndex and column
+                             * @todo Create a utility function for checking whether or not something is a react object
+                             */
                             let val =
                                 typeof column === 'object' &&
                                 column !== null &&
                                 !Array.isArray(column)
-                                    ? find(data, d => d.index === row.dataIndex)
+                                    ? data.find(d => d.index === row.dataIndex)
                                           .data[i]
                                     : column
                             val =
                                 typeof val === 'function'
-                                    ? find(data, d => d.index === row.dataIndex)
+                                    ? data.find(d => d.index === row.dataIndex)
                                           .data[i]
                                     : val
                             return val
