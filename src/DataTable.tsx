@@ -1,8 +1,8 @@
+// types
 import type { DataTableProps } from './@types/datatable-props'
-
-import Paper from '@mui/material/Paper'
-import MuiTable from '@mui/material/Table'
-import MuiTooltip from '@mui/material/Tooltip'
+// vendors
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
 import { withStyles } from 'tss-react/mui'
 import clsx from 'clsx'
 import assignwith from 'lodash.assignwith'
@@ -12,6 +12,12 @@ import isUndefined from 'lodash.isundefined'
 import merge from 'lodash.merge'
 import PropTypes from 'prop-types'
 import React, { JSX } from 'react'
+// materials
+import { type Theme } from '@mui/material'
+import Paper from '@mui/material/Paper'
+import MuiTable from '@mui/material/Table'
+import MuiTooltip from '@mui/material/Tooltip'
+// locals
 import DefaultTableBody from './components/TableBody'
 import DefaultTableFilter from './components/TableFilter'
 import DefaultTableFilterList from './components/TableFilterList'
@@ -20,20 +26,19 @@ import DefaultTableHead from './components/TableHead'
 import DefaultTableResize from './components/TableResize'
 import DefaultTableToolbar from './components/TableToolbar'
 import DefaultTableToolbarSelect from './components/TableToolbarSelect'
-import { getTextLabels } from './textLabels'
+import { TEXT_LABELS } from './statics/text-labels'
+import { getPageValue } from './functions.shared/get-page-value'
 import {
     buildMap,
     getCollatorComparator,
-    getPageValue,
+    load,
+    save,
     sortCompare,
     warnDeprecated,
     warnInfo
-} from './utils'
-import { DndProvider } from 'react-dnd'
-import { HTML5Backend } from 'react-dnd-html5-backend'
-import { load, save } from './localStorage'
+} from './functions'
 
-const defaultTableStyles = theme => ({
+const defaultTableStyles = (theme: Theme) => ({
     root: {
         '& .datatables-noprint': {
             '@media print': {
@@ -483,8 +488,8 @@ class MUIDataTableClass extends React.Component {
         disableToolbarSelect: false,
         download: true,
         downloadOptions: {
-            filename: 'tableDownload.csv',
-            separator: ','
+            filename: 'tableDownload.csv', // WILL REMOVE THIS LATER, DEFAULT VALUE HAS BEEN HANDLED BY `createCSVDownload` FUNCTION
+            separator: ',' // WILL REMOVE THIS LATER, DEFAULT VALUE HAS BEEN HANDLED BY `createCSVDownload` FUNCTION
         },
         draggableColumns: {
             enabled: false,
@@ -520,7 +525,7 @@ class MUIDataTableClass extends React.Component {
         tableBodyHeight: 'auto',
         tableBodyMaxHeight: null, // if set, it will override tableBodyHeight
         sortOrder: {},
-        textLabels: getTextLabels(),
+        textLabels: TEXT_LABELS,
         viewColumns: true,
         selectToolbarPlacement: STP.REPLACE
     })
@@ -2216,7 +2221,7 @@ class MUIDataTableClass extends React.Component {
         }))
 
         if (!hasCustomTableSort) {
-            const sortFn = columnSortCompare || sortCompare
+            const sortFn = columnSortCompare ?? sortCompare
             sortedData.sort(sortFn(order))
         }
 

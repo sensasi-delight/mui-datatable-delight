@@ -1,3 +1,5 @@
+import type { Theme } from '@mui/material'
+
 import React from 'react'
 import Typography from '@mui/material/Typography'
 import Toolbar from '@mui/material/Toolbar'
@@ -14,10 +16,10 @@ import FilterIcon from '@mui/icons-material/FilterList'
 import ReactToPrint, { PrintContextConsumer } from 'react-to-print'
 import find from 'lodash.find'
 import { withStyles } from 'tss-react/mui'
-import { createCSVDownload, downloadCSV } from '../utils'
+import { createCsvDownload } from './table-toolbar.functions.create-csv-download'
 import MuiTooltip from '@mui/material/Tooltip'
 
-export const defaultToolbarStyles = theme => ({
+export const defaultToolbarStyles = (theme: Theme) => ({
     root: {
         '@media print': {
             display: 'none'
@@ -204,12 +206,8 @@ class TableToolbar extends React.Component {
                 })
             }
         }
-        createCSVDownload(
-            columnsToDownload,
-            dataToDownload,
-            options,
-            downloadCSV
-        )
+
+        createCsvDownload(columnsToDownload, dataToDownload, options)
     }
 
     setActiveIcon = iconName => {

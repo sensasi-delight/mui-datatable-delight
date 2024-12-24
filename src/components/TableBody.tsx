@@ -6,7 +6,7 @@ import TableBodyCell from './TableBodyCell'
 import TableBodyRow from './TableBodyRow'
 import TableSelectCell from './TableSelectCell'
 import { withStyles } from 'tss-react/mui'
-import { getPageValue } from '../utils'
+import { getPageValue } from '../functions.shared/get-page-value'
 import clsx from 'clsx'
 
 const defaultBodyStyles = theme => ({

@@ -1,9 +1,10 @@
 export { DataTable as default } from './DataTable'
 export type {
     DataTableProps,
-    DataTableOptions,
-    DataTableColumns
+    DataTableColumns,
+    DataTableData
 } from './@types/datatable-props'
+export type { DataTableOptions } from './@types/data-table-options'
 
 // export { default as Popover } from './components/Popover'
 // export { default as TableBodyCell } from './components/TableBodyCell'

@@ -3,7 +3,7 @@ import MuiTablePagination, {
 } from '@mui/material/TablePagination'
 import JumpToPage from './JumpToPage'
 import { makeStyles } from 'tss-react/mui'
-import { getPageValue } from '../utils'
+import { getPageValue } from '../functions.shared/get-page-value'
 import {
     MUIDataTableOptions,
     MUIDataTableTextLabelsPagination
