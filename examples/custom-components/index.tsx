@@ -12,7 +12,7 @@ import TableViewCol from './table-view-col'
 
 const CustomChip = props => {
     const { label, onDelete, columnNames, className, index } = props
-    
+
     return (
         <Chip
             className={className}
