@@ -1,6 +1,6 @@
 import MUIDataTable from '../../src/'
 
-export default function SamplePage() {
+export default function Page() {
     const columns = ['Name', 'Title', 'Location']
 
     const data = [
@@ -17,8 +17,7 @@ export default function SamplePage() {
         print: false,
         download: false,
         viewColumns: false,
-        // customToolbar: null,
-        responsive: 'vertical'
+        responsive: 'vertical' as 'vertical'
     }
 
     return <MUIDataTable data={data} columns={columns} options={options} />
