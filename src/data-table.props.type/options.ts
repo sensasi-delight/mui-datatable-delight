@@ -47,7 +47,6 @@ export interface DataTableOptions {
      *
      * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-footer/index.tsx
      */
-
     customFooter?: (
         rowCount: number,
         page: number,
@@ -280,6 +279,7 @@ export interface DataTableOptions {
      * @default false
      */
     jumpToPage?: boolean
+
     /** Callback function that triggers when a cell is clicked. */
     onCellClick?: (
         colData: any,
@@ -318,7 +318,7 @@ export interface DataTableOptions {
      * In the callback, you can control what is written to the CSV file.
      * Return false to cancel download of file.
      *
-     * @see https://github.com/gregnb/mui-datatables/blob/master/examples/on-download/index.tsx
+     * @see https://github.com/sensasi-deligt/mui-datatable-delight/blob/main/examples/on-download/index.tsx
      */
     onDownload?: (
         data: DisplayData[],
@@ -333,6 +333,7 @@ export interface DataTableOptions {
         changedColumnIndex: number,
         displayData: DisplayData
     ) => void
+
     /**
      * Callback function that is triggered when a user clicks the "X" on a filter chip.
      *
@@ -343,6 +344,7 @@ export interface DataTableOptions {
         removedFilter: string,
         filterList: MUIDataTableState['filterList']
     ) => void
+
     /**
      * Callback function that is triggered when a user presses the "confirm" button on the filter popover.
      * This occurs only if you've set `confirmFilters` option to `true`.
@@ -611,6 +613,7 @@ export interface DataTableOptions {
      * @default auto-generated string
      */
     tableId?: string
+
     /**
      * CSS string for the height of the table.
      * @example '500px'
@@ -618,6 +621,7 @@ export interface DataTableOptions {
      * @example 'auto'
      * @default 'auto'
      */
+
     tableBodyHeight?: string
     /**
      * CSS string for the height of the table.
@@ -626,8 +630,10 @@ export interface DataTableOptions {
      * @example 'auto'
      */
     tableBodyMaxHeight?: string
+
     /** User provided labels to localize text. */
     textLabels?: Partial<MUIDataTableTextLabels>
+
     /**
      * Possible Values:
      * - true       = Button visible and clickable
