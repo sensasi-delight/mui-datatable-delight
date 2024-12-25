@@ -30,6 +30,7 @@ import {
     load,
     save,
     sortCompare,
+    transformData,
     warnDeprecated,
     warnInfo
 } from './functions'
@@ -814,28 +815,6 @@ class MUIDataTableClass extends React.Component {
         return { columns: columnData, filterData, filterList, columnOrder }
     }
 
-    transformData = (columns, data) => {
-        const { enableNestedDataAccess } = this.options
-        const leaf = (obj, path) =>
-            (enableNestedDataAccess
-                ? path.split(enableNestedDataAccess)
-                : path.split()
-            ).reduce((value, el) => (value ? value[el] : undefined), obj)
-
-        const transformedData = Array.isArray(data[0])
-            ? data.map(row => {
-                  let i = -1
-
-                  return columns.map(col => {
-                      if (!col.empty) i++
-                      return col.empty ? undefined : row[i]
-                  })
-              })
-            : data.map(row => columns.map(col => leaf(row, col.name)))
-
-        return transformedData
-    }
-
     setTableData(
         props,
         status,
@@ -883,7 +862,7 @@ class MUIDataTableClass extends React.Component {
 
         const data =
             status === TABLE_LOAD.INITIAL
-                ? this.transformData(columns, props.data)
+                ? transformData(columns, props.data, this.options)
                 : props.data
         let searchText =
             status === TABLE_LOAD.INITIAL ? this.options.searchText : null
