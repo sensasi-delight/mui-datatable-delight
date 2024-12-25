@@ -6,14 +6,26 @@ import type { DataTableComponents } from './components'
 import type { SxProps } from '@mui/material'
 
 export type DataTableColumns = (string | DataTableColumn)[]
-export type DataTableData = (number | string | null | undefined)[][]
+type DefaultDataItem = Object | (number | string | null)[]
+export type DataTableData = DefaultDataItem[]
 
-export interface DataTableProps {
+export interface DataTableProps<Item = DefaultDataItem> {
     columns: DataTableColumns
 
     components?: DataTableComponents
 
-    data: DataTableData
+    /**
+     * @example
+     * ```js
+     *  const data = [
+     *      ['Gabby George', 'Business Analyst', 'Minneapolis'],
+     *      ['Aiden Lloyd', "Business Consultant", 'Dallas'],
+     *      ['Jaden Collins', 'Attorney', 'Santa Ana'],
+     *      // ....
+     *  ];
+     * ```
+     */
+    data: Item[]
 
     /** Table title that placed on top left */
     title?: string | ReactNode
@@ -29,8 +41,8 @@ export interface DataTableProps {
     /**
      * Override `<DataTable />` Style
      *
-     * @todo WILL IMPLEMENT THIS LATER
      * @experimental not implemented yet
+     * @todo WILL IMPLEMENT THIS LATER
      */
     sx?: SxProps
 }
