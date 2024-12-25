@@ -1,71 +1,36 @@
-import PropTypes from 'prop-types'
-import InputBase from '@mui/material/InputBase'
-import MenuItem from '@mui/material/MenuItem'
-import Select from '@mui/material/Select'
-import Toolbar from '@mui/material/Toolbar'
-import Typography from '@mui/material/Typography'
+// vendors
+import { InputBase, MenuItem, Select, Toolbar, Typography } from '@mui/material'
 import { makeStyles } from 'tss-react/mui'
-import { getPageValue } from '../functions.shared/get-page-value'
 import clsx from 'clsx'
+// locals
+import { getPageValue } from '../functions.shared/get-page-value'
 
-const useStyles = makeStyles({ name: 'MUIDataTableJumpToPage' })(theme => ({
-    root: {
-        color: theme.palette.text.primary
-    },
-    caption: {
-        flexShrink: 0
-    },
-    /*  Styles applied to the Select component root element */
-    selectRoot: {
-        marginRight: 32,
-        marginLeft: 8
-    },
-    select: {
-        paddingTop: 6,
-        paddingBottom: 7,
-        paddingLeft: 8,
-        paddingRight: 24,
-        textAlign: 'right',
-        textAlignLast: 'right',
-        fontSize: theme.typography.pxToRem(14)
-    },
-    /* Styles applied to Select component icon class */
-    selectIcon: {},
-    /* Styles applied to InputBase component */
-    input: {
-        color: 'inhert',
-        fontSize: 'inhert',
-        flexShrink: 0
-    }
-}))
+export function DataTableFooterPaginationJumpToPage({
+    count,
+    textLabel,
+    rowsPerPage,
+    page,
+    changePage
+}: {
+    count: number
+    page: number
+    rowsPerPage: number
 
-function JumpToPage(props) {
+    /**
+     * @default options.textLabels.pagination.jumpToPage
+     */
+    textLabel: string
+
+    changePage: (pageNo: number) => void
+}) {
     const { classes } = useStyles()
 
-    const handlePageChange = event => {
-        props.changePage(parseInt(event.target.value, 10))
-    }
+    const lastPage = Math.min(1000, getPageValue(count, rowsPerPage, 1000000))
 
-    const { count, textLabels, rowsPerPage, page, changePage } = props
-
-    const textLabel = textLabels.pagination.jumpToPage
-
-    let pages = []
-    let lastPage = Math.min(1000, getPageValue(count, rowsPerPage, 1000000))
-
-    for (let ii = 0; ii <= lastPage; ii++) {
-        pages.push(ii)
-    }
-    const MenuItemComponent = MenuItem
-
-    let myStyle = {
-        display: 'flex',
-        minHeight: '52px',
-        alignItems: 'center'
-    }
+    const pages = [...Array(lastPage).keys()]
 
     return (
-        <Toolbar style={myStyle} className={classes.root}>
+        <Toolbar className={classes.root}>
             <Typography
                 color="inherit"
                 variant="body2"
@@ -81,28 +46,62 @@ function JumpToPage(props) {
                     />
                 }
                 value={getPageValue(count, rowsPerPage, page)}
-                onChange={handlePageChange}
+                onChange={({ target: { value } }) => {
+                    changePage(parseInt(value.toString(), 10))
+                }}
                 style={{ marginRight: 0 }}
             >
                 {pages.map(pageVal => (
-                    <MenuItemComponent
-                        className={classes.menuItem}
+                    <MenuItem
+                        // className={classes.menuItem} // `menuItem` IS NOT FOUND
                         key={pageVal}
                         value={pageVal}
                     >
                         {pageVal + 1}
-                    </MenuItemComponent>
+                    </MenuItem>
                 ))}
             </Select>
         </Toolbar>
     )
 }
 
-JumpToPage.propTypes = {
-    count: PropTypes.number.isRequired,
-    page: PropTypes.number.isRequired,
-    rowsPerPage: PropTypes.number.isRequired,
-    textLabels: PropTypes.object.isRequired
-}
+const useStyles = makeStyles({
+    name: 'delight-datatable-footer--pagination--jump-to-page'
+})(theme => ({
+    root: {
+        alignItems: 'center',
+        color: theme.palette.text.primary,
+        display: 'flex',
+        minHeight: '52px'
+    },
 
-export default JumpToPage
+    caption: {
+        flexShrink: 0
+    },
+
+    /*  Styles applied to the Select component root element */
+    selectRoot: {
+        marginRight: 32,
+        marginLeft: 8
+    },
+
+    select: {
+        paddingTop: 6,
+        paddingBottom: 7,
+        paddingLeft: 8,
+        paddingRight: 24,
+        textAlign: 'right',
+        textAlignLast: 'right',
+        fontSize: theme.typography.pxToRem(14)
+    },
+
+    /* Styles applied to Select component icon class */
+    selectIcon: {},
+
+    /* Styles applied to InputBase component */
+    input: {
+        color: 'inhert',
+        fontSize: 'inhert',
+        flexShrink: 0
+    }
+}))

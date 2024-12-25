@@ -1,42 +1,24 @@
-import MuiTablePagination, {
-    TablePaginationProps as MuiTablePaginationProps
-} from '@mui/material/TablePagination'
-import JumpToPage from './footer.pagination.jump-to-page'
+// vendors
 import { makeStyles } from 'tss-react/mui'
+import MuiTablePagination, {
+    type TablePaginationProps as MuiTablePaginationProps
+} from '@mui/material/TablePagination'
+// locals
+import type { DataTableFooterPaginationProps } from './footer.pagination.props.type'
+import { DataTableFooterPaginationJumpToPage } from './footer.pagination.jump-to-page'
+// statics
+import { TEXT_LABELS } from '../statics'
+// functions
 import { getPageValue } from '../functions.shared/get-page-value'
-import {
-    MUIDataTableOptions,
-    MUIDataTableTextLabelsPagination
-} from 'mui-datatables'
 
-const useStyles = makeStyles({ name: 'MUIDataTablePagination' })(() => ({
-    root: {},
-    navContainer: {
-        display: 'flex',
-        justifyContent: 'flex-end'
-    },
-    toolbar: {},
-    selectRoot: {},
-    '@media screen and (max-width: 400px)': {
-        toolbar: {
-            '& span:nth-of-type(2)': {
-                display: 'none'
-            }
-        },
-        selectRoot: {
-            marginRight: '8px'
-        }
-    }
-}))
-
-function TablePagination({
+export function DataTableFooterPagination({
     count,
     options,
     rowsPerPage,
     page,
     changeRowsPerPage,
     changePage
-}: TablePaginationProps) {
+}: DataTableFooterPaginationProps) {
     const { classes } = useStyles()
 
     const handleRowChange: MuiTablePaginationProps['onRowsPerPageChange'] = ({
@@ -52,20 +34,25 @@ function TablePagination({
         changePage(page)
     }
 
-    const textLabels = options.textLabels.pagination
+    const textLabels = {
+        ...TEXT_LABELS.pagination,
+        ...options.textLabels.pagination
+    }
 
     return (
         <div className={classes.navContainer}>
-            {options.jumpToPage ? (
-                <JumpToPage
+            {options.jumpToPage && (
+                <DataTableFooterPaginationJumpToPage
                     count={count}
                     page={page}
                     rowsPerPage={rowsPerPage}
-                    textLabels={options.textLabels}
+                    textLabel={
+                        textLabels.jumpToPage ??
+                        TEXT_LABELS.pagination.jumpToPage
+                    }
                     changePage={changePage}
-                    changeRowsPerPage={changeRowsPerPage}
                 />
-            ) : null}
+            )}
 
             <MuiTablePagination
                 component="div"
@@ -123,31 +110,24 @@ function TablePagination({
     )
 }
 
-export interface TablePaginationProps {
-    /** Total number of table rows */
-    count: number
-
-    /** Options used to describe table */
-    options: {
-        rowsPerPageOptions: MUIDataTableOptions['rowsPerPageOptions']
-        jumpToPage: MUIDataTableOptions['jumpToPage']
-        pagination: boolean
-        textLabels: {
-            pagination: MUIDataTableTextLabelsPagination
+const useStyles = makeStyles({
+    name: 'delight-datatable-footer--pagination'
+})(() => ({
+    root: {},
+    navContainer: {
+        display: 'flex',
+        justifyContent: 'flex-end'
+    },
+    toolbar: {},
+    selectRoot: {},
+    '@media screen and (max-width: 400px)': {
+        toolbar: {
+            '& span:nth-of-type(2)': {
+                display: 'none'
+            }
+        },
+        selectRoot: {
+            marginRight: '8px'
         }
     }
-
-    /** Current page index */
-    page: number
-
-    /** Total number allowed of rows per page */
-    rowsPerPage: number
-
-    /** Callback to trigger rows per page change */
-    changeRowsPerPage: (nRows: number) => void
-
-    /** Callback to trigger page change */
-    changePage: (pageNo: number) => void
-}
-
-export default TablePagination
+}))

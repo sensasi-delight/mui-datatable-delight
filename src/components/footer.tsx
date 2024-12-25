@@ -3,7 +3,8 @@ import type {
     MUIDataTablePagination,
     MUIDataTableTextLabelsPagination
 } from 'mui-datatables'
-import TablePagination, { type TablePaginationProps } from './footer.pagination'
+import { DataTableFooterPagination } from './footer.pagination'
+import type { DataTableFooterPaginationProps } from './footer.pagination.props.type'
 
 export default function TableFooter({
     options,
@@ -28,7 +29,7 @@ export default function TableFooter({
 
     if (pagination) {
         return (
-            <TablePagination
+            <DataTableFooterPagination
                 count={rowCount}
                 page={page}
                 rowsPerPage={rowsPerPage}
@@ -61,7 +62,7 @@ interface TableFooterProps {
         textLabels: {
             pagination: MUIDataTablePagination
         }
-    } & TablePaginationProps['options']
+    } & DataTableFooterPaginationProps['options']
 
     /** Current page index */
     page: number
