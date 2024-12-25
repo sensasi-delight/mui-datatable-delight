@@ -3,12 +3,11 @@ import type { DataTableProps } from './data-table.props.type'
 // vendors
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
-import { withStyles } from 'tss-react/mui'
+import { makeStyles } from 'tss-react/mui'
 import clsx from 'clsx'
 import PropTypes from 'prop-types'
-import React, { JSX } from 'react'
+import React from 'react'
 // materials
-import { type Theme } from '@mui/material'
 import Paper from '@mui/material/Paper'
 import MuiTable from '@mui/material/Table'
 import MuiTooltip from '@mui/material/Tooltip'
@@ -35,7 +34,21 @@ import {
     warnInfo
 } from './functions'
 
-const defaultTableStyles = (theme: Theme) => ({
+export function DataTable(props: DataTableProps) {
+    const { classes } = useStyles()
+
+    return <MUIDataTableClass {...props} classes={classes} />
+}
+
+/**
+ * A responsive DataTable component built with MUI for React-based project.
+ *
+ * @see https://github.com/sensasi-delight/mui-datatable-delight
+ */
+
+const useStyles = makeStyles({
+    name: 'MUIDataTable'
+})(theme => ({
     root: {
         '& .datatables-noprint': {
             '@media print': {
@@ -97,7 +110,7 @@ const defaultTableStyles = (theme: Theme) => ({
         position: 'absolute',
         width: '1px'
     }
-})
+}))
 
 const TABLE_LOAD = {
     INITIAL: 1,
@@ -467,6 +480,7 @@ class MUIDataTableClass extends React.Component {
 
         this.options = {
             ...options,
+            ...props.options,
             textLabels: {
                 ...options.textLabels,
                 ...props.options.textLabels
@@ -2525,12 +2539,3 @@ class MUIDataTableClass extends React.Component {
         )
     }
 }
-
-/**
- * A responsive DataTable component built with MUI for React-based project.
- *
- * @see https://github.com/sensasi-delight/mui-datatable-delight
- */
-export const DataTable = withStyles(MUIDataTableClass, defaultTableStyles, {
-    name: 'MUIDataTable'
-}) as unknown as (props: DataTableProps) => JSX.Element
