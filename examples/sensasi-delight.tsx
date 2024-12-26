@@ -8,7 +8,7 @@ import { Download, Refresh } from '@mui/icons-material'
 export function Page() {
     const options: DataTableOptions = {
         rowHover: true,
-        // download: 'disabled',
+        download: 'disabled',
         customToolbar: () => (
             <Tooltip arrow title="Segarkan">
                 <span>
