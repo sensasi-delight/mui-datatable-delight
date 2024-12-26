@@ -34,17 +34,16 @@ import {
     warnInfo
 } from './functions'
 
-export function DataTable(props: DataTableProps) {
-    const { classes } = useStyles()
-
-    return <MUIDataTableClass {...props} classes={classes} />
-}
-
 /**
  * A responsive DataTable component built with MUI for React-based project.
  *
  * @see https://github.com/sensasi-delight/mui-datatable-delight
  */
+export function DataTable(props: DataTableProps) {
+    const { classes } = useStyles()
+
+    return <MUIDataTableClass {...props} classes={classes} />
+}
 
 const useStyles = makeStyles({
     name: 'MUIDataTable'
@@ -542,11 +541,11 @@ class MUIDataTableClass extends React.Component {
         selectToolbarPlacement: STP.REPLACE
     })
 
-    warnDep = (msg, consoleWarnings) => {
+    warnDep = msg => {
         warnDeprecated(msg, this.options.consoleWarnings)
     }
 
-    warnInfo = (msg, consoleWarnings) => {
+    warnInfo = msg => {
         warnInfo(msg, this.options.consoleWarnings)
     }
 
@@ -861,7 +860,7 @@ class MUIDataTableClass extends React.Component {
 
             // if no sortOrder, check and see if there's a sortDirection on one of the columns (deprecation notice for this is given above)
             if (!sortOrder.direction) {
-                props.columns.forEach((column, colIndex) => {
+                props.columns.forEach(column => {
                     if (
                         column.options &&
                         (column.options.sortDirection === 'asc' ||
@@ -1473,7 +1472,7 @@ class MUIDataTableClass extends React.Component {
 
     updateColumns = newColumns => {
         this.setState(
-            prevState => {
+            () => {
                 return {
                     columns: newColumns
                 }
@@ -1489,28 +1488,6 @@ class MUIDataTableClass extends React.Component {
                 }
             }
         )
-    }
-
-    getSortDirectionLabel(sortOrder) {
-        switch (sortOrder.direction) {
-            case 'asc':
-                return 'ascending'
-            case 'desc':
-                return 'descending'
-            case 'none':
-                return 'none'
-            default:
-                return ''
-        }
-    }
-
-    getTableProps() {
-        const { classes } = this.props
-        const tableProps = this.options.setTableProps() || {}
-
-        tableProps.className = clsx(classes.tableRoot, tableProps.className)
-
-        return tableProps
     }
 
     toggleSortColumn = index => {
@@ -1544,7 +1521,22 @@ class MUIDataTableClass extends React.Component {
                     direction: newOrder
                 }
 
-                const orderLabel = this.getSortDirectionLabel(newSortOrder)
+                function getSortDirectionLabel(
+                    sortOrder: DataTableProps['options']
+                ) {
+                    switch (sortOrder.direction) {
+                        case 'asc':
+                            return 'ascending'
+                        case 'desc':
+                            return 'descending'
+                        case 'none':
+                            return 'none'
+                        default:
+                            return ''
+                    }
+                }
+
+                const orderLabel = getSortDirectionLabel(newSortOrder)
                 const announceText = `Table now sorted by ${columns[index].name} : ${orderLabel}`
 
                 let newState = {
@@ -1865,7 +1857,7 @@ class MUIDataTableClass extends React.Component {
 
     updateColumnOrder = (columnOrder, columnIndex, newPosition) => {
         this.setState(
-            prevState => {
+            () => {
                 return {
                     columnOrder
                 }
@@ -1990,7 +1982,7 @@ class MUIDataTableClass extends React.Component {
                         (selectedRowsLen < displayData.length &&
                             selectedRowsLen > 0)
 
-                    let selectedRows = displayData.reduce((arr, d, i) => {
+                    const selectedRows = displayData.reduce((arr, _, i) => {
                         const selected = isRowSelectable
                             ? isRowSelectable(
                                   displayData[i].dataIndex,
@@ -2268,7 +2260,6 @@ class MUIDataTableClass extends React.Component {
             expandedRows,
             searchText,
             sortOrder,
-            serverSideFilterList,
             columnOrder
         } = this.state
 
