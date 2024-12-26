@@ -425,7 +425,7 @@ class TableBody extends React.Component {
                             <Typography
                                 variant="body1"
                                 className={classes.emptyTitle}
-                                component={'div'}
+                                component="div"
                             >
                                 {options.textLabels.body.noMatch}
                             </Typography>

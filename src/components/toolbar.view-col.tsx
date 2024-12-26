@@ -54,7 +54,7 @@ const TableViewCol = ({
 
     return (
         <FormControl
-            component={'fieldset'}
+            component="fieldset"
             className={classes.root}
             aria-label={textLabels.titleAria}
         >

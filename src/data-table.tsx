@@ -2428,8 +2428,8 @@ class MUIDataTableClass extends React.Component {
                         const components = (
                             <MuiTable
                                 ref={el => (this.tableRef = el)}
-                                tabIndex={'0'}
-                                role={'grid'}
+                                tabIndex="0"
+                                role="grid"
                                 className={tableClassNames}
                                 {...tableProps}
                             >

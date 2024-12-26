@@ -201,7 +201,7 @@ const TableHeadCell = ({
                 setCellRef && setCellRef(index + 1, colPosition + 1, ref)
             }}
             className={cellClass}
-            scope={'col'}
+            scope="col"
             sortDirection={ariaSortDirection}
             data-colindex={index}
             data-tableid={tableId}
@@ -272,7 +272,7 @@ const TableHeadCell = ({
                     {hint && (
                         <Tooltip
                             title={hint}
-                            placement={'bottom-end'}
+                            placement="bottom-end"
                             open={hintTooltipOpen}
                             onOpen={() => showHintTooltip()}
                             onClose={() => setHintTooltipOpen(false)}

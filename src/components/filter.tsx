@@ -265,7 +265,7 @@ class TableFilter extends React.Component {
                     'grid-xs-6': classes.gridListTile
                 }}
             >
-                <FormControl key={index} variant={'standard'} fullWidth>
+                <FormControl key={index} variant="standard" fullWidth>
                     <InputLabel htmlFor={column.name}>
                         {column.label}
                     </InputLabel>
@@ -322,10 +322,10 @@ class TableFilter extends React.Component {
                 <FormControl key={index} fullWidth>
                     <TextField
                         fullWidth
-                        variant={'standard'}
+                        variant="standard"
                         label={column.label}
                         value={filterList[index].toString() || ''}
-                        data-testid={'filtertextfield-' + column.name}
+                        data-testid={`filtertextfield-${column.name}`}
                         onChange={event =>
                             this.handleTextFieldChange(
                                 event,
@@ -362,7 +362,7 @@ class TableFilter extends React.Component {
                     'grid-xs-6': classes.gridListTile
                 }}
             >
-                <FormControl key={index} variant={'standard'} fullWidth>
+                <FormControl key={index} variant="standard" fullWidth>
                     <InputLabel htmlFor={column.name}>
                         {column.label}
                     </InputLabel>
@@ -515,7 +515,7 @@ class TableFilter extends React.Component {
                             className={classes.resetLink}
                             tabIndex={0}
                             aria-label={textLabels.reset}
-                            data-testid={'filterReset-button'}
+                            data-testid="filterReset-button"
                             onClick={this.resetFilters}
                         >
                             {textLabels.reset}
