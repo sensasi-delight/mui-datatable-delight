@@ -1,3 +1,6 @@
+import type { DataTableOptions } from '../data-table.props.type/options'
+import type { DataTableProps } from '../../'
+
 import {
     Button,
     Checkbox,
@@ -13,30 +16,24 @@ import {
     TextField,
     Typography
 } from '@mui/material'
-import { cloneDeep } from '../functions'
 import { makeStyles } from 'tss-react/mui'
-import React from 'react'
+import React, { ElementType, useState } from 'react'
 import clsx from 'clsx'
 
-export function DataTableToolbarFilter(props: {
-    /** Data used to populate filter dropdown/checkbox */
-    filterData: []
-
-    /** Data selected to be filtered against dropdown/checkbox */
-    filterList: []
-
-    /** Options used to describe table */
-    options: object
-
-    /** Callback to trigger filter update */
-    onFilterUpdate?: () => void
-
-    /** Callback to trigger filter reset */
-    onFilterReset?: () => void
-}) {
+export function DataTableToolbarFilter(props: DataTableToolbarFilterProps) {
     const { classes } = useStyles()
+    const [state, setState] = useState({
+        filterList: props.filterList
+    })
 
-    return <TableFilter {...props} classes={classes} />
+    return (
+        <TableFilter
+            {...props}
+            classes={classes}
+            state={state}
+            setState={setState}
+        />
+    )
 }
 
 const useStyles = makeStyles({
@@ -107,13 +104,6 @@ const useStyles = makeStyles({
 }))
 
 class TableFilter extends React.Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            filterList: cloneDeep(props.filterList)
-        }
-    }
-
     filterUpdate = (index, value, column, type, customUpdate) => {
         let newFilterList = this.state.filterList.slice(0)
 
@@ -124,12 +114,17 @@ class TableFilter extends React.Component {
             type,
             customUpdate
         )
+
         this.setState({
             filterList: newFilterList
         })
     }
 
-    handleCheckboxChange = (index, value, column) => {
+    handleCheckboxChange = (
+        index: number,
+        value: DataTableProps['data'][0][0],
+        column: string
+    ) => {
         this.filterUpdate(index, value, column, 'checkbox')
 
         if (this.props.options.confirmFilters !== true) {
@@ -182,72 +177,7 @@ class TableFilter extends React.Component {
         }
     }
 
-    renderCheckbox(column, index, components = {}) {
-        const CheckboxComponent = components.Checkbox || Checkbox
-
-        const { classes, filterData } = this.props
-        const { filterList } = this.state
-        const renderItem =
-            column.filterOptions && column.filterOptions.renderValue
-                ? column.filterOptions.renderValue
-                : v => v
-
-        return (
-            <Grid item key={index} xs={6}>
-                <FormGroup>
-                    <Grid item xs={12}>
-                        <Typography
-                            variant="body2"
-                            className={classes.checkboxListTitle}
-                        >
-                            {column.label}
-                        </Typography>
-                    </Grid>
-                    <Grid container>
-                        {filterData[index].map((filterValue, filterIndex) => (
-                            <Grid item key={filterIndex}>
-                                <FormControlLabel
-                                    key={filterIndex}
-                                    classes={{
-                                        root: classes.checkboxFormControl,
-                                        label: classes.checkboxFormControlLabel
-                                    }}
-                                    control={
-                                        <CheckboxComponent
-                                            data-description="table-filter"
-                                            color="primary"
-                                            className={classes.checkboxIcon}
-                                            onChange={this.handleCheckboxChange.bind(
-                                                null,
-                                                index,
-                                                filterValue,
-                                                column.name
-                                            )}
-                                            checked={
-                                                filterList[index].indexOf(
-                                                    filterValue
-                                                ) >= 0
-                                            }
-                                            classes={{
-                                                root: classes.checkbox,
-                                                checked: classes.checked
-                                            }}
-                                            value={
-                                                filterValue != null
-                                                    ? filterValue.toString()
-                                                    : ''
-                                            }
-                                        />
-                                    }
-                                    label={renderItem(filterValue)}
-                                />
-                            </Grid>
-                        ))}
-                    </Grid>
-                </FormGroup>
-            </Grid>
-        )
-    }
+    // ################## RENDER COMPONENT BLOCK ######################
 
     renderSelect(column, index) {
         const { classes, filterData, options } = this.props
@@ -306,6 +236,7 @@ class TableFilter extends React.Component {
     renderTextField(column, index) {
         const { classes } = this.props
         const { filterList } = this.state
+
         if (column.filterOptions && column.filterOptions.renderValue) {
             console.warn(
                 'Custom renderValue not supported for textField filters'
@@ -347,7 +278,7 @@ class TableFilter extends React.Component {
     }
 
     renderMultiselect(column, index, components = {}) {
-        const CheckboxComponent = components.Checkbox || Checkbox
+        const CheckboxComponent = components.Checkbox ?? Checkbox
 
         const { classes, filterData } = this.props
         const { filterList } = this.state
@@ -355,10 +286,10 @@ class TableFilter extends React.Component {
             column.filterOptions && column.filterOptions.renderValue
                 ? column.filterOptions.renderValue
                 : v => v
+
         const width =
-            (column.filterOptions && column.filterOptions.fullWidth) === true
-                ? 12
-                : 6
+            column.filterOptions && column.filterOptions.fullWidth ? 12 : 6
+
         return (
             <Grid
                 item
@@ -485,15 +416,6 @@ class TableFilter extends React.Component {
         return this.state.filterList
     }
 
-    resetFilters = () => {
-        this.setState({
-            filterList: this.props.columns.map(() => [])
-        })
-        if (this.props.options.confirmFilters !== true) {
-            this.props.onFilterReset()
-        }
-    }
-
     render() {
         const {
             classes,
@@ -501,9 +423,47 @@ class TableFilter extends React.Component {
             options,
             customFooter,
             filterList,
-            components = {}
+            components = {},
+            onFilterReset,
+            state,
+            setState,
+            filterData
         } = this.props
+
+        this.setState = setState
+        this.state = state
+
         const textLabels = options.textLabels.filter
+
+        const renderedColumns = columns.map((column, index) => {
+            if (column.filter) {
+                const filterType = column.filterType ?? options.filterType
+
+                if (filterType === 'checkbox') {
+                    return (
+                        <DataTableToolbarFilterCheckbox
+                            index={index}
+                            column={column}
+                            key={index}
+                            Component={components.Checkbox}
+                            filterData={filterData}
+                            filterList={filterList}
+                            handleCheckboxChange={(value: string) =>
+                                this.handleCheckboxChange(index, value, column)
+                            }
+                        />
+                    )
+                }
+
+                return filterType === 'multiselect'
+                    ? this.renderMultiselect(column, index, components)
+                    : filterType === 'textField'
+                      ? this.renderTextField(column, index)
+                      : filterType === 'custom'
+                        ? this.renderCustomField(column, index)
+                        : this.renderSelect(column, index)
+            }
+        })
 
         return (
             <div className={classes.root}>
@@ -517,19 +477,29 @@ class TableFilter extends React.Component {
                         >
                             {textLabels.title}
                         </Typography>
+
                         <Button
                             color="primary"
                             className={classes.resetLink}
                             tabIndex={0}
                             aria-label={textLabels.reset}
                             data-testid="filterReset-button"
-                            onClick={this.resetFilters}
+                            onClick={() => {
+                                resetFilters(
+                                    setState,
+                                    columns,
+                                    options.confirmFilters,
+                                    onFilterReset
+                                )
+                            }}
                         >
                             {textLabels.reset}
                         </Button>
                     </div>
+
                     <div className={classes.filtersSelected} />
                 </div>
+
                 <Grid
                     container
                     direction="row"
@@ -537,30 +507,123 @@ class TableFilter extends React.Component {
                     alignItems="center"
                     spacing={4}
                 >
-                    {columns.map((column, index) => {
-                        if (column.filter) {
-                            const filterType =
-                                column.filterType || options.filterType
-                            return filterType === 'checkbox'
-                                ? this.renderCheckbox(column, index, components)
-                                : filterType === 'multiselect'
-                                  ? this.renderMultiselect(
-                                        column,
-                                        index,
-                                        components
-                                    )
-                                  : filterType === 'textField'
-                                    ? this.renderTextField(column, index)
-                                    : filterType === 'custom'
-                                      ? this.renderCustomField(column, index)
-                                      : this.renderSelect(column, index)
-                        }
-                    })}
+                    {renderedColumns}
                 </Grid>
-                {customFooter
-                    ? customFooter(filterList, this.applyFilters)
-                    : ''}
+
+                {customFooter && customFooter(filterList, this.applyFilters)}
             </div>
         )
     }
+}
+
+function resetFilters(
+    setState,
+    columns,
+    confirmFilters: DataTableOptions['confirmFilters'],
+    onFilterReset: DataTableToolbarFilterProps['onFilterReset']
+) {
+    setState({
+        filterList: columns.map(() => [])
+    })
+
+    if (confirmFilters !== true) {
+        onFilterReset?.()
+    }
+}
+
+interface DataTableToolbarFilterProps {
+    /** Data used to populate filter dropdown/checkbox */
+    filterData: []
+
+    /** Data selected to be filtered against dropdown/checkbox */
+    filterList: []
+
+    /** Options used to describe table */
+    options: object
+
+    /** Callback to trigger filter update */
+    onFilterUpdate?: () => void
+
+    /** Callback to trigger filter reset */
+    onFilterReset?: () => void
+}
+
+/**
+ * @deprecated REFACTORS WHEN COMPONENT CHANGES TO FULL FUNCTIONAL
+ */
+function DataTableToolbarFilterCheckbox({
+    index,
+    column,
+    filterData,
+    filterList,
+    Component = Checkbox,
+    handleCheckboxChange
+}: {
+    index: number
+    // column
+    // filterData
+    // filterList
+    Component: ElementType
+
+    /**
+     * @bug THIS WORKAROUND HAS A BUG, FILTER NOT APPLIED AT FIRST CLICK.
+     * @deprecated
+     */
+    handleCheckboxChange: (value: string) => void
+}) {
+    const { classes } = useStyles()
+    const renderItem = column?.filterOptions?.renderValue ?? ((v: unknown) => v)
+
+    return (
+        <Grid item xs={6}>
+            <FormGroup>
+                <Grid item xs={12}>
+                    <Typography
+                        variant="body2"
+                        className={classes.checkboxListTitle}
+                    >
+                        {column.label}
+                    </Typography>
+                </Grid>
+                <Grid container>
+                    {filterData[index].map((filterValue, filterIndex) => (
+                        <Grid item key={filterIndex}>
+                            <FormControlLabel
+                                key={filterIndex}
+                                classes={{
+                                    root: classes.checkboxFormControl,
+                                    label: classes.checkboxFormControlLabel
+                                }}
+                                control={
+                                    <Component
+                                        data-description="table-filter"
+                                        color="primary"
+                                        className={classes.checkboxIcon}
+                                        onChange={() =>
+                                            handleCheckboxChange(filterValue)
+                                        }
+                                        checked={
+                                            filterList[index].indexOf(
+                                                filterValue
+                                            ) >= 0
+                                        }
+                                        classes={{
+                                            root: classes.checkbox,
+                                            checked: classes.checked
+                                        }}
+                                        value={
+                                            filterValue != null
+                                                ? filterValue.toString()
+                                                : ''
+                                        }
+                                    />
+                                }
+                                label={renderItem(filterValue)}
+                            />
+                        </Grid>
+                    ))}
+                </Grid>
+            </FormGroup>
+        </Grid>
+    )
 }
