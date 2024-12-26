@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography'
 import Toolbar from '@mui/material/Toolbar'
 import IconButton from '@mui/material/IconButton'
 import Popover from './toolbar.popover'
-import TableFilter from './filter'
+import { DataTableToolbarFilter } from './toolbar.filter'
 import TableViewCol from './toolbar.view-col'
 import TableSearch from './toolbar.search'
 import SearchIcon from '@mui/icons-material/Search'
@@ -318,14 +318,16 @@ class TableToolbar extends React.Component {
         } = this.props
         const { icons = {} } = components
 
-        const Tooltip = components.Tooltip || MuiTooltip
-        const TableViewColComponent = components.TableViewCol || TableViewCol
-        const TableFilterComponent = components.TableFilter || TableFilter
-        const SearchIconComponent = icons.SearchIcon || SearchIcon
-        const DownloadIconComponent = icons.DownloadIcon || DownloadIcon
-        const PrintIconComponent = icons.PrintIcon || PrintIcon
-        const ViewColumnIconComponent = icons.ViewColumnIcon || ViewColumnIcon
-        const FilterIconComponent = icons.FilterIcon || FilterIcon
+        const Tooltip = components.Tooltip ?? MuiTooltip
+        const TableViewColComponent = components.TableViewCol ?? TableViewCol
+        const TableFilterComponent =
+            components.TableFilter ?? DataTableToolbarFilter
+        const SearchIconComponent = icons.SearchIcon ?? SearchIcon
+        const DownloadIconComponent = icons.DownloadIcon ?? DownloadIcon
+        const PrintIconComponent = icons.PrintIcon ?? PrintIcon
+        const ViewColumnIconComponent = icons.ViewColumnIcon ?? ViewColumnIcon
+        const FilterIconComponent = icons.FilterIcon ?? FilterIcon
+
         const { search, downloadCsv, print, viewColumns, filterTable } =
             options.textLabels.toolbar
         const { showSearch, searchText } = this.state
@@ -403,37 +405,41 @@ class TableToolbar extends React.Component {
                         options.searchAlwaysOpen === true
                     ) && (
                         <Tooltip title={search} disableFocusListener>
-                            <IconButton
-                                aria-label={search}
-                                data-testid={search + '-iconButton'}
-                                ref={el => (this.searchButton = el)}
-                                classes={{
-                                    root: this.getActiveIcon(classes, 'search')
-                                }}
-                                disabled={options.search === 'disabled'}
-                                onClick={this.handleSearchIconClick}
-                            >
-                                <SearchIconComponent />
-                            </IconButton>
+                            <span>
+                                <IconButton
+                                    aria-label={search}
+                                    data-testid={search + '-iconButton'}
+                                    ref={el => (this.searchButton = el)}
+                                    classes={{
+                                        root: this.getActiveIcon(
+                                            classes,
+                                            'search'
+                                        )
+                                    }}
+                                    disabled={options.search === 'disabled'}
+                                    onClick={this.handleSearchIconClick}
+                                >
+                                    <SearchIconComponent />
+                                </IconButton>
+                            </span>
                         </Tooltip>
                     )}
-                    {!(
-                        options.download === false ||
-                        options.download === 'false'
-                    ) && (
+                    {!(options.download === false) && (
                         <Tooltip title={downloadCsv}>
-                            <IconButton
-                                data-testid={
-                                    downloadCsv.replace(/\s/g, '') +
-                                    '-iconButton'
-                                }
-                                aria-label={downloadCsv}
-                                classes={{ root: classes.icon }}
-                                disabled={options.download === 'disabled'}
-                                onClick={this.handleCSVDownload}
-                            >
-                                <DownloadIconComponent />
-                            </IconButton>
+                            <span>
+                                <IconButton
+                                    data-testid={
+                                        downloadCsv.replace(/\s/g, '') +
+                                        '-iconButton'
+                                    }
+                                    aria-label={downloadCsv}
+                                    classes={{ root: classes.icon }}
+                                    disabled={options.download === 'disabled'}
+                                    onClick={this.handleCSVDownload}
+                                >
+                                    <DownloadIconComponent />
+                                </IconButton>
+                            </span>
                         </Tooltip>
                     )}
                     {!(
@@ -534,25 +540,29 @@ class TableToolbar extends React.Component {
                                     title={filterTable}
                                     disableFocusListener
                                 >
-                                    <IconButton
-                                        data-testid={
-                                            filterTable + '-iconButton'
-                                        }
-                                        aria-label={filterTable}
-                                        classes={{
-                                            root: this.getActiveIcon(
-                                                classes,
+                                    <span>
+                                        <IconButton
+                                            data-testid={
+                                                filterTable + '-iconButton'
+                                            }
+                                            aria-label={filterTable}
+                                            classes={{
+                                                root: this.getActiveIcon(
+                                                    classes,
+                                                    'filter'
+                                                )
+                                            }}
+                                            disabled={
+                                                options.filter === 'disabled'
+                                            }
+                                            onClick={this.setActiveIcon.bind(
+                                                null,
                                                 'filter'
-                                            )
-                                        }}
-                                        disabled={options.filter === 'disabled'}
-                                        onClick={this.setActiveIcon.bind(
-                                            null,
-                                            'filter'
-                                        )}
-                                    >
-                                        <FilterIconComponent />
-                                    </IconButton>
+                                            )}
+                                        >
+                                            <FilterIconComponent />
+                                        </IconButton>
+                                    </span>
                                 </Tooltip>
                             }
                             content={

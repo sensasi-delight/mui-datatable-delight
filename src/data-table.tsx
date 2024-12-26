@@ -9,14 +9,14 @@ import clsx from 'clsx'
 import PropTypes from 'prop-types'
 import React from 'react'
 // local components
+import { DataTableToolbarFilter } from './components/toolbar.filter'
+import { TableToolbarSelect as DefaultTableToolbarSelect } from './components/toolbar-select'
 import DefaultTableBody from './components/body'
-import DefaultTableFilter from './components/filter'
 import DefaultTableFilterList from './components/filter-list'
 import DefaultTableFooter from './components/footer'
 import DefaultTableHead from './components/head'
 import DefaultTableResize from './components/resize'
 import DefaultTableToolbar from './components/toolbar'
-import { TableToolbarSelect as DefaultTableToolbarSelect } from './components/toolbar-select'
 // locals
 import { TEXT_LABELS } from './statics/text-labels'
 import { getPageValue } from './functions.shared/get-page-value'
@@ -50,7 +50,7 @@ export function DataTable({ components, ...props }: DataTableProps) {
                 Tooltip: components?.Tooltip ?? MuiTooltip,
 
                 TableBody: components?.TableBody ?? DefaultTableBody,
-                TableFilter: components?.TableFilter ?? DefaultTableFilter,
+                TableFilter: components?.TableFilter ?? DataTableToolbarFilter,
                 TableFilterList:
                     components?.TableFilterList ?? DefaultTableFilterList,
                 TableFooter: components?.TableFooter ?? DefaultTableFooter,

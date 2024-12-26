@@ -1,25 +1,47 @@
-import type { Theme } from '@mui/material'
-
-import Button from '@mui/material/Button'
-import Checkbox from '@mui/material/Checkbox'
-import FormControl from '@mui/material/FormControl'
-import FormControlLabel from '@mui/material/FormControlLabel'
-import FormGroup from '@mui/material/FormGroup'
-import Grid from '@mui/material/Grid'
-import Input from '@mui/material/Input'
-import InputLabel from '@mui/material/InputLabel'
-import ListItemText from '@mui/material/ListItemText'
-import MenuItem from '@mui/material/MenuItem'
-import PropTypes from 'prop-types'
-import React from 'react'
-import Select from '@mui/material/Select'
-import TextField from '@mui/material/TextField'
-import Typography from '@mui/material/Typography'
-import clsx from 'clsx'
-import { withStyles } from 'tss-react/mui'
+import {
+    Button,
+    Checkbox,
+    FormControl,
+    FormControlLabel,
+    FormGroup,
+    Grid,
+    Input,
+    InputLabel,
+    ListItemText,
+    MenuItem,
+    Select,
+    TextField,
+    Typography
+} from '@mui/material'
 import { cloneDeep } from '../functions'
+import { makeStyles } from 'tss-react/mui'
+import React from 'react'
+import clsx from 'clsx'
 
-export const defaultFilterStyles = (theme: Theme) => ({
+export function DataTableToolbarFilter(props: {
+    /** Data used to populate filter dropdown/checkbox */
+    filterData: []
+
+    /** Data selected to be filtered against dropdown/checkbox */
+    filterList: []
+
+    /** Options used to describe table */
+    options: object
+
+    /** Callback to trigger filter update */
+    onFilterUpdate?: () => void
+
+    /** Callback to trigger filter reset */
+    onFilterReset?: () => void
+}) {
+    const { classes } = useStyles()
+
+    return <TableFilter {...props} classes={classes} />
+}
+
+const useStyles = makeStyles({
+    name: 'delight-datatable-toolbar--filter'
+})(theme => ({
     root: {
         backgroundColor: theme.palette.background.default,
         padding: '24px 24px 36px 24px',
@@ -82,24 +104,9 @@ export const defaultFilterStyles = (theme: Theme) => ({
     gridListTile: {
         marginTop: '16px'
     }
-})
+}))
 
 class TableFilter extends React.Component {
-    static propTypes = {
-        /** Data used to populate filter dropdown/checkbox */
-        filterData: PropTypes.array.isRequired,
-        /** Data selected to be filtered against dropdown/checkbox */
-        filterList: PropTypes.array.isRequired,
-        /** Options used to describe table */
-        options: PropTypes.object.isRequired,
-        /** Callback to trigger filter update */
-        onFilterUpdate: PropTypes.func,
-        /** Callback to trigger filter reset */
-        onFilterReset: PropTypes.func,
-        /** Extend the style applied to components */
-        classes: PropTypes.object
-    }
-
     constructor(props) {
         super(props)
         this.state = {
@@ -557,7 +564,3 @@ class TableFilter extends React.Component {
         )
     }
 }
-
-export default withStyles(TableFilter, defaultFilterStyles, {
-    name: 'MUIDataTableFilter'
-})
