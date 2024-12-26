@@ -346,8 +346,8 @@ class TableToolbar extends React.Component {
                         ? classes.root
                         : classes.fullWidthRoot
                 }
-                role={'toolbar'}
-                aria-label={'Table Toolbar'}
+                role="toolbar"
+                aria-label="Table Toolbar"
             >
                 <div
                     className={
@@ -375,7 +375,7 @@ class TableToolbar extends React.Component {
                     ) : typeof title !== 'string' ? (
                         title
                     ) : (
-                        <div className={classes.titleRoot} aria-hidden={'true'}>
+                        <div className={classes.titleRoot} aria-hidden="true">
                             <Typography
                                 variant="h6"
                                 className={
