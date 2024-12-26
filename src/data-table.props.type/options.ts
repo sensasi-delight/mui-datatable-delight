@@ -8,10 +8,11 @@ import type {
     MUIDataTableState,
     MUIDataTableTextLabels,
     MUISortOptions,
-    SelectableRows,
-    ToolbarButton
+    SelectableRows
 } from 'mui-datatables'
 import { Component, JSX, ReactNode } from 'react'
+
+type BooleanOrDisabled = Boolean | 'disabled'
 
 export interface DataTableOptions {
     /** Enable/disable case sensitivity for search */
@@ -142,7 +143,7 @@ export interface DataTableOptions {
      *
      * @default true
      */
-    download?: ToolbarButton
+    download?: BooleanOrDisabled
 
     /**
      * An object of options to change the output of the csv file.
@@ -218,7 +219,7 @@ export interface DataTableOptions {
      *
      * @default true
      */
-    filter?: ToolbarButton
+    filter?: BooleanOrDisabled
 
     /**
      * For array values, default checks if all the filter values are included in the array.
@@ -427,7 +428,7 @@ export interface DataTableOptions {
      * @default true
      */
 
-    print?: ToolbarButton
+    print?: BooleanOrDisabled
     /**
      * Render Expandable rows.
      *
@@ -486,7 +487,7 @@ export interface DataTableOptions {
      *
      * @default true
      */
-    search?: ToolbarButton
+    search?: BooleanOrDisabled
 
     /**
      * Initially displays search bar.
@@ -641,7 +642,7 @@ export interface DataTableOptions {
      * - 'disabled' = Button is visible but not clickable
      * @default true
      */
-    viewColumns?: ToolbarButton
+    viewColumns?: BooleanOrDisabled
 
     /**
      * Local storage key used to store the table state.
