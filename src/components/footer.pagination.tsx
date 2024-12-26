@@ -5,7 +5,6 @@ import MuiTablePagination, {
 } from '@mui/material/TablePagination'
 // locals
 import type { DataTableFooterPaginationProps } from './footer.pagination.props.type'
-import { DataTableFooterPaginationJumpToPage } from './footer.pagination.jump-to-page'
 // statics
 import { TEXT_LABELS } from '../statics'
 // functions
@@ -40,28 +39,9 @@ export function DataTableFooterPagination({
     }
 
     return (
-        <div className={classes.navContainer}>
-            {options.jumpToPage && (
-                <DataTableFooterPaginationJumpToPage
-                    count={count}
-                    page={page}
-                    rowsPerPage={rowsPerPage}
-                    textLabel={
-                        textLabels.jumpToPage ??
-                        TEXT_LABELS.pagination.jumpToPage
-                    }
-                    changePage={changePage}
-                />
-            )}
-
+        <div className={classes.root}>
             <MuiTablePagination
                 component="div"
-                className={classes.root}
-                classes={{
-                    // caption: classes.caption,
-                    toolbar: classes.toolbar,
-                    selectRoot: classes.selectRoot
-                }}
                 count={count}
                 rowsPerPage={rowsPerPage}
                 page={getPageValue(count, rowsPerPage, page)}
@@ -75,14 +55,15 @@ export function DataTableFooterPagination({
                             id: 'pagination-back',
                             // 'data-testid': 'pagination-back',
                             'aria-label': textLabels.previous,
-                            title: textLabels.previous || ''
+                            title: textLabels.previous ?? ''
                         },
 
                         nextButton: {
                             id: 'pagination-next',
                             // 'data-testid': 'pagination-next',
                             'aria-label': textLabels.next,
-                            title: textLabels.next || ''
+                            title: textLabels.next ?? '',
+                            className: classes.nextButton
                         }
                     },
 
@@ -100,6 +81,10 @@ export function DataTableFooterPagination({
                                 // 'data-testid': 'pagination-menu-list'
                             }
                         }
+                    },
+
+                    toolbar: {
+                        className: classes.toolbar
                     }
                 }}
                 rowsPerPageOptions={options.rowsPerPageOptions}
@@ -112,22 +97,20 @@ export function DataTableFooterPagination({
 
 const useStyles = makeStyles({
     name: 'delight-datatable-footer--pagination'
-})(() => ({
-    root: {},
-    navContainer: {
-        display: 'flex',
-        justifyContent: 'flex-end'
+})(theme => ({
+    root: {
+        maxWidth: '100%',
+        overflowX: 'auto'
     },
-    toolbar: {},
-    selectRoot: {},
-    '@media screen and (max-width: 400px)': {
-        toolbar: {
-            '& span:nth-of-type(2)': {
-                display: 'none'
-            }
+    toolbar: {
+        [theme.breakpoints.down('sm')]: {
+            marginTop: '-0.5em'
         },
-        selectRoot: {
-            marginRight: '8px'
-        }
+        paddingRight: '0 !important',
+        paddingLeft: '0 !important'
+    },
+
+    nextButton: {
+        marginRight: '0.5em !important'
     }
 }))
