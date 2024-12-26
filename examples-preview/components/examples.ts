@@ -35,6 +35,7 @@ import CustomComponents from '../../examples/custom-components'
 import InfiniteScrolling from '../../examples/infinite-scrolling'
 import Themes from '../../examples/themes'
 import LargeDataSet from '../../examples/large-data-set'
+import { Page as SensasiDelightPage } from '../../examples/sensasi-delight'
 
 /**
  * Here you can add any extra examples with the Card label as the key, and the component to render as the value
@@ -76,5 +77,6 @@ export default {
     'Simple No Toolbar': SimpleNoToolbar,
     'Text Localization': TextLocalization,
     'Custom Components': CustomComponents,
-    Themes: Themes
+    Themes: Themes,
+    'Sensasi Delight': SensasiDelightPage
 }
