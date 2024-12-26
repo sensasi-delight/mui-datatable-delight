@@ -1,33 +1,38 @@
-import React, { useState } from 'react'
-import MUIDataTable from '../../src'
-import InputLabel from '@mui/material/InputLabel'
-import MenuItem from '@mui/material/MenuItem'
-import FormControl from '@mui/material/FormControl'
-import Select from '@mui/material/Select'
+// vendors
+import { InputLabel, FormControl, MenuItem, Select } from '@mui/material'
+import { useState } from 'react'
+// DataTable
+import DataTable, {
+    type DataTableOptions,
+    type DataTableProps
+} from '../../src'
 
 function Example() {
-    const [responsive, setResponsive] = useState('vertical')
+    const [responsive, setResponsive] =
+        useState<DataTableOptions['responsive']>('vertical')
     const [tableBodyHeight, setTableBodyHeight] = useState('400px')
     const [tableBodyMaxHeight, setTableBodyMaxHeight] = useState('')
-    const [searchBtn, setSearchBtn] = useState(true)
-    const [downloadBtn, setDownloadBtn] = useState(true)
-    const [printBtn, setPrintBtn] = useState(true)
-    const [viewColumnBtn, setViewColumnBtn] = useState(true)
-    const [filterBtn, setFilterBtn] = useState(true)
+    const [searchBtn, setSearchBtn] = useState<DataTableOptions['search']>(true)
+    const [downloadBtn, setDownloadBtn] =
+        useState<DataTableOptions['download']>(true)
+    const [printBtn, setPrintBtn] = useState<DataTableOptions['print']>(true)
+    const [viewColumnBtn, setViewColumnBtn] =
+        useState<DataTableOptions['viewColumns']>(true)
+    const [filterBtn, setFilterBtn] = useState<DataTableOptions['filter']>(true)
 
-    const columns = [
+    const columns: DataTableProps['columns'] = [
         { name: 'Name', options: { filterOptions: { fullWidth: true } } },
         'Title',
         'Location'
     ]
 
-    const options = {
+    const options: DataTableOptions = {
         search: searchBtn,
         download: downloadBtn,
         print: printBtn,
         viewColumns: viewColumnBtn,
         filter: filterBtn,
-        filterType: 'dropdown',
+        filterType: 'checkbox',
         responsive,
         tableBodyHeight,
         tableBodyMaxHeight,
@@ -57,7 +62,7 @@ function Example() {
     ]
 
     return (
-        <React.Fragment>
+        <>
             <FormControl>
                 <InputLabel id="demo-simple-select-label">
                     Responsive Option
@@ -71,17 +76,18 @@ function Example() {
                         marginBottom: '10px',
                         marginRight: 10
                     }}
-                    onChange={e => setResponsive(e.target.value)}
+                    onChange={({ target: { value } }) =>
+                        setResponsive(value as typeof responsive)
+                    }
                 >
-                    <MenuItem value={'vertical'}>vertical</MenuItem>
-                    <MenuItem value={'standard'}>standard</MenuItem>
-                    <MenuItem value={'simple'}>simple</MenuItem>
-
-                    <MenuItem value={'scroll'}>scroll (deprecated)</MenuItem>
-                    <MenuItem value={'scrollMaxHeight'}>
+                    <MenuItem value="vertical">vertical</MenuItem>
+                    <MenuItem value="standard">standard</MenuItem>
+                    <MenuItem value="simple">simple</MenuItem>
+                    <MenuItem value="scroll">scroll (deprecated)</MenuItem>
+                    <MenuItem value="scrollMaxHeight">
                         scrollMaxHeight (deprecated)
                     </MenuItem>
-                    <MenuItem value={'stacked'}>stacked (deprecated)</MenuItem>
+                    <MenuItem value="stacked">stacked (deprecated)</MenuItem>
                 </Select>
             </FormControl>
             <FormControl>
@@ -97,7 +103,9 @@ function Example() {
                         marginBottom: '10px',
                         marginRight: 10
                     }}
-                    onChange={e => setTableBodyHeight(e.target.value)}
+                    onChange={({ target: { value } }) =>
+                        setTableBodyHeight(value as typeof tableBodyHeight)
+                    }
                 >
                     <MenuItem value={''}>[blank]</MenuItem>
                     <MenuItem value={'400px'}>400px</MenuItem>
@@ -114,7 +122,11 @@ function Example() {
                     id="demo-simple-select"
                     value={tableBodyMaxHeight}
                     style={{ width: '200px', marginBottom: '10px' }}
-                    onChange={e => setTableBodyMaxHeight(e.target.value)}
+                    onChange={({ target: { value } }) =>
+                        setTableBodyMaxHeight(
+                            value as typeof tableBodyMaxHeight
+                        )
+                    }
                 >
                     <MenuItem value={''}>[blank]</MenuItem>
                     <MenuItem value={'400px'}>400px</MenuItem>
@@ -131,11 +143,19 @@ function Example() {
                     id="demo-simple-select"
                     value={searchBtn}
                     style={{ width: '200px', marginBottom: '10px' }}
-                    onChange={e => setSearchBtn(e.target.value)}
+                    onChange={({ target: { value } }) =>
+                        setSearchBtn(value as typeof searchBtn)
+                    }
                 >
-                    <MenuItem value={'true'}>{'true'}</MenuItem>
-                    <MenuItem value={'false'}>{'false'}</MenuItem>
-                    <MenuItem value={'disabled'}>disabled</MenuItem>
+                    <MenuItem value="true">
+                        <code>true</code>
+                    </MenuItem>
+                    <MenuItem value="false">
+                        <code>false</code>
+                    </MenuItem>
+                    <MenuItem value="disabled">
+                        <code>'disabled'</code>
+                    </MenuItem>
                 </Select>
             </FormControl>
             <FormControl>
@@ -147,11 +167,19 @@ function Example() {
                     id="demo-simple-select"
                     value={downloadBtn}
                     style={{ width: '200px', marginBottom: '10px' }}
-                    onChange={e => setDownloadBtn(e.target.value)}
+                    onChange={({ target: { value } }) =>
+                        setDownloadBtn(value as typeof downloadBtn)
+                    }
                 >
-                    <MenuItem value={'true'}>{'true'}</MenuItem>
-                    <MenuItem value={'false'}>{'false'}</MenuItem>
-                    <MenuItem value={'disabled'}>disabled</MenuItem>
+                    <MenuItem value="true">
+                        <code>true</code>
+                    </MenuItem>
+                    <MenuItem value="false">
+                        <code>false</code>
+                    </MenuItem>
+                    <MenuItem value="disabled">
+                        <code>'disabled'</code>
+                    </MenuItem>
                 </Select>
             </FormControl>
             <FormControl>
@@ -163,11 +191,19 @@ function Example() {
                     id="demo-simple-select"
                     value={printBtn}
                     style={{ width: '200px', marginBottom: '10px' }}
-                    onChange={e => setPrintBtn(e.target.value)}
+                    onChange={({ target: { value } }) =>
+                        setPrintBtn(value as typeof printBtn)
+                    }
                 >
-                    <MenuItem value={'true'}>{'true'}</MenuItem>
-                    <MenuItem value={'false'}>{'false'}</MenuItem>
-                    <MenuItem value={'disabled'}>disabled</MenuItem>
+                    <MenuItem value="true">
+                        <code>true</code>
+                    </MenuItem>
+                    <MenuItem value="false">
+                        <code>false</code>
+                    </MenuItem>
+                    <MenuItem value="disabled">
+                        <code>'disabled'</code>
+                    </MenuItem>
                 </Select>
             </FormControl>
             <FormControl>
@@ -179,11 +215,19 @@ function Example() {
                     id="demo-simple-select"
                     value={viewColumnBtn}
                     style={{ width: '200px', marginBottom: '10px' }}
-                    onChange={e => setViewColumnBtn(e.target.value)}
+                    onChange={({ target: { value } }) =>
+                        setViewColumnBtn(value as typeof viewColumnBtn)
+                    }
                 >
-                    <MenuItem value={'true'}>{'true'}</MenuItem>
-                    <MenuItem value={'false'}>{'false'}</MenuItem>
-                    <MenuItem value={'disabled'}>disabled</MenuItem>
+                    <MenuItem value="true">
+                        <code>true</code>
+                    </MenuItem>
+                    <MenuItem value="false">
+                        <code>false</code>
+                    </MenuItem>
+                    <MenuItem value="disabled">
+                        <code>'disabled'</code>
+                    </MenuItem>
                 </Select>
             </FormControl>
             <FormControl>
@@ -195,20 +239,28 @@ function Example() {
                     id="demo-simple-select"
                     value={filterBtn}
                     style={{ width: '200px', marginBottom: '10px' }}
-                    onChange={e => setFilterBtn(e.target.value)}
+                    onChange={({ target: { value } }) =>
+                        setFilterBtn(value as typeof filterBtn)
+                    }
                 >
-                    <MenuItem value={'true'}>{'true'}</MenuItem>
-                    <MenuItem value={'false'}>{'false'}</MenuItem>
-                    <MenuItem value={'disabled'}>disabled</MenuItem>
+                    <MenuItem value="true">
+                        <code>true</code>
+                    </MenuItem>
+                    <MenuItem value="false">
+                        <code>false</code>
+                    </MenuItem>
+                    <MenuItem value="disabled">
+                        <code>'disabled'</code>
+                    </MenuItem>
                 </Select>
             </FormControl>
-            <MUIDataTable
+            <DataTable
                 title={'ACME Employee list'}
                 data={data}
                 columns={columns}
                 options={options}
             />
-        </React.Fragment>
+        </>
     )
 }
 
