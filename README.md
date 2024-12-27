@@ -29,7 +29,7 @@ Version 3 has been released! You can read about the [updates here](https://githu
 - [Install](#install)
 - [Usage](#usage)
 - [API](#api)
-    - [`<DataTable />`](#muidatatable-)
+    - [`<DataTable />`](#datatable-)
     - [Options:](#options)
 - [Customize Columns](#customize-columns)
     - [Column:](#column)
@@ -42,7 +42,6 @@ Version 3 has been released! You can read about the [updates here](https://githu
 - [Localization](#localization)
 - [Contributing](#contributing)
 - [License](#license)
-
 
 <!-- - [Compatibility](#compatibility) -->
 <!-- - [Demo](#demo) -->
@@ -106,7 +105,7 @@ export default function Page() {
 <!-- Or customize columns:
 
 ```jsx
-import MUIDataTable from 'mui-datatables'
+import DataTable from 'mui-datatable-delight'
 
 export default function Page(){
     const columns = [
@@ -156,8 +155,8 @@ export default function Page(){
     }
 
     return (
-        <MUIDataTable
-            title={'Employee List'}
+        <DataTable
+            title="Employee List"
             data={data}
             columns={columns}
             options={options}
@@ -169,7 +168,7 @@ export default function Page(){
 
 ## API
 
-### `<MUIDataTable />`
+### `<DataTable />`
 
 The component accepts the following props:
 
@@ -382,37 +381,34 @@ The table lends itself to plug-ins in many areas, especially in the customRender
 
 Using Material-UI theme overrides will allow you to customize styling to your liking. First, determine which component you would want to target and then lookup the override classname. Let's start with a simple example where we will change the background color of a body cell to be red:
 
-```js
+```jsx
 import React from 'react'
-import MUIDataTable from 'mui-datatables'
+import DataTable from 'mui-datatable-delight'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 
-class BodyCellExample extends React.Component {
-    getMuiTheme = () =>
-        createTheme({
-            components: {
-                MUIDataTableBodyCell: {
-                    styleOverrides: {
-                        root: {
-                            backgroundColor: '#FF0000'
-                        }
-                    }
+const theme = createTheme({
+    components: {
+        DataTableBodyCell: {
+            styleOverrides: {
+                root: {
+                    backgroundColor: '#FF0000'
                 }
             }
-        })
-
-    render() {
-        return (
-            <ThemeProvider theme={this.getMuiTheme()}>
-                <MUIDataTable
-                    title={'ACME Employee list'}
-                    data={data}
-                    columns={columns}
-                    options={options}
-                />
-            </ThemeProvider>
-        )
+        }
     }
+})
+
+function BodyCellExample() {
+    return (
+        <ThemeProvider theme={this.getMuiTheme()}>
+            <DataTable
+                title="ACME Employee list"
+                data={data}
+                columns={columns}
+                options={options}
+            />
+        </ThemeProvider>
+    )
 }
 ```
 
@@ -420,10 +416,10 @@ class BodyCellExample extends React.Component {
 
 You can pass custom components to further customize the table:
 
-```js
+```jsx
 import React from 'react'
 import Chip from '@mui/material/Chip'
-import MUIDataTable, { TableFilterList } from 'mui-datatables'
+import DataTable, { TableFilterList } from 'mui-datatable-delight'
 
 const CustomChip = ({ label, onDelete }) => {
     return (
@@ -440,18 +436,16 @@ const CustomFilterList = props => {
     return <TableFilterList {...props} ItemComponent={CustomChip} />
 }
 
-class CustomDataTable extends React.Component {
-    render() {
-        return (
-            <MUIDataTable
-                columns={columns}
-                data={data}
-                components={{
-                    TableFilterList: CustomFilterList
-                }}
-            />
-        )
-    }
+function CustomDataTable() {
+    return (
+        <DataTable
+            columns={columns}
+            data={data}
+            components={{
+                TableFilterList: CustomFilterList
+            }}
+        />
+    )
 }
 ```
 
