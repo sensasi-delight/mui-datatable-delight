@@ -474,10 +474,18 @@ export interface DataTableOptions {
     /** User provided expanded rows */
     rowsExpanded?: any[]
 
-    /** Number of ros allowed per page. */
+    /**
+     * Number of rows allowed per page.
+     *
+     * @default 10
+     */
     rowsPerPage?: number
 
-    /** Options to provide in pagination for number of rows a user can select */
+    /**
+     * Options to provide in pagination for number of rows a user can select
+     *
+     * @default [10, 20, 50, 100]
+     */
     rowsPerPageOptions?: number[]
 
     /** User provided array of number (dataIndexes) which indicated the selected row. */

@@ -38,17 +38,28 @@ export function DataTableFooterPagination({
         ...options.textLabels.pagination
     }
 
+    const finalRowsPerPageOptions = options.rowsPerPageOptions ?? [
+        10, 20, 50, 100
+    ]
+
+    const finalRowPerPage = finalRowsPerPageOptions.includes(rowsPerPage)
+        ? rowsPerPage
+        : finalRowsPerPageOptions[0]
+
     return (
         <div className={classes.root}>
             <MuiTablePagination
                 component="div"
                 count={count}
-                rowsPerPage={rowsPerPage}
-                page={getPageValue(count, rowsPerPage, page)}
-                labelRowsPerPage={textLabels.rowsPerPage}
                 labelDisplayedRows={({ from, to, count }) =>
                     `${from}-${to} ${textLabels.displayRows} ${count}`
                 }
+                labelRowsPerPage={textLabels.rowsPerPage}
+                onPageChange={handlePageChange}
+                onRowsPerPageChange={handleRowChange}
+                page={getPageValue(count, finalRowPerPage, page)}
+                rowsPerPage={finalRowPerPage}
+                rowsPerPageOptions={finalRowsPerPageOptions}
                 slotProps={{
                     actions: {
                         previousButton: {
@@ -87,9 +98,6 @@ export function DataTableFooterPagination({
                         className: classes.toolbar
                     }
                 }}
-                rowsPerPageOptions={options.rowsPerPageOptions}
-                onPageChange={handlePageChange}
-                onRowsPerPageChange={handleRowChange}
             />
         </div>
     )
