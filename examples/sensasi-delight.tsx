@@ -26,7 +26,7 @@ export function Page() {
         print: false,
         jumpToPage: true,
         rowsPerPageOptions: [15, 30, 50, 100],
-        rowsPerPage: 15,
+        // rowsPerPage: 15,
         // sortOrder: sortOrder,
         // onTableChange: handleTableChangeOrInit,
         // onTableInit: handleTableChangeOrInit,
