@@ -1,3 +1,4 @@
+import type { TableProps } from '@mui/material'
 import type {
     DisplayData,
     FilterType,
@@ -456,10 +457,13 @@ export interface DataTableOptions {
         | 'vertical'
         | 'standard'
         | 'simple'
-        /** @deprecated */
-        | 'stacked'
-        /** @deprecated */
-        | 'stackedFullWidth'
+        | 'verticalAlways' // deprecated in `/examples/simple`
+        | 'scroll' // deprecated in `/examples/simple`
+        | 'scrollMaxHeight' // deprecated in `/examples/simple`
+        | 'stacked' // ?? FOUND in `./body.cell.tsx`
+        | 'stackedFullWidth' // ?? FOUND in `./body.cell.tsx`
+        | 'scrollFullHeight' // ?? FOUND in `./body.cell.tsx`
+        | 'scrollFullHeightFullWidth' // ?? FOUND in `./body.cell.tsx`
 
     /**
      * Enable/disable hover style over row.
@@ -585,7 +589,7 @@ export interface DataTableOptions {
      *
      * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-styling/index.tsx
      */
-    setTableProps?: () => object
+    setTableProps?: () => TableProps
 
     /**
      * Enable/disable sort on all columns.
