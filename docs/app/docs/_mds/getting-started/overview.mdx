@@ -1,0 +1,47 @@
+import { LinkNewTab } from '@/components/link-new-tab'
+
+# MUI DataTable Delight
+
+Is a modern revival of the popular <LinkNewTab href="https://github.com/gregnb/mui-datatables">gregnb/mui-datatables</LinkNewTab>, offering a sleek, feature-rich table component built with <LinkNewTab href="https://mui.com/material-ui">Material UI</LinkNewTab>. Designed for effortless data handling, it includes robust support for sorting,
+filtering, pagination, and row selection. With its intuitive interface and
+responsive design, **MUI `<DataTable />` Delight** is perfect for enhancing any
+modern web application. Experience the power of Material-UI v6 with this
+versatile and easy-to-use data table solution!
+
+## Installation
+
+```bash
+npm install mui-datatable-delight
+```
+
+## Usage
+
+For a simple table:
+
+```jsx
+import DataTable from 'mui-datatable-delight'
+
+export default function Page() {
+    const columns = ['Name', 'Company', 'City', 'State']
+
+    const data = [
+        ['Joe James', 'Test Corp', 'Yonkers', 'NY'],
+        ['John Walsh', 'Test Corp', 'Hartford', 'CT'],
+        ['Bob Herm', 'Test Corp', 'Tampa', 'FL'],
+        ['James Houston', 'Test Corp', 'Dallas', 'TX']
+    ]
+
+    const options = {
+        filterType: 'checkbox'
+    }
+
+    return (
+        <DataTable
+            title="Employee List"
+            data={data}
+            columns={columns}
+            options={options}
+        />
+    )
+}
+```
