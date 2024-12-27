@@ -473,7 +473,10 @@ class MUIDataTableClass extends React.Component {
         }
 
         // provide default tableId when no tableId has been passed as prop
-        if (!props.options.tableId) {
+        if (
+            !props.options.tableId &&
+            typeof window !== 'undefined' // attempt to fix https://github.com/sensasi-delight/mui-datatable-delight/issues/46
+        ) {
             props.options.tableId = (Math.random() + '').replace(/\./, '')
         }
 
