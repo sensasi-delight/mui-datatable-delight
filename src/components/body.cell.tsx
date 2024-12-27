@@ -2,29 +2,44 @@ import { useCallback } from 'react'
 import clsx from 'clsx'
 import TableCell, { type TableCellProps } from '@mui/material/TableCell'
 import { makeStyles } from 'tss-react/mui'
+import { MUIDataTableBodyCell } from 'mui-datatables'
+import { DataTableOptions } from '../data-table.props.type/options'
 
-export default function TableBodyCell(props) {
+export default function TableBodyCell({
+    children,
+    colIndex,
+    columnHeader,
+    options,
+    dataIndex,
+    rowIndex,
+    className,
+    print,
+    tableId,
+    ...otherProps
+}: Omit<MUIDataTableBodyCell, 'options'> & {
+    options: DataTableOptions
+    print: Boolean
+    tableId: string
+}) {
     const { classes } = useStyles()
 
-    const {
-        children,
-        colIndex,
-        columnHeader,
-        options,
-        dataIndex,
-        rowIndex,
-        className,
-        print,
-        tableId,
-        ...otherProps
-    } = props
-
-    const onCellClick = options.onCellClick
+    const onCellClick = options?.onCellClick
 
     const handleClick = useCallback<Required<TableCellProps>['onClick']>(
-        event => {
-            onCellClick(children, { colIndex, rowIndex, dataIndex, event })
-        },
+        event =>
+            colIndex && rowIndex && dataIndex
+                ? onCellClick?.(children, {
+                      colIndex,
+                      rowIndex,
+                      dataIndex,
+                      event
+                  })
+                : console.error(`
+                    Required param is undefined:
+                    - colIndex: ${colIndex}
+                    - rowIndex: ${rowIndex}
+                    - dataIndex: ${dataIndex}
+                    `),
         [onCellClick, children, colIndex, rowIndex, dataIndex]
     )
 
@@ -38,17 +53,17 @@ export default function TableBodyCell(props) {
                     [classes.cellHide]: true,
                     [classes.stackedHeader]: true,
                     [classes.stackedCommon]:
-                        options.responsive === 'vertical' ||
-                        options.responsive === 'stacked' ||
-                        options.responsive === 'stackedFullWidth',
+                        options?.responsive === 'vertical' ||
+                        options?.responsive === 'stacked' ||
+                        options?.responsive === 'stackedFullWidth',
                     [classes.stackedCommonAlways]:
-                        options.responsive === 'verticalAlways',
+                        options?.responsive === 'verticalAlways',
                     [classes.cellStackedSmall]:
-                        options.responsive === 'stacked' ||
-                        (options.responsive === 'stackedFullWidth' &&
-                            (options.setTableProps().padding === 'none' ||
-                                options.setTableProps().size === 'small')),
-                    [classes.simpleHeader]: options.responsive === 'simple',
+                        options?.responsive === 'stacked' ||
+                        (options?.responsive === 'stackedFullWidth' &&
+                            (options.setTableProps?.().padding === 'none' ||
+                                options.setTableProps?.().size === 'small')),
+                    [classes.simpleHeader]: options?.responsive === 'simple',
                     'datatables-noprint': !print
                 },
                 className
@@ -62,17 +77,17 @@ export default function TableBodyCell(props) {
                 {
                     [classes.root]: true,
                     [classes.stackedCommon]:
-                        options.responsive === 'vertical' ||
-                        options.responsive === 'stacked' ||
-                        options.responsive === 'stackedFullWidth',
+                        options?.responsive === 'vertical' ||
+                        options?.responsive === 'stacked' ||
+                        options?.responsive === 'stackedFullWidth',
                     [classes.stackedCommonAlways]:
-                        options.responsive === 'verticalAlways',
+                        options?.responsive === 'verticalAlways',
                     [classes.responsiveStackedSmall]:
-                        options.responsive === 'stacked' ||
-                        (options.responsive === 'stackedFullWidth' &&
-                            (options.setTableProps().padding === 'none' ||
-                                options.setTableProps().size === 'small')),
-                    [classes.simpleCell]: options.responsive === 'simple',
+                        options?.responsive === 'stacked' ||
+                        (options?.responsive === 'stackedFullWidth' &&
+                            (options.setTableProps?.().padding === 'none' ||
+                                options.setTableProps?.().size === 'small')),
+                    [classes.simpleCell]: options?.responsive === 'simple',
                     'datatables-noprint': !print
                 },
                 className
@@ -85,6 +100,7 @@ export default function TableBodyCell(props) {
     ]
 
     const innerCells =
+        options?.responsive &&
         [
             'standard',
             'scrollMaxHeight',
@@ -104,18 +120,18 @@ export default function TableBodyCell(props) {
                 {
                     [classes.root]: true,
                     [classes.stackedParent]:
-                        options.responsive === 'vertical' ||
-                        options.responsive === 'stacked' ||
-                        options.responsive === 'stackedFullWidth',
+                        options?.responsive === 'vertical' ||
+                        options?.responsive === 'stacked' ||
+                        options?.responsive === 'stackedFullWidth',
                     [classes.stackedParentAlways]:
-                        options.responsive === 'verticalAlways',
+                        options?.responsive === 'verticalAlways',
                     [classes.responsiveStackedSmallParent]:
-                        options.responsive === 'vertical' ||
-                        options.responsive === 'stacked' ||
-                        (options.responsive === 'stackedFullWidth' &&
-                            (options.setTableProps().padding === 'none' ||
-                                options.setTableProps().size === 'small')),
-                    [classes.simpleCell]: options.responsive === 'simple',
+                        options?.responsive === 'vertical' ||
+                        options?.responsive === 'stacked' ||
+                        (options?.responsive === 'stackedFullWidth' &&
+                            (options.setTableProps?.().padding === 'none' ||
+                                options.setTableProps?.().size === 'small')),
+                    [classes.simpleCell]: options?.responsive === 'simple',
                     'datatables-noprint': !print
                 },
                 className
