@@ -1,17 +1,26 @@
-import '@fontsource/roboto/300.css'
-import '@fontsource/roboto/400.css'
-import '@fontsource/roboto/500.css'
-import '@fontsource/roboto/700.css'
-
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter'
+import InitColorSchemeScript from '@mui/material/InitColorSchemeScript'
 import { CssBaseline } from '@mui/material'
 import { ReactNode } from 'react'
+import { Roboto } from 'next/font/google'
+import { ThemeProvider } from '@mui/material/styles'
+import { THEME } from './_constants'
+
+const roboto = Roboto({
+    weight: ['300', '400', '500', '700'],
+    subsets: ['latin'],
+    display: 'swap',
+    variable: '--font-roboto'
+})
 
 export default function RootLayout({ children }: { children: ReactNode }) {
     return (
-        <html lang="en">
+        <html lang="en" suppressHydrationWarning>
             <head>
-                <title>MUI DataTable Delight</title>
+                <title>
+                    MUI DataTable Delight — A responsive DataTable component
+                    built with Material UI for React-based project
+                </title>
 
                 <meta
                     name="viewport"
@@ -45,10 +54,15 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                 {/* <link rel="shortcut icon" href="/static/favicon.ico" /> */}
             </head>
 
-            <AppRouterCacheProvider>
-                <CssBaseline />
-                <body>{children}</body>
-            </AppRouterCacheProvider>
+            <body className={roboto.variable}>
+                <AppRouterCacheProvider>
+                    <ThemeProvider theme={THEME}>
+                        <CssBaseline />
+                        <InitColorSchemeScript attribute="class" />
+                        {children}
+                    </ThemeProvider>
+                </AppRouterCacheProvider>
+            </body>
         </html>
     )
 }

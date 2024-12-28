@@ -5,6 +5,7 @@ import {
     List,
     ListItem,
     ListItemButton,
+    ListItemIcon,
     ListItemText,
     ListSubheader,
     useMediaQuery,
@@ -17,6 +18,7 @@ import { Route as ExamplesRoute } from '../examples/_route--enum'
 import { snakeCaseToKebab, snakeCaseToTitle } from '../../../utils'
 import { ReactNode, useEffect, useState } from 'react'
 import { DRAWER_WIDTH } from '../_constants'
+import { ArrowRight } from '@mui/icons-material'
 
 export default function Menu({
     isOpen,
@@ -27,7 +29,7 @@ export default function Menu({
 }) {
     const theme = useTheme()
     const [isClient, setIsClient] = useState(false)
-    const isBelowMd = useMediaQuery(theme.breakpoints.down('md')) && isClient
+    const isBelowMd = useMediaQuery(theme.breakpoints.down('md'))
 
     useEffect(() => {
         setIsClient(true)
@@ -35,22 +37,18 @@ export default function Menu({
 
     return (
         <Drawer
-            open={isOpen || !isBelowMd}
+            open={isOpen || (!isBelowMd && isClient)}
             anchor="left"
             onClose={toggle}
-            variant={isBelowMd ? 'temporary' : 'persistent'}
-            sx={
-                !isBelowMd
-                    ? {
-                          width: DRAWER_WIDTH,
-                          flexShrink: 0,
-                          '& .MuiDrawer-paper': {
-                              width: DRAWER_WIDTH,
-                              boxSizing: 'border-box'
-                          }
-                      }
-                    : undefined
-            }
+            variant={isClient && isBelowMd ? 'temporary' : 'permanent'}
+            sx={{
+                width: DRAWER_WIDTH,
+                flexShrink: 0,
+                '& .MuiDrawer-paper': {
+                    width: DRAWER_WIDTH,
+                    boxSizing: 'border-box'
+                }
+            }}
         >
             <List component="nav">
                 <CustomListSubheader>Getting Started</CustomListSubheader>
@@ -81,25 +79,52 @@ const SORTED_EXAMPLES = Object.keys(ExamplesRoute)
     .sort()
 
 function CustomListItem({ href, text }: { href: string; text: string }) {
+    const [isActive, setIsActive] = useState(false)
+
+    useEffect(() => {
+        setIsActive(location.pathname.includes(href))
+    }, [])
+
     return (
         <ListItem disablePadding>
             <ListItemButton
                 href={href}
                 LinkComponent={Link}
-                sx={{
-                    py: 0.5
-                }}
+                // disabled={isActive}
+                selected={isActive}
+                color="Highlight"
+                sx={[{
+                    py: 0.5,
+                    backgroundColor: isActive
+                        ? 'rgba(var(--mui-palette-primary-mainChannel) / var(--mui-palette-action-selectedOpacity)) !important'
+                        : undefined,
+                    color: isActive ? 'primary.main' : grey[700],
+                    opacity: 'unset !important'
+                }, style => style.applyStyles('dark', {
+                    color: isActive ? 'primary.main' : grey[500],
+                })]}
             >
+                {isActive && (
+                    <ListItemIcon
+                        sx={{
+                            minWidth: 'unset',
+                            color: 'inherit'
+                        }}
+                    >
+                        {<ArrowRight />}
+                    </ListItemIcon>
+                )}
+
                 <ListItemText
                     primary={text}
                     sx={{
-                        m: 0
+                        ml: isActive ? undefined : 3
                     }}
                     slotProps={{
                         primary: {
                             sx: {
-                                fontSize: '0.9em !important',
-                                color: grey[800]
+                                fontSize: '0.9em',
+                                fontWeight: 500
                             }
                         }
                     }}
