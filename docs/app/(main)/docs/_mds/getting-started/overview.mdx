@@ -1,3 +1,4 @@
+import { InlineCode } from '@/components/inline-code'
 import { LinkNewTab } from '@/components/link-new-tab'
 
 # MUI DataTable Delight
@@ -5,7 +6,7 @@ import { LinkNewTab } from '@/components/link-new-tab'
 [![npm version](https://badge.fury.io/js/mui-datatable-delight.svg)](https://badge.fury.io/js/mui-datatable-delight)
 [![NPM Downloads](https://img.shields.io/npm/dt/mui-datatable-delight.svg?style=flat)](https://npmcharts.com/compare/mui-datatable-delight?minimal=true)
 
-Is a modern revival of the popular <LinkNewTab href="https://github.com/gregnb/mui-datatables">gregnb/mui-datatables</LinkNewTab>, offering a sleek, feature-rich table component built with the latest <LinkNewTab href="https://mui.com/material-ui">Material UI</LinkNewTab>. Designed for effortless data handling, it includes robust support for sorting, filtering, pagination, and row selection. With its intuitive interface and responsive design, **MUI `<DataTable />` Delight** is perfect for enhancing any modern web application. Experience the power of Material-UI v6 with this versatile and easy-to-use data table solution!
+Is a modern revival of the popular <LinkNewTab href="https://github.com/gregnb/mui-datatables">gregnb/mui-datatables</LinkNewTab>, offering a sleek, feature-rich table component built with the latest <LinkNewTab href="https://mui.com/material-ui">Material UI</LinkNewTab>. Designed for effortless data handling, it includes robust support for sorting, filtering, pagination, and row selection. With its intuitive interface and responsive design, **MUI <InlineCode text="<DataTable/>" bg /> Delight** is perfect for enhancing any modern web application. Experience the power of Material-UI v6 with this versatile and easy-to-use data table solution!
 
 ## Installation
 
@@ -88,7 +89,12 @@ export default function Page() {
             city: 'Hartford',
             state: 'CT'
         },
-        { name: 'Bob Herm', company: 'Test Corp', city: 'Tampa', state: 'FL' },
+        {
+            name: 'Bob Herm',
+            company: 'Test Corp',
+            city: 'Tampa',
+            state: 'FL'
+        },
         {
             name: 'James Houston',
             company: 'Test Corp',

@@ -46,7 +46,7 @@ Version 3 has been released! You can read about the [updates here](https://githu
 
 ## Getting Started
 
-See [the docs](https://mui-datatable-delight.vercel.app/docs/getting-started).
+See [the docs](https://mui-datatable-delight.vercel.app/docs/getting-started/overview).
 
 ## Demo
 
