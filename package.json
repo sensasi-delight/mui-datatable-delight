@@ -13,7 +13,7 @@
         "envd": "cross-env NODE_ENV=development",
         "dev:vite": "npm run envd && vite --force",
         "test": "cross-env NODE_ENV=test mocha --require @babel/register test/**/*.test.js",
-        "dev": "next docs",
+        "dev": "next docs --turbopack",
         "docs:build": "npm run envp && next build docs",
         "docs:export": "next export docs -o docs/export",
         "docs:deploy": "npm run docs:build && npm run docs:export && firebase deploy",
