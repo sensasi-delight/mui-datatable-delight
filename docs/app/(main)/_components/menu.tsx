@@ -6,7 +6,11 @@ import {
     ListItemText,
     ListSubheader
 } from '@mui/material'
+import { grey } from '@mui/material/colors'
 import Link from 'next/link'
+// locals
+import { Route as ExamplesRoute } from '../examples/_route--enum'
+import { snakeCaseToKebab, snakeCaseToTitle } from '../../../utils'
 
 const drawerWidth = 240
 
@@ -33,55 +37,75 @@ export default function Menu({
             }}
         >
             <List component="nav">
-                <ListSubheader>Getting Started</ListSubheader>
-                <SandboxItem
+                <CustomListSubheader>Getting Started</CustomListSubheader>
+
+                <CustomListItem
                     href="/docs/getting-started/overview"
-                    name="Overview"
+                    text="Overview"
                 />
 
-                {sandboxes.map((item, i) => (
-                    <SandboxItem key={i} href={item.href} name={item.name} />
+                <CustomListSubheader>Examples</CustomListSubheader>
+
+                <CustomListItem href="/examples" text="Overview" />
+
+                {SORTED_EXAMPLES.map((enumKey, i) => (
+                    <CustomListItem
+                        key={i}
+                        href={'/examples/' + snakeCaseToKebab(enumKey)}
+                        text={snakeCaseToTitle(enumKey)}
+                    />
                 ))}
             </List>
         </Drawer>
     )
 }
 
-const sandboxes = [
-    // {
-    //     name: 'Custom Component',
-    //     href: 'https://codesandbox.io/embed/xrvrzryjvp?autoresize=1&hidenavigation=1'
-    // },
-    // {
-    //     name: 'Customize Columns',
-    //     href: 'https://codesandbox.io/embed/xowj5oj8w?autoresize=1&hidenavigation=1'
-    // },
-    // {
-    //     name: 'Customize Footer',
-    //     href: 'https://codesandbox.io/embed/5z0w0w9jyk?autoresize=1&hidenavigation=1'
-    // },
-    // {
-    //     name: 'Customize Styling',
-    //     href: 'https://codesandbox.io/embed/0ylq1lqwp0?autoresize=1&hidenavigation=1'
-    // },
-    // {
-    //     name: 'Customize Toolbar',
-    //     href: 'https://codesandbox.io/embed/wy2rl1nyzl?autoresize=1&hidenavigation=1'
-    // },
-    // {
-    //     name: 'Customize ToolbarSelect',
-    //     href: 'https://codesandbox.io/embed/545ym5ov6p?autoresize=1&hidenavigation=1'
-    // },
-    // {
-    //     name: 'Resizable Columns',
-    //     href: 'https://codesandbox.io/embed/q8w3230qpj?autoresize=1&hidenavigation=1'
-    // }
-]
+const SORTED_EXAMPLES = Object.keys(ExamplesRoute)
+    .filter(key => isNaN(parseInt(key)))
+    .sort()
 
-const SandboxItem = ({ href, name }: { href: string; name: string }) => (
-    <ListItem disablePadding>
-        <ListItemButton href={href} LinkComponent={Link}>
-            <ListItemText primary={name} />
-        </ListItemButton>
-    </ListItem>
-)
+function CustomListItem({ href, text }: { href: string; text: string }) {
+    return (
+        <ListItem disablePadding>
+            <ListItemButton
+                href={href}
+                LinkComponent={Link}
+                sx={{
+                    py: 0.5
+                }}
+            >
+                <ListItemText
+                    primary={text}
+                    sx={{
+                        m: 0
+                    }}
+                    slotProps={{
+                        primary: {
+                            sx: {
+                                fontSize: '0.9em !important',
+                                color: grey[800]
+                            }
+                        }
+                    }}
+                />
+            </ListItemButton>
+        </ListItem>
+    )
+}
+
+function CustomListSubheader({ children }: { children: React.ReactNode }) {
+    return (
+        <ListSubheader
+            sx={{
+                lineHeight: 'unset',
+                pt: 2,
+                pb: 0.5,
+                fontWeight: 'bold',
+                textTransform: 'uppercase',
+                color: 'Highlight'
+            }}
+        >
+            {children}
+        </ListSubheader>
+    )
+}
