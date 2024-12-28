@@ -13,11 +13,25 @@ export default function Layout({ children }: { children: ReactNode }) {
                     py: 15
                 }}
             >
-                <Grid2 size={9}>
+                <Grid2
+                    size={{
+                        md: 9
+                    }}
+                >
                     <Container component="main">{children}</Container>
                 </Grid2>
 
-                <Grid2 size={3}>
+                <Grid2
+                    size={{
+                        md: 3
+                    }}
+                    sx={{
+                        display: {
+                            sm: 'none',
+                            md: undefined
+                        }
+                    }}
+                >
                     <Container>asd</Container>
                 </Grid2>
             </Grid2>
