@@ -28,11 +28,11 @@ export default function Layout({ children }: { children: ReactNode }) {
                     sx={{
                         display: {
                             sm: 'none',
-                            md: undefined
+                            md: 'block'
                         }
                     }}
                 >
-                    <Container>asd</Container>
+                    <Container></Container>
                 </Grid2>
             </Grid2>
         </Box>
