@@ -1,3 +1,5 @@
+'use client'
+
 // types
 import type { DataTableProps } from './data-table.props.type'
 // vendors
