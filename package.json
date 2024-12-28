@@ -1,6 +1,6 @@
 {
     "name": "mui-datatable-delight",
-    "version": "0.0.0-experimental.9",
+    "version": "0.0.0-experimental.10",
     "description": "A responsive DataTable component built with MUI for React-based project.",
     "module": "dist/index.js",
     "types": "dist/index.d.ts",
