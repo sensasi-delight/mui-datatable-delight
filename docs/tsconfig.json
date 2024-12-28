@@ -4,6 +4,8 @@
         "allowJs": true,
         "incremental": true,
         "jsx": "preserve",
+        "esModuleInterop": true,
+        "resolveJsonModule": true,
 
         "plugins": [
             {
@@ -15,5 +17,6 @@
             "@/*": ["/*"]
         }
     },
-    "include": ["next-env.d.ts", ".next/types/**/*.ts", "**/*.ts", "**/*.tsx"]
+    "include": ["next-env.d.ts", ".next/types/**/*.ts", "**/*.ts", "**/*.tsx"],
+    "exclude": ["node_modules"]
 }
