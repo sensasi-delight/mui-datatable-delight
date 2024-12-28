@@ -1,9 +1,8 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import TextField from '@mui/material/TextField'
 import Switch from '@mui/material/Switch'
-import MUIDataTable from '../../../../src'
+import DataTable from '../../../../../src'
 import Cities from './_cities'
 
 class Example extends React.Component {
@@ -228,7 +227,7 @@ class Example extends React.Component {
         }
 
         return (
-            <MUIDataTable
+            <DataTable
                 title={'ACME Employee list'}
                 data={data}
                 columns={columns}
