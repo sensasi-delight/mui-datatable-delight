@@ -25,7 +25,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 
                 <meta
                     name="description"
-                    content="Datatable is a data tables component built for React Material-UI V1"
+                    content="A responsive DataTable component built with Material UI for React-based project"
                 />
                 <meta
                     name="keywords"
