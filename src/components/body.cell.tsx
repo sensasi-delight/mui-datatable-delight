@@ -27,7 +27,9 @@ export default function TableBodyCell({
 
     const handleClick = useCallback<Required<TableCellProps>['onClick']>(
         event =>
-            colIndex && rowIndex && dataIndex
+            colIndex !== undefined &&
+            rowIndex !== undefined &&
+            dataIndex !== undefined
                 ? onCellClick?.(children, {
                       colIndex,
                       rowIndex,
