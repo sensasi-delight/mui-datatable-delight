@@ -13,8 +13,7 @@ import Link from 'next/link'
 import { useState } from 'react'
 // locals
 import { Route } from './_route--enum'
-import { snakeCaseToKebab } from '../../../utils/snake-case-to-kebab'
-import { snakeCaseToTitle } from '../../../utils/snake-case-to-title'
+import { snakeCaseToKebab, snakeCaseToTitle } from '../../../utils'
 
 const SORTED_EXAMPLES = Object.keys(Route)
     .filter(key => isNaN(parseInt(key)))
