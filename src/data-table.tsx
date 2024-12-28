@@ -362,6 +362,7 @@ class MUIDataTableClass extends React.Component {
 
     constructor(props) {
         super(props)
+
         this.tableRef = React.createRef()
         this.tableContent = React.createRef()
         this.draggableHeadCellRefs = {}
@@ -473,12 +474,10 @@ class MUIDataTableClass extends React.Component {
         }
 
         // provide default tableId when no tableId has been passed as prop
-        if (
-            !props.options.tableId &&
-            typeof window !== 'undefined' // attempt to fix https://github.com/sensasi-delight/mui-datatable-delight/issues/46
-        ) {
-            props.options.tableId = (Math.random() + '').replace(/\./, '')
-        }
+        // DISABLED FOR NOW (https://github.com/sensasi-delight/mui-datatable-delight/issues/46)
+        // if (!props.options.tableId) {
+        // props.options.tableId = (Math.random() + '').replace(/\./, '')
+        // }
 
         this.options = {
             ...options,
