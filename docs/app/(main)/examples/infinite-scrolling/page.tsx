@@ -1,16 +1,10 @@
+'use client'
+
 import React, { Fragment, Component } from 'react'
 import { Waypoint } from 'react-waypoint'
 import PropTypes from 'prop-types'
 import DataTable from '@src'
 import { createTheme } from '@mui/material/styles'
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableRow,
-    Paper
-} from '@mui/material'
 import { withStyles } from 'tss-react/mui'
 
 const styles = theme => ({

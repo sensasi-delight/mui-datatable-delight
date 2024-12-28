@@ -11,7 +11,7 @@ export type { DataTableOptions } from './data-table.props.type/options'
 // export { default as TableBody } from './components/TableBody'
 // export { default as TableBodyRow } from './components/TableBodyRow'
 // export { default as TableFilter } from './components/TableFilter'
-// export { default as TableFilterList } from './components/TableFilterList'
+export { default as TableFilterList } from './components/filter-list'
 // export { default as TableFooter } from './components/TableFooter'
 // export { default as TableHeadCell } from './components/TableHeadCell'
 // export { default as TableHead } from './components/TableHead'
@@ -23,8 +23,8 @@ export type { DataTableOptions } from './data-table.props.type/options'
 // export { default as TableToolbar } from './components/TableToolbar'
 // export { default as TableToolbarSelect } from './components/TableToolbarSelect'
 // export { default as TableViewCol } from './components/TableViewCol'
-// export { default as ExpandButton } from './components/ExpandButton'
-// export {
-//     debounceSearchRender,
-//     DebounceTableSearch
-// } from './plug-ins/DebounceSearchRender'
+export { default as ExpandButton } from './components/components.shared/select-cell.expand-button'
+export {
+    debounceSearchRender
+    //     DebounceTableSearch
+} from './plug-ins'

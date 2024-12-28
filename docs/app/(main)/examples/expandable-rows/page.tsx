@@ -3,8 +3,7 @@ import TableRow from '@mui/material/TableRow'
 import TableCell from '@mui/material/TableCell'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 
-import DataTable from '@src'
-import ExpandButton from '@src/components/components.shared/select-cell.expand-button'
+import DataTable, { ExpandButton } from '@src'
 
 class Example extends React.Component {
     render() {

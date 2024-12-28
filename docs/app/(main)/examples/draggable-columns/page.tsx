@@ -1,15 +1,12 @@
+'use client'
+
 import React, { useState } from 'react'
-import ReactDOM from 'react-dom'
 import DataTable from '@src'
 import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
-import FormHelperText from '@mui/material/FormHelperText'
 import FormControl from '@mui/material/FormControl'
 import Select from '@mui/material/Select'
 import TextField from '@mui/material/TextField'
-
-import { DndProvider } from 'react-dnd'
-import { HTML5Backend } from 'react-dnd-html5-backend'
 
 function Example() {
     const [responsive, setResponsive] = useState('vertical')
@@ -17,11 +14,6 @@ function Example() {
     const [tableBodyMaxHeight, setTableBodyMaxHeight] = useState('')
     const [transitionTime, setTransitionTime] = useState(300)
     const [selectableRows, setSelectableRows] = useState('none')
-
-    const [treeData, setTreeData] = useState([
-        { title: 'Chicken', children: [{ title: 'Egg' }] },
-        { title: 'Fish', children: [{ title: 'fingerline' }] }
-    ])
 
     const columns = [
         {

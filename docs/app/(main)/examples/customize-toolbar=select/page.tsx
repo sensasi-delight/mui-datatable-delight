@@ -1,3 +1,5 @@
+'use client'
+
 import { useState } from 'react'
 import DataTable from '@src'
 import CustomToolbarSelect from './_custom-toolbar-select'

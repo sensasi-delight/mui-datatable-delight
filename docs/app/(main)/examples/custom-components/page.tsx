@@ -7,8 +7,8 @@ import Fade from '@mui/material/Fade'
 import Checkbox from '@mui/material/Checkbox'
 import Radio, { type RadioProps } from '@mui/material/Radio'
 import TableViewCol from './_table-view-col'
-import DataTable from '@src'
-import TableFilterList from '@src/components/filter-list'
+//
+import DataTable, { TableFilterList } from '@src'
 
 const CustomChip = props => {
     const { label, onDelete, columnNames, className, index } = props

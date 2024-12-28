@@ -1,8 +1,7 @@
 import React from 'react'
 import { Button } from '@mui/material'
 
-import DataTable from '@src'
-import { debounceSearchRender } from '@src/plug-ins'
+import DataTable, { debounceSearchRender } from '@src'
 
 class Example extends React.Component {
     constructor(props) {

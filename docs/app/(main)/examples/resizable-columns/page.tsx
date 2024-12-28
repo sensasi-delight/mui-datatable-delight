@@ -1,5 +1,6 @@
+'use client'
+
 import React, { useState } from 'react'
-import ReactDOM from 'react-dom'
 import DataTable from '@src'
 
 import FormControl from '@mui/material/FormControl'
