@@ -1,4 +1,4 @@
-import DataTable from '../../../../../src'
+import DataTable from '@src'
 
 export default function Page() {
     const columns = ['Name', 'Title', 'Location']

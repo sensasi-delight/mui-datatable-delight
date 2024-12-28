@@ -1,7 +1,8 @@
 import React from 'react'
-import MUIDataTable from '../../../../src'
-import { debounceSearchRender } from '../../../../src/plug-ins'
 import { Button } from '@mui/material'
+
+import DataTable from '@src'
+import { debounceSearchRender } from '@src/plug-ins'
 
 class Example extends React.Component {
     constructor(props) {
@@ -190,7 +191,7 @@ class Example extends React.Component {
         }
 
         return (
-            <MUIDataTable
+            <DataTable
                 title={'ACME Employee list'}
                 data={this.state.data}
                 columns={columns}

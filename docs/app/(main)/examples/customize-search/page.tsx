@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react'
-import ReactDOM from 'react-dom'
-import MUIDataTable from '../../../../src'
+import DataTable from '@src'
 
 class Example extends React.Component {
     state = {
@@ -156,7 +155,7 @@ class Example extends React.Component {
                 <button onClick={() => this.setState({ searchText: '' })}>
                     Reset Search
                 </button>
-                <MUIDataTable
+                <DataTable
                     title={'ACME Employee list'}
                     data={data}
                     columns={columns}

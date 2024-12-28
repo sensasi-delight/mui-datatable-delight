@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import MUIDataTable from '../../../../src'
+import DataTable from '@src'
 import SearchIcon from '@mui/icons-material/YoutubeSearchedFor'
 import PrintIcon from '@mui/icons-material/Receipt'
 import DownloadIcon from '@mui/icons-material/GetApp'
@@ -87,7 +87,7 @@ class Example extends React.Component {
         }
 
         return (
-            <MUIDataTable
+            <DataTable
                 title={'ACME Employee list'}
                 {...{ data, columns, options, components }}
             />

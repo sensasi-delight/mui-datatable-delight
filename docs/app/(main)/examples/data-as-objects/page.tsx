@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import MUIDataTable from '../../../../src'
+import DataTable from '@src'
 
 class Example extends React.Component {
     state = {
@@ -112,7 +112,7 @@ class Example extends React.Component {
                 <button onClick={this.rerender}>
                     Re-render - {this.state.counter}
                 </button>
-                <MUIDataTable
+                <DataTable
                     title={'ACME Employee list'}
                     data={this.state.data}
                     columns={columns}

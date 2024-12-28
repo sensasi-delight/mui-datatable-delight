@@ -1,6 +1,6 @@
 import React from 'react'
 import { CircularProgress, Typography } from '@mui/material'
-import MUIDataTable from '../../../../src'
+import DataTable from '@src'
 
 class Example extends React.Component {
     state = {
@@ -260,7 +260,7 @@ class Example extends React.Component {
 
         return (
             <div>
-                <MUIDataTable
+                <DataTable
                     title={
                         <Typography variant="h6">
                             ACME Employee list

@@ -1,5 +1,5 @@
 import React from 'react'
-import MUIDataTable from '../../../../src'
+import DataTable from '@src'
 import CustomSearchRender from './_custom-search-render'
 
 class Example extends React.Component {
@@ -87,7 +87,7 @@ class Example extends React.Component {
         }
 
         return (
-            <MUIDataTable
+            <DataTable
                 title={'ACME Employee list'}
                 data={data}
                 columns={columns}

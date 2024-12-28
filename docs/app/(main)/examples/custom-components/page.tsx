@@ -1,14 +1,14 @@
 import React from 'react'
-import MUIDataTable from '../../../../src'
 import Chip from '@mui/material/Chip'
 import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
-import TableFilterList from '../../../../src/components/filter-list'
 import MuiTooltip, { type TooltipProps } from '@mui/material/Tooltip'
 import Fade from '@mui/material/Fade'
 import Checkbox from '@mui/material/Checkbox'
 import Radio, { type RadioProps } from '@mui/material/Radio'
 import TableViewCol from './_table-view-col'
+import DataTable from '@src'
+import TableFilterList from '@src/components/filter-list'
 
 const CustomChip = props => {
     const { label, onDelete, columnNames, className, index } = props
@@ -135,7 +135,7 @@ class Example extends React.Component {
         }
 
         return (
-            <MUIDataTable
+            <DataTable
                 title={'ACME Employee list'}
                 data={data}
                 columns={columns}

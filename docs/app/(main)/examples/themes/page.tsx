@@ -1,5 +1,5 @@
 import React from 'react'
-import MUIDataTable from '../../../../src'
+import DataTable from '@src'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 
 class Example extends React.Component {
@@ -110,7 +110,7 @@ class Example extends React.Component {
 
         return (
             <ThemeProvider theme={theme}>
-                <MUIDataTable
+                <DataTable
                     title={'ACME Employee list'}
                     data={data}
                     columns={columns}

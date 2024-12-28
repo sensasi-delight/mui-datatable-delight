@@ -5,8 +5,7 @@
 */
 
 import React from 'react'
-import ReactDOM from 'react-dom'
-import MuiDataTable from '../../../../src'
+import DataTable from '@src'
 
 function YourCustomRowComponent(props) {
     const { name, cardNumber, cvc, expiry } = props
@@ -46,7 +45,7 @@ const creditCards = [
 
 function Example() {
     return (
-        <MuiDataTable
+        <DataTable
             title="Cards"
             data={creditCards}
             columns={[

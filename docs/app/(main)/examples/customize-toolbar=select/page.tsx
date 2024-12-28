@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import MUIDataTable from '../../../../src'
+import DataTable from '@src'
 import CustomToolbarSelect from './_custom-toolbar-select'
 import InputLabel from '@mui/material/InputLabel'
 
@@ -95,7 +95,7 @@ function Example() {
                     <MenuItem value={'above'}>above</MenuItem>
                 </Select>
             </FormControl>
-            <MUIDataTable
+            <DataTable
                 title={'ACME Employee list'}
                 data={data}
                 columns={columns}

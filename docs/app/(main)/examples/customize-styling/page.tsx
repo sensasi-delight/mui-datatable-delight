@@ -1,5 +1,5 @@
 import React from 'react'
-import MUIDataTable from '../../../../src'
+import DataTable from '@src'
 import { ThemeProvider } from '@mui/material/styles'
 import { withStyles } from 'tss-react/mui'
 import { createTheme } from '@mui/material/styles'
@@ -257,7 +257,7 @@ class Example extends React.Component {
                         label="Responsive Vertical Table"
                     />
                 </FormGroup>
-                <MUIDataTable
+                <DataTable
                     title={'ACME Employee list'}
                     data={data}
                     columns={columns}

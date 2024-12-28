@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
-import MUIDataTable from '../../../../src'
+import DataTable from '@src'
 
 import FormControl from '@mui/material/FormControl'
 import TextField from '@mui/material/TextField'
@@ -120,21 +120,21 @@ function Example(props) {
                 />
             </FormGroup>
             <div style={{ marginLeft: marginLeft + 'px' }}>
-                <MUIDataTable
+                <DataTable
                     title={'ACME Employee list' + ' [' + counter + ']'}
                     data={data}
                     columns={columns}
                     options={options}
                 />
                 <div>
-                    <MUIDataTable
+                    <DataTable
                         title={'ACME Employee list'}
                         data={data}
                         columns={columns}
                         options={options}
                     />
                 </div>
-                <MUIDataTable
+                <DataTable
                     title={'ACME Employee list'}
                     data={data}
                     columns={columns}

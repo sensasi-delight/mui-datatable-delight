@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import MUIDataTable from '../../../../src'
+import DataTable from '@src'
 import Chip from '@mui/material/Chip'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Switch from '@mui/material/Switch'
@@ -325,7 +325,7 @@ function Example() {
                 }
                 label="Fullmatch for Array filter"
             />
-            <MUIDataTable
+            <DataTable
                 title={'ACME Employee list'}
                 data={data}
                 columns={columns}

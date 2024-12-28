@@ -1,9 +1,10 @@
 import React from 'react'
-import MUIDataTable from '../../../../src'
 import TableRow from '@mui/material/TableRow'
 import TableCell from '@mui/material/TableCell'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
-import ExpandButton from '../../../../src/components/components.shared/select-cell.expand-button'
+
+import DataTable from '@src'
+import ExpandButton from '@src/components/components.shared/select-cell.expand-button'
 
 class Example extends React.Component {
     render() {
@@ -178,7 +179,7 @@ class Example extends React.Component {
 
         return (
             <ThemeProvider theme={theme}>
-                <MUIDataTable
+                <DataTable
                     title={'ACME Employee list'}
                     data={data}
                     columns={columns}

@@ -1,7 +1,7 @@
 import React, { Fragment, Component } from 'react'
 import { Waypoint } from 'react-waypoint'
 import PropTypes from 'prop-types'
-import MUIDataTable from '../../../../src'
+import DataTable from '@src'
 import { createTheme } from '@mui/material/styles'
 import {
     Table,
@@ -177,7 +177,7 @@ class MessageManager extends Component {
         const { filteredMessages } = this.state
         return (
             <Fragment>
-                <MUIDataTable
+                <DataTable
                     data={filteredMessages}
                     columns={this.columns}
                     options={this.options}

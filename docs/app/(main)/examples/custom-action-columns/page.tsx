@@ -1,6 +1,5 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
-import MUIDataTable from '../../../../src'
+import DataTable from '@src'
 
 class Example extends React.Component {
     constructor(props) {
@@ -516,7 +515,7 @@ class Example extends React.Component {
         }
 
         return (
-            <MUIDataTable
+            <DataTable
                 title={'ACME Employee list'}
                 data={this.state.data}
                 columns={columns}

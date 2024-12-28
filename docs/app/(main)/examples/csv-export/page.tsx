@@ -1,7 +1,6 @@
 import Button from '@mui/material/Button'
 import React from 'react'
-import ReactDOM from 'react-dom'
-import MUIDataTable from '../../../../src'
+import DataTable from '@src'
 
 class Example extends React.Component {
     state = {
@@ -173,7 +172,7 @@ class Example extends React.Component {
                 >
                     {this.state.downloadFile ? 'Disable' : 'Enable'} Download
                 </Button>
-                <MUIDataTable
+                <DataTable
                     title={'ACME Employee list CSV'}
                     data={data}
                     columns={columns}

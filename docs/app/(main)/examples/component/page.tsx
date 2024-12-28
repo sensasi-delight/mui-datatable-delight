@@ -2,8 +2,8 @@ import React from 'react'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import TextField from '@mui/material/TextField'
 import Switch from '@mui/material/Switch'
-import DataTable from '../../../../../src'
 import Cities from './_cities'
+import DataTable from '@src'
 
 class Example extends React.Component {
     render() {

@@ -4,10 +4,7 @@
 import { InputLabel, FormControl, MenuItem, Select } from '@mui/material'
 import { useState } from 'react'
 // DataTable
-import DataTable, {
-    type DataTableOptions,
-    type DataTableProps
-} from '../../../../../src'
+import DataTable, { type DataTableOptions, type DataTableProps } from '@src'
 
 function Example() {
     const [responsive, setResponsive] =

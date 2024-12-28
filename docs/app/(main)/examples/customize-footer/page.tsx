@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import MUIDataTable from '../../../../src'
+import DataTable from '@src'
 import CustomFooter from './_custom-footer'
 import { makeStyles } from 'tss-react/mui'
 
@@ -193,7 +193,7 @@ function Example() {
                     label="Sticky Footer"
                 />
             </FormGroup>
-            <MUIDataTable
+            <DataTable
                 title={'ACME Employee list'}
                 data={data}
                 columns={columns}

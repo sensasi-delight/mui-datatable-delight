@@ -6,13 +6,12 @@ import {
     TextField,
     Checkbox,
     FormControlLabel,
-    Grid,
     Select,
     InputLabel,
     MenuItem
 } from '@mui/material'
 import React from 'react'
-import MUIDataTable from '../../../../src'
+import DataTable from '@src'
 
 class Example extends React.Component {
     state = {
@@ -350,7 +349,7 @@ class Example extends React.Component {
         }
 
         return (
-            <MUIDataTable
+            <DataTable
                 title={'ACME Employee list - customizeFilter'}
                 data={data}
                 columns={columns}

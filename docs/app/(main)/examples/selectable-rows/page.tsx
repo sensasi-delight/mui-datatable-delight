@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import MUIDataTable from '../../../../src'
+import DataTable from '@src'
 import Switch from '@mui/material/Switch'
 import FormGroup from '@mui/material/FormGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
@@ -161,7 +161,7 @@ class Example extends React.Component {
                         label="Hide Checkboxes"
                     />
                 </FormGroup>
-                <MUIDataTable
+                <DataTable
                     title={'ACME Employee list'}
                     data={this.state.data}
                     columns={columns}

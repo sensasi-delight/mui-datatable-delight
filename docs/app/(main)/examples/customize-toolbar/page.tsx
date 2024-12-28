@@ -1,5 +1,5 @@
 import React from 'react'
-import MUIDataTable from '../../../../src'
+import DataTable from '@src'
 import CustomToolbar from './_custom-toolbar'
 
 class Example extends React.Component {
@@ -75,7 +75,7 @@ class Example extends React.Component {
         }
 
         return (
-            <MUIDataTable
+            <DataTable
                 title={'ACME Employee list'}
                 data={data}
                 columns={columns}

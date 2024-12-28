@@ -1,6 +1,6 @@
 import { IconButton, Tooltip } from '@mui/material'
-import DataTable, { DataTableOptions } from '../../../src'
 import { Download, Refresh } from '@mui/icons-material'
+import DataTable, { DataTableOptions } from '@src'
 
 /**
  * @deprecated FOR TEMPORARY DEVELOPMENT ONLY

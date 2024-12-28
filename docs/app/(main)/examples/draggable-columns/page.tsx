@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
-import MUIDataTable from '../../../../src'
+import DataTable from '@src'
 import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import FormHelperText from '@mui/material/FormHelperText'
@@ -203,7 +203,7 @@ function Example() {
                     onChange={e => setTransitionTime(e.target.value)}
                 />
             </FormControl>
-            <MUIDataTable
+            <DataTable
                 title={'ACME Employee list'}
                 data={data}
                 columns={columns}

@@ -1,7 +1,7 @@
 import { Button, CircularProgress } from '@mui/material'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import MUIDataTable from '../../../../src'
+import DataTable from '@src'
 
 const theData = [
     ['Gabby George', 'Business Analyst', 'Minneapolis', 30, '$100,000'],
@@ -199,7 +199,7 @@ class Example extends React.Component {
                         <CircularProgress />
                     </div>
                 )}
-                <MUIDataTable
+                <DataTable
                     title={'ACME Employee list'}
                     data={this.state.data}
                     columns={columns}
