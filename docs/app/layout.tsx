@@ -5,14 +5,9 @@ import '@fontsource/roboto/700.css'
 
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter'
 import { CssBaseline } from '@mui/material'
+import { ReactNode } from 'react'
 
-const drawerWidth = 240
-
-export default function RootLayout({
-    children
-}: {
-    children: React.ReactNode
-}) {
+export default function RootLayout({ children }: { children: ReactNode }) {
     return (
         <html lang="en">
             <head>

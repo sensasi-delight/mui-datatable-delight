@@ -1,3 +1,4 @@
+import { ReactNode } from 'react'
 import { OpenInNew } from '@mui/icons-material'
 import { Link } from '@mui/material'
 
@@ -6,7 +7,7 @@ export function LinkNewTab({
     children
 }: {
     href: string
-    children: React.ReactNode
+    children: ReactNode
 }) {
     return (
         <Link href={href} target="_blank">

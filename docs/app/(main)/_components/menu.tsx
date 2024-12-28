@@ -11,6 +11,7 @@ import Link from 'next/link'
 // locals
 import { Route as ExamplesRoute } from '../examples/_route--enum'
 import { snakeCaseToKebab, snakeCaseToTitle } from '../../../utils'
+import { ReactNode } from 'react'
 
 const drawerWidth = 240
 
@@ -93,7 +94,7 @@ function CustomListItem({ href, text }: { href: string; text: string }) {
     )
 }
 
-function CustomListSubheader({ children }: { children: React.ReactNode }) {
+function CustomListSubheader({ children }: { children: ReactNode }) {
     return (
         <ListSubheader
             sx={{

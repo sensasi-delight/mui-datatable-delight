@@ -1,6 +1,7 @@
+'use client'
+
 import { Button, CircularProgress } from '@mui/material'
 import React from 'react'
-import ReactDOM from 'react-dom'
 import DataTable from '@src'
 
 const theData = [

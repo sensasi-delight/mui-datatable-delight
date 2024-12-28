@@ -1,3 +1,5 @@
+'use client'
+
 /*
   See another example of how to use `customRowRender` at
   https://github.com/Skn0tt/mui-datatables-responsive-demo

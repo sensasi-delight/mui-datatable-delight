@@ -1,3 +1,5 @@
+'use client'
+
 import { IconButton, Tooltip } from '@mui/material'
 import { Download, Refresh } from '@mui/icons-material'
 import DataTable, { DataTableOptions } from '@src'
@@ -5,7 +7,7 @@ import DataTable, { DataTableOptions } from '@src'
 /**
  * @deprecated FOR TEMPORARY DEVELOPMENT ONLY
  */
-export function Page() {
+export default function Page() {
     const options: DataTableOptions = {
         rowHover: true,
         download: 'disabled',

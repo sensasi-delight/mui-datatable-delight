@@ -1,7 +1,8 @@
+import type { ReactNode } from 'react'
 import { Box, Container, Grid2 } from '@mui/material'
 import SideTopBar from './_components/side-top-bar'
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default function Layout({ children }: { children: ReactNode }) {
     return (
         <Box display="flex">
             <SideTopBar />

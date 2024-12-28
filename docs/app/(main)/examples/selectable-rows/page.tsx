@@ -1,5 +1,6 @@
+'use client'
+
 import React from 'react'
-import ReactDOM from 'react-dom'
 import DataTable from '@src'
 import Switch from '@mui/material/Switch'
 import FormGroup from '@mui/material/FormGroup'

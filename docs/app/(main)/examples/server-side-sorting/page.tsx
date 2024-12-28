@@ -1,5 +1,6 @@
+'use client'
+
 import React from 'react'
-import ReactDOM from 'react-dom'
 import DataTable from '@src'
 import { CircularProgress, Typography } from '@mui/material'
 import Cities from './_cities'
