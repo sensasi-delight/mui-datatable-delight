@@ -9,7 +9,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <Grid2
                 container
                 sx={{
-                    pt: 10
+                    py: 15
                 }}
             >
                 <Grid2 size={9}>
