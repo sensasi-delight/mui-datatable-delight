@@ -9,16 +9,17 @@
 
 # MUI `<DataTable />` Delight
 
+[![npm version](https://badge.fury.io/js/mui-datatable-delight.svg)](https://badge.fury.io/js/mui-datatable-delight)
+[![NPM Downloads](https://img.shields.io/npm/dt/mui-datatable-delight.svg?style=flat)](https://npmcharts.com/compare/mui-datatable-delight?minimal=true)
+
 <!-- [![Build Status](https://travis-ci.org/gregnb/mui-datatables.svg?branch=master)](https://travis-ci.org/gregnb/mui-datatables)
-[![NPM Downloads](https://img.shields.io/npm/dt/mui-datatables.svg?style=flat)](https://npmcharts.com/compare/mui-datatables?minimal=true)
-[![Coverage Status](https://coveralls.io/repos/github/gregnb/mui-datatables/badge.svg?branch=master)](https://coveralls.io/github/gregnb/mui-datatables?branch=master)
-[![npm version](https://badge.fury.io/js/mui-datatables.svg)](https://badge.fury.io/js/mui-datatables) -->
+[![Coverage Status](https://coveralls.io/repos/github/gregnb/mui-datatables/badge.svg?branch=master)](https://coveralls.io/github/gregnb/mui-datatables?branch=master)-->
 
 <!-- MUI-Datatables is a responsive datatables component built on [Material-UI](https://www.material-ui.com). It comes with features like filtering, [resizable columns](https://codesandbox.io/s/muidatatables-custom-toolbar-zomv5?file=/index.js), view/hide columns, [draggable columns](https://codesandbox.io/s/muidatatables-resize-columns-example-tnrkc?file=/index.js), search, export to CSV download, printing, selectable rows, expandable rows, pagination, and sorting. On top of the ability to customize styling on most views, there are three responsive modes "vertical", "standard", and "simple" for mobile/tablet devices.
 
 Version 3 has been released! You can read about the [updates here](https://github.com/gregnb/mui-datatables/blob/master/docs/v2_to_v3_guide.md)! -->
 
-**MUI `<DataTable />` Delight** is a modern revival of the popular [gregnb/mui-datatables](https://github.com/gregnb/mui-datatables), offering a sleek, feature-rich table component built with [Material-UI](https://mui.com/material-ui/getting-started/) v6. Designed for effortless data handling, it includes robust support for sorting, filtering, pagination, and row selection. With its intuitive interface and responsive design, **MUI `<DataTable />` Delight** is perfect for enhancing any modern web application. Experience the power of Material-UI v6 with this versatile and easy-to-use data table solution!
+**MUI `<DataTable />` Delight** is a modern revival of the popular [gregnb/mui-datatables](https://github.com/gregnb/mui-datatables), offering a sleek, feature-rich table component built with the latest [Material UI](https://mui.com/material-ui/getting-started/). Designed for effortless data handling, it includes robust support for sorting, filtering, pagination, and row selection. With its intuitive interface and responsive design, **MUI `<DataTable />` Delight** is perfect for enhancing any modern web application. Experience the power of Material-UI v6 with this versatile and easy-to-use data table solution!
 
 <div align="center">
 	<img src="https://user-images.githubusercontent.com/19170080/38026128-eac9d506-3258-11e8-92a7-b0d06e5faa82.gif" />
@@ -26,8 +27,8 @@ Version 3 has been released! You can read about the [updates here](https://githu
 
 ## Table of contents
 
-- [Install](#install)
-- [Usage](#usage)
+- [Getting Started](#getting-started)
+- [Demo](#demo)
 - [API](#api)
     - [`<DataTable />`](#datatable-)
     - [Options:](#options)
@@ -43,128 +44,13 @@ Version 3 has been released! You can read about the [updates here](https://githu
 - [Contributing](#contributing)
 - [License](#license)
 
-<!-- - [Compatibility](#compatibility) -->
-<!-- - [Demo](#demo) -->
-<!-- - [Thanks](#thanks) -->
+## Getting Started
 
-## Install
-
-```bash
-npm install mui-datatable-delight
-```
-
-<!-- If your project doesn't already use them, you need to install mui v5 and it's icon pack: `npm --save install @mui/material @emotion/react @emotion/styled @mui/icons-material` -->
-
-<!-- # Compatibility
-
-| mui-datatables | material-ui | Required Dependencies                    |
-| -------------- | ----------- | ---------------------------------------- |
-| ^2.0.0         | ^3.0.0      | `@material-ui/core`,`@material-ui/icons` |
-| ^3.0.0         | ^4.10.0     | `@material-ui/core`,`@material-ui/icons` |
-| ^3.8.0         | ^4.12.0     | `@material-ui/core`,`@material-ui/icons` |
-| ^4.0.0         | ^5.9.3      | `@mui/material`,`@mui/icons-material`    |
+See [the docs](https://mui-datatable-delight.vercel.app/docs/getting-started).
 
 ## Demo
 
-[![Edit react-to-print](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/muidatatables-custom-toolbar-forked-j002q?file=/index.js)
-
-Browse live demos of all examples in this repo in [here](https://codesandbox.io/s/github/gregnb/mui-datatables)! -->
-
-## Usage
-
-For a simple table:
-
-```jsx
-import DataTable from 'mui-datatable-delight'
-
-export default function Page() {
-    const columns = ['Name', 'Company', 'City', 'State']
-
-    const data = [
-        ['Joe James', 'Test Corp', 'Yonkers', 'NY'],
-        ['John Walsh', 'Test Corp', 'Hartford', 'CT'],
-        ['Bob Herm', 'Test Corp', 'Tampa', 'FL'],
-        ['James Houston', 'Test Corp', 'Dallas', 'TX']
-    ]
-
-    const options = {
-        filterType: 'checkbox'
-    }
-
-    return (
-        <DataTable
-            title="Employee List"
-            data={data}
-            columns={columns}
-            options={options}
-        />
-    )
-}
-```
-
-<!-- Or customize columns:
-
-```jsx
-import DataTable from 'mui-datatable-delight'
-
-export default function Page(){
-    const columns = [
-        {
-            name: 'name',
-            label: 'Name',
-            options: {
-                filter: true,
-                sort: true
-            }
-        },
-        {
-            name: 'company',
-            label: 'Company',
-            options: {
-                filter: true,
-                sort: false
-            }
-        },
-        {
-            name: 'city',
-            label: 'City',
-            options: {
-                filter: true,
-                sort: false
-            }
-        },
-        {
-            name: 'state',
-            label: 'State',
-            options: {
-                filter: true,
-                sort: false
-            }
-        }
-    ]
-
-    const data = [
-        { name: 'Joe James', company: 'Test Corp', city: 'Yonkers', state: 'NY' },
-        { name: 'John Walsh', company: 'Test Corp', city: 'Hartford', state: 'CT' },
-        { name: 'Bob Herm', company: 'Test Corp', city: 'Tampa', state: 'FL' },
-        { name: 'James Houston', company: 'Test Corp', city: 'Dallas', state: 'TX' }
-    ]
-
-    const options = {
-        filterType: 'checkbox'
-    }
-
-    return (
-        <DataTable
-            title="Employee List"
-            data={data}
-            columns={columns}
-            options={options}
-        />
-    )
-}
-
-``` -->
+See [the examples](https://mui-datatable-delight.vercel.app/examples).
 
 ## API
 

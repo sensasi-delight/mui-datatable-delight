@@ -35,9 +35,9 @@ import {
 } from './functions'
 
 /**
- * A responsive DataTable component built with MUI for React-based project.
+ * A responsive DataTable component built with Material UI for React-based project.
  *
- * @see https://github.com/sensasi-delight/mui-datatable-delight
+ * @see https://mui-datatable-delight.vercel.app
  */
 export function DataTable({ components, ...props }: DataTableProps) {
     const { classes } = useStyles()

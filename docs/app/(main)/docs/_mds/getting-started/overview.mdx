@@ -2,11 +2,10 @@ import { LinkNewTab } from '@/components/link-new-tab'
 
 # MUI DataTable Delight
 
-Is a modern revival of the popular <LinkNewTab href="https://github.com/gregnb/mui-datatables">gregnb/mui-datatables</LinkNewTab>, offering a sleek, feature-rich table component built with <LinkNewTab href="https://mui.com/material-ui">Material UI</LinkNewTab>. Designed for effortless data handling, it includes robust support for sorting,
-filtering, pagination, and row selection. With its intuitive interface and
-responsive design, **MUI `<DataTable />` Delight** is perfect for enhancing any
-modern web application. Experience the power of Material-UI v6 with this
-versatile and easy-to-use data table solution!
+[![npm version](https://badge.fury.io/js/mui-datatable-delight.svg)](https://badge.fury.io/js/mui-datatable-delight)
+[![NPM Downloads](https://img.shields.io/npm/dt/mui-datatable-delight.svg?style=flat)](https://npmcharts.com/compare/mui-datatable-delight?minimal=true)
+
+Is a modern revival of the popular <LinkNewTab href="https://github.com/gregnb/mui-datatables">gregnb/mui-datatables</LinkNewTab>, offering a sleek, feature-rich table component built with the latest <LinkNewTab href="https://mui.com/material-ui">Material UI</LinkNewTab>. Designed for effortless data handling, it includes robust support for sorting, filtering, pagination, and row selection. With its intuitive interface and responsive design, **MUI `<DataTable />` Delight** is perfect for enhancing any modern web application. Experience the power of Material-UI v6 with this versatile and easy-to-use data table solution!
 
 ## Installation
 
@@ -29,6 +28,73 @@ export default function Page() {
         ['John Walsh', 'Test Corp', 'Hartford', 'CT'],
         ['Bob Herm', 'Test Corp', 'Tampa', 'FL'],
         ['James Houston', 'Test Corp', 'Dallas', 'TX']
+    ]
+
+    return <DataTable title="Employee List" data={data} columns={columns} />
+}
+```
+
+Or customize columns:
+
+```jsx
+import DataTable from 'mui-datatable-delight'
+
+export default function Page() {
+    const columns = [
+        {
+            name: 'name',
+            label: 'Name',
+            options: {
+                filter: true,
+                sort: true
+            }
+        },
+        {
+            name: 'company',
+            label: 'Company',
+            options: {
+                filter: true,
+                sort: false
+            }
+        },
+        {
+            name: 'city',
+            label: 'City',
+            options: {
+                filter: true,
+                sort: false
+            }
+        },
+        {
+            name: 'state',
+            label: 'State',
+            options: {
+                filter: true,
+                sort: false
+            }
+        }
+    ]
+
+    const data = [
+        {
+            name: 'Joe James',
+            company: 'Test Corp',
+            city: 'Yonkers',
+            state: 'NY'
+        },
+        {
+            name: 'John Walsh',
+            company: 'Test Corp',
+            city: 'Hartford',
+            state: 'CT'
+        },
+        { name: 'Bob Herm', company: 'Test Corp', city: 'Tampa', state: 'FL' },
+        {
+            name: 'James Houston',
+            company: 'Test Corp',
+            city: 'Dallas',
+            state: 'TX'
+        }
     ]
 
     const options = {
