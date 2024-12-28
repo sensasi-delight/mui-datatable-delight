@@ -32,7 +32,7 @@ const PLUGINS = [
     /** To bundling ts/tsx files */
     typescript({
         importHelpers: true,
-        tsconfig: './tsconfig.app.json',
+        tsconfig: './tsconfig.json',
         rootDir: './src',
 
         compilerOptions: {
