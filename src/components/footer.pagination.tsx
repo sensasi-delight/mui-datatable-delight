@@ -112,13 +112,13 @@ const useStyles = makeStyles({
     },
     toolbar: {
         [theme.breakpoints.down('sm')]: {
-            marginTop: '-0.5em'
+            marginTop: '-0.5em',
+            paddingLeft: theme.spacing(2)
         },
-        paddingRight: '0 !important',
-        paddingLeft: '0 !important'
+        paddingRight: '0 !important'
     },
 
     nextButton: {
-        marginRight: '0.5em !important'
+        marginRight: theme.spacing(0.1)
     }
 }))

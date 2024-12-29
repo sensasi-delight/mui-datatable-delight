@@ -41,7 +41,7 @@ export default function TableFooter({
                     paginationTextLabels
                 )}
 
-            {jumpToPage && (
+            {!customFooter && jumpToPage && (
                 <DataTableFooterJumpToPage
                     count={rowCount}
                     page={page}
@@ -51,7 +51,7 @@ export default function TableFooter({
                 />
             )}
 
-            {pagination && (
+            {!customFooter && pagination && (
                 <DataTableFooterPagination
                     count={rowCount}
                     page={page}
