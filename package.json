@@ -1,6 +1,6 @@
 {
     "name": "mui-datatable-delight",
-    "version": "0.0.0-experimental.10",
+    "version": "0.0.0-experimental.11",
     "description": "A responsive DataTable component built with MUI for React-based project.",
     "module": "dist/index.js",
     "types": "dist/index.d.ts",
@@ -33,6 +33,7 @@
     "bugs": {
         "url": "https://github.com/gregnb/mui-datatable-delight/issues"
     },
+    "homepage": "https://mui-datatable-delight.vercel.app",
     "devDependencies": {
         "@emotion/cache": "^11.14.0",
         "@eslint/js": "^9.17.0",

@@ -46,7 +46,8 @@ export default function Menu({
                 flexShrink: 0,
                 '& .MuiDrawer-paper': {
                     width: DRAWER_WIDTH,
-                    boxSizing: 'border-box'
+                    boxSizing: 'border-box',
+                    pb: 10
                 }
             }}
         >
@@ -82,7 +83,7 @@ function CustomListItem({ href, text }: { href: string; text: string }) {
     const [isActive, setIsActive] = useState(false)
 
     useEffect(() => {
-        setIsActive(location.pathname.includes(href))
+        setIsActive(location.pathname === href)
     }, [])
 
     return (
@@ -90,19 +91,22 @@ function CustomListItem({ href, text }: { href: string; text: string }) {
             <ListItemButton
                 href={href}
                 LinkComponent={Link}
-                // disabled={isActive}
                 selected={isActive}
                 color="Highlight"
-                sx={[{
-                    py: 0.5,
-                    backgroundColor: isActive
-                        ? 'rgba(var(--mui-palette-primary-mainChannel) / var(--mui-palette-action-selectedOpacity)) !important'
-                        : undefined,
-                    color: isActive ? 'primary.main' : grey[700],
-                    opacity: 'unset !important'
-                }, style => style.applyStyles('dark', {
-                    color: isActive ? 'primary.main' : grey[500],
-                })]}
+                sx={[
+                    {
+                        py: 0.5,
+                        backgroundColor: isActive
+                            ? 'rgba(var(--mui-palette-primary-mainChannel) / var(--mui-palette-action-selectedOpacity)) !important'
+                            : undefined,
+                        color: isActive ? 'primary.main' : grey[700],
+                        opacity: 'unset !important'
+                    },
+                    style =>
+                        style.applyStyles('dark', {
+                            color: isActive ? 'primary.main' : grey[500]
+                        })
+                ]}
             >
                 {isActive && (
                     <ListItemIcon

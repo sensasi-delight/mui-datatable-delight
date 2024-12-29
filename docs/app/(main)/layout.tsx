@@ -10,12 +10,17 @@ export default function Layout({ children }: { children: ReactNode }) {
             <Grid2
                 container
                 sx={{
-                    py: 15
+                    py: 12,
+                    flexGrow: 1
                 }}
             >
                 <Grid2
                     size={{
-                        md: 9
+                        xs: 12,
+                        sm: 12,
+                        md: 12,
+                        lg: 9,
+                        xl: 9
                     }}
                 >
                     <Container component="main">{children}</Container>
@@ -23,7 +28,11 @@ export default function Layout({ children }: { children: ReactNode }) {
 
                 <Grid2
                     size={{
-                        md: 3
+                        xs: 12,
+                        sm: 12,
+                        md: 12,
+                        lg: 3,
+                        xl: 3
                     }}
                     sx={{
                         display: {
