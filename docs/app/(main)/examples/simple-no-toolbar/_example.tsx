@@ -2,7 +2,7 @@
 
 import DataTable from '@src'
 
-export default function Page() {
+export default function Example() {
     const columns = ['Name', 'Title', 'Location']
 
     const data = [
