@@ -2,14 +2,12 @@
 import { InputBase, MenuItem, Select, Typography } from '@mui/material'
 import { makeStyles } from 'tss-react/mui'
 import clsx from 'clsx'
-// locals
-import { getPageValue } from '../functions.shared/get-page-value'
 
 export function DataTableFooterJumpToPage({
     count,
     textLabel,
     rowsPerPage,
-    page,
+    page: pageProp,
     changePage
 }: {
     count: number
@@ -25,9 +23,8 @@ export function DataTableFooterJumpToPage({
 }) {
     const { classes } = useStyles()
 
-    const lastPage = Math.min(1000, getPageValue(count, rowsPerPage, 1000000))
-
-    const pages = [...Array(lastPage).keys()]
+    const pages = getPageOptions(count, rowsPerPage)
+    const page = pages.length < pageProp ? pages.length : pageProp
 
     return (
         <div className={classes.root}>
@@ -50,21 +47,17 @@ export function DataTableFooterJumpToPage({
                     changePage(parseInt(value.toString(), 10))
                 }}
                 style={{ marginRight: 0 }}
-                value={getPageValue(count, rowsPerPage, page) ?? ''}
+                value={page}
             >
-                {pages.length ? (
-                    pages.map(pageVal => (
-                        <MenuItem
-                            // className={classes.menuItem} // `menuItem` IS NOT FOUND
-                            key={pageVal}
-                            value={pageVal}
-                        >
-                            {pageVal + 1}
-                        </MenuItem>
-                    ))
-                ) : (
-                    <MenuItem value="" disabled />
-                )}
+                {pages.map(pageVal => (
+                    <MenuItem
+                        // className={classes.menuItem} // `menuItem` IS NOT FOUND
+                        key={pageVal}
+                        value={pageVal}
+                    >
+                        {pageVal + 1}
+                    </MenuItem>
+                ))}
             </Select>
         </div>
     )
@@ -108,3 +101,8 @@ const useStyles = makeStyles({
         flexShrink: 0
     }
 }))
+
+function getPageOptions(count: number, rowsPerPage: number): number[] {
+    const nPages = Math.ceil(count / rowsPerPage)
+    return [...Array(nPages).keys()]
+}
