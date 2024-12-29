@@ -7,13 +7,13 @@ import {
     CardContent,
     Grid,
     TextField,
+    TextFieldProps,
     Typography
 } from '@mui/material'
-import Link from 'next/link'
 import { useState } from 'react'
 // locals
 import { Route } from './_route--enum'
-import { snakeCaseToKebab, snakeCaseToTitle } from '../../../utils'
+import { snakeCaseToKebab, snakeCaseToTitle } from '@/utils'
 
 const SORTED_EXAMPLES = Object.keys(Route)
     .filter(key => isNaN(parseInt(key)))
@@ -50,7 +50,6 @@ export default function page() {
                     <Grid key={i} item md={2}>
                         <Card>
                             <CardActionArea
-                                component={Link}
                                 href={`/examples/${snakeCaseToKebab(enumKey)}`}
                             >
                                 <CardContent>
@@ -70,7 +69,15 @@ export default function page() {
     )
 }
 
-function SearchBar({ nItems, onChange, value }) {
+function SearchBar({
+    nItems,
+    onChange,
+    value
+}: {
+    nItems: number
+    onChange: TextFieldProps['onChange']
+    value: string
+}) {
     return (
         <Box>
             <Typography variant="h5" component="div">
