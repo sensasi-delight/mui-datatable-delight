@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
-import { OpenInNew } from '@mui/icons-material'
 import { Link } from '@mui/material'
+import { OpenInNew } from '@mui/icons-material'
 
 export function LinkNewTab({
     href,
@@ -14,7 +14,10 @@ export function LinkNewTab({
             {children}
             <OpenInNew
                 sx={{
-                    fontSize: '1em'
+                    fontSize: '1em',
+                    mb: 1,
+                    ml: 0.5,
+                    verticalAlign: 'middle'
                 }}
             />
         </Link>

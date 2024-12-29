@@ -1,0 +1,18 @@
+import { Link } from '@mui/material'
+
+## Remote Data
+
+If you are looking to work with remote data sets or handle pagination, filtering, and sorting on a remote server you can do that with the following options:
+
+```js
+const options = {
+    serverSide: true,
+    onTableChange: (action, tableState) => {
+        this.xhrRequest('my.api.com/tableData', result => {
+            this.setState({ data: result })
+        })
+    }
+}
+```
+
+To see an example <Link href="/examples/server-side-pagination">Click Here</Link>.

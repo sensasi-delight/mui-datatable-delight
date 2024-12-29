@@ -1,6 +1,6 @@
 import type { MDXComponents } from 'mdx/types'
 import { CodeSnippet } from './components/code-snippet'
-import { Typography } from '@mui/material'
+import { Link, Typography } from '@mui/material'
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
     return {
@@ -22,6 +22,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
                 {...props}
             />
         ),
+        a: props => <Link {...props} />,
         ...components
     }
 }

@@ -1,67 +1,73 @@
-import Button from '@mui/material/Button'
-import clsx from 'clsx'
-import HelpIcon from '@mui/icons-material/Help'
-import MuiTooltip from '@mui/material/Tooltip'
-import PropTypes from 'prop-types'
-import { useState } from 'react'
-import TableCell from '@mui/material/TableCell'
-import TableSortLabel from '@mui/material/TableSortLabel'
-import useColumnDrop from './head.cell.use-column-drop'
+// vendors
 import { makeStyles } from 'tss-react/mui'
 import { useDrag } from 'react-dnd'
+import { useState } from 'react'
+import clsx from 'clsx'
+// materials
+import {
+    Button,
+    TableCell,
+    TableSortLabel,
+    Tooltip as MuiTooltip
+} from '@mui/material'
+import { Help as HelpIcon } from '@mui/icons-material'
+// locals
+import useColumnDrop from './head.cell.use-column-drop'
 
-const useStyles = makeStyles({ name: 'MUIDataTableHeadCell' })(theme => ({
-    root: {},
-    fixedHeader: {
-        position: 'sticky',
-        top: '0px',
-        zIndex: 100,
-        backgroundColor: theme.palette.background.paper
-    },
-    tooltip: {
-        cursor: 'pointer'
-    },
-    mypopper: {
-        '&[data-x-out-of-boundaries]': {
-            display: 'none'
+const useStyles = makeStyles({ name: 'datatable-delight--head--cell' })(
+    theme => ({
+        root: {},
+        fixedHeader: {
+            position: 'sticky',
+            top: '0px',
+            zIndex: 1,
+            backgroundColor: theme.palette.background.paper
+        },
+        tooltip: {
+            cursor: 'pointer'
+        },
+        mypopper: {
+            '&[data-x-out-of-boundaries]': {
+                display: 'none'
+            }
+        },
+        data: {
+            display: 'inline-block'
+        },
+        sortAction: {
+            display: 'flex',
+            cursor: 'pointer'
+        },
+        dragCursor: {
+            cursor: 'grab'
+        },
+        sortLabelRoot: {
+            height: '20px'
+        },
+        sortActive: {
+            color: theme.palette.text.primary
+        },
+        toolButton: {
+            textTransform: 'none',
+            marginLeft: '-8px',
+            minWidth: 0,
+            marginRight: '8px',
+            paddingLeft: '8px',
+            paddingRight: '8px'
+        },
+        contentWrapper: {
+            display: 'flex',
+            alignItems: 'center'
+        },
+        hintIconAlone: {
+            marginTop: '-3px',
+            marginLeft: '3px'
+        },
+        hintIconWithSortIcon: {
+            marginTop: '-3px'
         }
-    },
-    data: {
-        display: 'inline-block'
-    },
-    sortAction: {
-        display: 'flex',
-        cursor: 'pointer'
-    },
-    dragCursor: {
-        cursor: 'grab'
-    },
-    sortLabelRoot: {
-        height: '20px'
-    },
-    sortActive: {
-        color: theme.palette.text.primary
-    },
-    toolButton: {
-        textTransform: 'none',
-        marginLeft: '-8px',
-        minWidth: 0,
-        marginRight: '8px',
-        paddingLeft: '8px',
-        paddingRight: '8px'
-    },
-    contentWrapper: {
-        display: 'flex',
-        alignItems: 'center'
-    },
-    hintIconAlone: {
-        marginTop: '-3px',
-        marginLeft: '3px'
-    },
-    hintIconWithSortIcon: {
-        marginTop: '-3px'
-    }
-}))
+    })
+)
 
 const TableHeadCell = ({
     cellHeaderProps = {},
@@ -85,7 +91,7 @@ const TableHeadCell = ({
     timers,
     toggleSort,
     updateColumnOrder
-}) => {
+}: DataTableHeadCellProps) => {
     const [sortTooltipOpen, setSortTooltipOpen] = useState(false)
     const [hintTooltipOpen, setHintTooltipOpen] = useState(false)
 
@@ -106,7 +112,7 @@ const TableHeadCell = ({
     const [dragging, setDragging] = draggingHook ? draggingHook : []
 
     const { className, ...otherProps } = cellHeaderProps
-    const Tooltip = components.Tooltip || MuiTooltip
+    const Tooltip = components.Tooltip ?? MuiTooltip
     const sortActive = sortDirection !== 'none' && sortDirection !== undefined
     const ariaSortDirection = sortDirection === 'none' ? false : sortDirection
 
@@ -294,23 +300,30 @@ const TableHeadCell = ({
     )
 }
 
-TableHeadCell.propTypes = {
+interface DataTableHeadCellProps {
     /** Options used to describe table */
-    options: PropTypes.object.isRequired,
+    options: Object
+
     /** Current sort direction */
-    sortDirection: PropTypes.oneOf(['asc', 'desc', 'none']),
+    sortDirection?: 'asc' | 'desc' | 'none'
+
     /** Callback to trigger column sort */
-    toggleSort: PropTypes.func.isRequired,
+    toggleSort: () => void
+
     /** Sort enabled / disabled for this column **/
-    sort: PropTypes.bool.isRequired,
+    sort: boolean
+
     /** Hint tooltip text */
-    hint: PropTypes.string,
+    hint?: string
+
     /** Column displayed in print */
-    print: PropTypes.bool.isRequired,
+    print: boolean
+
     /** Optional to be used with `textLabels.body.columnHeaderTooltip` */
-    column: PropTypes.object,
+    column?: Object
+
     /** Injectable component structure **/
-    components: PropTypes.object
+    components?: Object
 }
 
 export default TableHeadCell

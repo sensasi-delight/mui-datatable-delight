@@ -1,17 +1,32 @@
+import { Route } from '../../_route--enum'
+
 export default async function Page({
     params
 }: {
     params: Promise<{ group: string; page: string }>
 }) {
-    const { group, page } = await params
+    const { group, page = 'overview' } = await params
 
-    const { default: Page } = await import(`../..//_mds/${group}/${page}.mdx`)
+    const { default: Page } = await import(`../../_mds/${group}/${page}.mdx`)
 
     return <Page />
 }
 
 export function generateStaticParams() {
-    return [{ group: 'getting-started', page: 'overview' }]
+    return getRouteData()
+}
+
+function getRouteData() {
+    return Object.keys(Route)
+        .filter(enumKey => enumKey.includes('__'))
+        .map(enumKey => {
+            const route = enumKey.replace('_', '-').split('--')
+
+            return {
+                group: route[0],
+                page: route[1]
+            }
+        })
 }
 
 export const dynamicParams = false

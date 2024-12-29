@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
-import { Route } from './_routes--enum'
+import { Route } from './(main)/docs/_route--enum'
 
 export default function Page() {
-    return redirect('/' + Route.DOCS__GETTING_STARTED__OVERVIEW)
+    return redirect('/docs/' + Route.GETTING_STARTED)
 }

@@ -1,0 +1,34 @@
+# Customize Styling
+
+Using Material-UI theme overrides will allow you to customize styling to your liking. First, determine which component you would want to target and then lookup the override classname. Let's start with a simple example where we will change the background color of a body cell to be red:
+
+```js
+import React from 'react'
+import DataTable from 'mui-datatable-delight'
+import { createTheme, ThemeProvider } from '@mui/material/styles'
+
+const theme = createTheme({
+    components: {
+        DataTableBodyCell: {
+            defaultProps: {
+                sx: {
+                    backgroundColor: '#FF0000'
+                }
+            }
+        }
+    }
+})
+
+function BodyCellExample() {
+    return (
+        <ThemeProvider theme={theme}>
+            <DataTable
+                title="ACME Employee list"
+                data={data}
+                columns={columns}
+                options={options}
+            />
+        </ThemeProvider>
+    )
+}
+```
