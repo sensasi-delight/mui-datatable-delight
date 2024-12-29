@@ -46,21 +46,25 @@ export function DataTableFooterJumpToPage({
                         className={clsx(classes.input, classes.selectRoot)}
                     />
                 }
-                value={getPageValue(count, rowsPerPage, page)}
                 onChange={({ target: { value } }) => {
                     changePage(parseInt(value.toString(), 10))
                 }}
                 style={{ marginRight: 0 }}
+                value={getPageValue(count, rowsPerPage, page) ?? ''}
             >
-                {pages.map(pageVal => (
-                    <MenuItem
-                        // className={classes.menuItem} // `menuItem` IS NOT FOUND
-                        key={pageVal}
-                        value={pageVal}
-                    >
-                        {pageVal + 1}
-                    </MenuItem>
-                ))}
+                {pages.length ? (
+                    pages.map(pageVal => (
+                        <MenuItem
+                            // className={classes.menuItem} // `menuItem` IS NOT FOUND
+                            key={pageVal}
+                            value={pageVal}
+                        >
+                            {pageVal + 1}
+                        </MenuItem>
+                    ))
+                ) : (
+                    <MenuItem value="" disabled />
+                )}
             </Select>
         </div>
     )
@@ -71,10 +75,7 @@ const useStyles = makeStyles({
 })(theme => ({
     root: {
         alignItems: 'center',
-        display: 'flex',
-        [theme.breakpoints.down('sm')]: {
-            marginRight: '1em'
-        }
+        display: 'flex'
     },
 
     caption: {
