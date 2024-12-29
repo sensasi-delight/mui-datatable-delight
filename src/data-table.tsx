@@ -401,7 +401,10 @@ class MUIDataTableClass extends React.Component {
 
         this.mergeDefaultOptions(props)
 
-        const restoredState = load(props.options.storageKey)
+        const restoredState = props.options?.storageKey
+            ? load(props.options.storageKey)
+            : undefined
+
         this.state = Object.assign(
             defaultState,
             restoredState ? restoredState : this.getInitTableOptions()
@@ -416,7 +419,7 @@ class MUIDataTableClass extends React.Component {
         this.setHeadResizeable(this.resizeHeadCellRefs, this.tableRef)
 
         // When we have a search, we must reset page to view it unless on serverSide since paging is handled by the user.
-        if (this.props.options.searchText && !this.props.options.serverSide)
+        if (this.props.options?.searchText && !this.props.options?.serverSide)
             this.setState({ page: 0 })
 
         this.setTableInit('tableInitialized')
@@ -448,8 +451,8 @@ class MUIDataTableClass extends React.Component {
         }
 
         if (
-            this.props.options.searchText !== prevProps.options.searchText &&
-            !this.props.options.serverSide
+            this.props.options?.searchText !== prevProps.options?.searchText &&
+            !this.props.options?.serverSide
         ) {
             // When we have a search, we must reset page to view it unless on serverSide since paging is handled by the user.
             this.setState({ page: 0 })
@@ -468,8 +471,8 @@ class MUIDataTableClass extends React.Component {
     updateOptions(options, props) {
         // set backwards compatibility options
         if (
-            props.options.disableToolbarSelect === true &&
-            props.options.selectToolbarPlacement === undefined
+            props.options?.disableToolbarSelect === true &&
+            props.options?.selectToolbarPlacement === undefined
         ) {
             // if deprecated option disableToolbarSelect is set and selectToolbarPlacement is default then use it
             props.options.selectToolbarPlacement = STP.NONE
@@ -483,14 +486,14 @@ class MUIDataTableClass extends React.Component {
 
         this.options = {
             ...options,
-            ...props.options,
+            ...(props.options ?? {}),
             textLabels: {
                 ...options.textLabels,
-                ...props.options.textLabels
+                ...props.options?.textLabels
             },
             downloadOptions: {
                 ...options.downloadOptions,
-                ...props.options.downloadOptions
+                ...props.options?.downloadOptions
             }
         }
 
@@ -687,16 +690,17 @@ class MUIDataTableClass extends React.Component {
     }
 
     setTableAction = action => {
-        if (typeof this.options.onTableChange === 'function') {
+        if (this.options?.onTableChange) {
             this.options.onTableChange(action, this.state)
         }
-        if (this.options.storageKey) {
+
+        if (this.options?.storageKey) {
             save(this.options.storageKey, this.state)
         }
     }
 
     setTableInit = action => {
-        if (typeof this.options.onTableInit === 'function') {
+        if (this.options?.onTableInit) {
             this.options.onTableInit(action, this.state)
         }
     }
@@ -882,7 +886,7 @@ class MUIDataTableClass extends React.Component {
                 ? transformData(columns, props.data, this.options)
                 : props.data
         let searchText =
-            status === TABLE_LOAD.INITIAL ? this.options.searchText : null
+            status === TABLE_LOAD.INITIAL ? this.options?.searchText : null
 
         if (
             typeof this.options.searchText === 'undefined' &&
@@ -1307,7 +1311,7 @@ class MUIDataTableClass extends React.Component {
             }
         }
 
-        const { customSearch } = props.options
+        const { customSearch } = props.options ?? {}
 
         if (searchText && customSearch) {
             const customSearchResult = customSearch(searchText, row, columns)
@@ -2388,7 +2392,7 @@ class MUIDataTableClass extends React.Component {
                 <TableFilterList
                     options={this.options}
                     serverSideFilterList={
-                        this.props.options.serverSideFilterList
+                        this.props.options?.serverSideFilterList
                     }
                     filterListRenderers={columns.map(c => {
                         if (
