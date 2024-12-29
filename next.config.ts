@@ -5,6 +5,8 @@ const nextConfig: NextConfig = {
     pageExtensions: ['md', 'mdx', 'ts', 'tsx'],
     reactStrictMode: true,
 
+    output: 'export',
+
     typescript: {
         /**
          * WILL REMOVE THIS AFTER ALL CODES ARE FULLY MIGRATE TO TYPESCRIPT
