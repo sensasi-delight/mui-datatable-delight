@@ -1,6 +1,15 @@
 'use client'
 
+// materials
 import {
+    ArrowRight,
+    KeyboardArrowDown,
+    KeyboardArrowRight
+} from '@mui/icons-material'
+import {
+    Button,
+    ButtonProps,
+    Collapse,
     Drawer,
     List,
     ListItem,
@@ -12,13 +21,12 @@ import {
     useTheme
 } from '@mui/material'
 import { grey } from '@mui/material/colors'
-import Link from 'next/link'
 // locals
-import { Route as ExamplesRoute } from '../examples/_route--enum'
-import { snakeCaseToKebab, snakeCaseToTitle } from '../../../utils'
-import { ReactNode, useEffect, useState } from 'react'
 import { DRAWER_WIDTH } from '../_constants'
-import { ArrowRight } from '@mui/icons-material'
+import { useEffect, useState } from 'react'
+import { Route as DocsRoute } from '../docs/_route--enum'
+import { Route as ExamplesRoute } from '../examples/_route--enum'
+import { snakeCaseToKebab, snakeCaseToTitle } from '@/utils'
 
 export default function Menu({
     isOpen,
@@ -52,45 +60,26 @@ export default function Menu({
             }}
         >
             <List component="nav">
-                <CustomListSubheader>Getting Started</CustomListSubheader>
-
-                <CustomListItem
-                    href="/docs/getting-started/overview"
-                    text="Overview"
-                />
-
-                <CustomListSubheader>Examples</CustomListSubheader>
-
-                <CustomListItem href="/examples" text="Overview" />
-
-                {SORTED_EXAMPLES.map((enumKey, i) => (
-                    <CustomListItem
-                        key={i}
-                        href={'/examples/' + snakeCaseToKebab(enumKey)}
-                        text={snakeCaseToTitle(enumKey)}
-                    />
-                ))}
+                <MenuSection sectionId="GETTING_STARTED" />
+                <MenuSection sectionId="FEATURES" />
+                <MenuSection sectionId="EXAMPLES" />
+                <MenuSection sectionId="API" />
             </List>
         </Drawer>
     )
 }
 
-const SORTED_EXAMPLES = Object.keys(ExamplesRoute)
-    .filter(key => isNaN(parseInt(key)))
-    .sort()
-
 function CustomListItem({ href, text }: { href: string; text: string }) {
     const [isActive, setIsActive] = useState(false)
 
     useEffect(() => {
-        setIsActive(location.pathname === href)
+        setIsActive(location.pathname.replace('/overview', '') === href)
     }, [])
 
     return (
         <ListItem disablePadding>
             <ListItemButton
                 href={href}
-                LinkComponent={Link}
                 selected={isActive}
                 color="Highlight"
                 sx={[
@@ -138,19 +127,126 @@ function CustomListItem({ href, text }: { href: string; text: string }) {
     )
 }
 
-function CustomListSubheader({ children }: { children: ReactNode }) {
+function MenuSection({ sectionId }: { sectionId: SectionIdType }) {
+    const [isOpen, setIsOpen] = useState(false)
+
+    const isExampleSection = sectionId === 'EXAMPLES'
+
+    const routes = isExampleSection
+        ? getExampleRoutes()
+        : getDocRoutes(sectionId)
+
+    useEffect(() => {
+        const isContainActiveMenu = routes.some(
+            ({ href }) =>
+                location.pathname ===
+                (isExampleSection ? '/examples' : '/docs') +
+                    (href ? '/' : '') +
+                    href
+        )
+
+        console.log(location.pathname, routes)
+
+        setIsOpen(isContainActiveMenu)
+    }, [])
+
+    return (
+        <>
+            <CustomListSubheader
+                isOpen={isOpen}
+                title={snakeCaseToTitle(sectionId)}
+                onClick={() => setIsOpen(prev => !prev)}
+            />
+
+            <Collapse in={isOpen}>
+                <CustomListItem
+                    href={
+                        isExampleSection
+                            ? '/examples'
+                            : '/docs/' + snakeCaseToKebab(sectionId)
+                    }
+                    text={'Overview'}
+                />
+
+                {routes.slice(1).map((route, i) => (
+                    <CustomListItem
+                        key={i}
+                        href={
+                            (isExampleSection ? '/examples/' : '/docs/') +
+                            route.href
+                        }
+                        text={route.title}
+                    />
+                ))}
+            </Collapse>
+        </>
+    )
+}
+
+function CustomListSubheader({
+    title,
+    onClick,
+    isOpen
+}: {
+    title: string
+    onClick: ButtonProps['onClick']
+    isOpen: Boolean
+}) {
     return (
         <ListSubheader
+            component={Button}
+            onClick={onClick}
+            startIcon={isOpen ? <KeyboardArrowDown /> : <KeyboardArrowRight />}
+            fullWidth
             sx={{
                 lineHeight: 'unset',
-                pt: 2,
-                pb: 0.5,
+                py: 1.2,
+                px: 2,
                 fontWeight: 'bold',
                 textTransform: 'uppercase',
-                color: 'Highlight'
+                color: 'Highlight',
+                bgcolor: 'var(--mui-palette-background-paper)',
+                justifyContent: 'flex-start',
+                '&:hover': {
+                    bgcolor: 'var(--variant-textBg)'
+                }
             }}
         >
-            {children}
+            {title}
         </ListSubheader>
     )
+}
+
+type SectionIdType = 'GETTING_STARTED' | 'FEATURES' | 'EXAMPLES' | 'API'
+
+function getDocRoutes(sectionId: SectionIdType): Route[] {
+    return Object.keys(DocsRoute)
+        .filter(enumKey => enumKey.includes(sectionId))
+        .map(enumKey => {
+            const parsed = snakeCaseToTitle(enumKey).split('  ')
+
+            return {
+                href: snakeCaseToKebab(enumKey).replaceAll('--', '/'),
+                title: parsed[parsed.length - 1]
+            }
+        })
+}
+
+function getExampleRoutes(): Route[] {
+    const SORTED_EXAMPLES = [
+        '',
+        ...Object.keys(ExamplesRoute)
+            .filter(key => isNaN(parseInt(key)))
+            .sort()
+    ]
+
+    return SORTED_EXAMPLES.map(enumKey => ({
+        href: snakeCaseToKebab(enumKey),
+        title: snakeCaseToTitle(enumKey)
+    }))
+}
+
+interface Route {
+    href: string
+    title: string
 }
