@@ -1,10 +1,12 @@
+import { Box, Paper } from '@mui/material'
 import prism from 'prismjs'
-import { Box } from '@mui/material'
-import Paper from '@mui/material/Paper'
 
 import 'prismjs/components/prism-jsx'
 import 'prismjs/components/prism-bash'
+import 'prismjs/components/prism-typescript'
+import 'prismjs/components/prism-tsx'
 
+// @ts-expect-error IDK
 import 'prismjs/themes/prism-tomorrow.css'
 
 export function CodeSnippet({
@@ -14,7 +16,7 @@ export function CodeSnippet({
     language?: 'jsx' | 'bash'
     text: string
 }) {
-    const hightlightedCode = prism.highlight(
+    const highlightedCode = prism.highlight(
         text,
         prism.languages[language],
         language
@@ -27,7 +29,7 @@ export function CodeSnippet({
                 className={`language-${language}`}
                 borderRadius="4px"
             >
-                <code dangerouslySetInnerHTML={{ __html: hightlightedCode }} />
+                <code dangerouslySetInnerHTML={{ __html: highlightedCode }} />
             </Box>
         </Paper>
     )
