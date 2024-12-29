@@ -24,7 +24,7 @@ export function DataTableFooterJumpToPage({
     const { classes } = useStyles()
 
     const pages = getPageOptions(count, rowsPerPage)
-    const page = pages.length < pageProp ? pages.length : pageProp
+    const page = pages.length < pageProp ? pages.length - 1 : pageProp
 
     return (
         <div className={classes.root}>
@@ -103,6 +103,7 @@ const useStyles = makeStyles({
 }))
 
 function getPageOptions(count: number, rowsPerPage: number): number[] {
-    const nPages = Math.ceil(count / rowsPerPage)
+    const nPages = Math.max(Math.ceil(count / rowsPerPage), 1)
+
     return [...Array(nPages).keys()]
 }
