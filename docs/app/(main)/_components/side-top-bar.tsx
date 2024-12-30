@@ -33,7 +33,7 @@ export default function SideTopBar() {
         <>
             <AppBar
                 position="fixed"
-                sx={{
+                sx={theme => ({
                     width: {
                         sm: '100%',
                         md: `calc(100% - ${DRAWER_WIDTH}px)`
@@ -42,11 +42,12 @@ export default function SideTopBar() {
                         sm: undefined,
                         md: `${DRAWER_WIDTH}px`
                     },
+                    bgcolor: '#01579b !important',
                     transition: theme.transitions.create(['margin', 'width'], {
                         easing: theme.transitions.easing.easeOut,
                         duration: theme.transitions.duration.enteringScreen
                     })
-                }}
+                })}
             >
                 <Toolbar
                     sx={{
