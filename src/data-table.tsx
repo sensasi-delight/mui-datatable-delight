@@ -4,12 +4,16 @@
 import type { DataTableProps } from './data-table.props.type'
 // vendors
 import { DndProvider } from 'react-dnd'
-import { Paper, Table as MuiTable, Tooltip as MuiTooltip } from '@mui/material'
+import {
+    Paper,
+    Table as MuiTable,
+    Tooltip as MuiTooltip,
+    TableProps
+} from '@mui/material'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { makeStyles } from 'tss-react/mui'
 import clsx from 'clsx'
-import PropTypes from 'prop-types'
-import React from 'react'
+import React, { ReactNode } from 'react'
 // local components
 import { DataTableToolbarFilter } from './components/toolbar.filter'
 import { TableToolbarSelect as DefaultTableToolbarSelect } from './components/toolbar-select'
@@ -33,6 +37,8 @@ import {
     warnDeprecated,
     warnInfo
 } from './functions'
+import type { MUIDataTableState } from 'mui-datatables'
+import type { DataTableOptions } from './data-table.props.type/options'
 
 /**
  * A responsive DataTable component built with Material UI for React-based project.
@@ -47,7 +53,7 @@ export function DataTable({ components, ...props }: DataTableProps) {
             {...props}
             classes={classes}
             components={{
-                icons: components?.icons ?? {},
+                icons: components?.icons,
 
                 Tooltip: components?.Tooltip ?? MuiTooltip,
 
@@ -67,7 +73,7 @@ export function DataTable({ components, ...props }: DataTableProps) {
 }
 
 const useStyles = makeStyles({
-    name: 'MUIDataTable'
+    name: 'datatable-delight'
 })(theme => ({
     root: {
         '& .datatables-noprint': {
@@ -115,10 +121,6 @@ const useStyles = makeStyles({
     },
     // deprecated, but continuing support through v3.x
     responsiveStackedFullWidth: {},
-    caption: {
-        position: 'absolute',
-        left: '-3000px'
-    },
 
     liveAnnounce: {
         border: '0',
@@ -132,237 +134,20 @@ const useStyles = makeStyles({
     }
 }))
 
-const TABLE_LOAD = {
-    INITIAL: 1,
-    UPDATE: 2
-}
+class MUIDataTableClass extends React.Component<
+    DataTableProps,
+    MUIDataTableState
+> {
+    options: DataTableOptions
+    tableRef: React.RefObject<HTMLTableElement | null>
+    tableContent: React.RefObject<HTMLDivElement | null>
+    draggableHeadCellRefs: {}
+    setHeadResizable: () => void
+    resizeHeadCellRefs: {}
+    timers: {}
+    updateDividers: () => void
 
-// Populate this list with anything that might render in the toolbar to determine if we hide the toolbar
-const TOOLBAR_ITEMS = [
-    'title',
-    'filter',
-    'search',
-    'print',
-    'download',
-    'viewColumns',
-    'customToolbar'
-]
-
-const hasToolbarItem = (options, title) => {
-    options.title = title
-
-    return TOOLBAR_ITEMS.some(itemName => options[itemName])
-}
-
-// Select Toolbar Placement options
-const STP = {
-    REPLACE: 'replace',
-    ABOVE: 'above',
-    NONE: 'none',
-    ALWAYS: 'always'
-}
-
-class MUIDataTableClass extends React.Component {
-    static propTypes = {
-        /** Title of the table */
-        title: PropTypes.oneOfType([PropTypes.string, PropTypes.element])
-            .isRequired,
-        /** Data used to describe table */
-        data: PropTypes.array.isRequired,
-        /** Columns used to describe table */
-        columns: PropTypes.arrayOf(
-            PropTypes.oneOfType([
-                PropTypes.string,
-                PropTypes.shape({
-                    label: PropTypes.string,
-                    name: PropTypes.string.isRequired,
-                    options: PropTypes.shape({
-                        display: PropTypes.oneOf([
-                            'true',
-                            'false',
-                            'excluded',
-                            'always',
-                            true,
-                            false
-                        ]),
-                        empty: PropTypes.bool,
-                        filter: PropTypes.bool,
-                        sort: PropTypes.bool,
-                        print: PropTypes.bool,
-                        searchable: PropTypes.bool,
-                        download: PropTypes.bool,
-                        viewColumns: PropTypes.bool,
-                        filterList: PropTypes.array,
-                        filterOptions: PropTypes.oneOfType([
-                            PropTypes.array,
-                            PropTypes.shape({
-                                names: PropTypes.array,
-                                logic: PropTypes.func,
-                                display: PropTypes.func
-                            })
-                        ]),
-                        filterType: PropTypes.oneOf([
-                            'dropdown',
-                            'checkbox',
-                            'multiselect',
-                            'textField',
-                            'custom'
-                        ]),
-                        customHeadRender: PropTypes.func,
-                        customBodyRender: PropTypes.func,
-                        customBodyRenderLite: PropTypes.func,
-                        customHeadLabelRender: PropTypes.func,
-                        customFilterListOptions: PropTypes.oneOfType([
-                            PropTypes.shape({
-                                render: PropTypes.func,
-                                update: PropTypes.func
-                            })
-                        ]),
-                        customFilterListRender: PropTypes.func,
-                        setCellProps: PropTypes.func,
-                        setCellHeaderProps: PropTypes.func,
-                        sortThirdClickReset: PropTypes.bool,
-                        sortDescFirst: PropTypes.bool
-                    })
-                })
-            ])
-        ).isRequired,
-        /** Options used to describe table */
-        options: PropTypes.shape({
-            caseSensitive: PropTypes.bool,
-            columnOrder: PropTypes.array,
-            count: PropTypes.number,
-            confirmFilters: PropTypes.bool,
-            consoleWarnings: PropTypes.bool,
-            customFilterDialogFooter: PropTypes.func,
-            customFooter: PropTypes.oneOfType([
-                PropTypes.func,
-                PropTypes.element
-            ]),
-            customRowRender: PropTypes.func,
-            customSearch: PropTypes.func,
-            customSearchRender: PropTypes.oneOfType([
-                PropTypes.func,
-                PropTypes.element
-            ]),
-            customSort: PropTypes.func,
-            customToolbar: PropTypes.oneOfType([
-                PropTypes.func,
-                PropTypes.element
-            ]),
-            customToolbarSelect: PropTypes.oneOfType([
-                PropTypes.func,
-                PropTypes.element
-            ]),
-            draggableColumns: PropTypes.object,
-            enableNestedDataAccess: PropTypes.string,
-            expandableRows: PropTypes.bool,
-            expandableRowsHeader: PropTypes.bool,
-            expandableRowsOnClick: PropTypes.bool,
-            disableToolbarSelect: PropTypes.bool,
-            download: PropTypes.oneOf([
-                true,
-                false,
-                'true',
-                'false',
-                'disabled'
-            ]),
-            downloadOptions: PropTypes.shape({
-                filename: PropTypes.string,
-                separator: PropTypes.string,
-                filterOptions: PropTypes.shape({
-                    useDisplayedColumnsOnly: PropTypes.bool,
-                    useDisplayedRowsOnly: PropTypes.bool
-                })
-            }),
-            filter: PropTypes.oneOf([true, false, 'true', 'false', 'disabled']),
-            filterArrayFullMatch: PropTypes.bool,
-            filterType: PropTypes.oneOf([
-                'dropdown',
-                'checkbox',
-                'multiselect',
-                'textField',
-                'custom'
-            ]),
-            fixedHeader: PropTypes.bool,
-            fixedSelectColumn: PropTypes.bool,
-            getTextLabels: PropTypes.func,
-            isRowExpandable: PropTypes.func,
-            isRowSelectable: PropTypes.func,
-            jumpToPage: PropTypes.bool,
-            onDownload: PropTypes.func,
-            onFilterChange: PropTypes.func,
-            onFilterChipClose: PropTypes.func,
-            onFilterConfirm: PropTypes.func,
-            onFilterDialogOpen: PropTypes.func,
-            onFilterDialogClose: PropTypes.func,
-            onRowClick: PropTypes.func,
-            onRowsExpand: PropTypes.func,
-            onRowExpansionChange: PropTypes.func,
-            onRowsSelect: PropTypes.func,
-            onRowSelectionChange: PropTypes.func,
-            onTableChange: PropTypes.func,
-            onTableInit: PropTypes.func,
-            page: PropTypes.number,
-            pagination: PropTypes.bool,
-            print: PropTypes.oneOf([true, false, 'true', 'false', 'disabled']),
-            searchProps: PropTypes.object,
-            selectableRows: PropTypes.oneOfType([
-                PropTypes.bool,
-                PropTypes.oneOf(['none', 'single', 'multiple'])
-            ]),
-            selectableRowsHeader: PropTypes.bool,
-            selectableRowsHideCheckboxes: PropTypes.bool,
-            selectableRowsOnClick: PropTypes.bool,
-            serverSide: PropTypes.bool,
-            tableId: PropTypes.string,
-            tableBodyHeight: PropTypes.string,
-            tableBodyMaxHeight: PropTypes.string,
-            renderExpandableRow: PropTypes.func,
-            resizableColumns: PropTypes.oneOfType([
-                PropTypes.bool,
-                PropTypes.object
-            ]),
-            responsive: PropTypes.oneOf([
-                'standard',
-                'vertical',
-                'verticalAlways',
-                'simple'
-            ]),
-            rowHover: PropTypes.bool,
-            rowsExpanded: PropTypes.array,
-            rowsPerPage: PropTypes.number,
-            rowsPerPageOptions: PropTypes.array,
-            rowsSelected: PropTypes.array,
-            search: PropTypes.oneOf([true, false, 'true', 'false', 'disabled']),
-            searchOpen: PropTypes.bool,
-            searchAlwaysOpen: PropTypes.bool,
-            searchPlaceholder: PropTypes.string,
-            searchText: PropTypes.string,
-            setFilterChipProps: PropTypes.func,
-            setRowProps: PropTypes.func,
-            selectToolbarPlacement: PropTypes.oneOfType([
-                PropTypes.bool,
-                PropTypes.oneOf([STP.REPLACE, STP.ABOVE, STP.NONE, STP.ALWAYS])
-            ]),
-            setTableProps: PropTypes.func,
-            sort: PropTypes.bool,
-            sortOrder: PropTypes.object,
-            storageKey: PropTypes.string,
-            viewColumns: PropTypes.oneOf([
-                true,
-                false,
-                'true',
-                'false',
-                'disabled'
-            ])
-        }),
-        /** Pass and use className to style MUIDataTable as desired */
-        className: PropTypes.string,
-        components: PropTypes.objectOf(PropTypes.any)
-    }
-
-    constructor(props) {
+    constructor(props: DataTableProps) {
         super(props)
 
         this.tableRef = React.createRef()
@@ -370,53 +155,27 @@ class MUIDataTableClass extends React.Component {
         this.draggableHeadCellRefs = {}
         this.resizeHeadCellRefs = {}
         this.timers = {}
-        this.setHeadResizeable = () => {}
+        this.setHeadResizable = () => {}
         this.updateDividers = () => {}
 
-        let defaultState = {
-            activeColumn: null,
-            announceText: null,
-            count: 0,
-            columns: [],
-            expandedRows: {
-                data: [],
-                lookup: {}
-            },
-            data: [],
-            displayData: [],
-            filterData: [],
-            filterList: [],
-            page: 0,
-            previousSelectedRow: null,
-            rowsPerPage: 10,
-            searchProps: {},
-            searchText: null,
-            selectedRows: {
-                data: [],
-                lookup: {}
-            },
-            showResponsive: false,
-            sortOrder: {}
-        }
-
-        this.mergeDefaultOptions(props)
+        this.options = getConstructedOption(props?.options)
 
         const restoredState = props.options?.storageKey
             ? load(props.options.storageKey)
             : undefined
 
-        this.state = Object.assign(
-            defaultState,
-            restoredState ? restoredState : this.getInitTableOptions()
-        )
+        this.state = {
+            ...DEFAULT_STATE,
+            ...(restoredState ?? this.getInitTableOptions())
+        }
 
         this.setTableData = this.setTableData.bind(this)
 
-        this.setTableData(props, TABLE_LOAD.INITIAL, true, null, true)
+        this.setTableData(props, TABLE_LOAD.INITIAL, true, () => {}, true)
     }
 
     componentDidMount() {
-        this.setHeadResizeable(this.resizeHeadCellRefs, this.tableRef)
+        this.setHeadResizable(this.resizeHeadCellRefs, this.tableRef)
 
         // When we have a search, we must reset page to view it unless on serverSide since paging is handled by the user.
         if (this.props.options?.searchText && !this.props.options?.serverSide)
@@ -425,7 +184,7 @@ class MUIDataTableClass extends React.Component {
         this.setTableInit('tableInitialized')
     }
 
-    componentDidUpdate(prevProps) {
+    componentDidUpdate(prevProps: DataTableProps) {
         if (
             this.props.data !== prevProps.data ||
             this.props.columns !== prevProps.columns ||
@@ -463,12 +222,12 @@ class MUIDataTableClass extends React.Component {
             (this.options.resizableColumns &&
                 this.options.resizableColumns.enabled)
         ) {
-            this.setHeadResizeable(this.resizeHeadCellRefs, this.tableRef)
+            this.setHeadResizable(this.resizeHeadCellRefs, this.tableRef)
             this.updateDividers()
         }
     }
 
-    updateOptions(options, props) {
+    updateOptions(options: DataTableOptions, props: DataTableProps) {
         // set backwards compatibility options
         if (
             props.options?.disableToolbarSelect === true &&
@@ -497,174 +256,10 @@ class MUIDataTableClass extends React.Component {
             }
         }
 
-        this.handleOptionDeprecation(props)
+        handleOptionDeprecation(props)
     }
 
-    getDefaultOptions = () => ({
-        caseSensitive: false,
-        consoleWarnings: true,
-        disableToolbarSelect: false,
-        download: true,
-        downloadOptions: {
-            filename: 'tableDownload.csv', // WILL REMOVE THIS LATER, DEFAULT VALUE HAS BEEN HANDLED BY `createCSVDownload` FUNCTION
-            separator: ',' // WILL REMOVE THIS LATER, DEFAULT VALUE HAS BEEN HANDLED BY `createCSVDownload` FUNCTION
-        },
-        draggableColumns: {
-            enabled: false,
-            transitionTime: 300
-        },
-        elevation: 4,
-        enableNestedDataAccess: '',
-        expandableRows: false,
-        expandableRowsHeader: true,
-        expandableRowsOnClick: false,
-        filter: true,
-        filterArrayFullMatch: true,
-        filterType: 'dropdown',
-        fixedHeader: true,
-        fixedSelectColumn: true,
-        pagination: true,
-        print: true,
-        resizableColumns: false,
-        responsive: 'vertical',
-        rowHover: true,
-        rowsPerPage: 10,
-        rowsPerPageOptions: [10, 20, 50, 100],
-        search: true,
-        selectableRows: 'multiple',
-        selectableRowsHideCheckboxes: false,
-        selectableRowsOnClick: false,
-        selectableRowsHeader: true,
-        serverSide: false,
-        serverSideFilterList: null,
-        setTableProps: () => ({}),
-        sort: true,
-        sortFilterList: true,
-        tableBodyHeight: 'auto',
-        tableBodyMaxHeight: null, // if set, it will override tableBodyHeight
-        sortOrder: {},
-        textLabels: TEXT_LABELS,
-        viewColumns: true,
-        selectToolbarPlacement: STP.REPLACE
-    })
-
-    warnDep = msg => {
-        warnDeprecated(msg, this.options.consoleWarnings)
-    }
-
-    warnInfo = msg => {
-        warnInfo(msg, this.options.consoleWarnings)
-    }
-
-    handleOptionDeprecation = props => {
-        if (typeof this.options.selectableRows === 'boolean') {
-            this.warnDep(
-                'Using a boolean for selectableRows has been deprecated. Please use string option: multiple | single | none'
-            )
-            this.options.selectableRows = this.options.selectableRows
-                ? 'multiple'
-                : 'none'
-        }
-        if (
-            ['standard', 'vertical', 'verticalAlways', 'simple'].indexOf(
-                this.options.responsive
-            ) === -1
-        ) {
-            if (
-                [
-                    'scrollMaxHeight',
-                    'scrollFullHeight',
-                    'stacked',
-                    'stackedFullWidth',
-                    'scrollFullHeightFullWidth',
-                    'scroll'
-                ].indexOf(this.options.responsive) !== -1
-            ) {
-                this.warnDep(
-                    this.options.responsive +
-                        ' has been deprecated, but will still work in version 3.x. Please use string option: standard | vertical | simple. More info: https://github.com/gregnb/mui-datatables/tree/master/docs/v2_to_v3_guide.md'
-                )
-            } else {
-                this.warnInfo(
-                    this.options.responsive +
-                        ' is not recognized as a valid input for responsive option. Please use string option: standard | vertical | simple. More info: https://github.com/gregnb/mui-datatables/tree/master/docs/v2_to_v3_guide.md'
-                )
-            }
-        }
-        if (this.options.onRowsSelect) {
-            this.warnDep(
-                'onRowsSelect has been renamed onRowSelectionChange. More info: https://github.com/gregnb/mui-datatables/tree/master/docs/v2_to_v3_guide.md'
-            )
-        }
-        if (this.options.onRowsExpand) {
-            this.warnDep(
-                'onRowsExpand has been renamed onRowExpansionChange. More info: https://github.com/gregnb/mui-datatables/tree/master/docs/v2_to_v3_guide.md'
-            )
-        }
-        if (this.options.fixedHeaderOptions) {
-            if (
-                typeof this.options.fixedHeaderOptions.yAxis !== 'undefined' &&
-                typeof this.options.fixedHeader === 'undefined'
-            ) {
-                this.options.fixedHeader = this.options.fixedHeaderOptions.yAxis
-            }
-            if (
-                typeof this.options.fixedHeaderOptions.xAxis !== 'undefined' &&
-                typeof this.options.fixedSelectColumn === 'undefined'
-            ) {
-                this.options.fixedSelectColumn =
-                    this.options.fixedHeaderOptions.xAxis
-            }
-            this.warnDep(
-                'fixedHeaderOptions will still work but has been deprecated in favor of fixedHeader and fixedSelectColumn. More info: https://github.com/gregnb/mui-datatables/tree/master/docs/v2_to_v3_guide.md'
-            )
-        }
-        if (this.options.serverSideFilterList) {
-            this.warnDep(
-                'serverSideFilterList will still work but has been deprecated in favor of the confirmFilters option. See this example for details: https://github.com/gregnb/mui-datatables/blob/master/examples/serverside-filters/index.js More info here: https://github.com/gregnb/mui-datatables/tree/master/docs/v2_to_v3_guide.md'
-            )
-        }
-
-        props.columns.map(c => {
-            if (c.options && c.options.customFilterListRender) {
-                this.warnDep(
-                    'The customFilterListRender option has been deprecated. It is being replaced by customFilterListOptions.render (Specify customFilterListOptions: { render: Function } in column options.)'
-                )
-            }
-        })
-
-        if (this.options.disableToolbarSelect === true) {
-            this.warnDep(
-                'disableToolbarSelect has been deprecated but will still work in version 3.x. It is being replaced by "selectToolbarPlacement"="none". More info: https://github.com/gregnb/mui-datatables/tree/master/docs/v2_to_v3_guide.md'
-            )
-        }
-
-        // only give this warning message in newer browsers
-        if (Object.values) {
-            if (
-                Object.values(STP).indexOf(
-                    this.options.selectToolbarPlacement
-                ) === -1
-            ) {
-                this.warnDep(
-                    'Invalid option value for selectToolbarPlacement. Please check the documentation: https://github.com/gregnb/mui-datatables#options'
-                )
-            }
-        }
-    }
-
-    /*
-     * React currently does not support deep merge for defaultProps. Objects are overwritten
-     */
-    mergeDefaultOptions(props) {
-        const defaultOptions = this.getDefaultOptions()
-        const theProps = Object.assign({}, props)
-        theProps.options = theProps.options ?? {}
-
-        this.updateOptions(defaultOptions, theProps)
-    }
-
-    validateOptions(options) {
+    validateOptions(options: DataTableOptions) {
         if (options.serverSide && options.onTableChange === undefined) {
             throw Error(
                 'onTableChange callback must be provided when using serverSide option'
@@ -689,7 +284,7 @@ class MUIDataTableClass extends React.Component {
         }
     }
 
-    setTableAction = action => {
+    setTableAction = (action: string) => {
         if (this.options?.onTableChange) {
             this.options.onTableChange(action, this.state)
         }
@@ -699,7 +294,7 @@ class MUIDataTableClass extends React.Component {
         }
     }
 
-    setTableInit = action => {
+    setTableInit = (action: string) => {
         if (this.options?.onTableInit) {
             this.options.onTableInit(action, this.state)
         }
@@ -780,7 +375,7 @@ class MUIDataTableClass extends React.Component {
                         options.sortDirection === null ||
                         options.sortDirection
                     ) {
-                        this.warnDep(
+                        warnDeprecated(
                             'The sortDirection column field has been deprecated. Please use the sortOrder option on the options object. More info: https://github.com/gregnb/mui-datatables/tree/master/docs/v2_to_v3_guide.md'
                         )
                     }
@@ -837,13 +432,14 @@ class MUIDataTableClass extends React.Component {
     }
 
     setTableData(
-        props,
-        status,
-        dataUpdated,
-        callback = () => {},
-        fromConstructor = false
+        props: DataTableProps,
+        status: TABLE_LOAD,
+        dataUpdated: boolean,
+        callback: () => void = () => {},
+        fromConstructor: boolean = false
     ) {
         let tableData = []
+
         let { columns, filterData, filterList, columnOrder } =
             this.buildColumns(
                 props.columns,
@@ -993,7 +589,7 @@ class MUIDataTableClass extends React.Component {
             if (column.filterOptions) {
                 if (Array.isArray(column.filterOptions)) {
                     filterData[colIndex] = cloneDeep(column.filterOptions)
-                    this.warnDep(
+                    warnDeprecated(
                         'filterOptions must now be an object. see https://github.com/gregnb/mui-datatables/tree/master/examples/customize-filter example'
                     )
                 } else if (Array.isArray(column.filterOptions.names)) {
@@ -1336,7 +932,11 @@ class MUIDataTableClass extends React.Component {
         else return displayRow
     }
 
-    hasSearchText = (toSearch, toFind, caseSensitive) => {
+    hasSearchText = (
+        toSearch: string,
+        toFind: string,
+        caseSensitive: boolean
+    ) => {
         let stack = toSearch.toString()
         let needle = toFind.toString()
 
@@ -1348,7 +948,7 @@ class MUIDataTableClass extends React.Component {
         return stack.indexOf(needle) >= 0
     }
 
-    updateDataCol = (row, index, value) => {
+    updateDataCol = (row, index: number, value) => {
         this.setState(prevState => {
             let changedData = cloneDeep(prevState.data)
             let filterData = cloneDeep(prevState.filterData)
@@ -1398,8 +998,8 @@ class MUIDataTableClass extends React.Component {
     }
 
     getTableMeta = (
-        rowIndex,
-        colIndex,
+        rowIndex: number,
+        colIndex: number,
         rowData,
         columnData,
         tableData,
@@ -1448,10 +1048,10 @@ class MUIDataTableClass extends React.Component {
         return newRows
     }
 
-    toggleViewColumn = index => {
+    toggleViewColumn = (index: number) => {
         this.setState(
             ({ columns }) => {
-                const cols = cloneDeep(columns)
+                const cols = cloneDeep(columns) as typeof columns
 
                 cols[index].display =
                     cols[index].display === 'true' ? 'false' : 'true'
@@ -1498,7 +1098,7 @@ class MUIDataTableClass extends React.Component {
         )
     }
 
-    toggleSortColumn = index => {
+    toggleSortColumn = (index: number) => {
         this.setState(
             prevState => {
                 let columns = cloneDeep(prevState.columns)
@@ -1619,13 +1219,14 @@ class MUIDataTableClass extends React.Component {
         )
     }
 
-    changePage = page => {
+    changePage = (page: number) => {
         this.setState(
             () => ({
                 page: page
             }),
             () => {
                 this.setTableAction('changePage')
+
                 if (this.options.onChangePage) {
                     this.options.onChangePage(this.state.page)
                 }
@@ -1657,7 +1258,7 @@ class MUIDataTableClass extends React.Component {
         )
     }
 
-    searchTextUpdate = text => {
+    searchTextUpdate = (text: string) => {
         this.setState(
             prevState => ({
                 searchText: text && text.length ? text : null,
@@ -1715,8 +1316,14 @@ class MUIDataTableClass extends React.Component {
         )
     }
 
-    updateFilterByType = (filterList, index, value, type, customUpdate) => {
-        const filterPos = filterList[index].findIndex(
+    updateFilterByType = (
+        filterList,
+        index: number,
+        value,
+        type: DataTableOptions['filterType'],
+        customUpdate: (filterList, filterPos: number, index: number) => void
+    ) => {
+        const filterPos: number = filterList[index].findIndex(
             filter => filter === value
         )
 
@@ -1750,7 +1357,14 @@ class MUIDataTableClass extends React.Component {
         }
     }
 
-    filterUpdate = (index, value, column, type, customUpdate, next) => {
+    filterUpdate = (
+        index: number,
+        value,
+        column,
+        type: DataTableOptions['filterType'],
+        customUpdate: () => void,
+        next: (filterList) => void
+    ) => {
         this.setState(
             prevState => {
                 const filterList = cloneDeep(prevState.filterList)
@@ -1863,7 +1477,11 @@ class MUIDataTableClass extends React.Component {
         return this.state.expandedRows.data.length === this.state.data.length
     }
 
-    updateColumnOrder = (columnOrder, columnIndex, newPosition) => {
+    updateColumnOrder = (
+        columnOrder: number[],
+        columnIndex: number,
+        newPosition: number
+    ) => {
         this.setState(
             () => {
                 return {
@@ -2251,10 +1869,10 @@ class MUIDataTableClass extends React.Component {
                 TableHead,
                 TableResize,
                 TableToolbar,
-                TableToolbarSelect,
-                DragDropBackend = HTML5Backend
+                TableToolbarSelect
             }
         } = this.props
+
         const {
             announceText,
             activeColumn,
@@ -2276,7 +1894,7 @@ class MUIDataTableClass extends React.Component {
         const rowsPerPage = this.options.pagination
             ? this.state.rowsPerPage
             : displayData.length
-        const showToolbar = hasToolbarItem(this.options, title)
+        const showToolbar = hasToolbarItem(this.options)
         const columnNames = columns.map(column => ({
             name: column.name,
             filterType: column.filterType ?? this.options.filterType
@@ -2325,17 +1943,15 @@ class MUIDataTableClass extends React.Component {
                 break
         }
 
-        var tableHeightVal = {}
-        if (maxHeight) {
-            tableHeightVal.maxHeight = maxHeight
-        }
-        if (this.options.tableBodyHeight) {
-            tableHeightVal.height = this.options.tableBodyHeight
+        const tableHeightVal = {
+            maxHeight: maxHeight,
+            height: this.options.tableBodyHeight
         }
 
         const tableProps = this.options.setTableProps
             ? (this.options.setTableProps() ?? {})
             : {}
+
         const tableClassNames = clsx(classes.tableRoot, tableProps.className)
         delete tableProps.className // remove className from props to avoid the className being applied twice
 
@@ -2416,106 +2032,51 @@ class MUIDataTableClass extends React.Component {
                     filterUpdate={this.filterUpdate}
                     columnNames={columnNames}
                 />
-                <div
-                    style={{ position: 'relative', ...tableHeightVal }}
-                    className={responsiveClass}
-                >
-                    {(this.options.resizableColumns === true ||
-                        (this.options.resizableColumns &&
-                            this.options.resizableColumns.enabled)) && (
-                        <TableResize
-                            key={rowCount}
-                            columnOrder={columnOrder}
-                            updateDividers={fn => (this.updateDividers = fn)}
-                            setResizeable={fn => (this.setHeadResizeable = fn)}
-                            options={this.props.options}
-                            tableId={this.options.tableId}
-                        />
-                    )}
-                    {(() => {
-                        const components = (
-                            <MuiTable
-                                ref={el => (this.tableRef = el)}
-                                tabIndex="0"
-                                role="grid"
-                                className={tableClassNames}
-                                {...tableProps}
-                            >
-                                <caption className={classes.caption}>
-                                    {title}
-                                </caption>
-                                <TableHead
-                                    columns={columns}
-                                    activeColumn={activeColumn}
-                                    data={displayData}
-                                    count={rowCount}
-                                    page={page}
-                                    rowsPerPage={rowsPerPage}
-                                    selectedRows={selectedRows}
-                                    selectRowUpdate={this.selectRowUpdate}
-                                    toggleSort={this.toggleSortColumn}
-                                    setCellRef={this.setHeadCellRef}
-                                    expandedRows={expandedRows}
-                                    areAllRowsExpanded={this.areAllRowsExpanded}
-                                    toggleAllExpandableRows={
-                                        this.toggleAllExpandableRows
-                                    }
-                                    options={this.options}
-                                    sortOrder={sortOrder}
-                                    columnOrder={columnOrder}
-                                    updateColumnOrder={this.updateColumnOrder}
-                                    draggableHeadCellRefs={
-                                        this.draggableHeadCellRefs
-                                    }
-                                    tableRef={this.getTableContentRef}
-                                    tableId={this.options.tableId}
-                                    timers={this.timers}
-                                    components={this.props.components}
-                                />
 
-                                <TableBody
-                                    data={displayData}
-                                    count={rowCount}
-                                    columns={columns}
-                                    page={page}
-                                    rowsPerPage={rowsPerPage}
-                                    selectedRows={selectedRows}
-                                    selectRowUpdate={this.selectRowUpdate}
-                                    previousSelectedRow={previousSelectedRow}
-                                    expandedRows={expandedRows}
-                                    toggleExpandRow={this.toggleExpandRow}
-                                    options={this.options}
-                                    columnOrder={columnOrder}
-                                    filterList={filterList}
-                                    components={this.props.components}
-                                    tableId={this.options.tableId}
-                                />
-                                {this.options.customTableBodyFooterRender
-                                    ? this.options.customTableBodyFooterRender({
-                                          data: displayData,
-                                          count: rowCount,
-                                          columns,
-                                          selectedRows,
-                                          selectableRows:
-                                              this.options.selectableRows
-                                      })
-                                    : null}
-                            </MuiTable>
-                        )
-                        if (DragDropBackend) {
-                            return (
-                                <DndProvider
-                                    backend={DragDropBackend}
-                                    {...dndProps}
-                                >
-                                    {components}
-                                </DndProvider>
-                            )
-                        }
-
-                        return components
-                    })()}
-                </div>
+                <RenderInnerTable
+                    // new var
+                    components={{
+                        TableHead: TableHead,
+                        TableResize: TableResize,
+                        TableBody: TableBody
+                    }}
+                    // new this
+                    forwardUpdateDividers={fn => (this.updateDividers = fn)}
+                    forwardSetHeadResizable={fn => (this.setHeadResizable = fn)}
+                    // var section
+                    rowCount={rowCount}
+                    columnOrder={columnOrder}
+                    tableClassNames={tableClassNames}
+                    tableProps={tableProps}
+                    title={title}
+                    tableHeightVal={tableHeightVal}
+                    responsiveClass={responsiveClass}
+                    filterList={filterList}
+                    columns={columns}
+                    activeColumn={activeColumn}
+                    displayData={displayData}
+                    page={page}
+                    rowsPerPage={rowsPerPage}
+                    selectedRows={selectedRows}
+                    expandedRows={expandedRows}
+                    sortOrder={sortOrder}
+                    dndProps={dndProps}
+                    previousSelectedRow={previousSelectedRow}
+                    // this section
+                    tableRef={this.tableRef}
+                    options={this.options}
+                    selectRowUpdate={this.selectRowUpdate}
+                    props={this.props}
+                    toggleSortColumn={this.toggleSortColumn}
+                    setHeadCellRef={this.setHeadCellRef}
+                    areAllRowsExpanded={this.areAllRowsExpanded}
+                    toggleAllExpandableRows={this.toggleAllExpandableRows}
+                    updateColumnOrder={this.updateColumnOrder}
+                    draggableHeadCellRefs={this.draggableHeadCellRefs}
+                    getTableContentRef={this.getTableContentRef}
+                    timers={this.timers}
+                    toggleExpandRow={this.toggleExpandRow}
+                />
 
                 <TableFooter
                     options={this.options}
@@ -2532,4 +2093,387 @@ class MUIDataTableClass extends React.Component {
             </Paper>
         )
     }
+}
+
+// Select Toolbar Placement options
+enum STP {
+    REPLACE = 'replace',
+    ABOVE = 'above',
+    NONE = 'none',
+    ALWAYS = 'always'
+}
+
+enum TABLE_LOAD {
+    INITIAL = 1,
+    UPDATE = 2
+}
+
+const DEFAULT_OPTIONS: Required<DataTableOptions> = {
+    caseSensitive: false,
+    disableToolbarSelect: false,
+    download: true,
+    downloadOptions: {
+        filename: 'tableDownload.csv', // WILL REMOVE THIS LATER, DEFAULT VALUE HAS BEEN HANDLED BY `createCSVDownload` FUNCTION
+        separator: ',' // WILL REMOVE THIS LATER, DEFAULT VALUE HAS BEEN HANDLED BY `createCSVDownload` FUNCTION
+    },
+    draggableColumns: {
+        enabled: false,
+        transitionTime: 300
+    },
+    elevation: 4,
+    enableNestedDataAccess: '',
+    expandableRows: false,
+    expandableRowsHeader: true,
+    expandableRowsOnClick: false,
+    filter: true,
+    filterArrayFullMatch: true,
+    filterType: 'dropdown',
+    fixedHeader: true,
+    fixedSelectColumn: true,
+    pagination: true,
+    print: true,
+    resizableColumns: false,
+    responsive: 'vertical',
+    rowHover: true,
+    rowsPerPage: 10,
+    rowsPerPageOptions: [10, 20, 50, 100],
+    search: true,
+    selectableRows: 'multiple',
+    selectableRowsHideCheckboxes: false,
+    selectableRowsOnClick: false,
+    selectableRowsHeader: true,
+    serverSide: false,
+    serverSideFilterList: null,
+    setTableProps: () => ({}),
+    sort: true,
+    sortFilterList: true,
+    tableBodyHeight: 'auto',
+    tableBodyMaxHeight: null, // if set, it will override tableBodyHeight
+    sortOrder: {},
+    textLabels: TEXT_LABELS,
+    viewColumns: true,
+    selectToolbarPlacement: STP.REPLACE
+}
+
+const DEFAULT_STATE: MUIDataTableState = {
+    activeColumn: null,
+    announceText: null,
+    count: 0,
+    columns: [],
+    expandedRows: {
+        data: [],
+        lookup: {}
+    },
+    data: [],
+    displayData: [],
+    filterData: [],
+    filterList: [],
+    page: 0,
+    previousSelectedRow: null,
+    rowsPerPage: 10,
+    searchProps: {},
+    searchText: null,
+    selectedRows: {
+        data: [],
+        lookup: {}
+    },
+    showResponsive: false,
+
+    columnOrder: [0],
+    rowsPerPageOptions: DEFAULT_OPTIONS.rowsPerPageOptions,
+    sortOrder: undefined
+}
+
+function getConstructedOption(
+    optionsFromProp: DataTableProps['options']
+): DataTableOptions {
+    return {
+        ...DEFAULT_OPTIONS,
+        ...(optionsFromProp ?? {}),
+        textLabels: {
+            ...DEFAULT_OPTIONS.textLabels,
+            ...optionsFromProp?.textLabels
+        },
+        downloadOptions: {
+            ...DEFAULT_OPTIONS.downloadOptions,
+            ...optionsFromProp?.downloadOptions
+        }
+    }
+}
+
+function hasToolbarItem(options: DataTableOptions) {
+    // Populate this list with anything that might render in the toolbar to determine if we hide the toolbar
+    const TOOLBAR_ITEMS = [
+        'title',
+        'filter',
+        'search',
+        'print',
+        'download',
+        'viewColumns',
+        'customToolbar'
+    ]
+
+    return TOOLBAR_ITEMS.some(itemName => options[itemName])
+}
+
+function handleOptionDeprecation(
+    props: DataTableProps,
+    options: DataTableOptions
+) {
+    if (typeof options?.selectableRows === 'boolean') {
+        warnDeprecated(
+            'Using a boolean for selectableRows has been deprecated. Please use string option: multiple | single | none'
+        )
+
+        options.selectableRows = options.selectableRows ? 'multiple' : 'none'
+    }
+
+    if (
+        options?.responsive !== undefined &&
+        ['standard', 'vertical', 'verticalAlways', 'simple'].indexOf(
+            options.responsive
+        ) === -1
+    ) {
+        if (
+            [
+                'scrollMaxHeight',
+                'scrollFullHeight',
+                'stacked',
+                'stackedFullWidth',
+                'scrollFullHeightFullWidth',
+                'scroll'
+            ].indexOf(options.responsive) !== -1
+        ) {
+            warnDeprecated(
+                options.responsive +
+                    ' has been deprecated, but will still work in version 3.x. Please use string option: standard | vertical | simple. More info: https://github.com/gregnb/mui-datatables/tree/master/docs/v2_to_v3_guide.md'
+            )
+        } else {
+            warnInfo(
+                options.responsive +
+                    ' is not recognized as a valid input for responsive option. Please use string option: standard | vertical | simple. More info: https://github.com/gregnb/mui-datatables/tree/master/docs/v2_to_v3_guide.md'
+            )
+        }
+    }
+
+    if (options?.onRowsSelect) {
+        warnDeprecated(
+            'onRowsSelect has been renamed onRowSelectionChange. More info: https://github.com/gregnb/mui-datatables/tree/master/docs/v2_to_v3_guide.md'
+        )
+    }
+
+    if (options?.onRowsExpand) {
+        warnDeprecated(
+            'onRowsExpand has been renamed onRowExpansionChange. More info: https://github.com/gregnb/mui-datatables/tree/master/docs/v2_to_v3_guide.md'
+        )
+    }
+
+    if (options?.fixedHeaderOptions) {
+        if (
+            typeof options.fixedHeaderOptions.yAxis !== 'undefined' &&
+            typeof options.fixedHeader === 'undefined'
+        ) {
+            options.fixedHeader = options.fixedHeaderOptions.yAxis
+        }
+        if (
+            typeof options.fixedHeaderOptions.xAxis !== 'undefined' &&
+            typeof options.fixedSelectColumn === 'undefined'
+        ) {
+            options.fixedSelectColumn = options.fixedHeaderOptions.xAxis
+        }
+        warnDeprecated(
+            'fixedHeaderOptions will still work but has been deprecated in favor of fixedHeader and fixedSelectColumn. More info: https://github.com/gregnb/mui-datatables/tree/master/docs/v2_to_v3_guide.md'
+        )
+    }
+
+    if (options?.serverSideFilterList) {
+        warnDeprecated(
+            'serverSideFilterList will still work but has been deprecated in favor of the confirmFilters option. See this example for details: https://github.com/gregnb/mui-datatables/blob/master/examples/serverside-filters/index.js More info here: https://github.com/gregnb/mui-datatables/tree/master/docs/v2_to_v3_guide.md'
+        )
+    }
+
+    props.columns.map(c => {
+        if (c.options && c.options.customFilterListRender) {
+            warnDeprecated(
+                'The customFilterListRender option has been deprecated. It is being replaced by customFilterListOptions.render (Specify customFilterListOptions: { render: Function } in column options.)'
+            )
+        }
+    })
+
+    if (options?.disableToolbarSelect === true) {
+        warnDeprecated(
+            'disableToolbarSelect has been deprecated but will still work in version 3.x. It is being replaced by "selectToolbarPlacement"="none". More info: https://github.com/gregnb/mui-datatables/tree/master/docs/v2_to_v3_guide.md'
+        )
+    }
+
+    // only give this warning message in newer browsers
+    if (Object.values) {
+        if (
+            options?.selectToolbarPlacement &&
+            Object.values(STP).indexOf(options.selectToolbarPlacement) === -1
+        ) {
+            warnDeprecated(
+                'Invalid option value for selectToolbarPlacement. Please check the documentation: https://github.com/gregnb/mui-datatables#options'
+            )
+        }
+    }
+}
+
+function RenderInnerTable({
+    // new this
+    forwardUpdateDividers,
+    forwardSetHeadResizable,
+    // new var
+    components: { TableHead, TableResize, TableBody },
+    // var section
+    rowCount,
+    columnOrder,
+    tableClassNames,
+    tableProps,
+    title,
+    tableHeightVal,
+    responsiveClass,
+    filterList,
+    columns,
+    activeColumn,
+    displayData,
+    page,
+    rowsPerPage,
+    selectedRows,
+    expandedRows,
+    sortOrder,
+    dndProps,
+    previousSelectedRow,
+    // this sections
+    tableRef,
+    options,
+    selectRowUpdate,
+    props,
+    toggleSortColumn,
+    setHeadCellRef,
+    areAllRowsExpanded,
+    toggleAllExpandableRows,
+    updateColumnOrder,
+    draggableHeadCellRefs,
+    getTableContentRef,
+    timers,
+    toggleExpandRow
+}: {
+    // new this
+    forwardUpdateDividers: (fn: () => void) => void
+    forwardSetHeadResizable: (fn: () => void) => void
+    // new variable
+    components: {
+        TableHead: () => ReactNode
+        TableResize: () => ReactNode
+        TableBody: () => ReactNode
+    }
+    // variables
+    rowCount: number
+    columnOrder: number[]
+    tableHeightVal: {
+        maxHeight?: string
+        height?: string
+    }
+    title: DataTableProps['title']
+    options: DataTableOptions
+    responsiveClass: HTMLDivElement['className']
+    classes: {}
+    // this
+    tableRef: React.Ref<HTMLTableElement>
+
+    tableClassNames: string
+    tableProps: TableProps
+}) {
+    const isRenderTableResize =
+        options.resizableColumns === true ||
+        (options.resizableColumns && options.resizableColumns.enabled)
+
+    return (
+        <div
+            style={{ position: 'relative', ...tableHeightVal }}
+            className={responsiveClass}
+        >
+            {isRenderTableResize && (
+                <TableResize
+                    key={rowCount}
+                    columnOrder={columnOrder}
+                    updateDividers={forwardUpdateDividers}
+                    setResizeable={forwardSetHeadResizable}
+                    options={options}
+                    tableId={options.tableId}
+                />
+            )}
+
+            <DndProvider backend={HTML5Backend} {...dndProps}>
+                <MuiTable
+                    ref={tableRef}
+                    tabIndex={0}
+                    role="grid"
+                    className={tableClassNames}
+                    {...tableProps}
+                >
+                    <caption
+                        style={{
+                            position: 'absolute',
+                            left: '-3000px'
+                        }}
+                    >
+                        {title}
+                    </caption>
+
+                    <TableHead
+                        columns={columns}
+                        activeColumn={activeColumn}
+                        data={displayData}
+                        count={rowCount}
+                        page={page}
+                        rowsPerPage={rowsPerPage}
+                        selectedRows={selectedRows}
+                        selectRowUpdate={selectRowUpdate}
+                        toggleSort={toggleSortColumn}
+                        setCellRef={setHeadCellRef}
+                        expandedRows={expandedRows}
+                        areAllRowsExpanded={areAllRowsExpanded}
+                        toggleAllExpandableRows={toggleAllExpandableRows}
+                        options={options}
+                        sortOrder={sortOrder}
+                        columnOrder={columnOrder}
+                        updateColumnOrder={updateColumnOrder}
+                        draggableHeadCellRefs={draggableHeadCellRefs}
+                        tableRef={getTableContentRef}
+                        tableId={options.tableId}
+                        timers={timers}
+                        components={props.components}
+                    />
+
+                    <TableBody
+                        data={displayData}
+                        count={rowCount}
+                        columns={columns}
+                        page={page}
+                        rowsPerPage={rowsPerPage}
+                        selectedRows={selectedRows}
+                        selectRowUpdate={selectRowUpdate}
+                        previousSelectedRow={previousSelectedRow}
+                        expandedRows={expandedRows}
+                        toggleExpandRow={toggleExpandRow}
+                        options={options}
+                        columnOrder={columnOrder}
+                        filterList={filterList}
+                        components={props.components}
+                        tableId={options.tableId}
+                    />
+
+                    {options.customTableBodyFooterRender?.({
+                        data: displayData,
+                        count: rowCount,
+                        columns,
+                        selectedRows,
+                        selectableRows: options.selectableRows
+                    })}
+                </MuiTable>
+            </DndProvider>
+        </div>
+    )
 }
