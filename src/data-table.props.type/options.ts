@@ -661,3 +661,134 @@ export interface DataTableOptions {
      */
     storageKey?: string
 }
+
+//     /** Options used to describe table */
+//     options: PropTypes.shape({
+//         caseSensitive: PropTypes.bool,
+//         columnOrder: PropTypes.array,
+//         count: PropTypes.number,
+//         confirmFilters: PropTypes.bool,
+//         consoleWarnings: PropTypes.bool,
+//         customFilterDialogFooter: PropTypes.func,
+//         customFooter: PropTypes.oneOfType([
+//             PropTypes.func,
+//             PropTypes.element
+//         ]),
+//         customRowRender: PropTypes.func,
+//         customSearch: PropTypes.func,
+//         customSearchRender: PropTypes.oneOfType([
+//             PropTypes.func,
+//             PropTypes.element
+//         ]),
+//         customSort: PropTypes.func,
+//         customToolbar: PropTypes.oneOfType([
+//             PropTypes.func,
+//             PropTypes.element
+//         ]),
+//         customToolbarSelect: PropTypes.oneOfType([
+//             PropTypes.func,
+//             PropTypes.element
+//         ]),
+//         draggableColumns: PropTypes.object,
+//         enableNestedDataAccess: PropTypes.string,
+//         expandableRows: PropTypes.bool,
+//         expandableRowsHeader: PropTypes.bool,
+//         expandableRowsOnClick: PropTypes.bool,
+//         disableToolbarSelect: PropTypes.bool,
+//         download: PropTypes.oneOf([
+//             true,
+//             false,
+//             'true',
+//             'false',
+//             'disabled'
+//         ]),
+//         downloadOptions: PropTypes.shape({
+//             filename: PropTypes.string,
+//             separator: PropTypes.string,
+//             filterOptions: PropTypes.shape({
+//                 useDisplayedColumnsOnly: PropTypes.bool,
+//                 useDisplayedRowsOnly: PropTypes.bool
+//             })
+//         }),
+//         filter: PropTypes.oneOf([true, false, 'true', 'false', 'disabled']),
+//         filterArrayFullMatch: PropTypes.bool,
+//         filterType: PropTypes.oneOf([
+//             'dropdown',
+//             'checkbox',
+//             'multiselect',
+//             'textField',
+//             'custom'
+//         ]),
+//         fixedHeader: PropTypes.bool,
+//         fixedSelectColumn: PropTypes.bool,
+//         getTextLabels: PropTypes.func,
+//         isRowExpandable: PropTypes.func,
+//         isRowSelectable: PropTypes.func,
+//         jumpToPage: PropTypes.bool,
+//         onDownload: PropTypes.func,
+//         onFilterChange: PropTypes.func,
+//         onFilterChipClose: PropTypes.func,
+//         onFilterConfirm: PropTypes.func,
+//         onFilterDialogOpen: PropTypes.func,
+//         onFilterDialogClose: PropTypes.func,
+//         onRowClick: PropTypes.func,
+//         onRowsExpand: PropTypes.func,
+//         onRowExpansionChange: PropTypes.func,
+//         onRowsSelect: PropTypes.func,
+//         onRowSelectionChange: PropTypes.func,
+//         onTableChange: PropTypes.func,
+//         onTableInit: PropTypes.func,
+//         page: PropTypes.number,
+//         pagination: PropTypes.bool,
+//         print: PropTypes.oneOf([true, false, 'true', 'false', 'disabled']),
+//         searchProps: PropTypes.object,
+//         selectableRows: PropTypes.oneOfType([
+//             PropTypes.bool,
+//             PropTypes.oneOf(['none', 'single', 'multiple'])
+//         ]),
+//         selectableRowsHeader: PropTypes.bool,
+//         selectableRowsHideCheckboxes: PropTypes.bool,
+//         selectableRowsOnClick: PropTypes.bool,
+//         serverSide: PropTypes.bool,
+//         tableId: PropTypes.string,
+//         tableBodyHeight: PropTypes.string,
+//         tableBodyMaxHeight: PropTypes.string,
+//         renderExpandableRow: PropTypes.func,
+//         resizableColumns: PropTypes.oneOfType([
+//             PropTypes.bool,
+//             PropTypes.object
+//         ]),
+//         responsive: PropTypes.oneOf([
+//             'standard',
+//             'vertical',
+//             'verticalAlways',
+//             'simple'
+//         ]),
+//         rowHover: PropTypes.bool,
+//         rowsExpanded: PropTypes.array,
+//         rowsPerPage: PropTypes.number,
+//         rowsPerPageOptions: PropTypes.array,
+//         rowsSelected: PropTypes.array,
+//         search: PropTypes.oneOf([true, false, 'true', 'false', 'disabled']),
+//         searchOpen: PropTypes.bool,
+//         searchAlwaysOpen: PropTypes.bool,
+//         searchPlaceholder: PropTypes.string,
+//         searchText: PropTypes.string,
+//         setFilterChipProps: PropTypes.func,
+//         setRowProps: PropTypes.func,
+//         selectToolbarPlacement: PropTypes.oneOfType([
+//             PropTypes.bool,
+//             PropTypes.oneOf([STP.REPLACE, STP.ABOVE, STP.NONE, STP.ALWAYS])
+//         ]),
+//         setTableProps: PropTypes.func,
+//         sort: PropTypes.bool,
+//         sortOrder: PropTypes.object,
+//         storageKey: PropTypes.string,
+//         viewColumns: PropTypes.oneOf([
+//             true,
+//             false,
+//             'true',
+//             'false',
+//             'disabled'
+//         ])
+//     }),

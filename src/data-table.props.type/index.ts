@@ -1,15 +1,20 @@
 import type { MUIDataTableState } from 'mui-datatables'
 import type { Component, ReactNode, RefObject } from 'react'
 import type { DataTableOptions } from './options'
-import type { MUIDataTableColumn as DataTableColumn } from 'mui-datatables'
 import type { DataTableComponents } from './components'
 import type { SxProps } from '@mui/material'
+import type { DataTableColumns } from './columns'
 
-export type DataTableColumns = (string | DataTableColumn)[]
+export { DataTableColumns }
+
 type DefaultDataItem = Object | (number | string | null)[]
 export type DataTableData = DefaultDataItem[]
 
 export interface DataTableProps<Item = DefaultDataItem> {
+    /** Pass and use className to style MUIDataTable as desired */
+    className?: string
+
+    /** Columns used to describe table */
     columns: DataTableColumns
 
     components?: DataTableComponents
@@ -27,7 +32,9 @@ export interface DataTableProps<Item = DefaultDataItem> {
      */
     data: Item[]
 
-    /** Table title that placed on top left */
+    /**
+     * Title of the table
+     */
     title?: string | ReactNode
 
     options?: DataTableOptions
