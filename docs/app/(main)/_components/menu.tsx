@@ -82,19 +82,19 @@ function CustomListItem({ href, text }: { href: string; text: string }) {
             <ListItemButton
                 href={href}
                 selected={isActive}
-                color="Highlight"
                 sx={[
-                    {
+                    theme => ({
                         py: 0.5,
                         backgroundColor: isActive
-                            ? 'rgba(var(--mui-palette-primary-mainChannel) / var(--mui-palette-action-selectedOpacity)) !important'
+                            ? 'rgba(var(--mui-palette-primary-mainChannel) / var(--mui-palette-action-selectedOpacity))'
                             : undefined,
-                        color: isActive ? 'primary.main' : grey[700],
-                        opacity: 'unset !important'
-                    },
-                    style =>
-                        style.applyStyles('dark', {
-                            color: isActive ? 'primary.main' : grey[500]
+                        color: isActive ? theme.palette.primary.main : undefined
+                    }),
+                    theme =>
+                        theme.applyStyles('dark', {
+                            color: isActive
+                                ? theme.palette.primary.main
+                                : grey[400]
                         })
                 ]}
             >
@@ -197,19 +197,19 @@ function CustomListSubheader({
             onClick={onClick}
             startIcon={isOpen ? <KeyboardArrowDown /> : <KeyboardArrowRight />}
             fullWidth
-            sx={{
+            sx={theme => ({
                 lineHeight: 'unset',
                 py: 1.2,
                 px: 2,
                 fontWeight: 'bold',
                 textTransform: 'uppercase',
-                color: 'Highlight',
-                bgcolor: 'var(--mui-palette-background-paper)',
+                color: theme.palette.primary.dark,
                 justifyContent: 'flex-start',
+                borderRadius: 'unset',
                 '&:hover': {
                     bgcolor: 'var(--variant-textBg)'
                 }
-            }}
+            })}
         >
             {title}
         </ListSubheader>
