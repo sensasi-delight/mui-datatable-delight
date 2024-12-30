@@ -49,6 +49,7 @@ export default function Menu({
             anchor="left"
             onClose={toggle}
             variant={isClient && isBelowMd ? 'temporary' : 'permanent'}
+            elevation={0}
             sx={{
                 width: DRAWER_WIDTH,
                 flexShrink: 0,
@@ -144,8 +145,6 @@ function MenuSection({ sectionId }: { sectionId: SectionIdType }) {
                     (href ? '/' : '') +
                     href
         )
-
-        console.log(location.pathname, routes)
 
         setIsOpen(isContainActiveMenu)
     }, [])
