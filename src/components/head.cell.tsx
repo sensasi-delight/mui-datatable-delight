@@ -20,13 +20,12 @@ const useStyles = makeStyles({ name: 'datatable-delight--head--cell' })(
         fixedHeader: {
             position: 'sticky',
             top: '0px',
-            zIndex: 1,
-            backgroundColor: theme.palette.background.paper
+            zIndex: 1
         },
         tooltip: {
             cursor: 'pointer'
         },
-        mypopper: {
+        myPopper: {
             '&[data-x-out-of-boundaries]': {
                 display: 'none'
             }
@@ -228,11 +227,11 @@ const TableHeadCell = ({
                         onClose={() => setSortTooltipOpen(false)}
                         classes={{
                             tooltip: classes.tooltip,
-                            popper: classes.mypopper
+                            popper: classes.myPopper
                         }}
                     >
                         <Button
-                            variant=""
+                            color="inherit"
                             onKeyUp={handleKeyboardSortInput}
                             onClick={handleSortClick}
                             className={classes.toolButton}
@@ -284,7 +283,7 @@ const TableHeadCell = ({
                             onClose={() => setHintTooltipOpen(false)}
                             classes={{
                                 tooltip: classes.tooltip,
-                                popper: classes.mypopper
+                                popper: classes.myPopper
                             }}
                             enterDelay={300}
                         >

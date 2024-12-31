@@ -86,7 +86,7 @@ const TableHead = ({
         }
     }
 
-    let orderedColumns = columnOrder.map((colIndex, idx) => {
+    const orderedColumns = columnOrder.map((colIndex, idx) => {
         return {
             column: columns[colIndex],
             index: colIndex,
@@ -106,6 +106,9 @@ const TableHead = ({
                 [classes.responsiveSimple]: options.responsive === 'simple',
                 [classes.main]: true
             })}
+            sx={{
+                backgroundColor: 'background.paper'
+            }}
         >
             <TableHeadRow>
                 <TableSelectCell
@@ -128,6 +131,7 @@ const TableHead = ({
                     isRowSelectable={true}
                     components={components}
                 />
+
                 {orderedColumns.map(
                     ({ column, index, colPos }) =>
                         column.display === 'true' &&
