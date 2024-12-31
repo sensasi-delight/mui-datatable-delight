@@ -1,28 +1,14 @@
-import PropTypes from 'prop-types'
-import clsx from 'clsx'
-import TableRow from '@mui/material/TableRow'
+import { TableRow } from '@mui/material'
 import { makeStyles } from 'tss-react/mui'
 
-const useStyles = makeStyles({ name: 'MUIDataTableHeadRow' })(() => ({
+const useStyles = makeStyles({ name: 'datatable-delight--head--row' })(() => ({
     root: {}
 }))
 
-const TableHeadRow = ({ children }) => {
+const TableHeadRow = ({ children }: { children: React.ReactNode }) => {
     const { classes } = useStyles()
 
-    return (
-        <TableRow
-            className={clsx({
-                [classes.root]: true
-            })}
-        >
-            {children}
-        </TableRow>
-    )
-}
-
-TableHeadRow.propTypes = {
-    children: PropTypes.node
+    return <TableRow className={classes.root}>{children}</TableRow>
 }
 
 export default TableHeadRow
