@@ -1,22 +1,29 @@
-import type { Theme } from '@mui/material'
-
+// vendors
+import { withStyles } from 'tss-react/mui'
 import React from 'react'
-import Typography from '@mui/material/Typography'
-import Toolbar from '@mui/material/Toolbar'
-import IconButton from '@mui/material/IconButton'
-import Popover from './toolbar.popover'
+import ReactToPrint, { PrintContextConsumer } from 'react-to-print'
+// materials
+import {
+    IconButton,
+    Toolbar,
+    Tooltip as MuiTooltip,
+    Theme,
+    Typography
+} from '@mui/material'
+// material icons
+import {
+    Search as SearchIcon,
+    Download as DownloadIcon,
+    Print as PrintIcon,
+    ViewColumn as ViewColumnIcon,
+    FilterList as FilterIcon
+} from '@mui/icons-material'
+// locals
+import { createCsvDownload } from './toolbar.functions.create-csv-download'
 import { DataTableToolbarFilter } from './toolbar.filter'
+import Popover from './toolbar.popover'
 import TableViewCol from './toolbar.view-col'
 import TableSearch from './toolbar.search'
-import SearchIcon from '@mui/icons-material/Search'
-import DownloadIcon from '@mui/icons-material/Download'
-import PrintIcon from '@mui/icons-material/Print'
-import ViewColumnIcon from '@mui/icons-material/ViewColumn'
-import FilterIcon from '@mui/icons-material/FilterList'
-import ReactToPrint, { PrintContextConsumer } from 'react-to-print'
-import { withStyles } from 'tss-react/mui'
-import { createCsvDownload } from './toolbar.functions.create-csv-download'
-import MuiTooltip from '@mui/material/Tooltip'
 
 export const defaultToolbarStyles = (theme: Theme) => ({
     root: {
