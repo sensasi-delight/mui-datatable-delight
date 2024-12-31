@@ -1,7 +1,7 @@
 'use client'
 
 // types
-import type { DataTableProps } from './data-table.props.type'
+import type { DataTableColumns, DataTableProps } from './data-table.props.type'
 // vendors
 import { DndProvider } from 'react-dnd'
 import {
@@ -37,8 +37,14 @@ import {
     warnDeprecated,
     warnInfo
 } from './functions'
-import type { MUIDataTableState } from 'mui-datatables'
+import type {
+    DisplayData,
+    MUIDataTableColumnState,
+    MUIDataTableState,
+    MUIDataTableStateRows
+} from 'mui-datatables'
 import type { DataTableOptions } from './data-table.props.type/options'
+import type { DataTableState } from './data-table.props.type/state'
 
 /**
  * A responsive DataTable component built with Material UI for React-based project.
@@ -144,7 +150,7 @@ class MUIDataTableClass extends React.Component<
     draggableHeadCellRefs: {}
     setHeadResizable: () => void
     resizeHeadCellRefs: {}
-    timers: {}
+    timers: unknown
     updateDividers: () => void
 
     constructor(props: DataTableProps) {
@@ -166,7 +172,7 @@ class MUIDataTableClass extends React.Component<
 
         this.state = {
             ...DEFAULT_STATE,
-            ...(restoredState ?? this.getInitTableOptions())
+            ...(restoredState ?? getInitTableOptions(props?.options))
         }
 
         this.setTableData = this.setTableData.bind(this)
@@ -256,32 +262,7 @@ class MUIDataTableClass extends React.Component<
             }
         }
 
-        handleOptionDeprecation(props)
-    }
-
-    validateOptions(options: DataTableOptions) {
-        if (options.serverSide && options.onTableChange === undefined) {
-            throw Error(
-                'onTableChange callback must be provided when using serverSide option'
-            )
-        }
-        if (
-            options.expandableRows &&
-            options.renderExpandableRow === undefined
-        ) {
-            throw Error(
-                'renderExpandableRow must be provided when using expandableRows option'
-            )
-        }
-        if (
-            options.rowsSelected &&
-            Array.isArray(options.rowsSelected) &&
-            options.rowsSelected.some(isNaN)
-        ) {
-            warnInfo(
-                'When using the rowsSelected option, must be provided an array of numbers only.'
-            )
-        }
+        handleOptionDeprecation(props, this.options)
     }
 
     setTableAction = (action: string) => {
@@ -300,25 +281,11 @@ class MUIDataTableClass extends React.Component<
         }
     }
 
-    getInitTableOptions() {
-        const optionNames = [
-            'rowsPerPage',
-            'page',
-            'rowsSelected',
-            'rowsPerPageOptions'
-        ]
-        const optState = optionNames.reduce((acc, cur) => {
-            if (this.options[cur] !== undefined) {
-                acc[cur] = this.options[cur]
-            }
-            return acc
-        }, {})
-
-        this.validateOptions(optState)
-        return optState
-    }
-
-    setHeadCellRef = (index, pos, el) => {
+    setHeadCellRef = (
+        index: number,
+        pos: number,
+        el: React.RefObject<unknown>
+    ) => {
         this.draggableHeadCellRefs[index] = el
         this.resizeHeadCellRefs[pos] = el
     }
@@ -335,12 +302,11 @@ class MUIDataTableClass extends React.Component<
      *  newColumnOrder - columnOrder from the options object.
      *  prevColumnOrder - columnOrder object saved onto the state.
      */
-
     buildColumns = (
-        newColumns,
-        prevColumns = [],
-        newColumnOrder,
-        prevColumnOrder = []
+        newColumns: DataTableState['columns'],
+        prevColumns: DataTableState['columns'] = [],
+        newColumnOrder: DataTableState['columnOrder'],
+        prevColumnOrder: DataTableState['columnOrder'] = []
     ) => {
         let columnData = []
         let filterData = []
@@ -792,14 +758,14 @@ class MUIDataTableClass extends React.Component<
      *  Build the table data used to display to the user (ie: after filter/search applied)
      */
     computeDisplayRow(
-        columns,
-        row,
-        rowIndex,
-        filterList,
-        searchText,
+        columns: DataTableColumns,
+        row: unknown[],
+        rowIndex: number,
+        filterList: DataTableState['filterList'],
+        searchText: DataTableState['searchText'],
         dataForTableMeta,
-        options,
-        props,
+        options: DataTableOptions,
+        props: DataTableProps,
         currentTableData
     ) {
         let isFiltered = false
@@ -856,13 +822,14 @@ class MUIDataTableClass extends React.Component<
             const filterVal = filterList[index]
             const caseSensitive = options.caseSensitive
             const filterType = column.filterType ?? options.filterType
+
             if (filterVal.length || filterType === 'custom') {
                 if (column.filterOptions && column.filterOptions.logic) {
                     if (column.filterOptions.logic(columnValue, filterVal, row))
                         isFiltered = true
                 } else if (
                     filterType === 'textField' &&
-                    !this.hasSearchText(columnVal, filterVal, caseSensitive)
+                    !hasSearchText(columnVal, filterVal, caseSensitive)
                 ) {
                     isFiltered = true
                 } else if (
@@ -899,7 +866,7 @@ class MUIDataTableClass extends React.Component<
             if (
                 searchText &&
                 column.display !== 'excluded' &&
-                this.hasSearchText(columnVal, searchText, caseSensitive) &&
+                hasSearchText(columnVal, searchText, caseSensitive) &&
                 column.display !== 'false' &&
                 column.searchable
             ) {
@@ -930,22 +897,6 @@ class MUIDataTableClass extends React.Component<
 
         if (isFiltered || (searchText && !isSearchFound)) return null
         else return displayRow
-    }
-
-    hasSearchText = (
-        toSearch: string,
-        toFind: string,
-        caseSensitive: boolean
-    ) => {
-        let stack = toSearch.toString()
-        let needle = toFind.toString()
-
-        if (!caseSensitive) {
-            needle = needle.toLowerCase()
-            stack = stack.toLowerCase()
-        }
-
-        return stack.indexOf(needle) >= 0
     }
 
     updateDataCol = (row, index: number, value) => {
@@ -1020,7 +971,14 @@ class MUIDataTableClass extends React.Component<
         }
     }
 
-    getDisplayData(columns, data, filterList, searchText, tableMeta, props) {
+    getDisplayData(
+        columns: DataTableState['columns'],
+        data: DataTableState['data'],
+        filterList: DataTableState['filterList'],
+        searchText: DataTableState['searchText'],
+        tableMeta,
+        props: DataTableProps
+    ) {
         let newRows = []
         const dataForTableMeta = tableMeta ? tableMeta.tableData : props.data
 
@@ -1078,7 +1036,7 @@ class MUIDataTableClass extends React.Component<
         )
     }
 
-    updateColumns = newColumns => {
+    updateColumns = (newColumns: DataTableState['columns']) => {
         this.setState(
             () => {
                 return {
@@ -1087,13 +1045,12 @@ class MUIDataTableClass extends React.Component<
             },
             () => {
                 this.setTableAction('viewColumnsChange')
-                var cb =
+
+                const cb =
                     this.options.onViewColumnsChange ||
                     this.options.onColumnViewChange
 
-                if (cb) {
-                    cb(null, 'update', newColumns)
-                }
+                cb?.(null, 'update', newColumns)
             }
         )
     }
@@ -1201,13 +1158,13 @@ class MUIDataTableClass extends React.Component<
         )
     }
 
-    changeRowsPerPage = rows => {
+    changeRowsPerPage = (rowsPerPage: number) => {
         const rowCount = this.options.count ?? this.state.displayData.length
 
         this.setState(
             () => ({
-                rowsPerPage: rows,
-                page: getPageValue(rowCount, rows, this.state.page)
+                rowsPerPage: rowsPerPage,
+                page: getPageValue(rowCount, rowsPerPage, this.state.page)
             }),
             () => {
                 this.setTableAction('changeRowsPerPage')
@@ -1589,7 +1546,7 @@ class MUIDataTableClass extends React.Component<
         )
     }
 
-    selectRowUpdate = (type, value, shiftAdjacentRows = []) => {
+    selectRowUpdate = (type: string, value, shiftAdjacentRows = []) => {
         // safety check
         const { selectableRows } = this.options
         if (selectableRows === 'none') {
@@ -1955,11 +1912,6 @@ class MUIDataTableClass extends React.Component<
         const tableClassNames = clsx(classes.tableRoot, tableProps.className)
         delete tableProps.className // remove className from props to avoid the className being applied twice
 
-        const dndProps = {}
-        if (typeof window !== 'undefined') {
-            dndProps.context = window
-        }
-
         return (
             <Paper
                 elevation={this.options.elevation}
@@ -2060,7 +2012,6 @@ class MUIDataTableClass extends React.Component<
                     selectedRows={selectedRows}
                     expandedRows={expandedRows}
                     sortOrder={sortOrder}
-                    dndProps={dndProps}
                     previousSelectedRow={previousSelectedRow}
                     // this section
                     tableRef={this.tableRef}
@@ -2342,7 +2293,6 @@ function RenderInnerTable({
     selectedRows,
     expandedRows,
     sortOrder,
-    dndProps,
     previousSelectedRow,
     // this sections
     tableRef,
@@ -2371,19 +2321,38 @@ function RenderInnerTable({
     // variables
     rowCount: number
     columnOrder: number[]
+    tableClassNames: string
+    tableProps: TableProps
     tableHeightVal: {
         maxHeight?: string
         height?: string
     }
     title: DataTableProps['title']
-    options: DataTableOptions
     responsiveClass: HTMLDivElement['className']
-    classes: {}
+    filterList: string[][]
+    columns: MUIDataTableColumnState[]
+    activeColumn: string | null
+    displayData: DisplayData
+    page: number
+    rowsPerPage: number
+    selectedRows: MUIDataTableStateRows
+    expandedRows: MUIDataTableStateRows
+    sortOrder: DataTableOptions['sortOrder']
+    previousSelectedRow: DataTableState['previousSelectedRow']
     // this
     tableRef: React.Ref<HTMLTableElement>
-
-    tableClassNames: string
-    tableProps: TableProps
+    options: DataTableOptions
+    selectRowUpdate: unknown
+    props: DataTableProps
+    toggleSortColumn: unknown
+    setHeadCellRef: unknown
+    areAllRowsExpanded: unknown
+    toggleAllExpandableRows: unknown
+    updateColumnOrder: unknown
+    draggableHeadCellRefs: unknown
+    getTableContentRef: unknown
+    timers: unknown
+    toggleExpandRow: unknown
 }) {
     const isRenderTableResize =
         options.resizableColumns === true ||
@@ -2405,7 +2374,10 @@ function RenderInnerTable({
                 />
             )}
 
-            <DndProvider backend={HTML5Backend} {...dndProps}>
+            <DndProvider
+                backend={HTML5Backend}
+                context={typeof window === 'undefined' ? undefined : window}
+            >
                 <MuiTable
                     ref={tableRef}
                     tabIndex={0}
@@ -2476,4 +2448,71 @@ function RenderInnerTable({
             </DndProvider>
         </div>
     )
+}
+
+function hasSearchText(
+    toSearch: string,
+    toFind: string,
+    caseSensitive: boolean
+) {
+    let stack = toSearch.toString()
+    let needle = toFind.toString()
+
+    if (!caseSensitive) {
+        needle = needle.toLowerCase()
+        stack = stack.toLowerCase()
+    }
+
+    return stack.indexOf(needle) >= 0
+}
+
+function validateOptions(options: DataTableOptions) {
+    if (options.serverSide && options.onTableChange === undefined) {
+        throw Error(
+            'onTableChange callback must be provided when using serverSide option'
+        )
+    }
+    if (options.expandableRows && options.renderExpandableRow === undefined) {
+        throw Error(
+            'renderExpandableRow must be provided when using expandableRows option'
+        )
+    }
+    if (
+        options.rowsSelected &&
+        Array.isArray(options.rowsSelected) &&
+        options.rowsSelected.some(isNaN)
+    ) {
+        warnInfo(
+            'When using the rowsSelected option, must be provided an array of numbers only.'
+        )
+    }
+}
+
+function getInitTableOptions({
+    rowsPerPage,
+    page,
+    rowsSelected,
+    rowsPerPageOptions
+}: DataTableProps['options'] = {}): DataTableProps['options'] {
+    const optState: DataTableProps['options'] = {}
+
+    if (rowsPerPage) {
+        optState.rowsPerPage = rowsPerPage
+    }
+
+    if (page) {
+        optState.page = page
+    }
+
+    if (rowsSelected) {
+        optState.rowsSelected = rowsSelected
+    }
+
+    if (rowsPerPageOptions) {
+        optState.rowsPerPageOptions = rowsPerPageOptions
+    }
+
+    validateOptions(optState)
+
+    return optState
 }
