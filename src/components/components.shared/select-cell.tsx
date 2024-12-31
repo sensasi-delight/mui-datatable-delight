@@ -5,7 +5,7 @@ import TableCell from '@mui/material/TableCell'
 import { makeStyles } from 'tss-react/mui'
 import ExpandButton from './select-cell.expand-button'
 
-const useStyles = makeStyles({ name: 'MUIDataTableSelectCell' })(theme => ({
+const useStyles = makeStyles({ name: 'MUIDataTableSelectCell' })(() => ({
     root: {
         '@media print': {
             display: 'none'
@@ -32,8 +32,7 @@ const useStyles = makeStyles({ name: 'MUIDataTableSelectCell' })(theme => ({
         visibility: 'hidden'
     },
     headerCell: {
-        zIndex: 110,
-        backgroundColor: theme.palette.background.paper
+        zIndex: 110
     },
     expandDisabled: {},
     checkboxRoot: {},
