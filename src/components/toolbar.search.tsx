@@ -1,76 +1,97 @@
-import Grow from '@mui/material/Grow'
-import TextField from '@mui/material/TextField'
-import SearchIcon from '@mui/icons-material/Search'
-import IconButton from '@mui/material/IconButton'
-import ClearIcon from '@mui/icons-material/Clear'
+// vendors
 import { makeStyles } from 'tss-react/mui'
+// materials
+import { Grow, IconButton, TextField, TextFieldProps } from '@mui/material'
+import { Clear, Search } from '@mui/icons-material'
+// locals
+import type { DataTableProps } from '../data-table.props.type'
+import { TEXT_LABELS } from '../statics'
+import { useEffect, useState } from 'react'
 
-const useStyles = makeStyles({ name: 'MUIDataTableSearch' })(theme => ({
-    main: {
-        display: 'flex',
-        flex: '1 0 auto',
-        alignItems: 'center'
-    },
-    searchIcon: {
-        color: theme.palette.text.secondary,
-        marginRight: '8px'
-    },
-    searchText: {
-        flex: '0.8 0'
-    },
-    clearIcon: {
-        '&:hover': {
-            color: theme.palette.error.main
-        }
-    }
-}))
-
-const TableSearch = ({ options, searchText, onSearch, onHide }) => {
+export const DataTableToolbarSearch = ({
+    options,
+    onSearch,
+    onHide
+}: {
+    options: DataTableProps['options']
+    onSearch: (searchText: string) => void
+    onHide: () => void
+}) => {
     const { classes } = useStyles()
+    const [searchText, setSearchText] = useState(options?.searchText ?? '')
 
-    const handleTextChange = event => {
-        onSearch(event.target.value)
+    const searchDelay = options?.searchDelay ?? 0
+    const clearIconVisibility = options?.searchAlwaysOpen ? 'hidden' : 'visible'
+
+    const textLabels = options?.textLabels?.toolbar ?? TEXT_LABELS.toolbar
+
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            onSearch(searchText)
+        }, searchDelay)
+
+        return () => clearTimeout(timeout)
+    }, [searchText, searchDelay])
+
+    const handleSearch: TextFieldProps['onChange'] = ({
+        target: { value }
+    }) => {
+        setSearchText(value)
     }
-
-    const onKeyDown = event => {
-        if (event.key === 'Escape') {
-            onHide()
-        }
-    }
-
-    const clearIconVisibility = options.searchAlwaysOpen ? 'hidden' : 'visible'
 
     return (
         <Grow appear in={true} timeout={300}>
             <div className={classes.main}>
-                <SearchIcon className={classes.searchIcon} />
+                <Search className={classes.searchIcon} />
+
                 <TextField
                     className={classes.searchText}
                     autoFocus={true}
                     variant="standard"
-                    InputProps={{
-                        'data-test-id': options.textLabels.toolbar.search
+                    data-test-id={textLabels.search}
+                    aria-label={textLabels.search}
+                    value={searchText}
+                    onKeyDown={event => {
+                        if (event.key === 'Escape') {
+                            onHide()
+                        }
                     }}
-                    inputProps={{
-                        'aria-label': options.textLabels.toolbar.search
-                    }}
-                    value={searchText || ''}
-                    onKeyDown={onKeyDown}
-                    onChange={handleTextChange}
+                    onChange={handleSearch}
                     fullWidth={true}
-                    placeholder={options.searchPlaceholder}
-                    {...(options.searchProps ? options.searchProps : {})}
+                    placeholder={options?.searchPlaceholder}
+                    {...(options?.searchProps ?? {})}
                 />
+
                 <IconButton
                     className={classes.clearIcon}
                     style={{ visibility: clearIconVisibility }}
                     onClick={onHide}
                 >
-                    <ClearIcon />
+                    <Clear />
                 </IconButton>
             </div>
         </Grow>
     )
 }
 
-export default TableSearch
+const useStyles = makeStyles({ name: 'datatable-delight--toolbar--search' })(
+    theme => ({
+        main: {
+            display: 'flex',
+            flex: '1 0 auto',
+            alignItems: 'center'
+        },
+        searchIcon: {
+            color: theme.palette.text.secondary,
+            marginRight: '8px'
+        },
+        searchText: {
+            flex: '0.8 0'
+        },
+        clearIcon: {
+            '&:hover': {
+                color: theme.palette.error.main
+            }
+        }
+    })
+)
