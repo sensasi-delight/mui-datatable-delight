@@ -21,21 +21,16 @@ const ExpandButton = ({
 
     return (
         <IconButton
+            id="expandable-button"
             onClick={onExpand}
             style={{ padding: 0 }}
             disabled={expandableRowsHeader === false}
             className={buttonClass}
         >
             {isNotExpand ? (
-                <RemoveIcon
-                    id="expandable-button"
-                    className={iconIndeterminateClass}
-                />
+                <RemoveIcon className={iconIndeterminateClass} />
             ) : (
-                <KeyboardArrowRightIcon
-                    id="expandable-button"
-                    className={iconClass}
-                />
+                <KeyboardArrowRightIcon className={iconClass} />
             )}
         </IconButton>
     )
