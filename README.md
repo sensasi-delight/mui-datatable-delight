@@ -48,16 +48,6 @@ See [the examples](https://mui-datatable-delight.vercel.app/examples).
 
 See [the API docs](https://mui-datatable-delight.vercel.app/docs/api).
 
-<!-- ## Plug-ins
-
-The table lends itself to plug-ins in many areas, especially in the customRender functions. Many use cases for these render functions are common, so a set of plug-ins are available that you can use.
-
-#### Available Plug-ins:
-
-|            Name            | Type     | Default | Description                                                                                                                                                                                                                                                                                                                                |
-| :------------------------: | :------- | :------ | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`debounceSearchRender`** | function |         | Function that returns a function for the customSearchRender method. This plug-in allows you to create a debounced search which can be useful for server-side tables and tables with large data sets. `function(debounceWait) => function` [Example](https://github.com/gregnb/mui-datatables/blob/master/examples/large-data-set/index.js) | -->
-
 ## Contributing
 
 Thanks for taking an interest in the library and the github community!
