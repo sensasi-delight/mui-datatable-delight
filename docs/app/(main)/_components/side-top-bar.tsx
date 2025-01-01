@@ -21,7 +21,7 @@ import {
 import Menu from './menu'
 import { DRAWER_WIDTH } from '../_constants'
 import { useState } from 'react'
-import { InlineCode } from '@/components/inline-code'
+import { InlineCode } from '@/components'
 
 export default function SideTopBar() {
     const { mode, setMode } = useColorScheme()
@@ -67,7 +67,7 @@ export default function SideTopBar() {
 
                         <Link href="/" color="inherit" underline="hover">
                             <Typography fontWeight="bold">
-                                MUI <InlineCode text="&lt;DataTable/>" />
+                                MUI <InlineCode text="<DataTable/>" disableBg />{' '}
                                 Delight
                             </Typography>
                         </Link>

@@ -5,11 +5,11 @@ import { grey } from '@mui/material/colors'
 
 export function InlineCode({
     text,
-    bg = false
+    disableBg = false
 }: {
     text: string
     children?: never
-    bg?: boolean
+    disableBg?: boolean
 }) {
     return (
         <Box
@@ -17,14 +17,13 @@ export function InlineCode({
             sx={[
                 {
                     borderRadius: 1,
-                    fontSize: '1.1em',
                     px: 0.5,
                     py: 0.5,
-                    bgcolor: bg ? grey['200'] : undefined
+                    bgcolor: !disableBg ? grey['200'] : undefined
                 },
                 theme =>
                     theme.applyStyles('dark', {
-                        bgcolor: bg ? '#2f2f2f' : undefined
+                        bgcolor: !disableBg ? '#2f2f2f' : undefined
                     })
             ]}
             color="inherit"

@@ -5,7 +5,7 @@ import { ReactNode, useState } from 'react'
 import clsx from 'clsx'
 // locals
 import type { DataTableOptions } from '../data-table.props.type/options'
-import type { DataTableProps } from '../../'
+import type { DataTableProps } from '../'
 import {
     type DataTableState,
     FilterTypeEnum

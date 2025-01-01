@@ -33,7 +33,7 @@ export default function Menu({
     toggle
 }: {
     isOpen: boolean
-    toggle: () => void
+    toggle: ToggleType
 }) {
     const theme = useTheme()
     const [isClient, setIsClient] = useState(false)
@@ -61,14 +61,16 @@ export default function Menu({
             }}
         >
             <List component="nav">
-                <MenuSection sectionId="GETTING_STARTED" />
-                <MenuSection sectionId="FEATURES" />
-                <MenuSection sectionId="EXAMPLES" />
-                <MenuSection sectionId="API" />
+                <MenuSection sectionId="GETTING_STARTED" toggle={toggle} />
+                <MenuSection sectionId="FEATURES" toggle={toggle} />
+                <MenuSection sectionId="EXAMPLES" toggle={toggle} />
+                <MenuSection sectionId="API" toggle={toggle} />
             </List>
         </Drawer>
     )
 }
+
+type ToggleType = () => void
 
 function CustomListItem({ href, text }: { href: string; text: string }) {
     const [isActive, setIsActive] = useState(false)
@@ -128,7 +130,13 @@ function CustomListItem({ href, text }: { href: string; text: string }) {
     )
 }
 
-function MenuSection({ sectionId }: { sectionId: SectionIdType }) {
+function MenuSection({
+    sectionId,
+    toggle
+}: {
+    sectionId: SectionIdType
+    toggle: ToggleType
+}) {
     const [isOpen, setIsOpen] = useState(false)
 
     const isExampleSection = sectionId === 'EXAMPLES'
@@ -157,7 +165,7 @@ function MenuSection({ sectionId }: { sectionId: SectionIdType }) {
                 onClick={() => setIsOpen(prev => !prev)}
             />
 
-            <Collapse in={isOpen}>
+            <Collapse in={isOpen} onClick={toggle}>
                 <CustomListItem
                     href={
                         isExampleSection

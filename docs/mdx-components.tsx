@@ -1,6 +1,6 @@
 import type { MDXComponents } from 'mdx/types'
-import { CodeSnippet } from './components/code-snippet'
-import { Link, Typography } from '@mui/material'
+import { Alert, Link } from '@mui/material'
+import { CodeSnippet, InlineCode } from './components'
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
     return {
@@ -14,13 +14,24 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
                 />
             )
         },
-        code: props => (
-            <Typography
-                component="code"
-                fontWeight="inherit"
-                fontFamily="monospace"
-                {...props}
-            />
+        code: ({ children }) => <InlineCode text={children} />,
+        blockquote: ({ children }) => (
+            <Alert
+                component="blockquote"
+                elevation={1}
+                color="info"
+                icon={false}
+                sx={{
+                    m: 0,
+                    '& p': {
+                        m: 0
+                    },
+                    borderLeft: 6,
+                    boxShadow: 'none'
+                }}
+            >
+                {children}
+            </Alert>
         ),
         a: props => <Link {...props} />,
         ...components

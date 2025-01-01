@@ -4,6 +4,7 @@ export enum Route {
     FEATURES = 'features',
     FEATURES__CUSTOM_COMPONENTS = 'features/custom-components',
     FEATURES__CUSTOMIZE_STYLING = 'features/customize-styling',
+    FEATURES__DEBOUNCE_SEARCH = 'features/debounce-search',
     FEATURES__LOCALIZATION = 'features/localization',
     FEATURES__REMOTE_DATA = 'features/remote-data',
 

@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import { Box, Container, Grid2 } from '@mui/material'
 import SideTopBar from './_components/side-top-bar'
+import { Breadcrumbs } from './_components/breadcrumbs'
 
 export default function Layout({ children }: { children: ReactNode }) {
     return (
@@ -23,7 +24,11 @@ export default function Layout({ children }: { children: ReactNode }) {
                         xl: 9
                     }}
                 >
-                    <Container component="main">{children}</Container>
+                    <Container>
+                        <Breadcrumbs />
+
+                        <Box component="main">{children}</Box>
+                    </Container>
                 </Grid2>
 
                 <Grid2
