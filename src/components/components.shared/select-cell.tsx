@@ -1,46 +1,13 @@
-import PropTypes from 'prop-types'
 import clsx from 'clsx'
-import Checkbox from '@mui/material/Checkbox'
+import Checkbox, { CheckboxProps } from '@mui/material/Checkbox'
 import TableCell from '@mui/material/TableCell'
 import { makeStyles } from 'tss-react/mui'
 import ExpandButton from './select-cell.expand-button'
+import { MUIDataTableExpandButton } from 'mui-datatables'
+import { DataTableOptions } from '../../data-table.props.type/options'
+import { DataTableProps } from '../../data-table.props.type'
 
-const useStyles = makeStyles({ name: 'MUIDataTableSelectCell' })(() => ({
-    root: {
-        '@media print': {
-            display: 'none'
-        }
-    },
-    fixedHeader: {
-        position: 'sticky',
-        top: '0px',
-        zIndex: 100
-    },
-    fixedLeft: {
-        position: 'sticky',
-        left: '0px',
-        zIndex: 100
-    },
-    icon: {
-        cursor: 'pointer',
-        transition: 'transform 0.25s'
-    },
-    expanded: {
-        transform: 'rotate(90deg)'
-    },
-    hide: {
-        visibility: 'hidden'
-    },
-    headerCell: {
-        zIndex: 110
-    },
-    expandDisabled: {},
-    checkboxRoot: {},
-    checked: {},
-    disabled: {}
-}))
-
-const TableSelectCell = ({
+export function DataTableTableSelectCell({
     fixedHeader,
     fixedSelectColumn,
     isHeaderCell = false,
@@ -58,11 +25,13 @@ const TableSelectCell = ({
     setHeadCellRef,
     dataIndex,
     components = {},
+    onChange,
     ...otherProps
-}) => {
+}: DataTableTableSelectCellProps) {
     const { classes } = useStyles()
-    const CheckboxComponent = components.Checkbox || Checkbox
-    const ExpandButtonComponent = components.ExpandButton || ExpandButton
+
+    const CheckboxComponent = components.Checkbox ?? Checkbox
+    const ExpandButtonComponent = components.ExpandButton ?? ExpandButton
 
     if (
         expandableOn === false &&
@@ -121,6 +90,7 @@ const TableSelectCell = ({
                 data-index={dataIndex || null}
                 color="primary"
                 disabled={!isRowSelectable}
+                onChange={onChange}
                 {...otherProps}
             />
         )
@@ -150,23 +120,79 @@ const TableSelectCell = ({
     )
 }
 
-TableSelectCell.propTypes = {
+export interface DataTableTableSelectCellProps {
     /** Select cell checked on/off */
-    checked: PropTypes.bool.isRequired,
+    checked: boolean
+
     /** Select cell part of fixed header */
-    fixedHeader: PropTypes.bool,
+    fixedHeader?: boolean
+
     /** Callback to trigger cell update */
-    onChange: PropTypes.func,
+    onChange?: CheckboxProps['onChange']
+
     /** Extend the style applied to components */
-    classes: PropTypes.object,
+    // classes?: PropTypes.object
+
     /** Is expandable option enabled */
-    expandableOn: PropTypes.bool,
+    expandableOn?: boolean
+
     /** Adds extra class, `expandDisabled` when the row is not expandable. */
-    hideExpandButton: PropTypes.bool,
+    hideExpandButton?: boolean
+
     /** Is selectable option enabled */
-    selectableOn: PropTypes.string,
+    selectableOn?: string
+
     /** Select cell disabled on/off */
-    isRowSelectable: PropTypes.bool
+    isRowSelectable?: boolean
+
+    onExpand: MUIDataTableExpandButton['onExpand']
+
+    fixedSelectColumn: boolean
+
+    selectableRowsHideCheckboxes: DataTableOptions['selectableRowsHideCheckboxes']
+
+    isRowExpanded: boolean
+
+    dataIndex: number
+
+    id: string
+
+    components: DataTableProps['components']
 }
 
-export default TableSelectCell
+const useStyles = makeStyles({ name: 'datatable-delight--body--select-cell' })(
+    () => ({
+        root: {
+            '@media print': {
+                display: 'none'
+            }
+        },
+        fixedHeader: {
+            position: 'sticky',
+            top: '0px',
+            zIndex: 100
+        },
+        fixedLeft: {
+            position: 'sticky',
+            left: '0px',
+            zIndex: 100
+        },
+        icon: {
+            cursor: 'pointer',
+            transition: 'transform 0.25s'
+        },
+        expanded: {
+            transform: 'rotate(90deg)'
+        },
+        hide: {
+            visibility: 'hidden'
+        },
+        headerCell: {
+            zIndex: 110
+        },
+        expandDisabled: {},
+        checkboxRoot: {},
+        checked: {},
+        disabled: {}
+    })
+)

@@ -4,7 +4,7 @@ import MuiTableHead from '@mui/material/TableHead'
 import { useState } from 'react'
 import TableHeadCell from './head.cell'
 import TableHeadRow from './head.row'
-import TableSelectCell from './components.shared/select-cell'
+import { DataTableTableSelectCell } from './components.shared/select-cell'
 
 const useStyles = makeStyles({ name: 'MUIDataTableHead' })(theme => ({
     main: {},
@@ -111,7 +111,7 @@ const TableHead = ({
             }}
         >
             <TableHeadRow>
-                <TableSelectCell
+                <DataTableTableSelectCell
                     setHeadCellRef={setCellRef}
                     onChange={handleRowSelect.bind(null)}
                     indeterminate={isIndeterminate}
