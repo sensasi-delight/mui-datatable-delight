@@ -4,6 +4,7 @@ import TableCell, { type TableCellProps } from '@mui/material/TableCell'
 import { makeStyles } from 'tss-react/mui'
 import { MUIDataTableBodyCell } from 'mui-datatables'
 import { DataTableOptions } from '../data-table.props.type/options'
+import { DataTableState } from '../data-table.props.type/state'
 
 export default function TableBodyCell({
     children,
@@ -14,12 +15,10 @@ export default function TableBodyCell({
     rowIndex,
     className,
     print,
-    tableId,
     ...otherProps
-}: Omit<MUIDataTableBodyCell, 'options'> & {
+}: Omit<MUIDataTableBodyCell & TableCellProps, 'options'> & {
     options: DataTableOptions
-    print: Boolean
-    tableId: string
+    print: DataTableState['columns'][0]['print']
 }) {
     const { classes } = useStyles()
 
@@ -117,7 +116,7 @@ export default function TableBodyCell({
             // Event listeners. Avoid attaching them if they're not necessary.
             onClick={handleClick}
             data-colindex={colIndex}
-            data-tableid={tableId}
+            data-tableid={options.tableId}
             className={clsx(
                 {
                     [classes.root]: true,
