@@ -17,7 +17,7 @@ import React, { ReactNode } from 'react'
 // local components
 import { DataTableToolbarFilter } from './components/toolbar.filter'
 import { TableToolbarSelect as DefaultTableToolbarSelect } from './components/toolbar-select'
-import DefaultTableBody from './components/body'
+import { DataTableBody as DefaultTableBody } from './components/body'
 import DefaultTableFilterList from './components/filter-list'
 import DefaultTableFooter from './components/footer'
 import DefaultTableHead from './components/head'
@@ -1490,12 +1490,13 @@ class MUIDataTableClass extends React.Component<
         )
     }
 
-    toggleExpandRow = row => {
+    toggleExpandRow = (row: { index: number; dataIndex: number }) => {
         const { dataIndex } = row
         const { isRowExpandable } = this.options
         let { expandedRows } = this.state
         const expandedRowsData = [...expandedRows.data]
         let shouldCollapseExpandedRow = false
+
         let hasRemovedRow = false
         let removedRow = []
 

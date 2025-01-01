@@ -1,15 +1,13 @@
-// types
-import type { DataTableProps } from '../data-table.props.type'
+// vendors
 import type { MUIDataTableToolbarSelect } from 'mui-datatables'
-//
-import Paper from '@mui/material/Paper'
-import IconButton from '@mui/material/IconButton'
-import Typography from '@mui/material/Typography'
-import DeleteIcon from '@mui/icons-material/Delete'
 import { makeStyles } from 'tss-react/mui'
-import MuiTooltip from '@mui/material/Tooltip'
-import { Theme } from '@mui/material'
-import { DataTableOptions } from '../data-table.props.type/options'
+// materials
+import type { Theme } from '@mui/material'
+import { IconButton, Typography, Tooltip as MuiTooltip } from '@mui/material'
+import { Delete as DeleteIcon } from '@mui/icons-material'
+// locals
+import type { DataTableProps } from '../data-table.props.type'
+import type { DataTableOptions } from '../data-table.props.type/options'
 import { TEXT_LABELS } from '../statics'
 
 export function TableToolbarSelect({
@@ -47,7 +45,7 @@ export function TableToolbarSelect({
     const Tooltip = components.Tooltip ?? MuiTooltip
 
     return (
-        <Paper className={classes.root}>
+        <div className={classes.root}>
             <div>
                 <Typography variant="subtitle1" className={classes.title}>
                     {selectedRows.data.length} {textLabels.text}
@@ -72,15 +70,14 @@ export function TableToolbarSelect({
                     </IconButton>
                 </Tooltip>
             )}
-        </Paper>
+        </div>
     )
 }
 
 const useStyles = makeStyles({
-    name: 'MUIDataTableToolbarSelect'
-})(({ palette, spacing }: Theme) => ({
+    name: 'datatable-delight--toolbar-select'
+})(({ spacing }: Theme) => ({
     root: {
-        backgroundColor: palette.background.default,
         flex: '1 1 100%',
         display: 'flex',
         position: 'relative',

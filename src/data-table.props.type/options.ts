@@ -1,11 +1,10 @@
-import type { TableProps } from '@mui/material'
+import type { TableProps, TableRowProps } from '@mui/material'
 import type {
     DisplayData,
     FilterType,
     MUIDataTableChip,
     MUIDataTableColumn,
     MUIDataTableDraggableColumns,
-    MUIDataTableIsRowCheck,
     MUIDataTableState,
     MUIDataTableTextLabels,
     MUISortOptions,
@@ -14,6 +13,22 @@ import type {
 import { Component, JSX, ReactNode } from 'react'
 
 type BooleanOrDisabled = Boolean | 'disabled'
+
+/**
+ * @deprecated FOUND THIS TYPE BUT CAN'T DESCRIBED YET
+ */
+export interface RowTypeIDK {
+    index: number
+    dataIndex: number
+}
+
+/**
+ * @deprecated FOUND THIS TYPE BUT CAN'T DESCRIBED YET
+ */
+export interface SomeRowsIDK {
+    data: RowTypeIDK[]
+    lookup: boolean[]
+}
 
 export interface DataTableOptions {
     /** Enable/disable case sensitivity for search */
@@ -263,16 +278,10 @@ export interface DataTableOptions {
      * Enable/disable expansion or collapse on certain expandable rows with custom function.
      * Returns `true` if not provided.
      */
-    isRowExpandable?: (
-        dataIndex: number,
-        expandedRows?: MUIDataTableIsRowCheck
-    ) => boolean
+    isRowExpandable?: (dataIndex: number, expandedRows?: SomeRowsIDK) => boolean
 
     /** Enable/disable selection on certain rows with custom function. Returns true if not provided. */
-    isRowSelectable?: (
-        dataIndex: number,
-        selectedRows?: MUIDataTableIsRowCheck
-    ) => boolean
+    isRowSelectable?: (dataIndex: number, selectedRows?: SomeRowsIDK) => boolean
 
     /**
      * When true, the option adds a dropdown to the table's footer that allows a user to navigate to a specific page.
@@ -365,7 +374,8 @@ export interface DataTableOptions {
     /** Callback function that triggers when a row is clicked. */
     onRowClick?: (
         rowData: string[],
-        rowMeta: { dataIndex: number; rowIndex: number }
+        rowMeta: { dataIndex: number; rowIndex: number },
+        event: React.MouseEvent<HTMLTableRowElement, MouseEvent>
     ) => void
 
     /** Callback function that triggers when row(s) are expanded/collapsed. */
@@ -590,7 +600,11 @@ export interface DataTableOptions {
      *
      * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-styling/index.tsx
      */
-    setRowProps?: (row: any[], dataIndex: number, rowIndex: number) => object
+    setRowProps?: (
+        row: any[],
+        dataIndex: number,
+        rowIndex: number
+    ) => TableRowProps
 
     /**
      * Is called for the table and allows you to return custom props for the table based on its data.

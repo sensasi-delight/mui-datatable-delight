@@ -3,14 +3,14 @@ import { makeStyles } from 'tss-react/mui'
 import { DataTableOptions } from '../data-table.props.type/options'
 import clsx from 'clsx'
 
-export function TableBodyRow({
+export function DataTableBodyRow({
     options,
     rowSelected,
     onClick,
     isRowSelectable,
     children,
     className
-}: TableBodyRowProps) {
+}: DataTableBodyRowProps) {
     const { classes } = useStyles()
 
     return (
@@ -44,7 +44,7 @@ export function TableBodyRow({
         </TableRow>
     )
 }
-interface TableBodyRowProps extends TableRowProps {
+export interface DataTableBodyRowProps extends TableRowProps {
     isRowSelectable: boolean
 
     /** Options used to describe table */
@@ -61,7 +61,7 @@ interface TableBodyRowProps extends TableRowProps {
 }
 
 const useStyles = makeStyles({
-    name: 'DataTableBodyRow'
+    name: 'datatable-delight--body--row'
 })((theme: Theme) => ({
     root: {
         // material v4
