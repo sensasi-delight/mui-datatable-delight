@@ -1,4 +1,4 @@
-import type { TableProps, TableRowProps } from '@mui/material'
+import type { TableProps, TableRowProps, TextFieldProps } from '@mui/material'
 import type {
     DisplayData,
     FilterType,
@@ -10,7 +10,7 @@ import type {
     MUISortOptions,
     SelectableRows
 } from 'mui-datatables'
-import { Component, JSX, ReactNode } from 'react'
+import { ReactNode } from 'react'
 
 type BooleanOrDisabled = Boolean | 'disabled'
 
@@ -90,22 +90,10 @@ export interface DataTableOptions {
      * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-search/index.tsx
      */
     customSearch?: (
-        searchQuery: string,
+        searchText: string,
         currentRow: any[],
         columns: any[]
     ) => boolean
-
-    /**
-     * Render a custom table search.
-     *
-     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-search-render/CustomSearchRender.tsx
-     */
-    customSearchRender?: (
-        searchText: string,
-        handleSearch: (text: string) => void,
-        hideSearch: () => void,
-        options: any
-    ) => Component | JSX.Element
 
     /**
      * Override default sorting with custom function.
@@ -527,9 +515,17 @@ export interface DataTableOptions {
     /**
      * Props applied to the search text box. You can set method callbacks like onBlur, onKeyUp, etc, this way.
      *
+     * @see https://mui-datatable-delight.vercel.app/features/delay-search-debounce
+     * @default 0
+     */
+    searchDelay?: number
+
+    /**
+     * Props applied to the search text box. You can set method callbacks like onBlur, onKeyUp, etc, this way.
+     *
      * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-search/index.tsx
      */
-    searchProps?: React.HTMLAttributes<HTMLInputElement>
+    searchProps?: TextFieldProps
 
     /**
      * Search text placeholder.
@@ -690,10 +686,6 @@ export interface DataTableOptions {
 //         ]),
 //         customRowRender: PropTypes.func,
 //         customSearch: PropTypes.func,
-//         customSearchRender: PropTypes.oneOfType([
-//             PropTypes.func,
-//             PropTypes.element
-//         ]),
 //         customSort: PropTypes.func,
 //         customToolbar: PropTypes.oneOfType([
 //             PropTypes.func,

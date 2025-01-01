@@ -3,8 +3,12 @@
 import React from 'react'
 import { Button } from '@mui/material'
 
-import DataTable, { debounceSearchRender } from '@src'
+import DataTable, { DataTableOptions, DataTableProps } from '@src'
 
+/**
+ * @todo REFACTOR TO FUNCTIONAL COMPONENT
+ * @todo REMOVE RANDOM TO FIX HYDRATION ERROR
+ */
 class Example extends React.Component {
     constructor(props) {
         super(props)
@@ -91,7 +95,7 @@ class Example extends React.Component {
     }
 
     render() {
-        const columns = [
+        const columns: DataTableProps['columns'] = [
             {
                 name: 'name',
                 label: 'Name',
@@ -166,14 +170,14 @@ class Example extends React.Component {
             }
         ]
 
-        const options = {
+        const options: DataTableOptions = {
             rowsPerPage: 100,
             rowsPerPageOptions: [10, 100, 250, 500, 1000],
             filter: true,
             filterType: 'dropdown',
             responsive: 'vertical',
             tableBodyHeight: '500px',
-            customSearchRender: debounceSearchRender(500),
+            searchDelay: 500,
             jumpToPage: true,
 
             // These next two options allow you to make it so filters need to be confirmed.

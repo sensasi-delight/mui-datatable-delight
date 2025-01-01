@@ -24,7 +24,3 @@ export { default as TableFilterList } from './components/filter-list'
 // export { default as TableToolbarSelect } from './components/TableToolbarSelect'
 // export { default as TableViewCol } from './components/TableViewCol'
 export { default as ExpandButton } from './components/components.shared/select-cell.expand-button'
-export {
-    debounceSearchRender
-    //     DebounceTableSearch
-} from './plug-ins'

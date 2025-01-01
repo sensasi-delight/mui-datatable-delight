@@ -23,7 +23,7 @@ import { createCsvDownload } from './toolbar.functions.create-csv-download'
 import { DataTableToolbarFilter } from './toolbar.filter'
 import Popover from './toolbar.popover'
 import TableViewCol from './toolbar.view-col'
-import TableSearch from './toolbar.search'
+import { DataTableToolbarSearch } from './toolbar.search'
 
 export const defaultToolbarStyles = (theme: Theme) => ({
     root: {
@@ -337,7 +337,7 @@ class TableToolbar extends React.Component {
 
         const { search, downloadCsv, print, viewColumns, filterTable } =
             options.textLabels.toolbar
-        const { showSearch, searchText } = this.state
+        const { showSearch } = this.state
 
         const filterPopoverExit = () => {
             this.setState({ hideFilterPopover: false })
@@ -365,22 +365,12 @@ class TableToolbar extends React.Component {
                             : classes.fullWidthLeft
                     }
                 >
-                    {showSearch === true ? (
-                        options.customSearchRender ? (
-                            options.customSearchRender(
-                                searchText,
-                                this.handleSearch,
-                                this.hideSearch,
-                                options
-                            )
-                        ) : (
-                            <TableSearch
-                                searchText={searchText}
-                                onSearch={this.handleSearch}
-                                onHide={this.hideSearch}
-                                options={options}
-                            />
-                        )
+                    {showSearch ? (
+                        <DataTableToolbarSearch
+                            onSearch={this.handleSearch}
+                            onHide={this.hideSearch}
+                            options={options}
+                        />
                     ) : typeof title !== 'string' ? (
                         title
                     ) : (
