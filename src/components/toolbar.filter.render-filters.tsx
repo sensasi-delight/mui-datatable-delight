@@ -16,14 +16,13 @@ import {
     Typography
 } from '@mui/material'
 // vendors
-import type { ReactNode } from 'react'
 import { makeStyles } from 'tss-react/mui'
 // locals
 import type {
     CustomUpdateType,
     DataTableToolbarFilterProps
 } from './toolbar.filter'
-import type { DataTableProps } from '../../'
+import type { DataTableProps } from '..'
 import {
     type DataTableState,
     FilterTypeEnum
@@ -243,8 +242,7 @@ function DataTableToolbarFilterCheckbox({
     handleCheckboxChange: (value: string) => void
 }) {
     const { classes } = useStyles()
-    const renderItem =
-        column?.filterOptions?.renderValue ?? ((v: ReactNode) => v)
+    const renderItem = column?.filterOptions?.renderValue ?? (v => v)
 
     return (
         <Grid item xs={6}>
@@ -317,7 +315,7 @@ function DataTableToolbarFilterMultiselect({
 }) {
     const { classes } = useStyles()
 
-    const renderItem = column.filterOptions?.renderValue ?? ((v: string) => v)
+    const renderItem = column.filterOptions?.renderValue ?? (v => v)
 
     const width = column.filterOptions?.fullWidth ? 12 : 6
 
@@ -494,9 +492,7 @@ function RenderSelect({
 
     const textLabels = options.textLabels.filter ?? TEXT_LABELS.filter
 
-    const renderItem =
-        column.filterOptions?.renderValue ??
-        (v => (v !== null ? v.toString() : ''))
+    const renderItem = column.filterOptions?.renderValue ?? (v => v)
 
     const width = column.filterOptions?.fullWidth ? 12 : 6
 
