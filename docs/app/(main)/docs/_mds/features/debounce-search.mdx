@@ -1,0 +1,41 @@
+# Debounce Search
+
+The **`<DataTable />`** component includes a powerful feature for handling search input efficiently: **debounce search**. This feature helps reduce the number of search requests triggered by rapid user input, improving performance and user experience.
+
+> See debounce search in action on [Large Data Set example page](/examples/large-data-set)
+
+#### How It Works
+
+When users type in the search box, instead of sending a request for every keystroke, the component waits for a short delay (configured by you) before initiating the search. This delay resets each time the user types a new character, ensuring that only the final, settled input triggers the search.
+
+#### Enabling Debounce Search
+
+You can enable debounce search by simply setting the `searchDelay` property inside the `options` prop of the **DataTable** component.
+
+#### Example Usage
+
+```jsx
+import DataTable from './DataTable'
+
+const MyComponent = () => {
+    const options = {
+        searchDelay: 300 // Delay in milliseconds
+    }
+
+    return <DataTable data={myData} columns={myColumns} options={options} />
+}
+
+export default MyComponent
+```
+
+#### Explanation
+
+- **`searchDelay` (number)**: The delay in milliseconds to wait before triggering the search.
+    - For example, setting `searchDelay: 300` means the search will only execute 300ms after the user stops typing.
+
+#### Benefits
+
+- **Improved Performance**: Reduces the load on the server or data processing logic by minimizing the number of search operations.
+- **Enhanced User Experience**: Prevents unnecessary operations during quick typing, making the interface smoother.
+
+This feature is particularly useful when working with large datasets or when the search relies on server requests. By enabling debounce search, your application becomes more responsive and efficient with minimal effort.

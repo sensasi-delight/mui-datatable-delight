@@ -513,9 +513,10 @@ export interface DataTableOptions {
     searchAlwaysOpen?: boolean
 
     /**
-     * Props applied to the search text box. You can set method callbacks like onBlur, onKeyUp, etc, this way.
+     * The delay in milliseconds to wait before triggering the search.
+     * For example, setting searchDelay: 300 means the search will only execute 300ms after the user stops typing.
      *
-     * @see https://mui-datatable-delight.vercel.app/features/delay-search-debounce
+     * @see https://mui-datatable-delight.vercel.app/features/debounce-search
      * @default 0
      */
     searchDelay?: number
