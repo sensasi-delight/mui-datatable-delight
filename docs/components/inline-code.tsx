@@ -17,7 +17,6 @@ export function InlineCode({
             sx={[
                 {
                     borderRadius: 1,
-                    fontSize: '1.1em',
                     px: 0.5,
                     py: 0.5,
                     bgcolor: !disableBg ? grey['200'] : undefined
