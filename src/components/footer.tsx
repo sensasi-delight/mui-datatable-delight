@@ -21,7 +21,7 @@ export default function TableFooter({
     changeRowsPerPage,
     changePage
 }: TableFooterProps) {
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const {
         customFooter,
         pagination = true,
@@ -30,7 +30,7 @@ export default function TableFooter({
     } = options
 
     return (
-        <div className={classes.root}>
+        <div className={cx(ROOT_CLASS, classes.root)}>
             {customFooter &&
                 customFooter(
                     rowCount,
@@ -99,8 +99,10 @@ interface TableFooterProps {
     changePage: (pageNo: number) => void
 }
 
+const ROOT_CLASS = 'datatable-delight--footer'
+
 const useStyles = makeStyles({
-    name: 'delight-datatable-footer'
+    name: ROOT_CLASS
 })(theme => ({
     root: {
         display: 'flex',
