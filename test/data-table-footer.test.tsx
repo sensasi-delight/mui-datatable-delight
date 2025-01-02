@@ -1,25 +1,28 @@
-import React from 'react'
-import { spy } from 'sinon'
-import { mount } from 'enzyme'
-import { assert } from 'chai'
-import MuiTableFooter from '@mui/material/TableFooter'
-import { getTextLabels } from '../src/textLabels'
-import TableFooter from '../src/components/TableFooter'
-import JumpToPage from '../src/components/JumpToPage'
+// @ts-nocheck
 
-describe('<TableFooter />', function () {
-    let options
-    const changeRowsPerPage = spy()
-    const changePage = spy()
-    before(() => {
-        options = {
-            rowsPerPageOptions: [5, 10, 15],
-            textLabels: getTextLabels()
-        }
-    })
+// vendors
+import '@testing-library/jest-dom'
+import MuiTableFooter from '@mui/material/TableFooter'
+import { render } from '@testing-library/react'
+// locals
+import type { DataTableProps } from '../src'
+import { TEXT_LABELS } from '../src/statics'
+import TableFooter from '../src/components/footer'
+
+/**
+ * @todo FIX TYPE ERROR TO REMOVE `@ts-nocheck`
+ */
+describe('<DataTableFooter />', function () {
+    const options: DataTableProps['options'] = {
+        rowsPerPageOptions: [5, 10, 15],
+        textLabels: TEXT_LABELS
+    }
+
+    const changeRowsPerPage = jest.fn()
+    const changePage = jest.fn()
 
     it('should render a table footer', () => {
-        const mountWrapper = mount(
+        const { container } = render(
             <TableFooter
                 options={options}
                 rowCount={100}
@@ -30,14 +33,14 @@ describe('<TableFooter />', function () {
             />
         )
 
-        const actualResult = mountWrapper.find(MuiTableFooter)
-        assert.strictEqual(actualResult.length, 1)
+        expect(
+            container.getElementsByClassName('datatable-delight--footer').length
+        ).toBe(1)
     })
 
     it('should render a table footer with customFooter', () => {
         const customOptions = {
-            rowsPerPageOptions: [5, 10, 15],
-            textLabels: getTextLabels(),
+            ...options,
             customFooter: (
                 rowCount,
                 page,
@@ -59,7 +62,7 @@ describe('<TableFooter />', function () {
             }
         }
 
-        const mountWrapper = mount(
+        const { container } = render(
             <TableFooter
                 options={customOptions}
                 rowCount={100}
@@ -70,18 +73,16 @@ describe('<TableFooter />', function () {
             />
         )
 
-        const actualResult = mountWrapper.find(MuiTableFooter)
-        assert.strictEqual(actualResult.length, 1)
+        expect(container.getElementsByTagName('tfoot').length).toBe(1)
     })
 
     it('should not render a table footer', () => {
         const nonPageOption = {
-            rowsPerPageOptions: [5, 10, 15],
-            textLabels: getTextLabels(),
+            ...options,
             pagination: false
         }
 
-        const mountWrapper = mount(
+        const { container } = render(
             <TableFooter
                 options={nonPageOption}
                 rowCount={100}
@@ -92,20 +93,21 @@ describe('<TableFooter />', function () {
             />
         )
 
-        const actualResult = mountWrapper.find(MuiTableFooter)
-        assert.strictEqual(actualResult.length, 0)
+        expect(
+            container.getElementsByClassName('datatable-delight--footer')[0]
+                .children.length
+        ).toBe(0)
     })
 
     it('should render a JumpToPage component', () => {
-        const options = {
-            rowsPerPageOptions: [5, 10, 15],
-            textLabels: getTextLabels(),
+        const jumpToPageOptions = {
+            ...options,
             jumpToPage: true
         }
 
-        const mountWrapper = mount(
+        const { container } = render(
             <TableFooter
-                options={options}
+                options={jumpToPageOptions}
                 rowCount={100}
                 page={1}
                 rowsPerPage={10}
@@ -114,7 +116,10 @@ describe('<TableFooter />', function () {
             />
         )
 
-        const actualResult = mountWrapper.find(JumpToPage)
-        assert.strictEqual(actualResult.length, 1)
+        expect(
+            container.getElementsByClassName(
+                'datatable-delight--footer--jump-to-page'
+            ).length
+        ).toBe(1)
     })
 })

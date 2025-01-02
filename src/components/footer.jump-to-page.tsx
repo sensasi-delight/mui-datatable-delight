@@ -1,7 +1,6 @@
 // vendors
 import { InputBase, MenuItem, Select, Typography } from '@mui/material'
 import { makeStyles } from 'tss-react/mui'
-import clsx from 'clsx'
 
 export function DataTableFooterJumpToPage({
     count,
@@ -21,13 +20,13 @@ export function DataTableFooterJumpToPage({
 
     changePage: (pageNo: number) => void
 }) {
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
 
     const pages = getPageOptions(count, rowsPerPage)
     const page = pages.length < pageProp ? pages.length - 1 : pageProp
 
     return (
-        <div className={classes.root}>
+        <div className={cx(MAIN_CLASS, classes.root)}>
             <Typography
                 color="inherit"
                 variant="body2"
@@ -40,7 +39,7 @@ export function DataTableFooterJumpToPage({
                 classes={{ select: classes.select, icon: classes.selectIcon }}
                 input={
                     <InputBase
-                        className={clsx(classes.input, classes.selectRoot)}
+                        className={cx(classes.input, classes.selectRoot)}
                     />
                 }
                 onChange={({ target: { value } }) => {
@@ -63,8 +62,10 @@ export function DataTableFooterJumpToPage({
     )
 }
 
+const MAIN_CLASS = 'datatable-delight--footer--jump-to-page'
+
 const useStyles = makeStyles({
-    name: 'delight-datatable-footer--jump-to-page'
+    name: MAIN_CLASS
 })(theme => ({
     root: {
         alignItems: 'center',
