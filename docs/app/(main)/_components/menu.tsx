@@ -61,10 +61,9 @@ export default function Menu({
             }}
         >
             <List component="nav">
-                <MenuSection sectionId="GETTING_STARTED" toggle={toggle} />
-                <MenuSection sectionId="FEATURES" toggle={toggle} />
-                <MenuSection sectionId="EXAMPLES" toggle={toggle} />
-                <MenuSection sectionId="API" toggle={toggle} />
+                {Object.values(Section).map((section, i) => (
+                    <MenuSection sectionId={section} toggle={toggle} key={i} />
+                ))}
             </List>
         </Drawer>
     )
@@ -134,7 +133,7 @@ function MenuSection({
     sectionId,
     toggle
 }: {
-    sectionId: SectionIdType
+    sectionId: Section
     toggle: ToggleType
 }) {
     const [isOpen, setIsOpen] = useState(false)
@@ -201,32 +200,42 @@ function CustomListSubheader({
 }) {
     return (
         <ListSubheader
-            component={Button}
-            onClick={onClick}
-            startIcon={isOpen ? <KeyboardArrowDown /> : <KeyboardArrowRight />}
-            fullWidth
-            sx={theme => ({
+            sx={{
                 lineHeight: 'unset',
-                py: 1.2,
-                px: 2,
-                fontWeight: 'bold',
-                textTransform: 'uppercase',
-                color: theme.palette.primary.dark,
-                justifyContent: 'flex-start',
-                borderRadius: 'unset',
-                '&:hover': {
-                    bgcolor: 'var(--variant-textBg)'
-                }
-            })}
+                p: 0
+            }}
         >
-            {title}
+            <Button
+                onClick={onClick}
+                startIcon={
+                    isOpen ? <KeyboardArrowDown /> : <KeyboardArrowRight />
+                }
+                fullWidth
+                // color="primary"
+                sx={{
+                    py: 1.2,
+                    px: 2,
+                    // color: 'primary.dark',
+                    fontWeight: 'bold',
+                    textTransform: 'uppercase',
+                    justifyContent: 'flex-start',
+                    borderRadius: 'unset'
+                }}
+            >
+                {title}
+            </Button>
         </ListSubheader>
     )
 }
 
-type SectionIdType = 'GETTING_STARTED' | 'FEATURES' | 'EXAMPLES' | 'API'
+enum Section {
+    GETTING_STARTED = 'GETTING_STARTED',
+    FEATURES = 'FEATURES',
+    EXAMPLES = 'EXAMPLES',
+    API = 'API'
+}
 
-function getDocRoutes(sectionId: SectionIdType): Route[] {
+function getDocRoutes(sectionId: Section): Route[] {
     return Object.keys(DocsRoute)
         .filter(enumKey => enumKey.includes(sectionId))
         .map(enumKey => {

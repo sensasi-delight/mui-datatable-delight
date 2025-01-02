@@ -39,11 +39,12 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                 <meta
                     name="keywords"
                     content={
-                        'material-ui, data tables, datatables, material-ui, material-ui-datables, react tables, react data tables'
+                        'material-ui, data table, datatable, mui, mui data table, react table, react data table'
                     }
                 />
+
                 <meta name="robots" content="index,follow,noodp" />
-                <meta name="author" content="Gregory Nowakowski" />
+
                 <meta name="googlebot" content="noarchive" />
 
                 <link

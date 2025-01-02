@@ -1,5 +1,5 @@
 import type { MDXComponents } from 'mdx/types'
-import { Alert, Link } from '@mui/material'
+import { Alert, Link, Typography } from '@mui/material'
 import { CodeSnippet, InlineCode } from './components'
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
@@ -34,6 +34,11 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
             </Alert>
         ),
         a: props => <Link {...props} />,
+        p: ({ children }) => (
+            <Typography lineHeight={2} my={3}>
+                {children}
+            </Typography>
+        ),
         ...components
     }
 }
