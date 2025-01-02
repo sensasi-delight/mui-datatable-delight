@@ -413,31 +413,34 @@ export interface DataTableOptions {
 
     /** User provided page for pagination */
     page?: number
+
     /**
      * Enable/disable pagination.
+     *
      * @default true
      */
-
     pagination?: boolean
+
     /**
      * Possible Values:
      * - true       = Button visible and clickable
      * - false      = Button not visible
      * - 'disabled' = Button is visible but not clickable
+     *
      * @default true
      */
-
     print?: BooleanOrDisabled
+
     /**
      * Render Expandable rows.
      *
      * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/expandable-rows/index.tsx
      */
-
     renderExpandableRow?: (
         rowData: string[],
         rowMeta: { dataIndex: number; rowIndex: number }
     ) => ReactNode
+
     /** Enable/disable resizable columns. */
     resizableColumns?: boolean
 
@@ -449,6 +452,7 @@ export interface DataTableOptions {
      * - 'simple': On very small devices the table rows will collapse into simple display.
      *
      * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/simple/index.tsx
+     *
      * @default 'vertical'
      */
     responsive?:
@@ -465,6 +469,7 @@ export interface DataTableOptions {
 
     /**
      * Enable/disable hover style over row.
+     *
      * @default true
      */
     rowHover?: boolean
@@ -517,6 +522,7 @@ export interface DataTableOptions {
      * For example, setting searchDelay: 300 means the search will only execute 300ms after the user stops typing.
      *
      * @see https://mui-datatable-delight.vercel.app/features/debounce-search
+     *
      * @default 0
      */
     searchDelay?: number
@@ -566,14 +572,16 @@ export interface DataTableOptions {
 
     /**
      * Controls the visibility of the Select Toolbar.
+     *
      * Options:
-     * - 'replace': Select toolbar replaces default toolbar.
      * - 'above': Appears above the default toolbar.
+     * - `always`:
      * - 'none': Select Toolbar never appears
+     * - 'replace': Select toolbar replaces default toolbar.
      *
      * @default replace
      */
-    selectToolbarPlacement?: 'replace' | 'above' | 'none'
+    selectToolbarPlacement?: STP
 
     /**
      * Enable remote data source
@@ -783,10 +791,6 @@ export interface DataTableOptions {
 //         searchText: PropTypes.string,
 //         setFilterChipProps: PropTypes.func,
 //         setRowProps: PropTypes.func,
-//         selectToolbarPlacement: PropTypes.oneOfType([
-//             PropTypes.bool,
-//             PropTypes.oneOf([STP.REPLACE, STP.ABOVE, STP.NONE, STP.ALWAYS])
-//         ]),
 //         setTableProps: PropTypes.func,
 //         sort: PropTypes.bool,
 //         sortOrder: PropTypes.object,
@@ -799,3 +803,11 @@ export interface DataTableOptions {
 //             'disabled'
 //         ])
 //     }),
+
+// Select Toolbar Placement options
+export enum STP {
+    ABOVE = 'above',
+    ALWAYS = 'always',
+    NONE = 'none',
+    REPLACE = 'replace'
+}
