@@ -1,4 +1,4 @@
-export function getCollatorComparator() {
+export function getCollatorComparator(): (a: string, b: string) => number {
     if (Intl) {
         const collator = new Intl.Collator(undefined, {
             numeric: true,

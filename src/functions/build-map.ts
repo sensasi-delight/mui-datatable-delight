@@ -3,8 +3,8 @@ export function buildMap(
         index: number
         dataIndex: number
     }[]
-) {
-    const map: Record<number, boolean> = {}
+): boolean[] {
+    const map: boolean[] = []
 
     rows.forEach(({ dataIndex }) => (map[dataIndex] = true))
 

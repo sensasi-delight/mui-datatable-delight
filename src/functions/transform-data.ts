@@ -1,6 +1,11 @@
 import { DataTableOptions } from '../data-table.props.type/options'
+import { DataTableState } from '../data-table.props.type/state'
 
-export function transformData(columns, data, options: DataTableOptions) {
+export function transformData(
+    columns: DataTableState['columns'],
+    data: DataTableState['data'],
+    options: DataTableOptions
+): unknown[][] {
     const { enableNestedDataAccess } = options
 
     const leaf = (obj, path) =>
