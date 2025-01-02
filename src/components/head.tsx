@@ -106,9 +106,6 @@ const TableHead = ({
                 [classes.responsiveSimple]: options.responsive === 'simple',
                 [classes.main]: true
             })}
-            sx={{
-                backgroundColor: 'background.paper'
-            }}
         >
             <TableHeadRow>
                 <DataTableTableSelectCell
