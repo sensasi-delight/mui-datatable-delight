@@ -42,7 +42,6 @@ export default function SideTopBar() {
                         sm: undefined,
                         md: `${DRAWER_WIDTH}px`
                     },
-                    bgcolor: '#01579b !important',
                     transition: theme.transitions.create(['margin', 'width'], {
                         easing: theme.transitions.easing.easeOut,
                         duration: theme.transitions.duration.enteringScreen
