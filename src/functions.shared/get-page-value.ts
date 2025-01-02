@@ -1,4 +1,8 @@
-export function getPageValue(count: number, rowsPerPage: number, page: number) {
+export function getPageValue(
+    count: number,
+    rowsPerPage: number,
+    page: number
+): number {
     const totalPages = count <= rowsPerPage ? 1 : Math.ceil(count / rowsPerPage)
 
     // `page` is 0-indexed

@@ -3,7 +3,7 @@
  */
 export function cloneDeep(
     entity: unknown,
-    cache = new WeakMap()
+    cache: WeakMap<string[], unknown> = new WeakMap()
 ): typeof entity {
     const referenceTypes = ['Array', 'Object', 'Map', 'Set', 'Date']
     const entityType = Object.prototype.toString.call(entity)

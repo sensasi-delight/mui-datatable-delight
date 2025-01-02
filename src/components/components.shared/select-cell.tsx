@@ -97,7 +97,14 @@ export function DataTableTableSelectCell({
     }
 
     return (
-        <TableCell className={cellClass} padding="checkbox" {...refProp}>
+        <TableCell
+            className={cellClass}
+            padding="checkbox"
+            sx={{
+                bgcolor: isHeaderCell ? 'background.paper' : undefined
+            }}
+            {...refProp}
+        >
             <div style={{ display: 'flex', alignItems: 'center' }}>
                 {expandableOn && (
                     <ExpandButtonComponent

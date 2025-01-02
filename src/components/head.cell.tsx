@@ -211,6 +211,9 @@ const TableHeadCell = ({
             data-colindex={index}
             data-tableid={tableId}
             onMouseDown={closeTooltip}
+            sx={{
+                bgcolor: 'background.paper'
+            }}
             {...otherProps}
         >
             {options.sort && sort ? (

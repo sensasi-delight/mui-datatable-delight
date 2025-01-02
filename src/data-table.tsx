@@ -1,7 +1,7 @@
 'use client'
 
 // types
-import type { DataTableColumns, DataTableProps } from './data-table.props.type'
+import type { DataTableProps } from './data-table.props.type'
 // vendors
 import { DndProvider } from 'react-dnd'
 import {
@@ -13,7 +13,7 @@ import {
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { makeStyles } from 'tss-react/mui'
 import clsx from 'clsx'
-import React, { ReactNode } from 'react'
+import React, { createRef, type ReactNode, type RefObject } from 'react'
 // local components
 import { DataTableToolbarFilter } from './components/toolbar.filter'
 import { TableToolbarSelect as DefaultTableToolbarSelect } from './components/toolbar-select'
@@ -43,38 +43,57 @@ import type {
     MUIDataTableState,
     MUIDataTableStateRows
 } from 'mui-datatables'
-import type { DataTableOptions } from './data-table.props.type/options'
+import { STP, type DataTableOptions } from './data-table.props.type/options'
 import type { DataTableState } from './data-table.props.type/state'
+import { DataTableComponents } from './data-table.props.type/components'
 
 /**
  * A responsive DataTable component built with Material UI for React-based project.
  *
  * @see https://mui-datatable-delight.vercel.app
  */
-export function DataTable({ components, ...props }: DataTableProps) {
-    const { classes } = useStyles()
+export function DataTable({ components, className, ...props }: DataTableProps) {
+    const { classes, cx } = useStyles()
+    const rootRef = createRef<HTMLDivElement>()
+
+    const paperClasses = cx(
+        ['scrollFullHeightFullWidth', 'stackedFullWidth'].some(
+            responsive => props.options?.responsive === responsive
+        )
+            ? classes.paperResponsiveScrollFullHeightFullWidth
+            : '',
+        className
+    )
 
     return (
-        <MUIDataTableClass
-            {...props}
-            classes={classes}
-            components={{
-                icons: components?.icons,
-
-                Tooltip: components?.Tooltip ?? MuiTooltip,
-
-                TableBody: components?.TableBody ?? DefaultTableBody,
-                TableFilter: components?.TableFilter ?? DataTableToolbarFilter,
-                TableFilterList:
-                    components?.TableFilterList ?? DefaultTableFilterList,
-                TableFooter: components?.TableFooter ?? DefaultTableFooter,
-                TableHead: components?.TableHead ?? DefaultTableHead,
-                TableResize: components?.TableResize ?? DefaultTableResize,
-                TableToolbar: components?.TableToolbar ?? DefaultTableToolbar,
-                TableToolbarSelect:
-                    components?.TableToolbarSelect ?? DefaultTableToolbarSelect
-            }}
-        />
+        <Paper
+            elevation={props.options?.elevation}
+            ref={rootRef}
+            className={paperClasses}
+        >
+            <MUIDataTableClass
+                classes={classes}
+                getRootRef={() => rootRef}
+                {...props}
+                components={{
+                    icons: components?.icons,
+                    TableBody: components?.TableBody ?? DefaultTableBody,
+                    TableFilter:
+                        components?.TableFilter ?? DataTableToolbarFilter,
+                    TableFilterList:
+                        components?.TableFilterList ?? DefaultTableFilterList,
+                    TableFooter: components?.TableFooter ?? DefaultTableFooter,
+                    TableHead: components?.TableHead ?? DefaultTableHead,
+                    TableResize: components?.TableResize ?? DefaultTableResize,
+                    TableToolbar:
+                        components?.TableToolbar ?? DefaultTableToolbar,
+                    TableToolbarSelect:
+                        components?.TableToolbarSelect ??
+                        DefaultTableToolbarSelect,
+                    Tooltip: components?.Tooltip ?? MuiTooltip
+                }}
+            />
+        </Paper>
     )
 }
 
@@ -141,25 +160,34 @@ const useStyles = makeStyles({
 }))
 
 class MUIDataTableClass extends React.Component<
-    DataTableProps,
+    DataTableProps & {
+        classes: ReturnType<typeof useStyles>['classes']
+        getRootRef: () => RefObject<HTMLDivElement | null>
+    },
     MUIDataTableState
 > {
     options: DataTableOptions
-    tableRef: React.RefObject<HTMLTableElement | null>
-    tableContent: React.RefObject<HTMLDivElement | null>
-    draggableHeadCellRefs: {}
-    setHeadResizable: () => void
-    resizeHeadCellRefs: {}
+    tableRef: RefObject<HTMLTableElement | null>
+    draggableHeadCellRefs: RefObject<unknown>[]
+    setHeadResizable: (
+        resizeHeadCellRefs: RefObject<unknown>[],
+        tableRef: RefObject<unknown>
+    ) => void
+    resizeHeadCellRefs: RefObject<unknown>[]
     timers: unknown
     updateDividers: () => void
 
-    constructor(props: DataTableProps) {
+    constructor(
+        props: DataTableProps & {
+            classes: ReturnType<typeof useStyles>['classes']
+            getRootRef: () => RefObject<HTMLDivElement | null>
+        }
+    ) {
         super(props)
 
-        this.tableRef = React.createRef()
-        this.tableContent = React.createRef()
-        this.draggableHeadCellRefs = {}
-        this.resizeHeadCellRefs = {}
+        this.tableRef = createRef()
+        this.draggableHeadCellRefs = []
+        this.resizeHeadCellRefs = []
         this.timers = {}
         this.setHeadResizable = () => {}
         this.updateDividers = () => {}
@@ -223,11 +251,7 @@ class MUIDataTableClass extends React.Component<
             this.setState({ page: 0 })
         }
 
-        if (
-            this.options.resizableColumns === true ||
-            (this.options.resizableColumns &&
-                this.options.resizableColumns.enabled)
-        ) {
+        if (this.options.resizableColumns) {
             this.setHeadResizable(this.resizeHeadCellRefs, this.tableRef)
             this.updateDividers()
         }
@@ -292,7 +316,7 @@ class MUIDataTableClass extends React.Component<
 
     // must be arrow function on local field to refer to the correct instance when passed around
     // assigning it as arrow function in the JSX would cause hard to track re-render errors
-    getTableContentRef = () => this.tableContent.current
+    getCurrentRootRef = () => this.props.getRootRef().current
 
     /*
      *  Build the source table data
@@ -303,18 +327,18 @@ class MUIDataTableClass extends React.Component<
      *  prevColumnOrder - columnOrder object saved onto the state.
      */
     buildColumns = (
-        newColumns: DataTableState['columns'],
+        newColumns: DataTableProps['columns'],
         prevColumns: DataTableState['columns'] = [],
         newColumnOrder: DataTableState['columnOrder'],
         prevColumnOrder: DataTableState['columnOrder'] = []
     ) => {
-        let columnData = []
+        const columnData: DataTableState['columns'] = []
         let filterData = []
         let filterList = []
-        let columnOrder = []
+        let columnOrder: number[] = []
 
         newColumns.forEach((column, colIndex) => {
-            let columnOptions = {
+            let columnOptions: Partial<DataTableState['columns'][0]> = {
                 display: 'true',
                 empty: false,
                 filter: true,
@@ -323,13 +347,16 @@ class MUIDataTableClass extends React.Component<
                 searchable: true,
                 download: true,
                 viewColumns: true,
-                sortCompare: null,
+                sortCompare: undefined,
                 sortThirdClickReset: false,
                 sortDescFirst: false
             }
 
             columnOrder.push(colIndex)
-            const options = { ...column.options }
+
+            const options = {
+                ...(typeof column === 'string' ? {} : column.options)
+            }
 
             if (typeof column === 'object') {
                 if (options) {
@@ -758,7 +785,7 @@ class MUIDataTableClass extends React.Component<
      *  Build the table data used to display to the user (ie: after filter/search applied)
      */
     computeDisplayRow(
-        columns: DataTableColumns,
+        columns: DataTableState['columns'],
         row: unknown[],
         rowIndex: number,
         filterList: DataTableState['filterList'],
@@ -1817,18 +1844,16 @@ class MUIDataTableClass extends React.Component<
     render() {
         const {
             classes,
-            className,
             title,
             components: {
                 TableBody,
-                TableFilter,
                 TableFilterList,
                 TableFooter,
                 TableHead,
                 TableResize,
                 TableToolbar,
                 TableToolbarSelect
-            }
+            } = {}
         } = this.props
 
         const {
@@ -1859,7 +1884,6 @@ class MUIDataTableClass extends React.Component<
         }))
         const responsiveOption = this.options.responsive
 
-        let paperClasses = `${classes.paper} ${className}`
         let maxHeight = this.options.tableBodyMaxHeight
         let responsiveClass
 
@@ -1882,7 +1906,6 @@ class MUIDataTableClass extends React.Component<
             // deprecated
             case 'scrollFullHeightFullWidth':
                 responsiveClass = classes.responsiveScrollFullHeight
-                paperClasses = `${classes.paperResponsiveScrollFullHeightFullWidth} ${className}`
                 break
             // deprecated
             case 'stacked':
@@ -1892,7 +1915,6 @@ class MUIDataTableClass extends React.Component<
             // deprecated
             case 'stackedFullWidth':
                 responsiveClass = classes.responsiveStackedFullWidth
-                paperClasses = `${classes.paperResponsiveScrollFullHeightFullWidth} ${className}`
                 maxHeight = 'none'
                 break
 
@@ -1914,11 +1936,7 @@ class MUIDataTableClass extends React.Component<
         delete tableProps.className // remove className from props to avoid the className being applied twice
 
         return (
-            <Paper
-                elevation={this.options.elevation}
-                ref={this.tableContent}
-                className={paperClasses}
-            >
+            <>
                 {(this.options.selectToolbarPlacement === STP.ALWAYS ||
                     (selectedRows.data.length > 0 &&
                         this.options.selectToolbarPlacement !== STP.NONE)) && (
@@ -1950,7 +1968,7 @@ class MUIDataTableClass extends React.Component<
                             searchText={searchText}
                             searchTextUpdate={this.searchTextUpdate}
                             searchClose={this.searchClose}
-                            tableRef={this.getTableContentRef}
+                            tableRef={this.getCurrentRootRef}
                             title={title}
                             toggleViewColumn={this.toggleViewColumn}
                             updateColumns={this.updateColumns}
@@ -2025,7 +2043,7 @@ class MUIDataTableClass extends React.Component<
                     toggleAllExpandableRows={this.toggleAllExpandableRows}
                     updateColumnOrder={this.updateColumnOrder}
                     draggableHeadCellRefs={this.draggableHeadCellRefs}
-                    getTableContentRef={this.getTableContentRef}
+                    getCurrentRootRef={this.getCurrentRootRef}
                     timers={this.timers}
                     toggleExpandRow={this.toggleExpandRow}
                 />
@@ -2042,17 +2060,9 @@ class MUIDataTableClass extends React.Component<
                 <div className={classes.liveAnnounce} aria-live="polite">
                     {announceText}
                 </div>
-            </Paper>
+            </>
         )
     }
-}
-
-// Select Toolbar Placement options
-enum STP {
-    REPLACE = 'replace',
-    ABOVE = 'above',
-    NONE = 'none',
-    ALWAYS = 'always'
 }
 
 enum TABLE_LOAD {
@@ -2306,7 +2316,7 @@ function RenderInnerTable({
     toggleAllExpandableRows,
     updateColumnOrder,
     draggableHeadCellRefs,
-    getTableContentRef,
+    getCurrentRootRef,
     timers,
     toggleExpandRow
 }: {
@@ -2314,11 +2324,7 @@ function RenderInnerTable({
     forwardUpdateDividers: (fn: () => void) => void
     forwardSetHeadResizable: (fn: () => void) => void
     // new variable
-    components: {
-        TableHead: () => ReactNode
-        TableResize: () => ReactNode
-        TableBody: () => ReactNode
-    }
+    components: DataTableComponents
     // variables
     rowCount: number
     columnOrder: number[]
@@ -2351,7 +2357,7 @@ function RenderInnerTable({
     toggleAllExpandableRows: unknown
     updateColumnOrder: unknown
     draggableHeadCellRefs: unknown
-    getTableContentRef: unknown
+    getCurrentRootRef: unknown
     timers: unknown
     toggleExpandRow: unknown
 }) {
@@ -2414,7 +2420,7 @@ function RenderInnerTable({
                         columnOrder={columnOrder}
                         updateColumnOrder={updateColumnOrder}
                         draggableHeadCellRefs={draggableHeadCellRefs}
-                        tableRef={getTableContentRef}
+                        tableRef={getCurrentRootRef}
                         tableId={options.tableId}
                         timers={timers}
                         components={props.components}
