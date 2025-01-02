@@ -43,7 +43,7 @@ import type {
     MUIDataTableState,
     MUIDataTableStateRows
 } from 'mui-datatables'
-import type { DataTableOptions } from './data-table.props.type/options'
+import { STP, type DataTableOptions } from './data-table.props.type/options'
 import type { DataTableState } from './data-table.props.type/state'
 import { DataTableComponents } from './data-table.props.type/components'
 
@@ -167,10 +167,13 @@ class MUIDataTableClass extends React.Component<
     MUIDataTableState
 > {
     options: DataTableOptions
-    tableRef: React.RefObject<HTMLTableElement | null>
-    draggableHeadCellRefs: {}
-    setHeadResizable: () => void
-    resizeHeadCellRefs: {}
+    tableRef: RefObject<HTMLTableElement | null>
+    draggableHeadCellRefs: RefObject<unknown>[]
+    setHeadResizable: (
+        resizeHeadCellRefs: RefObject<unknown>[],
+        tableRef: RefObject<unknown>
+    ) => void
+    resizeHeadCellRefs: RefObject<unknown>[]
     timers: unknown
     updateDividers: () => void
 
@@ -183,8 +186,8 @@ class MUIDataTableClass extends React.Component<
         super(props)
 
         this.tableRef = createRef()
-        this.draggableHeadCellRefs = {}
-        this.resizeHeadCellRefs = {}
+        this.draggableHeadCellRefs = []
+        this.resizeHeadCellRefs = []
         this.timers = {}
         this.setHeadResizable = () => {}
         this.updateDividers = () => {}
@@ -248,11 +251,7 @@ class MUIDataTableClass extends React.Component<
             this.setState({ page: 0 })
         }
 
-        if (
-            this.options.resizableColumns === true ||
-            (this.options.resizableColumns &&
-                this.options.resizableColumns.enabled)
-        ) {
+        if (this.options.resizableColumns) {
             this.setHeadResizable(this.resizeHeadCellRefs, this.tableRef)
             this.updateDividers()
         }
@@ -328,18 +327,18 @@ class MUIDataTableClass extends React.Component<
      *  prevColumnOrder - columnOrder object saved onto the state.
      */
     buildColumns = (
-        newColumns: DataTableState['columns'],
+        newColumns: DataTableProps['columns'],
         prevColumns: DataTableState['columns'] = [],
         newColumnOrder: DataTableState['columnOrder'],
         prevColumnOrder: DataTableState['columnOrder'] = []
     ) => {
-        let columnData = []
+        const columnData: DataTableState['columns'] = []
         let filterData = []
         let filterList = []
-        let columnOrder = []
+        let columnOrder: number[] = []
 
         newColumns.forEach((column, colIndex) => {
-            let columnOptions = {
+            let columnOptions: Partial<DataTableState['columns'][0]> = {
                 display: 'true',
                 empty: false,
                 filter: true,
@@ -348,13 +347,16 @@ class MUIDataTableClass extends React.Component<
                 searchable: true,
                 download: true,
                 viewColumns: true,
-                sortCompare: null,
+                sortCompare: undefined,
                 sortThirdClickReset: false,
                 sortDescFirst: false
             }
 
             columnOrder.push(colIndex)
-            const options = { ...column.options }
+
+            const options = {
+                ...(typeof column === 'string' ? {} : column.options)
+            }
 
             if (typeof column === 'object') {
                 if (options) {
@@ -2061,14 +2063,6 @@ class MUIDataTableClass extends React.Component<
             </>
         )
     }
-}
-
-// Select Toolbar Placement options
-enum STP {
-    REPLACE = 'replace',
-    ABOVE = 'above',
-    NONE = 'none',
-    ALWAYS = 'always'
 }
 
 enum TABLE_LOAD {
