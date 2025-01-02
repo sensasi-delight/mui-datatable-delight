@@ -48,14 +48,13 @@ node_modules
 .eslintcache
 
 # Build Data
-dist/*
+dist
 es/*
 lib/*
 
 # Docs
-docs/.next/*
-docs/export/*
-.firebase/
+docs/.next
+docs/out
 
 # Optional REPL history
 .node_repl_history
