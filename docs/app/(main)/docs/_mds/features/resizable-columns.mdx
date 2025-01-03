@@ -1,0 +1,46 @@
+# Resizable Columns
+
+The **DataTable** component supports a convenient feature called **Resizable Columns**, allowing users to adjust the width of table columns according to their needs. This provides a flexible and user-friendly way to display data, especially when working with varying screen sizes or datasets.
+
+#### How It Works
+
+When **Resizable Columns** is enabled, each column in the table can be resized by clicking and dragging the column edges. This gives users control over how much space each column occupies, improving data visibility and usability.
+
+#### Enabling Resizable Columns
+
+To enable resizable columns, set the `resizableColumns` property to `true` in the `options` prop of the **DataTable** component.
+
+#### Example Usage
+
+```jsx
+import React from 'react'
+import DataTable from './DataTable'
+
+const MyComponent = () => {
+    const options = {
+        resizableColumns: true // Enable resizable columns
+    }
+
+    return <DataTable data={myData} columns={myColumns} options={options} />
+}
+
+export default MyComponent
+```
+
+#### Explanation
+
+- **`resizableColumns` (boolean)**:
+    - Set to `true` to allow users to resize columns by dragging the edges.
+    - Defaults to `false` if not specified, meaning columns will have a fixed width.
+
+#### Benefits
+
+- **Improved Usability**: Users can adjust column widths to focus on the most relevant data.
+- **Customization**: Supports different screen sizes and user preferences.
+- **Dynamic Layouts**: Makes the table adaptable for various use cases, from detailed reports to compact summaries.
+
+#### Try It Out
+
+> **Live Demo**: [Check out an example of resizable columns in action](/examples/resizable-columns)
+
+With the **Resizable Columns** feature, your **DataTable** becomes more flexible and user-friendly, making it an essential tool for displaying data interactively.
