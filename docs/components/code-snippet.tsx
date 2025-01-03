@@ -32,8 +32,9 @@ export function CodeSnippet({
                     sx={{
                         maxWidth: '100%',
                         overflow: 'auto',
-                        px: 3,
-                        py: 2.5,
+                        fontSize: '0.95rem',
+                        p: 2.5,
+                        pt: 2,
                         m: 0
                     }}
                 >
