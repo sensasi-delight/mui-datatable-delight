@@ -40,51 +40,53 @@ describe('<TableResize />', function () {
     })
 
     it('should execute resize methods correctly', () => {
-        const setResizable = next => {
-            const cellsRef = {
-                0: {
-                    left: 0,
-                    width: 50,
-                    getBoundingClientRect: () => ({
-                        left: 0,
-                        width: 50,
-                        height: 100
-                    }),
-                    style: {}
-                },
-                1: {
-                    left: 50,
-                    width: 50,
-                    getBoundingClientRect: () => ({
-                        left: 50,
-                        width: 50,
-                        height: 100
-                    }),
-                    style: {}
-                }
-            }
-            const tableRef = {
-                style: {
-                    width: '100px'
-                },
-                getBoundingClientRect: () => ({
-                    width: 100,
-                    height: 100
-                }),
-                offsetParent: {
-                    offsetLeft: 0
-                }
-            }
-            next(cellsRef, tableRef)
-        }
-
         const updateDividers = jest.fn()
 
         const { container } = render(
             <TableResize
-                options={options}
                 updateDividers={updateDividers}
-                setResizable={setResizable}
+                setResizable={forwardElements => {
+                    const fakeCellElements = [
+                        {
+                            left: 0,
+                            width: 50,
+                            getBoundingClientRect: () => ({
+                                left: 0,
+                                width: 50,
+                                height: 100
+                            }),
+                            style: {}
+                        },
+                        {
+                            left: 50,
+                            width: 50,
+                            getBoundingClientRect: () => ({
+                                left: 50,
+                                width: 50,
+                                height: 100
+                            }),
+                            style: {}
+                        }
+                    ]
+
+                    const fakeTableElement = {
+                        style: {
+                            width: '100px'
+                        },
+                        getBoundingClientRect: () => ({
+                            width: 100,
+                            height: 100
+                        }),
+                        offsetParent: {
+                            offsetLeft: 0
+                        }
+                    }
+
+                    forwardElements(
+                        fakeCellElements as unknown as HTMLTableCellElement[],
+                        fakeTableElement as unknown as HTMLTableElement
+                    )
+                }}
             />
         )
 
