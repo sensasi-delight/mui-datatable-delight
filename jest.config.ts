@@ -1,5 +1,7 @@
-export {}
-module.exports = {
+import type { Config } from 'jest'
+import type { TsJestTransformerOptions } from 'ts-jest'
+
+export default {
     collectCoverage: true,
     collectCoverageFrom: [
         'src/**/*.{ts,tsx}',
@@ -9,7 +11,15 @@ module.exports = {
     coverageDirectory: 'coverage',
     testEnvironment: 'jsdom',
     transform: {
-        '.(ts|tsx)': 'ts-jest'
+        '.(ts|tsx)': [
+            'ts-jest',
+            {
+                /**
+                 * @todo REMOVE THIS OPTION WHEN ALL FILES ARE TYPES SAFE
+                 */
+                diagnostics: false
+            } satisfies TsJestTransformerOptions
+        ]
     },
     coveragePathIgnorePatterns: [
         '/node_modules/',
@@ -20,4 +30,4 @@ module.exports = {
         'setupTests.ts',
         'index.tsx'
     ]
-}
+} satisfies Config
