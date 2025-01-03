@@ -441,7 +441,13 @@ export interface DataTableOptions {
         rowMeta: { dataIndex: number; rowIndex: number }
     ) => ReactNode
 
-    /** Enable/disable resizable columns. */
+    /**
+     * Set to `true` to allow users to resize columns by dragging the edges.
+     *
+     * @see https://mui-datatable-delight.vercel.app/docs/features/resizable-columns
+     *
+     * @default false
+     */
     resizableColumns?: boolean
 
     /**
