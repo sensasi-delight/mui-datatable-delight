@@ -171,7 +171,7 @@ class MUIDataTableClass extends React.Component<
     draggableHeadCellRefs: HTMLTableCellElement[]
     setHeadResizable: (
         tableHeadCellElements: HTMLTableCellElement[],
-        tableRef: RefObject<HTMLTableElement>
+        tableRef: HTMLTableElement
     ) => void
     tableHeadCellElements: HTMLTableCellElement[]
     timers: unknown
@@ -209,7 +209,12 @@ class MUIDataTableClass extends React.Component<
     }
 
     componentDidMount() {
-        this.setHeadResizable(this.tableHeadCellElements, this.tableRef.current)
+        if (this.tableRef.current) {
+            this.setHeadResizable(
+                this.tableHeadCellElements,
+                this.tableRef.current
+            )
+        }
 
         // When we have a search, we must reset page to view it unless on serverSide since paging is handled by the user.
         if (this.props.options?.searchText && !this.props.options?.serverSide)
@@ -251,7 +256,7 @@ class MUIDataTableClass extends React.Component<
             this.setState({ page: 0 })
         }
 
-        if (this.options.resizableColumns) {
+        if (this.options.resizableColumns && this.tableRef.current) {
             this.setHeadResizable(
                 this.tableHeadCellElements,
                 this.tableRef.current
@@ -2355,24 +2360,18 @@ function RenderInnerTable({
     areAllRowsExpanded: unknown
     toggleAllExpandableRows: unknown
     updateColumnOrder: unknown
-    draggableHeadCellRefs: unknown
+    draggableHeadCellRefs: HTMLTableCellElement[]
     getCurrentRootRef: unknown
     timers: unknown
     toggleExpandRow: unknown
 }) {
-    const isRenderTableResize =
-        options.resizableColumns === true ||
-        (options.resizableColumns && options.resizableColumns.enabled)
-
     return (
         <div
             style={{ position: 'relative', ...tableHeightVal }}
             className={responsiveClass}
         >
-            {isRenderTableResize && (
+            {options.resizableColumns && (
                 <TableResize
-                    key={rowCount}
-                    columnOrder={columnOrder}
                     updateDividers={forwardUpdateDividers}
                     setResizable={forwardSetHeadResizable}
                     options={options}
