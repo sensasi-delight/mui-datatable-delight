@@ -1,11 +1,11 @@
 // vendors
-import { withStyles } from 'tss-react/mui'
+import { makeStyles } from 'tss-react/mui'
 import React from 'react'
 import ReactToPrint, { PrintContextConsumer } from 'react-to-print'
 // materials
 import {
     IconButton,
-    Toolbar,
+    Toolbar as VendorToolbar,
     Tooltip as MuiTooltip,
     Theme,
     Typography
@@ -24,95 +24,54 @@ import { DataTableToolbarFilter } from './toolbar.filter'
 import Popover from './toolbar.popover'
 import TableViewCol from './toolbar.view-col'
 import { DataTableToolbarSearch } from './toolbar.search'
+import { DataTableOptions } from '../data-table.props.type/options'
+import { DataTableState } from '../data-table.props.type/state'
 
-export const defaultToolbarStyles = (theme: Theme) => ({
-    root: {
-        '@media print': {
-            display: 'none'
-        }
-    },
-    fullWidthRoot: {},
-    left: {
-        flex: '1 1 auto'
-    },
-    fullWidthLeft: {
-        flex: '1 1 auto'
-    },
-    actions: {
-        flex: '1 1 auto',
-        textAlign: 'right'
-    },
-    fullWidthActions: {
-        flex: '1 1 auto',
-        textAlign: 'right'
-    },
-    titleRoot: {},
-    titleText: {},
-    fullWidthTitleText: {
-        textAlign: 'left'
-    },
-    icon: {
-        '&:hover': {
-            color: theme.palette.primary.main
-        }
-    },
-    iconActive: {
-        color: theme.palette.primary.main
-    },
-    filterPaper: {
-        maxWidth: '50%'
-    },
-    filterCloseIcon: {
-        position: 'absolute',
-        right: 0,
-        top: 0,
-        zIndex: 100
-    },
-    searchIcon: {
-        display: 'inline-flex',
-        marginTop: '10px',
-        marginRight: '8px'
-    },
-    [theme.breakpoints.down('md')]: {
-        titleRoot: {},
-        titleText: {
-            fontSize: '16px'
-        },
-        spacer: {
-            display: 'none'
-        },
-        left: {
-            // flex: "1 1 40%",
-            padding: '8px 0px'
-        },
-        actions: {
-            // flex: "1 1 60%",
-            textAlign: 'right'
-        }
-    },
-    [theme.breakpoints.down('sm')]: {
-        root: {
-            display: 'block',
-            '@media print': {
-                display: 'none !important'
-            }
-        },
-        left: {
-            padding: '8px 0px 0px 0px'
-        },
-        titleText: {
-            textAlign: 'center'
-        },
-        actions: {
-            textAlign: 'center'
-        }
-    },
-    '@media screen and (max-width: 480px)': {}
-})
+const CLASS_ID = 'datatable-delight--toolbar'
 
 const RESPONSIVE_FULL_WIDTH_NAME = 'scrollFullHeightFullWidth'
 
-class TableToolbar extends React.Component {
+/**
+ * DataTable Delight Toolbar
+ *
+ * @todo rename this to `<Toolbar />
+ * @todo use named export instead default
+ *
+ * @see [Customize Example](http://mui-datatable-delight.vercel.app/examples/customize-toolbar)
+ * @see [Customize Icons Example](http://mui-datatable-delight.vercel.app/examples/customize-toolbar)
+ */
+export default function TableToolbar(props: ToolbarProps) {
+    const { classes, cx } = useStyles()
+
+    return (
+        <VendorToolbar
+            className={cx(
+                CLASS_ID,
+                props.options.responsive !== RESPONSIVE_FULL_WIDTH_NAME
+                    ? classes.root
+                    : classes.fullWidthRoot
+            )}
+            role="toolbar"
+            aria-label="Table Toolbar"
+        >
+            <TableToolbarClass {...props} classes={classes} />
+        </VendorToolbar>
+    )
+}
+
+interface ToolbarProps {
+    displayData: DataTableState['displayData']
+
+    options: DataTableOptions
+
+    searchText: string
+}
+
+type TEMPORARY_CLASS_PROP_TYPE = ToolbarProps & {
+    classes: ReturnType<typeof useStyles>['classes']
+}
+
+class TableToolbarClass extends React.Component<TEMPORARY_CLASS_PROP_TYPE> {
     state = {
         iconActive: null,
         showSearch: Boolean(
@@ -124,7 +83,7 @@ class TableToolbar extends React.Component {
         searchText: this.props.searchText || null
     }
 
-    componentDidUpdate(prevProps) {
+    componentDidUpdate(prevProps: TEMPORARY_CLASS_PROP_TYPE) {
         if (this.props.searchText !== prevProps.searchText) {
             this.setState({ searchText: this.props.searchText })
         }
@@ -349,15 +308,7 @@ class TableToolbar extends React.Component {
         }
 
         return (
-            <Toolbar
-                className={
-                    options.responsive !== RESPONSIVE_FULL_WIDTH_NAME
-                        ? classes.root
-                        : classes.fullWidthRoot
-                }
-                role="toolbar"
-                aria-label="Table Toolbar"
-            >
+            <>
                 <div
                     className={
                         options.responsive !== RESPONSIVE_FULL_WIDTH_NAME
@@ -398,7 +349,6 @@ class TableToolbar extends React.Component {
                 >
                     {!(
                         options.search === false ||
-                        options.search === 'false' ||
                         options.searchAlwaysOpen === true
                     ) && (
                         <Tooltip title={search} disableFocusListener>
@@ -406,7 +356,6 @@ class TableToolbar extends React.Component {
                                 <IconButton
                                     aria-label={search}
                                     data-testid={search + '-iconButton'}
-                                    ref={el => (this.searchButton = el)}
                                     classes={{
                                         root: this.getActiveIcon(
                                             classes,
@@ -421,7 +370,8 @@ class TableToolbar extends React.Component {
                             </span>
                         </Tooltip>
                     )}
-                    {!(options.download === false) && (
+
+                    {options.download && (
                         <Tooltip title={downloadCsv}>
                             <span>
                                 <IconButton
@@ -439,9 +389,8 @@ class TableToolbar extends React.Component {
                             </span>
                         </Tooltip>
                     )}
-                    {!(
-                        options.print === false || options.print === 'false'
-                    ) && (
+
+                    {options.print && (
                         <span>
                             <ReactToPrint content={() => this.props.tableRef()}>
                                 <PrintContextConsumer>
@@ -471,10 +420,8 @@ class TableToolbar extends React.Component {
                             </ReactToPrint>
                         </span>
                     )}
-                    {!(
-                        options.viewColumns === false ||
-                        options.viewColumns === 'false'
-                    ) && (
+
+                    {options.viewColumns && (
                         <Popover
                             refExit={this.setActiveIcon.bind(null)}
                             classes={{ closeIcon: classes.filterCloseIcon }}
@@ -519,9 +466,8 @@ class TableToolbar extends React.Component {
                             }
                         />
                     )}
-                    {!(
-                        options.filter === false || options.filter === 'false'
-                    ) && (
+
+                    {options.filter && (
                         <Popover
                             refExit={filterPopoverExit}
                             hide={
@@ -585,11 +531,92 @@ class TableToolbar extends React.Component {
                             displayData: this.props.displayData
                         })}
                 </div>
-            </Toolbar>
+            </>
         )
     }
 }
 
-export default withStyles(TableToolbar, defaultToolbarStyles, {
-    name: 'MUIDataTableToolbar'
-})
+const useStyles = makeStyles()((theme: Theme) => ({
+    root: {
+        '@media print': {
+            display: 'none'
+        }
+    },
+    fullWidthRoot: {},
+    left: {
+        flex: '1 1 auto'
+    },
+    fullWidthLeft: {
+        flex: '1 1 auto'
+    },
+    actions: {
+        flex: '1 1 auto',
+        textAlign: 'right'
+    },
+    fullWidthActions: {
+        flex: '1 1 auto',
+        textAlign: 'right'
+    },
+    titleRoot: {},
+    titleText: {},
+    fullWidthTitleText: {
+        textAlign: 'left'
+    },
+    icon: {
+        '&:hover': {
+            color: theme.palette.primary.main
+        }
+    },
+    iconActive: {
+        color: theme.palette.primary.main
+    },
+    filterPaper: {
+        maxWidth: '50%'
+    },
+    filterCloseIcon: {
+        position: 'absolute',
+        right: 0,
+        top: 0,
+        zIndex: 100
+    },
+    searchIcon: {
+        display: 'inline-flex',
+        marginTop: '10px',
+        marginRight: '8px'
+    },
+    // [theme.breakpoints.down('md')]: {
+    //     titleRoot: {},
+    //     titleText: {
+    //         fontSize: '16px'
+    //     },
+    //     spacer: {
+    //         display: 'none'
+    //     },
+    //     left: {
+    //         // flex: "1 1 40%",
+    //         padding: '8px 0px'
+    //     },
+    //     actions: {
+    //         // flex: "1 1 60%",
+    //         textAlign: 'right'
+    //     }
+    // },
+    // [theme.breakpoints.down('sm')]: {
+    //     root: {
+    //         display: 'block',
+    //         '@media print': {
+    //             display: 'none !important'
+    //         }
+    //     },
+    //     left: {
+    //         padding: '8px 0px 0px 0px'
+    //     },
+    //     titleText: {
+    //         textAlign: 'center'
+    //     },
+    //     actions: {
+    //         textAlign: 'center'
+    //     }
+    // },
+    '@media screen and (max-width: 480px)': {}
+}))
