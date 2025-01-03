@@ -1,6 +1,7 @@
 import React, { JSX, useEffect, useState } from 'react'
 import { makeStyles } from 'tss-react/mui'
-import { DataTableOptions, DataTableProps } from '..'
+// locals
+import type { DataTableOptions } from '..'
 
 /**
  * Column resize slider component.
@@ -121,11 +122,9 @@ export default function TableResize({
         tableElement.style.width = '1px'
 
         setMinWidths(
-            tableHeadCellElements.map(cellElement => {
-                console.log(cellElement.getBoundingClientRect().width)
-
-                return cellElement.getBoundingClientRect().width
-            })
+            tableHeadCellElements.map(
+                cellElement => cellElement.getBoundingClientRect().width
+            )
         )
 
         /**
@@ -376,16 +375,12 @@ interface DataTableResizeProps {
 
     updateDividers: (callback: () => void) => void
 
-    resizableColumns: DataTableOptions['resizableColumns']
-
-    tableId: string
+    tableId?: string
 
     /** Extend the style applied to components */
-    classes: ReturnType<typeof useStyles>['classes']
+    classes?: ReturnType<typeof useStyles>['classes']
 
-    // selectableRows: unknown
-
-    options: DataTableProps['options']
+    options?: DataTableOptions
 }
 
 const useStyles = makeStyles()({
