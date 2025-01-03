@@ -168,12 +168,12 @@ class MUIDataTableClass extends React.Component<
 > {
     options: DataTableOptions
     tableRef: RefObject<HTMLTableElement | null>
-    draggableHeadCellRefs: RefObject<unknown>[]
+    draggableHeadCellRefs: HTMLTableCellElement[]
     setHeadResizable: (
-        resizeHeadCellRefs: RefObject<unknown>[],
-        tableRef: RefObject<unknown>
+        tableHeadCellElements: HTMLTableCellElement[],
+        tableRef: RefObject<HTMLTableElement>
     ) => void
-    resizeHeadCellRefs: RefObject<unknown>[]
+    tableHeadCellElements: HTMLTableCellElement[]
     timers: unknown
     updateDividers: () => void
 
@@ -187,7 +187,7 @@ class MUIDataTableClass extends React.Component<
 
         this.tableRef = createRef()
         this.draggableHeadCellRefs = []
-        this.resizeHeadCellRefs = []
+        this.tableHeadCellElements = []
         this.timers = {}
         this.setHeadResizable = () => {}
         this.updateDividers = () => {}
@@ -209,7 +209,7 @@ class MUIDataTableClass extends React.Component<
     }
 
     componentDidMount() {
-        this.setHeadResizable(this.resizeHeadCellRefs, this.tableRef)
+        this.setHeadResizable(this.tableHeadCellElements, this.tableRef.current)
 
         // When we have a search, we must reset page to view it unless on serverSide since paging is handled by the user.
         if (this.props.options?.searchText && !this.props.options?.serverSide)
@@ -252,7 +252,10 @@ class MUIDataTableClass extends React.Component<
         }
 
         if (this.options.resizableColumns) {
-            this.setHeadResizable(this.resizeHeadCellRefs, this.tableRef)
+            this.setHeadResizable(
+                this.tableHeadCellElements,
+                this.tableRef.current
+            )
             this.updateDividers()
         }
     }
@@ -305,13 +308,9 @@ class MUIDataTableClass extends React.Component<
         }
     }
 
-    setHeadCellRef = (
-        index: number,
-        pos: number,
-        el: React.RefObject<unknown>
-    ) => {
+    setHeadCellRef = (index: number, pos: number, el: HTMLTableCellElement) => {
         this.draggableHeadCellRefs[index] = el
-        this.resizeHeadCellRefs[pos] = el
+        this.tableHeadCellElements[pos] = el
     }
 
     // must be arrow function on local field to refer to the correct instance when passed around
@@ -2375,7 +2374,7 @@ function RenderInnerTable({
                     key={rowCount}
                     columnOrder={columnOrder}
                     updateDividers={forwardUpdateDividers}
-                    setResizeable={forwardSetHeadResizable}
+                    setResizable={forwardSetHeadResizable}
                     options={options}
                     tableId={options.tableId}
                 />
