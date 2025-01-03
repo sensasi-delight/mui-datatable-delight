@@ -1,136 +1,97 @@
-import React, { JSX } from 'react'
+import React, { JSX, useEffect, useState } from 'react'
 import { makeStyles } from 'tss-react/mui'
 import { DataTableOptions, DataTableProps } from '..'
 
+/**
+ * Column resize slider component.
+ *
+ * @see https://mui-datatable-delight.vercel.app/docs/features/resizable-columns
+ */
 export default function TableResize({
     classes: classesFromProp,
     ...props
 }: DataTableResizeProps): JSX.Element {
-    const { classes } = classesFromProp
-        ? {
-              classes: classesFromProp
-          }
-        : useStyles()
+    const tssHook = useStyles()
+    const classes = classesFromProp ?? tssHook.classes
 
-    return <TableResizeClassComponent classes={classes} {...props} />
-}
-
-class TableResizeClassComponent extends React.Component<
-    DataTableResizeProps,
-    {
-        resizeCoords: {
+    /**
+     * ##### STATES ########
+     */
+    const [resizeCoords, setResizeCoords] = useState<
+        {
             left: number
         }[]
-        tableHeight: number
-        tableWidth: number
-        isResize: boolean
-        id?: number
-        lastColumn?: number
-        updateCoords?: boolean
-    }
-> {
-    windowWidth: number | null = null
-    minWidths: number[] = []
-    tableHeadCellElements?: HTMLElement[]
-    tableElement?: HTMLElement
+    >([])
+    const [currentWindowWidth, setCurrentWindowWidth] = useState<number>()
+    const [tableWidth, setTableWidth] = useState<number>()
+    const [tableHeight, setTableHeight] = useState<number | string>('100%')
+    const [isResizing, setIsResizing] = useState(false)
+    const [resizingOnCellIndex, setResizingOnCellIndex] = useState<
+        number | undefined
+    >()
+    const [tableElement, setTableElement] = useState<HTMLTableElement>()
+    const [tableHeadCellElements, setTableHeadCellElements] = useState<
+        HTMLTableCellElement[]
+    >([])
+    const [minWidths, setMinWidths] = useState<number[]>([])
 
-    // state = {
-    //     resizeCoords: [],
-    //     priorPosition: {},
-    //     tableWidth: '100%',
-    //     tableHeight: '100%',
-    //     isResize: false,
-    //     id: null
-    // }
+    useEffect(() => {
+        if (tableElement) {
+            const tableElementRect = tableElement.getBoundingClientRect()
+            setTableWidth(tableElementRect.width)
+            setTableHeight(tableElementRect.height)
 
-    constructor(props: DataTableResizeProps) {
-        super(props)
+            const parentOffsetLeft = getParentOffsetLeft(tableElement)
+            setResizeCoords(
+                tableHeadCellElements.slice(0, -1).map(cellElement => {
+                    const elRect = cellElement.getBoundingClientRect()
 
-        this.state = {
-            resizeCoords: [],
-            // priorPosition: {},
-            tableWidth: 0,
-            tableHeight: 0,
-            isResize: false
+                    return {
+                        left:
+                            elRect.left -
+                            parentOffsetLeft +
+                            cellElement.offsetWidth
+                    }
+                })
+            )
+
+            updateCellWidths()
         }
-    }
+    }, [tableElement, currentWindowWidth])
 
-    handleResize = () => {
-        if (window.innerWidth !== this.windowWidth) {
-            this.windowWidth = window.innerWidth
-            this.setDividers()
-        }
-    }
-
-    componentDidMount() {
-        // this.minWidths = []
-        this.windowWidth = null
-        this.props.setResizable((tableHeadCellElements, tableElement) => {
-            this.tableHeadCellElements = tableHeadCellElements
-            this.tableElement = tableElement
-
-            this.setDividers()
-        })
-        this.props.updateDividers(() =>
-            this.setState({ updateCoords: true }, () => this.updateWidths)
-        )
-        window.addEventListener('resize', this.handleResize, false)
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener('resize', this.handleResize, false)
-    }
-
-    setDividers = () => {
-        if (!this.tableElement) {
-            throw new Error('`this.tableElement` is undefined')
-        }
-
-        const tableEl = this.tableElement
-
-        const { width: tableWidth, height: tableHeight } =
-            tableEl?.getBoundingClientRect()
-
-        const { resizeCoords } = this.state
-
-        for (let prop in resizeCoords) {
-            delete resizeCoords[prop]
-        }
-
-        const parentOffsetLeft = getParentOffsetLeft(tableEl)
-
-        if (!this.tableHeadCellElements) {
-            throw new Error('`this.tableHeadCellElements` is undefined')
-        }
-
-        const finalCells = Object.entries(this.tableHeadCellElements)
-        const cellMinusOne = finalCells.filter(
-            (_item, ix) => ix + 1 < finalCells.length
+    useEffect(() => {
+        props.setResizable(
+            (forwardedTableHeadCellElements, forwardedTableElement) => {
+                if (forwardedTableElement) {
+                    setTableHeadCellElements(forwardedTableHeadCellElements)
+                    setTableElement(forwardedTableElement)
+                }
+            }
         )
 
-        cellMinusOne.forEach(([key, item]) => {
-            if (!item) return
+        props.updateDividers(updateCellWidths)
 
-            const elRect = item.getBoundingClientRect()
+        function updateCurrentWidth() {
+            setCurrentWindowWidth(prev => {
+                const newWindowWidth = window.innerWidth
 
-            let left = elRect.left
-            left = (left ?? 0) - parentOffsetLeft
-            // const elStyle = window.getComputedStyle(item, null)
-            resizeCoords[parseInt(key, 10)] = { left: left + item.offsetWidth }
-        })
-        this.setState(
-            { tableWidth, tableHeight, resizeCoords },
-            this.updateWidths
-        )
-    }
+                return newWindowWidth !== prev ? newWindowWidth : prev
+            })
+        }
 
-    updateWidths = () => {
-        const { resizeCoords, tableWidth } = this.state
+        window.addEventListener('resize', updateCurrentWidth, false)
 
-        let lastPosition = 0
+        return () => {
+            window.removeEventListener('resize', updateCurrentWidth, false)
+        }
+    }, [])
 
-        resizeCoords.forEach((item, key) => {
-            const newWidthRaw = ((item.left - lastPosition) / tableWidth) * 100
+    function updateCellWidths() {
+        let lastLeft = 0
+
+        resizeCoords.forEach((item, columnId) => {
+            const newWidthRaw =
+                ((item.left - lastLeft) / (tableWidth ?? 100)) * 100
 
             /**
              * Using .toFixed(2) causes the columns to jitter when resized. On all browsers I (Patrojk) have tested,
@@ -140,97 +101,104 @@ class TableResizeClassComponent extends React.Component<
              */
             const newWidth = Math.round(newWidthRaw * 100) / 100
 
-            const thCell = this.tableHeadCellElements?.[key]
+            const thCell = tableHeadCellElements?.[columnId]
 
             if (thCell) thCell.style.width = newWidth + '%'
 
-            lastPosition = item.left
+            lastLeft = item.left
         })
     }
 
-    onResizeStart = (id: number) => {
-        if (!this.tableElement) {
+    function onResizeStart(columnId: number) {
+        if (!tableElement) {
             throw new Error('tableElement is undefined')
         }
 
-        if (!this.tableHeadCellElements) {
-            throw new Error('tableHeadCellElements is undefined')
-        }
+        setIsResizing(true)
+        setResizingOnCellIndex(columnId)
 
-        const tableEl = this.tableElement
-        const originalWidth = tableEl.style.width
-        tableEl.style.width = '1px'
+        const originalWidth = tableElement.style.width
+        tableElement.style.width = '1px'
 
-        let lastColumn = 0
+        setMinWidths(
+            tableHeadCellElements.map(cellElement => {
+                console.log(cellElement.getBoundingClientRect().width)
 
-        this.tableHeadCellElements.forEach((item, key) => {
-            const elRect = item
-                ? item.getBoundingClientRect()
-                : { width: 0, left: 0 }
+                return cellElement.getBoundingClientRect().width
+            })
+        )
 
-            this.minWidths[key] = elRect.width
-
-            lastColumn = Math.max(key, lastColumn)
-        })
-
-        tableEl.style.width = originalWidth
-
-        this.setState({ isResize: true, id, lastColumn })
+        /**
+         * FOUND THIS 'REFRESH' WORKAROUND THAT TABLE WIDTH SHOULD BE SET TO `originalWidth` AFTER MIN WIDTH CHANGES
+         *
+         * 2025-01-04 - CAN NOT FOUND THE EXPLANATION
+         * 2025-01-04 - [ORIGINAL GIT BLAME](https://github.com/gregnb/mui-datatables/blame/e09c39cb3c5713c7c157845b3d3e4b7d77c77649/src/components/TableResize.js#L130)
+         */
+        tableElement.style.width = originalWidth
     }
 
-    onResizeMove = (
-        id: number,
+    function onResizeMove(
+        columnId: number,
         e: React.MouseEvent<HTMLDivElement, MouseEvent>
-    ) => {
-        const { isResize, resizeCoords, lastColumn } = this.state
+    ) {
+        /**
+         * @todo IMPROVE THIS FUNCTION
+         */
+        function prevCol(columnId: number) {
+            let nextId = columnId - 1
 
-        const prevCol = (id: number) => {
-            let nextId = id - 1
             while (typeof resizeCoords[nextId] === 'undefined' && nextId >= 0) {
                 nextId--
             }
+
             return nextId
         }
 
-        const nextCol = (id: number) => {
-            let nextId = id + 1
+        /**
+         * @todo IMPROVE THIS FUNCTION
+         */
+        function nextCol(columnId: number) {
+            let nextId = columnId + 1
             let tries = 0
 
             while (typeof resizeCoords[nextId] === 'undefined' && tries < 20) {
                 nextId++
                 tries++
             }
+
             return nextId
         }
 
-        const fixedMinWidth1 = this.minWidths[id]
-        const fixedMinWidth2 = this.minWidths[nextCol(id)] ?? this.minWidths[id]
-        const idNumber = id
-        // const finalCells = Object.entries(this.tableHeadCellElements)
+        const lastColumnIndex = (tableHeadCellElements?.length ?? 0) - 1
+        const fixedMinWidth1 = minWidths[columnId]
+        const fixedMinWidth2 =
+            minWidths[nextCol(columnId)] ?? minWidths[columnId]
 
-        if (!this.tableElement) {
+        if (!tableElement) {
             throw new Error('tableElement is undefined')
         }
 
-        const tableEl = this.tableElement
         const { width: tableWidth, height: tableHeight } =
-            tableEl.getBoundingClientRect()
+            tableElement.getBoundingClientRect()
 
-        const selectableRows = this.props.options?.selectableRows ?? 'multiple'
+        setTableHeight(tableHeight)
 
-        let parentOffsetLeft = getParentOffsetLeft(tableEl)
+        const selectableRows = props.options?.selectableRows ?? 'multiple'
 
-        const nextCoord = (id: number) => {
-            let nextId = id + 1
+        let parentOffsetLeft = getParentOffsetLeft(tableElement)
+
+        const nextCoord = (columnId: number) => {
+            let nextId = columnId + 1
             let tries = 0
+
             while (typeof resizeCoords[nextId] === 'undefined' && tries < 20) {
                 nextId++
                 tries++
             }
             return resizeCoords[nextId]
         }
-        const prevCoord = (id: number) => {
-            let nextId = id - 1
+        const prevCoord = (columnId: number) => {
+            let nextId = columnId - 1
 
             while (typeof resizeCoords[nextId] === 'undefined' && nextId >= 0) {
                 nextId--
@@ -238,7 +206,7 @@ class TableResizeClassComponent extends React.Component<
             return resizeCoords[nextId]
         }
 
-        if (isResize) {
+        if (isResizing) {
             let leftPos = e.clientX - parentOffsetLeft
 
             const handleMoveRightmostBoundary = (
@@ -264,49 +232,52 @@ class TableResizeClassComponent extends React.Component<
 
             const handleMoveRight = (
                 leftPos: number,
-                id: number,
+                columnId: number,
                 fixedMinWidth: number
             ) => {
-                if (typeof nextCoord(id) === 'undefined') return leftPos
-                if (leftPos > nextCoord(id).left - fixedMinWidth) {
-                    return nextCoord(id).left - fixedMinWidth
+                if (typeof nextCoord(columnId) === 'undefined') return leftPos
+                if (leftPos > nextCoord(columnId).left - fixedMinWidth) {
+                    return nextCoord(columnId).left - fixedMinWidth
                 }
                 return leftPos
             }
 
             const handleMoveLeft = (
                 leftPos: number,
-                id: number,
+                columnId: number,
                 fixedMinWidth: number
             ) => {
-                if (typeof prevCoord(id) === 'undefined') return leftPos
+                if (typeof prevCoord(columnId) === 'undefined') return leftPos
 
-                if (leftPos < prevCoord(id).left + fixedMinWidth) {
-                    return prevCoord(id).left + fixedMinWidth
+                if (leftPos < prevCoord(columnId).left + fixedMinWidth) {
+                    return prevCoord(columnId).left + fixedMinWidth
                 }
 
                 return leftPos
             }
 
-            const isFirstColumn = (selectableRows: unknown, id: number) => {
+            const isFirstColumn = (
+                selectableRows: unknown,
+                columnId: number
+            ) => {
                 let firstColumn = 1
                 while (!resizeCoords[firstColumn] && firstColumn < 20) {
                     firstColumn++
                 }
 
                 return (
-                    (selectableRows !== 'none' && id === 0) ||
-                    (selectableRows === 'none' && id === firstColumn)
+                    (selectableRows !== 'none' && columnId === 0) ||
+                    (selectableRows === 'none' && columnId === firstColumn)
                 )
             }
 
-            const isLastColumn = (id: number) => {
-                return id === prevCol(lastColumn ?? 0)
+            const isLastColumn = (columnId: number) => {
+                return columnId === prevCol(lastColumnIndex)
             }
 
             if (
-                isFirstColumn(selectableRows, idNumber) &&
-                isLastColumn(idNumber)
+                isFirstColumn(selectableRows, columnId) &&
+                isLastColumn(columnId)
             ) {
                 leftPos = handleMoveLeftmostBoundary(leftPos, fixedMinWidth1)
                 leftPos = handleMoveRightmostBoundary(
@@ -315,84 +286,84 @@ class TableResizeClassComponent extends React.Component<
                     fixedMinWidth2
                 )
             } else if (
-                !isFirstColumn(selectableRows, idNumber) &&
-                isLastColumn(idNumber)
+                !isFirstColumn(selectableRows, columnId) &&
+                isLastColumn(columnId)
             ) {
                 leftPos = handleMoveRightmostBoundary(
                     leftPos,
                     tableWidth,
                     fixedMinWidth2
                 )
-                leftPos = handleMoveLeft(leftPos, idNumber, fixedMinWidth1)
+                leftPos = handleMoveLeft(leftPos, columnId, fixedMinWidth1)
             } else if (
-                isFirstColumn(selectableRows, idNumber) &&
-                !isLastColumn(idNumber)
+                isFirstColumn(selectableRows, columnId) &&
+                !isLastColumn(columnId)
             ) {
                 leftPos = handleMoveLeftmostBoundary(leftPos, fixedMinWidth1)
-                leftPos = handleMoveRight(leftPos, idNumber, fixedMinWidth2)
+                leftPos = handleMoveRight(leftPos, columnId, fixedMinWidth2)
             } else if (
-                !isFirstColumn(selectableRows, idNumber) &&
-                !isLastColumn(idNumber)
+                !isFirstColumn(selectableRows, columnId) &&
+                !isLastColumn(columnId)
             ) {
-                leftPos = handleMoveLeft(leftPos, idNumber, fixedMinWidth1)
-                leftPos = handleMoveRight(leftPos, idNumber, fixedMinWidth2)
+                leftPos = handleMoveLeft(leftPos, columnId, fixedMinWidth1)
+                leftPos = handleMoveRight(leftPos, columnId, fixedMinWidth2)
             }
 
-            const newResizeCoords = [...resizeCoords]
+            setResizeCoords(prev => {
+                const newResizeCoords = [...prev]
 
-            newResizeCoords[id] = {
-                left: leftPos
-            }
-            this.setState(
-                { resizeCoords: newResizeCoords, tableHeight },
-                this.updateWidths
-            )
+                newResizeCoords[columnId] = {
+                    left: leftPos
+                }
+
+                return newResizeCoords
+            })
+
+            updateCellWidths()
         }
     }
 
-    onResizeEnd = () => {
-        this.setState({ isResize: false, id: undefined })
+    function onResizeEnd() {
+        setIsResizing(false)
+        setResizingOnCellIndex(undefined)
     }
 
-    render() {
-        const { classes, tableId } = this.props
-        const { id, isResize, resizeCoords, tableWidth, tableHeight } =
-            this.state
-
-        return (
-            <div className={classes.root} style={{ width: tableWidth }}>
-                {resizeCoords.map((val, key) => {
-                    return (
+    return (
+        <div
+            className={tssHook.cx('datatable-delight--resize', classes.root)}
+            style={{ width: tableWidth }}
+        >
+            {resizeCoords.map((val, columnId) => {
+                return (
+                    <div
+                        data-divider-index={columnId}
+                        // data-tableid={tableId}
+                        aria-hidden="true"
+                        key={columnId}
+                        onMouseMove={event => onResizeMove(columnId, event)}
+                        onMouseUp={onResizeEnd}
+                        style={{
+                            width:
+                                isResizing && resizingOnCellIndex == columnId
+                                    ? tableWidth
+                                    : 'auto',
+                            position: 'absolute',
+                            height: tableHeight,
+                            cursor: 'ew-resize',
+                            zIndex: 1000
+                        }}
+                    >
                         <div
-                            data-divider-index={key}
-                            data-tableid={tableId}
                             aria-hidden="true"
-                            key={key}
-                            onMouseMove={event => this.onResizeMove(key, event)}
-                            onMouseUp={this.onResizeEnd}
-                            style={{
-                                width:
-                                    isResize && id == key ? tableWidth : 'auto',
-                                position: 'absolute',
-                                height: tableHeight,
-                                cursor: 'ew-resize',
-                                zIndex: 1000
-                            }}
-                        >
-                            <div
-                                aria-hidden="true"
-                                onMouseDown={() => {
-                                    this.onResizeStart(key)
-                                }}
-                                className={classes.resizer}
-                                style={{ left: val.left }}
-                            />
-                        </div>
-                    )
-                })}
-            </div>
-        )
-    }
+                            onMouseDown={() => onResizeStart(columnId)}
+                            className={classes.resizer}
+                            style={{ left: val.left }}
+                        />
+                    </div>
+                )
+            })}
+        </div>
+    )
 }
 
 interface DataTableResizeProps {
@@ -417,9 +388,7 @@ interface DataTableResizeProps {
     options: DataTableProps['options']
 }
 
-const useStyles = makeStyles({
-    name: 'datatable-delight--resize'
-})({
+const useStyles = makeStyles()({
     root: {
         position: 'absolute'
     },
@@ -433,7 +402,7 @@ const useStyles = makeStyles({
     }
 })
 
-function getParentOffsetLeft(tableEl: HTMLElement): number {
+function getParentOffsetLeft(tableEl: HTMLTableElement): number {
     let ii = 0,
         parentOffsetLeft = 0,
         offsetParent = tableEl.offsetParent
