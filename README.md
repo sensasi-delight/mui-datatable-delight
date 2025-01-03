@@ -54,14 +54,27 @@ Thanks for taking an interest in the library and the github community!
 
 The following commands should get you started:
 
-```sh
+```bash
 npm i
 npm run dev
 ```
 
 open `http://localhost:3000/` in browser
 
-<!-- After you make your changes locally, you can run the test suite with `npm test`. -->
+After you make your changes locally, you can run the test suite with `npm test`.
+
+### Testing
+
+```bash
+# FULL TESTS
+npm run test
+
+# FULL WATCH TESTS
+npm run test:watch
+
+# WATCH SINGLE FILE TESTS
+npm run test:watch ./test/[filename].test.tsx
+```
 
 ## License
 

@@ -15,7 +15,8 @@
         "lint": "eslint src",
         "prepublishOnly": "npm run build",
         "prettier": "prettier './**/*.{js,jsx,ts,tsx,mjs,cjs}' --write",
-        "test": "jest"
+        "test": "jest",
+        "test:watch": "jest --collectCoverage=false --watch"
     },
     "repository": {
         "type": "git",
