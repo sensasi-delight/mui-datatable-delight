@@ -1,8 +1,12 @@
+// vendors
 import { createContext, ReactNode, useContext } from 'react'
-import { DataTableProps } from '..'
-import { DEFAULT_COMPONENTS } from './use-main-context.default-components'
-import { DEFAULT_ICONS } from './use-main-context.default-icons'
+// local types
+import type { DataTableProps } from '..'
+// functions
 import { processTextLabels } from './use-main-context.process-text-labels'
+// defaults
+import { DEFAULT_ICONS } from './use-main-context.default-icons'
+import { DEFAULT_COMPONENTS } from './use-main-context.default-components'
 
 export function MainContextProvider({
     datatableProps,
@@ -14,10 +18,13 @@ export function MainContextProvider({
     return (
         <MainContext.Provider
             value={{
-                components: componentsPreprocess(datatableProps.components),
+                components: {
+                    ...datatableProps.components,
+                    ...DEFAULT_COMPONENTS
+                },
                 icons: {
                     ...DEFAULT_ICONS,
-                    ...(datatableProps.components?.icons ?? {})
+                    ...datatableProps.icons
                 },
                 textLabels: processTextLabels(datatableProps.textLabels)
             }}
@@ -31,31 +38,11 @@ export function useMainContext() {
     return useContext(MainContext)
 }
 
-function componentsPreprocess(components: DataTableProps['components']) {
-    return {
-        TableBody: components?.TableBody ?? DEFAULT_COMPONENTS.TableBody,
-        TableFilter: components?.TableFilter ?? DEFAULT_COMPONENTS.TableFilter,
-        TableFilterList:
-            components?.TableFilterList ?? DEFAULT_COMPONENTS.TableFilterList,
-        TableFooter: components?.TableFooter ?? DEFAULT_COMPONENTS.TableFooter,
-        TableHead: components?.TableHead ?? DEFAULT_COMPONENTS.TableHead,
-        TableResize: components?.TableResize ?? DEFAULT_COMPONENTS.TableResize,
-        TableToolbar:
-            components?.TableToolbar ?? DEFAULT_COMPONENTS.TableToolbar,
-        TableToolbarSelect:
-            components?.TableToolbarSelect ??
-            DEFAULT_COMPONENTS.TableToolbarSelect,
-        Tooltip: components?.Tooltip ?? DEFAULT_COMPONENTS.Tooltip
-    }
-}
-
-const DEFAULT_MAIN_CONTEXT_VALUE = {
-    components: DEFAULT_COMPONENTS,
-    icons: DEFAULT_ICONS,
-    textLabels: processTextLabels(undefined)
-}
-
 /**
  * @deprecated WILL UNEXPORT, use `useMainContext` instead.
  */
-export const MainContext = createContext(DEFAULT_MAIN_CONTEXT_VALUE)
+export const MainContext = createContext({
+    components: DEFAULT_COMPONENTS,
+    icons: DEFAULT_ICONS,
+    textLabels: processTextLabels(undefined)
+})
