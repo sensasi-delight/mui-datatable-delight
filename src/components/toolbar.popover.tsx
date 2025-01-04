@@ -1,19 +1,17 @@
-import { useEffect, useRef, useState } from 'react'
-import PropTypes from 'prop-types'
-import MuiPopover from '@mui/material/Popover'
+import { ReactNode, useEffect, useRef, useState } from 'react'
+import MuiPopover, { PopoverProps } from '@mui/material/Popover'
 import IconButton from '@mui/material/IconButton'
 import CloseIcon from '@mui/icons-material/Close'
 
-const Popover = ({
-    className,
+export function ToolbarPopover({
+    children,
     trigger,
     refExit,
     hide,
-    content,
-    ...providedProps
-}) => {
+    slotProps
+}: ToolbarPopoverProps) {
     const [isOpen, open] = useState(false)
-    const anchorEl = useRef(null)
+    const anchorEl = useRef<EventTarget & HTMLSpanElement>(null)
 
     useEffect(() => {
         if (isOpen) {
@@ -28,31 +26,19 @@ const Popover = ({
         open(false)
     }
 
-    const closeIconClass = providedProps.classes.closeIcon
-    delete providedProps.classes.closeIcon // remove non-standard class from being passed to the popover component
-
-    const transformOriginSpecs = {
-        vertical: 'top',
-        horizontal: 'center'
-    }
-
-    const anchorOriginSpecs = {
-        vertical: 'bottom',
-        horizontal: 'center'
-    }
-
     const handleOnExit = () => {
         if (refExit) {
             refExit()
         }
     }
 
-    const handleTriggerClick = event => {
-        if (trigger.props.onClick) {
-            trigger.props.onClick()
-        }
-
+    function handleTriggerClick(
+        event:
+            | React.KeyboardEvent<HTMLSpanElement>
+            | React.MouseEvent<HTMLSpanElement>
+    ) {
         anchorEl.current = event.currentTarget
+
         open(true)
     }
 
@@ -67,40 +53,45 @@ const Popover = ({
             >
                 {trigger}
             </span>
+
             <MuiPopover
                 elevation={2}
                 open={isOpen}
                 TransitionProps={{ onExited: handleOnExit }}
                 onClose={handleRequestClose}
                 anchorEl={anchorEl.current}
-                anchorOrigin={anchorOriginSpecs}
-                transformOrigin={transformOriginSpecs}
-                {...providedProps}
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'center'
+                }}
+                transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'center'
+                }}
+                slotProps={slotProps}
             >
                 <IconButton
                     aria-label="Close"
                     onClick={handleRequestClose}
-                    className={closeIconClass}
-                    style={{
+                    sx={{
                         position: 'absolute',
-                        right: '4px',
-                        top: '4px',
-                        zIndex: '1000'
+                        right: 0,
+                        top: 0,
+                        zIndex: 100
                     }}
                 >
                     <CloseIcon />
                 </IconButton>
-                {content}
+                {children}
             </MuiPopover>
         </>
     )
 }
 
-Popover.propTypes = {
-    refExit: PropTypes.func,
-    trigger: PropTypes.node.isRequired,
-    content: PropTypes.node.isRequired,
-    hide: PropTypes.bool
+interface ToolbarPopoverProps {
+    children: ReactNode
+    refExit: () => void
+    trigger: ReactNode
+    hide: boolean
+    slotProps?: PopoverProps['slotProps']
 }
-
-export default Popover
