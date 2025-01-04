@@ -2,13 +2,13 @@ import TableResize from '../components/resize'
 import { DataTableToolbarFilter } from '../components/toolbar.filter'
 import { TableToolbarSelect as DefaultTableToolbarSelect } from '../components/toolbar-select'
 import { DataTableBody as DefaultTableBody } from '../components/body'
-import DefaultTableFilterList from '../components/filter-list'
+import { TableFilterList } from '../components/filter-list'
 import DefaultTableFooter from '../components/footer'
 import DefaultTableHead from '../components/head'
 import DefaultTableToolbar from '../components/toolbar'
 import { Checkbox, Tooltip } from '@mui/material'
 import ExpandButton from '../components/components.shared/select-cell.expand-button'
-import TableViewCol from '../components/toolbar.view-col'
+import { ToolbarViewCol } from '../components/toolbar.view-col'
 import type { DataTableComponents } from '../data-table.props.type/components'
 
 /**
@@ -19,12 +19,12 @@ export const DEFAULT_COMPONENTS: DataTableComponents = {
     ExpandButton: ExpandButton,
     TableBody: DefaultTableBody,
     TableFilter: DataTableToolbarFilter,
-    TableFilterList: DefaultTableFilterList,
+    TableFilterList: TableFilterList,
     TableFooter: DefaultTableFooter,
     TableHead: DefaultTableHead,
     TableResize: TableResize,
     TableToolbar: DefaultTableToolbar,
     TableToolbarSelect: DefaultTableToolbarSelect,
-    TableViewCol: TableViewCol,
+    TableViewCol: ToolbarViewCol,
     Tooltip: Tooltip
 }
