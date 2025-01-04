@@ -76,7 +76,6 @@ const TableHeadCell = ({
     column,
     columns,
     columnOrder = [],
-    components = {},
     draggableHeadCellRefs,
     draggingHook,
     hint,
@@ -92,7 +91,7 @@ const TableHeadCell = ({
     toggleSort,
     updateColumnOrder
 }: DataTableHeadCellProps) => {
-    const { textLabels } = useMainContext()
+    const { textLabels, components } = useMainContext()
     const [sortTooltipOpen, setSortTooltipOpen] = useState(false)
     const [hintTooltipOpen, setHintTooltipOpen] = useState(false)
 
@@ -113,7 +112,6 @@ const TableHeadCell = ({
     const [dragging, setDragging] = draggingHook ? draggingHook : []
 
     const { className, ...otherProps } = cellHeaderProps
-    const Tooltip = components.Tooltip ?? MuiTooltip
     const sortActive = sortDirection !== 'none' && sortDirection !== undefined
     const ariaSortDirection = sortDirection === 'none' ? false : sortDirection
 
@@ -220,7 +218,7 @@ const TableHeadCell = ({
         >
             {options.sort && sort ? (
                 <span className={classes.contentWrapper}>
-                    <Tooltip
+                    <components.Tooltip
                         title={tooltipTitle}
                         placement="bottom"
                         open={sortTooltipOpen}
@@ -259,9 +257,10 @@ const TableHeadCell = ({
                                 </div>
                             </div>
                         </Button>
-                    </Tooltip>
+                    </components.Tooltip>
+
                     {hint && (
-                        <Tooltip title={hint}>
+                        <components.Tooltip title={hint}>
                             <HelpIcon
                                 className={
                                     !sortActive
@@ -270,7 +269,7 @@ const TableHeadCell = ({
                                 }
                                 fontSize="small"
                             />
-                        </Tooltip>
+                        </components.Tooltip>
                     )}
                 </span>
             ) : (
@@ -280,7 +279,7 @@ const TableHeadCell = ({
                 >
                     {children}
                     {hint && (
-                        <Tooltip
+                        <components.Tooltip
                             title={hint}
                             placement="bottom-end"
                             open={hintTooltipOpen}
@@ -296,7 +295,7 @@ const TableHeadCell = ({
                                 className={classes.hintIconAlone}
                                 fontSize="small"
                             />
-                        </Tooltip>
+                        </components.Tooltip>
                     )}
                 </div>
             )}
@@ -325,9 +324,6 @@ interface DataTableHeadCellProps {
 
     /** Optional to be used with `textLabels.body.columnHeaderTooltip` */
     column?: Object
-
-    /** Injectable component structure **/
-    components?: Object
 }
 
 export default TableHeadCell

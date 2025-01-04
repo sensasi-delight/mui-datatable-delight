@@ -16,7 +16,6 @@ import {
     RowTypeIDK,
     SomeRowsIDK
 } from '../data-table.props.type/options'
-import { DataTableComponents } from '../data-table.props.type/components'
 import { useMainContext } from '../hooks/use-main-context'
 
 export function DataTableBody(props: DataTableBodyProps) {
@@ -120,10 +119,6 @@ interface DataTableBodyProps {
     rowsPerPage: DataTableState['rowsPerPage']
 
     tableId: string
-
-    components: {
-        Checkbox: DataTableComponents['Checkbox']
-    }
 }
 
 const useStyles = makeStyles({
@@ -302,8 +297,7 @@ function RenderRow({
 }) {
     const { classes } = useStyles()
 
-    const { options, selectedRows, toggleExpandRow, components, columns } =
-        parentProps
+    const { options, selectedRows, toggleExpandRow, columns } = parentProps
 
     if (options.customRowRender) {
         return options.customRowRender(row, dataIndex, rowIndex)
@@ -396,7 +390,6 @@ function RenderRow({
                     isRowSelectable={isRowSelectable}
                     dataIndex={dataIndex}
                     id={`datatable-delight--body--select-cell--${options.tableId}-${dataIndex}`}
-                    components={components}
                 />
 
                 {processedRow.map(

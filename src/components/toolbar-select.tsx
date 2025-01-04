@@ -3,10 +3,9 @@ import type { MUIDataTableToolbarSelect } from 'mui-datatables'
 import { makeStyles } from 'tss-react/mui'
 // materials
 import type { Theme } from '@mui/material'
-import { IconButton, Typography, Tooltip as MuiTooltip } from '@mui/material'
+import { IconButton, Typography } from '@mui/material'
 import { Delete as DeleteIcon } from '@mui/icons-material'
 // locals
-import type { DataTableProps } from '../data-table.props.type'
 import type { DataTableOptions } from '../data-table.props.type/options'
 import { useMainContext } from '../hooks/use-main-context'
 
@@ -15,8 +14,7 @@ export function TableToolbarSelect({
     selectedRows,
     options,
     displayData,
-    selectRowUpdate,
-    components = {}
+    selectRowUpdate
 }: {
     /** Options used to describe table */
     options: DataTableOptions
@@ -31,16 +29,12 @@ export function TableToolbarSelect({
 
     selectRowUpdate?: MUIDataTableToolbarSelect['selectRowUpdate']
 
-    components?: DataTableProps['components']
-
     selectedRows: Parameters<
         Required<DataTableOptions>['customToolbarSelect']
     >[0]
 }) {
-    const { textLabels } = useMainContext()
+    const { textLabels, components } = useMainContext()
     const { classes } = useStyles()
-
-    const Tooltip = components.Tooltip ?? MuiTooltip
 
     return (
         <div className={classes.root}>
@@ -58,7 +52,7 @@ export function TableToolbarSelect({
                         handleCustomSelectedRows(rows, options, selectRowUpdate)
                 )
             ) : (
-                <Tooltip title={textLabels.selectedRows.delete}>
+                <components.Tooltip title={textLabels.selectedRows.delete}>
                     <IconButton
                         className={classes.iconButton}
                         onClick={() => onRowsDelete()}
@@ -66,7 +60,7 @@ export function TableToolbarSelect({
                     >
                         <DeleteIcon className={classes.deleteIcon} />
                     </IconButton>
-                </Tooltip>
+                </components.Tooltip>
             )}
         </div>
     )

@@ -1,11 +1,10 @@
 import clsx from 'clsx'
-import Checkbox, { CheckboxProps } from '@mui/material/Checkbox'
+import { CheckboxProps } from '@mui/material/Checkbox'
 import TableCell from '@mui/material/TableCell'
 import { makeStyles } from 'tss-react/mui'
-import ExpandButton from './select-cell.expand-button'
 import { MUIDataTableExpandButton } from 'mui-datatables'
 import { DataTableOptions } from '../../data-table.props.type/options'
-import { DataTableProps } from '../../data-table.props.type'
+import { useMainContext } from '../../hooks/use-main-context'
 
 export function DataTableTableSelectCell({
     fixedHeader,
@@ -24,14 +23,11 @@ export function DataTableTableSelectCell({
     selectableRowsHideCheckboxes,
     setHeadCellRef,
     dataIndex,
-    components = {},
     onChange,
     ...otherProps
 }: DataTableTableSelectCellProps) {
+    const { components } = useMainContext()
     const { classes } = useStyles()
-
-    const CheckboxComponent = components.Checkbox ?? Checkbox
-    const ExpandButtonComponent = components.ExpandButton ?? ExpandButton
 
     if (
         expandableOn === false &&
@@ -78,7 +74,7 @@ export function DataTableTableSelectCell({
             return null
         }
         return (
-            <CheckboxComponent
+            <components.Checkbox
                 classes={{
                     root: classes.checkboxRoot,
                     checked: classes.checked,
@@ -107,7 +103,7 @@ export function DataTableTableSelectCell({
         >
             <div style={{ display: 'flex', alignItems: 'center' }}>
                 {expandableOn && (
-                    <ExpandButtonComponent
+                    <components.ExpandButton
                         isHeaderCell={isHeaderCell}
                         areAllRowsExpanded={areAllRowsExpanded}
                         expandedRows={expandedRows}
@@ -163,8 +159,6 @@ export interface DataTableTableSelectCellProps {
     dataIndex: number
 
     id: string
-
-    components: DataTableProps['components']
 }
 
 const useStyles = makeStyles({ name: 'datatable-delight--body--select-cell' })(

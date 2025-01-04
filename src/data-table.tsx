@@ -146,7 +146,7 @@ class MUIDataTableClass extends React.Component<
     },
     MUIDataTableState
 > {
-    declare context: typeof MainContext
+    declare context: ReturnType<typeof useMainContext>
     static contextType = MainContext
 
     options: DataTableOptions
@@ -1917,7 +1917,6 @@ class MUIDataTableClass extends React.Component<
                         onRowsDelete={this.selectRowDelete}
                         displayData={displayData}
                         selectRowUpdate={this.selectRowUpdate}
-                        components={this.props.components}
                     />
                 )}
                 {(selectedRows.data.length === 0 ||
@@ -1944,7 +1943,6 @@ class MUIDataTableClass extends React.Component<
                             toggleViewColumn={this.toggleViewColumn}
                             updateColumns={this.updateColumns}
                             setTableAction={this.setTableAction}
-                            components={this.props.components}
                         />
                     )}
                 <this.context.components.TableFilterList
@@ -2375,7 +2373,6 @@ function RenderInnerTable({
                         tableRef={getCurrentRootRef}
                         tableId={options.tableId}
                         timers={timers}
-                        components={props.components}
                     />
 
                     <components.TableBody
@@ -2392,7 +2389,6 @@ function RenderInnerTable({
                         options={options}
                         columnOrder={columnOrder}
                         filterList={filterList}
-                        components={props.components}
                         tableId={options.tableId}
                     />
 
