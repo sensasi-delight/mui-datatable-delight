@@ -28,12 +28,10 @@ export function ToolbarViewCol({
             <Typography variant="caption" className={classes.title}>
                 {textLabels.viewColumns.title}
             </Typography>
+
             <FormGroup className={classes.formGroup}>
                 {columns.map((column, index) => {
-                    if (
-                        column.display !== 'excluded' &&
-                        column.viewColumns !== false
-                    ) {
+                    if (column.display === 'excluded' || !column.viewColumns) {
                         return
                     }
 
