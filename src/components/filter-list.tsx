@@ -1,30 +1,22 @@
 import { makeStyles } from 'tss-react/mui'
-import PropTypes from 'prop-types'
+// local components
 import TableFilterListItem from './filter-list.item'
+// local types
+import type { DataTableState } from '../data-table.props.type/state'
+import type { DataTableOptions } from '../data-table.props.type/options'
 
-const useStyles = makeStyles({ name: 'MUIDataTableFilterList' })(() => ({
-    root: {
-        display: 'flex',
-        justifyContent: 'left',
-        flexWrap: 'wrap',
-        margin: '0px 16px 0px 16px'
-    },
-    chip: {
-        margin: '8px 8px 0px 0px'
-    }
-}))
+const CLASS_ID = 'datatable-delight--filter-list'
 
-const TableFilterList = ({
+export function TableFilterList({
     options,
     filterList,
     filterUpdate,
     filterListRenderers,
     columnNames,
     serverSideFilterList,
-    customFilterListUpdate,
-    ItemComponent = TableFilterListItem
-}) => {
-    const { classes } = useStyles()
+    customFilterListUpdate
+}: TableFilterListProps) {
+    const { classes, cx } = useStyles()
     const { serverSide } = options
 
     const removeFilter = (
@@ -52,6 +44,7 @@ const TableFilterList = ({
             }
         )
     }
+
     const customFilterChip = (
         customFilterItem,
         index,
@@ -69,7 +62,7 @@ const TableFilterList = ({
         }
 
         return (
-            <ItemComponent
+            <TableFilterListItem
                 label={customFilterItem}
                 key={customFilterItemIndex}
                 onDelete={() =>
@@ -99,8 +92,8 @@ const TableFilterList = ({
         )
     }
 
-    const filterChip = (index, data, colIndex) => (
-        <ItemComponent
+    const filterChip = (index: number, data, colIndex: number) => (
+        <TableFilterListItem
             label={filterListRenderers[index](data)}
             key={colIndex}
             onDelete={() =>
@@ -123,7 +116,7 @@ const TableFilterList = ({
         />
     )
 
-    const getFilterList = filterList => {
+    const getFilterList = (filterList: DataTableState['filterList']) => {
         return filterList.map((item, index) => {
             if (
                 columnNames[index].filterType === 'custom' &&
@@ -161,7 +154,7 @@ const TableFilterList = ({
     }
 
     return (
-        <div className={classes.root}>
+        <div className={cx(CLASS_ID, classes.root)}>
             {serverSide && serverSideFilterList
                 ? getFilterList(serverSideFilterList)
                 : getFilterList(filterList)}
@@ -169,24 +162,30 @@ const TableFilterList = ({
     )
 }
 
-TableFilterList.propTypes = {
+interface TableFilterListProps {
     /** Data used to filter table against */
-    filterList: PropTypes.array.isRequired,
+    filterList: DataTableState['filterList']
+
     /** Filter List value renderers */
-    filterListRenderers: PropTypes.array.isRequired,
+    filterListRenderers: unknown[]
+
     /** Columns used to describe table */
-    columnNames: PropTypes.arrayOf(
-        PropTypes.oneOfType([
-            PropTypes.string,
-            PropTypes.shape({
-                name: PropTypes.string.isRequired,
-                filterType: PropTypes.string
-            })
-        ])
-    ).isRequired,
+    columnNames: DataTableState['columns']
+
     /** Callback to trigger filter update */
-    onFilterUpdate: PropTypes.func,
-    ItemComponent: PropTypes.any
+    onFilterUpdate: (...params: unknown[]) => void
+
+    options: DataTableOptions
 }
 
-export default TableFilterList
+const useStyles = makeStyles()(() => ({
+    root: {
+        display: 'flex',
+        justifyContent: 'left',
+        flexWrap: 'wrap',
+        margin: '0px 16px 0px 16px'
+    },
+    chip: {
+        margin: '8px 8px 0px 0px'
+    }
+}))
