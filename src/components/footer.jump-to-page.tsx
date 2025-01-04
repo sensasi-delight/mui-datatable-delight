@@ -1,10 +1,10 @@
 // vendors
 import { InputBase, MenuItem, Select, Typography } from '@mui/material'
 import { makeStyles } from 'tss-react/mui'
+import { useMainContext } from '../hooks/use-main-context'
 
 export function DataTableFooterJumpToPage({
     count,
-    textLabel,
     rowsPerPage,
     page: pageProp,
     changePage
@@ -12,14 +12,9 @@ export function DataTableFooterJumpToPage({
     count: number
     page: number
     rowsPerPage: number
-
-    /**
-     * @default options.textLabels.pagination.jumpToPage
-     */
-    textLabel: string
-
     changePage: (pageNo: number) => void
 }) {
+    const { textLabels } = useMainContext()
     const { classes, cx } = useStyles()
 
     const pages = getPageOptions(count, rowsPerPage)
@@ -32,7 +27,7 @@ export function DataTableFooterJumpToPage({
                 variant="body2"
                 className={classes.caption}
             >
-                {textLabel}
+                {textLabels.pagination.jumpToPage}
             </Typography>
 
             <Select

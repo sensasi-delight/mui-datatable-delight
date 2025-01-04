@@ -26,6 +26,7 @@ import TableViewCol from './toolbar.view-col'
 import { DataTableToolbarSearch } from './toolbar.search'
 import { DataTableOptions } from '../data-table.props.type/options'
 import { DataTableState } from '../data-table.props.type/state'
+import { useMainContext } from '../hooks/use-main-context'
 
 const CLASS_ID = 'datatable-delight--toolbar'
 
@@ -41,6 +42,7 @@ const RESPONSIVE_FULL_WIDTH_NAME = 'scrollFullHeightFullWidth'
  * @see [Customize Icons Example](http://mui-datatable-delight.vercel.app/examples/customize-toolbar)
  */
 export default function TableToolbar(props: ToolbarProps) {
+    const context = useMainContext()
     const { classes, cx } = useStyles()
 
     return (
@@ -54,7 +56,7 @@ export default function TableToolbar(props: ToolbarProps) {
             role="toolbar"
             aria-label="Table Toolbar"
         >
-            <TableToolbarClass {...props} classes={classes} />
+            <TableToolbarClass {...props} classes={classes} context={context} />
         </VendorToolbar>
     )
 }
@@ -69,6 +71,8 @@ interface ToolbarProps {
 
 type TEMPORARY_CLASS_PROP_TYPE = ToolbarProps & {
     classes: ReturnType<typeof useStyles>['classes']
+
+    context: ReturnType<typeof useMainContext>
 }
 
 class TableToolbarClass extends React.Component<TEMPORARY_CLASS_PROP_TYPE> {
@@ -295,7 +299,7 @@ class TableToolbarClass extends React.Component<TEMPORARY_CLASS_PROP_TYPE> {
         const FilterIconComponent = icons.FilterIcon ?? FilterIcon
 
         const { search, downloadCsv, print, viewColumns, filterTable } =
-            options.textLabels.toolbar
+            this.props.context.textLabels.toolbar
         const { showSearch } = this.state
 
         const filterPopoverExit = () => {

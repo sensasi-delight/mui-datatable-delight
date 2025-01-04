@@ -27,7 +27,7 @@ import {
     type DataTableState,
     FilterTypeEnum
 } from '../data-table.props.type/state'
-import { TEXT_LABELS } from '../statics'
+import { useMainContext } from '../hooks/use-main-context'
 
 export function DataTableToolbarFilterRenderFilters({
     columns,
@@ -40,10 +40,9 @@ export function DataTableToolbarFilterRenderFilters({
     innerFilterList: string[][]
     setFilterList: React.Dispatch<React.SetStateAction<string[][]>>
 }) {
+    const { textLabels } = useMainContext()
     const { classes } = useStyles()
     const { components, filterData, onFilterUpdate, options } = parentProps
-
-    const textLabels = options.textLabels.filter ?? TEXT_LABELS.filter
 
     const renderedColumns = columns.map((column, index) => {
         if (!column.filter) return
@@ -186,7 +185,7 @@ export function DataTableToolbarFilterRenderFilters({
                 parentProps={parentProps}
                 onChange={event => {
                     const value =
-                        event.target.value === textLabels.all
+                        event.target.value === textLabels.filter.all
                             ? []
                             : [event.target.value]
 
@@ -480,7 +479,7 @@ function RenderCustomField({
 function RenderSelect({
     column,
     index,
-    parentProps: { filterData, options, filterList },
+    parentProps: { filterData, filterList },
     onChange
 }: {
     column: DataTableState['columns'][0]
@@ -488,9 +487,8 @@ function RenderSelect({
     parentProps: DataTableToolbarFilterProps
     onChange: SelectProps<string>['onChange']
 }) {
+    const { textLabels } = useMainContext()
     const { classes } = useStyles()
-
-    const textLabels = options.textLabels.filter ?? TEXT_LABELS.filter
 
     const renderItem = column.filterOptions?.renderValue ?? (v => v)
 
@@ -513,14 +511,14 @@ function RenderSelect({
                     value={
                         filterList[index].length
                             ? filterList[index].toString()
-                            : textLabels.all
+                            : textLabels.filter.all
                     }
                     name={column.name}
                     onChange={onChange}
                     input={<Input name={column.name} id={column.name} />}
                 >
-                    <MenuItem value={textLabels.all} key={0}>
-                        {textLabels.all}
+                    <MenuItem value={textLabels.filter.all} key={0}>
+                        {textLabels.filter.all}
                     </MenuItem>
 
                     {filterData[index].map((filterValue, filterIndex) => (

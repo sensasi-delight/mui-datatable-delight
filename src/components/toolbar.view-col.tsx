@@ -5,6 +5,7 @@ import FormControl from '@mui/material/FormControl'
 import FormGroup from '@mui/material/FormGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import { makeStyles } from 'tss-react/mui'
+import { useMainContext } from '../hooks/use-main-context'
 
 const useStyles = makeStyles({ name: 'MUIDataTableViewCol' })(theme => ({
     root: {
@@ -39,13 +40,12 @@ const useStyles = makeStyles({ name: 'MUIDataTableViewCol' })(theme => ({
 
 const TableViewCol = ({
     columns,
-    options,
     components = {},
     onColumnUpdate,
     updateColumns
 }) => {
+    const { textLabels } = useMainContext()
     const { classes } = useStyles()
-    const textLabels = options.textLabels.viewColumns
     const CheckboxComponent = components.Checkbox || Checkbox
 
     const handleColChange = index => {
@@ -56,10 +56,10 @@ const TableViewCol = ({
         <FormControl
             component="fieldset"
             className={classes.root}
-            aria-label={textLabels.titleAria}
+            aria-label={textLabels.viewColumns.titleAria}
         >
             <Typography variant="caption" className={classes.title}>
-                {textLabels.title}
+                {textLabels.viewColumns.title}
             </Typography>
             <FormGroup className={classes.formGroup}>
                 {columns.map((column, index) => {

@@ -5,8 +5,8 @@ import { Grow, IconButton, TextField, TextFieldProps } from '@mui/material'
 import { Clear, Search } from '@mui/icons-material'
 // locals
 import type { DataTableProps } from '../data-table.props.type'
-import { TEXT_LABELS } from '../statics'
 import { useEffect, useState } from 'react'
+import { useMainContext } from '../hooks/use-main-context'
 
 export const DataTableToolbarSearch = ({
     options,
@@ -17,13 +17,12 @@ export const DataTableToolbarSearch = ({
     onSearch: (searchText: string) => void
     onHide: () => void
 }) => {
+    const { textLabels } = useMainContext()
     const { classes } = useStyles()
     const [searchText, setSearchText] = useState(options?.searchText ?? '')
 
     const searchDelay = options?.searchDelay ?? 0
     const clearIconVisibility = options?.searchAlwaysOpen ? 'hidden' : 'visible'
-
-    const textLabels = options?.textLabels?.toolbar ?? TEXT_LABELS.toolbar
 
     useEffect(() => {
         const timeout = setTimeout(() => {
@@ -48,8 +47,8 @@ export const DataTableToolbarSearch = ({
                     className={classes.searchText}
                     autoFocus={true}
                     variant="standard"
-                    data-test-id={textLabels.search}
-                    aria-label={textLabels.search}
+                    data-test-id={textLabels.toolbar.search}
+                    aria-label={textLabels.toolbar.search}
                     value={searchText}
                     onKeyDown={event => {
                         if (event.key === 'Escape') {

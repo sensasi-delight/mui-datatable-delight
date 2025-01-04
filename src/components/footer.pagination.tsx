@@ -5,10 +5,9 @@ import MuiTablePagination, {
 } from '@mui/material/TablePagination'
 // locals
 import type { DataTableFooterPaginationProps } from './footer.pagination.props.type'
-// statics
-import { TEXT_LABELS } from '../statics'
 // functions
 import { getPageValue } from '../functions.shared/get-page-value'
+import { useMainContext } from '../hooks/use-main-context'
 
 export function DataTableFooterPagination({
     count,
@@ -18,6 +17,7 @@ export function DataTableFooterPagination({
     changeRowsPerPage,
     changePage
 }: DataTableFooterPaginationProps) {
+    const { textLabels } = useMainContext()
     const { classes } = useStyles()
 
     const handleRowChange: MuiTablePaginationProps['onRowsPerPageChange'] = ({
@@ -31,11 +31,6 @@ export function DataTableFooterPagination({
         page
     ) => {
         changePage(page)
-    }
-
-    const textLabels = {
-        ...TEXT_LABELS.pagination,
-        ...options.textLabels.pagination
     }
 
     const finalRowsPerPageOptions = options.rowsPerPageOptions ?? [
@@ -52,9 +47,9 @@ export function DataTableFooterPagination({
                 component="div"
                 count={count}
                 labelDisplayedRows={({ from, to, count }) =>
-                    `${from}-${to} ${textLabels.displayRows} ${count}`
+                    `${from}-${to} ${textLabels.pagination.displayRows} ${count}`
                 }
-                labelRowsPerPage={textLabels.rowsPerPage}
+                labelRowsPerPage={textLabels.pagination.rowsPerPage}
                 onPageChange={handlePageChange}
                 onRowsPerPageChange={handleRowChange}
                 page={getPageValue(count, finalRowPerPage, page)}
@@ -65,15 +60,15 @@ export function DataTableFooterPagination({
                         previousButton: {
                             id: 'pagination-back',
                             // 'data-testid': 'pagination-back',
-                            'aria-label': textLabels.previous,
-                            title: textLabels.previous ?? ''
+                            'aria-label': textLabels.pagination.previous,
+                            title: textLabels.pagination.previous
                         },
 
                         nextButton: {
                             id: 'pagination-next',
                             // 'data-testid': 'pagination-next',
-                            'aria-label': textLabels.next,
-                            title: textLabels.next ?? '',
+                            'aria-label': textLabels.pagination.next,
+                            title: textLabels.pagination.next,
                             className: classes.nextButton
                         }
                     },

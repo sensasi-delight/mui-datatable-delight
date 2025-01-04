@@ -8,7 +8,7 @@ import { Delete as DeleteIcon } from '@mui/icons-material'
 // locals
 import type { DataTableProps } from '../data-table.props.type'
 import type { DataTableOptions } from '../data-table.props.type/options'
-import { TEXT_LABELS } from '../statics'
+import { useMainContext } from '../hooks/use-main-context'
 
 export function TableToolbarSelect({
     onRowsDelete,
@@ -37,10 +37,8 @@ export function TableToolbarSelect({
         Required<DataTableOptions>['customToolbarSelect']
     >[0]
 }) {
+    const { textLabels } = useMainContext()
     const { classes } = useStyles()
-
-    const textLabels =
-        options.textLabels?.selectedRows ?? TEXT_LABELS.selectedRows
 
     const Tooltip = components.Tooltip ?? MuiTooltip
 
@@ -48,7 +46,7 @@ export function TableToolbarSelect({
         <div className={classes.root}>
             <div>
                 <Typography variant="subtitle1" className={classes.title}>
-                    {selectedRows.data.length} {textLabels.text}
+                    {selectedRows.data.length} {textLabels.selectedRows.text}
                 </Typography>
             </div>
 
@@ -60,11 +58,11 @@ export function TableToolbarSelect({
                         handleCustomSelectedRows(rows, options, selectRowUpdate)
                 )
             ) : (
-                <Tooltip title={textLabels.delete}>
+                <Tooltip title={textLabels.selectedRows.delete}>
                     <IconButton
                         className={classes.iconButton}
                         onClick={() => onRowsDelete()}
-                        aria-label={textLabels.deleteAria}
+                        aria-label={textLabels.selectedRows.deleteAria}
                     >
                         <DeleteIcon className={classes.deleteIcon} />
                     </IconButton>
