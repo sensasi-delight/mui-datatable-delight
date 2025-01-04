@@ -1,9 +1,9 @@
 import { makeStyles } from 'tss-react/mui'
-// local components
-import TableFilterListItem from './filter-list.item'
 // local types
 import type { DataTableState } from '../data-table.props.type/state'
 import type { DataTableOptions } from '../data-table.props.type/options'
+import { Chip } from '@mui/material'
+import { ReactNode } from 'react'
 
 const CLASS_ID = 'datatable-delight--filter-list'
 
@@ -62,7 +62,7 @@ export function TableFilterList({
         }
 
         return (
-            <TableFilterListItem
+            <Chip
                 label={customFilterItem}
                 key={customFilterItemIndex}
                 onDelete={() =>
@@ -75,44 +75,44 @@ export function TableFilterList({
                     )
                 }
                 className={classes.chip}
-                itemKey={customFilterItemIndex}
-                index={index}
-                data={item}
-                columnNames={columnNames}
-                filterProps={
-                    options.setFilterChipProps
-                        ? options.setFilterChipProps(
-                              index,
-                              columnNames[index].name,
-                              item[customFilterItemIndex] || []
-                          )
-                        : {}
-                }
+                // itemKey={customFilterItemIndex}
+                // index={index}
+                // data={item}
+                // columnNames={columnNames}
+                // filterProps={
+                //     options.setFilterChipProps
+                //         ? options.setFilterChipProps(
+                //               index,
+                //               columnNames[index].name,
+                //               item[customFilterItemIndex] || []
+                //           )
+                //         : {}
+                // }
             />
         )
     }
 
     const filterChip = (index: number, data, colIndex: number) => (
-        <TableFilterListItem
+        <Chip
             label={filterListRenderers[index](data)}
             key={colIndex}
             onDelete={() =>
                 removeFilter(index, data, columnNames[index].name, 'chip')
             }
             className={classes.chip}
-            itemKey={colIndex}
-            index={index}
-            data={data}
-            columnNames={columnNames}
-            filterProps={
-                options.setFilterChipProps
-                    ? options.setFilterChipProps(
-                          index,
-                          columnNames[index].name,
-                          data
-                      )
-                    : {}
-            }
+            // itemKey={colIndex}
+            // index={index}
+            // data={data}
+            // columnNames={columnNames}
+            // filterProps={
+            //     options.setFilterChipProps
+            //         ? options.setFilterChipProps(
+            //               index,
+            //               columnNames[index].name,
+            //               data
+            //           )
+            //         : {}
+            // }
         />
     )
 
@@ -167,7 +167,7 @@ interface TableFilterListProps {
     filterList: DataTableState['filterList']
 
     /** Filter List value renderers */
-    filterListRenderers: unknown[]
+    filterListRenderers: ((val: unknown) => ReactNode)[]
 
     /** Columns used to describe table */
     columnNames: DataTableState['columns']
