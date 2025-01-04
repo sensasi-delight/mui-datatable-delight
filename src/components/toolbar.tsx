@@ -282,7 +282,6 @@ class TableToolbarClass extends React.Component<TEMPORARY_CLASS_PROP_TYPE> {
          * @todo REMOVE THIS COMPONENT VARIABLES
          */
         const Tooltip = components.Tooltip
-        const TableViewColComponent = components.TableViewCol
         const TableFilterComponent =
             components.TableFilter ?? DataTableToolbarFilter
         const SearchIconComponent = icons.SearchIcon
@@ -452,12 +451,12 @@ class TableToolbarClass extends React.Component<TEMPORARY_CLASS_PROP_TYPE> {
                                 </Tooltip>
                             }
                             content={
-                                <TableViewColComponent
-                                    data={data}
+                                <components.TableViewCol
+                                    // data={data}
                                     columns={columns}
-                                    options={options}
+                                    // options={options}
                                     onColumnUpdate={toggleViewColumn}
-                                    updateColumns={updateColumns}
+                                    // updateColumns={updateColumns}
                                 />
                             }
                         />
