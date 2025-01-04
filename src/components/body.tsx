@@ -16,10 +16,12 @@ import {
     RowTypeIDK,
     SomeRowsIDK
 } from '../data-table.props.type/options'
-import { TEXT_LABELS } from '../statics'
 import { DataTableComponents } from '../data-table.props.type/components'
+import { useMainContext } from '../hooks/use-main-context'
 
 export function DataTableBody(props: DataTableBodyProps) {
+    const { textLabels } = useMainContext()
+
     const { classes } = useStyles()
 
     const { columns, options } = props
@@ -27,8 +29,6 @@ export function DataTableBody(props: DataTableBodyProps) {
     const columnOrder = props.columnOrder ?? columns.map((_, id) => id)
     const tableRows = buildRows(props)
     const visibleColCnt = columns.filter(c => c.display === 'true').length
-    const noMatchTextLabels =
-        options.textLabels?.body?.noMatch ?? TEXT_LABELS.body.noMatch
 
     return (
         <MuiTableBody className={classes.root}>
@@ -63,7 +63,7 @@ export function DataTableBody(props: DataTableBodyProps) {
                             className={classes.emptyTitle}
                             component="div"
                         >
-                            {noMatchTextLabels}
+                            {textLabels.body.noMatch}
                         </Typography>
                     </TableBodyCell>
                 </DataTableBodyRow>

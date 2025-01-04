@@ -1,7 +1,15 @@
+import {
+    MUIDataTableTextLabelsFilter,
+    MUIDataTableTextLabelsPagination,
+    MUIDataTableTextLabelsSelectedRows,
+    MUIDataTableTextLabelsToolbar,
+    MUIDataTableTextLabelsViewColumns
+} from 'mui-datatables'
+
 /*
  * Default text labels.
  */
-export const TEXT_LABELS = {
+export const DEFAULT_TEXT_LABELS: TextLabelsType = {
     body: {
         noMatch: 'Sorry, no matching records found',
         toolTip: 'Sort'
@@ -34,4 +42,16 @@ export const TEXT_LABELS = {
         delete: 'Delete',
         deleteAria: 'Delete Selected Rows'
     }
+}
+
+interface TextLabelsType {
+    body: {
+        noMatch: string | React.ReactNode
+        toolTip: string
+    }
+    filter: MUIDataTableTextLabelsFilter
+    pagination: MUIDataTableTextLabelsPagination
+    selectedRows: MUIDataTableTextLabelsSelectedRows
+    toolbar: MUIDataTableTextLabelsToolbar
+    viewColumns: MUIDataTableTextLabelsViewColumns
 }

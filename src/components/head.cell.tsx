@@ -13,6 +13,7 @@ import {
 import { Help as HelpIcon } from '@mui/icons-material'
 // locals
 import useColumnDrop from './head.cell.use-column-drop'
+import { useMainContext } from '../hooks/use-main-context'
 
 const useStyles = makeStyles({ name: 'datatable-delight--head--cell' })(
     theme => ({
@@ -91,6 +92,7 @@ const TableHeadCell = ({
     toggleSort,
     updateColumnOrder
 }: DataTableHeadCellProps) => {
+    const { textLabels } = useMainContext()
     const [sortTooltipOpen, setSortTooltipOpen] = useState(false)
     const [hintTooltipOpen, setHintTooltipOpen] = useState(false)
 
@@ -187,17 +189,17 @@ const TableHeadCell = ({
         setHintTooltipOpen(true)
     }
 
-    const getTooltipTitle = () => {
-        if (dragging) return ''
-        if (!options.textLabels) return ''
-        return options.textLabels.body.columnHeaderTooltip
-            ? options.textLabels.body.columnHeaderTooltip(column)
-            : options.textLabels.body.toolTip
-    }
-
     const closeTooltip = () => {
         setSortTooltipOpen(false)
     }
+
+    /**
+     * @todo ACCOMMODATE `textLabels.body.columnHeaderTooltip`
+     */
+    const tooltipTitle = dragging
+        ? ''
+        : // : (textLabels.body.columnHeaderTooltip?.(column) ??
+          textLabels.body.toolTip
 
     return (
         <TableCell
@@ -219,7 +221,7 @@ const TableHeadCell = ({
             {options.sort && sort ? (
                 <span className={classes.contentWrapper}>
                     <Tooltip
-                        title={getTooltipTitle()}
+                        title={tooltipTitle}
                         placement="bottom"
                         open={sortTooltipOpen}
                         onOpen={() =>

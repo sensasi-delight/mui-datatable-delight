@@ -2,6 +2,7 @@ import { createContext, ReactNode, useContext } from 'react'
 import { DataTableProps } from '..'
 import { DEFAULT_COMPONENTS } from './use-main-context.default-components'
 import { DEFAULT_ICONS } from './use-main-context.default-icons'
+import { processTextLabels } from './use-main-context.process-text-labels'
 
 export function MainContextProvider({
     datatableProps,
@@ -17,7 +18,8 @@ export function MainContextProvider({
                 icons: {
                     ...DEFAULT_ICONS,
                     ...(datatableProps.components?.icons ?? {})
-                }
+                },
+                textLabels: processTextLabels(datatableProps.textLabels)
             }}
         >
             {children}
@@ -49,7 +51,8 @@ function componentsPreprocess(components: DataTableProps['components']) {
 
 const DEFAULT_MAIN_CONTEXT_VALUE = {
     components: DEFAULT_COMPONENTS,
-    icons: DEFAULT_ICONS
+    icons: DEFAULT_ICONS,
+    textLabels: processTextLabels(undefined)
 }
 
 /**

@@ -10,10 +10,11 @@ import {
     type DataTableState,
     FilterTypeEnum
 } from '../data-table.props.type/state'
-import { TEXT_LABELS } from '../statics'
 import { DataTableToolbarFilterRenderFilters } from './toolbar.filter.render-filters'
+import { useMainContext } from '../hooks/use-main-context'
 
 export function DataTableToolbarFilter(props: DataTableToolbarFilterProps) {
+    const { textLabels } = useMainContext()
     const {
         columns,
         options,
@@ -27,8 +28,6 @@ export function DataTableToolbarFilter(props: DataTableToolbarFilterProps) {
     const { classes } = useStyles()
     const [filterList, setFilterList] = useState(filterListFromProp)
 
-    const textLabels = options.textLabels.filter ?? TEXT_LABELS.filter
-
     return (
         <div className={classes.root}>
             <div className={classes.header}>
@@ -39,14 +38,14 @@ export function DataTableToolbarFilter(props: DataTableToolbarFilterProps) {
                             [classes.title]: true
                         })}
                     >
-                        {textLabels.title}
+                        {textLabels.filter.title}
                     </Typography>
 
                     <Button
                         color="primary"
                         className={classes.resetLink}
                         tabIndex={0}
-                        aria-label={textLabels.reset}
+                        aria-label={textLabels.filter.reset}
                         data-testid="filterReset-button"
                         onClick={() => {
                             setFilterList(columns.map(() => []))
@@ -56,7 +55,7 @@ export function DataTableToolbarFilter(props: DataTableToolbarFilterProps) {
                             }
                         }}
                     >
-                        {textLabels.reset}
+                        {textLabels.filter.reset}
                     </Button>
                 </div>
 

@@ -1,4 +1,4 @@
-import type { MUIDataTableState } from 'mui-datatables'
+import type { MUIDataTableState, MUIDataTableTextLabels } from 'mui-datatables'
 import type { Component, ReactNode, RefObject } from 'react'
 import type { DataTableOptions } from './options'
 import type { DataTableComponents } from './components'
@@ -38,6 +38,13 @@ export interface DataTableProps<Item = DefaultDataItem> {
     title?: string | ReactNode
 
     options?: DataTableOptions
+
+    /**
+     * User provided labels to localize text.
+     *
+     * @see [Localization Docs](https://mui-datatable-delight.vercel.app/docs/features/localization)
+     */
+    textLabels?: Partial<MUIDataTableTextLabels>
 
     innerRef?:
         | RefObject<

@@ -1,17 +1,13 @@
 // types
 import type { ReactNode } from 'react'
-import type {
-    MUIDataTablePagination,
-    MUIDataTableTextLabelsPagination
-} from 'mui-datatables'
+import type { MUIDataTableTextLabelsPagination } from 'mui-datatables'
 // vendors
 import { makeStyles } from 'tss-react/mui'
 // local components
 import type { DataTableFooterPaginationProps } from './footer.pagination.props.type'
 import { DataTableFooterPagination } from './footer.pagination'
 import { DataTableFooterJumpToPage } from './footer.jump-to-page'
-// statics
-import { TEXT_LABELS } from '../statics'
+import { useMainContext } from '../hooks/use-main-context'
 
 export default function TableFooter({
     options,
@@ -21,13 +17,9 @@ export default function TableFooter({
     changeRowsPerPage,
     changePage
 }: TableFooterProps) {
+    const { textLabels } = useMainContext()
     const { classes, cx } = useStyles()
-    const {
-        customFooter,
-        pagination = true,
-        jumpToPage,
-        textLabels: { pagination: paginationTextLabels }
-    } = options
+    const { customFooter, pagination = true, jumpToPage } = options
 
     return (
         <div className={cx(ROOT_CLASS, classes.root)}>
@@ -38,7 +30,7 @@ export default function TableFooter({
                     rowsPerPage,
                     changeRowsPerPage,
                     changePage,
-                    paginationTextLabels
+                    textLabels.pagination
                 )}
 
             {!customFooter && jumpToPage && (
@@ -46,7 +38,6 @@ export default function TableFooter({
                     count={rowCount}
                     page={page}
                     rowsPerPage={rowsPerPage}
-                    textLabel={paginationTextLabels.jumpToPage ?? TEXT_LABELS}
                     changePage={changePage}
                 />
             )}
@@ -81,9 +72,6 @@ interface TableFooterProps {
             paginationTextLabels: MUIDataTableTextLabelsPagination
         ) => ReactNode
         pagination: boolean
-        textLabels: {
-            pagination: MUIDataTablePagination
-        }
     } & DataTableFooterPaginationProps['options']
 
     /** Current page index */

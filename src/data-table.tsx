@@ -10,7 +10,6 @@ import { makeStyles } from 'tss-react/mui'
 import clsx from 'clsx'
 import React, { createRef, type ReactNode, type RefObject } from 'react'
 // locals
-import { TEXT_LABELS } from './statics/text-labels'
 import { getPageValue } from './functions.shared/get-page-value'
 import {
     buildMap,
@@ -147,7 +146,7 @@ class MUIDataTableClass extends React.Component<
     },
     MUIDataTableState
 > {
-    declare context: React.ContextType<typeof MainContext>
+    declare context: typeof MainContext
     static contextType = MainContext
 
     options: DataTableOptions
@@ -268,10 +267,6 @@ class MUIDataTableClass extends React.Component<
         this.options = {
             ...options,
             ...(props.options ?? {}),
-            textLabels: {
-                ...options.textLabels,
-                ...props.options?.textLabels
-            },
             downloadOptions: {
                 ...options.downloadOptions,
                 ...props.options?.downloadOptions
@@ -2082,7 +2077,6 @@ const DEFAULT_OPTIONS: Required<DataTableOptions> = {
     tableBodyHeight: 'auto',
     tableBodyMaxHeight: null, // if set, it will override tableBodyHeight
     sortOrder: {},
-    textLabels: TEXT_LABELS,
     viewColumns: true,
     selectToolbarPlacement: STP.REPLACE
 }
@@ -2122,10 +2116,6 @@ function getConstructedOption(
     return {
         ...DEFAULT_OPTIONS,
         ...(optionsFromProp ?? {}),
-        textLabels: {
-            ...DEFAULT_OPTIONS.textLabels,
-            ...optionsFromProp?.textLabels
-        },
         downloadOptions: {
             ...DEFAULT_OPTIONS.downloadOptions,
             ...optionsFromProp?.downloadOptions
