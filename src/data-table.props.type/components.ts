@@ -9,7 +9,7 @@ import ExpandButton from '../components/components.shared/select-cell.expand-but
 import { TableToolbarSelect } from '../components/toolbar-select'
 import TableHead from '../components/head'
 import Toolbar from '../components/toolbar'
-import TableViewCol from '../components/toolbar.view-col'
+import { ToolbarViewCol } from '../components/toolbar.view-col'
 import TableResize from '../components/resize'
 
 export interface DataTableComponents {
@@ -23,6 +23,6 @@ export interface DataTableComponents {
     TableResize: typeof TableResize
     TableToolbar: typeof Toolbar
     TableToolbarSelect: typeof TableToolbarSelect
-    TableViewCol: typeof TableViewCol
+    TableViewCol: typeof ToolbarViewCol
     Tooltip: typeof Tooltip
 }

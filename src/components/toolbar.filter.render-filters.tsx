@@ -1,6 +1,5 @@
 // materials
 import {
-    Checkbox,
     FormControl,
     FormControlLabel,
     FormGroup,
@@ -86,7 +85,6 @@ export function DataTableToolbarFilterRenderFilters({
                     column={column}
                     index={index}
                     key={index}
-                    CheckboxComponent={components.Checkbox}
                     filterData={filterData}
                     filterList={filterList}
                     onSelectChange={event => {
@@ -298,18 +296,17 @@ function DataTableToolbarFilterCheckbox({
 function DataTableToolbarFilterMultiselect({
     column,
     index,
-    CheckboxComponent = Checkbox,
     filterList,
     onSelectChange,
     filterData
 }: {
     column: DataTableState['columns'][0]
     index: number
-    CheckboxComponent: typeof Checkbox
     filterList: string[][]
     onSelectChange: SelectProps<string[]>['onChange']
     filterData: string[][]
 }) {
+    const { components } = useMainContext()
     const { classes } = useStyles()
 
     const renderItem = column.filterOptions?.renderValue ?? (v => v)
@@ -342,7 +339,7 @@ function DataTableToolbarFilterMultiselect({
                 >
                     {filterData[index].map((filterValue, filterIndex) => (
                         <MenuItem value={filterValue} key={filterIndex + 1}>
-                            <CheckboxComponent
+                            <components.Checkbox
                                 data-description="table-filter"
                                 color="primary"
                                 checked={

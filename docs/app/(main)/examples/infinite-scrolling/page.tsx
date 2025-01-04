@@ -1,84 +1,84 @@
 'use client'
 
-import React, { Fragment, Component } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Waypoint } from 'react-waypoint'
-import PropTypes from 'prop-types'
 import DataTable from '@src'
-import { createTheme } from '@mui/material/styles'
-import { withStyles } from 'tss-react/mui'
+// import { makeStyles } from 'tss-react/mui'
 
-const styles = theme => ({
-    root: {
-        width: '100%',
-        overflowX: 'auto',
-        height: 300,
-        flexGrow: 1
-    },
-    head: {
-        backgroundColor: theme.palette.primary.main,
-        color: '#fff',
-        position: 'sticky',
-        fontSize: '.6rem',
-        top: 0
-    },
-    table: {
-        minWidth: 700,
-        height: 200
-    },
-    tableCell: {
-        fontSize: '.6rem'
+type DataItemType = (string | number)[]
+
+export default function MessageManager() {
+    // const { classes } = useStyles()
+    const [filteredMessages, setFilteredMessages] = useState<DataItemType[]>([])
+
+    useEffect(() => {
+        getMessages()
+    }, [])
+
+    function getMessages() {
+        const THIRTYROWS = 30
+        const messages = buildTestData(THIRTYROWS, 0)
+
+        setFilteredMessages(messages)
     }
-})
 
-class MessageManager extends Component {
-    constructor(props) {
-        super(props)
-        this.props = props
+    function buildTestData(count: number, startingIndex: number) {
+        const data = [
+            ['Template 1', 'Requester Jerry'],
+            ['Template 2', 'Test user 1'],
+            ['Order66', 'Test user 2'],
+            ['Live Message', 'Another Person'],
+            ['Future Message', 'John Doe'],
+            ['Expired Message', 'Jane Doe'],
+            ['Retired Message', 'Some Guy']
+        ]
 
-        this.state = {
-            filteredMessages: []
+        const rows: DataItemType[] = []
+
+        for (let i = 0; i < count; i += 1) {
+            const randomSelection =
+                data[Math.floor(Math.random() * data.length)]
+
+            const id = i + 1 + startingIndex
+
+            rows.push([id, ...randomSelection])
         }
+
+        return rows
     }
 
-    componentDidMount() {
-        this.getMessages(0)
-    }
-
-    columns = [
+    const columns = [
         {
             name: 'Id',
             options: {
                 filter: false,
                 sort: false,
                 customBodyRenderLite: (dataIndex, rowIndex) => {
-                    const { filteredMessages } = this.state
-                    let value = filteredMessages[dataIndex][0]
+                    const value = filteredMessages[dataIndex][0]
 
-                    if (rowIndex === filteredMessages.length - 10) {
-                        return (
-                            <Fragment>
-                                <Waypoint
-                                    onEnter={() => {
-                                        console.log('WAYPOINT REACHED')
-                                        const newData = this.buildTestData(
-                                            30,
-                                            filteredMessages.length
-                                        )
-
-                                        this.setState({
-                                            filteredMessages: [
-                                                ...filteredMessages,
-                                                ...newData
-                                            ]
-                                        })
-                                    }}
-                                />
-                                {value}*
-                            </Fragment>
-                        )
-                    } else {
-                        return <Fragment>{value}</Fragment>
+                    if (rowIndex !== filteredMessages.length - 10) {
+                        return value
                     }
+
+                    return (
+                        <>
+                            <Waypoint
+                                onEnter={() => {
+                                    console.log('WAYPOINT REACHED')
+                                    const newData = buildTestData(
+                                        30,
+                                        filteredMessages.length
+                                    )
+
+                                    setFilteredMessages(prev => [
+                                        ...prev,
+                                        ...newData
+                                    ])
+                                }}
+                            />
+                            {value}*
+                        </>
+                    )
                 }
             }
         },
@@ -96,92 +96,47 @@ class MessageManager extends Component {
         }
     ]
 
-    options = {
-        filter: false,
-        fixedHeader: true,
-        filterType: 'dropdown',
-        responsive: 'standard',
-        selectableRows: 'none',
-        pagination: false,
-        tableBodyHeight: '500px',
-        onRowClick(rowNode) {
-            console.log(rowNode)
-        }
-    }
-
-    /*eslint-disable */
-    buildTestData(count, startingIndex) {
-        const data = [
-            ['Template 1', 'Requester Jerry'],
-            ['Template 2', 'Test user 1'],
-            ['Order66', 'Test user 2'],
-            ['Live Message', 'Another Person'],
-            ['Future Message', 'John Doe'],
-            ['Expired Message', 'Jane Doe'],
-            ['Retired Message', 'Some Guy']
-        ]
-
-        function createData(id, message, requester) {
-            return [id, message, requester]
-        }
-
-        const rows = []
-
-        for (let i = 0; i < count; i += 1) {
-            const randomSelection =
-                data[Math.floor(Math.random() * data.length)]
-            const id = i + 1 + startingIndex
-            rows.push(createData(id, ...randomSelection))
-        }
-        return rows
-    }
-    /* eslint-enable */
-
-    getMessages(pageNum) {
-        const THIRTYROWS = 30
-        const messages = this.buildTestData(THIRTYROWS, 0)
-        this.setState({
-            filteredMessages: messages
-        })
-    }
-
-    getMuiTheme = () =>
-        createTheme({
-            typography: {
-                useNextVariants: true
-            },
-            overrides: {
-                MUIDataTable: {
-                    root: {}
-                },
-                MUIDataTableBodyRow: {
-                    root: {
-                        '&:nth-child(odd)': {
-                            backgroundColor: '#f6f6f6'
-                        }
-                    }
-                },
-                MUIDataTableBodyCell: {}
-            }
-        })
-
-    // eslint-disable-next-line max-lines-per-function
-    render() {
-        const { classes } = this.props
-        const { filteredMessages } = this.state
-        return (
-            <Fragment>
-                <DataTable
-                    data={filteredMessages}
-                    columns={this.columns}
-                    options={this.options}
-                />
-            </Fragment>
-        )
-    }
-}
-MessageManager.propTypes = {
-    classes: PropTypes.object.isRequired
+    return (
+        <DataTable
+            data={filteredMessages}
+            columns={columns}
+            options={options}
+        />
+    )
 }
 
-export default withStyles(MessageManager, styles)
+// const useStyles = makeStyles()(theme => ({
+//     root: {
+//         width: '100%',
+//         overflowX: 'auto',
+//         height: 300,
+//         flexGrow: 1
+//     },
+//     head: {
+//         backgroundColor: theme.palette.primary.main,
+//         color: '#fff',
+//         position: 'sticky',
+//         fontSize: '.6rem',
+//         top: 0
+//     },
+//     table: {
+//         minWidth: 700,
+//         height: 200
+//     },
+//     tableCell: {
+//         fontSize: '.6rem'
+//     }
+// }))
+
+const options = {
+    filter: false,
+    fixedHeader: true,
+    filterType: 'dropdown',
+    responsive: 'standard',
+    selectableRows: 'none',
+    pagination: false,
+    tableBodyHeight: '500px',
+    onRowClick(rowNode) {
+        console.log(rowNode)
+    }
+}

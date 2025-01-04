@@ -12,11 +12,12 @@ import {
 // locals
 import { createCsvDownload } from './toolbar.functions.create-csv-download'
 import { DataTableToolbarFilter } from './toolbar.filter'
-import Popover from './toolbar.popover'
 import { DataTableToolbarSearch } from './toolbar.search'
 import { DataTableOptions } from '../data-table.props.type/options'
 import { DataTableState } from '../data-table.props.type/state'
 import { useMainContext } from '../hooks/use-main-context'
+// internals
+import { ToolbarPopover } from './toolbar.popover'
 
 const CLASS_ID = 'datatable-delight--toolbar'
 
@@ -282,7 +283,6 @@ class TableToolbarClass extends React.Component<TEMPORARY_CLASS_PROP_TYPE> {
          * @todo REMOVE THIS COMPONENT VARIABLES
          */
         const Tooltip = components.Tooltip
-        const TableViewColComponent = components.TableViewCol
         const TableFilterComponent =
             components.TableFilter ?? DataTableToolbarFilter
         const SearchIconComponent = icons.SearchIcon
@@ -419,9 +419,8 @@ class TableToolbarClass extends React.Component<TEMPORARY_CLASS_PROP_TYPE> {
                     )}
 
                     {options.viewColumns && (
-                        <Popover
-                            refExit={this.setActiveIcon.bind(null)}
-                            classes={{ closeIcon: classes.filterCloseIcon }}
+                        <ToolbarPopover
+                            refExit={() => this.setActiveIcon()}
                             hide={options.viewColumns === 'disabled'}
                             trigger={
                                 <Tooltip
@@ -451,28 +450,28 @@ class TableToolbarClass extends React.Component<TEMPORARY_CLASS_PROP_TYPE> {
                                     </IconButton>
                                 </Tooltip>
                             }
-                            content={
-                                <TableViewColComponent
-                                    data={data}
-                                    columns={columns}
-                                    options={options}
-                                    onColumnUpdate={toggleViewColumn}
-                                    updateColumns={updateColumns}
-                                />
-                            }
-                        />
+                        >
+                            <components.TableViewCol
+                                // data={data}
+                                columns={columns}
+                                // options={options}
+                                onColumnUpdate={toggleViewColumn}
+                                // updateColumns={updateColumns}
+                            />
+                        </ToolbarPopover>
                     )}
 
                     {options.filter && (
-                        <Popover
+                        <ToolbarPopover
                             refExit={filterPopoverExit}
                             hide={
                                 this.state.hideFilterPopover ||
                                 options.filter === 'disabled'
                             }
-                            classes={{
-                                paper: classes.filterPaper,
-                                closeIcon: classes.filterCloseIcon
+                            slotProps={{
+                                paper: {
+                                    className: classes.filterPaper
+                                }
                             }}
                             trigger={
                                 <Tooltip
@@ -504,23 +503,21 @@ class TableToolbarClass extends React.Component<TEMPORARY_CLASS_PROP_TYPE> {
                                     </span>
                                 </Tooltip>
                             }
-                            content={
-                                <TableFilterComponent
-                                    customFooter={
-                                        options.customFilterDialogFooter
-                                    }
-                                    columns={columns}
-                                    options={options}
-                                    filterList={filterList}
-                                    filterData={filterData}
-                                    onFilterUpdate={filterUpdate}
-                                    onFilterReset={resetFilters}
-                                    handleClose={closeFilterPopover}
-                                    updateFilterByType={updateFilterByType}
-                                />
-                            }
-                        />
+                        >
+                            <TableFilterComponent
+                                customFooter={options.customFilterDialogFooter}
+                                columns={columns}
+                                options={options}
+                                filterList={filterList}
+                                filterData={filterData}
+                                onFilterUpdate={filterUpdate}
+                                onFilterReset={resetFilters}
+                                handleClose={closeFilterPopover}
+                                updateFilterByType={updateFilterByType}
+                            />
+                        </ToolbarPopover>
                     )}
+
                     {options.customToolbar &&
                         options.customToolbar({
                             displayData: this.props.displayData
@@ -567,12 +564,6 @@ const useStyles = makeStyles()((theme: Theme) => ({
     },
     filterPaper: {
         maxWidth: '50%'
-    },
-    filterCloseIcon: {
-        position: 'absolute',
-        right: 0,
-        top: 0,
-        zIndex: 100
     },
     searchIcon: {
         display: 'inline-flex',

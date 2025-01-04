@@ -3,7 +3,7 @@
 import React from 'react'
 import DataTable from '@src'
 import { CircularProgress, Typography } from '@mui/material'
-import Cities from './_cities'
+import Cities from '../_shared-components/cities'
 
 class Example extends React.Component {
     state = {
