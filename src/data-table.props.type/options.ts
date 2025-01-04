@@ -669,8 +669,12 @@ export interface DataTableOptions {
      */
     tableBodyMaxHeight?: string
 
-    /** User provided labels to localize text. */
-    textLabels?: Partial<MUIDataTableTextLabels>
+    /**
+     * User provided labels to localize text.
+     *
+     * @deprecated Set `textLabels` prop from main component instead.
+     */
+    textLabels?: never
 
     /**
      * Possible Values:
