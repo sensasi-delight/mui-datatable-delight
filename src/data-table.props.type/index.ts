@@ -4,6 +4,7 @@ import type { DataTableOptions } from './options'
 import type { DataTableComponents } from './components'
 import type { SxProps } from '@mui/material'
 import type { DataTableColumns } from './columns'
+import { DataTableIcons } from './icons'
 
 export { DataTableColumns }
 
@@ -17,7 +18,7 @@ export interface DataTableProps<Item = DefaultDataItem> {
     /** Columns used to describe table */
     columns: DataTableColumns
 
-    components?: DataTableComponents
+    components?: Partial<DataTableComponents>
 
     /**
      * @example
@@ -31,6 +32,8 @@ export interface DataTableProps<Item = DefaultDataItem> {
      * ```
      */
     data: Item[]
+
+    icons?: Partial<DataTableIcons>
 
     /**
      * Title of the table
