@@ -42,7 +42,7 @@ export function DataTableToolbarFilterRenderFilters({
 }) {
     const { textLabels } = useMainContext()
     const { classes } = useStyles()
-    const { components, filterData, onFilterUpdate, options } = parentProps
+    const { filterData, onFilterUpdate, options } = parentProps
 
     const renderedColumns = columns.map((column, index) => {
         if (!column.filter) return
@@ -55,7 +55,6 @@ export function DataTableToolbarFilterRenderFilters({
                     index={index}
                     column={column}
                     key={index}
-                    Component={components.Checkbox}
                     filterData={filterData}
                     filterList={filterList}
                     handleCheckboxChange={(value: string) => {
@@ -230,16 +229,15 @@ function DataTableToolbarFilterCheckbox({
     column,
     filterData,
     filterList,
-    Component = Checkbox,
     handleCheckboxChange
 }: {
     index: number
     column: DataTableState['columns'][0]
     filterData: DataTableToolbarFilterProps['filterData']
     filterList: DataTableToolbarFilterProps['filterList']
-    Component: typeof Checkbox
     handleCheckboxChange: (value: string) => void
 }) {
+    const { components } = useMainContext()
     const { classes } = useStyles()
     const renderItem = column?.filterOptions?.renderValue ?? (v => v)
 
@@ -264,7 +262,7 @@ function DataTableToolbarFilterCheckbox({
                                     label: classes.checkboxFormControlLabel
                                 }}
                                 control={
-                                    <Component
+                                    <components.Checkbox
                                         data-description="table-filter"
                                         color="primary"
                                         className={classes.checkboxIcon}

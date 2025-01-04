@@ -1,5 +1,5 @@
 // materials
-import { Button, Checkbox, Typography } from '@mui/material'
+import { Button, Typography } from '@mui/material'
 import { makeStyles } from 'tss-react/mui'
 import { ReactNode, useState } from 'react'
 import clsx from 'clsx'
@@ -183,10 +183,6 @@ export interface DataTableToolbarFilterProps {
     columns: DataTableState['columns']
 
     handleClose: () => void
-
-    components: {
-        Checkbox: typeof Checkbox
-    }
 
     customFooter: (
         filterList: FilterListType,

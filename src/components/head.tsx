@@ -26,7 +26,6 @@ const useStyles = makeStyles({ name: 'MUIDataTableHead' })(theme => ({
 const TableHead = ({
     columnOrder = null,
     columns,
-    components = {},
     count,
     data,
     draggableHeadCellRefs,
@@ -126,7 +125,6 @@ const TableHead = ({
                     }
                     onExpand={toggleAllExpandableRows}
                     isRowSelectable={true}
-                    components={components}
                 />
 
                 {orderedColumns.map(
@@ -172,7 +170,6 @@ const TableHead = ({
                                 draggableHeadCellRefs={draggableHeadCellRefs}
                                 tableRef={tableRef}
                                 tableId={tableId}
-                                components={components}
                             >
                                 {column.customHeadLabelRender
                                     ? column.customHeadLabelRender({

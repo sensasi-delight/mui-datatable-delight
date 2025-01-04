@@ -6,23 +6,13 @@ import ReactToPrint, { PrintContextConsumer } from 'react-to-print'
 import {
     IconButton,
     Toolbar as VendorToolbar,
-    Tooltip as MuiTooltip,
     Theme,
     Typography
 } from '@mui/material'
-// material icons
-import {
-    Search as SearchIcon,
-    Download as DownloadIcon,
-    Print as PrintIcon,
-    ViewColumn as ViewColumnIcon,
-    FilterList as FilterIcon
-} from '@mui/icons-material'
 // locals
 import { createCsvDownload } from './toolbar.functions.create-csv-download'
 import { DataTableToolbarFilter } from './toolbar.filter'
 import Popover from './toolbar.popover'
-import TableViewCol from './toolbar.view-col'
 import { DataTableToolbarSearch } from './toolbar.search'
 import { DataTableOptions } from '../data-table.props.type/options'
 import { DataTableState } from '../data-table.props.type/state'
@@ -283,20 +273,23 @@ class TableToolbarClass extends React.Component<TEMPORARY_CLASS_PROP_TYPE> {
             toggleViewColumn,
             updateColumns,
             title,
-            components = {},
             updateFilterByType
         } = this.props
-        const { icons = {} } = components
 
-        const Tooltip = components.Tooltip ?? MuiTooltip
-        const TableViewColComponent = components.TableViewCol ?? TableViewCol
+        const { components, icons } = this.props.context
+
+        /**
+         * @todo REMOVE THIS COMPONENT VARIABLES
+         */
+        const Tooltip = components.Tooltip
+        const TableViewColComponent = components.TableViewCol
         const TableFilterComponent =
             components.TableFilter ?? DataTableToolbarFilter
-        const SearchIconComponent = icons.SearchIcon ?? SearchIcon
-        const DownloadIconComponent = icons.DownloadIcon ?? DownloadIcon
-        const PrintIconComponent = icons.PrintIcon ?? PrintIcon
-        const ViewColumnIconComponent = icons.ViewColumnIcon ?? ViewColumnIcon
-        const FilterIconComponent = icons.FilterIcon ?? FilterIcon
+        const SearchIconComponent = icons.SearchIcon
+        const DownloadIconComponent = icons.DownloadIcon
+        const PrintIconComponent = icons.PrintIcon
+        const ViewColumnIconComponent = icons.ViewColumnIcon
+        const FilterIconComponent = icons.FilterIcon
 
         const { search, downloadCsv, print, viewColumns, filterTable } =
             this.props.context.textLabels.toolbar
@@ -465,7 +458,6 @@ class TableToolbarClass extends React.Component<TEMPORARY_CLASS_PROP_TYPE> {
                                     options={options}
                                     onColumnUpdate={toggleViewColumn}
                                     updateColumns={updateColumns}
-                                    components={components}
                                 />
                             }
                         />
@@ -525,7 +517,6 @@ class TableToolbarClass extends React.Component<TEMPORARY_CLASS_PROP_TYPE> {
                                     onFilterReset={resetFilters}
                                     handleClose={closeFilterPopover}
                                     updateFilterByType={updateFilterByType}
-                                    components={components}
                                 />
                             }
                         />
