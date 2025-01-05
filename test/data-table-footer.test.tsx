@@ -1,21 +1,17 @@
-// @ts-nocheck
-
 // vendors
 import '@testing-library/jest-dom'
-import MuiTableFooter from '@mui/material/TableFooter'
-import { render } from '@testing-library/react'
+import { TablePagination as OriginalPaginationFromMui } from '@mui/material'
+import { render, screen } from '@testing-library/react'
 // locals
-import type { DataTableProps } from '../src'
-import { TEXT_LABELS } from '../src/statics'
+import type { DataTableOptions, DataTableProps } from '../src'
 import TableFooter from '../src/components/footer'
 
 /**
- * @todo FIX TYPE ERROR TO REMOVE `@ts-nocheck`
+ * @todo CONSOLIDATE TYPES
  */
 describe('<DataTableFooter />', function () {
     const options: DataTableProps['options'] = {
-        rowsPerPageOptions: [5, 10, 15],
-        textLabels: TEXT_LABELS
+        rowsPerPageOptions: [5, 10, 15]
     }
 
     const changeRowsPerPage = jest.fn()
@@ -36,10 +32,25 @@ describe('<DataTableFooter />', function () {
         expect(
             container.getElementsByClassName('datatable-delight--footer').length
         ).toBe(1)
+
+        /**
+         * prev and next button
+         */
+        expect(screen.getAllByRole('button').length).toBe(2)
+
+        /**
+         * Row per page select/dropdown
+         */
+        expect(screen.getAllByRole('combobox').length).toBe(1)
+
+        /**
+         * Row per page options ([5, 10, 15])
+         */
+        // expect(screen.getAllByRole('option').length).toBe(3)
     })
 
     it('should render a table footer with customFooter', () => {
-        const customOptions = {
+        const customOptions: DataTableOptions = {
             ...options,
             customFooter: (
                 rowCount,
@@ -50,13 +61,16 @@ describe('<DataTableFooter />', function () {
                 textLabels
             ) => {
                 return (
-                    <MuiTableFooter
-                        changePage={changePage}
-                        changeRowsPerPage={changeRowsPerPage}
+                    <OriginalPaginationFromMui
+                        count={rowCount}
+                        component="div"
+                        labelRowsPerPage={textLabels.pagination?.rowsPerPage}
+                        onPageChange={(_, page) => changePage(page)}
+                        onRowsPerPageChange={event =>
+                            changeRowsPerPage(event.target.value)
+                        }
                         page={page}
-                        rowCount={rowCount}
                         rowsPerPage={rowsPerPage}
-                        labelRowsPerPage={textLabels.rowsPerPage}
                     />
                 )
             }
@@ -73,7 +87,12 @@ describe('<DataTableFooter />', function () {
             />
         )
 
-        expect(container.getElementsByTagName('tfoot').length).toBe(1)
+        /**
+         * The `<OriginalPaginationFromMui />` className
+         */
+        expect(
+            container.getElementsByClassName('MuiTablePagination-root').length
+        ).toBe(1)
     })
 
     it('should not render a table footer', () => {
