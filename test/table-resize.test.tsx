@@ -1,5 +1,5 @@
 // vendors
-import '@testing-library/jest-dom'
+import { test, expect, describe, vi } from 'vitest'
 import { fireEvent, render } from '@testing-library/react'
 // locals
 import TableResize from '../src/components/resize'
@@ -11,9 +11,9 @@ describe('<TableResize />', function () {
         tableBodyHeight: '500px'
     }
 
-    it('should render a table resize component', () => {
-        const updateDividers = jest.fn()
-        const setResizable = jest.fn()
+    test('should render a table resize component', () => {
+        const updateDividers = vi.fn()
+        const setResizable = vi.fn()
 
         const { container } = render(
             <TableResize
@@ -28,7 +28,7 @@ describe('<TableResize />', function () {
         expect(setResizable.mock.calls.length).toBe(1)
     })
 
-    it('should create a coordinate map for each column', () => {
+    test('should create a coordinate map for each column', () => {
         const columns = ['Name', 'Age', 'Location', 'Phone']
         const data = [['Joe', 26, 'Chile', '555-5555']]
 
@@ -39,8 +39,8 @@ describe('<TableResize />', function () {
         expect(container.children[0].childElementCount).toBe(5)
     })
 
-    it('should execute resize methods correctly', () => {
-        const updateDividers = jest.fn()
+    test('should execute resize methods correctly', () => {
+        const updateDividers = vi.fn()
 
         const { container } = render(
             <TableResize

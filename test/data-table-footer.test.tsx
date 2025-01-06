@@ -1,5 +1,5 @@
 // vendors
-import '@testing-library/jest-dom'
+import { test, expect, describe, vi } from 'vitest'
 import { TablePagination as OriginalPaginationFromMui } from '@mui/material'
 import { render, screen } from '@testing-library/react'
 // locals
@@ -14,10 +14,10 @@ describe('<DataTableFooter />', function () {
         rowsPerPageOptions: [5, 10, 15]
     }
 
-    const changeRowsPerPage = jest.fn()
-    const changePage = jest.fn()
+    const changeRowsPerPage = vi.fn()
+    const changePage = vi.fn()
 
-    it('should render a table footer', () => {
+    test('should render a table footer', () => {
         const { container } = render(
             <TableFooter
                 options={options}
@@ -49,7 +49,7 @@ describe('<DataTableFooter />', function () {
         // expect(screen.getAllByRole('option').length).toBe(3)
     })
 
-    it('should render a table footer with customFooter', () => {
+    test('should render a table footer with customFooter', () => {
         const customOptions: DataTableOptions = {
             ...options,
             customFooter: (
@@ -95,7 +95,7 @@ describe('<DataTableFooter />', function () {
         ).toBe(1)
     })
 
-    it('should not render a table footer', () => {
+    test('should not render a table footer', () => {
         const nonPageOption = {
             ...options,
             pagination: false
@@ -118,7 +118,7 @@ describe('<DataTableFooter />', function () {
         ).toBe(0)
     })
 
-    it('should render a JumpToPage component', () => {
+    test('should render a JumpToPage component', () => {
         const jumpToPageOptions = {
             ...options,
             jumpToPage: true
