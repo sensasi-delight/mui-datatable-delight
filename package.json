@@ -16,7 +16,7 @@
         "prepublishOnly": "npm run build",
         "prettier": "prettier './**/*.{js,jsx,ts,tsx,mjs,cjs}' --write",
         "test": "vitest run --coverage.all",
-        "test:watch": "vitest watch"
+        "test:watch": "vitest watch --silent=false"
     },
     "repository": {
         "type": "git",
