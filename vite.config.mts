@@ -6,6 +6,10 @@ import mdx from '@mdx-js/rollup'
 export default defineConfig({
     plugins: [tsconfigPaths(), mdx(), react()],
     test: {
-        environment: 'jsdom'
+        coverage: {
+            provider: 'v8'
+        },
+        environment: 'jsdom',
+        globals: true
     }
 })
