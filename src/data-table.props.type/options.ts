@@ -10,7 +10,8 @@ import type {
     MUISortOptions,
     SelectableRows
 } from 'mui-datatables'
-import { ReactNode } from 'react'
+import type { ReactNode } from 'react'
+import type { DataTableState } from './state'
 
 type BooleanOrDisabled = Boolean | 'disabled'
 
@@ -317,12 +318,18 @@ export interface DataTableOptions {
      * In the callback, you can control what is written to the CSV file.
      * Return false to cancel download of file.
      *
-     * @see https://github.com/sensasi-deligt/mui-datatable-delight/blob/main/examples/on-download/index.tsx
+     * @see [Download Sheet Formatted CSV example](https://mui-datatatable-delight.vercel.app/examples/download-sheet-formatted-csv)
+     * @see [On Download example](https://mui-datatatable-delight.vercel.app/examples/on-download)
      */
     onDownload?: (
-        data: DisplayData[],
-        columns: any
-    ) => { data: DisplayData[]; columns: any } | false
+        buildHead: (columns: DataTableState['columns']) => string,
+        buildBody: (data: DataTableState['data']) => string,
+        columns: DataTableState['columns'],
+        data: DataTableState['data']
+    ) =>
+        | { data: DisplayData[]; columns: DataTableState['columns'] }
+        | string
+        | false
 
     /** Callback function that triggers when filters have changed. */
     onFilterChange?: (
@@ -750,7 +757,6 @@ export interface DataTableOptions {
 //         isRowExpandable: PropTypes.func,
 //         isRowSelectable: PropTypes.func,
 //         jumpToPage: PropTypes.bool,
-//         onDownload: PropTypes.func,
 //         onFilterChange: PropTypes.func,
 //         onFilterChipClose: PropTypes.func,
 //         onFilterConfirm: PropTypes.func,

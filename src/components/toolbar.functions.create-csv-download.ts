@@ -1,31 +1,45 @@
-import type { MUIDataTableColumnState } from 'mui-datatables'
-import type { DataTableData } from '../data-table.props.type'
+import type { DataTableProps } from '../data-table.props.type'
 import type { DataTableOptions } from '../data-table.props.type/options'
-
-type DataType = { index: number; data: DataTableData[0] }
+import type { DataTableState } from '../data-table.props.type/state'
 
 /**
  * @todo Add datetime on default filename
  */
 export function createCsvDownload(
-    columns: MUIDataTableColumnState[],
-    data: DataType[],
+    columns: DataTableState['columns'],
+    data: DataTableState['data'],
     options: DataTableOptions
 ) {
-    const fromUser = options.onDownload?.(data, columns)
+    const fromUser = options.onDownload?.(
+        columns => buildHead(columns, options),
+        data => buildBody(data, columns, options),
+        columns,
+        data
+    )
 
-    if (fromUser) {
-        const csvHead = buildHead(fromUser.columns ?? columns, options)
-        const csvBody = buildBody(fromUser.data ?? data, columns, options)
-        const csv = `${csvHead}${csvBody}`.trim()
-
-        downloadCsv(csv, options.downloadOptions?.filename)
+    if (fromUser === false) {
+        return
     }
+
+    if (typeof fromUser === 'string') {
+        downloadCsv(fromUser, options?.downloadOptions?.filename)
+
+        return
+    }
+
+    const finalData = fromUser?.data ?? data
+    const finalColumns = fromUser?.columns ?? columns
+
+    const csvHead = buildHead(finalColumns, options)
+    const csvBody = buildBody(finalData, finalColumns, options)
+    const csv = `${csvHead}${csvBody}`.trim()
+
+    downloadCsv(csv, options?.downloadOptions?.filename)
 }
 
 const buildHead = (
-    columns: MUIDataTableColumnState[],
-    options: DataTableOptions
+    columns: DataTableState['columns'],
+    options: DataTableProps['options']
 ) =>
     columns
         .reduce(
@@ -35,17 +49,18 @@ const buildHead = (
                       '"' +
                       prepare(column.label ?? column.name) +
                       '"' +
-                      getSeparator(options.downloadOptions?.separator)
+                      getSeparator(options?.downloadOptions?.separator)
                     : soFar,
             ''
         )
         .slice(0, -1) + '\r\n'
 
 const buildBody = (
-    data: DataType[],
-    columns: MUIDataTableColumnState[],
-    options: DataTableOptions
+    data: DataTableState['data'],
+    columns: DataTableState['columns'],
+    options: DataTableProps['options']
 ) => {
+    console.log(columns)
     if (!data.length) return ''
 
     return data
@@ -53,12 +68,12 @@ const buildBody = (
             (soFar, row) =>
                 soFar +
                 '"' +
-                row.data
+                [...row.data]
                     .filter((_, index) => columns[index].download)
                     .map(prepare)
                     .join(
                         '"' +
-                            getSeparator(options.downloadOptions?.separator) +
+                            getSeparator(options?.downloadOptions?.separator) +
                             '"'
                     ) +
                 '"\r\n',
@@ -98,7 +113,9 @@ function getSeparator(separator = ',') {
     return separator
 }
 
-function prepare(data: DataTableData[0][0]): DataTableData[0][0] {
+function prepare(
+    data: DataTableState['data'][0]
+): DataTableState['data'][0][0] {
     if (typeof data === 'string') {
         // Places single quote before the appearance of dangerous characters if they
         // are the first in the data string.

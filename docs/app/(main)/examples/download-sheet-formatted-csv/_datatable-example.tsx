@@ -2,7 +2,7 @@
 
 import Button from '@mui/material/Button'
 import React from 'react'
-import DataTable from '@src'
+import DataTable, { DataTableOptions, DataTableProps } from '@src'
 
 class Example extends React.Component {
     state = {
@@ -10,13 +10,13 @@ class Example extends React.Component {
     }
 
     render() {
-        const columns = [
+        const columns: DataTableProps['columns'] = [
             'Name',
             'Title',
             {
                 name: 'Location',
                 options: {
-                    display: 'false'
+                    display: false
                 }
             },
             {
@@ -97,7 +97,7 @@ class Example extends React.Component {
             ['Mason Ray', 'Computer Scientist', 'San Francisco', 39, 142000]
         ]
 
-        const options = {
+        const options: DataTableOptions = {
             filter: true,
             selectableRows: 'multiple',
             filterType: 'dropdown',
@@ -116,8 +116,7 @@ class Example extends React.Component {
             },
             onDownload: (buildHead, buildBody, columns, data) => {
                 if (this.state.downloadFile) {
-                    let val = `${buildHead(columns)}${buildBody(data)}`.trim()
-                    return val
+                    return `${buildHead(columns)}${buildBody(data)}`.trim()
                 }
 
                 return false
