@@ -1,11 +1,11 @@
 'use client'
 
 import React from 'react'
-import DataTable from '@src'
+import DataTable, { DataTableColumns, DataTableOptions } from '@src'
 
 class Example extends React.Component {
     render() {
-        const columns = [
+        const columns: DataTableColumns = [
             {
                 name: 'Name',
                 options: {
@@ -155,11 +155,11 @@ class Example extends React.Component {
             'Allowance'
         ]
 
-        const options = {
+        const options: DataTableOptions = {
             filter: true,
             filterType: 'dropdown',
             responsive: 'standard',
-            onDownload: (buildHead, buildBody, columns, data) =>
+            onDownload: (buildHead, buildBody, _, data) =>
                 buildHead(headerNames) +
                 buildBody(
                     data.concat({
