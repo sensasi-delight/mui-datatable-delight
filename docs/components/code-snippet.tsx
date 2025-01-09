@@ -1,13 +1,12 @@
-'use client'
+import { Box, Paper } from '@mui/material'
+import { AlwaysDarkThemeProvider } from './code-snippet.always-dark-theme-provider'
 
-import { Box, createTheme, Paper, ThemeProvider } from '@mui/material'
+// prisms
 import prism from 'prismjs'
-
 import 'prismjs/components/prism-jsx'
 import 'prismjs/components/prism-bash'
 import 'prismjs/components/prism-typescript'
 import 'prismjs/components/prism-tsx'
-
 // @ts-expect-error IDK
 import 'prismjs/themes/prism-tomorrow.css'
 
@@ -25,7 +24,7 @@ export function CodeSnippet({
     )
 
     return (
-        <ThemeProvider theme={theme} noSsr>
+        <AlwaysDarkThemeProvider>
             <Paper elevation={4}>
                 <Box
                     component="pre"
@@ -43,15 +42,6 @@ export function CodeSnippet({
                     />
                 </Box>
             </Paper>
-        </ThemeProvider>
+        </AlwaysDarkThemeProvider>
     )
 }
-
-const theme = createTheme({
-    colorSchemes: {
-        dark: true
-    },
-    palette: {
-        mode: 'dark'
-    }
-})
