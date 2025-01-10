@@ -1,6 +1,6 @@
 // vendors
 import { makeStyles } from 'tss-react/mui'
-import React from 'react'
+import React, { type RefObject } from 'react'
 // materials
 import {
     IconButton,
@@ -10,7 +10,10 @@ import {
 } from '@mui/material'
 // locals
 import { createCsvDownload } from './toolbar.functions.create-csv-download'
-import { DataTableToolbarFilter } from './toolbar.filter'
+import {
+    DataTableToolbarFilter,
+    DataTableToolbarFilterProps
+} from './toolbar.filter'
 import { DataTableToolbarSearch } from './toolbar.search'
 import { DataTableOptions } from '../data-table.props.type/options'
 import { DataTableState } from '../data-table.props.type/state'
@@ -19,6 +22,7 @@ import { useMainContext } from '../hooks/use-main-context'
 import { ToolbarPopover } from './toolbar.popover'
 import { ToolbarPrintButton } from './toolbar.print-button'
 import { ToolbarDownloadButton } from './toolbar.download-button'
+import { ToolbarViewColProps } from './toolbar.view-col'
 
 const CLASS_ID = 'datatable-delight--toolbar'
 
@@ -54,11 +58,24 @@ export default function TableToolbar(props: ToolbarProps) {
 }
 
 interface ToolbarProps {
+    data: DataTableState['data']
+    columns: DataTableState['columns']
+    columnOrder: DataTableState['columnOrder']
     displayData: DataTableState['displayData']
-
     options: DataTableOptions
-
     searchText: string
+    tableRef: RefObject<HTMLTableElement>
+    setTableAction: (action: string) => void
+    searchTextUpdate: (searchText: string) => void
+    searchClose: () => void
+
+    filterData: DataTableState['filterData']
+    filterList: DataTableState['filterList']
+    filterUpdate: DataTableToolbarFilterProps['onFilterUpdate']
+    resetFilters: DataTableToolbarFilterProps['onFilterReset']
+    toggleViewColumn: ToolbarViewColProps['onColumnUpdate']
+    title: string
+    updateFilterByType: DataTableToolbarFilterProps['updateFilterByType']
 }
 
 type TEMPORARY_CLASS_PROP_TYPE = ToolbarProps & {
@@ -67,7 +84,16 @@ type TEMPORARY_CLASS_PROP_TYPE = ToolbarProps & {
     context: ReturnType<typeof useMainContext>
 }
 
-class TableToolbarClass extends React.Component<TEMPORARY_CLASS_PROP_TYPE> {
+class TableToolbarClass extends React.Component<
+    TEMPORARY_CLASS_PROP_TYPE,
+    {
+        iconActive: null | 'search' | 'filter' | 'viewcolumns'
+        showSearch: boolean
+        searchText: null | string
+        prevIconActive: null | string
+        hideFilterPopover: boolean
+    }
+> {
     state = {
         iconActive: null,
         showSearch: Boolean(
@@ -76,7 +102,9 @@ class TableToolbarClass extends React.Component<TEMPORARY_CLASS_PROP_TYPE> {
                 this.props.options.searchOpen ||
                 this.props.options.searchAlwaysOpen
         ),
-        searchText: this.props.searchText || null
+        searchText: this.props.searchText || null,
+        prevIconActive: null,
+        hideFilterPopover: true
     }
 
     componentDidUpdate(prevProps: TEMPORARY_CLASS_PROP_TYPE) {
@@ -91,94 +119,74 @@ class TableToolbarClass extends React.Component<TEMPORARY_CLASS_PROP_TYPE> {
     handleCSVDownload = () => {
         const { data, displayData, columns, options, columnOrder } = this.props
 
-        let dataToDownload = [] //cloneDeep(data);
-        let columnsToDownload = []
-        let columnOrderCopy = Array.isArray(columnOrder)
-            ? columnOrder.slice(0)
+        const columnOrderCopy = Array.isArray(columnOrder)
+            ? columnOrder.slice(0).map((_, idx) => idx)
             : []
 
-        if (columnOrderCopy.length === 0) {
-            columnOrderCopy = columns.map((item, idx) => idx)
+        let columnsToDownload = columnOrderCopy.map(idx => columns[idx])
+        let dataToDownload = data.map(row => ({
+            index: row.index,
+            data: columnOrderCopy.map(idx => row.data[idx])
+        }))
+
+        // check rows first:
+        if (options.downloadOptions?.filterOptions?.useDisplayedRowsOnly) {
+            const filteredDataToDownload = displayData.map((row, index) => {
+                let i = -1
+
+                return {
+                    index, // Help to preserve sort order in custom render columns
+                    data: row.data.map(column => {
+                        i += 1
+
+                        /**
+                         * if we have a custom render, which will appear as a react element, we must grab the actual value from data that matches the dataIndex and column
+                         * @todo Create a utility function for checking whether or not something is a react object
+                         */
+                        let val =
+                            typeof column === 'object' &&
+                            column !== null &&
+                            !Array.isArray(column)
+                                ? data.find(d => d.index === row.dataIndex)
+                                      ?.data[i]
+                                : column
+
+                        val =
+                            typeof val === 'function'
+                                ? data.find(d => d.index === row.dataIndex)
+                                      ?.data[i]
+                                : val
+
+                        return val
+                    })
+                }
+            })
+
+            dataToDownload = filteredDataToDownload.map(row => ({
+                index: row.index,
+                data: columnOrderCopy.map(idx => row.data[idx])
+            }))
         }
 
-        data.forEach(row => {
-            let newRow = { index: row.index, data: [] }
-            columnOrderCopy.forEach(idx => {
-                newRow.data.push(row.data[idx])
-            })
-            dataToDownload.push(newRow)
-        })
+        // now, check columns:
+        if (options.downloadOptions?.filterOptions?.useDisplayedColumnsOnly) {
+            columnsToDownload = columnsToDownload.filter(
+                column => column.display === 'true'
+            )
 
-        columnOrderCopy.forEach(idx => {
-            columnsToDownload.push(columns[idx])
-        })
-
-        if (options.downloadOptions && options.downloadOptions.filterOptions) {
-            // check rows first:
-            if (options.downloadOptions.filterOptions.useDisplayedRowsOnly) {
-                let filteredDataToDownload = displayData.map((row, index) => {
-                    let i = -1
-
-                    // Help to preserve sort order in custom render columns
-                    row.index = index
-
-                    return {
-                        data: row.data.map(column => {
-                            i += 1
-
-                            /**
-                             * if we have a custom render, which will appear as a react element, we must grab the actual value from data that matches the dataIndex and column
-                             * @todo Create a utility function for checking whether or not something is a react object
-                             */
-                            let val =
-                                typeof column === 'object' &&
-                                column !== null &&
-                                !Array.isArray(column)
-                                    ? data.find(d => d.index === row.dataIndex)
-                                          .data[i]
-                                    : column
-                            val =
-                                typeof val === 'function'
-                                    ? data.find(d => d.index === row.dataIndex)
-                                          .data[i]
-                                    : val
-                            return val
-                        })
-                    }
-                })
-
-                dataToDownload = []
-                filteredDataToDownload.forEach(row => {
-                    let newRow = { index: row.index, data: [] }
-                    columnOrderCopy.forEach(idx => {
-                        newRow.data.push(row.data[idx])
-                    })
-                    dataToDownload.push(newRow)
-                })
-            }
-
-            // now, check columns:
-            if (options.downloadOptions.filterOptions.useDisplayedColumnsOnly) {
-                columnsToDownload = columnsToDownload.filter(
-                    _ => _.display === 'true'
+            dataToDownload = dataToDownload.map(row => {
+                row.data = row.data.filter(
+                    (_, index) =>
+                        columns[columnOrderCopy[index]].display === 'true'
                 )
-
-                dataToDownload = dataToDownload.map(row => {
-                    row.data = row.data.filter(
-                        (_, index) =>
-                            columns[columnOrderCopy[index]].display === 'true'
-                    )
-                    return row
-                })
-            }
+                return row
+            })
         }
 
         createCsvDownload(columnsToDownload, dataToDownload, options)
     }
 
-    setActiveIcon = (
-        iconName: 'search' | 'filter' | 'viewcolumns' | undefined
-    ) => {
+    setActiveIcon = (iconName: 'search' | 'filter' | 'viewcolumns' | null) => {
         this.setState(
             prevState => ({
                 showSearch: this.isSearchShown(iconName),
@@ -190,26 +198,24 @@ class TableToolbarClass extends React.Component<TEMPORARY_CLASS_PROP_TYPE> {
 
                 if (iconActive === 'filter') {
                     this.props.setTableAction('onFilterDialogOpen')
-                    if (this.props.options.onFilterDialogOpen) {
-                        this.props.options.onFilterDialogOpen()
-                    }
+                    this.props.options.onFilterDialogOpen?.()
                 }
-                if (iconActive === undefined && prevIconActive === 'filter') {
+
+                if (iconActive === null && prevIconActive === 'filter') {
                     this.props.setTableAction('onFilterDialogClose')
-                    if (this.props.options.onFilterDialogClose) {
-                        this.props.options.onFilterDialogClose()
-                    }
+                    this.props.options.onFilterDialogClose?.()
                 }
             }
         )
     }
 
-    isSearchShown = iconName => {
+    isSearchShown = (iconName: 'search' | 'filter' | 'viewcolumns' | null) => {
         if (this.props.options.searchAlwaysOpen) {
             return true
         }
 
         let nextVal = false
+
         if (this.state.showSearch) {
             if (this.state.searchText) {
                 nextVal = true
@@ -222,16 +228,24 @@ class TableToolbarClass extends React.Component<TEMPORARY_CLASS_PROP_TYPE> {
         } else if (iconName === 'search') {
             nextVal = this.showSearch()
         }
+
         return nextVal
     }
 
-    getActiveIcon = (styles, iconName) => {
+    getIconClasses = (
+        iconName: 'search' | 'filter' | 'viewcolumns' | undefined
+    ) => {
         let isActive = this.state.iconActive === iconName
+
         if (iconName === 'search') {
             const { showSearch, searchText } = this.state
-            isActive = isActive || showSearch || searchText
+
+            isActive = Boolean(isActive || showSearch || searchText)
         }
-        return isActive ? styles.iconActive : styles.icon
+
+        return isActive
+            ? this.props.classes.iconActive
+            : this.props.classes.icon
     }
 
     showSearch = () => {
@@ -241,10 +255,10 @@ class TableToolbarClass extends React.Component<TEMPORARY_CLASS_PROP_TYPE> {
     }
 
     hideSearch = () => {
-        const { onSearchClose } = this.props.options
-
         this.props.setTableAction('onSearchClose')
-        if (onSearchClose) onSearchClose()
+
+        this.props.options?.onSearchClose?.()
+
         this.props.searchClose()
 
         this.setState(() => ({
@@ -254,7 +268,7 @@ class TableToolbarClass extends React.Component<TEMPORARY_CLASS_PROP_TYPE> {
         }))
     }
 
-    handleSearch = value => {
+    handleSearch = (value: string) => {
         this.setState({ searchText: value })
         this.props.searchTextUpdate(value)
     }
@@ -270,7 +284,6 @@ class TableToolbarClass extends React.Component<TEMPORARY_CLASS_PROP_TYPE> {
 
     render() {
         const {
-            data,
             options,
             classes,
             columns,
@@ -279,7 +292,6 @@ class TableToolbarClass extends React.Component<TEMPORARY_CLASS_PROP_TYPE> {
             filterUpdate,
             resetFilters,
             toggleViewColumn,
-            updateColumns,
             title,
             updateFilterByType
         } = this.props
@@ -302,7 +314,7 @@ class TableToolbarClass extends React.Component<TEMPORARY_CLASS_PROP_TYPE> {
 
         const filterPopoverExit = () => {
             this.setState({ hideFilterPopover: false })
-            this.setActiveIcon(undefined)
+            this.setActiveIcon(null)
         }
 
         const closeFilterPopover = () => {
@@ -342,6 +354,7 @@ class TableToolbarClass extends React.Component<TEMPORARY_CLASS_PROP_TYPE> {
                         </div>
                     )}
                 </div>
+
                 <div
                     className={
                         options.responsive !== RESPONSIVE_FULL_WIDTH_NAME
@@ -359,10 +372,7 @@ class TableToolbarClass extends React.Component<TEMPORARY_CLASS_PROP_TYPE> {
                                     aria-label={search}
                                     data-testid={search + '-iconButton'}
                                     classes={{
-                                        root: this.getActiveIcon(
-                                            classes,
-                                            'search'
-                                        )
+                                        root: this.getIconClasses('search')
                                     }}
                                     disabled={options.search === 'disabled'}
                                     onClick={this.handleSearchIconClick}
@@ -383,14 +393,13 @@ class TableToolbarClass extends React.Component<TEMPORARY_CLASS_PROP_TYPE> {
                     {options.print && (
                         <ToolbarPrintButton
                             options={options}
-                            // printContent={this.props.tableRef}
-                            printContent={() => <h1>helo</h1>}
+                            printContent={this.props.tableRef}
                         />
                     )}
 
                     {options.viewColumns && (
                         <ToolbarPopover
-                            refExit={() => this.setActiveIcon(undefined)}
+                            refExit={() => this.setActiveIcon(null)}
                             hide={options.viewColumns === 'disabled'}
                             trigger={
                                 <Tooltip
@@ -403,8 +412,7 @@ class TableToolbarClass extends React.Component<TEMPORARY_CLASS_PROP_TYPE> {
                                         }
                                         aria-label={viewColumns}
                                         classes={{
-                                            root: this.getActiveIcon(
-                                                classes,
+                                            root: this.getIconClasses(
                                                 'viewcolumns'
                                             )
                                         }}
@@ -454,8 +462,7 @@ class TableToolbarClass extends React.Component<TEMPORARY_CLASS_PROP_TYPE> {
                                             }
                                             aria-label={filterTable}
                                             classes={{
-                                                root: this.getActiveIcon(
-                                                    classes,
+                                                root: this.getIconClasses(
                                                     'filter'
                                                 )
                                             }}

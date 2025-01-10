@@ -1,5 +1,5 @@
 // vendors
-import { IReactToPrintProps, useReactToPrint } from 'react-to-print'
+import { useReactToPrint, UseReactToPrintOptions } from 'react-to-print'
 // materials
 import { IconButton, Tooltip } from '@mui/material'
 // locals
@@ -12,7 +12,7 @@ export function ToolbarPrintButton({
     printContent
 }: {
     options: DataTableOptions
-    printContent: IReactToPrintProps['content']
+    printContent: UseReactToPrintOptions['contentRef']
 }) {
     const {
         icons,
@@ -20,7 +20,7 @@ export function ToolbarPrintButton({
     } = useMainContext()
 
     const handlePrint = useReactToPrint({
-        content: printContent
+        contentRef: printContent
     })
 
     return (
@@ -30,7 +30,7 @@ export function ToolbarPrintButton({
                     data-testid={toolbarTextLabels.print + '-iconButton'}
                     aria-label={toolbarTextLabels.print}
                     disabled={options.print === 'disabled'}
-                    onClick={handlePrint}
+                    onClick={() => handlePrint()}
                     sx={ICON_BUTTON_DEFAULT_SX}
                 >
                     <icons.PrintIcon />

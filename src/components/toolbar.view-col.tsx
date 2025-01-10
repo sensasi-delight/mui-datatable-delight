@@ -96,7 +96,7 @@ const useStyles = makeStyles()(theme => ({
     }
 }))
 
-interface ToolbarViewColProps {
+export interface ToolbarViewColProps {
     /** Columns used to describe table */
     columns: DataTableState['columns']
 
