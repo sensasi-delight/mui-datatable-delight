@@ -8,6 +8,7 @@ import { Delete as DeleteIcon } from '@mui/icons-material'
 // locals
 import type { DataTableOptions } from '../data-table.props.type/options'
 import { useMainContext } from '../hooks/use-main-context'
+import { ClassName } from '../enums/class-name'
 
 export function TableToolbarSelect({
     onRowsDelete,
@@ -15,24 +16,7 @@ export function TableToolbarSelect({
     options,
     displayData,
     selectRowUpdate
-}: {
-    /** Options used to describe table */
-    options: DataTableOptions
-
-    /** Current row selected or not */
-    rowSelected?: boolean
-
-    /** Callback to trigger selected rows delete */
-    onRowsDelete: () => void
-
-    displayData: MUIDataTableToolbarSelect['displayData']
-
-    selectRowUpdate?: MUIDataTableToolbarSelect['selectRowUpdate']
-
-    selectedRows: Parameters<
-        Required<DataTableOptions>['customToolbarSelect']
-    >[0]
-}) {
+}: TableToolbarSelectProps) {
     const { textLabels, components } = useMainContext()
     const { classes } = useStyles()
 
@@ -67,7 +51,7 @@ export function TableToolbarSelect({
 }
 
 const useStyles = makeStyles({
-    name: 'datatable-delight--toolbar-select'
+    name: ClassName.TOOLBAR__SELECT + '-'
 })(({ spacing }: Theme) => ({
     root: {
         flex: '1 1 100%',
@@ -90,6 +74,25 @@ const useStyles = makeStyles({
     },
     deleteIcon: {}
 }))
+
+export interface TableToolbarSelectProps {
+    /** Options used to describe table */
+    options: DataTableOptions
+
+    /** Current row selected or not */
+    rowSelected?: boolean
+
+    /** Callback to trigger selected rows delete */
+    onRowsDelete: () => void
+
+    displayData: MUIDataTableToolbarSelect['displayData']
+
+    selectRowUpdate?: MUIDataTableToolbarSelect['selectRowUpdate']
+
+    selectedRows: Parameters<
+        Required<DataTableOptions>['customToolbarSelect']
+    >[0]
+}
 
 function handleCustomSelectedRows(
     /** Array of rows indexes that are selected, e.g. [0, 2] will select first and third rows in table */
