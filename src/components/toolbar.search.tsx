@@ -1,12 +1,13 @@
 // vendors
 import { makeStyles } from 'tss-react/mui'
+import { useEffect, useState } from 'react'
 // materials
 import { Grow, IconButton, TextField, TextFieldProps } from '@mui/material'
 import { Clear, Search } from '@mui/icons-material'
 // locals
 import type { DataTableProps } from '../data-table.props.type'
-import { useEffect, useState } from 'react'
 import { useMainContext } from '../hooks/use-main-context'
+import { ClassName } from '../enums/class-name'
 
 export const DataTableToolbarSearch = ({
     options,
@@ -38,33 +39,35 @@ export const DataTableToolbarSearch = ({
         setSearchText(value)
     }
 
+    const handleKeyDown: TextFieldProps['onKeyDown'] = event => {
+        if (event.key === 'Escape') {
+            onHide()
+        }
+    }
+
     return (
         <Grow appear in={true} timeout={300}>
-            <div className={classes.main}>
+            <div className={classes.root}>
                 <Search className={classes.searchIcon} />
 
                 <TextField
-                    className={classes.searchText}
-                    autoFocus={true}
-                    variant="standard"
-                    data-test-id={textLabels.toolbar.search}
                     aria-label={textLabels.toolbar.search}
-                    value={searchText}
-                    onKeyDown={event => {
-                        if (event.key === 'Escape') {
-                            onHide()
-                        }
-                    }}
-                    onChange={handleSearch}
+                    autoFocus={true}
+                    className={classes.textField}
                     fullWidth={true}
+                    onKeyDown={handleKeyDown}
+                    onChange={handleSearch}
                     placeholder={options?.searchPlaceholder}
+                    value={searchText}
+                    variant="standard"
                     {...(options?.searchProps ?? {})}
                 />
 
                 <IconButton
-                    className={classes.clearIcon}
-                    style={{ visibility: clearIconVisibility }}
+                    className={classes.clearButton}
+                    aria-label="Close search bar"
                     onClick={onHide}
+                    style={{ visibility: clearIconVisibility }}
                 >
                     <Clear />
                 </IconButton>
@@ -73,24 +76,24 @@ export const DataTableToolbarSearch = ({
     )
 }
 
-const useStyles = makeStyles({ name: 'datatable-delight--toolbar--search' })(
-    theme => ({
-        main: {
-            display: 'flex',
-            flex: '1 0 auto',
-            alignItems: 'center'
-        },
-        searchIcon: {
-            color: theme.palette.text.secondary,
-            marginRight: '8px'
-        },
-        searchText: {
-            flex: '0.8 0'
-        },
-        clearIcon: {
-            '&:hover': {
-                color: theme.palette.error.main
-            }
+const useStyles = makeStyles({
+    name: ClassName.TOOLBAR__SEARCH_BAR + '-'
+})(theme => ({
+    clearButton: {
+        '&:hover': {
+            color: theme.palette.error.main
         }
-    })
-)
+    },
+    root: {
+        display: 'flex',
+        flex: '1 0 auto',
+        alignItems: 'center'
+    },
+    searchIcon: {
+        color: theme.palette.text.secondary,
+        marginRight: '8px'
+    },
+    textField: {
+        flex: '0.8 0'
+    }
+}))
