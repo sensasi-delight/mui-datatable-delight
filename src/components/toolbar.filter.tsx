@@ -159,7 +159,7 @@ export interface DataTableToolbarFilterProps {
     filterList: DataTableState['filterList']
 
     /** Options used to describe table */
-    options: Required<DataTableOptions>
+    options: DataTableOptions
 
     /** Callback to trigger filter update */
     onFilterUpdate?: (
@@ -184,7 +184,7 @@ export interface DataTableToolbarFilterProps {
 
     handleClose: () => void
 
-    customFooter: (
+    customFooter?: (
         filterList: FilterListType,
         applyFilters: () => FilterListType
     ) => ReactNode
