@@ -1,7 +1,6 @@
 // vendors
 import { makeStyles } from 'tss-react/mui'
 import React from 'react'
-import ReactToPrint, { PrintContextConsumer } from 'react-to-print'
 // materials
 import {
     IconButton,
@@ -18,6 +17,8 @@ import { DataTableState } from '../data-table.props.type/state'
 import { useMainContext } from '../hooks/use-main-context'
 // internals
 import { ToolbarPopover } from './toolbar.popover'
+import { ToolbarPrintButton } from './toolbar.print-button'
+import { ToolbarDownloadButton } from './toolbar.download-button'
 
 const CLASS_ID = 'datatable-delight--toolbar'
 
@@ -84,8 +85,12 @@ class TableToolbarClass extends React.Component<TEMPORARY_CLASS_PROP_TYPE> {
         }
     }
 
+    /**
+     * @todo MOVE THIS TO <ToolbarDownloadButton />
+     */
     handleCSVDownload = () => {
         const { data, displayData, columns, options, columnOrder } = this.props
+
         let dataToDownload = [] //cloneDeep(data);
         let columnsToDownload = []
         let columnOrderCopy = Array.isArray(columnOrder)
@@ -171,7 +176,9 @@ class TableToolbarClass extends React.Component<TEMPORARY_CLASS_PROP_TYPE> {
         createCsvDownload(columnsToDownload, dataToDownload, options)
     }
 
-    setActiveIcon = iconName => {
+    setActiveIcon = (
+        iconName: 'search' | 'filter' | 'viewcolumns' | undefined
+    ) => {
         this.setState(
             prevState => ({
                 showSearch: this.isSearchShown(iconName),
@@ -286,18 +293,16 @@ class TableToolbarClass extends React.Component<TEMPORARY_CLASS_PROP_TYPE> {
         const TableFilterComponent =
             components.TableFilter ?? DataTableToolbarFilter
         const SearchIconComponent = icons.SearchIcon
-        const DownloadIconComponent = icons.DownloadIcon
-        const PrintIconComponent = icons.PrintIcon
         const ViewColumnIconComponent = icons.ViewColumnIcon
         const FilterIconComponent = icons.FilterIcon
 
-        const { search, downloadCsv, print, viewColumns, filterTable } =
+        const { search, viewColumns, filterTable } =
             this.props.context.textLabels.toolbar
         const { showSearch } = this.state
 
         const filterPopoverExit = () => {
             this.setState({ hideFilterPopover: false })
-            this.setActiveIcon()
+            this.setActiveIcon(undefined)
         }
 
         const closeFilterPopover = () => {
@@ -369,58 +374,23 @@ class TableToolbarClass extends React.Component<TEMPORARY_CLASS_PROP_TYPE> {
                     )}
 
                     {options.download && (
-                        <Tooltip title={downloadCsv}>
-                            <span>
-                                <IconButton
-                                    data-testid={
-                                        downloadCsv.replace(/\s/g, '') +
-                                        '-iconButton'
-                                    }
-                                    aria-label={downloadCsv}
-                                    classes={{ root: classes.icon }}
-                                    disabled={options.download === 'disabled'}
-                                    onClick={this.handleCSVDownload}
-                                >
-                                    <DownloadIconComponent />
-                                </IconButton>
-                            </span>
-                        </Tooltip>
+                        <ToolbarDownloadButton
+                            options={options}
+                            onDownload={this.handleCSVDownload}
+                        />
                     )}
 
                     {options.print && (
-                        <span>
-                            <ReactToPrint content={() => this.props.tableRef()}>
-                                <PrintContextConsumer>
-                                    {({ handlePrint }) => (
-                                        <span>
-                                            <Tooltip title={print}>
-                                                <IconButton
-                                                    data-testid={
-                                                        print + '-iconButton'
-                                                    }
-                                                    aria-label={print}
-                                                    disabled={
-                                                        options.print ===
-                                                        'disabled'
-                                                    }
-                                                    onClick={handlePrint}
-                                                    classes={{
-                                                        root: classes.icon
-                                                    }}
-                                                >
-                                                    <PrintIconComponent />
-                                                </IconButton>
-                                            </Tooltip>
-                                        </span>
-                                    )}
-                                </PrintContextConsumer>
-                            </ReactToPrint>
-                        </span>
+                        <ToolbarPrintButton
+                            options={options}
+                            // printContent={this.props.tableRef}
+                            printContent={() => <h1>helo</h1>}
+                        />
                     )}
 
                     {options.viewColumns && (
                         <ToolbarPopover
-                            refExit={() => this.setActiveIcon()}
+                            refExit={() => this.setActiveIcon(undefined)}
                             hide={options.viewColumns === 'disabled'}
                             trigger={
                                 <Tooltip
@@ -441,10 +411,9 @@ class TableToolbarClass extends React.Component<TEMPORARY_CLASS_PROP_TYPE> {
                                         disabled={
                                             options.viewColumns === 'disabled'
                                         }
-                                        onClick={this.setActiveIcon.bind(
-                                            null,
-                                            'viewcolumns'
-                                        )}
+                                        onClick={() =>
+                                            this.setActiveIcon('viewcolumns')
+                                        }
                                     >
                                         <ViewColumnIconComponent />
                                     </IconButton>
@@ -493,10 +462,9 @@ class TableToolbarClass extends React.Component<TEMPORARY_CLASS_PROP_TYPE> {
                                             disabled={
                                                 options.filter === 'disabled'
                                             }
-                                            onClick={this.setActiveIcon.bind(
-                                                null,
-                                                'filter'
-                                            )}
+                                            onClick={() =>
+                                                this.setActiveIcon('filter')
+                                            }
                                         >
                                             <FilterIconComponent />
                                         </IconButton>
