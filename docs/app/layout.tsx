@@ -52,7 +52,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                     href="https://fonts.googleapis.com/css?family=Roboto:300,400,500"
                 />
 
-                {/* <link rel="shortcut icon" href="/static/favicon.ico" /> */}
+                <meta
+                    name="apple-mobile-web-app-title"
+                    content="MUI DataTable Delight"
+                />
             </head>
 
             <body className={roboto.variable}>
