@@ -1,6 +1,6 @@
 // vendors
 import { makeStyles } from 'tss-react/mui'
-import React from 'react'
+import React, { type RefObject } from 'react'
 // materials
 import {
     IconButton,
@@ -64,7 +64,7 @@ interface ToolbarProps {
     displayData: DataTableState['displayData']
     options: DataTableOptions
     searchText: string
-    tableRef: () => HTMLElement
+    tableRef: RefObject<HTMLTableElement>
     setTableAction: (action: string) => void
     searchTextUpdate: (searchText: string) => void
     searchClose: () => void
