@@ -14,7 +14,7 @@ import {
     DataTableToolbarFilterProps
 } from './toolbar.filter'
 import { DataTableToolbarSearch } from './toolbar.search'
-import { DataTableOptions } from '../data-table.props.type/options'
+import { DataTableOptions, TableAction } from '../data-table.props.type/options'
 import { useMainContext } from '../hooks/use-main-context'
 // internals
 import { ToolbarPopover } from './toolbar.popover'
@@ -57,7 +57,7 @@ interface ToolbarProps {
     options: DataTableOptions
     searchText: string
     tableRef: RefObject<HTMLTableElement>
-    setTableAction: (action: string) => void
+    setTableAction: (action: TableAction) => void
     searchTextUpdate: (searchText: string) => void
     searchClose: () => void
 
@@ -116,12 +116,14 @@ class TableToolbarClass extends React.Component<
                 const { iconActive, prevIconActive } = this.state
 
                 if (iconActive === 'filter') {
-                    this.props.setTableAction('onFilterDialogOpen')
+                    this.props.setTableAction(TableAction.ON_FILTER_DIALOG_OPEN)
                     this.props.options.onFilterDialogOpen?.()
                 }
 
                 if (iconActive === null && prevIconActive === 'filter') {
-                    this.props.setTableAction('onFilterDialogClose')
+                    this.props.setTableAction(
+                        TableAction.ON_FILTER_DIALOG_CLOSE
+                    )
                     this.props.options.onFilterDialogClose?.()
                 }
             }
@@ -140,7 +142,7 @@ class TableToolbarClass extends React.Component<
                 nextVal = true
             } else {
                 const { onSearchClose } = this.props.options
-                this.props.setTableAction('onSearchClose')
+                this.props.setTableAction(TableAction.ON_SEARCH_CLOSE)
                 if (onSearchClose) onSearchClose()
                 nextVal = false
             }
@@ -168,13 +170,13 @@ class TableToolbarClass extends React.Component<
     }
 
     showSearch = () => {
-        this.props.setTableAction('onSearchOpen')
+        this.props.setTableAction(TableAction.ON_SEARCH_OPEN)
         !!this.props.options.onSearchOpen && this.props.options.onSearchOpen()
         return true
     }
 
     hideSearch = () => {
-        this.props.setTableAction('onSearchClose')
+        this.props.setTableAction(TableAction.ON_SEARCH_CLOSE)
 
         this.props.options?.onSearchClose?.()
 

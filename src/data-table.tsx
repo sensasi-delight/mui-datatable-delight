@@ -27,8 +27,15 @@ import type {
     MUIDataTableColumnState,
     MUIDataTableStateRows
 } from 'mui-datatables'
-import { STP, type DataTableOptions } from './data-table.props.type/options'
-import type { DataTableState } from './data-table.props.type/state'
+import {
+    STP,
+    TableAction,
+    type DataTableOptions
+} from './data-table.props.type/options'
+import {
+    type DataTableState,
+    FilterTypeEnum
+} from './data-table.props.type/state'
 import {
     DEFAULT_STATE,
     MainContext,
@@ -201,8 +208,8 @@ class MUIDataTableClass extends React.Component<
         if (this.props.options?.searchText && !this.props.options?.serverSide)
             this.setState({ page: 0 })
 
-        this.context.setState?.(this.state)
-        this.options.onTableInit?.('tableInitialized', this.state)
+        this.context.onStateChange?.(TableAction.INITIALIZED, this.state)
+        this.options.onTableInit?.(TableAction.INITIALIZED, this.state)
     }
 
     componentDidUpdate(prevProps: DataTableProps) {
@@ -225,7 +232,10 @@ class MUIDataTableClass extends React.Component<
                 TABLE_LOAD.INITIAL,
                 didDataUpdate,
                 () => {
-                    this.setTableAction('propsUpdate')
+                    this.context.onStateChange?.(
+                        TableAction.PROP_UPDATE,
+                        this.state
+                    )
                 }
             )
         }
@@ -273,14 +283,6 @@ class MUIDataTableClass extends React.Component<
         }
 
         handleOptionDeprecation(props, this.options)
-    }
-
-    setTableAction = (action: string) => {
-        this.context.setState?.(this.state)
-
-        this.options.onTableChange?.(action, this.state)
-
-        if (this.options?.storageKey) save(this.options.storageKey, this.state)
     }
 
     setHeadCellRef = (index: number, pos: number, el: HTMLTableCellElement) => {
@@ -490,7 +492,7 @@ class MUIDataTableClass extends React.Component<
             lookup: {}
         }
 
-        if (TABLE_LOAD.INITIAL) {
+        if (status === TABLE_LOAD.INITIAL) {
             // Multiple row selection customization
             if (
                 this.options.rowsSelected &&
@@ -625,7 +627,7 @@ class MUIDataTableClass extends React.Component<
             searchText: searchText,
             selectedRows: selectedRowsData,
             expandedRows: expandedRowsData,
-            count: this.options.count,
+            count: this.options.count ?? tableData.length,
             data: tableData,
             sortOrder: sortOrder,
             rowsPerPage,
@@ -913,7 +915,11 @@ class MUIDataTableClass extends React.Component<
                 }
             },
             () => {
-                this.setTableAction('viewColumnsChange')
+                this.context.onStateChange?.(
+                    TableAction.VIEW_COLUMNS_CHANGE,
+                    this.state
+                )
+
                 var cb =
                     this.options.onViewColumnsChange ||
                     this.options.onColumnViewChange
@@ -938,7 +944,10 @@ class MUIDataTableClass extends React.Component<
                 }
             },
             () => {
-                this.setTableAction('viewColumnsChange')
+                this.context.onStateChange?.(
+                    TableAction.VIEW_COLUMNS_CHANGE,
+                    this.state
+                )
 
                 const cb =
                     this.options.onViewColumnsChange ||
@@ -1040,7 +1049,7 @@ class MUIDataTableClass extends React.Component<
                 return newState
             },
             () => {
-                this.setTableAction('sort')
+                this.context.onStateChange?.(TableAction.SORT, this.state)
 
                 if (this.options.onColumnSortChange) {
                     this.options.onColumnSortChange(
@@ -1061,11 +1070,12 @@ class MUIDataTableClass extends React.Component<
                 page: getPageValue(rowCount, rowsPerPage, this.state.page)
             }),
             () => {
-                this.setTableAction('changeRowsPerPage')
+                this.context.onStateChange?.(
+                    TableAction.CHANGE_ROWS_PER_PAGE,
+                    this.state
+                )
 
-                if (this.options.onChangeRowsPerPage) {
-                    this.options.onChangeRowsPerPage(this.state.rowsPerPage)
-                }
+                this.options.onChangeRowsPerPage?.(this.state.rowsPerPage)
             }
         )
     }
@@ -1076,7 +1086,10 @@ class MUIDataTableClass extends React.Component<
                 page: page
             }),
             () => {
-                this.setTableAction('changePage')
+                this.context.onStateChange?.(
+                    TableAction.CHANGE_PAGE,
+                    this.state
+                )
 
                 if (this.options.onChangePage) {
                     this.options.onChangePage(this.state.page)
@@ -1101,10 +1114,8 @@ class MUIDataTableClass extends React.Component<
                       )
             }),
             () => {
-                this.setTableAction('search')
-                if (this.options.onSearchChange) {
-                    this.options.onSearchChange(this.state.searchText)
-                }
+                this.context.onStateChange?.(TableAction.SEARCH, this.state)
+                this.options.onSearchChange?.(this.state.searchText)
             }
         )
     }
@@ -1126,10 +1137,8 @@ class MUIDataTableClass extends React.Component<
                       )
             }),
             () => {
-                this.setTableAction('search')
-                if (this.options.onSearchChange) {
-                    this.options.onSearchChange(this.state.searchText)
-                }
+                this.context.onStateChange?.(TableAction.SEARCH, this.state)
+                this.options.onSearchChange?.(this.state.searchText)
             }
         )
     }
@@ -1154,15 +1163,17 @@ class MUIDataTableClass extends React.Component<
                 }
             },
             () => {
-                this.setTableAction('resetFilters')
-                if (this.options.onFilterChange) {
-                    this.options.onFilterChange(
-                        null,
-                        this.state.filterList,
-                        'reset',
-                        null
-                    )
-                }
+                this.context.onStateChange?.(
+                    TableAction.RESET_FILTERS,
+                    this.state
+                )
+
+                this.options.onFilterChange?.(
+                    null,
+                    this.state.filterList,
+                    'reset',
+                    null
+                )
             }
         )
     }
@@ -1212,7 +1223,7 @@ class MUIDataTableClass extends React.Component<
         index: number,
         value,
         column,
-        type: DataTableOptions['filterType'],
+        type: FilterTypeEnum,
         customUpdate: () => void,
         next: (filterList) => void
     ) => {
@@ -1244,16 +1255,19 @@ class MUIDataTableClass extends React.Component<
                 }
             },
             () => {
-                this.setTableAction('filterChange')
-                if (this.options.onFilterChange) {
-                    this.options.onFilterChange(
-                        column,
-                        this.state.filterList,
-                        type,
-                        index,
-                        this.state.displayData
-                    )
-                }
+                this.context.onStateChange?.(
+                    TableAction.FILTER_CHANGE,
+                    this.state
+                )
+
+                this.options.onFilterChange?.(
+                    column,
+                    this.state.filterList,
+                    type,
+                    index,
+                    this.state.displayData
+                )
+
                 next && next(this.state.filterList)
             }
         )
@@ -1312,14 +1326,13 @@ class MUIDataTableClass extends React.Component<
                 }
             },
             () => {
-                this.setTableAction('expandRow')
-                if (this.options.onRowExpansionChange) {
-                    this.options.onRowExpansionChange(
-                        affecttedRows,
-                        this.state.expandedRows.data,
-                        this.state.expandedRows.data.map(item => item.dataIndex)
-                    )
-                }
+                this.context.onStateChange?.(TableAction.EXPAND_ROW, this.state)
+
+                this.options.onRowExpansionChange?.(
+                    affecttedRows,
+                    this.state.expandedRows.data,
+                    this.state.expandedRows.data.map(item => item.dataIndex)
+                )
             }
         )
     }
@@ -1340,14 +1353,16 @@ class MUIDataTableClass extends React.Component<
                 }
             },
             () => {
-                this.setTableAction('columnOrderChange')
-                if (this.options.onColumnOrderChange) {
-                    this.options.onColumnOrderChange(
-                        this.state.columnOrder,
-                        columnIndex,
-                        newPosition
-                    )
-                }
+                this.context.onStateChange?.(
+                    TableAction.COLUMN_ORDER_CHANGE,
+                    this.state
+                )
+
+                this.options.onColumnOrderChange?.(
+                    this.state.columnOrder,
+                    columnIndex,
+                    newPosition
+                )
             }
         )
     }
@@ -1379,7 +1394,7 @@ class MUIDataTableClass extends React.Component<
             TABLE_LOAD.UPDATE,
             true,
             () => {
-                this.setTableAction('rowDelete')
+                this.context.onStateChange?.(TableAction.ROW_DELETE, this.state)
             }
         )
     }
@@ -1424,19 +1439,19 @@ class MUIDataTableClass extends React.Component<
                 }
             },
             () => {
-                this.setTableAction('rowExpansionChange')
-                if (
-                    this.options.onRowExpansionChange ||
+                this.context.onStateChange?.(
+                    TableAction.ROW_EXPANSION_CHANGE,
+                    this.state
+                )
+
+                const expandCallback =
+                    this.options.onRowExpansionChange ??
                     this.options.onRowsExpand
-                ) {
-                    let expandCallback =
-                        this.options.onRowExpansionChange ||
-                        this.options.onRowsExpand
-                    expandCallback(
-                        this.state.curExpandedRows,
-                        this.state.expandedRows.data
-                    )
-                }
+
+                expandCallback?.(
+                    this.state.curExpandedRows,
+                    this.state.expandedRows.data
+                )
             }
         )
     }
@@ -1508,17 +1523,19 @@ class MUIDataTableClass extends React.Component<
                     }
                 },
                 () => {
-                    this.setTableAction('rowSelectionChange')
-                    if (this.options.onRowSelectionChange) {
-                        this.options.onRowSelectionChange(
-                            this.state.curSelectedRows,
-                            this.state.selectedRows.data,
-                            this.state.selectedRows.data.map(
-                                item => item.dataIndex
-                            )
-                        )
-                    } else if (this.options.onRowsSelect) {
-                        this.options.onRowsSelect(
+                    this.context.onStateChange?.(
+                        TableAction.ROW_SELECTION_CHANGE,
+                        this.state
+                    )
+
+                    this.options.onRowSelectionChange?.(
+                        this.state.curSelectedRows,
+                        this.state.selectedRows.data,
+                        this.state.selectedRows.data.map(item => item.dataIndex)
+                    )
+
+                    if (!this.options.onRowSelectionChange) {
+                        this.options.onRowsSelect?.(
                             this.state.curSelectedRows,
                             this.state.selectedRows.data,
                             this.state.selectedRows.data.map(
@@ -1592,17 +1609,19 @@ class MUIDataTableClass extends React.Component<
                     }
                 },
                 () => {
-                    this.setTableAction('rowSelectionChange')
-                    if (this.options.onRowSelectionChange) {
-                        this.options.onRowSelectionChange(
-                            [value],
-                            this.state.selectedRows.data,
-                            this.state.selectedRows.data.map(
-                                item => item.dataIndex
-                            )
-                        )
-                    } else if (this.options.onRowsSelect) {
-                        this.options.onRowsSelect(
+                    this.context.onStateChange?.(
+                        TableAction.ROW_SELECTION_CHANGE,
+                        this.state
+                    )
+
+                    this.options.onRowSelectionChange?.(
+                        [value],
+                        this.state.selectedRows.data,
+                        this.state.selectedRows.data.map(item => item.dataIndex)
+                    )
+
+                    if (!this.options.onRowSelectionChange) {
+                        this.options.onRowsSelect?.(
                             [value],
                             this.state.selectedRows.data,
                             this.state.selectedRows.data.map(
@@ -1627,17 +1646,19 @@ class MUIDataTableClass extends React.Component<
                     previousSelectedRow: null
                 },
                 () => {
-                    this.setTableAction('rowSelectionChange')
-                    if (this.options.onRowSelectionChange) {
-                        this.options.onRowSelectionChange(
-                            this.state.selectedRows.data,
-                            this.state.selectedRows.data,
-                            this.state.selectedRows.data.map(
-                                item => item.dataIndex
-                            )
-                        )
-                    } else if (this.options.onRowsSelect) {
-                        this.options.onRowsSelect(
+                    this.context.onStateChange?.(
+                        TableAction.ROW_SELECTION_CHANGE,
+                        this.state
+                    )
+
+                    this.options.onRowSelectionChange?.(
+                        this.state.selectedRows.data,
+                        this.state.selectedRows.data,
+                        this.state.selectedRows.data.map(item => item.dataIndex)
+                    )
+
+                    if (!this.options.onRowSelectionChange) {
+                        this.options.onRowsSelect?.(
                             this.state.selectedRows.data,
                             this.state.selectedRows.data,
                             this.state.selectedRows.data.map(
@@ -1826,7 +1847,9 @@ class MUIDataTableClass extends React.Component<
                             title={title}
                             toggleViewColumn={this.toggleViewColumn}
                             updateColumns={this.updateColumns}
-                            setTableAction={this.setTableAction}
+                            setTableAction={(action: TableAction) =>
+                                this.context.onStateChange?.(action, this.state)
+                            }
                         />
                     )}
                 <this.context.components.TableFilterList

@@ -1,12 +1,5 @@
 // vendors
-import {
-    createContext,
-    Dispatch,
-    ReactNode,
-    SetStateAction,
-    useContext,
-    useState
-} from 'react'
+import { createContext, ReactNode, useContext, useState } from 'react'
 // local types
 import type { DataTableProps } from '..'
 // functions
@@ -15,6 +8,8 @@ import { processTextLabels } from './use-main-context.process-text-labels'
 import { DEFAULT_ICONS } from './use-main-context.default-icons'
 import { DEFAULT_COMPONENTS } from './use-main-context.default-components'
 import { DataTableState } from '../data-table.props.type/state'
+import { TableAction } from '../data-table.props.type/options'
+import { save } from '../functions'
 
 export function MainContextProvider({
     datatableProps,
@@ -24,6 +19,15 @@ export function MainContextProvider({
     children: ReactNode
 }): ReactNode {
     const [state, setState] = useState(DEFAULT_STATE)
+
+    function onStateChange(action: TableAction, state: DataTableState) {
+        setState(state)
+
+        datatableProps.options?.onTableChange?.(action, state)
+
+        if (datatableProps.options?.storageKey)
+            save(datatableProps.options.storageKey, state)
+    }
 
     return (
         <MainContext.Provider
@@ -36,7 +40,7 @@ export function MainContextProvider({
                     ...DEFAULT_ICONS,
                     ...datatableProps.icons
                 },
-                setState,
+                onStateChange,
                 state,
                 textLabels: processTextLabels(datatableProps.textLabels)
             }}
@@ -91,7 +95,7 @@ export const MainContext = createContext<ContextValueType>({
 interface ContextValueType {
     components: typeof DEFAULT_COMPONENTS
     icons: typeof DEFAULT_ICONS
-    setState?: Dispatch<SetStateAction<DataTableState>>
+    onStateChange?: (action: TableAction, state: DataTableState) => void
     state: typeof DEFAULT_STATE
     textLabels: ReturnType<typeof processTextLabels>
 }
