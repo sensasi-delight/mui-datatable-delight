@@ -8,7 +8,7 @@ import { Paper, Table as MuiTable, TableProps } from '@mui/material'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { makeStyles } from 'tss-react/mui'
 import clsx from 'clsx'
-import React, { createRef, type ReactNode, type RefObject } from 'react'
+import React, { createRef, type RefObject } from 'react'
 // locals
 import { getPageValue } from './functions.shared/get-page-value'
 import {
@@ -25,12 +25,12 @@ import {
 import type {
     DisplayData,
     MUIDataTableColumnState,
-    MUIDataTableState,
     MUIDataTableStateRows
 } from 'mui-datatables'
 import { STP, type DataTableOptions } from './data-table.props.type/options'
 import type { DataTableState } from './data-table.props.type/state'
 import {
+    DEFAULT_STATE,
     MainContext,
     MainContextProvider,
     useMainContext
@@ -144,7 +144,7 @@ class MUIDataTableClass extends React.Component<
         classes: ReturnType<typeof useStyles>['classes']
         getRootRef: () => RefObject<HTMLDivElement | null>
     },
-    MUIDataTableState
+    DataTableState
 > {
     declare context: ReturnType<typeof useMainContext>
     static contextType = MainContext
@@ -186,8 +186,6 @@ class MUIDataTableClass extends React.Component<
             ...(restoredState ?? getInitTableOptions(props?.options))
         }
 
-        this.setTableData = this.setTableData.bind(this)
-
         this.setTableData(props, TABLE_LOAD.INITIAL, true, () => {}, true)
     }
 
@@ -203,7 +201,8 @@ class MUIDataTableClass extends React.Component<
         if (this.props.options?.searchText && !this.props.options?.serverSide)
             this.setState({ page: 0 })
 
-        this.setTableInit('tableInitialized')
+        this.context.setState?.(this.state)
+        this.options.onTableInit?.('tableInitialized', this.state)
     }
 
     componentDidUpdate(prevProps: DataTableProps) {
@@ -214,7 +213,7 @@ class MUIDataTableClass extends React.Component<
         ) {
             this.updateOptions(this.options, this.props)
 
-            var didDataUpdate = this.props.data !== prevProps.data
+            let didDataUpdate = this.props.data !== prevProps.data
             if (this.props.data && prevProps.data) {
                 didDataUpdate =
                     didDataUpdate &&
@@ -277,19 +276,11 @@ class MUIDataTableClass extends React.Component<
     }
 
     setTableAction = (action: string) => {
-        if (this.options?.onTableChange) {
-            this.options.onTableChange(action, this.state)
-        }
+        this.context.setState?.(this.state)
 
-        if (this.options?.storageKey) {
-            save(this.options.storageKey, this.state)
-        }
-    }
+        this.options.onTableChange?.(action, this.state)
 
-    setTableInit = (action: string) => {
-        if (this.options?.onTableInit) {
-            this.options.onTableInit(action, this.state)
-        }
+        if (this.options?.storageKey) save(this.options.storageKey, this.state)
     }
 
     setHeadCellRef = (index: number, pos: number, el: HTMLTableCellElement) => {
@@ -301,112 +292,6 @@ class MUIDataTableClass extends React.Component<
     // assigning it as arrow function in the JSX would cause hard to track re-render errors
     getCurrentRootRef = () => this.props.getRootRef().current
 
-    /*
-     *  Build the source table data
-     *
-     *  newColumns - columns from the options object.
-     *  prevColumns - columns object saved onto ths state.
-     *  newColumnOrder - columnOrder from the options object.
-     *  prevColumnOrder - columnOrder object saved onto the state.
-     */
-    buildColumns = (
-        newColumns: DataTableProps['columns'],
-        prevColumns: DataTableState['columns'] = [],
-        newColumnOrder: DataTableState['columnOrder'],
-        prevColumnOrder: DataTableState['columnOrder'] = []
-    ) => {
-        const columnData: DataTableState['columns'] = []
-        let filterData = []
-        let filterList = []
-        let columnOrder: number[] = []
-
-        newColumns.forEach((column, colIndex) => {
-            let columnOptions: Partial<DataTableState['columns'][0]> = {
-                display: 'true',
-                empty: false,
-                filter: true,
-                sort: true,
-                print: true,
-                searchable: true,
-                download: true,
-                viewColumns: true,
-                sortCompare: undefined,
-                sortThirdClickReset: false,
-                sortDescFirst: false
-            }
-
-            columnOrder.push(colIndex)
-
-            const options = {
-                ...(typeof column === 'string' ? {} : column.options)
-            }
-
-            if (typeof column === 'object') {
-                if (options) {
-                    if (options.display !== undefined) {
-                        options.display = options.display.toString()
-                    }
-
-                    if (
-                        options.sortDirection === null ||
-                        options.sortDirection
-                    ) {
-                        warnDeprecated(
-                            'The sortDirection column field has been deprecated. Please use the sortOrder option on the options object. More info: https://github.com/gregnb/mui-datatables/tree/master/docs/v2_to_v3_guide.md'
-                        )
-                    }
-                }
-
-                // remember stored version of display if not overwritten
-                if (
-                    typeof options.display === 'undefined' &&
-                    prevColumns[colIndex] &&
-                    prevColumns[colIndex].name === column.name &&
-                    prevColumns[colIndex].display
-                ) {
-                    options.display = prevColumns[colIndex].display
-                }
-
-                columnOptions = {
-                    name: column.name,
-                    label: column.label ? column.label : column.name,
-                    ...columnOptions,
-                    ...options
-                }
-            } else {
-                // remember stored version of display if not overwritten
-                if (prevColumns[colIndex] && prevColumns[colIndex].display) {
-                    options.display = prevColumns[colIndex].display
-                }
-
-                columnOptions = {
-                    ...columnOptions,
-                    ...options,
-                    name: column,
-                    label: column
-                }
-            }
-
-            columnData.push(columnOptions)
-
-            filterData[colIndex] = []
-            filterList[colIndex] = []
-        })
-
-        if (Array.isArray(newColumnOrder)) {
-            columnOrder = newColumnOrder
-        } else if (
-            Array.isArray(prevColumnOrder) &&
-            Array.isArray(newColumns) &&
-            Array.isArray(prevColumns) &&
-            newColumns.length === prevColumns.length
-        ) {
-            columnOrder = prevColumnOrder
-        }
-
-        return { columns: columnData, filterData, filterList, columnOrder }
-    }
-
     setTableData(
         props: DataTableProps,
         status: TABLE_LOAD,
@@ -416,13 +301,12 @@ class MUIDataTableClass extends React.Component<
     ) {
         let tableData = []
 
-        let { columns, filterData, filterList, columnOrder } =
-            this.buildColumns(
-                props.columns,
-                this.state.columns,
-                this.options.columnOrder,
-                this.state.columnOrder
-            )
+        let { columns, filterData, filterList, columnOrder } = buildColumns(
+            props.columns,
+            this.state.columns,
+            this.options.columnOrder,
+            this.state.columnOrder
+        )
 
         let sortIndex = null
         let sortDirection = 'none'
@@ -2079,35 +1963,6 @@ const DEFAULT_OPTIONS: Required<DataTableOptions> = {
     selectToolbarPlacement: STP.REPLACE
 }
 
-const DEFAULT_STATE: MUIDataTableState = {
-    activeColumn: null,
-    announceText: null,
-    count: 0,
-    columns: [],
-    expandedRows: {
-        data: [],
-        lookup: {}
-    },
-    data: [],
-    displayData: [],
-    filterData: [],
-    filterList: [],
-    page: 0,
-    previousSelectedRow: null,
-    rowsPerPage: 10,
-    searchProps: {},
-    searchText: null,
-    selectedRows: {
-        data: [],
-        lookup: {}
-    },
-    showResponsive: false,
-
-    columnOrder: [0],
-    rowsPerPageOptions: DEFAULT_OPTIONS.rowsPerPageOptions,
-    sortOrder: undefined
-}
-
 function getConstructedOption(
     optionsFromProp: DataTableProps['options']
 ): DataTableOptions {
@@ -2265,7 +2120,6 @@ function RenderInnerTable({
     tableRef,
     options,
     selectRowUpdate,
-    props,
     toggleSortColumn,
     setHeadCellRef,
     areAllRowsExpanded,
@@ -2421,6 +2275,9 @@ function hasSearchText(
     return stack.indexOf(needle) >= 0
 }
 
+/**
+ * @todo move to main context
+ */
 function validateOptions(options: DataTableOptions) {
     if (options.serverSide && options.onTableChange === undefined) {
         throw Error(
@@ -2443,13 +2300,21 @@ function validateOptions(options: DataTableOptions) {
     }
 }
 
+/**
+ * @todo move to main context
+ */
 function getInitTableOptions({
     rowsPerPage,
     page,
     rowsSelected,
     rowsPerPageOptions
-}: DataTableProps['options'] = {}): DataTableProps['options'] {
-    const optState: DataTableProps['options'] = {}
+}: DataTableProps['options'] = {}) {
+    const optState: {
+        page?: DataTableState['page']
+        rowsPerPage?: DataTableState['rowsPerPage']
+        rowsPerPageOptions?: DataTableState['rowsPerPageOptions']
+        rowsSelected?: DataTableState['rowsSelected']
+    } = {}
 
     if (rowsPerPage) {
         optState.rowsPerPage = rowsPerPage
@@ -2470,4 +2335,107 @@ function getInitTableOptions({
     validateOptions(optState)
 
     return optState
+}
+
+/*
+ *  Build the source table data
+ *
+ *  newColumns - columns from the options object.
+ *  prevColumns - columns object saved onto ths state.
+ *  newColumnOrder - columnOrder from the options object.
+ *  prevColumnOrder - columnOrder object saved onto the state.
+ */
+function buildColumns(
+    newColumns: DataTableProps['columns'],
+    prevColumns: DataTableState['columns'] = [],
+    newColumnOrder: DataTableState['columnOrder'],
+    prevColumnOrder: DataTableState['columnOrder'] = []
+) {
+    const columnData: DataTableState['columns'] = []
+    let filterData = []
+    let filterList = []
+    let columnOrder: number[] = []
+
+    newColumns.forEach((column, colIndex) => {
+        let columnOptions: Partial<DataTableState['columns'][0]> = {
+            display: 'true',
+            empty: false,
+            filter: true,
+            sort: true,
+            print: true,
+            searchable: true,
+            download: true,
+            viewColumns: true,
+            sortCompare: undefined,
+            sortThirdClickReset: false,
+            sortDescFirst: false
+        }
+
+        columnOrder.push(colIndex)
+
+        const options = {
+            ...(typeof column === 'string' ? {} : column.options)
+        }
+
+        if (typeof column === 'object') {
+            if (options) {
+                if (options.display !== undefined) {
+                    options.display = options.display.toString()
+                }
+
+                if (options.sortDirection === null || options.sortDirection) {
+                    warnDeprecated(
+                        'The sortDirection column field has been deprecated. Please use the sortOrder option on the options object. More info: https://github.com/gregnb/mui-datatables/tree/master/docs/v2_to_v3_guide.md'
+                    )
+                }
+            }
+
+            // remember stored version of display if not overwritten
+            if (
+                typeof options.display === 'undefined' &&
+                prevColumns[colIndex] &&
+                prevColumns[colIndex].name === column.name &&
+                prevColumns[colIndex].display
+            ) {
+                options.display = prevColumns[colIndex].display
+            }
+
+            columnOptions = {
+                name: column.name,
+                label: column.label ? column.label : column.name,
+                ...columnOptions,
+                ...options
+            }
+        } else {
+            // remember stored version of display if not overwritten
+            if (prevColumns[colIndex] && prevColumns[colIndex].display) {
+                options.display = prevColumns[colIndex].display
+            }
+
+            columnOptions = {
+                ...columnOptions,
+                ...options,
+                name: column,
+                label: column
+            }
+        }
+
+        columnData.push(columnOptions)
+
+        filterData[colIndex] = []
+        filterList[colIndex] = []
+    })
+
+    if (Array.isArray(newColumnOrder)) {
+        columnOrder = newColumnOrder
+    } else if (
+        Array.isArray(prevColumnOrder) &&
+        Array.isArray(newColumns) &&
+        Array.isArray(prevColumns) &&
+        newColumns.length === prevColumns.length
+    ) {
+        columnOrder = prevColumnOrder
+    }
+
+    return { columns: columnData, filterData, filterList, columnOrder }
 }
