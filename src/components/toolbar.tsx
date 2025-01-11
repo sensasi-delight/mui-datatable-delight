@@ -31,8 +31,7 @@ const RESPONSIVE_FULL_WIDTH_NAME = 'scrollFullHeightFullWidth'
  * @todo rename this to `<Toolbar />
  * @todo use named export instead default
  *
- * @see [Customize Example](http://mui-datatable-delight.vercel.app/examples/customize-toolbar)
- * @see [Customize Icons Example](http://mui-datatable-delight.vercel.app/examples/customize-toolbar)
+ * @see {@link http://mui-datatable-delight.vercel.app/examples/customize-toolbar|Customize Toolbar Example}.
  */
 export default function TableToolbar(props: ToolbarProps) {
     const context = useMainContext()
@@ -50,23 +49,16 @@ export default function TableToolbar(props: ToolbarProps) {
 }
 
 interface ToolbarProps {
-    // data: DataTableState['data']
-    // columns: DataTableState['columns']
-    // columnOrder: DataTableState['columnOrder']
-    // displayData: DataTableState['displayData']
-    options: DataTableOptions
-    searchText: string
-    tableRef: RefObject<HTMLTableElement>
-    setTableAction: (action: TableAction) => void
-    searchTextUpdate: (searchText: string) => void
-    searchClose: () => void
-
-    // filterData: DataTableState['filterData']
-    // filterList: DataTableState['filterList']
     filterUpdate: DataTableToolbarFilterProps['onFilterUpdate']
+    options: DataTableOptions
     resetFilters: DataTableToolbarFilterProps['onFilterReset']
-    toggleViewColumn: ToolbarViewColProps['onColumnUpdate']
+    searchClose: () => void
+    searchText: string
+    searchTextUpdate: (searchText: string) => void
+    setTableAction: (action: TableAction) => void
+    tableRef: RefObject<HTMLTableElement>
     title: string
+    toggleViewColumn: ToolbarViewColProps['onColumnUpdate']
     updateFilterByType: DataTableToolbarFilterProps['updateFilterByType']
 }
 
