@@ -7,24 +7,55 @@ import {
 } from '@testing-library/react'
 // locals
 import TableToolbar from '../src/components/toolbar'
-import { DataTableColumns, DataTableData, DataTableOptions } from '../src'
+import {
+    DataTableColumns,
+    DataTableData,
+    DataTableOptions,
+    DataTableProps
+} from '../src'
 import { DEFAULT_TEXT_LABELS } from '../src/hooks/use-main-context.process-text-labels.default-text-labels'
 import { ClassName } from '../src/enums/class-name'
+import { MainContextProvider } from '../src/hooks/use-main-context'
 
 describe('<TableToolbar />', function () {
+    function setup(override?: DataTableProps) {
+        const {
+            columns = COLUMNS,
+            data = DATA,
+            options
+        } = {
+            ...override,
+            options: {
+                ...OPTIONS,
+                ...override?.options
+            }
+        }
+
+        return {
+            result: render(
+                <MainContextProvider
+                    datatableProps={{
+                        columns,
+                        data,
+                        options
+                    }}
+                >
+                    <TableToolbar
+                        // displayData={DATA}
+                        options={options}
+                        // setTableAction={setTableAction}
+                    />
+                </MainContextProvider>
+            )
+        }
+    }
+
     test('should render a toolbar', () => {
-        const { getAllByRole } = render(
-            <TableToolbar
-                columns={COLUMNS}
-                data={DATA}
-                options={OPTIONS}
-                // setTableAction={setTableAction}
-            />
-        )
+        const { result } = setup()
 
         // console.log(getAllByRole('button').map(el => el.outerHTML))
 
-        expect(getAllByRole('button').length).toBe(
+        expect(result.getAllByRole('button').length).toBe(
             5 + // toolbar icon buttons
                 2 // toolbar filter children
         )
@@ -564,16 +595,8 @@ describe('<TableToolbar />', function () {
         )
     })
 
-    test('should download CSV when calling method handleCSVDownload', () => {
-        const result = render(
-            <TableToolbar
-                columns={COLUMNS}
-                displayData={DATA}
-                data={DATA}
-                options={OPTIONS}
-                // setTableAction={setTableAction}
-            />
-        )
+    test('should download CSV when calling method `handleCSVDownload`', () => {
+        const { result } = setup()
 
         const appendSpy = vi.spyOn(document.body, 'appendChild')
         const removeSpy = vi.spyOn(document.body, 'removeChild')
@@ -590,20 +613,12 @@ describe('<TableToolbar />', function () {
         expect(removeSpy).toHaveBeenCalledOnce()
     })
 
-    test('should trigger onDownload prop callback when calling method handleCSVDownload', () => {
+    test('should trigger onDownload prop callback when calling method `handleCSVDownload`', () => {
         const onDownload = vi.fn()
 
-        const newOptions = { ...OPTIONS, onDownload }
-
-        const result = render(
-            <TableToolbar
-                columns={COLUMNS}
-                displayData={DATA}
-                data={DATA}
-                options={newOptions}
-                // setTableAction={setTableAction}
-            />
-        )
+        const { result } = setup({
+            options: { onDownload }
+        })
 
         const downloadButtons = result.container.querySelectorAll(
             `button[aria-label="${DEFAULT_TEXT_LABELS.toolbar.downloadCsv}"]`
