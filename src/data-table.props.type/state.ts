@@ -20,21 +20,28 @@ type DataTableStateColumn = Omit<
 > & {
     /**
      * Choice of filtering view. Takes priority over global filterType option.
+     *
      * Use 'custom' is you are supplying your own rendering via filterOptions.
-     * @default dropdown
+     *
+     * @default  'dropdown'
+     *
+     * @see  {@link FilterTypeEnum}
      */
     filterType?: FilterTypeEnum
 
     /**
      * Filter value list.
      *
-     * [Example](https://github.com/gregnb/mui-datatables/blob/master/examples/column-filters/index.js)
+     * @see  {@link https://mui-datatable-delight.vercel.app/examples/column-filters|Column Filters Example}.
      */
     filterList?: string[]
 
     /**
      * These options affect the filter display and functionality from the filter dialog.
-     * To modify the filter chip that display after selecting filters, see customFilterListOptions
+     *
+     * To modify the filter chip that display after selecting filters.
+     *
+     * @see  {@link DataTableStateColumnFilterOptions}.
      */
     filterOptions?: DataTableStateColumnFilterOptions
 }
@@ -43,15 +50,16 @@ export interface DataTableStateColumnFilterOptions {
     /**
      * Custom names for the filter fields.
      *
-     * [Example](https://github.com/gregnb/mui-datatables/blob/master/examples/column-filters/index.js)
+     * @see  {@link https://mui-datatable-delight.vercel.app/examples/column-filters|Column Filters Example}.
      */
     names?: string[] | undefined
 
     /**
      * Custom rendering inside the filter dialog.
+     *
      * `filterList` must be of the same type in the main column options, that is an array of arrays, where each array corresponds to the filter list for a given column.
      *
-     * [Example](https://github.com/gregnb/mui-datatables/blob/master/examples/customize-filter/index.js)
+     * @see {@link https://mui-datatable-delight.vercel.app/examples/customize-filter|Customize Filter Example}.
      */
     display?: (
         filterList: DataTableState['filterList'],
@@ -68,7 +76,7 @@ export interface DataTableStateColumnFilterOptions {
     /**
      * custom filter logic.
      *
-     * [Example](https://github.com/gregnb/mui-datatables/blob/master/examples/customize-filter/index.js)
+     * @see {@link https://mui-datatable-delight.vercel.app/examples/customize-filter|Customize Filter Example}.
      */
     logic?:
         | ((prop: string, filterValue: any[], row?: any[]) => boolean)
@@ -76,9 +84,10 @@ export interface DataTableStateColumnFilterOptions {
 
     /**
      * A function to customize filter choices.
-     * Use case: changing empty strings to "(empty)" in a dropdown.
      *
-     * [Example](https://github.com/gregnb/mui-datatables/blob/master/examples/customize-filter/index.js)
+     * Use case: changing empty strings to `"(empty)"` in a dropdown.
+     *
+     * @see {@link https://mui-datatable-delight.vercel.app/examples/customize-filter|Customize Filter Example}.
      */
     renderValue?: ((value: string) => string) | undefined
 
@@ -101,6 +110,7 @@ export interface DataTableState {
     previousSelectedRow: null | { index: number; dataIndex: number }
     rowsPerPage: number
     rowsPerPageOptions: number[]
+    rowsSelected: number[]
     searchText: string | null
     searchProps: React.HTMLAttributes<HTMLInputElement> | null
     selectedRows: MUIDataTableStateRows

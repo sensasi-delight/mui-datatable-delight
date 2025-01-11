@@ -5,7 +5,6 @@ import type {
     MUIDataTableChip,
     MUIDataTableColumn,
     MUIDataTableDraggableColumns,
-    MUIDataTableState,
     MUIDataTableTextLabels,
     MUISortOptions,
     SelectableRows
@@ -56,7 +55,7 @@ export interface DataTableOptions {
 
     /** Add a custom footer to the filter dialog. */
     customFilterDialogFooter?: (
-        filterList: MUIDataTableState['filterList'],
+        filterList: DataTableState['filterList'],
         applyNewFilters?: (...args: any[]) => any
     ) => ReactNode
 
@@ -334,7 +333,7 @@ export interface DataTableOptions {
     /** Callback function that triggers when filters have changed. */
     onFilterChange?: (
         changedColumn: string | MUIDataTableColumn | null,
-        filterList: MUIDataTableState['filterList'],
+        filterList: DataTableState['filterList'],
         type: FilterType | 'chip' | 'reset',
         changedColumnIndex: number,
         displayData: DisplayData
@@ -348,7 +347,7 @@ export interface DataTableOptions {
     onFilterChipClose?: (
         index: number,
         removedFilter: string,
-        filterList: MUIDataTableState['filterList']
+        filterList: DataTableState['filterList']
     ) => void
 
     /**
@@ -358,7 +357,7 @@ export interface DataTableOptions {
      * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/serverside-filters/index.tsx
      */
 
-    onFilterConfirm?: (filterList: MUIDataTableState['filterList']) => void
+    onFilterConfirm?: (filterList: DataTableState['filterList']) => void
 
     /** Callback function that triggers when the filter dialog closes. */
     onFilterDialogClose?: () => void
@@ -410,10 +409,10 @@ export interface DataTableOptions {
     onSearchOpen?: () => void
 
     /** Callback function that triggers when table state has changed. */
-    onTableChange?: (action: string, tableState: MUIDataTableState) => void
+    onTableChange?: (action: string, tableState: DataTableState) => void
 
     /** Callback function that triggers when table state has been initialized. */
-    onTableInit?: (action: string, tableState: MUIDataTableState) => void
+    onTableInit?: (action: string, tableState: DataTableState) => void
 
     /** Callback function that triggers when a column view has been changed. Previously known as onColumnViewChange. */
     onViewColumnsChange?: (changedColumn: string, action: string) => void
