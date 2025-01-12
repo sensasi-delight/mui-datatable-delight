@@ -24,7 +24,7 @@ export function ToolbarPrintButton({
     })
 
     return (
-        <Tooltip title={toolbarTextLabels.print}>
+        <Tooltip title={toolbarTextLabels.print} disableFocusListener>
             <span>
                 <IconButton
                     data-testid={toolbarTextLabels.print + '-iconButton'}

@@ -23,8 +23,6 @@ import { ToolbarDownloadButton } from './toolbar.download-button'
 import { ToolbarViewColProps } from './toolbar.view-col'
 import { ClassName } from '../enums/class-name'
 
-const RESPONSIVE_FULL_WIDTH_NAME = 'scrollFullHeightFullWidth'
-
 /**
  * DataTable Delight Toolbar
  *
@@ -237,45 +235,31 @@ class TableToolbarClass extends React.Component<
 
         return (
             <>
-                <div
-                    className={
-                        options.responsive !== RESPONSIVE_FULL_WIDTH_NAME
-                            ? classes.left
-                            : classes.fullWidthLeft
-                    }
-                >
-                    {showSearch ? (
+                <div className={classes.left}>
+                    {showSearch && (
                         <DataTableToolbarSearch
                             onSearch={this.handleSearch}
                             onHide={this.hideSearch}
                             options={options}
                         />
-                    ) : typeof title !== 'string' ? (
-                        title
-                    ) : (
-                        <div aria-hidden="true">
-                            <Typography
-                                variant="h6"
-                                className={
-                                    options.responsive !==
-                                    RESPONSIVE_FULL_WIDTH_NAME
-                                        ? classes.titleText
-                                        : classes.fullWidthTitleText
-                                }
-                            >
+                    )}
+
+                    <div
+                        style={{
+                            display: showSearch ? 'none' : undefined
+                        }}
+                    >
+                        {title === 'string' ? (
+                            <Typography variant="h6" component="div">
                                 {title}
                             </Typography>
-                        </div>
-                    )}
+                        ) : (
+                            title
+                        )}
+                    </div>
                 </div>
 
-                <div
-                    className={
-                        options.responsive !== RESPONSIVE_FULL_WIDTH_NAME
-                            ? classes.actions
-                            : classes.fullWidthActions
-                    }
-                >
+                <div className={classes.actions}>
                     {!(
                         options.search === false ||
                         options.searchAlwaysOpen === true
@@ -312,32 +296,15 @@ class TableToolbarClass extends React.Component<
                         <ToolbarPopover
                             refExit={() => this.setActiveIcon(null)}
                             hide={options.viewColumns === 'disabled'}
-                            trigger={
-                                <Tooltip
-                                    title={viewColumns}
-                                    disableFocusListener
-                                >
-                                    <IconButton
-                                        data-testid={
-                                            viewColumns + '-iconButton'
-                                        }
-                                        aria-label={viewColumns}
-                                        classes={{
-                                            root: this.getIconClasses(
-                                                'viewColumns'
-                                            )
-                                        }}
-                                        disabled={
-                                            options.viewColumns === 'disabled'
-                                        }
-                                        onClick={() =>
-                                            this.setActiveIcon('viewColumns')
-                                        }
-                                    >
-                                        <ViewColumnIconComponent />
-                                    </IconButton>
-                                </Tooltip>
-                            }
+                            title={viewColumns}
+                            iconButtonProps={{
+                                children: <ViewColumnIconComponent />,
+                                classes: {
+                                    root: this.getIconClasses('viewColumns')
+                                },
+                                disabled: options.viewColumns === 'disabled',
+                                onClick: () => this.setActiveIcon('viewColumns')
+                            }}
                         >
                             <components.TableViewCol
                                 // data={data}
@@ -361,34 +328,15 @@ class TableToolbarClass extends React.Component<
                                     className: classes.filterPaper
                                 }
                             }}
-                            trigger={
-                                <Tooltip
-                                    title={filterTable}
-                                    disableFocusListener
-                                >
-                                    <span>
-                                        <IconButton
-                                            data-testid={
-                                                filterTable + '-iconButton'
-                                            }
-                                            aria-label={filterTable}
-                                            classes={{
-                                                root: this.getIconClasses(
-                                                    'filter'
-                                                )
-                                            }}
-                                            disabled={
-                                                options.filter === 'disabled'
-                                            }
-                                            onClick={() =>
-                                                this.setActiveIcon('filter')
-                                            }
-                                        >
-                                            <FilterIconComponent />
-                                        </IconButton>
-                                    </span>
-                                </Tooltip>
-                            }
+                            title={filterTable}
+                            iconButtonProps={{
+                                children: <FilterIconComponent />,
+                                classes: {
+                                    root: this.getIconClasses('filter')
+                                },
+                                disabled: options.filter === 'disabled',
+                                onClick: () => this.setActiveIcon('filter')
+                            }}
                         >
                             <TableFilterComponent
                                 customFooter={options.customFilterDialogFooter}
@@ -418,64 +366,34 @@ const useStyles = makeStyles({
     name: ClassName.TOOLBAR + '-'
 })((theme: Theme) => ({
     actions: {
-        flex: '1 1 auto',
-        textAlign: 'right',
-
-        [theme.breakpoints.down('sm')]: {
-            textAlign: 'center'
-        }
+        display: 'flex'
     },
     root: {
+        overflowX: 'auto',
+
         '@media print': {
             display: 'none !important'
-        },
-
-        [theme.breakpoints.down('sm')]: {
-            display: 'block'
         }
     },
+
     left: {
         flex: '1 1 auto',
-        [theme.breakpoints.down('md')]: {
-            padding: '8px 0px'
-        },
-
-        [theme.breakpoints.down('sm')]: {
-            padding: '8px 0px 0px 0px'
-        }
+        minWidth: '16em'
     },
 
-    fullWidthLeft: {
-        flex: '1 1 auto'
-    },
-    fullWidthActions: {
-        flex: '1 1 auto',
-        textAlign: 'right'
-    },
-    titleText: {
-        fontSize: '16px',
-
-        [theme.breakpoints.down('sm')]: {
-            textAlign: 'center'
-        }
-    },
-    fullWidthTitleText: {
-        textAlign: 'left'
-    },
     icon: {
         '&:hover': {
             color: theme.palette.primary.main
         }
     },
+
     iconActive: {
         color: theme.palette.primary.main
     },
+
     filterPaper: {
-        maxWidth: '50%'
-    },
-    searchIcon: {
-        display: 'inline-flex',
-        marginTop: '10px',
-        marginRight: '8px'
+        [theme.breakpoints.up('sm')]: {
+            maxWidth: '50%'
+        }
     }
 }))

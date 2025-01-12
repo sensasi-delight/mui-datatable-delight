@@ -2,10 +2,10 @@
 import { IconButton, Tooltip } from '@mui/material'
 // locals
 import type { DataTableOptions } from '../data-table.props.type/options'
+import type { DataTableState } from '../data-table.props.type/state'
 import { useMainContext } from '../hooks/use-main-context'
 import { ICON_BUTTON_DEFAULT_SX } from './toolbar.icon-button-default-sx'
 import { createCsvDownload } from './toolbar.functions.create-csv-download'
-import { DataTableState } from '../data-table.props.type/state'
 
 export function ToolbarDownloadButton({
     options
@@ -19,7 +19,7 @@ export function ToolbarDownloadButton({
     } = useMainContext()
 
     return (
-        <Tooltip title={toolbarTextLabels.downloadCsv}>
+        <Tooltip title={toolbarTextLabels.downloadCsv} disableFocusListener>
             <span>
                 <IconButton
                     aria-label={toolbarTextLabels.downloadCsv}
