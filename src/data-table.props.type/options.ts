@@ -10,6 +10,7 @@ import type {
 import type { ReactNode } from 'react'
 import type { DataTableState } from './state'
 import type { DataTableColumnObjectOptions, FilterTypeEnum } from './columns'
+import type { FilterTypeType } from './shared/filter-type-type'
 
 export interface DataTableSortOrderOption {
     name: string
@@ -261,8 +262,16 @@ export interface DataTableOptions {
      */
     filterArrayFullMatch?: boolean
 
-    /** Choice of filtering view. */
-    filterType?: FilterTypeEnum
+    /**
+     * Choice of filtering view. Takes priority over global filterType option.
+     *
+     * Use 'custom' is you are supplying your own rendering via filterOptions.
+     *
+     * @default  'dropdown'
+     *
+     * @see  {@link FilterTypeType}
+     */
+    filterType?: FilterTypeType
 
     /**
      * Enable/disable a fixed header for the table
@@ -806,13 +815,6 @@ export interface DataTableOptions {
 //         }),
 //         filter: PropTypes.oneOf([true, false, 'true', 'false', 'disabled']),
 //         filterArrayFullMatch: PropTypes.bool,
-//         filterType: PropTypes.oneOf([
-//             'dropdown',
-//             'checkbox',
-//             'multiselect',
-//             'textField',
-//             'custom'
-//         ]),
 //         fixedHeader: PropTypes.bool,
 //         fixedSelectColumn: PropTypes.bool,
 //         getTextLabels: PropTypes.func,
