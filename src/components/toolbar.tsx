@@ -88,7 +88,7 @@ class TableToolbarClass extends React.Component<
         ),
         searchText: this.props.searchText || null,
         prevIconActive: null,
-        hideFilterPopover: true
+        hideFilterPopover: false
     }
 
     componentDidUpdate(prevProps: TEMPORARY_CLASS_PROP_TYPE) {
