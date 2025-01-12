@@ -1,12 +1,16 @@
 import React from 'react'
 import type { DataTableProps } from '../data-table.props.type'
-import type { DataTableOptions } from '../data-table.props.type/options'
+import type {
+    DataTableOptions,
+    DataTableSortOrderOption
+} from '../data-table.props.type/options'
 import type { DataTableState } from '../data-table.props.type/state'
 import { cloneDeep } from './clone-deep'
 import { getCollatorComparator } from './get-collator-comparator'
 import { transformData } from './transform-data'
-import { sortCompare } from './sort-compare'
+import { sortCompare as defaultSortCompare } from './sort-compare'
 import { buildMap } from './build-map'
+import { warnDeprecated } from './warn-deprecated'
 
 enum TABLE_LOAD {
     INITIAL = 1,
@@ -44,8 +48,8 @@ function buildColumns(
     prevColumnOrder: DataTableState['columnOrder'] = []
 ) {
     const columnData: DataTableState['columns'] = []
-    let filterData = []
-    let filterList = []
+    let filterData: DataTableState['filterData'] = []
+    let filterList: DataTableState['filterList'] = []
     let columnOrder: number[] = []
 
     newColumns.forEach((column, colIndex) => {
@@ -155,55 +159,60 @@ function getTableMeta(
 }
 
 export function sortTable(
-    data,
-    col,
-    order,
-    columnSortCompare = null,
+    data: DataTableState['data'],
+    col: number,
+    order: DataTableSortOrderOption['direction'],
+    column: DataTableState['columns'][0],
     options: DataTableOptions,
     state: DataTableState
 ) {
-    const hasCustomTableSort = options.customSort && !columnSortCompare
-    let meta = { selectedRows: state.selectedRows } // meta for customSort
-    let dataSrc = hasCustomTableSort
-        ? options.customSort(
+    const isSortByCustomSortOption = options.customSort && !column.sortCompare
+
+    const meta = { selectedRows: state.selectedRows } // meta for customSort
+
+    const dataSrc = isSortByCustomSortOption
+        ? options.customSort?.(
               data,
               col,
-              order ?? (options.sortDescFirst ? 'desc' : 'asc'),
+              order ?? (column.sortDescFirst ? 'desc' : 'asc'),
               meta
           )
         : data
 
     // reset the order by index
     let noSortData
+
     if (order === 'none') {
         noSortData = data.reduce((r, i) => {
             r[i.index] = i
+
             return r
         }, [])
     }
 
-    let sortedData = dataSrc.map((row, sIndex) => ({
-        data: row.data[col],
-        rowData: row.data,
-        position: sIndex,
-        rowSelected: state.selectedRows.lookup[row.index] ? true : false
-    }))
+    const sortedData =
+        dataSrc?.map((row, sIndex) => ({
+            data: row.data[col],
+            rowData: row.data,
+            position: sIndex,
+            rowSelected: state.selectedRows.lookup[row.index] ? true : false
+        })) ?? []
 
-    if (!hasCustomTableSort) {
-        const sortFn = columnSortCompare ?? sortCompare
-        sortedData.sort(sortFn(order))
+    if (!isSortByCustomSortOption) {
+        const sortCompareFn = column.sortCompare ?? defaultSortCompare
+        sortedData.sort(sortCompareFn(order))
     }
 
-    let tableData = []
-    let selectedRows = []
+    const tableData = []
+    const selectedRows = []
 
     for (let i = 0; i < sortedData.length; i++) {
         const row = sortedData[i]
-        tableData.push(dataSrc[row.position])
+        tableData.push(dataSrc?.[row.position])
         if (row.rowSelected) {
             selectedRows.push({
                 index: i,
-                dataIndex: dataSrc[row.position].index
+                dataIndex: dataSrc?.[row.position].index
             })
         }
     }
@@ -495,33 +504,8 @@ export function getNewStateOnDataChange(
 
     let sortIndex = null
     let sortDirection = 'none'
-    let sortOrder
 
     let tableMeta
-
-    if (
-        options.sortOrder &&
-        options.sortOrder.direction &&
-        options.sortOrder.name
-    ) {
-        sortOrder = Object.assign({}, options.sortOrder)
-    } else {
-        sortOrder = Object.assign({}, state.sortOrder)
-
-        // if no sortOrder, check and see if there's a sortDirection on one of the columns (deprecation notice for this is given above)
-        if (!sortOrder.direction) {
-            props.columns.forEach(column => {
-                if (
-                    column.options &&
-                    (column.options.sortDirection === 'asc' ||
-                        column.options.sortDirection === 'desc')
-                ) {
-                    sortOrder.name = column.name
-                    sortOrder.sortDirection = column.sortDirection
-                }
-            })
-        }
-    }
 
     const data =
         status === TABLE_LOAD.INITIAL
@@ -530,6 +514,7 @@ export function getNewStateOnDataChange(
 
     const rowsPerPage = options.rowsPerPage ?? state.rowsPerPage
     const page = options.page ?? state.page
+    const sortOrder = options.sortOrder ?? state.sortOrder
 
     let tableData = []
 
@@ -638,8 +623,8 @@ export function getNewStateOnDataChange(
             filterData[colIndex].sort(comparator)
         }
 
-        if (column.name === sortOrder.name) {
-            sortDirection = sortOrder.direction
+        if (column.name === sortOrder?.name) {
+            sortDirection = sortOrder?.direction
             sortIndex = colIndex
         }
     })
