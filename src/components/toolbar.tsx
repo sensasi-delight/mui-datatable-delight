@@ -1,6 +1,6 @@
 // vendors
 import { makeStyles } from 'tss-react/mui'
-import React, { type RefObject } from 'react'
+import { useState, type RefObject } from 'react'
 // materials
 import {
     IconButton,
@@ -8,20 +8,20 @@ import {
     Theme,
     Typography
 } from '@mui/material'
-// locals
+// locals datatables
 import {
-    DataTableToolbarFilter,
-    DataTableToolbarFilterProps
-} from './toolbar.filter'
-import { DataTableToolbarSearch } from './toolbar.search'
-import { DataTableOptions, TableAction } from '../data-table.props.type/options'
+    type DataTableOptions,
+    TableAction
+} from '../data-table.props.type/options'
 import { useMainContext } from '../hooks/use-main-context'
-// internals
+import { ClassName } from '../enums/class-name'
+// toolbar internals
+import type { DataTableToolbarFilterProps } from './toolbar.filter'
+import type { ToolbarViewColProps } from './toolbar.view-col'
+import { DataTableToolbarSearch } from './toolbar.search'
 import { ToolbarPopover } from './toolbar.popover'
 import { ToolbarPrintButton } from './toolbar.print-button'
 import { ToolbarDownloadButton } from './toolbar.download-button'
-import { ToolbarViewColProps } from './toolbar.view-col'
-import { ClassName } from '../enums/class-name'
 
 /**
  * DataTable Delight Toolbar
@@ -31,17 +31,237 @@ import { ClassName } from '../enums/class-name'
  *
  * @see {@link http://mui-datatable-delight.vercel.app/examples/customize-toolbar|Customize Toolbar Example}.
  */
-export default function TableToolbar(props: ToolbarProps) {
-    const context = useMainContext()
+export default function TableToolbar({ options, ...props }: ToolbarProps) {
+    const {
+        state,
+        components,
+        textLabels: { toolbar: toolbarTextLabels },
+        icons
+    } = useMainContext()
     const { classes } = useStyles()
 
+    const [showSearch, setShowSearch] = useState(
+        Boolean(
+            props.searchText ||
+                options.searchText ||
+                options.searchOpen ||
+                options.searchAlwaysOpen
+        )
+    )
+
+    const [searchText, setSearchText] = useState<string | undefined>(
+        props.searchText
+    )
+    const [activeIcon, _setActiveIcon] = useState<
+        'search' | 'filter' | 'viewColumns'
+    >()
+
+    function setActiveIcon(iconName: typeof activeIcon) {
+        if (iconName === 'filter') {
+            props.setTableAction(TableAction.ON_FILTER_DIALOG_OPEN)
+            options.onFilterDialogOpen?.()
+        }
+
+        if (!iconName && activeIcon === 'filter') {
+            props.setTableAction(TableAction.ON_FILTER_DIALOG_CLOSE)
+            options.onFilterDialogClose?.()
+        }
+
+        _setActiveIcon(iconName)
+        setShowSearch(isSearchShown(iconName))
+    }
+
+    function handleSearch(value: string) {
+        setSearchText(value)
+        props.searchTextUpdate(value)
+    }
+
+    function hideSearch() {
+        props.setTableAction(TableAction.ON_SEARCH_CLOSE)
+        options?.onSearchClose?.()
+        props.searchClose()
+
+        setActiveIcon(undefined)
+        setShowSearch(false)
+        setSearchText(undefined)
+    }
+
+    function getIconClasses(
+        iconName: 'search' | 'filter' | 'viewColumns' | undefined
+    ) {
+        const isActive =
+            iconName === 'search'
+                ? Boolean(showSearch || searchText)
+                : activeIcon === iconName
+
+        return isActive ? classes.iconActive : classes.icon
+    }
+
+    function handleSearchIconClick() {
+        if (showSearch && !searchText) {
+            hideSearch()
+        } else {
+            setActiveIcon('search')
+        }
+    }
+
+    function isSearchShown(iconName: typeof activeIcon) {
+        if (options.searchAlwaysOpen) {
+            return true
+        }
+
+        let nextVal = false
+
+        if (showSearch) {
+            if (searchText) {
+                nextVal = true
+            } else {
+                props.setTableAction(TableAction.ON_SEARCH_CLOSE)
+                options.onSearchClose?.()
+                nextVal = false
+            }
+        } else if (iconName === 'search') {
+            props.setTableAction(TableAction.ON_SEARCH_OPEN)
+            options.onSearchOpen?.()
+
+            nextVal = true
+        }
+
+        return nextVal
+    }
+
+    const [isDialogFilterOpen, setIsDialogFilterOpen] = useState(false)
+
     return (
-        <VendorToolbar
-            className={classes.root}
-            role="toolbar"
-            aria-label="Table Toolbar"
-        >
-            <TableToolbarClass {...props} classes={classes} context={context} />
+        <VendorToolbar className={classes.root} role="table toolbar">
+            <div className={classes.left}>
+                {showSearch && (
+                    <DataTableToolbarSearch
+                        onSearch={handleSearch}
+                        onHide={hideSearch}
+                        options={options}
+                    />
+                )}
+
+                <div
+                    style={{
+                        display: showSearch ? 'none' : undefined
+                    }}
+                >
+                    {props.title === 'string' ? (
+                        <Typography variant="h6" component="div">
+                            {props.title}
+                        </Typography>
+                    ) : (
+                        props.title
+                    )}
+                </div>
+            </div>
+
+            <div className={classes.actions}>
+                {!(
+                    options.search === false ||
+                    options.searchAlwaysOpen === true
+                ) && (
+                    <components.Tooltip
+                        title={toolbarTextLabels.search}
+                        disableFocusListener
+                    >
+                        <span>
+                            <IconButton
+                                aria-label={toolbarTextLabels.search}
+                                classes={{
+                                    root: getIconClasses('search')
+                                }}
+                                disabled={options.search === 'disabled'}
+                                onClick={handleSearchIconClick}
+                            >
+                                <icons.SearchIcon />
+                            </IconButton>
+                        </span>
+                    </components.Tooltip>
+                )}
+
+                {options.download && (
+                    <ToolbarDownloadButton options={options} />
+                )}
+
+                {options.print && (
+                    <ToolbarPrintButton
+                        options={options}
+                        printContent={props.tableRef}
+                    />
+                )}
+
+                {options.viewColumns && (
+                    <ToolbarPopover
+                        hide={options.viewColumns === 'disabled'}
+                        iconButtonProps={{
+                            children: <icons.ViewColumnIcon />,
+                            classes: {
+                                root: getIconClasses('viewColumns')
+                            },
+                            disabled: options.viewColumns === 'disabled',
+                            onClick: () => setActiveIcon('viewColumns')
+                        }}
+                        onPopoverExited={() => setActiveIcon(undefined)}
+                        title={toolbarTextLabels.viewColumns}
+                    >
+                        <components.TableViewCol
+                            // data={data}
+                            columns={state.columns}
+                            // options={options}
+                            onColumnUpdate={props.toggleViewColumn}
+                            // updateColumns={updateColumns}
+                        />
+                    </ToolbarPopover>
+                )}
+
+                {options.filter && (
+                    <ToolbarPopover
+                        hide={
+                            isDialogFilterOpen || options.filter === 'disabled'
+                        }
+                        iconButtonProps={{
+                            children: <icons.FilterIcon />,
+                            classes: {
+                                root: getIconClasses('filter')
+                            },
+                            disabled: options.filter === 'disabled',
+                            onClick: () => setActiveIcon('filter')
+                        }}
+                        onPopoverExited={() => {
+                            setIsDialogFilterOpen(false)
+                            setActiveIcon(undefined)
+                        }}
+                        slotProps={{
+                            paper: {
+                                className: classes.filterPaper
+                            }
+                        }}
+                        title={toolbarTextLabels.filterTable}
+                    >
+                        <components.TableFilter
+                            customFooter={options.customFilterDialogFooter}
+                            columns={state.columns}
+                            options={options}
+                            filterList={state.filterList}
+                            filterData={state.filterData}
+                            onFilterUpdate={props.filterUpdate}
+                            onFilterReset={props.resetFilters}
+                            handleClose={() => {
+                                setIsDialogFilterOpen(false)
+                            }}
+                            updateFilterByType={props.updateFilterByType}
+                        />
+                    </ToolbarPopover>
+                )}
+
+                {options.customToolbar &&
+                    options.customToolbar({
+                        displayData: state.displayData
+                    })}
+            </div>
         </VendorToolbar>
     )
 }
@@ -58,308 +278,6 @@ interface ToolbarProps {
     title: string
     toggleViewColumn: ToolbarViewColProps['onColumnUpdate']
     updateFilterByType: DataTableToolbarFilterProps['updateFilterByType']
-}
-
-type TEMPORARY_CLASS_PROP_TYPE = ToolbarProps & {
-    classes: ReturnType<typeof useStyles>['classes']
-
-    context: ReturnType<typeof useMainContext>
-}
-
-class TableToolbarClass extends React.Component<
-    TEMPORARY_CLASS_PROP_TYPE,
-    {
-        iconActive: null | 'search' | 'filter' | 'viewColumns'
-        showSearch: boolean
-        searchText: null | string
-        prevIconActive: null | string
-        hideFilterPopover: boolean
-    }
-> {
-    state = {
-        iconActive: null,
-        showSearch: Boolean(
-            this.props.searchText ||
-                this.props.options.searchText ||
-                this.props.options.searchOpen ||
-                this.props.options.searchAlwaysOpen
-        ),
-        searchText: this.props.searchText || null,
-        prevIconActive: null,
-        hideFilterPopover: false
-    }
-
-    componentDidUpdate(prevProps: TEMPORARY_CLASS_PROP_TYPE) {
-        if (this.props.searchText !== prevProps.searchText) {
-            this.setState({ searchText: this.props.searchText })
-        }
-    }
-
-    setActiveIcon = (iconName: 'search' | 'filter' | 'viewColumns' | null) => {
-        this.setState(
-            prevState => ({
-                showSearch: this.isSearchShown(iconName),
-                iconActive: iconName,
-                prevIconActive: prevState.iconActive
-            }),
-            () => {
-                const { iconActive, prevIconActive } = this.state
-
-                if (iconActive === 'filter') {
-                    this.props.setTableAction(TableAction.ON_FILTER_DIALOG_OPEN)
-                    this.props.options.onFilterDialogOpen?.()
-                }
-
-                if (iconActive === null && prevIconActive === 'filter') {
-                    this.props.setTableAction(
-                        TableAction.ON_FILTER_DIALOG_CLOSE
-                    )
-                    this.props.options.onFilterDialogClose?.()
-                }
-            }
-        )
-    }
-
-    isSearchShown = (iconName: 'search' | 'filter' | 'viewColumns' | null) => {
-        if (this.props.options.searchAlwaysOpen) {
-            return true
-        }
-
-        let nextVal = false
-
-        if (this.state.showSearch) {
-            if (this.state.searchText) {
-                nextVal = true
-            } else {
-                const { onSearchClose } = this.props.options
-                this.props.setTableAction(TableAction.ON_SEARCH_CLOSE)
-                if (onSearchClose) onSearchClose()
-                nextVal = false
-            }
-        } else if (iconName === 'search') {
-            nextVal = this.showSearch()
-        }
-
-        return nextVal
-    }
-
-    getIconClasses = (
-        iconName: 'search' | 'filter' | 'viewColumns' | undefined
-    ) => {
-        let isActive = this.state.iconActive === iconName
-
-        if (iconName === 'search') {
-            const { showSearch, searchText } = this.state
-
-            isActive = Boolean(isActive || showSearch || searchText)
-        }
-
-        return isActive
-            ? this.props.classes.iconActive
-            : this.props.classes.icon
-    }
-
-    showSearch = () => {
-        this.props.setTableAction(TableAction.ON_SEARCH_OPEN)
-        !!this.props.options.onSearchOpen && this.props.options.onSearchOpen()
-        return true
-    }
-
-    hideSearch = () => {
-        this.props.setTableAction(TableAction.ON_SEARCH_CLOSE)
-
-        this.props.options?.onSearchClose?.()
-
-        this.props.searchClose()
-
-        this.setState(() => ({
-            iconActive: null,
-            showSearch: false,
-            searchText: null
-        }))
-    }
-
-    handleSearch = (value: string) => {
-        this.setState({ searchText: value })
-        this.props.searchTextUpdate(value)
-    }
-
-    handleSearchIconClick = () => {
-        const { showSearch, searchText } = this.state
-        if (showSearch && !searchText) {
-            this.hideSearch()
-        } else {
-            this.setActiveIcon('search')
-        }
-    }
-
-    render() {
-        const {
-            options,
-            classes,
-            filterUpdate,
-            resetFilters,
-            toggleViewColumn,
-            title,
-            updateFilterByType
-        } = this.props
-
-        const {
-            components,
-            icons,
-            state: { columns, filterData, filterList }
-        } = this.props.context
-
-        /**
-         * @todo REMOVE THIS COMPONENT VARIABLES
-         */
-        const Tooltip = components.Tooltip
-        const TableFilterComponent =
-            components.TableFilter ?? DataTableToolbarFilter
-        const SearchIconComponent = icons.SearchIcon
-        const ViewColumnIconComponent = icons.ViewColumnIcon
-        const FilterIconComponent = icons.FilterIcon
-
-        const { search, viewColumns, filterTable } =
-            this.props.context.textLabels.toolbar
-        const { showSearch } = this.state
-
-        const filterPopoverExit = () => {
-            this.setState({ hideFilterPopover: false })
-            this.setActiveIcon(null)
-        }
-
-        const closeFilterPopover = () => {
-            this.setState({ hideFilterPopover: true })
-        }
-
-        return (
-            <>
-                <div className={classes.left}>
-                    {showSearch && (
-                        <DataTableToolbarSearch
-                            onSearch={this.handleSearch}
-                            onHide={this.hideSearch}
-                            options={options}
-                        />
-                    )}
-
-                    <div
-                        style={{
-                            display: showSearch ? 'none' : undefined
-                        }}
-                    >
-                        {title === 'string' ? (
-                            <Typography variant="h6" component="div">
-                                {title}
-                            </Typography>
-                        ) : (
-                            title
-                        )}
-                    </div>
-                </div>
-
-                <div className={classes.actions}>
-                    {!(
-                        options.search === false ||
-                        options.searchAlwaysOpen === true
-                    ) && (
-                        <Tooltip title={search} disableFocusListener>
-                            <span>
-                                <IconButton
-                                    aria-label={search}
-                                    data-testid={search + '-iconButton'}
-                                    classes={{
-                                        root: this.getIconClasses('search')
-                                    }}
-                                    disabled={options.search === 'disabled'}
-                                    onClick={this.handleSearchIconClick}
-                                >
-                                    <SearchIconComponent />
-                                </IconButton>
-                            </span>
-                        </Tooltip>
-                    )}
-
-                    {options.download && (
-                        <ToolbarDownloadButton options={options} />
-                    )}
-
-                    {options.print && (
-                        <ToolbarPrintButton
-                            options={options}
-                            printContent={this.props.tableRef}
-                        />
-                    )}
-
-                    {options.viewColumns && (
-                        <ToolbarPopover
-                            refExit={() => this.setActiveIcon(null)}
-                            hide={options.viewColumns === 'disabled'}
-                            title={viewColumns}
-                            iconButtonProps={{
-                                children: <ViewColumnIconComponent />,
-                                classes: {
-                                    root: this.getIconClasses('viewColumns')
-                                },
-                                disabled: options.viewColumns === 'disabled',
-                                onClick: () => this.setActiveIcon('viewColumns')
-                            }}
-                        >
-                            <components.TableViewCol
-                                // data={data}
-                                columns={columns}
-                                // options={options}
-                                onColumnUpdate={toggleViewColumn}
-                                // updateColumns={updateColumns}
-                            />
-                        </ToolbarPopover>
-                    )}
-
-                    {options.filter && (
-                        <ToolbarPopover
-                            refExit={filterPopoverExit}
-                            hide={
-                                this.state.hideFilterPopover ||
-                                options.filter === 'disabled'
-                            }
-                            slotProps={{
-                                paper: {
-                                    className: classes.filterPaper
-                                }
-                            }}
-                            title={filterTable}
-                            iconButtonProps={{
-                                children: <FilterIconComponent />,
-                                classes: {
-                                    root: this.getIconClasses('filter')
-                                },
-                                disabled: options.filter === 'disabled',
-                                onClick: () => this.setActiveIcon('filter')
-                            }}
-                        >
-                            <TableFilterComponent
-                                customFooter={options.customFilterDialogFooter}
-                                columns={columns}
-                                options={options}
-                                filterList={filterList}
-                                filterData={filterData}
-                                onFilterUpdate={filterUpdate}
-                                onFilterReset={resetFilters}
-                                handleClose={closeFilterPopover}
-                                updateFilterByType={updateFilterByType}
-                            />
-                        </ToolbarPopover>
-                    )}
-
-                    {options.customToolbar &&
-                        options.customToolbar({
-                            displayData: this.props.context.state.displayData
-                        })}
-                </div>
-            </>
-        )
-    }
 }
 
 const useStyles = makeStyles({

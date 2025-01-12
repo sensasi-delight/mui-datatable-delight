@@ -3,12 +3,13 @@ import MuiPopover, { PopoverProps } from '@mui/material/Popover'
 import IconButton, { IconButtonProps } from '@mui/material/IconButton'
 import CloseIcon from '@mui/icons-material/Close'
 import { Tooltip as VendorTooltip } from '@mui/material'
+import { TransitionProps } from '@mui/material/transitions'
 
 export function ToolbarPopover({
     children,
     hide,
     iconButtonProps,
-    refExit,
+    onPopoverExited,
     slotProps,
     title
 }: ToolbarPopoverProps) {
@@ -26,12 +27,6 @@ export function ToolbarPopover({
 
     const handleRequestClose = () => {
         open(false)
-    }
-
-    const handleOnExit = () => {
-        if (refExit) {
-            refExit()
-        }
     }
 
     function handleTriggerClick(
@@ -62,7 +57,7 @@ export function ToolbarPopover({
             <MuiPopover
                 elevation={2}
                 open={isOpen}
-                TransitionProps={{ onExited: handleOnExit }}
+                TransitionProps={{ onExited: onPopoverExited }}
                 onClose={handleRequestClose}
                 anchorEl={anchorEl.current}
                 anchorOrigin={{
@@ -97,7 +92,7 @@ interface ToolbarPopoverProps {
     children: ReactNode
     hide: boolean
     iconButtonProps: IconButtonProps
-    refExit: () => void
+    onPopoverExited: TransitionProps['onExited']
     slotProps?: PopoverProps['slotProps']
     title: string
 }
