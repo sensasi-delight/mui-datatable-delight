@@ -162,11 +162,11 @@ export function sortTable(
     data: DataTableState['data'],
     col: number,
     order: DataTableSortOrderOption['direction'],
-    column: DataTableState['columns'][0],
+    column: DataTableState['columns'][0] | undefined,
     options: DataTableOptions,
     state: DataTableState
 ) {
-    const isSortByCustomSortOption = options.customSort && !column.sortCompare
+    const isSortByCustomSortOption = options.customSort && !column?.sortCompare
 
     const meta = { selectedRows: state.selectedRows } // meta for customSort
 
@@ -174,7 +174,7 @@ export function sortTable(
         ? options.customSort?.(
               data,
               col,
-              order ?? (column.sortDescFirst ? 'desc' : 'asc'),
+              order ?? (column?.sortDescFirst ? 'desc' : 'asc'),
               meta
           )
         : data
@@ -199,7 +199,7 @@ export function sortTable(
         })) ?? []
 
     if (!isSortByCustomSortOption) {
-        const sortCompareFn = column.sortCompare ?? defaultSortCompare
+        const sortCompareFn = column?.sortCompare ?? defaultSortCompare
         sortedData.sort(sortCompareFn(order))
     }
 
