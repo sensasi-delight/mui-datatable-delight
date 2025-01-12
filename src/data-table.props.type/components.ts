@@ -3,7 +3,7 @@ import { Checkbox, Tooltip } from '@mui/material'
 // locals
 import { DataTableBody } from '../components/body'
 import { DataTableToolbarFilter } from '../components/toolbar.filter'
-import TableFilterList from '../components/filter-list'
+import { TableFilterList } from '../components/filter-list'
 import TableFooter from '../components/footer'
 import ExpandButton from '../components/components.shared/select-cell.expand-button'
 import { TableToolbarSelect } from '../components/toolbar-select'
