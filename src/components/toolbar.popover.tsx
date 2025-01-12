@@ -1,14 +1,16 @@
 import { ReactNode, useEffect, useRef, useState } from 'react'
 import MuiPopover, { PopoverProps } from '@mui/material/Popover'
-import IconButton from '@mui/material/IconButton'
+import IconButton, { IconButtonProps } from '@mui/material/IconButton'
 import CloseIcon from '@mui/icons-material/Close'
+import { Tooltip as VendorTooltip } from '@mui/material'
 
 export function ToolbarPopover({
     children,
-    trigger,
-    refExit,
     hide,
-    slotProps
+    iconButtonProps,
+    refExit,
+    slotProps,
+    title
 }: ToolbarPopoverProps) {
     const [isOpen, open] = useState(false)
     const anchorEl = useRef<EventTarget & HTMLSpanElement>(null)
@@ -34,25 +36,28 @@ export function ToolbarPopover({
 
     function handleTriggerClick(
         event:
-            | React.KeyboardEvent<HTMLSpanElement>
-            | React.MouseEvent<HTMLSpanElement>
+            | React.KeyboardEvent<HTMLButtonElement>
+            | React.MouseEvent<HTMLButtonElement>
     ) {
         anchorEl.current = event.currentTarget
+
+        iconButtonProps.onClick?.(event as React.MouseEvent<HTMLButtonElement>)
 
         open(true)
     }
 
     return (
         <>
-            <span
-                key="content"
-                onClick={handleTriggerClick}
-                onKeyDown={handleTriggerClick}
-                role="button"
-                tabIndex={0}
-            >
-                {trigger}
-            </span>
+            <VendorTooltip title={title} disableFocusListener>
+                <span>
+                    <IconButton
+                        aria-label={title}
+                        {...iconButtonProps}
+                        onClick={handleTriggerClick}
+                        onKeyDown={handleTriggerClick}
+                    />
+                </span>
+            </VendorTooltip>
 
             <MuiPopover
                 elevation={2}
@@ -90,8 +95,9 @@ export function ToolbarPopover({
 
 interface ToolbarPopoverProps {
     children: ReactNode
-    refExit: () => void
-    trigger: ReactNode
     hide: boolean
+    iconButtonProps: IconButtonProps
+    refExit: () => void
     slotProps?: PopoverProps['slotProps']
+    title: string
 }
