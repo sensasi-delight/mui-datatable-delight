@@ -58,13 +58,6 @@ export function DataTableTableSelectCell({
         [classes.hide]: isHeaderCell && !expandableRowsHeader
     })
 
-    let refProp = {}
-    if (setHeadCellRef) {
-        refProp.ref = el => {
-            setHeadCellRef(0, 0, el)
-        }
-    }
-
     const renderCheckBox = () => {
         if (
             isHeaderCell &&
@@ -99,7 +92,9 @@ export function DataTableTableSelectCell({
             sx={{
                 bgcolor: isHeaderCell ? 'background.paper' : undefined
             }}
-            {...refProp}
+            ref={el => {
+                setHeadCellRef?.(0, 0, el)
+            }}
         >
             <div style={{ display: 'flex', alignItems: 'center' }}>
                 {expandableOn && (
