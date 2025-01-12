@@ -9,22 +9,19 @@ import {
     Typography
 } from '@mui/material'
 // locals
-import { createCsvDownload } from './toolbar.functions.create-csv-download'
 import {
     DataTableToolbarFilter,
     DataTableToolbarFilterProps
 } from './toolbar.filter'
 import { DataTableToolbarSearch } from './toolbar.search'
-import { DataTableOptions } from '../data-table.props.type/options'
-import { DataTableState } from '../data-table.props.type/state'
+import { DataTableOptions, TableAction } from '../data-table.props.type/options'
 import { useMainContext } from '../hooks/use-main-context'
 // internals
 import { ToolbarPopover } from './toolbar.popover'
 import { ToolbarPrintButton } from './toolbar.print-button'
 import { ToolbarDownloadButton } from './toolbar.download-button'
 import { ToolbarViewColProps } from './toolbar.view-col'
-
-const CLASS_ID = 'datatable-delight--toolbar'
+import { ClassName } from '../enums/class-name'
 
 const RESPONSIVE_FULL_WIDTH_NAME = 'scrollFullHeightFullWidth'
 
@@ -34,21 +31,15 @@ const RESPONSIVE_FULL_WIDTH_NAME = 'scrollFullHeightFullWidth'
  * @todo rename this to `<Toolbar />
  * @todo use named export instead default
  *
- * @see [Customize Example](http://mui-datatable-delight.vercel.app/examples/customize-toolbar)
- * @see [Customize Icons Example](http://mui-datatable-delight.vercel.app/examples/customize-toolbar)
+ * @see {@link http://mui-datatable-delight.vercel.app/examples/customize-toolbar|Customize Toolbar Example}.
  */
 export default function TableToolbar(props: ToolbarProps) {
     const context = useMainContext()
-    const { classes, cx } = useStyles()
+    const { classes } = useStyles()
 
     return (
         <VendorToolbar
-            className={cx(
-                CLASS_ID,
-                props.options.responsive !== RESPONSIVE_FULL_WIDTH_NAME
-                    ? classes.root
-                    : classes.fullWidthRoot
-            )}
+            className={classes.root}
             role="toolbar"
             aria-label="Table Toolbar"
         >
@@ -58,23 +49,16 @@ export default function TableToolbar(props: ToolbarProps) {
 }
 
 interface ToolbarProps {
-    data: DataTableState['data']
-    columns: DataTableState['columns']
-    columnOrder: DataTableState['columnOrder']
-    displayData: DataTableState['displayData']
-    options: DataTableOptions
-    searchText: string
-    tableRef: RefObject<HTMLTableElement>
-    setTableAction: (action: string) => void
-    searchTextUpdate: (searchText: string) => void
-    searchClose: () => void
-
-    filterData: DataTableState['filterData']
-    filterList: DataTableState['filterList']
     filterUpdate: DataTableToolbarFilterProps['onFilterUpdate']
+    options: DataTableOptions
     resetFilters: DataTableToolbarFilterProps['onFilterReset']
-    toggleViewColumn: ToolbarViewColProps['onColumnUpdate']
+    searchClose: () => void
+    searchText: string
+    searchTextUpdate: (searchText: string) => void
+    setTableAction: (action: TableAction) => void
+    tableRef: RefObject<HTMLTableElement>
     title: string
+    toggleViewColumn: ToolbarViewColProps['onColumnUpdate']
     updateFilterByType: DataTableToolbarFilterProps['updateFilterByType']
 }
 
@@ -113,79 +97,6 @@ class TableToolbarClass extends React.Component<
         }
     }
 
-    /**
-     * @todo MOVE THIS TO <ToolbarDownloadButton />
-     */
-    handleCSVDownload = () => {
-        const { data, displayData, columns, options, columnOrder } = this.props
-
-        const columnOrderCopy = Array.isArray(columnOrder)
-            ? columnOrder.slice(0).map((_, idx) => idx)
-            : []
-
-        let columnsToDownload = columnOrderCopy.map(idx => columns[idx])
-        let dataToDownload = data.map(row => ({
-            index: row.index,
-            data: columnOrderCopy.map(idx => row.data[idx])
-        }))
-
-        // check rows first:
-        if (options.downloadOptions?.filterOptions?.useDisplayedRowsOnly) {
-            const filteredDataToDownload = displayData.map((row, index) => {
-                let i = -1
-
-                return {
-                    index, // Help to preserve sort order in custom render columns
-                    data: row.data.map(column => {
-                        i += 1
-
-                        /**
-                         * if we have a custom render, which will appear as a react element, we must grab the actual value from data that matches the dataIndex and column
-                         * @todo Create a utility function for checking whether or not something is a react object
-                         */
-                        let val =
-                            typeof column === 'object' &&
-                            column !== null &&
-                            !Array.isArray(column)
-                                ? data.find(d => d.index === row.dataIndex)
-                                      ?.data[i]
-                                : column
-
-                        val =
-                            typeof val === 'function'
-                                ? data.find(d => d.index === row.dataIndex)
-                                      ?.data[i]
-                                : val
-
-                        return val
-                    })
-                }
-            })
-
-            dataToDownload = filteredDataToDownload.map(row => ({
-                index: row.index,
-                data: columnOrderCopy.map(idx => row.data[idx])
-            }))
-        }
-
-        // now, check columns:
-        if (options.downloadOptions?.filterOptions?.useDisplayedColumnsOnly) {
-            columnsToDownload = columnsToDownload.filter(
-                column => column.display === 'true'
-            )
-
-            dataToDownload = dataToDownload.map(row => {
-                row.data = row.data.filter(
-                    (_, index) =>
-                        columns[columnOrderCopy[index]].display === 'true'
-                )
-                return row
-            })
-        }
-
-        createCsvDownload(columnsToDownload, dataToDownload, options)
-    }
-
     setActiveIcon = (iconName: 'search' | 'filter' | 'viewcolumns' | null) => {
         this.setState(
             prevState => ({
@@ -197,12 +108,14 @@ class TableToolbarClass extends React.Component<
                 const { iconActive, prevIconActive } = this.state
 
                 if (iconActive === 'filter') {
-                    this.props.setTableAction('onFilterDialogOpen')
+                    this.props.setTableAction(TableAction.ON_FILTER_DIALOG_OPEN)
                     this.props.options.onFilterDialogOpen?.()
                 }
 
                 if (iconActive === null && prevIconActive === 'filter') {
-                    this.props.setTableAction('onFilterDialogClose')
+                    this.props.setTableAction(
+                        TableAction.ON_FILTER_DIALOG_CLOSE
+                    )
                     this.props.options.onFilterDialogClose?.()
                 }
             }
@@ -221,7 +134,7 @@ class TableToolbarClass extends React.Component<
                 nextVal = true
             } else {
                 const { onSearchClose } = this.props.options
-                this.props.setTableAction('onSearchClose')
+                this.props.setTableAction(TableAction.ON_SEARCH_CLOSE)
                 if (onSearchClose) onSearchClose()
                 nextVal = false
             }
@@ -249,13 +162,13 @@ class TableToolbarClass extends React.Component<
     }
 
     showSearch = () => {
-        this.props.setTableAction('onSearchOpen')
+        this.props.setTableAction(TableAction.ON_SEARCH_OPEN)
         !!this.props.options.onSearchOpen && this.props.options.onSearchOpen()
         return true
     }
 
     hideSearch = () => {
-        this.props.setTableAction('onSearchClose')
+        this.props.setTableAction(TableAction.ON_SEARCH_CLOSE)
 
         this.props.options?.onSearchClose?.()
 
@@ -286,9 +199,6 @@ class TableToolbarClass extends React.Component<
         const {
             options,
             classes,
-            columns,
-            filterData,
-            filterList,
             filterUpdate,
             resetFilters,
             toggleViewColumn,
@@ -296,7 +206,11 @@ class TableToolbarClass extends React.Component<
             updateFilterByType
         } = this.props
 
-        const { components, icons } = this.props.context
+        const {
+            components,
+            icons,
+            state: { columns, filterData, filterList }
+        } = this.props.context
 
         /**
          * @todo REMOVE THIS COMPONENT VARIABLES
@@ -339,7 +253,7 @@ class TableToolbarClass extends React.Component<
                     ) : typeof title !== 'string' ? (
                         title
                     ) : (
-                        <div className={classes.titleRoot} aria-hidden="true">
+                        <div aria-hidden="true">
                             <Typography
                                 variant="h6"
                                 className={
@@ -384,10 +298,7 @@ class TableToolbarClass extends React.Component<
                     )}
 
                     {options.download && (
-                        <ToolbarDownloadButton
-                            options={options}
-                            onDownload={this.handleCSVDownload}
-                        />
+                        <ToolbarDownloadButton options={options} />
                     )}
 
                     {options.print && (
@@ -495,7 +406,7 @@ class TableToolbarClass extends React.Component<
 
                     {options.customToolbar &&
                         options.customToolbar({
-                            displayData: this.props.displayData
+                            displayData: this.props.context.state.displayData
                         })}
                 </div>
             </>
@@ -503,29 +414,51 @@ class TableToolbarClass extends React.Component<
     }
 }
 
-const useStyles = makeStyles()((theme: Theme) => ({
-    root: {
-        '@media print': {
-            display: 'none'
-        }
-    },
-    fullWidthRoot: {},
-    left: {
-        flex: '1 1 auto'
-    },
-    fullWidthLeft: {
-        flex: '1 1 auto'
-    },
+const useStyles = makeStyles({
+    name: ClassName.TOOLBAR + '-'
+})((theme: Theme) => ({
     actions: {
         flex: '1 1 auto',
-        textAlign: 'right'
+        textAlign: 'right',
+
+        [theme.breakpoints.down('sm')]: {
+            textAlign: 'center'
+        }
+    },
+    root: {
+        '@media print': {
+            display: 'none !important'
+        },
+
+        [theme.breakpoints.down('sm')]: {
+            display: 'block'
+        }
+    },
+    left: {
+        flex: '1 1 auto',
+        [theme.breakpoints.down('md')]: {
+            padding: '8px 0px'
+        },
+
+        [theme.breakpoints.down('sm')]: {
+            padding: '8px 0px 0px 0px'
+        }
+    },
+
+    fullWidthLeft: {
+        flex: '1 1 auto'
     },
     fullWidthActions: {
         flex: '1 1 auto',
         textAlign: 'right'
     },
-    titleRoot: {},
-    titleText: {},
+    titleText: {
+        fontSize: '16px',
+
+        [theme.breakpoints.down('sm')]: {
+            textAlign: 'center'
+        }
+    },
     fullWidthTitleText: {
         textAlign: 'left'
     },
@@ -544,40 +477,5 @@ const useStyles = makeStyles()((theme: Theme) => ({
         display: 'inline-flex',
         marginTop: '10px',
         marginRight: '8px'
-    },
-    // [theme.breakpoints.down('md')]: {
-    //     titleRoot: {},
-    //     titleText: {
-    //         fontSize: '16px'
-    //     },
-    //     spacer: {
-    //         display: 'none'
-    //     },
-    //     left: {
-    //         // flex: "1 1 40%",
-    //         padding: '8px 0px'
-    //     },
-    //     actions: {
-    //         // flex: "1 1 60%",
-    //         textAlign: 'right'
-    //     }
-    // },
-    // [theme.breakpoints.down('sm')]: {
-    //     root: {
-    //         display: 'block',
-    //         '@media print': {
-    //             display: 'none !important'
-    //         }
-    //     },
-    //     left: {
-    //         padding: '8px 0px 0px 0px'
-    //     },
-    //     titleText: {
-    //         textAlign: 'center'
-    //     },
-    //     actions: {
-    //         textAlign: 'center'
-    //     }
-    // },
-    '@media screen and (max-width: 480px)': {}
+    }
 }))

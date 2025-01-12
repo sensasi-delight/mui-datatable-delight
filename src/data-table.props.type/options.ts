@@ -5,7 +5,6 @@ import type {
     MUIDataTableChip,
     MUIDataTableColumn,
     MUIDataTableDraggableColumns,
-    MUIDataTableState,
     MUIDataTableTextLabels,
     MUISortOptions,
     SelectableRows
@@ -14,6 +13,27 @@ import type { ReactNode } from 'react'
 import type { DataTableState } from './state'
 
 type BooleanOrDisabled = Boolean | 'disabled'
+
+export enum TableAction {
+    SORT = 'sort',
+    CHANGE_ROWS_PER_PAGE = 'changeRowsPerPage',
+    COLUMN_ORDER_CHANGE = 'columnOrderChange',
+    CHANGE_PAGE = 'changePage',
+    INITIALIZED = 'tableInitialized',
+    PROP_UPDATE = 'propsUpdate',
+    RESET_FILTERS = 'resetFilters',
+    FILTER_CHANGE = 'filterChange',
+    ON_SEARCH_CLOSE = 'onSearchClose',
+    ON_SEARCH_OPEN = 'onSearchOpen',
+    ROW_DELETE = 'rowDelete',
+    ROW_EXPANSION_CHANGE = 'rowExpansionChange',
+    ROW_SELECTION_CHANGE = 'rowSelectionChange',
+    ON_FILTER_DIALOG_OPEN = 'onFilterDialogOpen',
+    ON_FILTER_DIALOG_CLOSE = 'onFilterDialogClose',
+    EXPAND_ROW = 'expandRow',
+    SEARCH = 'search',
+    VIEW_COLUMNS_CHANGE = 'viewColumnsChange'
+}
 
 /**
  * @deprecated FOUND THIS TYPE BUT CAN'T DESCRIBED YET
@@ -56,7 +76,7 @@ export interface DataTableOptions {
 
     /** Add a custom footer to the filter dialog. */
     customFilterDialogFooter?: (
-        filterList: MUIDataTableState['filterList'],
+        filterList: DataTableState['filterList'],
         applyNewFilters?: (...args: any[]) => any
     ) => ReactNode
 
@@ -334,7 +354,7 @@ export interface DataTableOptions {
     /** Callback function that triggers when filters have changed. */
     onFilterChange?: (
         changedColumn: string | MUIDataTableColumn | null,
-        filterList: MUIDataTableState['filterList'],
+        filterList: DataTableState['filterList'],
         type: FilterType | 'chip' | 'reset',
         changedColumnIndex: number,
         displayData: DisplayData
@@ -348,7 +368,7 @@ export interface DataTableOptions {
     onFilterChipClose?: (
         index: number,
         removedFilter: string,
-        filterList: MUIDataTableState['filterList']
+        filterList: DataTableState['filterList']
     ) => void
 
     /**
@@ -358,7 +378,7 @@ export interface DataTableOptions {
      * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/serverside-filters/index.tsx
      */
 
-    onFilterConfirm?: (filterList: MUIDataTableState['filterList']) => void
+    onFilterConfirm?: (filterList: DataTableState['filterList']) => void
 
     /** Callback function that triggers when the filter dialog closes. */
     onFilterDialogClose?: () => void
@@ -409,11 +429,21 @@ export interface DataTableOptions {
     /** Callback function that triggers when the searchbox opens.  */
     onSearchOpen?: () => void
 
-    /** Callback function that triggers when table state has changed. */
-    onTableChange?: (action: string, tableState: MUIDataTableState) => void
+    /**
+     * Callback function that triggers when table state has changed.
+     *
+     * @see {@link TableAction} enum.
+     * @see {@link DataTableState} interface.
+     */
+    onTableChange?: (action: TableAction, tableState: DataTableState) => void
 
-    /** Callback function that triggers when table state has been initialized. */
-    onTableInit?: (action: string, tableState: MUIDataTableState) => void
+    /**
+     * Callback function that triggers when table state has been initialized.
+     *
+     * @see {@link TableAction} enum.
+     * @see {@link DataTableState} interface.
+     */
+    onTableInit?: (action: TableAction, tableState: DataTableState) => void
 
     /** Callback function that triggers when a column view has been changed. Previously known as onColumnViewChange. */
     onViewColumnsChange?: (changedColumn: string, action: string) => void
@@ -572,6 +602,7 @@ export interface DataTableOptions {
     /**
      * Hides the checkboxes that appear when selectableRows is set to "multiple" or "single".
      * Can provide a more custom UX, especially when paired with selectableRowsOnClick.
+     *
      * @default false
      */
     selectableRowsHideCheckboxes?: boolean
@@ -579,6 +610,7 @@ export interface DataTableOptions {
     /**
      * Enable/disable select toggle when row is clicked.
      * When False, only checkbox will trigger this action.
+     *
      * @default false
      */
     selectableRowsOnClick?: boolean
@@ -767,8 +799,6 @@ export interface DataTableOptions {
 //         onRowExpansionChange: PropTypes.func,
 //         onRowsSelect: PropTypes.func,
 //         onRowSelectionChange: PropTypes.func,
-//         onTableChange: PropTypes.func,
-//         onTableInit: PropTypes.func,
 //         page: PropTypes.number,
 //         pagination: PropTypes.bool,
 //         print: PropTypes.oneOf([true, false, 'true', 'false', 'disabled']),

@@ -1,4 +1,4 @@
-import type { MUIDataTableState } from 'mui-datatables'
+import type { DataTableState } from '../data-table.props.type/state'
 
 /**
  * Load DataTableState from localStorage
@@ -8,5 +8,5 @@ export function load(storageKey: string) {
         typeof localStorage !== 'undefined'
             ? (localStorage.getItem(storageKey) ?? '{}')
             : '{}'
-    ) as MUIDataTableState
+    ) as DataTableState
 }
