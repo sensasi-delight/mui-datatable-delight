@@ -1,5 +1,7 @@
 import { Box, Paper } from '@mui/material'
+// internals
 import { AlwaysDarkThemeProvider } from './code-snippet.always-dark-theme-provider'
+import { CopyButton } from './code-snippet.copy-button'
 
 // prisms
 import prism from 'prismjs'
@@ -25,7 +27,7 @@ export function CodeSnippet({
 
     return (
         <AlwaysDarkThemeProvider>
-            <Paper elevation={4}>
+            <Paper elevation={4} sx={{ position: 'relative' }}>
                 <Box
                     component="pre"
                     sx={{
@@ -38,9 +40,13 @@ export function CodeSnippet({
                     }}
                 >
                     <code
-                        dangerouslySetInnerHTML={{ __html: highlightedCode }}
+                        dangerouslySetInnerHTML={{
+                            __html: highlightedCode
+                        }}
                     />
                 </Box>
+
+                <CopyButton text={text} />
             </Paper>
         </AlwaysDarkThemeProvider>
     )

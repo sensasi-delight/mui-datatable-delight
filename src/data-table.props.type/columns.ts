@@ -2,6 +2,7 @@ import type { MUIDataTableColumnOptions } from 'mui-datatables'
 import { DataTableSortOrderOption } from './options'
 import { DataTableState } from './state'
 import { ReactNode } from 'react'
+import type { FilterTypeType } from './shared/filter-type-type'
 
 export interface DataTableColumnObject {
     label?: string
@@ -86,9 +87,9 @@ export interface DataTableColumnObjectOptions
      *
      * @default  'dropdown'
      *
-     * @see  {@link FilterTypeEnum}
+     * @see  {@link FilterTypeType}
      */
-    filterType?: FilterTypeEnum
+    filterType?: FilterTypeType
 
     /**
      * Filter value list.
