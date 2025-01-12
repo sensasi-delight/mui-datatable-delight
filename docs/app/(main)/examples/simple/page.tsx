@@ -143,7 +143,9 @@ function Example() {
                     value={searchBtn}
                     style={{ width: '200px', marginBottom: '10px' }}
                     onChange={({ target: { value } }) =>
-                        setSearchBtn(value as typeof searchBtn)
+                        setSearchBtn(
+                            value === 'disabled' ? value : value === 'true'
+                        )
                     }
                 >
                     <MenuItem value="true">
@@ -167,7 +169,9 @@ function Example() {
                     value={downloadBtn}
                     style={{ width: '200px', marginBottom: '10px' }}
                     onChange={({ target: { value } }) =>
-                        setDownloadBtn(value as typeof downloadBtn)
+                        setDownloadBtn(
+                            value === 'disabled' ? value : value === 'true'
+                        )
                     }
                 >
                     <MenuItem value="true">
@@ -191,7 +195,9 @@ function Example() {
                     value={printBtn}
                     style={{ width: '200px', marginBottom: '10px' }}
                     onChange={({ target: { value } }) =>
-                        setPrintBtn(value as typeof printBtn)
+                        setPrintBtn(
+                            value === 'disabled' ? value : value === 'true'
+                        )
                     }
                 >
                     <MenuItem value="true">
@@ -215,7 +221,9 @@ function Example() {
                     value={viewColumnBtn}
                     style={{ width: '200px', marginBottom: '10px' }}
                     onChange={({ target: { value } }) =>
-                        setViewColumnBtn(value as typeof viewColumnBtn)
+                        setViewColumnBtn(
+                            value === 'disabled' ? value : value === 'true'
+                        )
                     }
                 >
                     <MenuItem value="true">
@@ -239,7 +247,9 @@ function Example() {
                     value={filterBtn}
                     style={{ width: '200px', marginBottom: '10px' }}
                     onChange={({ target: { value } }) =>
-                        setFilterBtn(value as typeof filterBtn)
+                        setFilterBtn(
+                            value === 'disabled' ? value : value === 'true'
+                        )
                     }
                 >
                     <MenuItem value="true">
