@@ -6,7 +6,7 @@ import { useState } from 'react'
 // DataTable
 import DataTable, { type DataTableOptions, type DataTableProps } from '@src'
 
-function Example() {
+export function Example() {
     const [responsive, setResponsive] =
         useState<DataTableOptions['responsive']>('vertical')
     const [tableBodyHeight, setTableBodyHeight] = useState('400px')
@@ -19,49 +19,22 @@ function Example() {
         useState<DataTableOptions['viewColumns']>(true)
     const [filterBtn, setFilterBtn] = useState<DataTableOptions['filter']>(true)
 
-    const columns: DataTableProps['columns'] = [
-        { name: 'Name', options: { filterOptions: { fullWidth: true } } },
-        'Title',
-        'Location'
-    ]
-
-    const options: DataTableOptions = {
-        search: searchBtn,
-        download: downloadBtn,
-        print: printBtn,
-        viewColumns: viewColumnBtn,
-        filter: filterBtn,
-        filterType: 'checkbox',
-        responsive,
-        tableBodyHeight,
-        tableBodyMaxHeight,
-        onTableChange: (action, state) => {
-            console.log(action)
-            console.dir(state)
-        }
-    }
-
-    const data = [
-        ['Gabby George', 'Business Analyst', 'Minneapolis'],
-        [
-            'Aiden Lloyd',
-            "Business Consultant for an International Company and CEO of Tony's Burger Palace",
-            'Dallas'
-        ],
-        ['Jaden Collins', 'Attorney', 'Santa Ana'],
-        ['Franky Rees', 'Business Analyst', 'St. Petersburg'],
-        ['Aaren Rose', null, 'Toledo'],
-        ['Johnny Jones', 'Business Analyst', 'St. Petersburg'],
-        ['Jimmy Johns', 'Business Analyst', 'Baltimore'],
-        ['Jack Jackson', 'Business Analyst', 'El Paso'],
-        ['Joe Jones', 'Computer Programmer', 'El Paso'],
-        ['Jacky Jackson', 'Business Consultant', 'Baltimore'],
-        ['Jo Jo', 'Software Developer', 'Washington DC'],
-        ['Donna Marie', 'Business Manager', 'Annapolis']
-    ]
-
     return (
         <>
+            {/* <Radios
+                label="Responsive"
+                options={[
+                    'vertical',
+                    'standard',
+                    'simple',
+                    'scroll',
+                    'scrollMaxHeight',
+                    'stacked'
+                ]}
+                value={responsive}
+                onChange={setResponsive}
+            /> */}
+
             <FormControl>
                 <InputLabel id="demo-simple-select-label">
                     Responsive Option
@@ -70,11 +43,7 @@ function Example() {
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
                     value={responsive}
-                    style={{
-                        width: '200px',
-                        marginBottom: '10px',
-                        marginRight: 10
-                    }}
+                    style={{ width: '200px', marginBottom: '10px' }}
                     onChange={({ target: { value } }) =>
                         setResponsive(value as typeof responsive)
                     }
@@ -99,8 +68,7 @@ function Example() {
                     value={tableBodyHeight}
                     style={{
                         width: '200px',
-                        marginBottom: '10px',
-                        marginRight: 10
+                        marginBottom: '10px'
                     }}
                     onChange={({ target: { value } }) =>
                         setTableBodyHeight(value as typeof tableBodyHeight)
@@ -263,14 +231,58 @@ function Example() {
                     </MenuItem>
                 </Select>
             </FormControl>
+
             <DataTable
                 title={'ACME Employee list'}
-                data={data}
-                columns={columns}
-                options={options}
+                data={DATA}
+                columns={COLUMNS}
+                options={
+                    {
+                        ...STATIC_OPTIONS,
+                        search: searchBtn,
+                        download: downloadBtn,
+                        print: printBtn,
+                        viewColumns: viewColumnBtn,
+                        filter: filterBtn,
+                        responsive,
+                        tableBodyHeight,
+                        tableBodyMaxHeight
+                    } satisfies DataTableOptions
+                }
             />
         </>
     )
 }
 
-export default Example
+const COLUMNS: DataTableProps['columns'] = [
+    { name: 'Name', options: { filterOptions: { fullWidth: true } } },
+    'Title',
+    'Location'
+]
+
+const STATIC_OPTIONS: DataTableOptions = {
+    filterType: 'checkbox',
+    onTableChange: (action, state) => {
+        console.log(action)
+        console.dir(state)
+    }
+}
+
+const DATA = [
+    ['Gabby George', 'Business Analyst', 'Minneapolis'],
+    [
+        'Aiden Lloyd',
+        "Business Consultant for an International Company and CEO of Tony's Burger Palace",
+        'Dallas'
+    ],
+    ['Jaden Collins', 'Attorney', 'Santa Ana'],
+    ['Franky Rees', 'Business Analyst', 'St. Petersburg'],
+    ['Aaren Rose', null, 'Toledo'],
+    ['Johnny Jones', 'Business Analyst', 'St. Petersburg'],
+    ['Jimmy Johns', 'Business Analyst', 'Baltimore'],
+    ['Jack Jackson', 'Business Analyst', 'El Paso'],
+    ['Joe Jones', 'Computer Programmer', 'El Paso'],
+    ['Jacky Jackson', 'Business Consultant', 'Baltimore'],
+    ['Jo Jo', 'Software Developer', 'Washington DC'],
+    ['Donna Marie', 'Business Manager', 'Annapolis']
+]
