@@ -6,6 +6,7 @@ import { cloneDeep } from './clone-deep'
 import { getCollatorComparator } from './get-collator-comparator'
 import { transformData } from './transform-data'
 import { sortCompare } from './sort-compare'
+import { buildMap } from './build-map'
 
 enum TABLE_LOAD {
     INITIAL = 1,
