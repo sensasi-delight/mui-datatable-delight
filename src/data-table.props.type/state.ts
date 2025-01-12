@@ -97,7 +97,7 @@ export interface DataTableStateColumnFilterOptions {
 
 export interface DataTableState {
     activeColumn: string | null
-    announceText: string | null
+    announceText?: string
     columnOrder: number[]
     columns: DataTableStateColumn[]
     count: number

@@ -8,7 +8,7 @@ import { Paper, Table as MuiTable, TableProps } from '@mui/material'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { makeStyles } from 'tss-react/mui'
 import clsx from 'clsx'
-import React, { createRef, type RefObject } from 'react'
+import React, { createRef, useState, type RefObject } from 'react'
 // locals
 import { getPageValue } from './functions.shared/get-page-value'
 import {
@@ -46,6 +46,7 @@ import {
  */
 export function DataTable({ components, className, ...props }: DataTableProps) {
     const { classes, cx } = useStyles()
+    const [announceText, setAnnounceText] = useState<string>()
     const rootRef = createRef<HTMLDivElement>()
 
     const paperClasses = cx(
@@ -74,8 +75,15 @@ export function DataTable({ components, className, ...props }: DataTableProps) {
                     classes={classes}
                     getRootRef={() => rootRef}
                     {...props}
+                    setAnnounceText={setAnnounceText}
                 />
             </Paper>
+
+            {announceText && (
+                <div className={classes.liveAnnounce} aria-live="polite">
+                    {announceText}
+                </div>
+            )}
         </MainContextProvider>
     )
 }
@@ -142,14 +150,17 @@ const useStyles = makeStyles({
     }
 }))
 
+interface TEMPORARY_PROPS_TYPE extends Omit<DataTableProps, 'components'> {
+    classes: ReturnType<typeof useStyles>['classes']
+    getRootRef: () => RefObject<HTMLDivElement | null>
+    setAnnounceText: (text: string) => void
+}
+
 /**
  * @todo MIGRATE STATE TO CONTEXT
  */
 class MUIDataTableClass extends React.Component<
-    Omit<DataTableProps, 'components'> & {
-        classes: ReturnType<typeof useStyles>['classes']
-        getRootRef: () => RefObject<HTMLDivElement | null>
-    },
+    TEMPORARY_PROPS_TYPE,
     DataTableState
 > {
     declare context: ReturnType<typeof useMainContext>
@@ -166,12 +177,7 @@ class MUIDataTableClass extends React.Component<
     timers: unknown
     updateDividers: () => void
 
-    constructor(
-        props: DataTableProps & {
-            classes: ReturnType<typeof useStyles>['classes']
-            getRootRef: () => RefObject<HTMLDivElement | null>
-        }
-    ) {
+    constructor(props: TEMPORARY_PROPS_TYPE) {
         super(props)
 
         this.tableRef = createRef()
@@ -383,10 +389,11 @@ class MUIDataTableClass extends React.Component<
                 const orderLabel = getSortDirectionLabel(newSortOrder)
                 const announceText = `Table now sorted by ${columns[index].name} : ${orderLabel}`
 
+                this.props.setAnnounceText(announceText)
+
                 let newState: DataTableState = {
                     ...prevState,
                     columns: columns,
-                    announceText: announceText,
                     activeColumn: index
                 }
 
@@ -1079,7 +1086,6 @@ class MUIDataTableClass extends React.Component<
         const { classes, title } = this.props
 
         const {
-            announceText,
             activeColumn,
             data,
             displayData,
@@ -1274,10 +1280,6 @@ class MUIDataTableClass extends React.Component<
                     changeRowsPerPage={this.changeRowsPerPage}
                     changePage={this.changePage}
                 />
-
-                <div className={classes.liveAnnounce} aria-live="polite">
-                    {announceText}
-                </div>
             </>
         )
     }

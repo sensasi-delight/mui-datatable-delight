@@ -93,7 +93,6 @@ export function useMainContext() {
 
 export const DEFAULT_STATE: DataTableState = {
     activeColumn: null,
-    announceText: null,
     count: 0,
     columnOrder: [0],
     columns: [],
