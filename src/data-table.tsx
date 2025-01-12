@@ -219,7 +219,7 @@ class MUIDataTableClass extends React.Component<
             this.setState(
                 getNewStateOnDataChange(
                     this.props,
-                    TABLE_LOAD.UPDATE,
+                    TABLE_LOAD.INITIAL,
                     didDataUpdate,
                     this.options,
                     this.state,
