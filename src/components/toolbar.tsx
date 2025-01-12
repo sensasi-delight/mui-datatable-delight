@@ -71,7 +71,7 @@ type TEMPORARY_CLASS_PROP_TYPE = ToolbarProps & {
 class TableToolbarClass extends React.Component<
     TEMPORARY_CLASS_PROP_TYPE,
     {
-        iconActive: null | 'search' | 'filter' | 'viewcolumns'
+        iconActive: null | 'search' | 'filter' | 'viewColumns'
         showSearch: boolean
         searchText: null | string
         prevIconActive: null | string
@@ -88,7 +88,7 @@ class TableToolbarClass extends React.Component<
         ),
         searchText: this.props.searchText || null,
         prevIconActive: null,
-        hideFilterPopover: true
+        hideFilterPopover: false
     }
 
     componentDidUpdate(prevProps: TEMPORARY_CLASS_PROP_TYPE) {
@@ -97,7 +97,7 @@ class TableToolbarClass extends React.Component<
         }
     }
 
-    setActiveIcon = (iconName: 'search' | 'filter' | 'viewcolumns' | null) => {
+    setActiveIcon = (iconName: 'search' | 'filter' | 'viewColumns' | null) => {
         this.setState(
             prevState => ({
                 showSearch: this.isSearchShown(iconName),
@@ -122,7 +122,7 @@ class TableToolbarClass extends React.Component<
         )
     }
 
-    isSearchShown = (iconName: 'search' | 'filter' | 'viewcolumns' | null) => {
+    isSearchShown = (iconName: 'search' | 'filter' | 'viewColumns' | null) => {
         if (this.props.options.searchAlwaysOpen) {
             return true
         }
@@ -146,7 +146,7 @@ class TableToolbarClass extends React.Component<
     }
 
     getIconClasses = (
-        iconName: 'search' | 'filter' | 'viewcolumns' | undefined
+        iconName: 'search' | 'filter' | 'viewColumns' | undefined
     ) => {
         let isActive = this.state.iconActive === iconName
 
@@ -324,14 +324,14 @@ class TableToolbarClass extends React.Component<
                                         aria-label={viewColumns}
                                         classes={{
                                             root: this.getIconClasses(
-                                                'viewcolumns'
+                                                'viewColumns'
                                             )
                                         }}
                                         disabled={
                                             options.viewColumns === 'disabled'
                                         }
                                         onClick={() =>
-                                            this.setActiveIcon('viewcolumns')
+                                            this.setActiveIcon('viewColumns')
                                         }
                                     >
                                         <ViewColumnIconComponent />

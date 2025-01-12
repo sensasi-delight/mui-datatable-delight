@@ -22,11 +22,9 @@ import type {
     DataTableToolbarFilterProps
 } from './toolbar.filter'
 import type { DataTableProps } from '..'
-import {
-    type DataTableState,
-    FilterTypeEnum
-} from '../data-table.props.type/state'
+import { type DataTableState } from '../data-table.props.type/state'
 import { useMainContext } from '../hooks/use-main-context'
+import { FilterTypeEnum } from '../data-table.props.type/columns'
 
 export function DataTableToolbarFilterRenderFilters({
     columns,

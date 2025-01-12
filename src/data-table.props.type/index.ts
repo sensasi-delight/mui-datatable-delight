@@ -3,12 +3,10 @@ import type { Component, ReactNode, RefObject } from 'react'
 import type { DataTableOptions } from './options'
 import type { DataTableComponents } from './components'
 import type { SxProps } from '@mui/material'
-import type { DataTableColumns } from './columns'
+import type { DataTableColumnObject } from './columns'
 import { DataTableIcons } from './icons'
 
-export { DataTableColumns }
-
-type DefaultDataItem = Object | (number | string | null)[]
+export type DefaultDataItem = Object | (number | string | null)[]
 export type DataTableData = DefaultDataItem[]
 
 export interface DataTableProps<Item = DefaultDataItem> {
@@ -16,7 +14,7 @@ export interface DataTableProps<Item = DefaultDataItem> {
     className?: string
 
     /** Columns used to describe table */
-    columns: DataTableColumns
+    columns: (string | DataTableColumnObject)[]
 
     components?: Partial<DataTableComponents>
 

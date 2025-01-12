@@ -1,16 +1,20 @@
 import type { TableProps, TableRowProps, TextFieldProps } from '@mui/material'
 import type {
     DisplayData,
-    FilterType,
     MUIDataTableChip,
     MUIDataTableColumn,
     MUIDataTableDraggableColumns,
     MUIDataTableTextLabels,
-    MUISortOptions,
     SelectableRows
 } from 'mui-datatables'
 import type { ReactNode } from 'react'
 import type { DataTableState } from './state'
+import type { DataTableColumnObjectOptions, FilterTypeEnum } from './columns'
+
+export interface DataTableSortOrderOption {
+    name: string
+    direction: 'asc' | 'desc' | 'none'
+}
 
 type BooleanOrDisabled = Boolean | 'disabled'
 
@@ -118,7 +122,8 @@ export interface DataTableOptions {
 
     /**
      * Override default sorting with custom function.
-     * If you just need to override the sorting for a particular column, see the sortCompare method in the Column options.
+     *
+     * If you just need to override the sorting for a particular column, see the {@link DataTableColumnObjectOptions.sortCompare} method in the Column options.
      *
      * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-sorting/index.tsx
      */
@@ -257,7 +262,7 @@ export interface DataTableOptions {
     filterArrayFullMatch?: boolean
 
     /** Choice of filtering view. */
-    filterType?: FilterType
+    filterType?: FilterTypeEnum
 
     /**
      * Enable/disable a fixed header for the table
@@ -325,7 +330,7 @@ export interface DataTableOptions {
     /** Callback function that triggers when a column has been sorted. */
     onColumnSortChange?: (
         changedColumn: string,
-        direction: 'asc' | 'desc'
+        direction: DataTableSortOrderOption['direction']
     ) => void
 
     /** @deprecated use `onViewColumnsChange` instead */
@@ -355,8 +360,8 @@ export interface DataTableOptions {
     onFilterChange?: (
         changedColumn: string | MUIDataTableColumn | null,
         filterList: DataTableState['filterList'],
-        type: FilterType | 'chip' | 'reset',
-        changedColumnIndex: number,
+        type: FilterTypeEnum | 'reset',
+        changedColumnIndex: number | null,
         displayData: DisplayData
     ) => void
 
@@ -393,7 +398,9 @@ export interface DataTableOptions {
         event: React.MouseEvent<HTMLTableRowElement, MouseEvent>
     ) => void
 
-    /** Callback function that triggers when row(s) are expanded/collapsed. */
+    /**
+     * Callback function that triggers when row(s) are expanded/collapsed.
+     */
     onRowExpansionChange?: (
         currentRowsExpanded: any[],
         allRowsExpanded: any[],
@@ -589,9 +596,10 @@ export interface DataTableOptions {
 
     /**
      * Indicates if rows can be selected.
-     * @default multiple
+     *
+     * @default  'multiple'
      */
-    selectableRows?: SelectableRows
+    selectableRows?: 'multiple' | 'single' | 'none'
 
     /**
      * Show/hide the select all/deselect all checkbox header for selectable rows.
@@ -665,12 +673,14 @@ export interface DataTableOptions {
 
     /**
      * Enable/disable sort on all columns.
+     *
      * @default true
      */
     sort?: boolean
 
     /**
      * Enable/disable alphanumeric sorting of filter lists.
+     *
      * @default true
      */
     sortFilterList?: boolean
@@ -680,9 +690,10 @@ export interface DataTableOptions {
      * To remove/reset sorting, input in an empty object.
      * The object options are the column name and the direction.
      *
-     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-columns/index.tsx
+     * @see  {@link DataTableSortOrderOption}
+     * @see  {@link https://mui-datatable-delight.vercel.app/examples/customize-columns|Customize Columns Example}.
      */
-    sortOrder?: MUISortOptions
+    sortOrder?: DataTableSortOrderOption
 
     /**
      * A string that is used internally for identifying the table.
@@ -728,6 +739,25 @@ export interface DataTableOptions {
      * Local storage key used to store the table state.
      */
     storageKey?: string
+
+    /**
+     * @deprecated  Use `onRowExpansionChange` instead.
+     *
+     * @see  {@link onRowExpansionChange}
+     */
+    onRowsExpand?: DataTableOptions['onRowExpansionChange']
+
+    /**
+     * @deprecated Use `onRowSelectionChange` instead.
+     *
+     * @see  {@link onRowSelectionChange}
+     */
+    onRowsSelect?: DataTableOptions['onRowSelectionChange']
+
+    /**
+     * @deprecated  in favor of the {@link confirmFilters} option.
+     */
+    serverSideFilterList?: unknown
 }
 
 //     /** Options used to describe table */
@@ -795,9 +825,7 @@ export interface DataTableOptions {
 //         onFilterDialogOpen: PropTypes.func,
 //         onFilterDialogClose: PropTypes.func,
 //         onRowClick: PropTypes.func,
-//         onRowsExpand: PropTypes.func,
 //         onRowExpansionChange: PropTypes.func,
-//         onRowsSelect: PropTypes.func,
 //         onRowSelectionChange: PropTypes.func,
 //         page: PropTypes.number,
 //         pagination: PropTypes.bool,
@@ -839,7 +867,6 @@ export interface DataTableOptions {
 //         setRowProps: PropTypes.func,
 //         setTableProps: PropTypes.func,
 //         sort: PropTypes.bool,
-//         sortOrder: PropTypes.object,
 //         storageKey: PropTypes.string,
 //         viewColumns: PropTypes.oneOf([
 //             true,
