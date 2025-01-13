@@ -1,9 +1,5 @@
 export { DataTable as default } from './data-table'
-export type {
-    DataTableProps,
-    DataTableColumns,
-    DataTableData
-} from './data-table.props.type'
+export type { DataTableProps, DataTableData } from './data-table.props.type'
 export type { DataTableOptions } from './data-table.props.type/options'
 
 // export { default as Popover } from './components/Popover'
@@ -11,7 +7,7 @@ export type { DataTableOptions } from './data-table.props.type/options'
 // export { default as TableBody } from './components/TableBody'
 // export { default as TableBodyRow } from './components/TableBodyRow'
 // export { default as TableFilter } from './components/TableFilter'
-export { default as TableFilterList } from './components/filter-list'
+export { TableFilterList } from './components/filter-list'
 // export { default as TableFooter } from './components/TableFooter'
 // export { default as TableHeadCell } from './components/TableHeadCell'
 // export { default as TableHead } from './components/TableHead'
