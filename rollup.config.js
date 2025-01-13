@@ -30,14 +30,13 @@ const PLUGINS = [
 
     /** To bundling ts/tsx files */
     typescript({
-        importHelpers: true,
         tsconfig: './tsconfig.json',
         rootDir: './src',
 
         compilerOptions: {
             declaration: true,
             declarationDir: './dist',
-            isolatedDeclarations: true
+            allowImportingTsExtensions: false
         }
     })
 ]
@@ -48,6 +47,12 @@ export default {
     input: 'src/index.ts',
     plugins: PLUGINS,
     output: [
+        {
+            file: pkg.main,
+            format: 'cjs',
+            sourcemap: true,
+            exports: 'named'
+        },
         {
             file: pkg.module,
             format: 'es',
