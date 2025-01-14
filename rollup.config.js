@@ -1,18 +1,12 @@
 import commonjs from '@rollup/plugin-commonjs'
 import del from 'rollup-plugin-delete'
-import filesize from 'rollup-plugin-filesize'
 import nodeResolve from '@rollup/plugin-node-resolve'
 import preserveDirectives from 'rollup-preserve-directives'
 import terser from '@rollup/plugin-terser'
 import typescript from '@rollup/plugin-typescript'
 
-import pkg from './package.json' assert { type: 'json' }
-
 /** @type {import('rollup').RollupOptions['plugins']} */
 const PLUGINS = [
-    /** To delete `dist` dir before build */
-    del({ targets: 'dist/*' }),
-
     /** Locate modules using the Node resolution algorithm, for using third party modules in node_modules */
     nodeResolve(),
 
@@ -22,42 +16,66 @@ const PLUGINS = [
     /** To minify the bundled files */
     terser(),
 
-    /** To show the bundled size */
-    filesize(),
-
     /** To preserve `use client` directive */
-    preserveDirectives(),
-
-    /** To bundling ts/tsx files */
-    typescript({
-        tsconfig: './tsconfig.json',
-        rootDir: './src',
-
-        compilerOptions: {
-            declaration: true,
-            declarationDir: './dist',
-            allowImportingTsExtensions: false
-        }
-    })
+    preserveDirectives()
 ]
 
 /** @type {import('rollup').RollupOptions} */
-export default {
+const BASE_EXPORT = {
     external: [/node_modules/],
-    input: 'src/index.ts',
-    plugins: PLUGINS,
-    output: [
-        {
-            file: pkg.main,
-            format: 'cjs',
-            sourcemap: true,
-            exports: 'named'
-        },
-        {
-            file: pkg.module,
-            format: 'es',
-            sourcemap: true,
-            exports: 'named'
-        }
-    ]
+    input: 'src/index.ts'
 }
+
+/** @type {import('rollup').RollupOptions} */
+const CJS_EXPORT = {
+    ...BASE_EXPORT,
+    plugins: [
+        ...PLUGINS,
+        /** To delete `dist` dir before build */
+        del({ targets: 'dist/*' }),
+
+        typescript({
+            tsconfig: './tsconfig.json',
+            rootDir: './src',
+
+            compilerOptions: {
+                allowImportingTsExtensions: false
+            }
+        })
+    ],
+    output: {
+        preserveModules: true,
+        dir: 'dist/cjs',
+        format: 'cjs',
+        sourcemap: true,
+        exports: 'named'
+    }
+}
+
+/** @type {import('rollup').RollupOptions} */
+const MJS_EXPORT = {
+    ...BASE_EXPORT,
+    plugins: [
+        ...PLUGINS,
+        typescript({
+            tsconfig: './tsconfig.json',
+            rootDir: './src',
+
+            compilerOptions: {
+                allowImportingTsExtensions: false,
+                declaration: true,
+                declarationDir: 'dist/esm',
+                emitDeclarationOnly: true
+            }
+        })
+    ],
+    output: {
+        preserveModules: true,
+        dir: 'dist/esm',
+        format: 'es',
+        sourcemap: true
+    }
+}
+
+/** @type {import('rollup').RollupOptions} */
+export default [CJS_EXPORT, MJS_EXPORT]
