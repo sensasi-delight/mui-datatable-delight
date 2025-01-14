@@ -9,7 +9,7 @@ import type { DataTableProps } from '../data-table.props.type'
 import { useMainContext } from '../hooks/use-main-context'
 import { ClassName } from '../enums/class-name'
 
-export const DataTableToolbarSearch = ({
+export function DataTableToolbarSearch({
     options,
     onSearch,
     onHide
@@ -17,7 +17,7 @@ export const DataTableToolbarSearch = ({
     options: DataTableProps['options']
     onSearch: (searchText: string) => void
     onHide: () => void
-}) => {
+}) {
     const { textLabels } = useMainContext()
     const { classes } = useStyles()
     const [searchText, setSearchText] = useState(options?.searchText ?? '')

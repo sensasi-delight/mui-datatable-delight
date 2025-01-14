@@ -23,7 +23,7 @@ const useStyles = makeStyles({ name: 'MUIDataTableHead' })(theme => ({
     }
 }))
 
-const TableHead = ({
+export default function TableHead({
     columnOrder = null,
     columns,
     count,
@@ -41,7 +41,7 @@ const TableHead = ({
     toggleAllExpandableRows,
     toggleSort,
     updateColumnOrder
-}) => {
+}) {
     const { classes } = useStyles()
 
     if (columnOrder === null) {
@@ -185,5 +185,3 @@ const TableHead = ({
         </MuiTableHead>
     )
 }
-
-export default TableHead
