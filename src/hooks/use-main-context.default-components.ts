@@ -1,30 +1,34 @@
-import TableResize from '../components/resize'
-import { DataTableToolbarFilter } from '../components/toolbar.filter'
-import { TableToolbarSelect as DefaultTableToolbarSelect } from '../components/toolbar-select'
-import { DataTableBody as DefaultTableBody } from '../components/body'
-import { TableFilterList } from '../components/filter-list'
-import DefaultTableFooter from '../components/footer'
-import DefaultTableHead from '../components/head'
-import DefaultTableToolbar from '../components/toolbar'
+// vendors
 import { Checkbox, Tooltip } from '@mui/material'
-import ExpandButton from '../components/components.shared/select-cell.expand-button'
-import { ToolbarViewCol } from '../components/toolbar.view-col'
+// components
 import type { DataTableComponents } from '../data-table.props.type/components'
+import {
+    DataTableBody,
+    DataTableToolbarFilter,
+    ExpandButton,
+    TableFilterList,
+    TableFooter,
+    TableHead,
+    TableResize,
+    TableToolbar,
+    TableToolbarSelect,
+    ToolbarViewCol
+} from '../'
 
 /**
  * ⚠️ THIS VARIABLE SHOULD NOT BE USED OUTSIDE THE `use-main-context.tsx` ⚠️
  */
 export const DEFAULT_COMPONENTS: DataTableComponents = {
-    Checkbox: Checkbox,
-    ExpandButton: ExpandButton,
-    TableBody: DefaultTableBody,
+    Checkbox,
+    ExpandButton,
+    TableBody: DataTableBody,
     TableFilter: DataTableToolbarFilter,
     TableFilterList: TableFilterList,
-    TableFooter: DefaultTableFooter,
-    TableHead: DefaultTableHead,
-    TableResize: TableResize,
-    TableToolbar: DefaultTableToolbar,
-    TableToolbarSelect: DefaultTableToolbarSelect,
+    TableFooter,
+    TableHead,
+    TableResize,
+    TableToolbar,
+    TableToolbarSelect,
     TableViewCol: ToolbarViewCol,
-    Tooltip: Tooltip
+    Tooltip
 }
