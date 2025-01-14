@@ -69,7 +69,7 @@ const useStyles = makeStyles({ name: 'datatable-delight--head--cell' })(
     })
 )
 
-const TableHeadCell = ({
+export default function TableHeadCell({
     cellHeaderProps = {},
     children,
     colPosition,
@@ -90,7 +90,7 @@ const TableHeadCell = ({
     timers,
     toggleSort,
     updateColumnOrder
-}: DataTableHeadCellProps) => {
+}: DataTableHeadCellProps) {
     const { textLabels, components } = useMainContext()
     const [sortTooltipOpen, setSortTooltipOpen] = useState(false)
     const [hintTooltipOpen, setHintTooltipOpen] = useState(false)
@@ -325,5 +325,3 @@ interface DataTableHeadCellProps {
     /** Optional to be used with `textLabels.body.columnHeaderTooltip` */
     column?: Object
 }
-
-export default TableHeadCell

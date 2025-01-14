@@ -11,7 +11,7 @@
     "scripts": {
         "build": "rollup -c",
         "build:docs": "next build docs",
-        "dev": "next docs --turbopack",
+        "dev": "next docs",
         "lint": "eslint src",
         "prepublishOnly": "npm run build",
         "prettier": "prettier './**/*.{js,jsx,ts,tsx,mjs,cjs}' --write",

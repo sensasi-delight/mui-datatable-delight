@@ -3,7 +3,7 @@ import IconButton from '@mui/material/IconButton'
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight'
 import RemoveIcon from '@mui/icons-material/Remove'
 
-const ExpandButton = ({
+export default function ExpandButton({
     areAllRowsExpanded,
     buttonClass,
     expandableRowsHeader,
@@ -12,7 +12,7 @@ const ExpandButton = ({
     iconIndeterminateClass,
     isHeaderCell,
     onExpand
-}: MUIDataTableExpandButton) => {
+}: MUIDataTableExpandButton) {
     const isNotExpand =
         isHeaderCell &&
         areAllRowsExpanded &&
@@ -35,5 +35,3 @@ const ExpandButton = ({
         </IconButton>
     )
 }
-
-export default ExpandButton

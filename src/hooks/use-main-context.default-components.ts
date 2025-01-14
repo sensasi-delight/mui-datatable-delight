@@ -2,10 +2,11 @@
 import { Checkbox, Tooltip } from '@mui/material'
 // components
 import type { DataTableComponents } from '../data-table.props.type/components'
+
 import {
+    ExpandButton,
     DataTableBody,
     DataTableToolbarFilter,
-    ExpandButton,
     TableFilterList,
     TableFooter,
     TableHead,
@@ -13,7 +14,7 @@ import {
     TableToolbar,
     TableToolbarSelect,
     ToolbarViewCol
-} from '../'
+} from '../components'
 
 /**
  * ⚠️ THIS VARIABLE SHOULD NOT BE USED OUTSIDE THE `use-main-context.tsx` ⚠️
