@@ -1,7 +1,16 @@
-export { DataTable as default } from './data-table'
+export type {
+    DataTableColumnObject,
+    DataTableColumnObjectOptions
+} from './data-table.props.type/columns'
+export type { DataTableIcons } from './data-table.props.type/icons'
+export type { DataTableState } from './data-table.props.type/state'
 export type { DataTableProps, DataTableData } from './data-table.props.type'
-export type { DataTableOptions } from './data-table.props.type/options'
+export type {
+    DataTableOptions,
+    DataTableSortOrderOption
+} from './data-table.props.type/options'
 
+export { DataTable as default } from './data-table'
 // export { default as Popover } from './components/Popover'
 // export { default as TableBodyCell } from './components/TableBodyCell'
 // export { default as TableBody } from './components/TableBody'
