@@ -42,14 +42,6 @@ export default {
     output: [
         {
             dir: 'dist',
-            entryFileNames: '[name].cjs',
-            exports: 'named',
-            format: 'cjs',
-            preserveModules: true,
-            sourcemap: true
-        },
-        {
-            dir: 'dist',
             format: 'es',
             preserveModules: true,
             sourcemap: true
