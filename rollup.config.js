@@ -7,6 +7,9 @@ import typescript from '@rollup/plugin-typescript'
 
 /** @type {import('rollup').RollupOptions['plugins']} */
 const PLUGINS = [
+    /** To delete `dist` dir before build */
+    del({ targets: 'dist/*' }),
+
     /** Locate modules using the Node resolution algorithm, for using third party modules in node_modules */
     nodeResolve(),
 
@@ -17,65 +20,40 @@ const PLUGINS = [
     terser(),
 
     /** To preserve `use client` directive */
-    preserveDirectives()
+    preserveDirectives(),
+
+    /** Bundle ts files */
+    typescript({
+        tsconfig: './tsconfig.json',
+        rootDir: './src',
+
+        compilerOptions: {
+            allowImportingTsExtensions: false,
+            declaration: true,
+            declarationDir: 'dist'
+        }
+    })
 ]
 
 /** @type {import('rollup').RollupOptions} */
-const BASE_EXPORT = {
+export default {
     external: [/node_modules/],
-    input: 'src/index.ts'
-}
-
-/** @type {import('rollup').RollupOptions} */
-const CJS_EXPORT = {
-    ...BASE_EXPORT,
-    plugins: [
-        ...PLUGINS,
-        /** To delete `dist` dir before build */
-        del({ targets: 'dist/*' }),
-
-        typescript({
-            tsconfig: './tsconfig.json',
-            rootDir: './src',
-
-            compilerOptions: {
-                allowImportingTsExtensions: false
-            }
-        })
+    input: 'src/index.ts',
+    output: [
+        {
+            dir: 'dist',
+            entryFileNames: '[name].cjs',
+            exports: 'named',
+            format: 'cjs',
+            preserveModules: true,
+            sourcemap: true
+        },
+        {
+            dir: 'dist',
+            format: 'es',
+            preserveModules: true,
+            sourcemap: true
+        }
     ],
-    output: {
-        preserveModules: true,
-        dir: 'dist/cjs',
-        format: 'cjs',
-        sourcemap: true,
-        exports: 'named'
-    }
+    plugins: PLUGINS
 }
-
-/** @type {import('rollup').RollupOptions} */
-const MJS_EXPORT = {
-    ...BASE_EXPORT,
-    plugins: [
-        ...PLUGINS,
-        typescript({
-            tsconfig: './tsconfig.json',
-            rootDir: './src',
-
-            compilerOptions: {
-                allowImportingTsExtensions: false,
-                declaration: true,
-                declarationDir: 'dist/esm',
-                emitDeclarationOnly: true
-            }
-        })
-    ],
-    output: {
-        preserveModules: true,
-        dir: 'dist/esm',
-        format: 'es',
-        sourcemap: true
-    }
-}
-
-/** @type {import('rollup').RollupOptions} */
-export default [CJS_EXPORT, MJS_EXPORT]
