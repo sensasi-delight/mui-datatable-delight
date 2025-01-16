@@ -7,13 +7,10 @@ import { useMainContext } from '../hooks/use-main-context'
 import { ICON_BUTTON_DEFAULT_SX } from './toolbar.icon-button-default-sx'
 import { createCsvDownload } from './toolbar.functions.create-csv-download'
 
-export function ToolbarDownloadButton({
-    options
-}: {
-    options: DataTableOptions
-}) {
+export function ToolbarDownloadButton() {
     const {
         icons,
+        options,
         state,
         textLabels: { toolbar: toolbarTextLabels }
     } = useMainContext()

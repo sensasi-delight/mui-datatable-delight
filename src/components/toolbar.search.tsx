@@ -5,20 +5,17 @@ import { useEffect, useState } from 'react'
 import { Grow, IconButton, TextField, TextFieldProps } from '@mui/material'
 import { Clear, Search } from '@mui/icons-material'
 // locals
-import type { DataTableProps } from '../data-table.props.type'
 import { useMainContext } from '../hooks/use-main-context'
 import { ClassName } from '../enums/class-name'
 
 export function DataTableToolbarSearch({
-    options,
     onSearch,
     onHide
 }: {
-    options: DataTableProps['options']
     onSearch: (searchText: string) => void
     onHide: () => void
 }) {
-    const { textLabels } = useMainContext()
+    const { options, textLabels } = useMainContext()
     const { classes } = useStyles()
     const [searchText, setSearchText] = useState(options?.searchText ?? '')
 

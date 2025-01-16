@@ -1,7 +1,7 @@
 import React, { JSX, useEffect, useState } from 'react'
 import { makeStyles } from 'tss-react/mui'
 // locals
-import type { DataTableOptions } from '..'
+import { useMainContext } from '../hooks/use-main-context'
 
 /**
  * Column resize slider component.
@@ -14,6 +14,7 @@ export default function TableResize({
 }: DataTableResizeProps): JSX.Element {
     const tssHook = useStyles()
     const classes = classesFromProp ?? tssHook.classes
+    const { options } = useMainContext()
 
     /**
      * ##### STATES ########
@@ -182,7 +183,7 @@ export default function TableResize({
 
         setTableHeight(tableHeight)
 
-        const selectableRows = props.options?.selectableRows ?? 'multiple'
+        const selectableRows = options?.selectableRows ?? 'multiple'
 
         let parentOffsetLeft = getParentOffsetLeft(tableElement)
 
@@ -336,7 +337,6 @@ export default function TableResize({
                 return (
                     <div
                         data-divider-index={columnId}
-                        // data-tableid={tableId}
                         aria-hidden="true"
                         key={columnId}
                         onMouseMove={event => onResizeMove(columnId, event)}
@@ -375,12 +375,8 @@ interface DataTableResizeProps {
 
     updateDividers: (callback: () => void) => void
 
-    tableId?: string
-
     /** Extend the style applied to components */
     classes?: ReturnType<typeof useStyles>['classes']
-
-    options?: DataTableOptions
 }
 
 const useStyles = makeStyles()({

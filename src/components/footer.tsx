@@ -1,37 +1,31 @@
-// types
-import type { ReactNode } from 'react'
-import type { MUIDataTableTextLabelsPagination } from 'mui-datatables'
 // vendors
 import { makeStyles } from 'tss-react/mui'
 // local components
-import type { DataTableFooterPaginationProps } from './footer.pagination.props.type'
 import { DataTableFooterPagination } from './footer.pagination'
 import { DataTableFooterJumpToPage } from './footer.jump-to-page'
 import { useMainContext } from '../hooks/use-main-context'
 
 export default function TableFooter({
-    options,
     rowCount,
     page,
     rowsPerPage,
     changeRowsPerPage,
     changePage
 }: TableFooterProps) {
-    const { textLabels } = useMainContext()
+    const { textLabels, options } = useMainContext()
     const { classes, cx } = useStyles()
     const { customFooter, pagination = true, jumpToPage } = options
 
     return (
         <div className={cx(ROOT_CLASS, classes.root)}>
-            {customFooter &&
-                customFooter(
-                    rowCount,
-                    page,
-                    rowsPerPage,
-                    changeRowsPerPage,
-                    changePage,
-                    textLabels.pagination
-                )}
+            {customFooter?.(
+                rowCount,
+                page,
+                rowsPerPage,
+                changeRowsPerPage,
+                changePage,
+                textLabels.pagination
+            )}
 
             {!customFooter && jumpToPage && (
                 <DataTableFooterJumpToPage
@@ -49,7 +43,6 @@ export default function TableFooter({
                     rowsPerPage={rowsPerPage}
                     changeRowsPerPage={changeRowsPerPage}
                     changePage={changePage}
-                    options={options}
                 />
             )}
         </div>
@@ -59,20 +52,6 @@ export default function TableFooter({
 interface TableFooterProps {
     /** Total number of table rows */
     rowCount: number
-
-    /** Options used to describe table */
-    options: {
-        customFooter: (
-            rowCount: TableFooterProps['rowCount'],
-            page: TableFooterProps['page'],
-            rowsPerPage: TableFooterProps['rowsPerPage'],
-
-            changeRowsPerPage: TableFooterProps['changeRowsPerPage'],
-            changePage: TableFooterProps['changePage'],
-            paginationTextLabels: MUIDataTableTextLabelsPagination
-        ) => ReactNode
-        pagination: boolean
-    } & DataTableFooterPaginationProps['options']
 
     /** Current page index */
     page: number

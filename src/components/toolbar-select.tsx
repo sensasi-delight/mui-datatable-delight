@@ -13,34 +13,37 @@ import { ClassName } from '../enums/class-name'
 export function TableToolbarSelect({
     onRowsDelete,
     selectedRows,
-    options,
     displayData,
     selectRowUpdate
 }: TableToolbarSelectProps) {
-    const { textLabels, components } = useMainContext()
+    const {
+        components,
+        options,
+        textLabels: { selectedRows: selectedRowsTextLabels }
+    } = useMainContext()
     const { classes } = useStyles()
 
     return (
         <div className={classes.root}>
             <div>
                 <Typography variant="subtitle1" className={classes.title}>
-                    {selectedRows.data.length} {textLabels.selectedRows.text}
+                    {selectedRows.data.length} {selectedRowsTextLabels.text}
                 </Typography>
             </div>
 
-            {options.customToolbarSelect ? (
-                options.customToolbarSelect(
-                    selectedRows,
-                    displayData ?? [],
-                    (rows: number[]) =>
-                        handleCustomSelectedRows(rows, options, selectRowUpdate)
-                )
-            ) : (
-                <components.Tooltip title={textLabels.selectedRows.delete}>
+            {options.customToolbarSelect?.(
+                selectedRows,
+                displayData ?? [],
+                (rows: number[]) =>
+                    handleCustomSelectedRows(rows, options, selectRowUpdate)
+            )}
+
+            {!options.customToolbarSelect && (
+                <components.Tooltip title={selectedRowsTextLabels.delete}>
                     <IconButton
                         className={classes.iconButton}
                         onClick={() => onRowsDelete()}
-                        aria-label={textLabels.selectedRows.deleteAria}
+                        aria-label={selectedRowsTextLabels.deleteAria}
                     >
                         <DeleteIcon className={classes.deleteIcon} />
                     </IconButton>
@@ -76,11 +79,8 @@ const useStyles = makeStyles({
 }))
 
 export interface TableToolbarSelectProps {
-    /** Options used to describe table */
-    options: DataTableOptions
-
     /** Current row selected or not */
-    rowSelected?: boolean
+    // rowSelected?: boolean // UNUSED SKIP FOR NOW
 
     /** Callback to trigger selected rows delete */
     onRowsDelete: () => void

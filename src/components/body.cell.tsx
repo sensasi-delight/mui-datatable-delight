@@ -3,23 +3,22 @@ import clsx from 'clsx'
 import TableCell, { type TableCellProps } from '@mui/material/TableCell'
 import { makeStyles } from 'tss-react/mui'
 import { MUIDataTableBodyCell } from 'mui-datatables'
-import { DataTableOptions } from '../data-table.props.type/options'
 import { DataTableState } from '../data-table.props.type/state'
+import { useMainContext } from '../hooks/use-main-context'
 
 export default function TableBodyCell({
     children,
     colIndex,
     columnHeader,
-    options,
     dataIndex,
     rowIndex,
     className,
     print,
     ...otherProps
 }: Omit<MUIDataTableBodyCell & TableCellProps, 'options'> & {
-    options: DataTableOptions
     print: DataTableState['columns'][0]['print']
 }) {
+    const { options } = useMainContext()
     const { classes } = useStyles()
 
     const onCellClick = options?.onCellClick

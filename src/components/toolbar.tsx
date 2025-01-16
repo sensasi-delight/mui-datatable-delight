@@ -9,10 +9,7 @@ import {
     Typography
 } from '@mui/material'
 // locals datatables
-import {
-    type DataTableOptions,
-    TableAction
-} from '../data-table.props.type/options'
+import { TableAction } from '../data-table.props.type/options'
 import { useMainContext } from '../hooks/use-main-context'
 import { ClassName } from '../enums/class-name'
 // toolbar internals
@@ -22,6 +19,7 @@ import { DataTableToolbarSearch } from './toolbar.search'
 import { ToolbarPopover } from './toolbar.popover'
 import { ToolbarPrintButton } from './toolbar.print-button'
 import { ToolbarDownloadButton } from './toolbar.download-button'
+import { DataTableProps } from '../data-table.props.type'
 
 /**
  * DataTable Delight Toolbar
@@ -31,12 +29,13 @@ import { ToolbarDownloadButton } from './toolbar.download-button'
  *
  * @see {@link http://mui-datatable-delight.vercel.app/examples/customize-toolbar|Customize Toolbar Example}.
  */
-export default function TableToolbar({ options, ...props }: ToolbarProps) {
+export default function TableToolbar(props: ToolbarProps) {
     const {
-        state,
         components,
-        textLabels: { toolbar: toolbarTextLabels },
-        icons
+        icons,
+        options,
+        state,
+        textLabels: { toolbar: toolbarTextLabels }
     } = useMainContext()
     const { classes } = useStyles()
 
@@ -139,7 +138,6 @@ export default function TableToolbar({ options, ...props }: ToolbarProps) {
                     <DataTableToolbarSearch
                         onSearch={handleSearch}
                         onHide={hideSearch}
-                        options={options}
                     />
                 )}
 
@@ -182,15 +180,10 @@ export default function TableToolbar({ options, ...props }: ToolbarProps) {
                     </components.Tooltip>
                 )}
 
-                {options.download && (
-                    <ToolbarDownloadButton options={options} />
-                )}
+                {options.download && <ToolbarDownloadButton />}
 
                 {options.print && (
-                    <ToolbarPrintButton
-                        options={options}
-                        printContent={props.tableRef}
-                    />
+                    <ToolbarPrintButton printContent={props.tableRef} />
                 )}
 
                 {options.viewColumns && (
@@ -210,7 +203,6 @@ export default function TableToolbar({ options, ...props }: ToolbarProps) {
                         <components.TableViewCol
                             // data={data}
                             columns={state.columns}
-                            // options={options}
                             onColumnUpdate={props.toggleViewColumn}
                             // updateColumns={updateColumns}
                         />
@@ -244,7 +236,6 @@ export default function TableToolbar({ options, ...props }: ToolbarProps) {
                         <components.TableFilter
                             customFooter={options.customFilterDialogFooter}
                             columns={state.columns}
-                            options={options}
                             filterList={state.filterList}
                             filterData={state.filterData}
                             onFilterUpdate={props.filterUpdate}
@@ -268,14 +259,13 @@ export default function TableToolbar({ options, ...props }: ToolbarProps) {
 
 interface ToolbarProps {
     filterUpdate: DataTableToolbarFilterProps['onFilterUpdate']
-    options: DataTableOptions
     resetFilters: DataTableToolbarFilterProps['onFilterReset']
     searchClose: () => void
-    searchText: string
+    searchText?: string
     searchTextUpdate: (searchText: string) => void
     setTableAction: (action: TableAction) => void
     tableRef: RefObject<HTMLTableElement>
-    title: string
+    title: DataTableProps['title']
     toggleViewColumn: ToolbarViewColProps['onColumnUpdate']
     updateFilterByType: DataTableToolbarFilterProps['updateFilterByType']
 }
