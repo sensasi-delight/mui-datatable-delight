@@ -148,13 +148,13 @@ export default function TableToolbar({ options, ...props }: ToolbarProps) {
                         display: showSearch ? 'none' : undefined
                     }}
                 >
-                    {props.title === 'string' ? (
+                    {typeof props.title === 'string' && (
                         <Typography variant="h6" component="div">
                             {props.title}
                         </Typography>
-                    ) : (
-                        props.title
                     )}
+
+                    {typeof props.title !== 'string' && props.title}
                 </div>
             </div>
 
