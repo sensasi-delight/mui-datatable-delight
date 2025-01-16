@@ -4,13 +4,13 @@ import type {
     MUIDataTableChip,
     MUIDataTableColumn,
     MUIDataTableDraggableColumns,
-    MUIDataTableTextLabels,
     SelectableRows
 } from 'mui-datatables'
 import type { ReactNode } from 'react'
 import type { DataTableState } from './state'
 import type { DataTableColumnObjectOptions, FilterTypeEnum } from './columns'
 import type { FilterTypeType } from './shared/filter-type-type'
+import { DEFAULT_TEXT_LABELS } from '../hooks/use-main-context.process-text-labels.default-text-labels'
 
 export interface DataTableSortOrderOption {
     name: string
@@ -94,9 +94,9 @@ export interface DataTableOptions {
         rowCount: number,
         page: number,
         rowsPerPage: number,
-        changeRowsPerPage: (page: string | number) => void,
+        changeRowsPerPage: (rowPerPage: number) => void,
         changePage: (newPage: number) => void,
-        textLabels: Partial<MUIDataTableTextLabels>
+        textLabels: typeof DEFAULT_TEXT_LABELS.pagination
     ) => ReactNode
 
     /**
@@ -162,9 +162,6 @@ export interface DataTableOptions {
         displayData: DisplayData,
         setSelectedRows: (rows: number[]) => void
     ) => ReactNode
-
-    /** @deprecated use `selectToolbarPlacement` instead */
-    disableToolbarSelect?: boolean
 
     /**
      * Possible Values:
