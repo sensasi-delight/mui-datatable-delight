@@ -16,6 +16,8 @@ import { DEFAULT_COMPONENTS } from './use-main-context.default-components'
 import { DataTableState } from '../data-table.props.type/state'
 import { TableAction } from '../data-table.props.type/options'
 import { getNewStateOnDataChange, load, save, warnInfo } from '../functions'
+import { DEFAULT_OPTIONS } from './use-main-context.default-options'
+import { handleDeprecatedOptions } from './use-main-context.handle-deprecated-options'
 
 export function MainContextProvider({
     datatableProps,
@@ -66,6 +68,10 @@ export function MainContextProvider({
         datatableProps.options?.onTableInit?.(TableAction.INITIALIZED, state)
     }, [])
 
+    const options = getConstructedOption(datatableProps?.options)
+
+    handleDeprecatedOptions(datatableProps, options)
+
     return (
         <MainContext.Provider
             value={{
@@ -78,6 +84,7 @@ export function MainContextProvider({
                     ...datatableProps.icons
                 },
                 onStateChange,
+                options,
                 state,
                 textLabels: processTextLabels(datatableProps.textLabels)
             }}
@@ -124,6 +131,7 @@ export const DEFAULT_STATE: DataTableState = {
 export const MainContext = createContext<ContextValueType>({
     components: DEFAULT_COMPONENTS,
     icons: DEFAULT_ICONS,
+    options: DEFAULT_OPTIONS,
     state: DEFAULT_STATE,
     textLabels: processTextLabels(undefined)
 })
@@ -132,6 +140,7 @@ interface ContextValueType {
     components: typeof DEFAULT_COMPONENTS
     icons: typeof DEFAULT_ICONS
     onStateChange?: (action: TableAction, state: DataTableState) => void
+    options: DataTableOptions
     state: typeof DEFAULT_STATE
     textLabels: ReturnType<typeof processTextLabels>
 }
@@ -193,4 +202,17 @@ function getInitTableOptions({
     validateOptions(optState)
 
     return optState
+}
+
+function getConstructedOption(
+    optionsFromProp: DataTableProps['options']
+): DataTableOptions {
+    return {
+        ...DEFAULT_OPTIONS,
+        ...(optionsFromProp ?? {}),
+        downloadOptions: {
+            ...DEFAULT_OPTIONS.downloadOptions,
+            ...optionsFromProp?.downloadOptions
+        }
+    }
 }
