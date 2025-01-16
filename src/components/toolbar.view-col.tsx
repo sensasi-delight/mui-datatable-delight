@@ -100,9 +100,6 @@ export interface ToolbarViewColProps {
     /** Columns used to describe table */
     columns: DataTableState['columns']
 
-    /** Options used to describe table */
-    // options: DataTableOptions
-
     /** Callback to trigger View column update */
     onColumnUpdate: (columnIndex: number) => void
 

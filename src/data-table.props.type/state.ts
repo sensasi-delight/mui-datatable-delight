@@ -1,4 +1,4 @@
-import type { DisplayData, MUIDataTableStateRows } from 'mui-datatables'
+import type { MUIDataTableStateRows } from 'mui-datatables'
 import type { DataTableSortOrderOption } from './options'
 import { DataTableColumnObject } from './columns'
 import { DefaultDataItem } from '.'
@@ -11,8 +11,14 @@ export interface DataTableState<DataItem = DefaultDataItem> {
         DataTableColumnObject['options'])[]
     curExpandedRows?: MUIDataTableStateRows
     count: number
-    data: DataItem[]
-    displayData: DisplayData
+    data: {
+        index: number
+        data: DataItem
+    }[]
+    displayData: {
+        index: number
+        data: DataItem
+    }[]
     expandedRows: MUIDataTableStateRows
     filterData: string[][]
     filterList: string[][]

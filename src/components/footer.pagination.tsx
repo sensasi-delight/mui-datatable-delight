@@ -11,13 +11,12 @@ import { useMainContext } from '../hooks/use-main-context'
 
 export function DataTableFooterPagination({
     count,
-    options,
     rowsPerPage,
     page,
     changeRowsPerPage,
     changePage
 }: DataTableFooterPaginationProps) {
-    const { textLabels } = useMainContext()
+    const { options, textLabels } = useMainContext()
     const { classes } = useStyles()
 
     const handleRowChange: MuiTablePaginationProps['onRowsPerPageChange'] = ({

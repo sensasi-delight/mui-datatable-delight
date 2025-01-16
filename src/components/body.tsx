@@ -19,14 +19,14 @@ import {
 import { useMainContext } from '../hooks/use-main-context'
 
 export function DataTableBody(props: DataTableBodyProps) {
-    const { textLabels } = useMainContext()
+    const { options, textLabels } = useMainContext()
 
     const { classes } = useStyles()
 
-    const { columns, options } = props
+    const { columns } = props
 
     const columnOrder = props.columnOrder ?? columns.map((_, id) => id)
-    const tableRows = buildRows(props)
+    const tableRows = buildRows(props, options)
     const visibleColCnt = columns.filter(c => c.display === 'true').length
 
     return (
@@ -44,7 +44,7 @@ export function DataTableBody(props: DataTableBodyProps) {
                 ))}
 
             {(!tableRows || tableRows.length === 0) && (
-                <DataTableBodyRow options={options} isRowSelectable={false}>
+                <DataTableBodyRow isRowSelectable={false}>
                     <TableBodyCell
                         colSpan={
                             options.selectableRows !== 'none' ||
@@ -52,7 +52,6 @@ export function DataTableBody(props: DataTableBodyProps) {
                                 ? visibleColCnt + 1
                                 : visibleColCnt
                         }
-                        options={options}
                         colIndex={0}
                         rowIndex={0}
                         print
@@ -80,9 +79,6 @@ interface DataTableBodyProps {
 
     /** Columns used to describe table */
     columns: DataTableState['columns']
-
-    /** Options used to describe table */
-    options: DataTableOptions
 
     /** Data used to filter table against */
     filterList: DataTableState['filterList']
@@ -117,8 +113,6 @@ interface DataTableBodyProps {
     page: DataTableState['page']
 
     rowsPerPage: DataTableState['rowsPerPage']
-
-    tableId: string
 }
 
 const useStyles = makeStyles({
@@ -144,13 +138,10 @@ const useStyles = makeStyles({
     }
 }))
 
-function buildRows({
-    data,
-    page,
-    rowsPerPage,
-    count,
-    options
-}: DataTableBodyProps) {
+function buildRows(
+    { data, page, rowsPerPage, count }: DataTableBodyProps,
+    options: DataTableOptions
+) {
     if (options.serverSide) return data.length ? data : null
 
     const rows = []
@@ -176,13 +167,6 @@ function buildRows({
     return rows.length ? rows : null
 }
 
-function isRowExpandable(
-    dataIndex: number,
-    { options, expandedRows }: DataTableBodyProps
-) {
-    return options.isRowExpandable?.(dataIndex, expandedRows) ?? true
-}
-
 function isRowExpanded(
     dataIndex: number,
     { expandedRows }: DataTableBodyProps
@@ -193,7 +177,8 @@ function isRowExpanded(
 function getIsRowSelectable(
     dataIndex: number,
     selectedRows: DataTableBodyProps['selectedRows'],
-    { options, selectedRows: selectedRowsFromOptions }: DataTableBodyProps
+    { selectedRows: selectedRowsFromOptions }: DataTableBodyProps,
+    options: DataTableOptions
 ) {
     selectedRows = selectedRows ?? selectedRowsFromOptions
 
@@ -202,7 +187,8 @@ function getIsRowSelectable(
 
 function getRowIndex(
     index: number,
-    { page, rowsPerPage, options }: DataTableBodyProps
+    { page, rowsPerPage }: DataTableBodyProps,
+    options: DataTableOptions
 ) {
     if (options.serverSide) {
         return index
@@ -216,7 +202,8 @@ function getRowIndex(
 function handleRowSelect(
     data: RowTypeIDK,
     event: React.SyntheticEvent,
-    parentProps: DataTableBodyProps
+    parentProps: DataTableBodyProps,
+    options: DataTableOptions
 ) {
     const { previousSelectedRow } = parentProps
 
@@ -256,7 +243,14 @@ function handleRowSelect(
         while (curIndex !== data.index) {
             const dataIndex = parentProps.data[curIndex].dataIndex
 
-            if (getIsRowSelectable(dataIndex, selectedRows, parentProps)) {
+            if (
+                getIsRowSelectable(
+                    dataIndex,
+                    selectedRows,
+                    parentProps,
+                    options
+                )
+            ) {
                 const lookup = {
                     index: curIndex,
                     dataIndex: dataIndex
@@ -296,8 +290,9 @@ function RenderRow({
     columnOrder: number[]
 }) {
     const { classes } = useStyles()
+    const { options } = useMainContext()
 
-    const { options, selectedRows, toggleExpandRow, columns } = parentProps
+    const { selectedRows, toggleExpandRow, columns } = parentProps
 
     if (options.customRowRender) {
         return options.customRowRender(row, dataIndex, rowIndex)
@@ -311,7 +306,8 @@ function RenderRow({
     const isRowSelectable = getIsRowSelectable(
         dataIndex,
         selectedRows,
-        parentProps
+        parentProps,
+        options
     )
 
     const overriddenBodyProps: TableRowProps = options.setRowProps
@@ -326,7 +322,6 @@ function RenderRow({
     return (
         <>
             <DataTableBodyRow
-                options={options}
                 rowSelected={isRowSelected}
                 isRowSelectable={isRowSelectable}
                 onClick={event =>
@@ -337,6 +332,7 @@ function RenderRow({
                             dataIndex: dataIndex
                         },
                         event,
+                        options,
                         parentProps
                     )
                 }
@@ -359,16 +355,21 @@ function RenderRow({
                     onChange={event =>
                         handleRowSelect(
                             {
-                                index: getRowIndex(rowIndex, parentProps),
+                                index: getRowIndex(
+                                    rowIndex,
+                                    parentProps,
+                                    options
+                                ),
                                 dataIndex
                             },
                             event,
-                            parentProps
+                            parentProps,
+                            options
                         )
                     }
                     onExpand={() =>
                         toggleExpandRow({
-                            index: getRowIndex(rowIndex, parentProps),
+                            index: getRowIndex(rowIndex, parentProps, options),
                             dataIndex
                         })
                     }
@@ -379,8 +380,12 @@ function RenderRow({
                     // When rows are expandable, but this particular row isn't expandable, set this to true.
                     // This will add a new class to the toggle button, datatable-delight--body--select-cell-expandDisabled.
                     hideExpandButton={
-                        !isRowExpandable(dataIndex, parentProps) &&
-                        options.expandableRows
+                        !(
+                            options.isRowExpandable?.(
+                                dataIndex,
+                                parentProps.expandedRows
+                            ) ?? true
+                        ) && options.expandableRows
                     }
                     selectableOn={options.selectableRows}
                     selectableRowsHideCheckboxes={
@@ -407,7 +412,6 @@ function RenderRow({
                                 colIndex={column.index}
                                 columnHeader={columns[column.index].label}
                                 print={columns[column.index].print}
-                                options={options}
                                 key={column.index}
                             >
                                 {column.value}
@@ -432,6 +436,7 @@ function handleRowClick(
         dataIndex: number
     },
     event: React.MouseEvent<HTMLTableRowElement, MouseEvent>,
+    options: DataTableOptions,
     parentProps: DataTableBodyProps
 ) {
     const clickedElement = event.target as HTMLElement
@@ -451,12 +456,13 @@ function handleRowClick(
 
     // Check if we should toggle row select when row is clicked anywhere
     if (
-        parentProps.options.selectableRowsOnClick &&
-        parentProps.options.selectableRows !== 'none' &&
+        options.selectableRowsOnClick &&
+        options.selectableRows !== 'none' &&
         getIsRowSelectable(
             data.dataIndex,
             parentProps.selectedRows,
-            parentProps
+            parentProps,
+            options
         )
     ) {
         const selectRow = {
@@ -464,14 +470,15 @@ function handleRowClick(
             dataIndex: data.dataIndex
         }
 
-        handleRowSelect(selectRow, event, parentProps)
+        handleRowSelect(selectRow, event, parentProps, options)
     }
 
     // Check if we should trigger row expand when row is clicked anywhere
     if (
-        parentProps.options.expandableRowsOnClick &&
-        parentProps.options.expandableRows &&
-        isRowExpandable(data.dataIndex, parentProps)
+        options.expandableRowsOnClick &&
+        options.expandableRows &&
+        (options.isRowExpandable?.(data.dataIndex, parentProps.expandedRows) ??
+            true)
     ) {
         parentProps.toggleExpandRow({
             index: data.rowIndex,
@@ -480,8 +487,7 @@ function handleRowClick(
     }
 
     // Don't trigger onRowClick if the event was actually a row selection via click
-    if (parentProps.options.selectableRowsOnClick) return
+    if (options.selectableRowsOnClick) return
 
-    parentProps.options.onRowClick &&
-        parentProps.options.onRowClick(row, data, event)
+    options.onRowClick && options.onRowClick(row, data, event)
 }

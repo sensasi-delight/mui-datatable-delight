@@ -5,6 +5,8 @@ import { useState } from 'react'
 import TableHeadCell from './head.cell'
 import TableHeadRow from './head.row'
 import { DataTableTableSelectCell } from './components.shared/select-cell'
+import { useMainContext } from '../hooks/use-main-context'
+import { DataTableState } from '../data-table.props.type/state'
 
 const useStyles = makeStyles({ name: 'MUIDataTableHead' })(theme => ({
     main: {},
@@ -30,7 +32,6 @@ export default function TableHead({
     data,
     draggableHeadCellRefs,
     expandedRows,
-    options,
     selectedRows,
     selectRowUpdate,
     setCellRef,
@@ -41,8 +42,9 @@ export default function TableHead({
     toggleAllExpandableRows,
     toggleSort,
     updateColumnOrder
-}) {
+}: DataTableHeadProps) {
     const { classes } = useStyles()
+    const { options } = useMainContext()
 
     if (columnOrder === null) {
         columnOrder = columns ? columns.map((item, idx) => idx) : []
@@ -160,7 +162,6 @@ export default function TableHead({
                                 toggleSort={handleToggleColumn}
                                 hint={column.hint}
                                 print={column.print}
-                                options={options}
                                 column={column}
                                 columns={columns}
                                 updateColumnOrder={updateColumnOrder}
@@ -184,4 +185,8 @@ export default function TableHead({
             </TableHeadRow>
         </MuiTableHead>
     )
+}
+
+interface DataTableHeadProps {
+    columns: DataTableState['columns']
 }

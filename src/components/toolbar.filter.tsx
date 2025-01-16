@@ -4,7 +4,6 @@ import { makeStyles } from 'tss-react/mui'
 import { ReactNode, useState } from 'react'
 import clsx from 'clsx'
 // locals
-import type { DataTableOptions } from '../data-table.props.type/options'
 import type { DataTableProps } from '../'
 import { type DataTableState } from '../data-table.props.type/state'
 import { DataTableToolbarFilterRenderFilters } from './toolbar.filter.render-filters'
@@ -12,10 +11,9 @@ import { useMainContext } from '../hooks/use-main-context'
 import { FilterTypeEnum } from '../data-table.props.type/columns'
 
 export function DataTableToolbarFilter(props: DataTableToolbarFilterProps) {
-    const { textLabels } = useMainContext()
+    const { options, textLabels } = useMainContext()
     const {
         columns,
-        options,
         customFooter,
         filterList: filterListFromProp,
         onFilterReset,
@@ -155,9 +153,6 @@ export interface DataTableToolbarFilterProps {
 
     /** Data selected to be filtered against dropdown/checkbox */
     filterList: DataTableState['filterList']
-
-    /** Options used to describe table */
-    options: DataTableOptions
 
     /** Callback to trigger filter update */
     onFilterUpdate?: (

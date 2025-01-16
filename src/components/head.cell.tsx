@@ -80,18 +80,16 @@ export default function TableHeadCell({
     draggingHook,
     hint,
     index,
-    options,
     print,
     setCellRef,
     sort,
     sortDirection,
     tableRef,
-    tableId,
     timers,
     toggleSort,
     updateColumnOrder
 }: DataTableHeadCellProps) {
-    const { textLabels, components } = useMainContext()
+    const { components, options, textLabels } = useMainContext()
     const [sortTooltipOpen, setSortTooltipOpen] = useState(false)
     const [hintTooltipOpen, setHintTooltipOpen] = useState(false)
 
@@ -171,7 +169,7 @@ export default function TableHeadCell({
             ? options.draggableColumns.transitionTime
             : 300,
         tableRef: tableRef ? tableRef() : null,
-        tableId: tableId || 'none',
+        tableId: options.tableId ?? 'none',
         timers
     })
 
@@ -209,7 +207,6 @@ export default function TableHeadCell({
             scope="col"
             sortDirection={ariaSortDirection}
             data-colindex={index}
-            data-tableid={tableId}
             onMouseDown={closeTooltip}
             sx={{
                 bgcolor: 'background.paper'
@@ -304,9 +301,6 @@ export default function TableHeadCell({
 }
 
 interface DataTableHeadCellProps {
-    /** Options used to describe table */
-    options: Object
-
     /** Current sort direction */
     sortDirection?: 'asc' | 'desc' | 'none'
 

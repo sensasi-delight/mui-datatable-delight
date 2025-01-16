@@ -1,10 +1,9 @@
 import { TableRow, type TableRowProps, type Theme } from '@mui/material'
 import { makeStyles } from 'tss-react/mui'
-import { DataTableOptions } from '../data-table.props.type/options'
 import clsx from 'clsx'
+import { useMainContext } from '../hooks/use-main-context'
 
 export function DataTableBodyRow({
-    options,
     rowSelected,
     onClick,
     isRowSelectable,
@@ -12,6 +11,7 @@ export function DataTableBodyRow({
     className
 }: DataTableBodyRowProps) {
     const { classes } = useStyles()
+    const { options } = useMainContext()
 
     return (
         <TableRow
@@ -46,9 +46,6 @@ export function DataTableBodyRow({
 }
 export interface DataTableBodyRowProps extends TableRowProps {
     isRowSelectable: boolean
-
-    /** Options used to describe table */
-    options: DataTableOptions
 
     /** Callback to execute when row is clicked */
     onClick?: TableRowProps['onClick']

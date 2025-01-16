@@ -1,21 +1,6 @@
-import type {
-    MUIDataTableOptions,
-    MUIDataTableTextLabelsPagination
-} from 'mui-datatables'
-
 export interface DataTableFooterPaginationProps {
     /** Total number of table rows */
     count: number
-
-    /** Options used to describe table */
-    options: {
-        rowsPerPageOptions: MUIDataTableOptions['rowsPerPageOptions']
-        jumpToPage: MUIDataTableOptions['jumpToPage']
-        pagination: boolean
-        textLabels: {
-            pagination: MUIDataTableTextLabelsPagination
-        }
-    }
 
     /** Current page index */
     page: number

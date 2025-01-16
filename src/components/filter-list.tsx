@@ -1,14 +1,13 @@
+import type { ReactNode } from 'react'
 import { makeStyles } from 'tss-react/mui'
+import { Chip } from '@mui/material'
 // local types
 import type { DataTableState } from '../data-table.props.type/state'
-import type { DataTableOptions } from '../data-table.props.type/options'
-import { Chip } from '@mui/material'
-import { ReactNode } from 'react'
+import { useMainContext } from '../hooks/use-main-context'
 
 const CLASS_ID = 'datatable-delight--filter-list'
 
 export function TableFilterList({
-    options,
     filterList,
     filterUpdate,
     filterListRenderers,
@@ -17,6 +16,7 @@ export function TableFilterList({
     customFilterListUpdate
 }: TableFilterListProps) {
     const { classes, cx } = useStyles()
+    const { options } = useMainContext()
     const { serverSide } = options
 
     const removeFilter = (
@@ -174,8 +174,6 @@ interface TableFilterListProps {
 
     /** Callback to trigger filter update */
     onFilterUpdate: (...params: unknown[]) => void
-
-    options: DataTableOptions
 }
 
 const useStyles = makeStyles()(() => ({
