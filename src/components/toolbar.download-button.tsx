@@ -35,66 +35,100 @@ function handleCSVDownload(
     { columns, columnOrder, data, displayData }: DataTableState,
     options: DataTableOptions
 ) {
-    const columnOrderCopy = Array.isArray(columnOrder)
-        ? columnOrder.slice(0).map((_, idx) => idx)
-        : []
+    const columnOrderIndices = getColumnOrderIndices(columnOrder)
+    let columnsToDownload = columnOrderIndices.map(idx => columns[idx])
+    let dataToDownload = getDataToDownload(data, columnOrderIndices)
 
-    let columnsToDownload = columnOrderCopy.map(idx => columns[idx])
-    let dataToDownload = data.map(row => ({
-        index: row.index,
-        data: columnOrderCopy.map(idx => row.data[idx])
-    }))
-
-    // check rows first:
-    if (options.downloadOptions?.filterOptions?.useDisplayedRowsOnly) {
-        const filteredDataToDownload = displayData.map((row, index) => {
-            let i = -1
-
-            return {
-                index, // Help to preserve sort order in custom render columns
-                data: row.data.map(column => {
-                    i += 1
-
-                    /**
-                     * if we have a custom render, which will appear as a react element, we must grab the actual value from data that matches the dataIndex and column
-                     * @todo Create a utility function for checking whether or not something is a react object
-                     */
-                    let val =
-                        typeof column === 'object' &&
-                        column !== null &&
-                        !Array.isArray(column)
-                            ? data.find(d => d.index === row.dataIndex)?.data[i]
-                            : column
-
-                    val =
-                        typeof val === 'function'
-                            ? data.find(d => d.index === row.dataIndex)?.data[i]
-                            : val
-
-                    return val
-                })
-            }
-        })
-
-        dataToDownload = filteredDataToDownload.map(row => ({
-            index: row.index,
-            data: columnOrderCopy.map(idx => row.data[idx])
-        }))
+    if (shouldUseDisplayedRowsOnly(options)) {
+        dataToDownload = getFilteredDataToDownload(
+            displayData,
+            data,
+            columnOrderIndices
+        )
     }
 
-    // now, check columns:
-    if (options.downloadOptions?.filterOptions?.useDisplayedColumnsOnly) {
-        columnsToDownload = columnsToDownload.filter(
-            column => column.display === 'true'
+    if (shouldUseDisplayedColumnsOnly(options)) {
+        columnsToDownload = getDisplayedColumns(columnsToDownload)
+        dataToDownload = filterDataByDisplayedColumns(
+            dataToDownload,
+            columns,
+            columnOrderIndices
         )
-
-        dataToDownload = dataToDownload.map(row => {
-            row.data = row.data.filter(
-                (_, index) => columns[columnOrderCopy[index]].display === 'true'
-            )
-            return row
-        })
     }
 
     createCsvDownload(columnsToDownload, dataToDownload, options)
+}
+
+function getColumnOrderIndices(columnOrder: any[]): number[] {
+    return Array.isArray(columnOrder) ? columnOrder.map((_, idx) => idx) : []
+}
+
+function getDataToDownload(data: any[], columnOrderIndices: number[]): any[] {
+    return data.map(row => ({
+        index: row.index,
+        data: columnOrderIndices.map(idx => row.data[idx])
+    }))
+}
+
+function shouldUseDisplayedRowsOnly(options: DataTableOptions): boolean {
+    return options.downloadOptions?.filterOptions?.useDisplayedRowsOnly || false
+}
+
+function getFilteredDataToDownload(
+    displayData: DataTableState['displayData'],
+    data: DataTableState['data'],
+    columnOrderIndices: number[]
+): any[] {
+    return displayData
+        .map(row => ({
+            index: row.index,
+            data: row.data.map((column, i) =>
+                getActualValue(column, row.dataIndex, i, data)
+            )
+        }))
+        .map(row => ({
+            index: row.index,
+            data: columnOrderIndices.map(idx => row.data[idx])
+        }))
+}
+
+function getActualValue(
+    column: any,
+    dataIndex: number,
+    colIndex: number,
+    data: any[]
+): any {
+    if (isReactElement(column)) {
+        return data.find(d => d.index === dataIndex)?.data[colIndex]
+    }
+    return typeof column === 'function'
+        ? data.find(d => d.index === dataIndex)?.data[colIndex]
+        : column
+}
+
+function isReactElement(obj: any): boolean {
+    return typeof obj === 'object' && obj !== null && !Array.isArray(obj)
+}
+
+function shouldUseDisplayedColumnsOnly(options: DataTableOptions): boolean {
+    return (
+        options.downloadOptions?.filterOptions?.useDisplayedColumnsOnly || false
+    )
+}
+
+function getDisplayedColumns(columns: any[]): any[] {
+    return columns.filter(column => column.display === 'true')
+}
+
+function filterDataByDisplayedColumns(
+    data: any[],
+    columns: any[],
+    columnOrderIndices: number[]
+): any[] {
+    return data.map(row => ({
+        ...row,
+        data: row.data.filter(
+            (_, idx) => columns[columnOrderIndices[idx]].display === 'true'
+        )
+    }))
 }
