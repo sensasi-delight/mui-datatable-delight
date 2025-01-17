@@ -147,7 +147,9 @@ export interface DataTableOptions {
      *
      * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-toolbar/CustomToolbar.tsx
      */
-    customToolbar?: (data: { displayData: DisplayData }) => ReactNode
+    customToolbar?: (data: {
+        displayData: DataTableState['displayData']
+    }) => ReactNode
 
     /**
      * Render a custom selected row ToolBar.
@@ -368,7 +370,7 @@ export interface DataTableOptions {
         filterList: DataTableState['filterList'],
         type: FilterTypeEnum | 'reset',
         changedColumnIndex: number | null,
-        displayData: DisplayData
+        displayData: DataTableState['displayData']
     ) => void
 
     /**
@@ -378,7 +380,7 @@ export interface DataTableOptions {
      */
     onFilterChipClose?: (
         index: number,
-        removedFilter: string,
+        removedFilter: string | string[],
         filterList: DataTableState['filterList']
     ) => void
 
@@ -434,7 +436,7 @@ export interface DataTableOptions {
     ) => void
 
     /** Callback function that triggers when the search text value has changed. */
-    onSearchChange?: (searchText: string | null) => void
+    onSearchChange?: (searchText?: string) => void
 
     /** Callback function that triggers when the searchbox closes. */
     onSearchClose?: () => void
@@ -763,7 +765,7 @@ export interface DataTableOptions {
     /**
      * @deprecated  in favor of the {@link confirmFilters} option.
      */
-    serverSideFilterList?: unknown
+    serverSideFilterList?: DataTableState['filterList']
 }
 
 //     /** Options used to describe table */

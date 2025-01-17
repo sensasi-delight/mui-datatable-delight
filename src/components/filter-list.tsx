@@ -1,65 +1,80 @@
-import type { ReactNode } from 'react'
 import { makeStyles } from 'tss-react/mui'
 import { Chip } from '@mui/material'
 // local types
 import type { DataTableState } from '../data-table.props.type/state'
 import { useMainContext } from '../hooks/use-main-context'
+import { FilterTypeType } from '../data-table.props.type/shared/filter-type-type'
+import { FilterUpdateType } from '../data-table'
 
 const CLASS_ID = 'datatable-delight--filter-list'
 
-export function TableFilterList({
-    filterList,
-    filterUpdate,
-    filterListRenderers,
-    columnNames,
-    serverSideFilterList,
-    customFilterListUpdate
-}: TableFilterListProps) {
+/**
+ * SHOW LIST OF VALUES OF FILTERS THAT APPLIED
+ */
+export function TableFilterList({ filterUpdate }: TableFilterListProps) {
     const { classes, cx } = useStyles()
-    const { options } = useMainContext()
+    const { options, state } = useMainContext()
     const { serverSide } = options
 
-    const removeFilter = (
-        index,
-        filterValue,
-        columnName,
-        filterType,
-        customFilterListUpdate = null
-    ) => {
-        let removedFilter = filterValue
-        if (Array.isArray(removedFilter) && removedFilter.length === 0) {
-            removedFilter = filterList[index]
-        }
+    const columnNames = state.columns.map(column => ({
+        name: column.name,
+        filterType: column.filterType ?? options.filterType
+    }))
+
+    const customFilterListUpdate = state.columns.map(column => {
+        return column.customFilterListOptions?.update
+    })
+
+    const filterListRenderers = state.columns.map(column => {
+        if (
+            column.customFilterListOptions &&
+            column.customFilterListOptions.render
+        )
+            return column.customFilterListOptions.render
+
+        // DEPRECATED: This option is being replaced with customFilterListOptions.render
+        return column.customFilterListRender ?? (<T,>(f: T) => f)
+    })
+
+    function removeFilter(
+        index: number,
+        filterValue: string,
+        columnName: string,
+        filterType: FilterTypeType
+    ) {
+        const removedFilter =
+            Array.isArray(filterValue) && filterValue.length === 0
+                ? state.filterList[index]
+                : filterValue
+
+        console.log(columnName)
 
         filterUpdate(
             index,
             filterValue,
-            columnName,
+            state.columns.find(column => column.name === columnName),
             filterType,
             customFilterListUpdate,
-            filterList => {
-                if (options.onFilterChipClose) {
-                    options.onFilterChipClose(index, removedFilter, filterList)
-                }
+            (filterList: DataTableState['filterList']) => {
+                options.onFilterChipClose?.(index, removedFilter, filterList)
             }
         )
     }
 
     const customFilterChip = (
-        customFilterItem,
-        index,
-        customFilterItemIndex,
-        item,
-        isArray
+        customFilterItem: string,
+        index: number,
+        customFilterItemIndex: number,
+        item: string[],
+        isArray: boolean
     ) => {
-        let type
-        // If our custom filter list is an array, we need to check for custom update functions to determine
-        // default type. Otherwise we use the supplied type in options.
-        if (isArray) {
-            type = customFilterListUpdate[index] ? 'custom' : 'chip'
-        } else {
-            type = columnNames[index].filterType
-        }
+        /**
+         * If our custom filter list is an array, we need to check for custom update functions to determine default type. Otherwise we use the supplied type in options.
+         */
+        const type: FilterTypeType =
+            (isArray && customFilterListUpdate[index]
+                ? 'custom'
+                : columnNames[index].filterType) ?? 'chip'
 
         return (
             <Chip
@@ -68,10 +83,10 @@ export function TableFilterList({
                 onDelete={() =>
                     removeFilter(
                         index,
-                        item[customFilterItemIndex] || [],
+                        item[customFilterItemIndex],
                         columnNames[index].name,
-                        type,
-                        customFilterListUpdate[index]
+                        type
+                        // customFilterListUpdate[index]
                     )
                 }
                 className={classes.chip}
@@ -92,7 +107,7 @@ export function TableFilterList({
         )
     }
 
-    const filterChip = (index: number, data, colIndex: number) => (
+    const filterChip = (index: number, data: string, colIndex: number) => (
         <Chip
             label={filterListRenderers[index](data)}
             key={colIndex}
@@ -155,25 +170,15 @@ export function TableFilterList({
 
     return (
         <div className={cx(CLASS_ID, classes.root)}>
-            {serverSide && serverSideFilterList
-                ? getFilterList(serverSideFilterList)
-                : getFilterList(filterList)}
+            {serverSide && options.serverSideFilterList
+                ? getFilterList(options.serverSideFilterList)
+                : getFilterList(state.filterList)}
         </div>
     )
 }
 
 interface TableFilterListProps {
-    /** Data used to filter table against */
-    filterList: DataTableState['filterList']
-
-    /** Filter List value renderers */
-    filterListRenderers: ((val: unknown) => ReactNode)[]
-
-    /** Columns used to describe table */
-    columnNames: DataTableState['columns']
-
-    /** Callback to trigger filter update */
-    onFilterUpdate: (...params: unknown[]) => void
+    filterUpdate: FilterUpdateType
 }
 
 const useStyles = makeStyles()(() => ({

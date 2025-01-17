@@ -11,6 +11,7 @@ import { transformData } from './transform-data'
 import { sortCompare as defaultSortCompare } from './sort-compare'
 import { buildMap } from './build-map'
 import { warnDeprecated } from './warn-deprecated'
+import { MUIDataTableMeta } from 'mui-datatables'
 
 enum TABLE_LOAD {
     INITIAL = 1,
@@ -456,7 +457,7 @@ export function getDisplayData(
     state: DataTableState,
     options: DataTableOptions,
     setState: (newState: DataTableState) => void
-) {
+): DataTableState['displayData'] {
     const newRows = []
     const dataForTableMeta = tableMeta ? tableMeta.tableData : props.data
 

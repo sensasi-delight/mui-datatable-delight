@@ -3,11 +3,8 @@
 // types
 import type { DataTableProps, DefaultDataItem } from './data-table.props.type'
 // vendors
-import { DndProvider } from 'react-dnd'
-import { Paper, Table as MuiTable, TableProps } from '@mui/material'
-import { HTML5Backend } from 'react-dnd-html5-backend'
+import { Paper } from '@mui/material'
 import { makeStyles } from 'tss-react/mui'
-import clsx from 'clsx'
 import React, { createRef, useState, type RefObject } from 'react'
 // locals
 import { getPageValue } from './functions.shared/get-page-value'
@@ -18,7 +15,6 @@ import {
     getNewStateOnDataChange,
     sortTable
 } from './functions'
-import type { DisplayData, MUIDataTableStateRows } from 'mui-datatables'
 import {
     DataTableSortOrderOption,
     STP,
@@ -32,6 +28,7 @@ import {
     useMainContext
 } from './hooks/use-main-context'
 import { FilterTypeEnum } from './data-table.props.type/columns'
+import { InnerTable } from './data-table.inner-table'
 
 /**
  * A responsive DataTable component built with Material UI for React-based project.
@@ -66,7 +63,6 @@ export function DataTable({ components, className, ...props }: DataTableProps) {
                 className={paperClasses}
             >
                 <MUIDataTableClass
-                    classes={classes}
                     getRootRef={() => rootRef}
                     {...props}
                     setAnnounceText={setAnnounceText}
@@ -84,7 +80,7 @@ export function DataTable({ components, className, ...props }: DataTableProps) {
 
 const useStyles = makeStyles({
     name: 'datatable-delight'
-})(theme => ({
+})({
     root: {
         '& .datatables-no-print': {
             '@media print': {
@@ -98,40 +94,6 @@ const useStyles = makeStyles({
     paperResponsiveScrollFullHeightFullWidth: {
         position: 'absolute'
     },
-    tableRoot: {
-        outline: 'none'
-    },
-    responsiveBase: {
-        overflow: 'auto',
-        '@media print': {
-            height: 'auto !important'
-        }
-    },
-
-    // deprecated, but continuing support through v3.x
-    responsiveScroll: {
-        overflow: 'auto',
-        height: '100%'
-    },
-    // deprecated, but continuing support through v3.x
-    responsiveScrollMaxHeight: {
-        overflow: 'auto',
-        height: '100%'
-    },
-    // deprecated, but continuing support through v3.x
-    responsiveScrollFullHeight: {
-        height: '100%'
-    },
-    // deprecated, but continuing support through v3.x
-    responsiveStacked: {
-        overflow: 'auto',
-        [theme.breakpoints.down('md')]: {
-            overflow: 'hidden'
-        }
-    },
-    // deprecated, but continuing support through v3.x
-    responsiveStackedFullWidth: {},
-
     liveAnnounce: {
         border: '0',
         clip: 'rect(0 0 0 0)',
@@ -142,11 +104,10 @@ const useStyles = makeStyles({
         position: 'absolute',
         width: '1px'
     }
-}))
+})
 
 interface TEMPORARY_PROPS_TYPE
     extends Omit<DataTableProps<DefaultDataItem>, 'components'> {
-    classes: ReturnType<typeof useStyles>['classes']
     getRootRef: () => RefObject<HTMLDivElement | null>
     setAnnounceText: (text: string) => void
 }
@@ -189,8 +150,6 @@ class MUIDataTableClass extends React.Component<
                 this.tableRef.current
             )
         }
-
-        this.setState(this.context.state)
     }
 
     componentDidUpdate(prevProps: DataTableProps) {
@@ -199,33 +158,31 @@ class MUIDataTableClass extends React.Component<
             this.props.columns !== prevProps.columns ||
             this.props.options !== prevProps.options
         ) {
-            let didDataUpdate = this.props.data !== prevProps.data
-            if (this.props.data && prevProps.data) {
-                didDataUpdate =
-                    didDataUpdate &&
-                    this.props.data.length === prevProps.data.length
-            }
+            const didDataUpdate =
+                this.props.data && prevProps.data
+                    ? this.props.data.length === prevProps.data.length
+                    : this.props.data !== prevProps.data
 
-            this.setState(
-                getNewStateOnDataChange(
+            const pageNo =
+                this.props.options?.searchText !==
+                    prevProps.options?.searchText &&
+                !this.props.options?.serverSide
+                    ? 0 // When we have a search, we must reset page to view it unless on serverSide since paging is handled by the user.
+                    : this.context.state.page
+
+            const newState = {
+                ...getNewStateOnDataChange(
                     this.props,
                     TABLE_LOAD.INITIAL,
                     didDataUpdate,
                     this.context.options,
-                    this.state,
-                    this.setState
-                )
-            )
+                    this.context.state,
+                    this.context.setState
+                ),
+                page: pageNo
+            }
 
-            this.context.onStateChange?.(TableAction.PROP_UPDATE, this.state)
-        }
-
-        if (
-            this.props.options?.searchText !== prevProps.options?.searchText &&
-            !this.props.options?.serverSide
-        ) {
-            // When we have a search, we must reset page to view it unless on serverSide since paging is handled by the user.
-            this.setState({ page: 0 })
+            this.context.onAction?.(TableAction.PROP_UPDATE, newState)
         }
 
         if (this.context.options.resizableColumns && this.tableRef.current) {
@@ -247,394 +204,300 @@ class MUIDataTableClass extends React.Component<
     getCurrentRootRef = () => this.props.getRootRef().current
 
     toggleViewColumn = (index: number) => {
-        this.setState(
-            ({ columns }) => {
-                const cols = cloneDeep(columns) as typeof columns
+        const { columns } = this.context.state
 
-                cols[index].display =
-                    cols[index].display === 'true' ? 'false' : 'true'
+        const newColumns = cloneDeep(columns) as typeof columns
 
-                return {
-                    columns: cols
-                }
-            },
-            () => {
-                this.context.onStateChange?.(
-                    TableAction.VIEW_COLUMNS_CHANGE,
-                    this.state
-                )
+        newColumns[index].display =
+            newColumns[index].display === 'true' ? 'false' : 'true'
 
-                var cb =
-                    this.context.options.onViewColumnsChange ||
-                    this.context.options.onColumnViewChange
+        this.context.onAction?.(TableAction.VIEW_COLUMNS_CHANGE, {
+            columns: newColumns
+        })
 
-                if (cb) {
-                    cb(
-                        this.state.columns[index].name,
-                        this.state.columns[index].display === 'true'
-                            ? 'add'
-                            : 'remove'
-                    )
-                }
-            }
+        const cb =
+            this.context.options.onViewColumnsChange ||
+            this.context.options.onColumnViewChange
+
+        cb?.(
+            newColumns[index].name,
+            newColumns[index].display === 'true' ? 'add' : 'remove'
         )
     }
 
     toggleSortColumn = (columnIndex: number) => {
-        this.setState(prevState => {
-            const { columns, data } = prevState
+        const prevState = this.context.state
+        const { columns, data } = prevState
 
-            let newOrder: DataTableSortOrderOption['direction'] = columns[
-                columnIndex
-            ].sortDescFirst
-                ? 'desc'
-                : 'asc'
+        let newOrder: DataTableSortOrderOption['direction'] = columns[
+            columnIndex
+        ].sortDescFirst
+            ? 'desc'
+            : 'asc'
 
-            const sequenceOrder: DataTableSortOrderOption['direction'][] = [
-                'asc',
-                'desc'
-            ]
+        const sequenceOrder: DataTableSortOrderOption['direction'][] = [
+            'asc',
+            'desc'
+        ]
 
-            if (columns[columnIndex].sortDescFirst) {
-                sequenceOrder.reverse()
+        if (columns[columnIndex].sortDescFirst) {
+            sequenceOrder.reverse()
+        }
+
+        if (columns[columnIndex].sortThirdClickReset) {
+            sequenceOrder.push('none')
+        }
+
+        if (columns[columnIndex].name === prevState.sortOrder?.name) {
+            let position = sequenceOrder.indexOf(prevState.sortOrder.direction)
+
+            if (position !== -1) {
+                position++
+
+                if (position >= sequenceOrder.length) position = 0
+
+                newOrder = sequenceOrder[position]
             }
+        }
 
-            if (columns[columnIndex].sortThirdClickReset) {
-                sequenceOrder.push('none')
+        const newSortOrder: DataTableSortOrderOption = {
+            name: columns[columnIndex].name,
+            direction: newOrder
+        }
+
+        function getSortDirectionLabel(
+            sortOrder: DataTableOptions['sortOrder']
+        ) {
+            switch (sortOrder?.direction) {
+                case 'asc':
+                    return 'ascending'
+                case 'desc':
+                    return 'descending'
+                case 'none':
+                    return 'none'
+                default:
+                    return ''
             }
+        }
 
-            if (columns[columnIndex].name === this.state.sortOrder?.name) {
-                let position = sequenceOrder.indexOf(
-                    this.state.sortOrder.direction
-                )
+        const orderLabel = getSortDirectionLabel(newSortOrder)
+        const announceText = `Table now sorted by ${columns[columnIndex].name} : ${orderLabel}`
 
-                if (position !== -1) {
-                    position++
+        this.props.setAnnounceText(announceText)
 
-                    if (position >= sequenceOrder.length) position = 0
+        let newState: DataTableState = {
+            ...prevState,
+            columns: columns,
+            activeColumn: columnIndex
+        }
 
-                    newOrder = sequenceOrder[position]
-                }
+        if (this.context.options.serverSide) {
+            newState = {
+                ...newState,
+                data: prevState.data,
+                displayData: prevState.displayData,
+                selectedRows: prevState.selectedRows,
+                sortOrder: newSortOrder
             }
-
-            const newSortOrder: DataTableSortOrderOption = {
-                name: columns[columnIndex].name,
-                direction: newOrder
-            }
-
-            function getSortDirectionLabel(
-                sortOrder: DataTableOptions['sortOrder']
-            ) {
-                switch (sortOrder?.direction) {
-                    case 'asc':
-                        return 'ascending'
-                    case 'desc':
-                        return 'descending'
-                    case 'none':
-                        return 'none'
-                    default:
-                        return ''
-                }
-            }
-
-            const orderLabel = getSortDirectionLabel(newSortOrder)
-            const announceText = `Table now sorted by ${columns[columnIndex].name} : ${orderLabel}`
-
-            this.props.setAnnounceText(announceText)
-
-            let newState: DataTableState = {
-                ...prevState,
-                columns: columns,
-                activeColumn: columnIndex
-            }
-
-            if (this.context.options.serverSide) {
-                newState = {
-                    ...newState,
-                    data: prevState.data,
-                    displayData: prevState.displayData,
-                    selectedRows: prevState.selectedRows,
-                    sortOrder: newSortOrder
-                }
-            } else {
-                const sortedData = sortTable(
-                    data,
-                    columnIndex,
-                    newOrder,
-                    columns[columnIndex],
-                    this.context.options,
-                    newState
-                )
-
-                newState = {
-                    ...newState,
-                    data: sortedData.data,
-                    selectedRows: sortedData.selectedRows,
-                    sortOrder: newSortOrder,
-                    previousSelectedRow: null
-                }
-
-                newState.displayData = getDisplayData(
-                    columns,
-                    sortedData.data,
-                    prevState.filterList,
-                    prevState.searchText,
-                    null,
-                    this.props,
-                    newState,
-                    this.context.options,
-                    this.setState
-                )
-            }
-
-            this.context.onStateChange?.(TableAction.SORT, newState)
-
-            this.context.options.onColumnSortChange?.(
-                newSortOrder.name,
-                newSortOrder.direction
+        } else {
+            const sortedData = sortTable(
+                data,
+                columnIndex,
+                newOrder,
+                columns[columnIndex],
+                this.context.options,
+                newState
             )
 
-            return newState
-        })
+            newState = {
+                ...newState,
+                data: sortedData.data,
+                selectedRows: sortedData.selectedRows,
+                sortOrder: newSortOrder,
+                previousSelectedRow: null
+            }
+
+            newState.displayData = getDisplayData(
+                columns,
+                sortedData.data,
+                prevState.filterList,
+                prevState.searchText,
+                null,
+                this.props,
+                newState,
+                this.context.options,
+                this.context.setState
+            )
+        }
+
+        this.context.onAction?.(TableAction.SORT, newState)
+
+        this.context.options.onColumnSortChange?.(
+            newSortOrder.name,
+            newSortOrder.direction
+        )
+
+        this.context.setState?.(newState)
     }
 
     changeRowsPerPage = (rowsPerPage: number) => {
         const rowCount =
-            this.context.options.count ?? this.state.displayData.length
+            this.context.options.count ?? this.context.state.displayData.length
 
-        this.setState(
-            () => ({
-                rowsPerPage: rowsPerPage,
-                page: getPageValue(rowCount, rowsPerPage, this.state.page)
-            }),
-            () => {
-                this.context.onStateChange?.(
-                    TableAction.CHANGE_ROWS_PER_PAGE,
-                    this.state
-                )
+        const newState = {
+            rowsPerPage: rowsPerPage,
+            page: getPageValue(rowCount, rowsPerPage, this.context.state.page)
+        }
 
-                this.context.options.onChangeRowsPerPage?.(
-                    this.state.rowsPerPage
-                )
-            }
-        )
+        this.context.onAction?.(TableAction.CHANGE_ROWS_PER_PAGE, newState)
+
+        this.context.options.onChangeRowsPerPage?.(newState.rowsPerPage)
     }
 
     changePage = (page: number) => {
-        this.setState(
-            () => ({
-                page: page
-            }),
-            () => {
-                this.context.onStateChange?.(
-                    TableAction.CHANGE_PAGE,
-                    this.state
-                )
-
-                if (this.context.options.onChangePage) {
-                    this.context.options.onChangePage(this.state.page)
-                }
-            }
-        )
+        this.context.onAction?.(TableAction.CHANGE_PAGE, { page })
+        this.context.options.onChangePage?.(page)
     }
 
     searchClose = () => {
-        this.setState(
-            prevState => ({
-                searchText: null,
-                displayData: this.context.options.serverSide
-                    ? prevState.displayData
-                    : getDisplayData(
-                          prevState.columns,
-                          prevState.data,
-                          prevState.filterList,
-                          null,
-                          null,
-                          this.props,
-                          prevState,
-                          this.context.options,
-                          this.setState
-                      )
-            }),
-            () => {
-                this.context.onStateChange?.(TableAction.SEARCH, this.state)
-                this.context.options.onSearchChange?.(this.state.searchText)
-            }
-        )
+        const prevState = this.context.state
+
+        // reset searchText
+        const searchText = undefined
+
+        this.context.onAction?.(TableAction.SEARCH, {
+            searchText,
+            displayData: this.context.options.serverSide
+                ? prevState.displayData
+                : getDisplayData(
+                      prevState.columns,
+                      prevState.data,
+                      prevState.filterList,
+                      undefined,
+                      null,
+                      this.props,
+                      prevState,
+                      this.context.options,
+                      this.context.setState
+                  )
+        })
+
+        this.context.options.onSearchChange?.(searchText)
     }
 
-    searchTextUpdate = (text: string) => {
-        this.setState(
-            prevState => ({
-                searchText: text && text.length ? text : null,
-                page: 0,
-                displayData: this.context.options.serverSide
-                    ? prevState.displayData
-                    : getDisplayData(
-                          prevState.columns,
-                          prevState.data,
-                          prevState.filterList,
-                          text,
-                          null,
-                          this.props,
-                          prevState,
-                          this.context.options,
-                          this.setState
-                      )
-            }),
-            () => {
-                this.context.onStateChange?.(TableAction.SEARCH, this.state)
-                this.context.options.onSearchChange?.(this.state.searchText)
-            }
-        )
+    searchTextUpdate = (newSearchText: string) => {
+        const prevState = this.context.state
+
+        const displayData = this.context.options.serverSide
+            ? prevState.displayData
+            : getDisplayData(
+                  prevState.columns,
+                  prevState.data,
+                  prevState.filterList,
+                  newSearchText,
+                  null,
+                  this.props,
+                  prevState,
+                  this.context.options,
+                  this.context.setState
+              )
+
+        this.context.onAction?.(TableAction.SEARCH, {
+            searchText: newSearchText,
+            page: 0,
+            displayData
+        })
+        this.context.options.onSearchChange?.(newSearchText)
     }
 
     resetFilters = () => {
-        this.setState(
-            prevState => {
-                const filterList = prevState.columns.map(() => [])
+        const prevState = this.context.state
 
-                return {
-                    filterList: filterList,
-                    displayData: this.context.options.serverSide
-                        ? prevState.displayData
-                        : getDisplayData(
-                              prevState.columns,
-                              prevState.data,
-                              filterList,
-                              prevState.searchText,
-                              null,
-                              this.props,
-                              prevState,
-                              this.context.options,
-                              this.setState
-                          )
-                }
-            },
-            () => {
-                this.context.onStateChange?.(
-                    TableAction.RESET_FILTERS,
-                    this.state
-                )
+        const filterList = prevState.columns.map(() => [])
+        const displayData = this.context.options.serverSide
+            ? prevState.displayData
+            : getDisplayData(
+                  prevState.columns,
+                  prevState.data,
+                  filterList,
+                  prevState.searchText,
+                  null,
+                  this.props,
+                  prevState,
+                  this.context.options,
+                  this.context.setState
+              )
 
-                this.context.options.onFilterChange?.(
-                    null,
-                    this.state.filterList,
-                    'reset',
-                    null,
-                    this.state.displayData
-                )
-            }
+        this.context.onAction?.(TableAction.RESET_FILTERS, {
+            filterList,
+            displayData
+        })
+
+        this.context.options.onFilterChange?.(
+            null,
+            filterList,
+            'reset',
+            null,
+            displayData
         )
     }
 
-    updateFilterByType = (
-        filterList: DataTableState['filterList'],
-        index: number,
+    filterUpdate: FilterUpdateType = (
+        index,
         value,
-        type: DataTableOptions['filterType'],
-        customUpdate: (
-            filterList: DataTableState['filterList'],
-            filterPos: number,
-            index: number
-        ) => string[][]
+        column,
+        type,
+        customUpdate,
+        next
     ) => {
-        const filterPos: number = filterList[index].findIndex(
-            filter => filter === value
+        const prevState = this.context.state
+
+        updateFilterByType(
+            prevState.filterList,
+            index,
+            value,
+            type,
+            customUpdate
         )
 
-        switch (type) {
-            case 'checkbox':
-                filterPos >= 0
-                    ? filterList[index].splice(filterPos, 1)
-                    : filterList[index].push(value)
-                break
-            case 'chip':
-                filterPos >= 0
-                    ? filterList[index].splice(filterPos, 1)
-                    : filterList[index].push(value)
-                break
-            case 'multiselect':
-                filterList[index] = value === '' ? [] : value
-                break
-            case 'dropdown':
-                filterList[index] = value
-                break
-            case 'custom':
-                if (customUpdate) {
-                    filterList = customUpdate(filterList, filterPos, index)
-                } else {
-                    filterList[index] = value
-                }
-                break
-            default:
-                filterList[index] =
-                    filterPos >= 0 || value === '' ? [] : [value]
+        const newState = {
+            ...prevState,
+            page: 0
         }
-    }
 
-    filterUpdate = (
-        index: number,
-        value: string | string[],
-        column: DataTableState['columns'][0],
-        type: FilterTypeEnum,
-        customUpdate: (
-            filterList: DataTableState['filterList'],
-            filterPos: number,
-            index: number
-        ) => string[][],
-        next?: (filterList: DataTableState['filterList']) => void
-    ) => {
-        this.setState(
-            prevState => {
-                this.updateFilterByType(
-                    prevState.filterList,
-                    index,
-                    value,
-                    type,
-                    customUpdate
-                )
+        const displayData = this.context.options.serverSide
+            ? prevState.displayData
+            : getDisplayData(
+                  prevState.columns,
+                  prevState.data,
+                  prevState.filterList,
+                  prevState.searchText,
+                  null,
+                  this.props,
+                  newState,
+                  this.context.options,
+                  this.context.setState
+              )
 
-                return {
-                    page: 0,
-                    displayData: this.context.options.serverSide
-                        ? prevState.displayData
-                        : getDisplayData(
-                              prevState.columns,
-                              prevState.data,
-                              prevState.filterList,
-                              prevState.searchText,
-                              null,
-                              this.props,
-                              prevState,
-                              this.context.options,
-                              this.setState
-                          ),
-                    previousSelectedRow: null
-                }
-            },
-            () => {
-                this.context.onStateChange?.(
-                    TableAction.FILTER_CHANGE,
-                    this.state
-                )
+        this.context.onAction?.(TableAction.FILTER_CHANGE, {
+            ...newState,
+            displayData
+        })
 
-                this.context.options.onFilterChange?.(
-                    column,
-                    this.state.filterList,
-                    type,
-                    index,
-                    this.state.displayData
-                )
-
-                next?.(this.state.filterList)
-            }
+        this.context.options.onFilterChange?.(
+            column,
+            prevState.filterList,
+            type,
+            index,
+            displayData
         )
+
+        next?.(prevState.filterList)
     }
 
     // Collapses or expands all expanded rows
     toggleAllExpandableRows = () => {
-        const expandedRowsData = [...this.state.expandedRows.data]
+        const expandedRowsData = [...this.context.state.expandedRows.data]
 
         const { isRowExpandable } = this.context.options
         const affectedRows: string[] = []
@@ -655,17 +518,20 @@ class MUIDataTableClass extends React.Component<
             }
         } else {
             // expand all
-            for (let ii = 0; ii < this.state.data.length; ii++) {
-                let item = this.state.data[ii]
+            for (let ii = 0; ii < this.context.state.data.length; ii++) {
+                let item = this.context.state.data[ii]
                 if (
                     !isRowExpandable ||
                     (isRowExpandable &&
                         isRowExpandable(
                             item.dataIndex,
-                            this.state.expandedRows
+                            this.context.state.expandedRows
                         ))
                 ) {
-                    if (this.state.expandedRows.lookup[item.index] !== true) {
+                    if (
+                        this.context.state.expandedRows.lookup[item.index] !==
+                        true
+                    ) {
                         let newItem = {
                             index: ii,
                             dataIndex: item.index
@@ -677,27 +543,27 @@ class MUIDataTableClass extends React.Component<
             }
         }
 
-        this.setState(
-            {
-                expandedRows: {
-                    lookup: buildMap(expandedRowsData),
-                    data: expandedRowsData
-                }
-            },
-            () => {
-                this.context.onStateChange?.(TableAction.EXPAND_ROW, this.state)
-
-                this.context.options.onRowExpansionChange?.(
-                    affectedRows,
-                    this.state.expandedRows.data,
-                    this.state.expandedRows.data.map(item => item.dataIndex)
-                )
+        const newState = {
+            expandedRows: {
+                lookup: buildMap(expandedRowsData),
+                data: expandedRowsData
             }
+        }
+
+        this.context.onAction?.(TableAction.EXPAND_ROW, newState)
+
+        this.context.options.onRowExpansionChange?.(
+            affectedRows,
+            newState.expandedRows.data,
+            newState.expandedRows.data.map(item => item.dataIndex)
         )
     }
 
     areAllRowsExpanded = () => {
-        return this.state.expandedRows.data.length === this.state.data.length
+        return (
+            this.context.state.expandedRows.data.length ===
+            this.context.state.data.length
+        )
     }
 
     updateColumnOrder = (
@@ -705,67 +571,21 @@ class MUIDataTableClass extends React.Component<
         columnIndex: number,
         newPosition: number
     ) => {
-        this.setState(
-            () => {
-                return {
-                    columnOrder
-                }
-            },
-            () => {
-                this.context.onStateChange?.(
-                    TableAction.COLUMN_ORDER_CHANGE,
-                    this.state
-                )
+        this.context.onAction?.(TableAction.COLUMN_ORDER_CHANGE, {
+            columnOrder
+        })
 
-                this.context.options.onColumnOrderChange?.(
-                    this.state.columnOrder,
-                    columnIndex,
-                    newPosition
-                )
-            }
+        this.context.options.onColumnOrderChange?.(
+            columnOrder,
+            columnIndex,
+            newPosition
         )
-    }
-
-    selectRowDelete = () => {
-        const { selectedRows, data, filterList } = this.state
-
-        const selectedMap = buildMap(selectedRows.data)
-        const cleanRows = data.filter(({ index }) => !selectedMap[index])
-
-        if (this.context.options.onRowsDelete) {
-            if (
-                this.context.options.onRowsDelete(
-                    selectedRows,
-                    cleanRows.map(ii => ii.data)
-                ) === false
-            )
-                return
-        }
-
-        this.setState(
-            getNewStateOnDataChange(
-                {
-                    columns: this.props.columns,
-                    data: cleanRows,
-                    options: {
-                        filterList: filterList
-                    }
-                },
-                TABLE_LOAD.UPDATE,
-                true,
-                this.context.options,
-                this.state,
-                this.setState
-            )
-        )
-
-        this.context.onStateChange?.(TableAction.ROW_DELETE, this.state)
     }
 
     toggleExpandRow = (row: { index: number; dataIndex: number }) => {
         const { dataIndex } = row
         const { isRowExpandable } = this.context.options
-        let { expandedRows } = this.state
+        let { expandedRows } = this.context.state
         const expandedRowsData = [...expandedRows.data]
         let shouldCollapseExpandedRow = false
 
@@ -793,35 +613,26 @@ class MUIDataTableClass extends React.Component<
             else if (!isRowExpandable) expandedRowsData.push(row)
         }
 
-        this.setState(
-            {
-                curExpandedRows: hasRemovedRow ? removedRow : [row],
-                expandedRows: {
-                    lookup: buildMap(expandedRowsData),
-                    data: expandedRowsData
-                }
-            },
-            () => {
-                this.context.onStateChange?.(
-                    TableAction.ROW_EXPANSION_CHANGE,
-                    this.state
-                )
-
-                const expandCallback =
-                    this.context.options.onRowExpansionChange ??
-                    this.context.options.onRowsExpand
-
-                expandCallback?.(
-                    this.state.curExpandedRows,
-                    this.state.expandedRows.data
-                )
+        const newState = {
+            curExpandedRows: hasRemovedRow ? removedRow : [row],
+            expandedRows: {
+                lookup: buildMap(expandedRowsData),
+                data: expandedRowsData
             }
-        )
+        }
+
+        this.context.onAction?.(TableAction.ROW_EXPANSION_CHANGE, newState)
+
+        const expandCallback =
+            this.context.options.onRowExpansionChange ??
+            this.context.options.onRowsExpand
+
+        expandCallback?.(newState.curExpandedRows, newState.expandedRows.data)
     }
 
     selectRowUpdate = (
         type: string,
-        value: number[],
+        value: DataTableState['previousSelectedRow'],
         shiftAdjacentRows = []
     ) => {
         // safety check
@@ -832,166 +643,142 @@ class MUIDataTableClass extends React.Component<
 
         if (type === 'head') {
             const { isRowSelectable } = this.context.options
-            this.setState(
-                prevState => {
-                    const { displayData, selectedRows: prevSelectedRows } =
-                        prevState
-                    const selectedRowsLen = prevState.selectedRows.data.length
-                    let isDeselect =
-                        selectedRowsLen === displayData.length ||
-                        (selectedRowsLen < displayData.length &&
-                            selectedRowsLen > 0)
+            const prevState = this.context.state
 
-                    const selectedRows = displayData.reduce((arr, _, i) => {
-                        const selected = isRowSelectable
-                            ? isRowSelectable(
-                                  displayData[i].dataIndex,
-                                  prevSelectedRows
-                              )
-                            : true
+            const { displayData, selectedRows: prevSelectedRows } = prevState
+            const selectedRowsLen = prevState.selectedRows.data.length
+            let isDeselect =
+                selectedRowsLen === displayData.length ||
+                (selectedRowsLen < displayData.length && selectedRowsLen > 0)
 
-                        if (selected)
-                            arr.push({
-                                index: i,
-                                dataIndex: displayData[i].dataIndex
-                            })
+            const selectedRows = displayData.reduce((arr, _, i) => {
+                const selected = isRowSelectable
+                    ? isRowSelectable(
+                          displayData[i].dataIndex,
+                          prevSelectedRows
+                      )
+                    : true
 
-                        return arr
-                    }, [])
+                if (selected)
+                    arr.push({
+                        index: i,
+                        dataIndex: displayData[i].dataIndex
+                    })
 
-                    let newRows = [...selectedRows]
-                    let selectedMap = buildMap(newRows)
+                return arr
+            }, [])
 
-                    // if the select toolbar is disabled, the rules are a little different
-                    if (
-                        this.context.options.selectToolbarPlacement === STP.NONE
-                    ) {
-                        if (selectedRowsLen > displayData.length) {
+            let newRows = [...selectedRows]
+            let selectedMap = buildMap(newRows)
+
+            // if the select toolbar is disabled, the rules are a little different
+            if (this.context.options.selectToolbarPlacement === STP.NONE) {
+                if (selectedRowsLen > displayData.length) {
+                    isDeselect = true
+                } else {
+                    for (let ii = 0; ii < displayData.length; ii++) {
+                        if (!selectedMap[displayData[ii].dataIndex]) {
                             isDeselect = true
-                        } else {
-                            for (let ii = 0; ii < displayData.length; ii++) {
-                                if (!selectedMap[displayData[ii].dataIndex]) {
-                                    isDeselect = true
-                                }
-                            }
                         }
                     }
-
-                    if (isDeselect) {
-                        newRows = prevState.selectedRows.data.filter(
-                            ({ dataIndex }) => !selectedMap[dataIndex]
-                        )
-                        selectedMap = buildMap(newRows)
-                    }
-
-                    return {
-                        curSelectedRows: newRows,
-                        selectedRows: {
-                            data: newRows,
-                            lookup: selectedMap
-                        },
-                        previousSelectedRow: null
-                    }
-                },
-                () => {
-                    this.context.onStateChange?.(
-                        TableAction.ROW_SELECTION_CHANGE,
-                        this.state
-                    )
-
-                    const onChangeForwarder =
-                        this.context.options.onRowSelectionChange ??
-                        this.context.options.onRowsSelect
-
-                    onChangeForwarder?.(
-                        this.state.curSelectedRows,
-                        this.state.selectedRows.data,
-                        this.state.selectedRows.data.map(item => item.dataIndex)
-                    )
                 }
+            }
+
+            if (isDeselect) {
+                newRows = prevState.selectedRows.data.filter(
+                    ({ dataIndex }) => !selectedMap[dataIndex]
+                )
+                selectedMap = buildMap(newRows)
+            }
+
+            const newState = {
+                curSelectedRows: newRows,
+                selectedRows: {
+                    data: newRows,
+                    lookup: selectedMap
+                },
+                previousSelectedRow: null
+            }
+
+            this.context.onAction?.(TableAction.ROW_SELECTION_CHANGE, newState)
+
+            const onChangeForwarder =
+                this.context.options.onRowSelectionChange ??
+                this.context.options.onRowsSelect
+
+            onChangeForwarder?.(
+                newState.curSelectedRows,
+                newState.selectedRows.data,
+                newState.selectedRows.data.map(item => item.dataIndex)
             )
         } else if (type === 'cell') {
-            this.setState(
-                prevState => {
-                    const { dataIndex } = value
-                    let selectedRows = [...prevState.selectedRows.data]
-                    let rowPos = -1
+            const prevState = this.context.state
+            const { dataIndex } = value
+            let selectedRows = [...prevState.selectedRows.data]
+            let rowPos = -1
 
-                    for (
-                        let cIndex = 0;
-                        cIndex < selectedRows.length;
-                        cIndex++
-                    ) {
-                        if (selectedRows[cIndex].dataIndex === dataIndex) {
-                            rowPos = cIndex
-                            break
-                        }
-                    }
-
-                    if (rowPos >= 0) {
-                        selectedRows.splice(rowPos, 1)
-
-                        // handle rows affected by shift+click
-                        if (shiftAdjacentRows.length > 0) {
-                            let shiftAdjacentMap = buildMap(shiftAdjacentRows)
-                            for (
-                                let cIndex = selectedRows.length - 1;
-                                cIndex >= 0;
-                                cIndex--
-                            ) {
-                                if (
-                                    shiftAdjacentMap[
-                                        selectedRows[cIndex].dataIndex
-                                    ]
-                                ) {
-                                    selectedRows.splice(cIndex, 1)
-                                }
-                            }
-                        }
-                    } else if (selectableRows === 'single') {
-                        selectedRows = [value]
-                    } else {
-                        // multiple
-                        selectedRows.push(value)
-
-                        // handle rows affected by shift+click
-                        if (shiftAdjacentRows.length > 0) {
-                            let selectedMap = buildMap(selectedRows)
-                            shiftAdjacentRows.forEach(aRow => {
-                                if (!selectedMap[aRow.dataIndex]) {
-                                    selectedRows.push(aRow)
-                                }
-                            })
-                        }
-                    }
-
-                    return {
-                        selectedRows: {
-                            lookup: buildMap(selectedRows),
-                            data: selectedRows
-                        },
-                        previousSelectedRow: value
-                    }
-                },
-                () => {
-                    this.context.onStateChange?.(
-                        TableAction.ROW_SELECTION_CHANGE,
-                        this.state
-                    )
-
-                    const onChange =
-                        this.context.options.onRowSelectionChange ??
-                        this.context.options.onRowsSelect
-
-                    onChange?.(
-                        [value],
-                        this.state.selectedRows.data,
-                        this.state.selectedRows.data.map(item => item.dataIndex)
-                    )
+            for (let cIndex = 0; cIndex < selectedRows.length; cIndex++) {
+                if (selectedRows[cIndex].dataIndex === dataIndex) {
+                    rowPos = cIndex
+                    break
                 }
+            }
+
+            if (rowPos >= 0) {
+                selectedRows.splice(rowPos, 1)
+
+                // handle rows affected by shift+click
+                if (shiftAdjacentRows.length > 0) {
+                    let shiftAdjacentMap = buildMap(shiftAdjacentRows)
+                    for (
+                        let cIndex = selectedRows.length - 1;
+                        cIndex >= 0;
+                        cIndex--
+                    ) {
+                        if (shiftAdjacentMap[selectedRows[cIndex].dataIndex]) {
+                            selectedRows.splice(cIndex, 1)
+                        }
+                    }
+                }
+            } else if (selectableRows === 'single') {
+                selectedRows = [value]
+            } else {
+                // multiple
+                selectedRows.push(value)
+
+                // handle rows affected by shift+click
+                if (shiftAdjacentRows.length > 0) {
+                    let selectedMap = buildMap(selectedRows)
+                    shiftAdjacentRows.forEach(aRow => {
+                        if (!selectedMap[aRow.dataIndex]) {
+                            selectedRows.push(aRow)
+                        }
+                    })
+                }
+            }
+
+            const newState = {
+                ...prevState,
+                selectedRows: {
+                    lookup: buildMap(selectedRows),
+                    data: selectedRows
+                },
+                previousSelectedRow: value
+            }
+
+            this.context.onAction?.(TableAction.ROW_SELECTION_CHANGE, newState)
+
+            const onChange =
+                this.context.options.onRowSelectionChange ??
+                this.context.options.onRowsSelect
+
+            onChange?.(
+                [value],
+                newState.selectedRows.data,
+                newState.selectedRows.data.map(item => item.dataIndex)
             )
         } else if (type === 'custom') {
-            const { displayData } = this.state
+            const { displayData } = this.context.state
 
             const data = value.map(index => ({
                 index,
@@ -1000,203 +787,84 @@ class MUIDataTableClass extends React.Component<
 
             const lookup = buildMap(data)
 
-            this.setState(
-                {
-                    selectedRows: { data, lookup },
-                    previousSelectedRow: null
-                },
-                () => {
-                    this.context.onStateChange?.(
-                        TableAction.ROW_SELECTION_CHANGE,
-                        this.state
-                    )
+            const selectedRows = { data, lookup }
 
-                    const onRowSelectionChange =
-                        this.context.options.onRowSelectionChange ??
-                        this.context.options.onRowsSelect
+            this.context.onAction?.(TableAction.ROW_SELECTION_CHANGE, {
+                selectedRows,
+                previousSelectedRow: null
+            })
 
-                    onRowSelectionChange?.(
-                        this.state.selectedRows.data,
-                        this.state.selectedRows.data,
-                        this.state.selectedRows.data.map(item => item.dataIndex)
-                    )
-                }
+            const onRowSelectionChange =
+                this.context.options.onRowSelectionChange ??
+                this.context.options.onRowsSelect
+
+            onRowSelectionChange?.(
+                selectedRows.data,
+                selectedRows.data,
+                selectedRows.data.map(item => item.dataIndex)
             )
         }
     }
 
     render() {
-        const state = this.state ?? this.context.state
+        const state = this.context.state
 
-        const { classes, title } = this.props
+        const { title } = this.props
 
-        const {
-            activeColumn,
-            displayData,
-            columns,
-            page,
-            filterList,
-            selectedRows,
-            previousSelectedRow,
-            expandedRows,
-            searchText,
-            sortOrder,
-            columnOrder,
-            count
-        } = state
-
-        const rowCount = count
         const rowsPerPage = this.context.options.pagination
             ? state.rowsPerPage
-            : displayData.length
-        const showToolbar = hasToolbarItem(this.context.options)
-        const columnNames = columns.map(column => ({
-            name: column.name,
-            filterType: column.filterType ?? this.context.options.filterType
-        }))
-        const responsiveOption = this.context.options.responsive
+            : state.displayData.length
 
-        let maxHeight = this.context.options.tableBodyMaxHeight
-        let responsiveClass
+        const isShowToolbarSelect =
+            this.context.options.selectToolbarPlacement === STP.ALWAYS ||
+            (state.selectedRows.data.length > 0 &&
+                this.context.options.selectToolbarPlacement !== STP.NONE)
 
-        switch (responsiveOption) {
-            // deprecated
-            case 'scroll':
-                responsiveClass = classes.responsiveScroll
-                maxHeight = '499px'
-                break
-            // deprecated
-            case 'scrollMaxHeight':
-                responsiveClass = classes.responsiveScrollMaxHeight
-                maxHeight = '499px'
-                break
-            // deprecated
-            case 'scrollFullHeight':
-                responsiveClass = classes.responsiveScrollFullHeight
-                maxHeight = 'none'
-                break
-            // deprecated
-            case 'scrollFullHeightFullWidth':
-                responsiveClass = classes.responsiveScrollFullHeight
-                break
-            // deprecated
-            case 'stacked':
-                responsiveClass = classes.responsiveStacked
-                maxHeight = 'none'
-                break
-            // deprecated
-            case 'stackedFullWidth':
-                responsiveClass = classes.responsiveStackedFullWidth
-                maxHeight = 'none'
-                break
-
-            default:
-                responsiveClass = classes.responsiveBase
-                break
-        }
-
-        const tableHeightVal = {
-            maxHeight: maxHeight,
-            height: this.context.options.tableBodyHeight
-        }
-
-        const tableProps = this.context.options.setTableProps?.() ?? {}
-
-        const tableClassNames = clsx(classes.tableRoot, tableProps.className)
-        delete tableProps.className // remove className from props to avoid the className being applied twice
+        const isShowToolbar =
+            !isShowToolbarSelect &&
+            hasToolbarItem(this.context.options) &&
+            this.context.options.selectToolbarPlacement &&
+            ![STP.ABOVE, STP.NONE].includes(
+                this.context.options.selectToolbarPlacement
+            )
 
         return (
             <>
-                {(this.context.options.selectToolbarPlacement === STP.ALWAYS ||
-                    (selectedRows.data.length > 0 &&
-                        this.context.options.selectToolbarPlacement !==
-                            STP.NONE)) && (
+                {isShowToolbarSelect && (
                     <this.context.components.TableToolbarSelect
-                        selectedRows={selectedRows}
-                        onRowsDelete={this.selectRowDelete}
-                        displayData={displayData}
                         selectRowUpdate={this.selectRowUpdate}
                     />
                 )}
-                {(selectedRows.data.length === 0 ||
-                    ![STP.ABOVE, STP.NONE].some(
-                        stp =>
-                            this.context.options.selectToolbarPlacement === stp
-                    )) &&
-                    showToolbar && (
-                        <this.context.components.TableToolbar
-                            // columns={columns}
-                            // columnOrder={columnOrder}
-                            // displayData={displayData}
-                            // filterList={filterList}
-                            filterUpdate={this.filterUpdate}
-                            // updateFilterByType={this.updateFilterByType}
-                            resetFilters={this.resetFilters}
-                            searchText={searchText ?? undefined}
-                            searchTextUpdate={this.searchTextUpdate}
-                            searchClose={this.searchClose}
-                            // tableRef={this.tableRef}
-                            title={title}
-                            toggleViewColumn={this.toggleViewColumn}
-                            setTableAction={(action: TableAction) => {
-                                // throw new Error(action)
-                                this.context.onStateChange?.(action, state)
-                            }}
-                        />
-                    )}
-                <this.context.components.TableFilterList
-                    serverSideFilterList={
-                        this.props.options?.serverSideFilterList
-                    }
-                    filterListRenderers={columns.map(c => {
-                        if (
-                            c.customFilterListOptions &&
-                            c.customFilterListOptions.render
-                        )
-                            return c.customFilterListOptions.render
-                        // DEPRECATED: This option is being replaced with customFilterListOptions.render
-                        if (c.customFilterListRender)
-                            return c.customFilterListRender
 
-                        return f => f
-                    })}
-                    customFilterListUpdate={columns.map(c => {
-                        return c.customFilterListOptions &&
-                            c.customFilterListOptions.update
-                            ? c.customFilterListOptions.update
-                            : null
-                    })}
-                    filterList={filterList}
+                {isShowToolbar && (
+                    <this.context.components.TableToolbar
+                        filterUpdate={this.filterUpdate}
+                        resetFilters={this.resetFilters}
+                        searchTextUpdate={this.searchTextUpdate}
+                        searchClose={this.searchClose}
+                        tableRef={this.tableRef}
+                        title={title}
+                        toggleViewColumn={this.toggleViewColumn}
+                        setTableAction={(action: TableAction) => {
+                            this.context.onAction?.(action, this.context.state)
+                        }}
+                    />
+                )}
+
+                <this.context.components.TableFilterList
                     filterUpdate={this.filterUpdate}
-                    columnNames={columnNames}
                 />
 
-                <RenderInnerTable
+                <InnerTable
                     // new this
                     forwardUpdateDividers={fn => (this.updateDividers = fn)}
                     forwardSetHeadResizable={fn => (this.setHeadResizable = fn)}
                     // var section
-                    rowCount={rowCount}
-                    columnOrder={columnOrder}
-                    tableClassNames={tableClassNames}
-                    tableProps={tableProps}
                     title={title}
-                    tableHeightVal={tableHeightVal}
-                    responsiveClass={responsiveClass}
-                    filterList={filterList}
-                    columns={columns}
-                    activeColumn={activeColumn}
-                    displayData={displayData}
-                    page={page}
                     rowsPerPage={rowsPerPage}
-                    selectedRows={selectedRows}
-                    expandedRows={expandedRows}
-                    sortOrder={sortOrder}
-                    previousSelectedRow={previousSelectedRow}
                     // this section
                     tableRef={this.tableRef}
                     selectRowUpdate={this.selectRowUpdate}
-                    props={this.props}
                     toggleSortColumn={this.toggleSortColumn}
                     setHeadCellRef={this.setHeadCellRef}
                     areAllRowsExpanded={this.areAllRowsExpanded}
@@ -1209,8 +877,6 @@ class MUIDataTableClass extends React.Component<
                 />
 
                 <this.context.components.TableFooter
-                    page={page}
-                    rowCount={rowCount}
                     rowsPerPage={rowsPerPage}
                     changeRowsPerPage={this.changeRowsPerPage}
                     changePage={this.changePage}
@@ -1242,159 +908,76 @@ function hasToolbarItem(options: DataTableOptions) {
     )
 }
 
-function RenderInnerTable({
-    // new this
-    forwardUpdateDividers,
-    forwardSetHeadResizable,
-    // var section
-    rowCount,
-    columnOrder,
-    tableClassNames,
-    tableProps,
-    title,
-    tableHeightVal,
-    responsiveClass,
-    filterList,
-    columns,
-    activeColumn,
-    displayData,
-    page,
-    rowsPerPage,
-    selectedRows,
-    expandedRows,
-    sortOrder,
-    previousSelectedRow,
-    // this sections
-    tableRef,
-    selectRowUpdate,
-    toggleSortColumn,
-    setHeadCellRef,
-    areAllRowsExpanded,
-    toggleAllExpandableRows,
-    updateColumnOrder,
-    draggableHeadCellRefs,
-    getCurrentRootRef,
-    timers,
-    toggleExpandRow
-}: {
-    // new this
-    forwardUpdateDividers: (fn: () => void) => void
-    forwardSetHeadResizable: (fn: () => void) => void
-    // variables
-    rowCount: number
-    columnOrder: number[]
-    tableClassNames: string
-    tableProps: TableProps
-    tableHeightVal: {
-        maxHeight?: string
-        height?: string
-    }
-    title: DataTableProps['title']
-    responsiveClass: HTMLDivElement['className']
-    filterList: string[][]
-    columns: DataTableState['columns']
-    activeColumn: string | null
-    displayData: DisplayData
-    page: number
-    rowsPerPage: number
-    selectedRows: MUIDataTableStateRows
-    expandedRows: MUIDataTableStateRows
-    sortOrder: DataTableOptions['sortOrder']
-    previousSelectedRow: DataTableState['previousSelectedRow']
-    // this
-    tableRef: React.Ref<HTMLTableElement>
-    selectRowUpdate: unknown
-    props: DataTableProps
-    toggleSortColumn: unknown
-    setHeadCellRef: unknown
-    areAllRowsExpanded: unknown
-    toggleAllExpandableRows: unknown
-    updateColumnOrder: unknown
-    draggableHeadCellRefs: HTMLTableCellElement[]
-    getCurrentRootRef: unknown
-    timers: unknown
-    toggleExpandRow: unknown
-}) {
-    const { components, options } = useMainContext()
-
-    return (
-        <div
-            style={{ position: 'relative', ...tableHeightVal }}
-            className={responsiveClass}
-        >
-            {options.resizableColumns && (
-                <components.TableResize
-                    updateDividers={forwardUpdateDividers}
-                    setResizable={forwardSetHeadResizable}
-                />
-            )}
-
-            <DndProvider
-                backend={HTML5Backend}
-                context={typeof window === 'undefined' ? undefined : window}
-            >
-                <MuiTable
-                    ref={tableRef}
-                    tabIndex={0}
-                    role="grid"
-                    className={tableClassNames}
-                    {...tableProps}
-                >
-                    <caption
-                        style={{
-                            position: 'absolute',
-                            left: '-3000px'
-                        }}
-                    >
-                        {title}
-                    </caption>
-
-                    <components.TableHead
-                        columns={columns}
-                        activeColumn={activeColumn}
-                        data={displayData}
-                        count={rowCount}
-                        page={page}
-                        rowsPerPage={rowsPerPage}
-                        selectedRows={selectedRows}
-                        selectRowUpdate={selectRowUpdate}
-                        toggleSort={toggleSortColumn}
-                        setCellRef={setHeadCellRef}
-                        expandedRows={expandedRows}
-                        areAllRowsExpanded={areAllRowsExpanded}
-                        toggleAllExpandableRows={toggleAllExpandableRows}
-                        sortOrder={sortOrder}
-                        columnOrder={columnOrder}
-                        updateColumnOrder={updateColumnOrder}
-                        draggableHeadCellRefs={draggableHeadCellRefs}
-                        tableRef={getCurrentRootRef}
-                        timers={timers}
-                    />
-
-                    <components.TableBody
-                        data={displayData}
-                        count={rowCount}
-                        columns={columns}
-                        page={page}
-                        rowsPerPage={rowsPerPage}
-                        selectedRows={selectedRows}
-                        selectRowUpdate={selectRowUpdate}
-                        previousSelectedRow={previousSelectedRow}
-                        expandedRows={expandedRows}
-                        toggleExpandRow={toggleExpandRow}
-                        columnOrder={columnOrder}
-                        filterList={filterList}
-                    />
-
-                    {options.customTableBodyFooterRender?.({
-                        data: displayData,
-                        count: rowCount,
-                        columns,
-                        selectedRows,
-                        selectableRows: options.selectableRows
-                    })}
-                </MuiTable>
-            </DndProvider>
-        </div>
+function updateFilterByType(
+    filterList: DataTableState['filterList'],
+    index: number,
+    value: string | string[],
+    type: DataTableOptions['filterType'],
+    customUpdate?: (
+        filterList: DataTableState['filterList'],
+        filterPos: number,
+        index: number
+    ) => string[][]
+) {
+    const filterIndexPosition: number = filterList[index].findIndex(
+        filter => filter === value
     )
+
+    switch (type) {
+        case 'checkbox':
+            filterIndexPosition >= 0
+                ? filterList[index].splice(filterIndexPosition, 1)
+                : typeof value === 'string' && filterList[index].push(value)
+            break
+
+        case 'chip':
+            filterIndexPosition >= 0
+                ? filterList[index].splice(filterIndexPosition, 1)
+                : typeof value === 'string' && filterList[index].push(value)
+            break
+
+        case 'multiselect':
+            filterList[index] = typeof value === 'string' ? [] : value
+            break
+
+        case 'dropdown':
+            filterList[index] = typeof value === 'string' ? [] : value
+            break
+
+        case 'custom':
+            if (customUpdate) {
+                filterList = customUpdate(
+                    filterList,
+                    filterIndexPosition,
+                    index
+                )
+            } else {
+                filterList[index] = typeof value === 'string' ? [] : value
+            }
+            break
+
+        default:
+            filterList[index] = typeof value === 'string' ? [value] : value
+    }
 }
+
+export type FilterUpdateType = (
+    index: number,
+    value: string | string[],
+    column: DataTableState['columns'][0],
+    type: FilterTypeEnum,
+
+    /**
+     * customUpdate is called FilterList (onDelete)
+     */
+    customUpdate?: (
+        filterList: DataTableState['filterList'],
+        filterPos: number,
+        index: number
+    ) => string[][],
+
+    /**
+     * next is called FilterList (onDelete)
+     */
+    next?: (filterList: DataTableState['filterList']) => void
+) => void

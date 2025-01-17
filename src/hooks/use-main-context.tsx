@@ -1,7 +1,9 @@
 // vendors
 import {
     createContext,
+    Dispatch,
     ReactNode,
+    SetStateAction,
     useContext,
     useEffect,
     useState
@@ -18,6 +20,7 @@ import { TableAction } from '../data-table.props.type/options'
 import { getNewStateOnDataChange, load, save, warnInfo } from '../functions'
 import { DEFAULT_OPTIONS } from './use-main-context.default-options'
 import { handleDeprecatedOptions } from './use-main-context.handle-deprecated-options'
+import { DefaultDataItem } from '../data-table.props.type'
 
 export function MainContextProvider({
     datatableProps,
@@ -45,7 +48,7 @@ export function MainContextProvider({
         )
     )
 
-    function onStateChange(
+    function onAction(
         action: TableAction,
         newPartialState: Partial<DataTableState>
     ) {
@@ -68,6 +71,10 @@ export function MainContextProvider({
         datatableProps.options?.onTableInit?.(TableAction.INITIALIZED, state)
     }, [])
 
+    useEffect(() => {
+        datatableProps.options?.onTableInit?.(TableAction.INITIALIZED, state)
+    }, [])
+
     const options = getConstructedOption(datatableProps?.options)
 
     handleDeprecatedOptions(datatableProps, options)
@@ -83,8 +90,11 @@ export function MainContextProvider({
                     ...DEFAULT_ICONS,
                     ...datatableProps.icons
                 },
-                onStateChange,
+                onAction,
+                onStateChange: onAction,
                 options,
+                props: datatableProps,
+                setState,
                 state,
                 textLabels: processTextLabels(datatableProps.textLabels)
             }}
@@ -117,7 +127,6 @@ export const DEFAULT_STATE: DataTableState = {
     rowsPerPageOptions: [10, 20, 50, 100],
     rowsSelected: [],
     searchProps: {},
-    searchText: null,
     selectedRows: {
         data: [],
         lookup: {}
@@ -139,8 +148,17 @@ export const MainContext = createContext<ContextValueType>({
 interface ContextValueType {
     components: typeof DEFAULT_COMPONENTS
     icons: typeof DEFAULT_ICONS
-    onStateChange?: (action: TableAction, state: DataTableState) => void
+    /**
+     * @deprecated  WILL CHANGE THIS TO `onAction`
+     */
+    onStateChange?: (
+        action: TableAction,
+        state: Partial<DataTableState>
+    ) => void
+    onAction?: (action: TableAction, state: Partial<DataTableState>) => void
     options: DataTableOptions
+    props?: DataTableProps
+    setState?: Dispatch<SetStateAction<DataTableState<DefaultDataItem>>>
     state: typeof DEFAULT_STATE
     textLabels: ReturnType<typeof processTextLabels>
 }

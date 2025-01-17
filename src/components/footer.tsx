@@ -6,21 +6,19 @@ import { DataTableFooterJumpToPage } from './footer.jump-to-page'
 import { useMainContext } from '../hooks/use-main-context'
 
 export default function TableFooter({
-    rowCount,
-    page,
     rowsPerPage,
     changeRowsPerPage,
     changePage
 }: TableFooterProps) {
-    const { textLabels, options } = useMainContext()
+    const { options, state, textLabels } = useMainContext()
     const { classes, cx } = useStyles()
     const { customFooter, pagination = true, jumpToPage } = options
 
     return (
         <div className={cx(ROOT_CLASS, classes.root)}>
             {customFooter?.(
-                rowCount,
-                page,
+                state.displayData.length,
+                state.page,
                 rowsPerPage,
                 changeRowsPerPage,
                 changePage,
@@ -29,8 +27,8 @@ export default function TableFooter({
 
             {!customFooter && jumpToPage && (
                 <DataTableFooterJumpToPage
-                    count={rowCount}
-                    page={page}
+                    count={state.displayData.length}
+                    page={state.page}
                     rowsPerPage={rowsPerPage}
                     changePage={changePage}
                 />
@@ -38,8 +36,8 @@ export default function TableFooter({
 
             {!customFooter && pagination && (
                 <DataTableFooterPagination
-                    count={rowCount}
-                    page={page}
+                    count={state.displayData.length}
+                    page={state.page}
                     rowsPerPage={rowsPerPage}
                     changeRowsPerPage={changeRowsPerPage}
                     changePage={changePage}
@@ -50,12 +48,6 @@ export default function TableFooter({
 }
 
 interface TableFooterProps {
-    /** Total number of table rows */
-    rowCount: number
-
-    /** Current page index */
-    page: number
-
     /** Total number allowed of rows per page */
     rowsPerPage: number
 
