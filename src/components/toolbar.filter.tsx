@@ -4,11 +4,11 @@ import { makeStyles } from 'tss-react/mui'
 import { ReactNode, useState } from 'react'
 import clsx from 'clsx'
 // locals
-import type { DataTableProps } from '../'
 import { type DataTableState } from '../data-table.props.type/state'
 import { DataTableToolbarFilterRenderFilters } from './toolbar.filter.render-filters'
 import { useMainContext } from '../hooks/use-main-context'
 import { FilterTypeEnum } from '../data-table.props.type/columns'
+import { FilterUpdateType } from '../data-table'
 
 export function DataTableToolbarFilter(props: DataTableToolbarFilterProps) {
     const { options, textLabels } = useMainContext()
@@ -17,7 +17,7 @@ export function DataTableToolbarFilter(props: DataTableToolbarFilterProps) {
         customFooter,
         filterList: filterListFromProp,
         onFilterReset,
-        onFilterUpdate,
+        filterUpdate,
         handleClose
     } = props
 
@@ -66,13 +66,15 @@ export function DataTableToolbarFilter(props: DataTableToolbarFilterProps) {
             />
 
             {customFooter?.(filterList, () => {
-                filterList.forEach((filter, index) => {
-                    onFilterUpdate?.(
-                        index,
-                        filter,
-                        columns[index],
-                        FilterTypeEnum.CUSTOM
-                    )
+                filterList.forEach((filters, index) => {
+                    filters.forEach(filter => {
+                        filterUpdate?.(
+                            index,
+                            filter,
+                            columns[index],
+                            FilterTypeEnum.CUSTOM
+                        )
+                    })
                 })
 
                 handleClose()
@@ -155,23 +157,10 @@ export interface DataTableToolbarFilterProps {
     filterList: DataTableState['filterList']
 
     /** Callback to trigger filter update */
-    onFilterUpdate?: (
-        index: number,
-        value: string | string[],
-        column: DataTableState['columns'][0],
-        type: FilterTypeEnum
-    ) => void
+    filterUpdate: FilterUpdateType
 
     /** Callback to trigger filter reset */
     onFilterReset?: () => void
-
-    updateFilterByType: (
-        newFilterList: string[][],
-        index: number,
-        value: DataTableProps['data'][0],
-        type: string,
-        customUpdate: CustomUpdateType | undefined
-    ) => void
 
     columns: DataTableState['columns']
 

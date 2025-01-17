@@ -6,34 +6,72 @@ import type { Theme } from '@mui/material'
 import { IconButton, Typography } from '@mui/material'
 import { Delete as DeleteIcon } from '@mui/icons-material'
 // locals
-import type { DataTableOptions } from '../data-table.props.type/options'
+import {
+    TableAction,
+    type DataTableOptions
+} from '../data-table.props.type/options'
 import { useMainContext } from '../hooks/use-main-context'
 import { ClassName } from '../enums/class-name'
+import { buildMap, getNewStateOnDataChange } from '../functions'
 
 export function TableToolbarSelect({
-    onRowsDelete,
-    selectedRows,
-    displayData,
     selectRowUpdate
 }: TableToolbarSelectProps) {
     const {
         components,
+        onAction,
         options,
+        props,
+        state,
+        setState,
         textLabels: { selectedRows: selectedRowsTextLabels }
     } = useMainContext()
     const { classes } = useStyles()
+
+    function onRowsDelete() {
+        const { selectedRows, data } = state
+        const selectedMap = buildMap(selectedRows.data)
+        const cleanRows = data.filter(({ index }) => !selectedMap[index])
+
+        if (
+            options.onRowsDelete?.(
+                selectedRows,
+                cleanRows.map(ii => ii.data)
+            ) === false
+        ) {
+            return
+        }
+
+        const newState = {
+            ...getNewStateOnDataChange(
+                {
+                    columns: props?.columns ?? [],
+                    data: cleanRows,
+                    options
+                },
+                2, // 2 = MEAN UPDATE
+                true,
+                options,
+                state,
+                setState ?? (() => {})
+            )
+        }
+
+        onAction?.(TableAction.ROW_DELETE, newState)
+    }
 
     return (
         <div className={classes.root}>
             <div>
                 <Typography variant="subtitle1" className={classes.title}>
-                    {selectedRows.data.length} {selectedRowsTextLabels.text}
+                    {state.selectedRows.data.length}{' '}
+                    {selectedRowsTextLabels.text}
                 </Typography>
             </div>
 
             {options.customToolbarSelect?.(
-                selectedRows,
-                displayData ?? [],
+                state.selectedRows,
+                state.displayData ?? [],
                 (rows: number[]) =>
                     handleCustomSelectedRows(rows, options, selectRowUpdate)
             )}
@@ -79,19 +117,7 @@ const useStyles = makeStyles({
 }))
 
 export interface TableToolbarSelectProps {
-    /** Current row selected or not */
-    // rowSelected?: boolean // UNUSED SKIP FOR NOW
-
-    /** Callback to trigger selected rows delete */
-    onRowsDelete: () => void
-
-    displayData: MUIDataTableToolbarSelect['displayData']
-
     selectRowUpdate?: MUIDataTableToolbarSelect['selectRowUpdate']
-
-    selectedRows: Parameters<
-        Required<DataTableOptions>['customToolbarSelect']
-    >[0]
 }
 
 function handleCustomSelectedRows(

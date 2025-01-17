@@ -27,8 +27,12 @@ export interface DataTableState<DataItem = DefaultDataItem> {
     rowsPerPage: number
     rowsPerPageOptions: number[]
     rowsSelected: number[]
-    searchText: string | null
+    searchText?: string
     searchProps: React.HTMLAttributes<HTMLInputElement> | null
+
+    /**
+     * Current row selected or not
+     */
     selectedRows: StateRows
     showResponsive: boolean
     sortOrder?: DataTableSortOrderOption

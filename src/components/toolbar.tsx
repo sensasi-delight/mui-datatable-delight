@@ -20,6 +20,7 @@ import { ToolbarPopover } from './toolbar.popover'
 import { ToolbarPrintButton } from './toolbar.print-button'
 import { ToolbarDownloadButton } from './toolbar.download-button'
 import { DataTableProps } from '../data-table.props.type'
+import { FilterUpdateType } from '../data-table'
 
 /**
  * DataTable Delight Toolbar
@@ -41,16 +42,14 @@ export default function TableToolbar(props: ToolbarProps) {
 
     const [showSearch, setShowSearch] = useState(
         Boolean(
-            props.searchText ||
+            state.searchText ||
                 options.searchText ||
                 options.searchOpen ||
                 options.searchAlwaysOpen
         )
     )
 
-    const [searchText, setSearchText] = useState<string | undefined>(
-        props.searchText
-    )
+    const [searchText, setSearchText] = useState(state.searchText)
     const [activeIcon, _setActiveIcon] = useState<
         'search' | 'filter' | 'viewColumns'
     >()
@@ -238,12 +237,11 @@ export default function TableToolbar(props: ToolbarProps) {
                             columns={state.columns}
                             filterList={state.filterList}
                             filterData={state.filterData}
-                            onFilterUpdate={props.filterUpdate}
+                            filterUpdate={props.filterUpdate}
                             onFilterReset={props.resetFilters}
                             handleClose={() => {
                                 setIsDialogFilterOpen(false)
                             }}
-                            updateFilterByType={props.updateFilterByType}
                         />
                     </ToolbarPopover>
                 )}
@@ -258,16 +256,15 @@ export default function TableToolbar(props: ToolbarProps) {
 }
 
 interface ToolbarProps {
-    filterUpdate: DataTableToolbarFilterProps['onFilterUpdate']
+    filterUpdate: FilterUpdateType
     resetFilters: DataTableToolbarFilterProps['onFilterReset']
     searchClose: () => void
     searchText?: string
     searchTextUpdate: (searchText: string) => void
     setTableAction: (action: TableAction) => void
-    tableRef: RefObject<HTMLTableElement>
+    tableRef: RefObject<HTMLTableElement | null>
     title: DataTableProps['title']
     toggleViewColumn: ToolbarViewColProps['onColumnUpdate']
-    updateFilterByType: DataTableToolbarFilterProps['updateFilterByType']
 }
 
 const useStyles = makeStyles({

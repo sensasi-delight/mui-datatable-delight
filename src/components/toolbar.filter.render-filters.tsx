@@ -17,11 +17,7 @@ import {
 // vendors
 import { makeStyles } from 'tss-react/mui'
 // locals
-import type {
-    CustomUpdateType,
-    DataTableToolbarFilterProps
-} from './toolbar.filter'
-import type { DataTableProps } from '..'
+import type { DataTableToolbarFilterProps } from './toolbar.filter'
 import { type DataTableState } from '../data-table.props.type/state'
 import { useMainContext } from '../hooks/use-main-context'
 import { FilterTypeEnum } from '../data-table.props.type/columns'
@@ -29,7 +25,6 @@ import { FilterTypeEnum } from '../data-table.props.type/columns'
 export function DataTableToolbarFilterRenderFilters({
     columns,
     parentProps,
-    setFilterList,
     innerFilterList: filterList
 }: {
     columns: DataTableState['columns']
@@ -37,9 +32,9 @@ export function DataTableToolbarFilterRenderFilters({
     innerFilterList: string[][]
     setFilterList: React.Dispatch<React.SetStateAction<string[][]>>
 }) {
-    const { textLabels } = useMainContext()
+    const { textLabels, options } = useMainContext()
     const { classes } = useStyles()
-    const { filterData, onFilterUpdate, options } = parentProps
+    const { filterData, filterUpdate } = parentProps
 
     const renderedColumns = columns.map((column, index) => {
         if (!column.filter) return
@@ -55,17 +50,8 @@ export function DataTableToolbarFilterRenderFilters({
                     filterData={filterData}
                     filterList={filterList}
                     handleCheckboxChange={(value: string) => {
-                        filterUpdate(
-                            index,
-                            value,
-                            FilterTypeEnum.CHECKBOX,
-                            undefined,
-                            parentProps,
-                            setFilterList
-                        )
-
                         if (options.confirmFilters !== true) {
-                            onFilterUpdate?.(
+                            filterUpdate?.(
                                 index,
                                 value,
                                 column,
@@ -86,17 +72,8 @@ export function DataTableToolbarFilterRenderFilters({
                     filterData={filterData}
                     filterList={filterList}
                     onSelectChange={event => {
-                        filterUpdate(
-                            index,
-                            event.target.value,
-                            FilterTypeEnum.MULTISELECT,
-                            undefined,
-                            parentProps,
-                            setFilterList
-                        )
-
-                        if (parentProps.options.confirmFilters !== true) {
-                            parentProps.onFilterUpdate?.(
+                        if (options.confirmFilters !== true) {
+                            filterUpdate?.(
                                 index,
                                 event.target.value,
                                 column,
@@ -116,17 +93,8 @@ export function DataTableToolbarFilterRenderFilters({
                     index={index}
                     key={index}
                     onChange={event => {
-                        filterUpdate(
-                            index,
-                            event.target.value,
-                            FilterTypeEnum.TEXTFIELD,
-                            undefined,
-                            parentProps,
-                            setFilterList
-                        )
-
-                        if (parentProps.options.confirmFilters !== true) {
-                            parentProps.onFilterUpdate?.(
+                        if (options.confirmFilters !== true) {
+                            filterUpdate?.(
                                 index,
                                 event.target.value,
                                 column,
@@ -150,17 +118,8 @@ export function DataTableToolbarFilterRenderFilters({
                         index: number,
                         column: DataTableState['columns'][0]
                     ) => {
-                        filterUpdate(
-                            index,
-                            value,
-                            column.filterType ?? FilterTypeEnum.DROPDOWN,
-                            undefined,
-                            parentProps,
-                            setFilterList
-                        )
-
-                        if (parentProps.options.confirmFilters !== true) {
-                            parentProps.onFilterUpdate?.(
+                        if (options.confirmFilters !== true) {
+                            filterUpdate?.(
                                 index,
                                 value,
                                 column,
@@ -184,17 +143,8 @@ export function DataTableToolbarFilterRenderFilters({
                             ? []
                             : [event.target.value]
 
-                    filterUpdate(
-                        index,
-                        value,
-                        FilterTypeEnum.DROPDOWN,
-                        undefined,
-                        parentProps,
-                        setFilterList
-                    )
-
                     if (options.confirmFilters !== true) {
-                        parentProps.onFilterUpdate?.(
+                        filterUpdate?.(
                             index,
                             value,
                             column,
@@ -523,21 +473,6 @@ function RenderSelect({
             </FormControl>
         </Grid>
     )
-}
-
-function filterUpdate(
-    index: number,
-    value: DataTableProps['data'][0],
-    type: FilterTypeEnum,
-    customUpdate: CustomUpdateType | undefined,
-    { filterList, updateFilterByType }: DataTableToolbarFilterProps,
-    setFilterList: React.Dispatch<React.SetStateAction<string[][]>>
-) {
-    const clonedFilterList = [...filterList]
-
-    updateFilterByType(clonedFilterList, index, value, type, customUpdate)
-
-    setFilterList(clonedFilterList)
 }
 
 const useStyles = makeStyles({
