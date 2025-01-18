@@ -1,7 +1,6 @@
 import { DndProvider } from 'react-dnd'
 import { Table as MuiTable } from '@mui/material'
 import { HTML5Backend } from 'react-dnd-html5-backend'
-import { DataTableProps } from './data-table.props.type'
 import { useMainContext } from './hooks/use-main-context'
 import { DataTableOptions } from './data-table.props.type/options'
 import { makeStyles } from 'tss-react/mui'
@@ -10,43 +9,32 @@ export function InnerTable({
     // new this
     forwardUpdateDividers,
     forwardSetHeadResizable,
-    // var section
-    title,
-    rowsPerPage,
     // this sections
     tableRef,
     selectRowUpdate,
-    toggleSortColumn,
     setHeadCellRef,
-    areAllRowsExpanded,
-    toggleAllExpandableRows,
-    updateColumnOrder,
     draggableHeadCellRefs,
     getCurrentRootRef,
-    timers,
-    toggleExpandRow
+    timers
 }: {
     // new this
     forwardUpdateDividers: (fn: () => void) => void
     forwardSetHeadResizable: (fn: () => void) => void
-    // variables
-    title: DataTableProps['title']
-    rowsPerPage: number
     // this
     tableRef: React.Ref<HTMLTableElement>
     selectRowUpdate: unknown
-    toggleSortColumn: unknown
     setHeadCellRef: unknown
-    areAllRowsExpanded: unknown
-    toggleAllExpandableRows: unknown
-    updateColumnOrder: unknown
     draggableHeadCellRefs: HTMLTableCellElement[]
     getCurrentRootRef: unknown
     timers: unknown
-    toggleExpandRow: unknown
 }) {
     const { classes, cx } = useStyles()
-    const { components, options, state } = useMainContext()
+    const {
+        components,
+        options,
+        props: datatableRootProps,
+        state
+    } = useMainContext()
 
     const { tableHeightVal, responsiveClass } =
         getTableHeightAndResponsiveClasses(options, classes)
@@ -78,14 +66,16 @@ export function InnerTable({
                     {...tableProps}
                     className={cx(classes.tableRoot, tableProps.className)}
                 >
-                    <caption
-                        style={{
-                            position: 'absolute',
-                            left: '-3000px'
-                        }}
-                    >
-                        {title}
-                    </caption>
+                    {datatableRootProps?.title && (
+                        <caption
+                            style={{
+                                position: 'absolute',
+                                left: '-3000px'
+                            }}
+                        >
+                            {datatableRootProps.title}
+                        </caption>
+                    )}
 
                     <components.TableHead
                         columns={state.columns}
@@ -94,17 +84,13 @@ export function InnerTable({
                         data={state.displayData}
                         count={state.count}
                         page={state.page}
-                        rowsPerPage={rowsPerPage}
+                        rowsPerPage={state.rowsPerPage}
                         selectedRows={state.selectedRows}
                         selectRowUpdate={selectRowUpdate}
-                        toggleSort={toggleSortColumn}
                         setCellRef={setHeadCellRef}
                         expandedRows={state.expandedRows}
-                        areAllRowsExpanded={areAllRowsExpanded}
-                        toggleAllExpandableRows={toggleAllExpandableRows}
                         sortOrder={state.sortOrder}
                         columnOrder={state.columnOrder}
-                        updateColumnOrder={updateColumnOrder}
                         draggableHeadCellRefs={draggableHeadCellRefs}
                         tableRef={getCurrentRootRef}
                         timers={timers}
@@ -115,15 +101,13 @@ export function InnerTable({
                         count={state.count}
                         columns={state.columns}
                         page={state.page}
-                        rowsPerPage={rowsPerPage}
+                        rowsPerPage={state.rowsPerPage}
                         selectedRows={state.selectedRows}
                         // @ts-expect-error WILL FIX THIS LATER
                         selectRowUpdate={selectRowUpdate}
                         previousSelectedRow={state.previousSelectedRow}
                         // @ts-expect-error WILL FIX THIS LATER
                         expandedRows={state.expandedRows}
-                        // @ts-expect-error WILL FIX THIS LATER
-                        toggleExpandRow={toggleExpandRow}
                         columnOrder={state.columnOrder}
                         filterList={state.filterList}
                     />

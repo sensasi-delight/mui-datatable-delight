@@ -4,16 +4,12 @@ import { useDrag } from 'react-dnd'
 import { useState } from 'react'
 import clsx from 'clsx'
 // materials
-import {
-    Button,
-    TableCell,
-    TableSortLabel,
-    Tooltip as MuiTooltip
-} from '@mui/material'
+import { Button, TableCell, TableSortLabel } from '@mui/material'
 import { Help as HelpIcon } from '@mui/icons-material'
 // locals
 import useColumnDrop from './head.cell.use-column-drop'
 import { useMainContext } from '../hooks/use-main-context'
+import { TableAction } from '../data-table.props.type/options'
 
 const useStyles = makeStyles({ name: 'datatable-delight--head--cell' })(
     theme => ({
@@ -86,10 +82,9 @@ export default function TableHeadCell({
     sortDirection,
     tableRef,
     timers,
-    toggleSort,
-    updateColumnOrder
+    toggleSort
 }: DataTableHeadCellProps) {
-    const { components, options, textLabels } = useMainContext()
+    const { components, onAction, options, textLabels } = useMainContext()
     const [sortTooltipOpen, setSortTooltipOpen] = useState(false)
     const [hintTooltipOpen, setHintTooltipOpen] = useState(false)
 
@@ -130,21 +125,20 @@ export default function TableHeadCell({
         ...(ariaSortDirection ? { direction: sortDirection } : {})
     }
 
-    const [{ opacity }, dragRef, preview] = useDrag({
+    const [{}, dragRef] = useDrag({
         item: {
             type: 'HEADER',
             colIndex: index,
             headCellRefs: draggableHeadCellRefs
         },
-        begin: monitor => {
+        begin: () => {
             setTimeout(() => {
                 setHintTooltipOpen(false)
                 setSortTooltipOpen(false)
                 setDragging(true)
             }, 0)
-            return null
         },
-        end: (item, monitor) => {
+        end: () => {
             setDragging(false)
         },
         collect: monitor => {
@@ -154,15 +148,27 @@ export default function TableHeadCell({
         }
     })
 
+    function handleColumnOrderUpdate(
+        columnOrder: number[],
+        columnIndex: number,
+        newPosition: number
+    ) {
+        onAction?.(TableAction.COLUMN_ORDER_CHANGE, {
+            columnOrder
+        })
+
+        options.onColumnOrderChange?.(columnOrder, columnIndex, newPosition)
+    }
+
     const [drop] = useColumnDrop({
-        drop: (item, mon) => {
+        drop: () => {
             setSortTooltipOpen(false)
             setHintTooltipOpen(false)
             setDragging(false)
         },
         index,
         headCellRefs: draggableHeadCellRefs,
-        updateColumnOrder,
+        updateColumnOrder: handleColumnOrderUpdate,
         columnOrder,
         columns,
         transitionTime: options.draggableColumns

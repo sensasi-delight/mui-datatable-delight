@@ -56,7 +56,7 @@ export interface SomeRowsIDK {
     lookup: boolean[]
 }
 
-export interface DataTableOptions {
+export interface DataTableOptions extends DataTableCustomsOptions {
     /** Enable/disable case sensitivity for search */
     caseSensitive?: boolean
 
@@ -78,92 +78,6 @@ export interface DataTableOptions {
 
     /** User provided override for the total number of row. */
     count?: number
-
-    /** Add a custom footer to the filter dialog. */
-    customFilterDialogFooter?: (
-        filterList: DataTableState['filterList'],
-        applyNewFilters?: (...args: any[]) => any
-    ) => ReactNode
-
-    /**
-     * Render a custom table footer.
-     *
-     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-footer/index.tsx
-     */
-    customFooter?: (
-        rowCount: number,
-        page: number,
-        rowsPerPage: number,
-        changeRowsPerPage: (rowPerPage: number) => void,
-        changePage: (newPage: number) => void,
-        textLabels: typeof DEFAULT_TEXT_LABELS.pagination
-    ) => ReactNode
-
-    /**
-     * Override default row rendering with custom function.
-     *
-     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-rows/index.tsx
-     */
-    customRowRender?: (
-        data: any[],
-        dataIndex: number,
-        rowIndex: number
-    ) => ReactNode
-
-    /**
-     * Override default search with custom function.
-     *
-     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-search/index.tsx
-     */
-    customSearch?: (
-        searchText: string,
-        currentRow: any[],
-        columns: any[]
-    ) => boolean
-
-    /**
-     * Override default sorting with custom function.
-     *
-     * If you just need to override the sorting for a particular column, see the {@link DataTableColumnObjectOptions.sortCompare} method in the Column options.
-     *
-     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-sorting/index.tsx
-     */
-    customSort?: (data: any[], colIndex: number, order: string) => any[]
-
-    /**
-     * Render a footer under the table body but above the table's standard footer.
-     * This is useful for creating footers for individual columns.
-     *
-     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-footer/index.tsx
-     */
-    customTableBodyFooterRender?: (options: {
-        data: any[]
-        selectableRows: SelectableRows
-        columns: any[]
-    }) => any
-
-    /**
-     * Render a custom Toolbar.
-     *
-     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-toolbar/CustomToolbar.tsx
-     */
-    customToolbar?: (data: {
-        displayData: DataTableState['displayData']
-    }) => ReactNode
-
-    /**
-     * Render a custom selected row ToolBar.
-     *
-     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-toolbarselect/CustomToolbarSelect.tsx
-     */
-    customToolbarSelect?: (
-        selectedRows: {
-            data: Array<{ index: number; dataIndex: number }>
-            lookup: { [key: number]: boolean }
-        },
-        displayData: DisplayData,
-        setSelectedRows: (rows: number[]) => void
-    ) => ReactNode
 
     /**
      * Possible Values:
@@ -768,6 +682,94 @@ export interface DataTableOptions {
     serverSideFilterList?: DataTableState['filterList']
 }
 
+interface DataTableCustomsOptions {
+    /** Add a custom footer to the filter dialog. */
+    customFilterDialogFooter?: (
+        filterList: DataTableState['filterList'],
+        applyNewFilters?: (...args: any[]) => any
+    ) => ReactNode
+
+    /**
+     * Render a custom table footer.
+     *
+     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-footer/index.tsx
+     */
+    customFooter?: (
+        rowCount: number,
+        page: number,
+        rowsPerPage: number,
+        changeRowsPerPage: (rowPerPage: number) => void,
+        changePage: (newPage: number) => void,
+        textLabels: typeof DEFAULT_TEXT_LABELS.pagination
+    ) => ReactNode
+
+    /**
+     * Override default row rendering with custom function.
+     *
+     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-rows/index.tsx
+     */
+    customRowRender?: (
+        data: any[],
+        dataIndex: number,
+        rowIndex: number
+    ) => ReactNode
+
+    /**
+     * Override default search with custom function.
+     *
+     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-search/index.tsx
+     */
+    customSearch?: (
+        searchText: string,
+        currentRow: any[],
+        columns: any[]
+    ) => boolean
+
+    /**
+     * Override default sorting with custom function.
+     *
+     * If you just need to override the sorting for a particular column, see the {@link DataTableColumnObjectOptions.sortCompare} method in the Column options.
+     *
+     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-sorting/index.tsx
+     */
+    customSort?: (data: any[], colIndex: number, order: string) => any[]
+
+    /**
+     * Render a footer under the table body but above the table's standard footer.
+     * This is useful for creating footers for individual columns.
+     *
+     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-footer/index.tsx
+     */
+    customTableBodyFooterRender?: (options: {
+        data: any[]
+        selectableRows: SelectableRows
+        columns: any[]
+    }) => any
+
+    /**
+     * Render a custom Toolbar.
+     *
+     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-toolbar/CustomToolbar.tsx
+     */
+    customToolbar?: (data: {
+        displayData: DataTableState['displayData']
+    }) => ReactNode
+
+    /**
+     * Render a custom selected row ToolBar.
+     *
+     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-toolbarselect/CustomToolbarSelect.tsx
+     */
+    customToolbarSelect?: (
+        selectedRows: {
+            data: Array<{ index: number; dataIndex: number }>
+            lookup: { [key: number]: boolean }
+        },
+        displayData: DisplayData,
+        setSelectedRows: (rows: number[]) => void
+    ) => ReactNode
+}
+
 //     /** Options used to describe table */
 //     options: PropTypes.shape({
 //         caseSensitive: PropTypes.bool,
@@ -775,22 +777,6 @@ export interface DataTableOptions {
 //         count: PropTypes.number,
 //         confirmFilters: PropTypes.bool,
 //         consoleWarnings: PropTypes.bool,
-//         customFilterDialogFooter: PropTypes.func,
-//         customFooter: PropTypes.oneOfType([
-//             PropTypes.func,
-//             PropTypes.element
-//         ]),
-//         customRowRender: PropTypes.func,
-//         customSearch: PropTypes.func,
-//         customSort: PropTypes.func,
-//         customToolbar: PropTypes.oneOfType([
-//             PropTypes.func,
-//             PropTypes.element
-//         ]),
-//         customToolbarSelect: PropTypes.oneOfType([
-//             PropTypes.func,
-//             PropTypes.element
-//         ]),
 //         draggableColumns: PropTypes.object,
 //         enableNestedDataAccess: PropTypes.string,
 //         expandableRows: PropTypes.bool,

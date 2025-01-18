@@ -22,18 +22,20 @@ import { DEFAULT_OPTIONS } from './use-main-context.default-options'
 import { handleDeprecatedOptions } from './use-main-context.handle-deprecated-options'
 import { DefaultDataItem } from '../data-table.props.type'
 
+type ContextDatatableProps = Omit<DataTableProps, 'className'>
+
 export function MainContextProvider({
     datatableProps,
     children
 }: {
-    datatableProps: DataTableProps
+    datatableProps: ContextDatatableProps
     children: ReactNode
 }): ReactNode {
     const restoredState = datatableProps.options?.storageKey
         ? load(datatableProps.options.storageKey)
         : undefined
 
-    const [state, setState] = useState(
+    const [state, setState] = useState<DataTableState>(
         getNewStateOnDataChange(
             datatableProps,
             1,
@@ -157,7 +159,7 @@ interface ContextValueType {
     ) => void
     onAction?: (action: TableAction, state: Partial<DataTableState>) => void
     options: DataTableOptions
-    props?: DataTableProps
+    props?: ContextDatatableProps
     setState?: Dispatch<SetStateAction<DataTableState<DefaultDataItem>>>
     state: typeof DEFAULT_STATE
     textLabels: ReturnType<typeof processTextLabels>
@@ -168,7 +170,7 @@ function getInitTableOptions({
     page,
     rowsSelected,
     rowsPerPageOptions
-}: DataTableProps['options'] = {}) {
+}: ContextDatatableProps['options'] = {}) {
     const optState: {
         page?: DataTableState['page']
         rowsPerPage?: DataTableState['rowsPerPage']
@@ -223,7 +225,7 @@ function getInitTableOptions({
 }
 
 function getConstructedOption(
-    optionsFromProp: DataTableProps['options']
+    optionsFromProp: ContextDatatableProps['options']
 ): DataTableOptions {
     return {
         ...DEFAULT_OPTIONS,

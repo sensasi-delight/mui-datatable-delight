@@ -14,9 +14,11 @@ import { DataTableState } from '../data-table.props.type/state'
 import {
     DataTableOptions,
     RowTypeIDK,
-    SomeRowsIDK
+    SomeRowsIDK,
+    TableAction
 } from '../data-table.props.type/options'
 import { useMainContext } from '../hooks/use-main-context'
+import { buildMap } from '../functions'
 
 export function DataTableBody(props: DataTableBodyProps) {
     const { options, textLabels } = useMainContext()
@@ -104,9 +106,6 @@ interface DataTableBodyProps {
 
     /** Data used to search table against */
     searchText: string
-
-    /** Toggle row expandable */
-    toggleExpandRow: (row: RowTypeIDK) => void
 
     columnOrder: number[] | undefined
 
@@ -290,9 +289,9 @@ function RenderRow({
     columnOrder: number[]
 }) {
     const { classes } = useStyles()
-    const { options } = useMainContext()
+    const { onAction, options, state } = useMainContext()
 
-    const { selectedRows, toggleExpandRow, columns } = parentProps
+    const { selectedRows, columns } = parentProps
 
     if (options.customRowRender) {
         return options.customRowRender(row, dataIndex, rowIndex)
@@ -319,6 +318,54 @@ function RenderRow({
         index: columnOrderItem
     }))
 
+    function toggleExpandRow(row: { index: number; dataIndex: number }) {
+        const { dataIndex } = row
+        const { isRowExpandable } = options
+
+        let { expandedRows } = state
+        const expandedRowsData = [...expandedRows.data]
+        let shouldCollapseExpandedRow = false
+
+        let hasRemovedRow = false
+        let removedRow: string[] = []
+
+        for (var cIndex = 0; cIndex < expandedRowsData.length; cIndex++) {
+            if (expandedRowsData[cIndex].dataIndex === dataIndex) {
+                shouldCollapseExpandedRow = true
+                break
+            }
+        }
+
+        if (shouldCollapseExpandedRow) {
+            if (
+                (isRowExpandable && isRowExpandable(dataIndex, expandedRows)) ||
+                !isRowExpandable
+            ) {
+                removedRow = expandedRowsData.splice(cIndex, 1)
+                hasRemovedRow = true
+            }
+        } else {
+            if (isRowExpandable && isRowExpandable(dataIndex, expandedRows))
+                expandedRowsData.push(row)
+            else if (!isRowExpandable) expandedRowsData.push(row)
+        }
+
+        const newState = {
+            curExpandedRows: hasRemovedRow ? removedRow : [row],
+            expandedRows: {
+                lookup: buildMap(expandedRowsData),
+                data: expandedRowsData
+            }
+        }
+
+        onAction?.(TableAction.ROW_EXPANSION_CHANGE, newState)
+
+        const expandCallback =
+            options.onRowExpansionChange ?? options.onRowsExpand
+
+        expandCallback?.(newState.curExpandedRows, newState.expandedRows.data)
+    }
+
     return (
         <>
             <DataTableBodyRow
@@ -333,7 +380,8 @@ function RenderRow({
                         },
                         event,
                         options,
-                        parentProps
+                        parentProps,
+                        toggleExpandRow
                     )
                 }
                 className={clsx(
@@ -352,6 +400,7 @@ function RenderRow({
                 {...overriddenBodyProps}
             >
                 <DataTableTableSelectCell
+                    isHeaderCell={false}
                     onChange={event =>
                         handleRowSelect(
                             {
@@ -437,7 +486,8 @@ function handleRowClick(
     },
     event: React.MouseEvent<HTMLTableRowElement, MouseEvent>,
     options: DataTableOptions,
-    parentProps: DataTableBodyProps
+    parentProps: DataTableBodyProps,
+    toggleExpandRow: (params: { index: number; dataIndex: number }) => void
 ) {
     const clickedElement = event.target as HTMLElement
 
@@ -480,7 +530,7 @@ function handleRowClick(
         (options.isRowExpandable?.(data.dataIndex, parentProps.expandedRows) ??
             true)
     ) {
-        parentProps.toggleExpandRow({
+        toggleExpandRow({
             index: data.rowIndex,
             dataIndex: data.dataIndex
         })

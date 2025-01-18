@@ -1,7 +1,9 @@
 // vendors
 import { InputBase, MenuItem, Select, Typography } from '@mui/material'
-import { makeStyles } from 'tss-react/mui'
+import { tss } from 'tss-react/mui'
+// globals
 import { useMainContext } from '../hooks/use-main-context'
+import { ClassName } from '../enums/class-name'
 
 export function DataTableFooterJumpToPage({
     count,
@@ -21,7 +23,7 @@ export function DataTableFooterJumpToPage({
     const page = pages.length < pageProp ? pages.length - 1 : pageProp
 
     return (
-        <div className={cx(MAIN_CLASS, classes.root)}>
+        <div className={cx(ClassName.FOOTER__JUMP_TO_PAGE, classes.root)}>
             <Typography
                 color="inherit"
                 variant="body2"
@@ -57,46 +59,44 @@ export function DataTableFooterJumpToPage({
     )
 }
 
-const MAIN_CLASS = 'datatable-delight--footer--jump-to-page'
+const useStyles = tss
+    .withName(ClassName.FOOTER__JUMP_TO_PAGE + '-')
+    .create(({ theme }) => ({
+        root: {
+            alignItems: 'center',
+            display: 'flex'
+        },
 
-const useStyles = makeStyles({
-    name: MAIN_CLASS
-})(theme => ({
-    root: {
-        alignItems: 'center',
-        display: 'flex'
-    },
+        caption: {
+            flexShrink: 0
+        },
 
-    caption: {
-        flexShrink: 0
-    },
+        /*  Styles applied to the Select component root element */
+        selectRoot: {
+            marginRight: 32,
+            marginLeft: 8
+        },
 
-    /*  Styles applied to the Select component root element */
-    selectRoot: {
-        marginRight: 32,
-        marginLeft: 8
-    },
+        select: {
+            paddingTop: 6,
+            paddingBottom: 7,
+            paddingLeft: 8,
+            paddingRight: 24,
+            textAlign: 'right',
+            textAlignLast: 'right',
+            fontSize: theme.typography.pxToRem(14)
+        },
 
-    select: {
-        paddingTop: 6,
-        paddingBottom: 7,
-        paddingLeft: 8,
-        paddingRight: 24,
-        textAlign: 'right',
-        textAlignLast: 'right',
-        fontSize: theme.typography.pxToRem(14)
-    },
+        /* Styles applied to Select component icon class */
+        selectIcon: {},
 
-    /* Styles applied to Select component icon class */
-    selectIcon: {},
-
-    /* Styles applied to InputBase component */
-    input: {
-        color: 'inhert',
-        fontSize: 'inhert',
-        flexShrink: 0
-    }
-}))
+        /* Styles applied to InputBase component */
+        input: {
+            color: 'inhert',
+            fontSize: 'inhert',
+            flexShrink: 0
+        }
+    }))
 
 function getPageOptions(count: number, rowsPerPage: number): number[] {
     const nPages = Math.max(Math.ceil(count / rowsPerPage), 1)

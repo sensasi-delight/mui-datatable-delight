@@ -1,22 +1,38 @@
-import Typography from '@mui/material/Typography'
-import FormControl from '@mui/material/FormControl'
-import FormGroup from '@mui/material/FormGroup'
-import FormControlLabel from '@mui/material/FormControlLabel'
+// vendors
+import {
+    FormControl,
+    FormControlLabel,
+    FormGroup,
+    Typography
+} from '@mui/material'
 import { makeStyles } from 'tss-react/mui'
+// globals
 import { useMainContext } from '../hooks/use-main-context'
-import type { DataTableState } from '../data-table.props.type/state'
+import { TableAction } from '../data-table.props.type/options'
 
 const CLASS_ID = 'datatable-delight--toolbar--view-col'
 
-export function ToolbarViewCol({
-    columns,
-    onColumnUpdate
-}: ToolbarViewColProps) {
-    const { components, textLabels } = useMainContext()
+export function ToolbarViewCol({}: ToolbarViewColProps) {
+    const { components, onAction, options, state, textLabels } =
+        useMainContext()
     const { classes, cx } = useStyles()
 
     const handleColChange = (index: number) => {
-        onColumnUpdate(index)
+        const newColumns = [...state.columns]
+
+        newColumns[index].display =
+            newColumns[index].display === 'true' ? 'false' : 'true'
+
+        onAction?.(TableAction.VIEW_COLUMNS_CHANGE, {
+            columns: newColumns
+        })
+
+        const cb = options.onViewColumnsChange || options.onColumnViewChange
+
+        cb?.(
+            newColumns[index].name,
+            newColumns[index].display === 'true' ? 'add' : 'remove'
+        )
     }
 
     return (
@@ -30,7 +46,7 @@ export function ToolbarViewCol({
             </Typography>
 
             <FormGroup className={classes.formGroup}>
-                {columns.map((column, index) => {
+                {state.columns.map((column, index) => {
                     if (column.display === 'excluded' || !column.viewColumns) {
                         return
                     }
@@ -97,12 +113,6 @@ const useStyles = makeStyles()(theme => ({
 }))
 
 export interface ToolbarViewColProps {
-    /** Columns used to describe table */
-    columns: DataTableState['columns']
-
-    /** Callback to trigger View column update */
-    onColumnUpdate: (columnIndex: number) => void
-
     /** Extend the style applied to components */
     // classes?: PropTypes.object
 }

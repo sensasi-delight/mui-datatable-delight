@@ -1,31 +1,60 @@
 // vendors
-import { makeStyles } from 'tss-react/mui'
-// local components
+import { tss } from 'tss-react/mui'
+// local sub-components
 import { DataTableFooterPagination } from './footer.pagination'
 import { DataTableFooterJumpToPage } from './footer.jump-to-page'
+// globals
 import { useMainContext } from '../hooks/use-main-context'
+import { TableAction } from '../data-table.props.type/options'
+import { getPageValue } from '../functions.shared/get-page-value'
+import { ClassName } from '../enums/class-name'
+import { DataTableState } from '../data-table.props.type/state'
 
-export default function TableFooter({
-    rowsPerPage,
-    changeRowsPerPage,
-    changePage
-}: TableFooterProps) {
-    const { options, state, textLabels } = useMainContext()
+/**
+ * @todo  FIX FONT SIZES ARE DIFFERENT IN SUB-COMPONENTS
+ * @todo  RENAME COMPONENT TO `<BottomToolbar />`
+ */
+export default function TableFooter({}: TableFooterProps) {
+    const { options, state, textLabels, onAction } = useMainContext()
     const { classes, cx } = useStyles()
     const { customFooter, pagination = true, jumpToPage } = options
 
-    return (
-        <div className={cx(ROOT_CLASS, classes.root)}>
-            {customFooter?.(
-                state.displayData.length,
-                state.page,
-                rowsPerPage,
-                changeRowsPerPage,
-                changePage,
-                textLabels.pagination
-            )}
+    function changePage(page: number) {
+        onAction?.(TableAction.CHANGE_PAGE, { page })
+        options.onChangePage?.(page)
+    }
 
-            {!customFooter && jumpToPage && (
+    function changeRowsPerPage(rowsPerPage: DataTableState['rowsPerPage']) {
+        const rowCount = options.count ?? state.displayData.length
+
+        const newState = {
+            rowsPerPage: rowsPerPage,
+            page: getPageValue(rowCount, rowsPerPage, state.page)
+        }
+
+        onAction?.(TableAction.CHANGE_ROWS_PER_PAGE, newState)
+
+        options.onChangeRowsPerPage?.(newState.rowsPerPage)
+    }
+
+    const rowsPerPage = state.rowsPerPage
+
+    if (customFooter)
+        return customFooter(
+            state.displayData.length,
+            state.page,
+            rowsPerPage,
+            changeRowsPerPage,
+            changePage,
+            textLabels.pagination
+        )
+
+    /** Render nothing */
+    if (!jumpToPage && !pagination) return <></>
+
+    return (
+        <div className={cx(ClassName.FOOTER, classes.root)}>
+            {jumpToPage && (
                 <DataTableFooterJumpToPage
                     count={state.displayData.length}
                     page={state.page}
@@ -34,7 +63,7 @@ export default function TableFooter({
                 />
             )}
 
-            {!customFooter && pagination && (
+            {pagination && (
                 <DataTableFooterPagination
                     count={state.displayData.length}
                     page={state.page}
@@ -47,22 +76,9 @@ export default function TableFooter({
     )
 }
 
-interface TableFooterProps {
-    /** Total number allowed of rows per page */
-    rowsPerPage: number
+interface TableFooterProps {}
 
-    /** Callback to trigger rows per page change */
-    changeRowsPerPage: (nRows: number) => void
-
-    /** Callback to trigger page change */
-    changePage: (pageNo: number) => void
-}
-
-const ROOT_CLASS = 'datatable-delight--footer'
-
-const useStyles = makeStyles({
-    name: ROOT_CLASS
-})(theme => ({
+const useStyles = tss.withName(ClassName.FOOTER + '-').create(({ theme }) => ({
     root: {
         display: 'flex',
         justifyContent: 'flex-end',
