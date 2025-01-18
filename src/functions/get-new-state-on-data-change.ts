@@ -761,13 +761,10 @@ export function getNewStateOnDataChange(
     }
 
     const searchText =
-        status === TABLE_LOAD.INITIAL
-            ? (options?.searchText ?? null)
-            : state.searchText
+        status === TABLE_LOAD.INITIAL ? options?.searchText : state.searchText
 
     /* set source data and display Data set source set */
-    const newState: DataTableState = {
-        ...state,
+    const newState = {
         columns: columns,
         filterData: filterData,
         filterList: filterList,
@@ -782,17 +779,18 @@ export function getNewStateOnDataChange(
         columnOrder
     }
 
-    newState.displayData = getDisplayData(
-        columns,
-        tableData,
-        filterList,
-        searchText,
-        tableMeta,
-        props,
-        newState,
-        options,
-        setState
-    )
-
-    return newState
+    return {
+        ...newState,
+        displayData: getDisplayData(
+            columns,
+            tableData,
+            filterList,
+            searchText,
+            tableMeta,
+            props,
+            newState,
+            options,
+            setState
+        )
+    }
 }
