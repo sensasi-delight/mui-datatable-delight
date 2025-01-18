@@ -1,7 +1,6 @@
 import { DndProvider } from 'react-dnd'
 import { Table as MuiTable } from '@mui/material'
 import { HTML5Backend } from 'react-dnd-html5-backend'
-import { DataTableProps } from './data-table.props.type'
 import { useMainContext } from './hooks/use-main-context'
 import { DataTableOptions } from './data-table.props.type/options'
 import { makeStyles } from 'tss-react/mui'
@@ -10,8 +9,6 @@ export function InnerTable({
     // new this
     forwardUpdateDividers,
     forwardSetHeadResizable,
-    // var section
-    title,
     // this sections
     tableRef,
     selectRowUpdate,
@@ -28,8 +25,6 @@ export function InnerTable({
     // new this
     forwardUpdateDividers: (fn: () => void) => void
     forwardSetHeadResizable: (fn: () => void) => void
-    // variables
-    title: DataTableProps['title']
     // this
     tableRef: React.Ref<HTMLTableElement>
     selectRowUpdate: unknown
@@ -44,7 +39,12 @@ export function InnerTable({
     toggleExpandRow: unknown
 }) {
     const { classes, cx } = useStyles()
-    const { components, options, state } = useMainContext()
+    const {
+        components,
+        options,
+        props: datatableRootProps,
+        state
+    } = useMainContext()
 
     const { tableHeightVal, responsiveClass } =
         getTableHeightAndResponsiveClasses(options, classes)
@@ -76,14 +76,16 @@ export function InnerTable({
                     {...tableProps}
                     className={cx(classes.tableRoot, tableProps.className)}
                 >
-                    <caption
-                        style={{
-                            position: 'absolute',
-                            left: '-3000px'
-                        }}
-                    >
-                        {title}
-                    </caption>
+                    {datatableRootProps?.title && (
+                        <caption
+                            style={{
+                                position: 'absolute',
+                                left: '-3000px'
+                            }}
+                        >
+                            {datatableRootProps.title}
+                        </caption>
+                    )}
 
                     <components.TableHead
                         columns={state.columns}

@@ -33,7 +33,7 @@ export function MainContextProvider({
         ? load(datatableProps.options.storageKey)
         : undefined
 
-    const [state, setState] = useState(
+    const [state, setState] = useState<DataTableState>(
         getNewStateOnDataChange(
             datatableProps,
             1,

@@ -9,20 +9,54 @@ import { DataTableToolbarFilterRenderFilters } from './toolbar.filter.render-fil
 import { useMainContext } from '../hooks/use-main-context'
 import { FilterTypeEnum } from '../data-table.props.type/columns'
 import { FilterUpdateType } from '../data-table'
+import { getDisplayData } from '../functions'
+import { TableAction } from '../data-table.props.type/options'
 
 export function DataTableToolbarFilter(props: DataTableToolbarFilterProps) {
-    const { options, textLabels } = useMainContext()
+    const {
+        onAction,
+        options,
+        props: DataTableRootProps,
+        setState,
+        state,
+        textLabels
+    } = useMainContext()
     const {
         columns,
         customFooter,
         filterList: filterListFromProp,
-        onFilterReset,
         filterUpdate,
         handleClose
     } = props
 
     const { classes } = useStyles()
     const [filterList, setFilterList] = useState(filterListFromProp)
+
+    function handleFilterReset() {
+        const prevState = state
+
+        const filterList = prevState.columns.map(() => [])
+        const displayData = options.serverSide
+            ? prevState.displayData
+            : getDisplayData(
+                  prevState.columns,
+                  prevState.data,
+                  filterList,
+                  prevState.searchText,
+                  null,
+                  DataTableRootProps,
+                  prevState,
+                  options,
+                  setState
+              )
+
+        onAction?.(TableAction.RESET_FILTERS, {
+            filterList,
+            displayData
+        })
+
+        options.onFilterChange?.(null, filterList, 'reset', null, displayData)
+    }
 
     return (
         <div className={classes.root}>
@@ -44,10 +78,9 @@ export function DataTableToolbarFilter(props: DataTableToolbarFilterProps) {
                         aria-label={textLabels.filter.reset}
                         data-testid="filterReset-button"
                         onClick={() => {
-                            setFilterList(columns.map(() => []))
-
                             if (options.confirmFilters !== true) {
-                                onFilterReset?.()
+                                setFilterList(columns.map(() => []))
+                                handleFilterReset()
                             }
                         }}
                     >
@@ -158,9 +191,6 @@ export interface DataTableToolbarFilterProps {
 
     /** Callback to trigger filter update */
     filterUpdate: FilterUpdateType
-
-    /** Callback to trigger filter reset */
-    onFilterReset?: () => void
 
     columns: DataTableState['columns']
 

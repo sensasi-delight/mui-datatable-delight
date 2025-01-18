@@ -9,7 +9,6 @@ import React, { createRef, useState, type RefObject } from 'react'
 // locals
 import {
     buildMap,
-    cloneDeep,
     getDisplayData,
     getNewStateOnDataChange,
     sortTable
@@ -202,28 +201,6 @@ class MUIDataTableClass extends React.Component<
     // assigning it as arrow function in the JSX would cause hard to track re-render errors
     getCurrentRootRef = () => this.props.getRootRef().current
 
-    toggleViewColumn = (index: number) => {
-        const { columns } = this.context.state
-
-        const newColumns = cloneDeep(columns) as typeof columns
-
-        newColumns[index].display =
-            newColumns[index].display === 'true' ? 'false' : 'true'
-
-        this.context.onAction?.(TableAction.VIEW_COLUMNS_CHANGE, {
-            columns: newColumns
-        })
-
-        const cb =
-            this.context.options.onViewColumnsChange ||
-            this.context.options.onColumnViewChange
-
-        cb?.(
-            newColumns[index].name,
-            newColumns[index].display === 'true' ? 'add' : 'remove'
-        )
-    }
-
     toggleSortColumn = (columnIndex: number) => {
         const prevState = this.context.state
         const { columns, data } = prevState
@@ -337,63 +314,6 @@ class MUIDataTableClass extends React.Component<
         )
 
         this.context.setState?.(newState)
-    }
-
-    searchTextUpdate = (newSearchText: string) => {
-        const prevState = this.context.state
-
-        const displayData = this.context.options.serverSide
-            ? prevState.displayData
-            : getDisplayData(
-                  prevState.columns,
-                  prevState.data,
-                  prevState.filterList,
-                  newSearchText,
-                  null,
-                  this.props,
-                  prevState,
-                  this.context.options,
-                  this.context.setState
-              )
-
-        this.context.onAction?.(TableAction.SEARCH, {
-            searchText: newSearchText,
-            page: 0,
-            displayData
-        })
-        this.context.options.onSearchChange?.(newSearchText)
-    }
-
-    resetFilters = () => {
-        const prevState = this.context.state
-
-        const filterList = prevState.columns.map(() => [])
-        const displayData = this.context.options.serverSide
-            ? prevState.displayData
-            : getDisplayData(
-                  prevState.columns,
-                  prevState.data,
-                  filterList,
-                  prevState.searchText,
-                  null,
-                  this.props,
-                  prevState,
-                  this.context.options,
-                  this.context.setState
-              )
-
-        this.context.onAction?.(TableAction.RESET_FILTERS, {
-            filterList,
-            displayData
-        })
-
-        this.context.options.onFilterChange?.(
-            null,
-            filterList,
-            'reset',
-            null,
-            displayData
-        )
     }
 
     filterUpdate: FilterUpdateType = (
@@ -763,8 +683,6 @@ class MUIDataTableClass extends React.Component<
     render() {
         const state = this.context.state
 
-        const { title } = this.props
-
         const isShowToolbarSelect =
             this.context.options.selectToolbarPlacement === STP.ALWAYS ||
             (state.selectedRows.data.length > 0 &&
@@ -789,14 +707,7 @@ class MUIDataTableClass extends React.Component<
                 {isShowToolbar && (
                     <this.context.components.TableToolbar
                         filterUpdate={this.filterUpdate}
-                        resetFilters={this.resetFilters}
-                        searchTextUpdate={this.searchTextUpdate}
                         tableRef={this.tableRef}
-                        title={title}
-                        toggleViewColumn={this.toggleViewColumn}
-                        setTableAction={(action: TableAction) => {
-                            this.context.onAction?.(action, this.context.state)
-                        }}
                     />
                 )}
 
@@ -808,8 +719,6 @@ class MUIDataTableClass extends React.Component<
                     // new this
                     forwardUpdateDividers={fn => (this.updateDividers = fn)}
                     forwardSetHeadResizable={fn => (this.setHeadResizable = fn)}
-                    // var section
-                    title={title}
                     // this section
                     tableRef={this.tableRef}
                     selectRowUpdate={this.selectRowUpdate}
@@ -912,7 +821,7 @@ export type FilterUpdateType = (
     type: FilterTypeEnum,
 
     /**
-     * customUpdate is called FilterList (onDelete)
+     * customUpdate is called `<FilterList />` (onDelete)
      */
     customUpdate?: (
         filterList: DataTableState['filterList'],
@@ -921,7 +830,7 @@ export type FilterUpdateType = (
     ) => string[][],
 
     /**
-     * next is called FilterList (onDelete)
+     * next is called `<FilterList />` (onDelete)
      */
     next?: (filterList: DataTableState['filterList']) => void
 ) => void

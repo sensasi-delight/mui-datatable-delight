@@ -494,7 +494,7 @@ export function getNewStateOnDataChange(
     dataUpdated: boolean,
     options: DataTableOptions,
     state: DataTableState,
-    setState: (newState: DataTableState) => void
+    setState?: (newState: DataTableState) => void
 ) {
     const { columns, filterData, filterList, columnOrder } = buildColumns(
         props.columns,
@@ -765,6 +765,7 @@ export function getNewStateOnDataChange(
 
     /* set source data and display Data set source set */
     const newState = {
+        ...state,
         columns: columns,
         filterData: filterData,
         filterList: filterList,

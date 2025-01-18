@@ -8,18 +8,15 @@ import {
     Theme,
     Typography
 } from '@mui/material'
-// locals datatables
+// globals
 import { TableAction } from '../data-table.props.type/options'
 import { useMainContext } from '../hooks/use-main-context'
 import { ClassName } from '../enums/class-name'
-// toolbar internals
-import type { DataTableToolbarFilterProps } from './toolbar.filter'
-import type { ToolbarViewColProps } from './toolbar.view-col'
+// sub-components
 import { DataTableToolbarSearch } from './toolbar.search'
 import { ToolbarPopover } from './toolbar.popover'
 import { ToolbarPrintButton } from './toolbar.print-button'
 import { ToolbarDownloadButton } from './toolbar.download-button'
-import { DataTableProps } from '../data-table.props.type'
 import { FilterUpdateType } from '../data-table'
 import { getDisplayData } from '../functions'
 
@@ -37,7 +34,7 @@ export default function TableToolbar(props: ToolbarProps) {
         icons,
         options,
         onAction,
-        props: rootProps,
+        props: datatableRootProps,
         setState,
         state,
         textLabels: { toolbar: toolbarTextLabels }
@@ -60,12 +57,12 @@ export default function TableToolbar(props: ToolbarProps) {
 
     function setActiveIcon(iconName: typeof activeIcon) {
         if (iconName === 'filter') {
-            props.setTableAction(TableAction.ON_FILTER_DIALOG_OPEN)
+            onAction?.(TableAction.ON_FILTER_DIALOG_OPEN, {})
             options.onFilterDialogOpen?.()
         }
 
         if (!iconName && activeIcon === 'filter') {
-            props.setTableAction(TableAction.ON_FILTER_DIALOG_CLOSE)
+            onAction?.(TableAction.ON_FILTER_DIALOG_CLOSE, {})
             options.onFilterDialogClose?.()
         }
 
@@ -73,13 +70,35 @@ export default function TableToolbar(props: ToolbarProps) {
         setShowSearch(isSearchShown(iconName))
     }
 
-    function handleSearch(value: string) {
-        setSearchText(value)
-        props.searchTextUpdate(value)
+    function handleSearch(newSearchText: string) {
+        const prevState = state
+
+        const displayData = options.serverSide
+            ? prevState.displayData
+            : getDisplayData(
+                  prevState.columns,
+                  prevState.data,
+                  prevState.filterList,
+                  newSearchText,
+                  null,
+                  datatableRootProps,
+                  prevState,
+                  options,
+                  setState
+              )
+
+        onAction?.(TableAction.SEARCH, {
+            searchText: newSearchText,
+            page: 0,
+            displayData
+        })
+
+        setSearchText(newSearchText)
+        options.onSearchChange?.(newSearchText)
     }
 
     function hideSearch() {
-        props.setTableAction(TableAction.ON_SEARCH_CLOSE)
+        onAction?.(TableAction.ON_SEARCH_CLOSE, {})
         options?.onSearchClose?.()
         searchClose()
 
@@ -118,12 +137,12 @@ export default function TableToolbar(props: ToolbarProps) {
             if (searchText) {
                 nextVal = true
             } else {
-                props.setTableAction(TableAction.ON_SEARCH_CLOSE)
+                onAction?.(TableAction.ON_SEARCH_CLOSE, {})
                 options.onSearchClose?.()
                 nextVal = false
             }
         } else if (iconName === 'search') {
-            props.setTableAction(TableAction.ON_SEARCH_OPEN)
+            onAction?.(TableAction.ON_SEARCH_OPEN, {})
             options.onSearchOpen?.()
 
             nextVal = true
@@ -148,7 +167,7 @@ export default function TableToolbar(props: ToolbarProps) {
                       prevState.filterList,
                       undefined,
                       null,
-                      rootProps,
+                      datatableRootProps,
                       prevState,
                       options,
                       setState
@@ -170,19 +189,22 @@ export default function TableToolbar(props: ToolbarProps) {
                     />
                 )}
 
-                <div
-                    style={{
-                        display: showSearch ? 'none' : undefined
-                    }}
-                >
-                    {typeof props.title === 'string' && (
-                        <Typography variant="h6" component="div">
-                            {props.title}
-                        </Typography>
-                    )}
+                {datatableRootProps?.title && (
+                    <div
+                        style={{
+                            display: showSearch ? 'none' : undefined
+                        }}
+                    >
+                        {typeof datatableRootProps.title === 'string' && (
+                            <Typography variant="h6" component="div">
+                                {datatableRootProps.title}
+                            </Typography>
+                        )}
 
-                    {typeof props.title !== 'string' && props.title}
-                </div>
+                        {typeof datatableRootProps.title !== 'string' &&
+                            datatableRootProps.title}
+                    </div>
+                )}
             </div>
 
             <div className={classes.actions}>
@@ -229,12 +251,7 @@ export default function TableToolbar(props: ToolbarProps) {
                         onPopoverExited={() => setActiveIcon(undefined)}
                         title={toolbarTextLabels.viewColumns}
                     >
-                        <components.TableViewCol
-                            // data={data}
-                            columns={state.columns}
-                            onColumnUpdate={props.toggleViewColumn}
-                            // updateColumns={updateColumns}
-                        />
+                        <components.TableViewCol />
                     </ToolbarPopover>
                 )}
 
@@ -268,7 +285,6 @@ export default function TableToolbar(props: ToolbarProps) {
                             filterList={state.filterList}
                             filterData={state.filterData}
                             filterUpdate={props.filterUpdate}
-                            onFilterReset={props.resetFilters}
                             handleClose={() => {
                                 setIsDialogFilterOpen(false)
                             }}
@@ -287,13 +303,8 @@ export default function TableToolbar(props: ToolbarProps) {
 
 interface ToolbarProps {
     filterUpdate: FilterUpdateType
-    resetFilters: DataTableToolbarFilterProps['onFilterReset']
     searchText?: string
-    searchTextUpdate: (searchText: string) => void
-    setTableAction: (action: TableAction) => void
     tableRef: RefObject<HTMLTableElement | null>
-    title: DataTableProps['title']
-    toggleViewColumn: ToolbarViewColProps['onColumnUpdate']
 }
 
 const useStyles = makeStyles({
