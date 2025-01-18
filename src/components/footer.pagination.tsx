@@ -1,5 +1,5 @@
 // vendors
-import { makeStyles } from 'tss-react/mui'
+import { tss } from 'tss-react/mui'
 import MuiTablePagination, {
     type TablePaginationProps as MuiTablePaginationProps
 } from '@mui/material/TablePagination'
@@ -8,6 +8,7 @@ import type { DataTableFooterPaginationProps } from './footer.pagination.props.t
 // functions
 import { getPageValue } from '../functions.shared/get-page-value'
 import { useMainContext } from '../hooks/use-main-context'
+import { ClassName } from '../enums/class-name'
 
 export function DataTableFooterPagination({
     count,
@@ -17,7 +18,7 @@ export function DataTableFooterPagination({
     changePage
 }: DataTableFooterPaginationProps) {
     const { options, textLabels } = useMainContext()
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
 
     const handleRowChange: MuiTablePaginationProps['onRowsPerPageChange'] = ({
         target: { value }
@@ -41,7 +42,7 @@ export function DataTableFooterPagination({
         : finalRowsPerPageOptions[0]
 
     return (
-        <div className={classes.root}>
+        <div className={cx(ClassName.FOOTER__PAGINATION, classes.root)}>
             <MuiTablePagination
                 component="div"
                 count={count}
@@ -58,14 +59,12 @@ export function DataTableFooterPagination({
                     actions: {
                         previousButton: {
                             id: 'pagination-back',
-                            // 'data-testid': 'pagination-back',
                             'aria-label': textLabels.pagination.previous,
                             title: textLabels.pagination.previous
                         },
 
                         nextButton: {
                             id: 'pagination-next',
-                            // 'data-testid': 'pagination-next',
                             'aria-label': textLabels.pagination.next,
                             title: textLabels.pagination.next,
                             className: classes.nextButton
@@ -76,14 +75,11 @@ export function DataTableFooterPagination({
                         id: 'pagination-input',
                         SelectDisplayProps: {
                             id: 'pagination-rows'
-                            // 'data-testid': 'pagination-rows'
                         },
                         MenuProps: {
                             id: 'pagination-menu',
-                            // 'data-testid': 'pagination-menu',
                             MenuListProps: {
                                 id: 'pagination-menu-list'
-                                // 'data-testid': 'pagination-menu-list'
                             }
                         }
                     },
@@ -97,22 +93,22 @@ export function DataTableFooterPagination({
     )
 }
 
-const useStyles = makeStyles({
-    name: 'delight-datatable-footer--pagination'
-})(theme => ({
-    root: {
-        maxWidth: '100%',
-        overflowX: 'auto'
-    },
-    toolbar: {
-        [theme.breakpoints.down('sm')]: {
-            marginTop: '-0.5em',
-            paddingLeft: theme.spacing(2)
+const useStyles = tss
+    .withName(ClassName.FOOTER__PAGINATION + '-')
+    .create(({ theme }) => ({
+        root: {
+            maxWidth: '100%',
+            overflowX: 'auto'
         },
-        paddingRight: '0 !important'
-    },
+        toolbar: {
+            [theme.breakpoints.down('sm')]: {
+                marginTop: '-0.5em',
+                paddingLeft: theme.spacing(2)
+            },
+            paddingRight: '0 !important'
+        },
 
-    nextButton: {
-        marginRight: theme.spacing(0.1)
-    }
-}))
+        nextButton: {
+            marginRight: theme.spacing(0.1)
+        }
+    }))
