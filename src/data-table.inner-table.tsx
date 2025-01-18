@@ -12,15 +12,10 @@ export function InnerTable({
     // this sections
     tableRef,
     selectRowUpdate,
-    toggleSortColumn,
     setHeadCellRef,
-    areAllRowsExpanded,
-    toggleAllExpandableRows,
-    updateColumnOrder,
     draggableHeadCellRefs,
     getCurrentRootRef,
-    timers,
-    toggleExpandRow
+    timers
 }: {
     // new this
     forwardUpdateDividers: (fn: () => void) => void
@@ -28,15 +23,10 @@ export function InnerTable({
     // this
     tableRef: React.Ref<HTMLTableElement>
     selectRowUpdate: unknown
-    toggleSortColumn: unknown
     setHeadCellRef: unknown
-    areAllRowsExpanded: unknown
-    toggleAllExpandableRows: unknown
-    updateColumnOrder: unknown
     draggableHeadCellRefs: HTMLTableCellElement[]
     getCurrentRootRef: unknown
     timers: unknown
-    toggleExpandRow: unknown
 }) {
     const { classes, cx } = useStyles()
     const {
@@ -97,14 +87,10 @@ export function InnerTable({
                         rowsPerPage={state.rowsPerPage}
                         selectedRows={state.selectedRows}
                         selectRowUpdate={selectRowUpdate}
-                        toggleSort={toggleSortColumn}
                         setCellRef={setHeadCellRef}
                         expandedRows={state.expandedRows}
-                        areAllRowsExpanded={areAllRowsExpanded}
-                        toggleAllExpandableRows={toggleAllExpandableRows}
                         sortOrder={state.sortOrder}
                         columnOrder={state.columnOrder}
-                        updateColumnOrder={updateColumnOrder}
                         draggableHeadCellRefs={draggableHeadCellRefs}
                         tableRef={getCurrentRootRef}
                         timers={timers}
@@ -122,8 +108,6 @@ export function InnerTable({
                         previousSelectedRow={state.previousSelectedRow}
                         // @ts-expect-error WILL FIX THIS LATER
                         expandedRows={state.expandedRows}
-                        // @ts-expect-error WILL FIX THIS LATER
-                        toggleExpandRow={toggleExpandRow}
                         columnOrder={state.columnOrder}
                         filterList={state.filterList}
                     />

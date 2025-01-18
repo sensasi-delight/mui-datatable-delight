@@ -7,23 +7,12 @@ import TableHeadRow from './head.row'
 import { DataTableTableSelectCell } from './components.shared/select-cell'
 import { useMainContext } from '../hooks/use-main-context'
 import { DataTableState } from '../data-table.props.type/state'
-
-const useStyles = makeStyles({ name: 'MUIDataTableHead' })(theme => ({
-    main: {},
-    responsiveStacked: {
-        [theme.breakpoints.down('md')]: {
-            display: 'none'
-        }
-    },
-    responsiveStackedAlways: {
-        display: 'none'
-    },
-    responsiveSimple: {
-        [theme.breakpoints.down('sm')]: {
-            display: 'none'
-        }
-    }
-}))
+import {
+    DataTableOptions,
+    DataTableSortOrderOption,
+    TableAction
+} from '../data-table.props.type/options'
+import { getDisplayData, sortTable } from '../functions'
 
 export default function TableHead({
     columnOrder = null,
@@ -38,22 +27,129 @@ export default function TableHead({
     sortOrder = {},
     tableRef,
     tableId,
-    timers,
-    toggleAllExpandableRows,
-    toggleSort,
-    updateColumnOrder
+    timers
 }: DataTableHeadProps) {
     const { classes } = useStyles()
-    const { options } = useMainContext()
+    const {
+        onAction,
+        options,
+        props: datatableRootProps,
+        setState,
+        state
+    } = useMainContext()
 
     if (columnOrder === null) {
-        columnOrder = columns ? columns.map((item, idx) => idx) : []
+        columnOrder = columns ? columns.map((_, idx) => idx) : []
     }
 
     const [dragging, setDragging] = useState(false)
 
-    const handleToggleColumn = index => {
-        toggleSort(index)
+    function handleToggleColumn(columnIndex: number) {
+        const prevState = state
+        const { columns, data } = prevState
+
+        let newOrder: DataTableSortOrderOption['direction'] = columns[
+            columnIndex
+        ].sortDescFirst
+            ? 'desc'
+            : 'asc'
+
+        const sequenceOrder: DataTableSortOrderOption['direction'][] = [
+            'asc',
+            'desc'
+        ]
+
+        if (columns[columnIndex].sortDescFirst) {
+            sequenceOrder.reverse()
+        }
+
+        if (columns[columnIndex].sortThirdClickReset) {
+            sequenceOrder.push('none')
+        }
+
+        if (columns[columnIndex].name === prevState.sortOrder?.name) {
+            let position = sequenceOrder.indexOf(prevState.sortOrder.direction)
+
+            if (position !== -1) {
+                position++
+
+                if (position >= sequenceOrder.length) position = 0
+
+                newOrder = sequenceOrder[position]
+            }
+        }
+
+        const newSortOrder: DataTableSortOrderOption = {
+            name: columns[columnIndex].name,
+            direction: newOrder
+        }
+
+        function getSortDirectionLabel(
+            sortOrder: DataTableOptions['sortOrder']
+        ) {
+            switch (sortOrder?.direction) {
+                case 'asc':
+                    return 'ascending'
+                case 'desc':
+                    return 'descending'
+                case 'none':
+                    return 'none'
+                default:
+                    return ''
+            }
+        }
+
+        const orderLabel = getSortDirectionLabel(newSortOrder)
+        const announceText = `Table now sorted by ${columns[columnIndex].name} : ${orderLabel}`
+
+        let newState: DataTableState = {
+            ...prevState,
+            announceText,
+            columns: columns,
+            activeColumn: columnIndex
+        }
+
+        if (options.serverSide) {
+            newState = {
+                ...newState,
+                data: prevState.data,
+                displayData: prevState.displayData,
+                selectedRows: prevState.selectedRows,
+                sortOrder: newSortOrder
+            }
+        } else {
+            const sortedData = sortTable(
+                data,
+                columnIndex,
+                newOrder,
+                columns[columnIndex],
+                options,
+                newState
+            )
+
+            newState = {
+                ...newState,
+                data: sortedData.data,
+                selectedRows: sortedData.selectedRows,
+                sortOrder: newSortOrder,
+                previousSelectedRow: null
+            }
+
+            newState.displayData = getDisplayData(
+                columns,
+                sortedData.data,
+                prevState.filterList,
+                prevState.searchText,
+                null,
+                datatableRootProps,
+                newState,
+                options,
+                setState
+            )
+        }
+
+        onAction?.(TableAction.SORT, newState)
+        options.onColumnSortChange?.(newSortOrder.name, newSortOrder.direction)
     }
 
     const handleRowSelect = () => {
@@ -125,7 +221,6 @@ export default function TableHead({
                     selectableRowsHideCheckboxes={
                         options.selectableRowsHideCheckboxes
                     }
-                    onExpand={toggleAllExpandableRows}
                     isRowSelectable={true}
                 />
 
@@ -164,7 +259,6 @@ export default function TableHead({
                                 print={column.print}
                                 column={column}
                                 columns={columns}
-                                updateColumnOrder={updateColumnOrder}
                                 columnOrder={columnOrder}
                                 timers={timers}
                                 draggingHook={[dragging, setDragging]}
@@ -186,6 +280,23 @@ export default function TableHead({
         </MuiTableHead>
     )
 }
+
+const useStyles = makeStyles({ name: 'MUIDataTableHead' })(theme => ({
+    main: {},
+    responsiveStacked: {
+        [theme.breakpoints.down('md')]: {
+            display: 'none'
+        }
+    },
+    responsiveStackedAlways: {
+        display: 'none'
+    },
+    responsiveSimple: {
+        [theme.breakpoints.down('sm')]: {
+            display: 'none'
+        }
+    }
+}))
 
 interface DataTableHeadProps {
     columns: DataTableState['columns']

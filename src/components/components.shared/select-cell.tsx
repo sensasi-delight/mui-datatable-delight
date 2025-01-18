@@ -2,14 +2,13 @@ import clsx from 'clsx'
 import { CheckboxProps } from '@mui/material/Checkbox'
 import TableCell from '@mui/material/TableCell'
 import { makeStyles } from 'tss-react/mui'
-import { MUIDataTableExpandButton } from 'mui-datatables'
 import { DataTableOptions } from '../../data-table.props.type/options'
 import { useMainContext } from '../../hooks/use-main-context'
 
 export function DataTableTableSelectCell({
     fixedHeader,
     fixedSelectColumn,
-    isHeaderCell = false,
+    isHeaderCell,
     expandableOn = false,
     selectableOn = 'none',
     isRowExpanded = false,
@@ -19,15 +18,18 @@ export function DataTableTableSelectCell({
     hideExpandButton,
     expandableRowsHeader,
     expandedRows,
-    areAllRowsExpanded = () => false,
     selectableRowsHideCheckboxes,
     setHeadCellRef,
     dataIndex,
     onChange,
     ...otherProps
-}: DataTableTableSelectCellProps) {
-    const { components } = useMainContext()
+}: DataTableTableSelectCellProps & IsHeaderCell) {
+    const { components, state } = useMainContext()
     const { classes } = useStyles()
+
+    function areAllRowsExpanded() {
+        return state.expandedRows.data.length === state.data.length
+    }
 
     if (
         expandableOn === false &&
@@ -85,6 +87,61 @@ export function DataTableTableSelectCell({
         )
     }
 
+    // Collapses or expands all expanded rows
+    function toggleAllExpandableRows() {
+        const expandedRowsData = [...state.expandedRows.data]
+
+        const { isRowExpandable } = options
+        const affectedRows: string[] = []
+
+        if (expandedRowsData.length > 0) {
+            // collapse all
+            for (let ii = expandedRowsData.length - 1; ii >= 0; ii--) {
+                let item = expandedRowsData[ii]
+                if (
+                    !isRowExpandable ||
+                    isRowExpandable(item.dataIndex, state.expandedRows)
+                ) {
+                    affectedRows.push(expandedRowsData.splice(ii, 1))
+                }
+            }
+        } else {
+            // expand all
+            for (let ii = 0; ii < state.data.length; ii++) {
+                let item = state.data[ii]
+                if (
+                    !isRowExpandable ||
+                    (isRowExpandable &&
+                        isRowExpandable(item.dataIndex, state.expandedRows))
+                ) {
+                    if (state.expandedRows.lookup[item.index] !== true) {
+                        let newItem = {
+                            index: ii,
+                            dataIndex: item.index
+                        }
+                        expandedRowsData.push(newItem)
+                        affectedRows.push(newItem)
+                    }
+                }
+            }
+        }
+
+        const newState = {
+            expandedRows: {
+                lookup: buildMap(expandedRowsData),
+                data: expandedRowsData
+            }
+        }
+
+        onAction?.(TableAction.EXPAND_ROW, newState)
+
+        options.onRowExpansionChange?.(
+            affectedRows,
+            newState.expandedRows.data,
+            newState.expandedRows.data.map(item => item.dataIndex)
+        )
+    }
+
     return (
         <TableCell
             className={cellClass}
@@ -99,15 +156,17 @@ export function DataTableTableSelectCell({
             <div style={{ display: 'flex', alignItems: 'center' }}>
                 {expandableOn && (
                     <components.ExpandButton
-                        isHeaderCell={isHeaderCell}
                         areAllRowsExpanded={areAllRowsExpanded}
-                        expandedRows={expandedRows}
-                        onExpand={onExpand}
-                        expandableRowsHeader={expandableRowsHeader}
                         buttonClass={buttonClass}
-                        iconIndeterminateClass={iconIndeterminateClass}
-                        iconClass={iconClass}
                         dataIndex={dataIndex}
+                        expandedRows={expandedRows}
+                        expandableRowsHeader={expandableRowsHeader}
+                        iconClass={iconClass}
+                        iconIndeterminateClass={iconIndeterminateClass}
+                        isHeaderCell={isHeaderCell}
+                        onExpand={
+                            isHeaderCell ? toggleAllExpandableRows : onExpand
+                        }
                     />
                 )}
                 {selectableOn !== 'none' &&
@@ -117,6 +176,16 @@ export function DataTableTableSelectCell({
         </TableCell>
     )
 }
+
+type IsHeaderCell =
+    | {
+          isHeaderCell: true
+          onExpand?: never
+      }
+    | {
+          isHeaderCell: false
+          onExpand: () => void
+      }
 
 export interface DataTableTableSelectCellProps {
     /** Select cell checked on/off */
@@ -142,8 +211,6 @@ export interface DataTableTableSelectCellProps {
 
     /** Select cell disabled on/off */
     isRowSelectable?: boolean
-
-    onExpand: MUIDataTableExpandButton['onExpand']
 
     fixedSelectColumn: boolean
 
