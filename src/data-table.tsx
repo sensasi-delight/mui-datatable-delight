@@ -7,7 +7,6 @@ import { Paper } from '@mui/material'
 import { makeStyles } from 'tss-react/mui'
 import React, { createRef, useState, type RefObject } from 'react'
 // locals
-import { getPageValue } from './functions.shared/get-page-value'
 import {
     buildMap,
     cloneDeep,
@@ -338,51 +337,6 @@ class MUIDataTableClass extends React.Component<
         )
 
         this.context.setState?.(newState)
-    }
-
-    changeRowsPerPage = (rowsPerPage: number) => {
-        const rowCount =
-            this.context.options.count ?? this.context.state.displayData.length
-
-        const newState = {
-            rowsPerPage: rowsPerPage,
-            page: getPageValue(rowCount, rowsPerPage, this.context.state.page)
-        }
-
-        this.context.onAction?.(TableAction.CHANGE_ROWS_PER_PAGE, newState)
-
-        this.context.options.onChangeRowsPerPage?.(newState.rowsPerPage)
-    }
-
-    changePage = (page: number) => {
-        this.context.onAction?.(TableAction.CHANGE_PAGE, { page })
-        this.context.options.onChangePage?.(page)
-    }
-
-    searchClose = () => {
-        const prevState = this.context.state
-
-        // reset searchText
-        const searchText = undefined
-
-        this.context.onAction?.(TableAction.SEARCH, {
-            searchText,
-            displayData: this.context.options.serverSide
-                ? prevState.displayData
-                : getDisplayData(
-                      prevState.columns,
-                      prevState.data,
-                      prevState.filterList,
-                      undefined,
-                      null,
-                      this.props,
-                      prevState,
-                      this.context.options,
-                      this.context.setState
-                  )
-        })
-
-        this.context.options.onSearchChange?.(searchText)
     }
 
     searchTextUpdate = (newSearchText: string) => {
@@ -811,10 +765,6 @@ class MUIDataTableClass extends React.Component<
 
         const { title } = this.props
 
-        const rowsPerPage = this.context.options.pagination
-            ? state.rowsPerPage
-            : state.displayData.length
-
         const isShowToolbarSelect =
             this.context.options.selectToolbarPlacement === STP.ALWAYS ||
             (state.selectedRows.data.length > 0 &&
@@ -841,7 +791,6 @@ class MUIDataTableClass extends React.Component<
                         filterUpdate={this.filterUpdate}
                         resetFilters={this.resetFilters}
                         searchTextUpdate={this.searchTextUpdate}
-                        searchClose={this.searchClose}
                         tableRef={this.tableRef}
                         title={title}
                         toggleViewColumn={this.toggleViewColumn}
@@ -861,7 +810,6 @@ class MUIDataTableClass extends React.Component<
                     forwardSetHeadResizable={fn => (this.setHeadResizable = fn)}
                     // var section
                     title={title}
-                    rowsPerPage={rowsPerPage}
                     // this section
                     tableRef={this.tableRef}
                     selectRowUpdate={this.selectRowUpdate}
@@ -876,11 +824,7 @@ class MUIDataTableClass extends React.Component<
                     toggleExpandRow={this.toggleExpandRow}
                 />
 
-                <this.context.components.TableFooter
-                    rowsPerPage={rowsPerPage}
-                    changeRowsPerPage={this.changeRowsPerPage}
-                    changePage={this.changePage}
-                />
+                <this.context.components.TableFooter />
             </>
         )
     }

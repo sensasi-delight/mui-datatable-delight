@@ -21,6 +21,7 @@ import { ToolbarPrintButton } from './toolbar.print-button'
 import { ToolbarDownloadButton } from './toolbar.download-button'
 import { DataTableProps } from '../data-table.props.type'
 import { FilterUpdateType } from '../data-table'
+import { getDisplayData } from '../functions'
 
 /**
  * DataTable Delight Toolbar
@@ -35,6 +36,9 @@ export default function TableToolbar(props: ToolbarProps) {
         components,
         icons,
         options,
+        onAction,
+        props: rootProps,
+        setState,
         state,
         textLabels: { toolbar: toolbarTextLabels }
     } = useMainContext()
@@ -77,7 +81,7 @@ export default function TableToolbar(props: ToolbarProps) {
     function hideSearch() {
         props.setTableAction(TableAction.ON_SEARCH_CLOSE)
         options?.onSearchClose?.()
-        props.searchClose()
+        searchClose()
 
         setActiveIcon(undefined)
         setShowSearch(false)
@@ -126,6 +130,32 @@ export default function TableToolbar(props: ToolbarProps) {
         }
 
         return nextVal
+    }
+
+    function searchClose() {
+        const prevState = state
+
+        // reset searchText
+        const searchText = undefined
+
+        onAction?.(TableAction.SEARCH, {
+            searchText,
+            displayData: options.serverSide
+                ? prevState.displayData
+                : getDisplayData(
+                      prevState.columns,
+                      prevState.data,
+                      prevState.filterList,
+                      undefined,
+                      null,
+                      rootProps,
+                      prevState,
+                      options,
+                      setState
+                  )
+        })
+
+        options.onSearchChange?.(searchText)
     }
 
     const [isDialogFilterOpen, setIsDialogFilterOpen] = useState(false)
@@ -258,7 +288,6 @@ export default function TableToolbar(props: ToolbarProps) {
 interface ToolbarProps {
     filterUpdate: FilterUpdateType
     resetFilters: DataTableToolbarFilterProps['onFilterReset']
-    searchClose: () => void
     searchText?: string
     searchTextUpdate: (searchText: string) => void
     setTableAction: (action: TableAction) => void

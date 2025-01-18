@@ -12,7 +12,6 @@ export function InnerTable({
     forwardSetHeadResizable,
     // var section
     title,
-    rowsPerPage,
     // this sections
     tableRef,
     selectRowUpdate,
@@ -31,7 +30,6 @@ export function InnerTable({
     forwardSetHeadResizable: (fn: () => void) => void
     // variables
     title: DataTableProps['title']
-    rowsPerPage: number
     // this
     tableRef: React.Ref<HTMLTableElement>
     selectRowUpdate: unknown
@@ -94,7 +92,7 @@ export function InnerTable({
                         data={state.displayData}
                         count={state.count}
                         page={state.page}
-                        rowsPerPage={rowsPerPage}
+                        rowsPerPage={state.rowsPerPage}
                         selectedRows={state.selectedRows}
                         selectRowUpdate={selectRowUpdate}
                         toggleSort={toggleSortColumn}
@@ -115,7 +113,7 @@ export function InnerTable({
                         count={state.count}
                         columns={state.columns}
                         page={state.page}
-                        rowsPerPage={rowsPerPage}
+                        rowsPerPage={state.rowsPerPage}
                         selectedRows={state.selectedRows}
                         // @ts-expect-error WILL FIX THIS LATER
                         selectRowUpdate={selectRowUpdate}
