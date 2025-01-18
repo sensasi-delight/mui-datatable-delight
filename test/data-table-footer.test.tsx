@@ -1,142 +1,127 @@
 // vendors
-import { test, expect, describe, vi } from 'vitest'
+import { test, expect, describe } from 'vitest'
 import { TablePagination as OriginalPaginationFromMui } from '@mui/material'
-import { render, screen } from '@testing-library/react'
+import { render } from '@testing-library/react'
 // locals
 import type { DataTableOptions, DataTableProps } from '../src'
 import TableFooter from '../src/components/footer'
+import { MainContextProvider } from '../src/hooks/use-main-context'
+import { ClassName } from '../src/enums/class-name'
 
-/**
- * @todo CONSOLIDATE TYPES
- */
 describe('<DataTableFooter />', function () {
-    const options: DataTableProps['options'] = {
-        rowsPerPageOptions: [5, 10, 15]
+    function setup(props?: Partial<DataTableProps>) {
+        const {
+            columns = [],
+            data = [],
+            options = {}
+        } = {
+            ...props
+        }
+
+        return {
+            result: render(
+                <MainContextProvider
+                    datatableProps={{
+                        columns,
+                        data,
+                        options
+                    }}
+                >
+                    <TableFooter />
+                </MainContextProvider>
+            )
+        }
     }
 
-    const changeRowsPerPage = vi.fn()
-    const changePage = vi.fn()
-
     test('should render a table footer', () => {
-        const { container } = render(
-            <TableFooter
-                options={options}
-                rowCount={100}
-                page={1}
-                rowsPerPage={10}
-                changeRowsPerPage={changeRowsPerPage}
-                changePage={changePage}
-            />
-        )
+        const { result } = setup({
+            options: {
+                rowsPerPageOptions: [5, 10, 15]
+            }
+        })
 
         expect(
-            container.getElementsByClassName('datatable-delight--footer').length
+            result.container.getElementsByClassName(ClassName.FOOTER).length
         ).toBe(1)
 
         /**
          * prev and next button
          */
-        expect(screen.getAllByRole('button').length).toBe(2)
+        expect(result.getAllByRole('button').length).toBe(2)
 
         /**
          * Row per page select/dropdown
          */
-        expect(screen.getAllByRole('combobox').length).toBe(1)
+        expect(result.getAllByRole('combobox').length).toBe(1)
 
         /**
          * Row per page options ([5, 10, 15])
+         *
+         * NOTE: options are show on popper, so it can selected from container. SKIP for now
+         *
+         * @todo  FIX THIS
          */
-        // expect(screen.getAllByRole('option').length).toBe(3)
+        // expect(result.getAllByRole('option').length).toBe(3)
     })
 
     test('should render a table footer with customFooter', () => {
-        const customOptions: DataTableOptions = {
-            ...options,
-            customFooter: (
-                rowCount,
-                page,
-                rowsPerPage,
-                changeRowsPerPage,
-                changePage,
-                textLabels
-            ) => {
-                return (
-                    <OriginalPaginationFromMui
-                        count={rowCount}
-                        component="div"
-                        labelRowsPerPage={textLabels.pagination?.rowsPerPage}
-                        onPageChange={(_, page) => changePage(page)}
-                        onRowsPerPageChange={event =>
-                            changeRowsPerPage(event.target.value)
-                        }
-                        page={page}
-                        rowsPerPage={rowsPerPage}
-                    />
-                )
-            }
-        }
-
-        const { container } = render(
-            <TableFooter
-                options={customOptions}
-                rowCount={100}
-                page={1}
-                rowsPerPage={10}
-                changeRowsPerPage={changeRowsPerPage}
-                changePage={changePage}
+        const customFooter: DataTableOptions['customFooter'] = (
+            rowCount,
+            page,
+            rowsPerPage,
+            changeRowsPerPage,
+            changePage,
+            textLabels
+        ) => (
+            <OriginalPaginationFromMui
+                count={rowCount}
+                component="div"
+                labelRowsPerPage={textLabels.rowsPerPage}
+                onPageChange={(_, page) => changePage(page)}
+                onRowsPerPageChange={event =>
+                    changeRowsPerPage(parseInt(event.target.value))
+                }
+                page={page}
+                rowsPerPage={rowsPerPage}
             />
         )
+
+        const { result } = setup({
+            options: {
+                customFooter
+            }
+        })
 
         /**
          * The `<OriginalPaginationFromMui />` className
          */
         expect(
-            container.getElementsByClassName('MuiTablePagination-root').length
+            result.container.getElementsByClassName('MuiTablePagination-root')
+                .length
         ).toBe(1)
     })
 
     test('should not render a table footer', () => {
-        const nonPageOption = {
-            ...options,
-            pagination: false
-        }
-
-        const { container } = render(
-            <TableFooter
-                options={nonPageOption}
-                rowCount={100}
-                page={1}
-                rowsPerPage={10}
-                changeRowsPerPage={changeRowsPerPage}
-                changePage={changePage}
-            />
-        )
+        const { result } = setup({
+            options: {
+                pagination: false
+            }
+        })
 
         expect(
-            container.getElementsByClassName('datatable-delight--footer')[0]
-                .children.length
+            result.container.getElementsByClassName(ClassName.FOOTER).length
         ).toBe(0)
     })
 
     test('should render a JumpToPage component', () => {
-        const jumpToPageOptions = {
-            ...options,
-            jumpToPage: true
-        }
-
-        const { container } = render(
-            <TableFooter
-                options={jumpToPageOptions}
-                rowCount={100}
-                page={1}
-                rowsPerPage={10}
-                changeRowsPerPage={changeRowsPerPage}
-                changePage={changePage}
-            />
-        )
+        const { result } = setup({
+            options: {
+                jumpToPage: true
+            }
+        })
 
         expect(
-            container.getElementsByClassName(
+            result.container.getElementsByClassName(
                 'datatable-delight--footer--jump-to-page'
             ).length
         ).toBe(1)
