@@ -1,8 +1,8 @@
-import type { MUIDataTableState, MUIDataTableTextLabels } from 'mui-datatables'
-import type { Component, ReactNode, RefObject } from 'react'
+import type { MUIDataTableTextLabels } from 'mui-datatables'
+import type { ReactNode } from 'react'
 import type { DataTableOptions } from './options'
 import type { DataTableComponents } from './components'
-import type { SxProps } from '@mui/material'
+import type { PaperProps, SxProps } from '@mui/material'
 import type { DataTableColumnObject } from './columns'
 import { DataTableIcons } from './icons'
 
@@ -47,11 +47,7 @@ export interface DataTableProps<Item = DefaultDataItem> {
      */
     textLabels?: Partial<MUIDataTableTextLabels>
 
-    innerRef?:
-        | RefObject<
-              Component<DataTableProps, MUIDataTableState> | null | undefined
-          >
-        | undefined
+    ref?: PaperProps['ref']
 
     /**
      * Override `<DataTable />` Style

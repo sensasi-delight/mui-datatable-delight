@@ -10,7 +10,6 @@ export function Table({
     selectRowUpdate,
     setHeadCellRef,
     draggableHeadCellRefs,
-    getCurrentRootRef,
     timers
 }: TableProps) {
     const { classes, cx } = useStyles()
@@ -57,7 +56,7 @@ export function Table({
                 sortOrder={state.sortOrder}
                 columnOrder={state.columnOrder}
                 draggableHeadCellRefs={draggableHeadCellRefs}
-                tableRef={getCurrentRootRef}
+                tableRef={ref}
                 timers={timers}
             />
 

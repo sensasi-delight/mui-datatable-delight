@@ -1,7 +1,7 @@
 import { makeStyles } from 'tss-react/mui'
 import clsx from 'clsx'
 import MuiTableHead from '@mui/material/TableHead'
-import { useState } from 'react'
+import { RefObject, useState } from 'react'
 import TableHeadCell from './head.cell'
 import TableHeadRow from './head.row'
 import { DataTableTableSelectCell } from './components.shared/select-cell'
@@ -300,4 +300,6 @@ const useStyles = makeStyles({ name: 'MUIDataTableHead' })(theme => ({
 
 interface DataTableHeadProps {
     columns: DataTableState['columns']
+
+    tableRef: RefObject<HTMLTableElement | null>
 }

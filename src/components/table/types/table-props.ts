@@ -5,6 +5,5 @@ export interface TableProps {
     selectRowUpdate: unknown
     setHeadCellRef: unknown
     draggableHeadCellRefs: HTMLTableCellElement[]
-    getCurrentRootRef: unknown
     timers: unknown
 }

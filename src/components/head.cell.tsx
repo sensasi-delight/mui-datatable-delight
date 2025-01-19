@@ -1,7 +1,7 @@
 // vendors
 import { makeStyles } from 'tss-react/mui'
 import { useDrag } from 'react-dnd'
-import { useState } from 'react'
+import { RefObject, useState } from 'react'
 import clsx from 'clsx'
 // materials
 import { Button, TableCell, TableSortLabel } from '@mui/material'
@@ -174,7 +174,7 @@ export default function TableHeadCell({
         transitionTime: options.draggableColumns
             ? options.draggableColumns.transitionTime
             : 300,
-        tableRef: tableRef ? tableRef() : null,
+        tableRef: tableRef?.current,
         tableId: options.tableId ?? 'none',
         timers
     })
@@ -324,4 +324,6 @@ interface DataTableHeadCellProps {
 
     /** Optional to be used with `textLabels.body.columnHeaderTooltip` */
     column?: Object
+
+    tableRef: RefObject<HTMLTableElement | null>
 }
