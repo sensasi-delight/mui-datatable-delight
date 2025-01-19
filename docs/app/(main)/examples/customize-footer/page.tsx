@@ -2,9 +2,9 @@
 
 import { useState } from 'react'
 import DataTable from '@src'
-import CustomFooter from './_custom-footer'
 import { tss } from 'tss-react/mui'
 
+import { CustomFooter } from './_custom-footer'
 import TableFooter from '@mui/material/TableFooter'
 import TableRow from '@mui/material/TableRow'
 import TableCell from '@mui/material/TableCell'
@@ -96,8 +96,6 @@ function Example() {
             )
         },
         customTableBodyFooterRender: function (opts) {
-            console.dir(opts)
-
             let avgAge =
                 opts.data.reduce((accu, item) => {
                     return accu + item.data[3]
