@@ -1,16 +1,16 @@
 // vendors
-import { tss } from 'tss-react/mui'
 import { useDrag } from 'react-dnd'
-import { RefObject, useState } from 'react'
+import { useState } from 'react'
 // materials
 import { Button, TableCell, TableSortLabel } from '@mui/material'
 import { Help as HelpIcon } from '@mui/icons-material'
 // locals
-import useColumnDrop from './head.cell.use-column-drop'
-import { useMainContext } from '../hooks/use-main-context'
-import { TableAction } from '../data-table.props.type/options'
+import type { Props } from './types/props'
+import { useDataTableContext } from '../../../../hooks'
+import { TableAction } from '../../../../data-table.props.type/options'
+import { useColumnDrop, useStyles } from './hooks'
 
-export default function TableHeadCell({
+export function TableHeadCell({
     cellHeaderProps = {},
     children,
     colPosition,
@@ -18,7 +18,6 @@ export default function TableHeadCell({
     columns,
     columnOrder = [],
     draggableHeadCellRefs,
-    draggingHook,
     hint,
     index,
     print,
@@ -28,11 +27,12 @@ export default function TableHeadCell({
     tableRef,
     timers,
     toggleSort
-}: DataTableHeadCellProps) {
+}: Props) {
     const { classes, cx } = useStyles()
-    const { components, onAction, options, textLabels } = useMainContext()
+    const { components, onAction, options, textLabels } = useDataTableContext()
     const [sortTooltipOpen, setSortTooltipOpen] = useState(false)
     const [hintTooltipOpen, setHintTooltipOpen] = useState(false)
+    const [dragging, setDragging] = useState(false)
 
     const handleKeyboardSortInput = e => {
         if (e.key === 'Enter') {
@@ -46,14 +46,11 @@ export default function TableHeadCell({
         toggleSort(index)
     }
 
-    const [dragging, setDragging] = draggingHook ? draggingHook : []
-
     const { className, ...otherProps } = cellHeaderProps
     const sortActive = sortDirection !== 'none' && sortDirection !== undefined
     const ariaSortDirection = sortDirection === 'none' ? false : sortDirection
 
-    const isDraggingEnabled = () => {
-        if (!draggingHook) return false
+    function isDraggingEnabled() {
         return (
             options.draggableColumns &&
             options.draggableColumns.enabled &&
@@ -185,8 +182,7 @@ export default function TableHeadCell({
                             onKeyUp={handleKeyboardSortInput}
                             onClick={handleSortClick}
                             className={classes.toolButton}
-                            data-testid={`headcol-${index}`}
-                            ref={isDraggingEnabled() ? dragRef : null}
+                            ref={isDraggingEnabled() ? dragRef : undefined}
                         >
                             <div className={classes.sortAction}>
                                 <div
@@ -221,8 +217,8 @@ export default function TableHeadCell({
                 </span>
             ) : (
                 <div
-                    className={hint ? classes.sortAction : null}
-                    ref={isDraggingEnabled() ? dragRef : null}
+                    className={hint ? classes.sortAction : undefined}
+                    ref={isDraggingEnabled() ? dragRef : undefined}
                 >
                     {children}
                     {hint && (
@@ -249,83 +245,3 @@ export default function TableHeadCell({
         </TableCell>
     )
 }
-
-interface DataTableHeadCellProps {
-    /** Current sort direction */
-    sortDirection?: 'asc' | 'desc' | 'none'
-
-    /** Callback to trigger column sort */
-    toggleSort: () => void
-
-    /** Sort enabled / disabled for this column **/
-    sort: boolean
-
-    /** Hint tooltip text */
-    hint?: string
-
-    /** Column displayed in print */
-    print: boolean
-
-    /** Optional to be used with `textLabels.body.columnHeaderTooltip` */
-    column?: Object
-
-    tableRef: RefObject<HTMLTableElement | null>
-
-    timers: RefObject<unknown>
-
-    draggableHeadCellRefs: RefObject<HTMLTableCellElement[]>
-}
-
-const useStyles = tss
-    .withName('datatable-delight--head--cell')
-    .create(({ theme }) => ({
-        root: {},
-        fixedHeader: {
-            position: 'sticky',
-            top: '0px',
-            zIndex: 1
-        },
-        tooltip: {
-            cursor: 'pointer'
-        },
-        myPopper: {
-            '&[data-x-out-of-boundaries]': {
-                display: 'none'
-            }
-        },
-        data: {
-            display: 'inline-block'
-        },
-        sortAction: {
-            display: 'flex',
-            cursor: 'pointer'
-        },
-        dragCursor: {
-            cursor: 'grab'
-        },
-        sortLabelRoot: {
-            height: '20px'
-        },
-        sortActive: {
-            color: theme.palette.text.primary
-        },
-        toolButton: {
-            textTransform: 'none',
-            marginLeft: '-8px',
-            minWidth: 0,
-            marginRight: '8px',
-            paddingLeft: '8px',
-            paddingRight: '8px'
-        },
-        contentWrapper: {
-            display: 'flex',
-            alignItems: 'center'
-        },
-        hintIconAlone: {
-            marginTop: '-3px',
-            marginLeft: '3px'
-        },
-        hintIconWithSortIcon: {
-            marginTop: '-3px'
-        }
-    }))

@@ -1,7 +1,7 @@
 import { tss } from 'tss-react/mui'
 import MuiTableHead from '@mui/material/TableHead'
-import { RefObject, useState } from 'react'
-import TableHeadCell from './head.cell'
+import { RefObject } from 'react'
+import { TableHeadCell } from './table-head/components'
 import TableHeadRow from './head.row'
 import { DataTableTableSelectCell } from './components.shared/select-cell'
 import { useMainContext } from '../hooks/use-main-context'
@@ -40,8 +40,6 @@ export default function TableHead({
     if (columnOrder === null) {
         columnOrder = columns ? columns.map((_, idx) => idx) : []
     }
-
-    const [dragging, setDragging] = useState(false)
 
     function handleToggleColumn(columnIndex: number) {
         const prevState = state
@@ -260,7 +258,6 @@ export default function TableHead({
                                 columns={columns}
                                 columnOrder={columnOrder}
                                 timers={timers}
-                                draggingHook={[dragging, setDragging]}
                                 draggableHeadCellRefs={draggableHeadCellRefs}
                                 tableRef={tableRef}
                                 tableId={tableId}
