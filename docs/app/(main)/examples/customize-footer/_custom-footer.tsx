@@ -5,11 +5,8 @@ import TableFooter from '@mui/material/TableFooter'
 import TableRow from '@mui/material/TableRow'
 import TableCell from '@mui/material/TableCell'
 import MuiTablePagination from '@mui/material/TablePagination'
-import { withStyles } from 'tss-react/mui'
 
-const defaultFooterStyles = {}
-
-class CustomFooter extends React.Component {
+export default class CustomFooter extends React.Component {
     handleRowChange = event => {
         this.props.changeRowsPerPage(event.target.value)
     }
@@ -58,7 +55,3 @@ class CustomFooter extends React.Component {
         )
     }
 }
-
-export default withStyles(CustomFooter, defaultFooterStyles, {
-    name: 'CustomFooter'
-})

@@ -1,13 +1,57 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import Grow from '@mui/material/Grow'
 import TextField from '@mui/material/TextField'
 import IconButton from '@mui/material/IconButton'
 import ClearIcon from '@mui/icons-material/Clear'
-import { withStyles } from 'tss-react/mui'
+import { tss } from 'tss-react/mui'
 
-const defaultSearchStyles = theme => ({
+export default function CustomSearchRender(props: unknown) {
+    const { options, onHide, searchText } = props
+    const { classes } = useStyles()
+
+    const handleTextChange = event => {
+        props.onSearch(event.target.value)
+    }
+
+    const onKeyDown = event => {
+        if (event.keyCode === 27) {
+            props.onHide()
+        }
+    }
+
+    useEffect(() => {
+        document.addEventListener('keydown', onKeyDown, false)
+
+        return () => {
+            document.removeEventListener('keydown', onKeyDown, false)
+        }
+    }, [])
+
+    return (
+        <Grow appear in={true} timeout={300}>
+            <div className={classes.main} ref={el => (rootRef = el)}>
+                <TextField
+                    placeholder={'Custom TableSearch without search icon'}
+                    className={classes.searchText}
+                    InputProps={{
+                        'aria-label': options.textLabels.toolbar.search
+                    }}
+                    value={searchText || ''}
+                    onChange={handleTextChange}
+                    fullWidth={true}
+                    inputRef={el => (searchField = el)}
+                />
+                <IconButton className={classes.clearIcon} onClick={onHide}>
+                    <ClearIcon />
+                </IconButton>
+            </div>
+        </Grow>
+    )
+}
+
+const useStyles = tss.create(({ theme }) => ({
     main: {
         display: 'flex',
         flex: '1 0 auto'
@@ -20,53 +64,4 @@ const defaultSearchStyles = theme => ({
             color: theme.palette.error.main
         }
     }
-})
-
-class CustomSearchRender extends React.Component {
-    handleTextChange = event => {
-        this.props.onSearch(event.target.value)
-    }
-
-    componentDidMount() {
-        document.addEventListener('keydown', this.onKeyDown, false)
-    }
-
-    componentWillUnmount() {
-        document.removeEventListener('keydown', this.onKeyDown, false)
-    }
-
-    onKeyDown = event => {
-        if (event.keyCode === 27) {
-            this.props.onHide()
-        }
-    }
-
-    render() {
-        const { classes, options, onHide, searchText } = this.props
-
-        return (
-            <Grow appear in={true} timeout={300}>
-                <div className={classes.main} ref={el => (this.rootRef = el)}>
-                    <TextField
-                        placeholder={'Custom TableSearch without search icon'}
-                        className={classes.searchText}
-                        InputProps={{
-                            'aria-label': options.textLabels.toolbar.search
-                        }}
-                        value={searchText || ''}
-                        onChange={this.handleTextChange}
-                        fullWidth={true}
-                        inputRef={el => (this.searchField = el)}
-                    />
-                    <IconButton className={classes.clearIcon} onClick={onHide}>
-                        <ClearIcon />
-                    </IconButton>
-                </div>
-            </Grow>
-        )
-    }
-}
-
-export default withStyles(CustomSearchRender, defaultSearchStyles, {
-    name: 'CustomSearchRender'
-})
+}))

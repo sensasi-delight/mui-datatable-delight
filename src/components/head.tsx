@@ -1,4 +1,4 @@
-import { makeStyles } from 'tss-react/mui'
+import { tss } from 'tss-react/mui'
 import clsx from 'clsx'
 import MuiTableHead from '@mui/material/TableHead'
 import { RefObject, useState } from 'react'
@@ -281,7 +281,7 @@ export default function TableHead({
     )
 }
 
-const useStyles = makeStyles({ name: 'MUIDataTableHead' })(theme => ({
+const useStyles = tss.withName('MUIDataTableHead').create(({ theme }) => ({
     main: {},
     responsiveStacked: {
         [theme.breakpoints.down('md')]: {

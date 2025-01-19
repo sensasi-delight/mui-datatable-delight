@@ -6,24 +6,16 @@ import Tooltip from '@mui/material/Tooltip'
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows'
 import IndeterminateCheckBoxIcon from '@mui/icons-material/IndeterminateCheckBox'
 import BlockIcon from '@mui/icons-material/Block'
-import { withStyles } from 'tss-react/mui'
+import { tss } from 'tss-react/mui'
 
-const defaultToolbarSelectStyles = {
-    iconButton: {},
-    iconContainer: {
-        marginRight: '24px'
-    },
-    inverseIcon: {
-        transform: 'rotate(90deg)'
-    }
-}
+export default function CustomToolbarSelect(props: unknown) {
+    const { classes } = useStyles()
 
-class CustomToolbarSelect extends React.Component {
-    handleClickInverseSelection = () => {
-        const nextSelectedRows = this.props.displayData.reduce(
+    const handleClickInverseSelection = () => {
+        const nextSelectedRows = props.displayData.reduce(
             (nextSelectedRows, _, index) => {
                 if (
-                    !this.props.selectedRows.data.find(
+                    !props.selectedRows.data.find(
                         selectedRow => selectedRow.index === index
                     )
                 ) {
@@ -35,57 +27,60 @@ class CustomToolbarSelect extends React.Component {
             []
         )
 
-        this.props.setSelectedRows(nextSelectedRows)
+        props.setSelectedRows(nextSelectedRows)
     }
 
-    handleClickDeselectAll = () => {
-        this.props.setSelectedRows([])
+    const handleClickDeselectAll = () => {
+        props.setSelectedRows([])
     }
 
-    handleClickBlockSelected = () => {
+    const handleClickBlockSelected = () => {
         console.log(
-            `block users with dataIndexes: ${this.props.selectedRows.data.map(row => row.dataIndex)}`
+            `block users with dataIndexes: ${props.selectedRows.data.map(row => row.dataIndex)}`
         )
     }
 
-    render() {
-        const { classes } = this.props
-
-        return (
-            <div className={classes.iconContainer}>
-                <Tooltip title={'Deselect ALL'}>
-                    <IconButton
-                        className={classes.iconButton}
-                        onClick={this.handleClickDeselectAll}
-                    >
-                        <IndeterminateCheckBoxIcon className={classes.icon} />
-                    </IconButton>
-                </Tooltip>
-                <Tooltip title={'Inverse selection'}>
-                    <IconButton
-                        className={classes.iconButton}
-                        onClick={this.handleClickInverseSelection}
-                    >
-                        <CompareArrowsIcon
-                            className={[classes.icon, classes.inverseIcon].join(
-                                ' '
-                            )}
-                        />
-                    </IconButton>
-                </Tooltip>
-                <Tooltip title={'Block selected'}>
-                    <IconButton
-                        className={classes.iconButton}
-                        onClick={this.handleClickBlockSelected}
-                    >
-                        <BlockIcon className={classes.icon} />
-                    </IconButton>
-                </Tooltip>
-            </div>
-        )
-    }
+    return (
+        <div className={classes.iconContainer}>
+            <Tooltip title={'Deselect ALL'}>
+                <IconButton
+                    className={classes.iconButton}
+                    onClick={handleClickDeselectAll}
+                >
+                    <IndeterminateCheckBoxIcon className={classes.icon} />
+                </IconButton>
+            </Tooltip>
+            <Tooltip title={'Inverse selection'}>
+                <IconButton
+                    className={classes.iconButton}
+                    onClick={handleClickInverseSelection}
+                >
+                    <CompareArrowsIcon
+                        className={[classes.icon, classes.inverseIcon].join(
+                            ' '
+                        )}
+                    />
+                </IconButton>
+            </Tooltip>
+            <Tooltip title={'Block selected'}>
+                <IconButton
+                    className={classes.iconButton}
+                    onClick={handleClickBlockSelected}
+                >
+                    <BlockIcon className={classes.icon} />
+                </IconButton>
+            </Tooltip>
+        </div>
+    )
 }
 
-export default withStyles(CustomToolbarSelect, defaultToolbarSelectStyles, {
-    name: 'CustomToolbarSelect'
+const useStyles = tss.create({
+    iconButton: {},
+    iconContainer: {
+        marginRight: '24px'
+    },
+    inverseIcon: {
+        transform: 'rotate(90deg)'
+    },
+    icon: {}
 })

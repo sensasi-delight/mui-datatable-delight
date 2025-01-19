@@ -1,8 +1,7 @@
 // vendors
 import type { MUIDataTableToolbarSelect } from 'mui-datatables'
-import { makeStyles } from 'tss-react/mui'
+import { tss } from 'tss-react/mui'
 // materials
-import type { Theme } from '@mui/material'
 import { IconButton, Typography } from '@mui/material'
 import { Delete as DeleteIcon } from '@mui/icons-material'
 // locals
@@ -91,30 +90,30 @@ export function TableToolbarSelect({
     )
 }
 
-const useStyles = makeStyles({
-    name: ClassName.TOOLBAR__SELECT + '-'
-})(({ spacing }: Theme) => ({
-    root: {
-        flex: '1 1 100%',
-        display: 'flex',
-        position: 'relative',
-        zIndex: 120,
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        paddingTop: spacing(1),
-        paddingBottom: spacing(1),
-        '@media print': {
-            display: 'none'
-        }
-    },
-    title: {
-        paddingLeft: '26px'
-    },
-    iconButton: {
-        marginRight: '24px'
-    },
-    deleteIcon: {}
-}))
+const useStyles = tss
+    .withName(ClassName.TOOLBAR__SELECT)
+    .create(({ theme }) => ({
+        root: {
+            flex: '1 1 100%',
+            display: 'flex',
+            position: 'relative',
+            zIndex: 120,
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            paddingTop: theme.spacing(1),
+            paddingBottom: theme.spacing(1),
+            '@media print': {
+                display: 'none'
+            }
+        },
+        title: {
+            paddingLeft: '26px'
+        },
+        iconButton: {
+            marginRight: '24px'
+        },
+        deleteIcon: {}
+    }))
 
 export interface TableToolbarSelectProps {
     selectRowUpdate?: MUIDataTableToolbarSelect['selectRowUpdate']

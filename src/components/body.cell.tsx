@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import clsx from 'clsx'
 import TableCell, { type TableCellProps } from '@mui/material/TableCell'
-import { makeStyles } from 'tss-react/mui'
+import { tss } from 'tss-react/mui'
 import { MUIDataTableBodyCell } from 'mui-datatables'
 import { DataTableState } from '../data-table.props.type/state'
 import { useMainContext } from '../hooks/use-main-context'
@@ -143,7 +143,7 @@ export default function TableBodyCell({
     )
 }
 
-const useStyles = makeStyles({ name: 'MUIDataTableBodyCell' })(theme => ({
+const useStyles = tss.withName('MUIDataTableBodyCell').create(({ theme }) => ({
     root: {},
     cellHide: {
         display: 'none'

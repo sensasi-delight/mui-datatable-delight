@@ -5,7 +5,7 @@ import {
     FormGroup,
     Typography
 } from '@mui/material'
-import { makeStyles } from 'tss-react/mui'
+import { tss } from 'tss-react/mui'
 // globals
 import { useMainContext } from '../hooks/use-main-context'
 import { TableAction } from '../data-table.props.type/options'
@@ -81,7 +81,7 @@ export function ToolbarViewCol({}: ToolbarViewColProps) {
     )
 }
 
-const useStyles = makeStyles()(theme => ({
+const useStyles = tss.create(({ theme }) => ({
     root: {
         padding: '16px 24px 16px 24px',
         fontFamily: 'Roboto'

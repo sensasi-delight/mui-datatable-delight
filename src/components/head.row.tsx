@@ -1,9 +1,5 @@
 import { TableRow } from '@mui/material'
-import { makeStyles } from 'tss-react/mui'
-
-const useStyles = makeStyles({ name: 'datatable-delight--head--row' })(() => ({
-    root: {}
-}))
+import { tss } from 'tss-react/mui'
 
 export default function TableHeadRow({
     children
@@ -14,3 +10,7 @@ export default function TableHeadRow({
 
     return <TableRow className={classes.root}>{children}</TableRow>
 }
+
+const useStyles = tss.withName('datatable-delight--head--row').create({
+    root: {}
+})

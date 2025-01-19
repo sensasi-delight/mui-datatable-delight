@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import { Waypoint } from 'react-waypoint'
 import DataTable from '@src'
-// import { makeStyles } from 'tss-react/mui'
+// import { tss } from 'tss-react/mui'
 
 type DataItemType = (string | number)[]
 
@@ -105,7 +105,7 @@ export default function MessageManager() {
     )
 }
 
-// const useStyles = makeStyles()(theme => ({
+// const useStyles = tss.crate(({ theme }) => ({
 //     root: {
 //         width: '100%',
 //         overflowX: 'auto',

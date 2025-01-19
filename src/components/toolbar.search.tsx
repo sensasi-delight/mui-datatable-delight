@@ -1,5 +1,5 @@
 // vendors
-import { makeStyles } from 'tss-react/mui'
+import { tss } from 'tss-react/mui'
 import { useEffect, useState } from 'react'
 // materials
 import { Grow, IconButton, TextField, TextFieldProps } from '@mui/material'
@@ -73,24 +73,24 @@ export function DataTableToolbarSearch({
     )
 }
 
-const useStyles = makeStyles({
-    name: ClassName.TOOLBAR__SEARCH_BAR + '-'
-})(theme => ({
-    clearButton: {
-        '&:hover': {
-            color: theme.palette.error.main
+const useStyles = tss
+    .withName(ClassName.TOOLBAR__SEARCH_BAR)
+    .create(({ theme }) => ({
+        clearButton: {
+            '&:hover': {
+                color: theme.palette.error.main
+            }
+        },
+        root: {
+            display: 'flex',
+            flex: '1 0 auto',
+            alignItems: 'center'
+        },
+        searchIcon: {
+            color: theme.palette.text.secondary,
+            marginRight: '8px'
+        },
+        textField: {
+            flex: '0.8 0'
         }
-    },
-    root: {
-        display: 'flex',
-        flex: '1 0 auto',
-        alignItems: 'center'
-    },
-    searchIcon: {
-        color: theme.palette.text.secondary,
-        marginRight: '8px'
-    },
-    textField: {
-        flex: '0.8 0'
-    }
-}))
+    }))

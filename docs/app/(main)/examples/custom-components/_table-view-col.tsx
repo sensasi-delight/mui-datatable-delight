@@ -4,7 +4,7 @@ import Button from '@mui/material/Button'
 import FormControl from '@mui/material/FormControl'
 import FormGroup from '@mui/material/FormGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
-import { makeStyles } from 'tss-react/mui'
+import { tss } from 'tss-react/mui'
 import { ToolbarViewCol } from '../../../../../src/components/toolbar.view-col'
 
 function TableViewCol({
@@ -77,7 +77,7 @@ function TableViewCol({
 
 export default TableViewCol
 
-const useStyles = makeStyles({ name: 'MUIDataTableViewCol' })(theme => ({
+const useStyles = tss.withName('MUIDataTableViewCol').create(({ theme }) => ({
     root: {
         padding: '16px 24px 16px 24px',
         fontFamily: 'Roboto'
