@@ -420,7 +420,7 @@ function _DataTable({
                     context={typeof window === 'undefined' ? undefined : window}
                 >
                     <Table
-                        ref={tableRef}
+                        tableRef={tableRef}
                         selectRowUpdate={selectRowUpdate}
                         setHeadCellRef={setHeadCellRef}
                         draggableHeadCellRefs={draggableHeadCellRefs}

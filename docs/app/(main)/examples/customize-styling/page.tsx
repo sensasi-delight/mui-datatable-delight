@@ -134,9 +134,6 @@ export default function Example() {
         },
         setTableProps: () => {
             return {
-                padding: denseTable ? 'none' : 'default',
-
-                // material ui v4 only
                 size: denseTable ? 'small' : 'medium'
             }
         }
