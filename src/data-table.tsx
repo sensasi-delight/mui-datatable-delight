@@ -3,9 +3,9 @@
 // types
 import type { DataTableProps } from './data-table.props.type'
 // vendors
-import { Paper } from '@mui/material'
-import { makeStyles } from 'tss-react/mui'
 import { createRef, useEffect } from 'react'
+import { Paper } from '@mui/material'
+import { tss } from 'tss-react/mui'
 // locals
 import {
     buildMap,
@@ -21,6 +21,9 @@ import { type DataTableState } from './data-table.props.type/state'
 import { MainContextProvider, useMainContext } from './hooks/use-main-context'
 import { FilterTypeEnum } from './data-table.props.type/columns'
 import { InnerTable } from './data-table.inner-table'
+import { ClassName } from './enums'
+// components
+import { AnnounceText } from './components'
 
 /**
  * A responsive DataTable component built with Material UI for React-based project.
@@ -374,61 +377,52 @@ function _DataTable({ className }: { className: DataTableProps['className'] }) {
         )
             ? classes.paperResponsiveScrollFullHeightFullWidth
             : '',
+        classes.root,
         className
     )
 
     return (
-        <>
-            <Paper
-                elevation={options?.elevation}
-                ref={rootRef}
-                className={paperClasses}
-            >
-                {isShowToolbarSelect && (
-                    <components.SelectedRowsToolbar
-                        selectRowUpdate={selectRowUpdate}
-                    />
-                )}
-
-                {isShowToolbar && (
-                    <components.Toolbar
-                        filterUpdate={filterUpdate}
-                        tableRef={tableRef}
-                    />
-                )}
-
-                <components.FilteredValuesList filterUpdate={filterUpdate} />
-
-                <InnerTable
-                    // new this
-                    forwardUpdateDividers={fn => (updateDividers.current = fn)}
-                    forwardSetHeadResizable={fn =>
-                        (setHeadResizable.current = fn)
-                    }
-                    // this section
-                    tableRef={tableRef}
+        <Paper
+            elevation={options?.elevation}
+            ref={rootRef}
+            className={paperClasses}
+        >
+            {isShowToolbarSelect && (
+                <components.SelectedRowsToolbar
                     selectRowUpdate={selectRowUpdate}
-                    setHeadCellRef={setHeadCellRef}
-                    draggableHeadCellRefs={draggableHeadCellRefs.current ?? []}
-                    getCurrentRootRef={rootRef.current}
-                    timers={timers.current}
                 />
-
-                <components.BottomBar />
-            </Paper>
-
-            {state.announceText && (
-                <div className={classes.liveAnnounce} aria-live="polite">
-                    {state.announceText}
-                </div>
             )}
-        </>
+
+            {isShowToolbar && (
+                <components.Toolbar
+                    filterUpdate={filterUpdate}
+                    tableRef={tableRef}
+                />
+            )}
+
+            <components.FilteredValuesList filterUpdate={filterUpdate} />
+
+            <InnerTable
+                // new this
+                forwardUpdateDividers={fn => (updateDividers.current = fn)}
+                forwardSetHeadResizable={fn => (setHeadResizable.current = fn)}
+                // this section
+                tableRef={tableRef}
+                selectRowUpdate={selectRowUpdate}
+                setHeadCellRef={setHeadCellRef}
+                draggableHeadCellRefs={draggableHeadCellRefs.current ?? []}
+                getCurrentRootRef={rootRef.current}
+                timers={timers.current}
+            />
+
+            <components.BottomBar />
+
+            <AnnounceText />
+        </Paper>
     )
 }
 
-const useStyles = makeStyles({
-    name: 'datatable-delight'
-})({
+const useStyles = tss.withName(ClassName.ROOT).create({
     root: {
         '& .datatables-no-print': {
             '@media print': {
@@ -441,16 +435,6 @@ const useStyles = makeStyles({
     },
     paperResponsiveScrollFullHeightFullWidth: {
         position: 'absolute'
-    },
-    liveAnnounce: {
-        border: '0',
-        clip: 'rect(0 0 0 0)',
-        height: '1px',
-        margin: '-1px',
-        overflow: 'hidden',
-        padding: '0',
-        position: 'absolute',
-        width: '1px'
     }
 })
 

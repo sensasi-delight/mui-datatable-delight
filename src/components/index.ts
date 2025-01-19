@@ -13,3 +13,5 @@ export { DataTableBody as TableBody } from './body'
 export { default as TableHead } from './head'
 
 export { default as BottomBar } from './footer'
+
+export { AnnounceText } from './announce-text'
