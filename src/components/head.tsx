@@ -24,9 +24,7 @@ export default function TableHead({
     selectRowUpdate,
     setCellRef,
     sortOrder = {},
-    tableRef,
-    tableId,
-    timers
+    tableRef
 }: DataTableHeadProps) {
     const { classes, cx } = useStyles()
     const {
@@ -243,7 +241,6 @@ export default function TableHead({
                                 key={index}
                                 index={index}
                                 colPosition={colPos}
-                                type="cell"
                                 setCellRef={setCellRef}
                                 sort={column.sort}
                                 sortDirection={
@@ -257,10 +254,8 @@ export default function TableHead({
                                 column={column}
                                 columns={columns}
                                 columnOrder={columnOrder}
-                                timers={timers}
                                 draggableHeadCellRefs={draggableHeadCellRefs}
                                 tableRef={tableRef}
-                                tableId={tableId}
                             >
                                 {column.customHeadLabelRender
                                     ? column.customHeadLabelRender({
@@ -298,6 +293,4 @@ interface DataTableHeadProps {
     columns: DataTableState['columns']
 
     tableRef: RefObject<HTMLTableElement | null>
-
-    timers: RefObject<unknown>
 }

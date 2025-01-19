@@ -60,7 +60,6 @@ function _DataTable({
         state
     } = useDataTableContext()
 
-    const timers = useRef<unknown>({})
     const tableRef = useRef<HTMLTableElement>(null)
     const tableHeadCellElements = useRef<HTMLTableCellElement[]>([])
     const draggableHeadCellRefs = useRef<HTMLTableCellElement[]>([])
@@ -414,17 +413,12 @@ function _DataTable({
                     />
                 )}
 
-                {/* @ts-expect-error WILL FIX THIS LATER */}
-                <DndProvider
-                    backend={HTML5Backend}
-                    context={typeof window === 'undefined' ? undefined : window}
-                >
+                <DndProvider backend={HTML5Backend}>
                     <Table
                         tableRef={tableRef}
                         selectRowUpdate={selectRowUpdate}
                         setHeadCellRef={setHeadCellRef}
                         draggableHeadCellRefs={draggableHeadCellRefs}
-                        timers={timers}
                     />
                 </DndProvider>
             </div>

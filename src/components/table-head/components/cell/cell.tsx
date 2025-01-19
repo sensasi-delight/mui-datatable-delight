@@ -2,12 +2,17 @@
 import { useDrag } from 'react-dnd'
 import { useState } from 'react'
 // materials
-import { Button, TableCell, TableSortLabel } from '@mui/material'
+import {
+    Button,
+    ButtonProps,
+    TableCell,
+    TableSortLabel,
+    TableSortLabelProps
+} from '@mui/material'
 import { Help as HelpIcon } from '@mui/icons-material'
 // locals
 import type { Props } from './types/props'
 import { useDataTableContext } from '../../../../hooks'
-import { TableAction } from '../../../../data-table.props.type/options'
 import { useColumnDrop, useStyles } from './hooks'
 
 export function TableHeadCell({
@@ -25,30 +30,60 @@ export function TableHeadCell({
     sort,
     sortDirection,
     tableRef,
-    timers,
     toggleSort
 }: Props) {
     const { classes, cx } = useStyles()
-    const { components, onAction, options, textLabels } = useDataTableContext()
+    const { components, options, textLabels } = useDataTableContext()
     const [sortTooltipOpen, setSortTooltipOpen] = useState(false)
     const [hintTooltipOpen, setHintTooltipOpen] = useState(false)
     const [dragging, setDragging] = useState(false)
 
-    const handleKeyboardSortInput = e => {
+    const { className, ...otherProps } = cellHeaderProps
+    const sortActive = Boolean(sortDirection)
+
+    const [, dragRef] = useDrag({
+        type: 'HEADER',
+        item: () => {
+            setHintTooltipOpen(false)
+            setSortTooltipOpen(false)
+            setDragging(true)
+
+            return {
+                colIndex: index,
+                headCellRefs: draggableHeadCellRefs
+            }
+        },
+        end: () => {
+            setDragging(false)
+        }
+        // collect: monitor => {
+        //     return {
+        //         opacity: monitor.isDragging() ? 1 : 0
+        //     }
+        // }
+    })
+
+    const [, dropRef] = useColumnDrop({
+        index,
+        headCellRefs: draggableHeadCellRefs,
+        columnOrder,
+        columns,
+        transitionTime: options.draggableColumns
+            ? (options.draggableColumns.transitionTime ?? 0)
+            : 300,
+        tableRef: tableRef,
+        tableId: options.tableId ?? 'none'
+    })
+
+    const handleKeyboardSortInput: ButtonProps['onKeyUp'] = e => {
         if (e.key === 'Enter') {
             toggleSort(index)
         }
-
-        return false
     }
 
-    const handleSortClick = () => {
+    function handleSortClick() {
         toggleSort(index)
     }
-
-    const { className, ...otherProps } = cellHeaderProps
-    const sortActive = sortDirection !== 'none' && sortDirection !== undefined
-    const ariaSortDirection = sortDirection === 'none' ? false : sortDirection
 
     function isDraggingEnabled() {
         return (
@@ -58,73 +93,17 @@ export function TableHeadCell({
         )
     }
 
-    const sortLabelProps = {
+    const sortLabelProps: TableSortLabelProps = {
         classes: { root: classes.sortLabelRoot },
         tabIndex: -1,
         active: sortActive,
         hideSortIcon: true,
-        ...(ariaSortDirection ? { direction: sortDirection } : {})
+        direction: sortDirection
     }
 
-    const [{}, dragRef] = useDrag({
-        item: {
-            type: 'HEADER',
-            colIndex: index,
-            headCellRefs: draggableHeadCellRefs.current
-        },
-        begin: () => {
-            setTimeout(() => {
-                setHintTooltipOpen(false)
-                setSortTooltipOpen(false)
-                setDragging(true)
-            }, 0)
-        },
-        end: () => {
-            setDragging(false)
-        },
-        collect: monitor => {
-            return {
-                opacity: monitor.isDragging() ? 1 : 0
-            }
-        }
-    })
-
-    function handleColumnOrderUpdate(
-        columnOrder: number[],
-        columnIndex: number,
-        newPosition: number
-    ) {
-        onAction?.(TableAction.COLUMN_ORDER_CHANGE, {
-            columnOrder
-        })
-
-        options.onColumnOrderChange?.(columnOrder, columnIndex, newPosition)
-    }
-
-    const [drop] = useColumnDrop({
-        drop: () => {
-            setSortTooltipOpen(false)
-            setHintTooltipOpen(false)
-            setDragging(false)
-        },
-        index,
-        headCellRefs: draggableHeadCellRefs.current,
-        updateColumnOrder: handleColumnOrderUpdate,
-        columnOrder,
-        columns,
-        transitionTime: options.draggableColumns
-            ? options.draggableColumns.transitionTime
-            : 300,
-        tableRef: tableRef?.current,
-        tableId: options.tableId ?? 'none',
-        timers: timers.current
-    })
-
-    const cellClass = cx({
-        [classes.root]: true,
+    const cellClass = cx(className, classes.root, {
         [classes.fixedHeader]: options.fixedHeader,
-        'datatables-noprint': !print,
-        [className]: className
+        'datatables-noprint': !print
     })
 
     const showHintTooltip = () => {
@@ -146,13 +125,13 @@ export function TableHeadCell({
 
     return (
         <TableCell
-            ref={ref => {
-                drop && drop(ref)
-                setCellRef && setCellRef(index + 1, colPosition + 1, ref)
+            ref={(ref: HTMLTableCellElement) => {
+                dropRef(ref)
+                setCellRef(index + 1, colPosition + 1, ref)
             }}
             className={cellClass}
             scope="col"
-            sortDirection={ariaSortDirection}
+            sortDirection={sortDirection}
             data-colindex={index}
             onMouseDown={closeTooltip}
             sx={{
@@ -182,7 +161,13 @@ export function TableHeadCell({
                             onKeyUp={handleKeyboardSortInput}
                             onClick={handleSortClick}
                             className={classes.toolButton}
-                            ref={isDraggingEnabled() ? dragRef : undefined}
+                            ref={
+                                isDraggingEnabled()
+                                    ? ref => {
+                                          dragRef(ref)
+                                      }
+                                    : undefined
+                            }
                         >
                             <div className={classes.sortAction}>
                                 <div
@@ -218,7 +203,13 @@ export function TableHeadCell({
             ) : (
                 <div
                     className={hint ? classes.sortAction : undefined}
-                    ref={isDraggingEnabled() ? dragRef : undefined}
+                    ref={
+                        isDraggingEnabled()
+                            ? ref => {
+                                  dragRef(ref)
+                              }
+                            : undefined
+                    }
                 >
                     {children}
                     {hint && (

@@ -9,8 +9,7 @@ export function Table({
     tableRef,
     selectRowUpdate,
     setHeadCellRef,
-    draggableHeadCellRefs,
-    timers
+    draggableHeadCellRefs
 }: TableProps) {
     const { classes, cx } = useStyles()
     const {
@@ -57,7 +56,6 @@ export function Table({
                 columnOrder={state.columnOrder}
                 draggableHeadCellRefs={draggableHeadCellRefs}
                 tableRef={tableRef}
-                timers={timers}
             />
 
             <components.TableBody

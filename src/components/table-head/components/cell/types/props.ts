@@ -1,11 +1,13 @@
+import { TableCellProps, TableSortLabelProps } from '@mui/material'
 import type { ReactNode, RefObject } from 'react'
+import { DataTableState } from '../../../../../data-table.props.type/state'
 
 export interface Props {
     /** Current sort direction */
-    sortDirection?: 'asc' | 'desc' | 'none'
+    sortDirection?: TableSortLabelProps['direction']
 
     /** Callback to trigger column sort */
-    toggleSort: () => void
+    toggleSort: (columnIndex: number) => void
 
     /** Sort enabled / disabled for this column **/
     sort: boolean
@@ -17,15 +19,27 @@ export interface Props {
     print: boolean
 
     /** Optional to be used with `textLabels.body.columnHeaderTooltip` */
-    column?: Object
+    column: DataTableState['columns'][0]
 
     tableRef: RefObject<HTMLTableElement | null>
-
-    timers: RefObject<unknown>
 
     draggableHeadCellRefs: RefObject<HTMLTableCellElement[]>
 
     index: number
 
     children: ReactNode
+
+    columnOrder: DataTableState['columnOrder']
+
+    columns: DataTableState['columns']
+
+    cellHeaderProps: TableCellProps
+
+    colPosition: number
+
+    setCellRef: (
+        rowIndex: number,
+        colIndex: number,
+        ref: HTMLTableCellElement
+    ) => void
 }

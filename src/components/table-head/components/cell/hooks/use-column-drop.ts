@@ -1,67 +1,117 @@
-/*
-  This hook handles the dragging and dropping effects that occur for columns.
-*/
+import { DropTargetMonitor, useDrop } from 'react-dnd'
+import { useDataTableContext } from '../../../../../hooks'
+import { TableAction } from '../../../../../data-table.props.type/options'
+import { Props } from '../types/props'
+import { RefObject, useRef } from 'react'
 
-import { useDrop } from 'react-dnd'
+/**
+ * This hook handles the dragging and dropping effects that occur for columns.
+ */
+export function useColumnDrop(opts: OptsType) {
+    const { onAction, options } = useDataTableContext()
+    const timeoutRef = useRef<NodeJS.Timeout>(null)
 
-export const useColumnDrop = opts => {
-    const [{ isOver, canDrop }, drop] = useDrop({
+    function handleColumnOrderUpdate(
+        columnOrder: number[],
+        columnIndex: number,
+        newPosition: number
+    ) {
+        onAction?.(TableAction.COLUMN_ORDER_CHANGE, {
+            columnOrder
+        })
+
+        options.onColumnOrderChange?.(columnOrder, columnIndex, newPosition)
+    }
+
+    return useDrop({
         accept: 'HEADER',
-        // drop: drop,
-        hover: (item, mon) =>
-            handleHover(Object.assign({}, opts, { item, mon })),
+        hover: (_, mon) =>
+            handleHover({ ...opts, mon, handleColumnOrderUpdate, timeoutRef }),
         collect: mon => ({
             isOver: !!mon.isOver(),
             canDrop: !!mon.canDrop()
         })
     })
-
-    return [drop]
 }
 
-const getColModel = (headCellRefs, columnOrder, columns) => {
-    let colModel = []
-    let leftMostCell = headCellRefs[0] ? headCellRefs[0] : null // left most cell is the select cell, if it exists
+interface OptsType {
+    index: number
+    headCellRefs: RefObject<HTMLTableCellElement[]>
+    columnOrder: Props['columnOrder']
+    columns: Props['columns']
+    transitionTime: number
+    tableRef: RefObject<HTMLTableElement | null>
+    tableId: string
+}
 
-    if (leftMostCell === null) {
-        leftMostCell = { offsetLeft: Infinity }
-        let headCells = Object.entries(headCellRefs)
-        headCells.forEach(([key, item], idx) => {
+function getColModel(
+    headCellRefs: OptsType['headCellRefs'],
+    columnOrder: OptsType['columnOrder'],
+    columns: OptsType['columns']
+) {
+    let colModel = []
+
+    function getFakeCell() {
+        let leftMostCell = { offsetLeft: Infinity }
+
+        const headCells = Object.entries(headCellRefs.current)
+
+        headCells.forEach(([_, item]) => {
             if (item && item.offsetLeft < leftMostCell.offsetLeft) {
                 leftMostCell = item
             }
         })
 
         if (leftMostCell.offsetLeft === Infinity) {
-            leftMostCell = { offsetParent: 0, offsetWidth: 0, offsetLeft: 0 }
+            return {
+                offsetParent: undefined,
+                offsetWidth: 0,
+                offsetLeft: 0
+            }
         }
+
+        return leftMostCell as HTMLTableCellElement
     }
+
+    // left most cell is the select cell, if it exists
+    const leftMostCell = headCellRefs.current[0]
+        ? headCellRefs.current[0]
+        : getFakeCell()
 
     let ii = 0,
         parentOffsetLeft = 0,
         offsetParent = leftMostCell.offsetParent
+
     while (offsetParent) {
         parentOffsetLeft =
             parentOffsetLeft +
-            (offsetParent.offsetLeft || 0) -
-            (offsetParent.scrollLeft || 0)
-        offsetParent = offsetParent.offsetParent
+            ('offsetLeft' in offsetParent
+                ? (offsetParent.offsetLeft as number)
+                : 0) -
+            (offsetParent.scrollLeft ?? 0)
+
+        offsetParent =
+            'offsetParent' in offsetParent
+                ? (offsetParent.offsetParent as Element)
+                : undefined
+
         ii++
+
         if (ii > 1000) break
     }
 
     // if the select cell is present, make sure it is apart of the column model
-    if (headCellRefs[0]) {
+    if (headCellRefs.current[0]) {
         colModel[0] = {
             left: parentOffsetLeft + leftMostCell.offsetLeft,
             width: leftMostCell.offsetWidth,
-            columnIndex: null,
+            columnIndex: -1,
             ref: leftMostCell
         }
     }
 
-    columnOrder.forEach((colIdx, idx) => {
-        let col = headCellRefs[colIdx + 1]
+    columnOrder.forEach(colIdx => {
+        let col = headCellRefs.current[colIdx + 1]
         let cmIndx = colModel.length - 1
         if (!(columns[colIdx] && columns[colIdx].display !== 'true')) {
             let prevLeft =
@@ -80,7 +130,11 @@ const getColModel = (headCellRefs, columnOrder, columns) => {
     return colModel
 }
 
-const reorderColumns = (prevColumnOrder, columnIndex, newPosition) => {
+const reorderColumns = (
+    prevColumnOrder: number[],
+    columnIndex: number,
+    newPosition: number
+) => {
     let columnOrder = prevColumnOrder.slice()
     let srcIndex = columnOrder.indexOf(columnIndex)
     let targetIndex = columnOrder.indexOf(newPosition)
@@ -100,51 +154,68 @@ const reorderColumns = (prevColumnOrder, columnIndex, newPosition) => {
     return columnOrder
 }
 
-const handleHover = opts => {
+function handleHover(
+    opts: OptsType & {
+        mon: DropTargetMonitor<
+            {
+                colIndex: number
+                headCellRefs: RefObject<HTMLTableCellElement[]>
+            },
+            unknown
+        >
+        timeoutRef: RefObject<NodeJS.Timeout | null>
+        handleColumnOrderUpdate: (
+            columnOrder: number[],
+            columnIndex: number,
+            newPosition: number
+        ) => void
+    }
+) {
     const {
-        item,
         mon,
         index,
         headCellRefs,
-        updateColumnOrder,
         columnOrder,
         transitionTime = 300,
         tableRef,
         tableId,
-        timers,
-        columns
+        timeoutRef,
+        columns,
+        handleColumnOrderUpdate
     } = opts
 
-    let hoverIdx = mon.getItem().colIndex
+    const item = mon.getItem()
 
-    if (headCellRefs !== mon.getItem().headCellRefs) return
+    const hoverIdx = item.colIndex
+
+    if (headCellRefs.current !== item.headCellRefs.current) return
 
     if (hoverIdx !== index) {
-        let reorderedCols = reorderColumns(
-            columnOrder,
-            mon.getItem().colIndex,
-            index
-        )
+        let reorderedCols = reorderColumns(columnOrder, item.colIndex, index)
         let newColModel = getColModel(headCellRefs, reorderedCols, columns)
 
-        let newX = mon.getClientOffset().x
+        let newX = mon.getClientOffset()?.x ?? 0
+
         let modelIdx = -1
+
         for (let ii = 0; ii < newColModel.length; ii++) {
             if (
                 newX > newColModel[ii].left &&
                 newX < newColModel[ii].left + newColModel[ii].width
             ) {
                 modelIdx = newColModel[ii].columnIndex
+
                 break
             }
         }
 
-        if (modelIdx === mon.getItem().colIndex) {
-            clearTimeout(timers.columnShift)
+        if (modelIdx === item.colIndex) {
+            clearTimeout(timeoutRef.current ?? undefined)
 
             let curColModel = getColModel(headCellRefs, columnOrder, columns)
 
-            let transitions = []
+            let transitions: number[] = []
+
             newColModel.forEach(item => {
                 transitions[item.columnIndex] = item.left
             })
@@ -158,26 +229,27 @@ const handleHover = opts => {
                 if (columns[colIndex] && columns[colIndex].display !== 'true') {
                     // skip
                 } else {
-                    if (headCellRefs[idx])
-                        headCellRefs[idx].style.transition = '280ms'
-                    if (headCellRefs[idx])
-                        headCellRefs[idx].style.transform =
+                    if (headCellRefs.current[idx])
+                        headCellRefs.current[idx].style.transition = '280ms'
+                    if (headCellRefs.current[idx])
+                        headCellRefs.current[idx].style.transform =
                             'translateX(' + transitions[idx - 1] + 'px)'
                 }
             }
 
-            let allElms = []
-            let dividers = []
+            const allElms: HTMLTableCellElement[] = []
+            const dividers: HTMLTableCellElement[] = []
+
             for (let ii = 0; ii < columnOrder.length; ii++) {
-                let elms = tableRef
-                    ? tableRef.querySelectorAll(
-                          '[data-colindex="' +
-                              ii +
-                              '"][data-tableid="' +
-                              tableId +
-                              '"]'
-                      )
-                    : []
+                const elms =
+                    tableRef.current?.querySelectorAll<HTMLTableCellElement>(
+                        '[data-colindex="' +
+                            ii +
+                            '"][data-tableid="' +
+                            tableId +
+                            '"]'
+                    ) ?? []
+
                 for (let jj = 0; jj < elms.length; jj++) {
                     elms[jj].style.transition = transitionTime + 'ms'
                     elms[jj].style.transform =
@@ -185,15 +257,15 @@ const handleHover = opts => {
                     allElms.push(elms[jj])
                 }
 
-                let divider = tableRef
-                    ? tableRef.querySelectorAll(
-                          '[data-divider-index="' +
-                              (ii + 1) +
-                              '"][data-tableid="' +
-                              tableId +
-                              '"]'
-                      )
-                    : []
+                const divider =
+                    tableRef.current?.querySelectorAll<HTMLTableCellElement>(
+                        '[data-divider-index="' +
+                            (ii + 1) +
+                            '"][data-tableid="' +
+                            tableId +
+                            '"]'
+                    ) ?? []
+
                 for (let jj = 0; jj < divider.length; jj++) {
                     divider[jj].style.transition = transitionTime + 'ms'
                     divider[jj].style.transform =
@@ -202,8 +274,9 @@ const handleHover = opts => {
                 }
             }
 
-            let newColIndex = mon.getItem().colIndex
-            timers.columnShift = setTimeout(() => {
+            const newColIndex = item.colIndex
+
+            timeoutRef.current = setTimeout(() => {
                 allElms.forEach(item => {
                     item.style.transition = '0s'
                     item.style.transform = 'translateX(0)'
@@ -212,7 +285,7 @@ const handleHover = opts => {
                     item.style.transition = '0s'
                     item.style.transform = 'translateX(0)'
                 })
-                updateColumnOrder(reorderedCols, newColIndex, index)
+                handleColumnOrderUpdate(reorderedCols, newColIndex, index)
             }, transitionTime)
         }
     }
