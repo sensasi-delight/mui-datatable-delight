@@ -5,7 +5,6 @@ import type { DataTableProps } from './data-table.props.type'
 // vendors
 import { createRef, useEffect } from 'react'
 import { Paper } from '@mui/material'
-import { tss } from 'tss-react/mui'
 // locals
 import {
     buildMap,
@@ -18,10 +17,13 @@ import {
     type DataTableOptions
 } from './data-table.props.type/options'
 import { type DataTableState } from './data-table.props.type/state'
-import { MainContextProvider, useMainContext } from './hooks/use-main-context'
+import {
+    DataTableContextProvider,
+    useDataTableContext,
+    useStyles
+} from './hooks'
 import { FilterTypeEnum } from './data-table.props.type/columns'
 import { InnerTable } from './data-table.inner-table'
-import { ClassName } from './enums'
 // components
 import { AnnounceText } from './components'
 
@@ -32,9 +34,9 @@ import { AnnounceText } from './components'
  */
 export function DataTable({ className, ...props }: DataTableProps) {
     return (
-        <MainContextProvider datatableProps={props}>
+        <DataTableContextProvider datatableProps={props}>
             <_DataTable className={className} />
-        </MainContextProvider>
+        </DataTableContextProvider>
     )
 }
 
@@ -48,7 +50,7 @@ function _DataTable({ className }: { className: DataTableProps['className'] }) {
         props: datatableRootProps,
         setState,
         state
-    } = useMainContext()
+    } = useDataTableContext()
 
     const rootRef = createRef<HTMLDivElement>()
 
@@ -421,22 +423,6 @@ function _DataTable({ className }: { className: DataTableProps['className'] }) {
         </Paper>
     )
 }
-
-const useStyles = tss.withName(ClassName.ROOT).create({
-    root: {
-        '& .datatables-no-print': {
-            '@media print': {
-                display: 'none'
-            }
-        }
-    },
-    paper: {
-        isolation: 'isolate'
-    },
-    paperResponsiveScrollFullHeightFullWidth: {
-        position: 'absolute'
-    }
-})
 
 // enum TABLE_LOAD {
 //     INITIAL = 1,
