@@ -11,24 +11,11 @@ import TableCell from '@mui/material/TableCell'
 import Switch from '@mui/material/Switch'
 import FormGroup from '@mui/material/FormGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
-import clsx from 'clsx'
-
-const useStyles = tss.create(({ theme }) => ({
-    footerCell: {
-        backgroundColor: theme.palette.background.paper,
-        borderBottom: 'none'
-    },
-    stickyFooterCell: {
-        position: 'sticky',
-        bottom: 0,
-        zIndex: 100
-    }
-}))
 
 function Example() {
     const [resizableColumns, setResizableColumns] = useState(false)
     const [stickyFooter, setStickyFooter] = useState(true)
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
 
     const columns = ['Name', 'Title', 'Location', 'Age', 'Salary']
 
@@ -77,7 +64,7 @@ function Example() {
         ['Mason Ray', 'Computer Scientist', 'San Francisco', 39, 142000]
     ]
 
-    const footerClasses = clsx({
+    const footerClasses = cx({
         [classes.footerCell]: true,
         [classes.stickyFooterCell]: stickyFooter
     })
@@ -204,5 +191,17 @@ function Example() {
         </>
     )
 }
+
+const useStyles = tss.create(({ theme }) => ({
+    footerCell: {
+        backgroundColor: theme.palette.background.paper,
+        borderBottom: 'none'
+    },
+    stickyFooterCell: {
+        position: 'sticky',
+        bottom: 0,
+        zIndex: 100
+    }
+}))
 
 export default Example

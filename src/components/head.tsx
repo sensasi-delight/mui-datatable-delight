@@ -1,5 +1,4 @@
 import { tss } from 'tss-react/mui'
-import clsx from 'clsx'
 import MuiTableHead from '@mui/material/TableHead'
 import { RefObject, useState } from 'react'
 import TableHeadCell from './head.cell'
@@ -29,7 +28,7 @@ export default function TableHead({
     tableId,
     timers
 }: DataTableHeadProps) {
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const {
         onAction,
         options,
@@ -193,7 +192,7 @@ export default function TableHead({
 
     return (
         <MuiTableHead
-            className={clsx({
+            className={cx({
                 [classes.responsiveStacked]:
                     options.responsive === 'vertical' ||
                     options.responsive === 'stacked' ||

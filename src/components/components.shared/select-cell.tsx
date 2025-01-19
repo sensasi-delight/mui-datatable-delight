@@ -1,4 +1,3 @@
-import clsx from 'clsx'
 import { CheckboxProps } from '@mui/material/Checkbox'
 import TableCell from '@mui/material/TableCell'
 import { tss } from 'tss-react/mui'
@@ -25,7 +24,7 @@ export function DataTableTableSelectCell({
     ...otherProps
 }: DataTableTableSelectCellProps & IsHeaderCell) {
     const { components, state } = useMainContext()
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
 
     function areAllRowsExpanded() {
         return state.expandedRows.data.length === state.data.length
@@ -38,24 +37,24 @@ export function DataTableTableSelectCell({
         return null
     }
 
-    const cellClass = clsx({
+    const cellClass = cx({
         [classes.root]: true,
         [classes.fixedHeader]: fixedHeader && isHeaderCell,
         [classes.fixedLeft]: fixedSelectColumn,
         [classes.headerCell]: isHeaderCell
     })
 
-    const buttonClass = clsx({
+    const buttonClass = cx({
         [classes.expandDisabled]: hideExpandButton
     })
 
-    const iconClass = clsx({
+    const iconClass = cx({
         [classes.icon]: true,
         [classes.hide]: isHeaderCell && !expandableRowsHeader,
         [classes.expanded]:
             isRowExpanded || (isHeaderCell && areAllRowsExpanded())
     })
-    const iconIndeterminateClass = clsx({
+    const iconIndeterminateClass = cx({
         [classes.icon]: true,
         [classes.hide]: isHeaderCell && !expandableRowsHeader
     })

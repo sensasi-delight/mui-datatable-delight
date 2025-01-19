@@ -1,6 +1,5 @@
 import { TableRow, type TableRowProps } from '@mui/material'
 import { tss } from 'tss-react/mui'
-import clsx from 'clsx'
 import { useMainContext } from '../hooks/use-main-context'
 
 export function DataTableBodyRow({
@@ -10,14 +9,14 @@ export function DataTableBodyRow({
     children,
     className
 }: DataTableBodyRowProps) {
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const { options } = useMainContext()
 
     return (
         <TableRow
             hover={options.rowHover}
             onClick={onClick}
-            className={clsx(
+            className={cx(
                 {
                     [classes.root]: true,
 
