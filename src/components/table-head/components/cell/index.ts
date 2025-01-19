@@ -1,0 +1,1 @@
+export { TableHeadCell } from './cell'
