@@ -1,5 +1,4 @@
 import { useCallback } from 'react'
-import clsx from 'clsx'
 import TableCell, { type TableCellProps } from '@mui/material/TableCell'
 import { tss } from 'tss-react/mui'
 import { MUIDataTableBodyCell } from 'mui-datatables'
@@ -19,7 +18,7 @@ export default function TableBodyCell({
     print: DataTableState['columns'][0]['print']
 }) {
     const { options } = useMainContext()
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
 
     const onCellClick = options?.onCellClick
 
@@ -46,7 +45,7 @@ export default function TableBodyCell({
     const cells = [
         <div
             key={1}
-            className={clsx(
+            className={cx(
                 {
                     lastColumn: colIndex === 2,
                     [classes.root]: true,
@@ -73,7 +72,7 @@ export default function TableBodyCell({
         </div>,
         <div
             key={2}
-            className={clsx(
+            className={cx(
                 {
                     [classes.root]: true,
                     [classes.stackedCommon]:
@@ -116,7 +115,7 @@ export default function TableBodyCell({
             onClick={handleClick}
             data-colindex={colIndex}
             data-tableid={options.tableId}
-            className={clsx(
+            className={cx(
                 {
                     [classes.root]: true,
                     [classes.stackedParent]:

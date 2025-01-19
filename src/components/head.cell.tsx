@@ -2,7 +2,6 @@
 import { tss } from 'tss-react/mui'
 import { useDrag } from 'react-dnd'
 import { RefObject, useState } from 'react'
-import clsx from 'clsx'
 // materials
 import { Button, TableCell, TableSortLabel } from '@mui/material'
 import { Help as HelpIcon } from '@mui/icons-material'
@@ -30,11 +29,10 @@ export default function TableHeadCell({
     timers,
     toggleSort
 }: DataTableHeadCellProps) {
+    const { classes, cx } = useStyles()
     const { components, onAction, options, textLabels } = useMainContext()
     const [sortTooltipOpen, setSortTooltipOpen] = useState(false)
     const [hintTooltipOpen, setHintTooltipOpen] = useState(false)
-
-    const { classes } = useStyles()
 
     const handleKeyboardSortInput = e => {
         if (e.key === 'Enter') {
@@ -125,7 +123,7 @@ export default function TableHeadCell({
         timers: timers.current
     })
 
-    const cellClass = clsx({
+    const cellClass = cx({
         [classes.root]: true,
         [classes.fixedHeader]: options.fixedHeader,
         'datatables-noprint': !print,
@@ -192,7 +190,7 @@ export default function TableHeadCell({
                         >
                             <div className={classes.sortAction}>
                                 <div
-                                    className={clsx({
+                                    className={cx({
                                         [classes.data]: true,
                                         [classes.sortActive]: sortActive,
                                         [classes.dragCursor]:

@@ -2,7 +2,6 @@
 import { Button, Typography } from '@mui/material'
 import { tss } from 'tss-react/mui'
 import { ReactNode, useState } from 'react'
-import clsx from 'clsx'
 // locals
 import { type DataTableState } from '../data-table.props.type/state'
 import { DataTableToolbarFilterRenderFilters } from './toolbar.filter.render-filters'
@@ -29,7 +28,7 @@ export function DataTableToolbarFilter(props: DataTableToolbarFilterProps) {
         handleClose
     } = props
 
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const [filterList, setFilterList] = useState(filterListFromProp)
 
     function handleFilterReset() {
@@ -64,7 +63,7 @@ export function DataTableToolbarFilter(props: DataTableToolbarFilterProps) {
                 <div className={classes.reset}>
                     <Typography
                         variant="body2"
-                        className={clsx({
+                        className={cx({
                             [classes.title]: true
                         })}
                     >

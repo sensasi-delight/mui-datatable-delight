@@ -1,6 +1,5 @@
 // vendors
 import { tss } from 'tss-react/mui'
-import clsx from 'clsx'
 import React from 'react'
 // materials
 import type { TableRowProps } from '@mui/material'
@@ -21,9 +20,8 @@ import { useMainContext } from '../hooks/use-main-context'
 import { buildMap } from '../functions'
 
 export function DataTableBody(props: DataTableBodyProps) {
-    const { options, textLabels } = useMainContext()
-
     const { classes } = useStyles()
+    const { options, textLabels } = useMainContext()
 
     const { columns } = props
 
@@ -288,7 +286,7 @@ function RenderRow({
     parentProps: DataTableBodyProps
     columnOrder: number[]
 }) {
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const { onAction, options, state } = useMainContext()
 
     const { selectedRows, columns } = parentProps
@@ -384,7 +382,7 @@ function RenderRow({
                         toggleExpandRow
                     )
                 }
-                className={clsx(
+                className={cx(
                     {
                         [classes.lastStackedCell]:
                             options.responsive === 'vertical' ||
