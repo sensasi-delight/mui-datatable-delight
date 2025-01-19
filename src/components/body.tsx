@@ -1,9 +1,9 @@
 // vendors
-import { makeStyles } from 'tss-react/mui'
+import { tss } from 'tss-react/mui'
 import clsx from 'clsx'
 import React from 'react'
 // materials
-import type { TableRowProps, Theme } from '@mui/material'
+import type { TableRowProps } from '@mui/material'
 import { Typography, TableBody as MuiTableBody } from '@mui/material'
 // locals
 import TableBodyCell from './body.cell'
@@ -114,28 +114,28 @@ interface DataTableBodyProps {
     rowsPerPage: DataTableState['rowsPerPage']
 }
 
-const useStyles = makeStyles({
-    name: 'datatable-delight--Body'
-})((theme: Theme) => ({
-    root: {},
-    emptyTitle: {
-        textAlign: 'center'
-    },
-    lastStackedCell: {
-        [theme.breakpoints.down('md')]: {
-            '& td:last-child': {
-                borderBottom: 'none'
+const useStyles = tss
+    .withName('datatable-delight--Body')
+    .create(({ theme }) => ({
+        root: {},
+        emptyTitle: {
+            textAlign: 'center'
+        },
+        lastStackedCell: {
+            [theme.breakpoints.down('md')]: {
+                '& td:last-child': {
+                    borderBottom: 'none'
+                }
+            }
+        },
+        lastSimpleCell: {
+            [theme.breakpoints.down('sm')]: {
+                '& td:last-child': {
+                    borderBottom: 'none'
+                }
             }
         }
-    },
-    lastSimpleCell: {
-        [theme.breakpoints.down('sm')]: {
-            '& td:last-child': {
-                borderBottom: 'none'
-            }
-        }
-    }
-}))
+    }))
 
 function buildRows(
     { data, page, rowsPerPage, count }: DataTableBodyProps,

@@ -1,7 +1,7 @@
 import clsx from 'clsx'
 import { CheckboxProps } from '@mui/material/Checkbox'
 import TableCell from '@mui/material/TableCell'
-import { makeStyles } from 'tss-react/mui'
+import { tss } from 'tss-react/mui'
 import { DataTableOptions } from '../../data-table.props.type/options'
 import { useMainContext } from '../../hooks/use-main-context'
 
@@ -223,39 +223,37 @@ export interface DataTableTableSelectCellProps {
     id: string
 }
 
-const useStyles = makeStyles({ name: 'datatable-delight--body--select-cell' })(
-    () => ({
-        root: {
-            '@media print': {
-                display: 'none'
-            }
-        },
-        fixedHeader: {
-            position: 'sticky',
-            top: '0px',
-            zIndex: 100
-        },
-        fixedLeft: {
-            position: 'sticky',
-            left: '0px',
-            zIndex: 100
-        },
-        icon: {
-            cursor: 'pointer',
-            transition: 'transform 0.25s'
-        },
-        expanded: {
-            transform: 'rotate(90deg)'
-        },
-        hide: {
-            visibility: 'hidden'
-        },
-        headerCell: {
-            zIndex: 110
-        },
-        expandDisabled: {},
-        checkboxRoot: {},
-        checked: {},
-        disabled: {}
-    })
-)
+const useStyles = tss.withName('datatable-delight--body--select-cell').create({
+    root: {
+        '@media print': {
+            display: 'none'
+        }
+    },
+    fixedHeader: {
+        position: 'sticky',
+        top: '0px',
+        zIndex: 100
+    },
+    fixedLeft: {
+        position: 'sticky',
+        left: '0px',
+        zIndex: 100
+    },
+    icon: {
+        cursor: 'pointer',
+        transition: 'transform 0.25s'
+    },
+    expanded: {
+        transform: 'rotate(90deg)'
+    },
+    hide: {
+        visibility: 'hidden'
+    },
+    headerCell: {
+        zIndex: 110
+    },
+    expandDisabled: {},
+    checkboxRoot: {},
+    checked: {},
+    disabled: {}
+})

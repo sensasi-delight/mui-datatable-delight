@@ -1,13 +1,8 @@
 // vendors
-import { makeStyles } from 'tss-react/mui'
+import { tss } from 'tss-react/mui'
 import { useState, type RefObject } from 'react'
 // materials
-import {
-    IconButton,
-    Toolbar as VendorToolbar,
-    Theme,
-    Typography
-} from '@mui/material'
+import { IconButton, Toolbar as VendorToolbar, Typography } from '@mui/material'
 // globals
 import { TableAction } from '../data-table.props.type/options'
 import { useMainContext } from '../hooks/use-main-context'
@@ -307,9 +302,7 @@ interface ToolbarProps {
     tableRef: RefObject<HTMLTableElement | null>
 }
 
-const useStyles = makeStyles({
-    name: ClassName.TOOLBAR + '-'
-})((theme: Theme) => ({
+const useStyles = tss.withName(ClassName.TOOLBAR).create(({ theme }) => ({
     actions: {
         display: 'flex'
     },

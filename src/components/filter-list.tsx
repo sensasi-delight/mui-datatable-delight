@@ -1,4 +1,4 @@
-import { makeStyles } from 'tss-react/mui'
+import { tss } from 'tss-react/mui'
 import { Chip } from '@mui/material'
 // local types
 import type { DataTableState } from '../data-table.props.type/state'
@@ -181,7 +181,7 @@ interface TableFilterListProps {
     filterUpdate: FilterUpdateType
 }
 
-const useStyles = makeStyles()(() => ({
+const useStyles = tss.create({
     root: {
         display: 'flex',
         justifyContent: 'left',
@@ -191,4 +191,4 @@ const useStyles = makeStyles()(() => ({
     chip: {
         margin: '8px 8px 0px 0px'
     }
-}))
+})

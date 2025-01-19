@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import DataTable from '@src'
 import CustomFooter from './_custom-footer'
-import { makeStyles } from 'tss-react/mui'
+import { tss } from 'tss-react/mui'
 
 import TableFooter from '@mui/material/TableFooter'
 import TableRow from '@mui/material/TableRow'
@@ -13,7 +13,7 @@ import FormGroup from '@mui/material/FormGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import clsx from 'clsx'
 
-const useStyles = makeStyles()(theme => ({
+const useStyles = tss.create(({ theme }) => ({
     footerCell: {
         backgroundColor: theme.palette.background.paper,
         borderBottom: 'none'

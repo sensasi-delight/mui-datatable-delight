@@ -15,7 +15,7 @@ import {
     Typography
 } from '@mui/material'
 // vendors
-import { makeStyles } from 'tss-react/mui'
+import { tss } from 'tss-react/mui'
 // locals
 import type { DataTableToolbarFilterProps } from './toolbar.filter'
 import { type DataTableState } from '../data-table.props.type/state'
@@ -475,35 +475,35 @@ function RenderSelect({
     )
 }
 
-const useStyles = makeStyles({
-    name: 'datatable-delight--toolbar--filter--render-filters'
-})(theme => ({
-    root: {},
-    checkboxListTitle: {
-        marginLeft: '7px',
-        marginBottom: '8px',
-        fontSize: '14px',
-        color: theme.palette.text.secondary,
-        textAlign: 'left',
-        fontWeight: 500
-    },
+const useStyles = tss
+    .withName('datatable-delight--toolbar--filter--render-filters')
+    .create(({ theme }) => ({
+        root: {},
+        checkboxListTitle: {
+            marginLeft: '7px',
+            marginBottom: '8px',
+            fontSize: '14px',
+            color: theme.palette.text.secondary,
+            textAlign: 'left',
+            fontWeight: 500
+        },
 
-    checkboxFormControl: {
-        margin: '0px'
-    },
+        checkboxFormControl: {
+            margin: '0px'
+        },
 
-    checkboxFormControlLabel: {
-        fontSize: '15px',
-        marginLeft: '8px',
-        color: theme.palette.text.primary
-    },
-    checkboxIcon: {
-        width: '32px',
-        height: '32px'
-    },
-    checkbox: {},
-    checked: {},
-    gridListTile: {
-        marginTop: '16px'
-    }
-}))
+        checkboxFormControlLabel: {
+            fontSize: '15px',
+            marginLeft: '8px',
+            color: theme.palette.text.primary
+        },
+        checkboxIcon: {
+            width: '32px',
+            height: '32px'
+        },
+        checkbox: {},
+        checked: {},
+        gridListTile: {
+            marginTop: '16px'
+        }
+    }))

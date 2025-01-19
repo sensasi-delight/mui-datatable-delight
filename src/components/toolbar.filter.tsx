@@ -1,6 +1,6 @@
 // materials
 import { Button, Typography } from '@mui/material'
-import { makeStyles } from 'tss-react/mui'
+import { tss } from 'tss-react/mui'
 import { ReactNode, useState } from 'react'
 import clsx from 'clsx'
 // locals
@@ -120,59 +120,59 @@ export function DataTableToolbarFilter(props: DataTableToolbarFilterProps) {
     )
 }
 
-const useStyles = makeStyles({
-    name: 'datatable-delight--toolbar--filter'
-})(theme => ({
-    root: {
-        backgroundColor: theme.palette.background.default,
-        padding: '24px 24px 36px 24px',
-        fontFamily: 'Roboto'
-    },
+const useStyles = tss
+    .withName('datatable-delight--toolbar--filter')
+    .create(({ theme }) => ({
+        root: {
+            backgroundColor: theme.palette.background.default,
+            padding: '24px 24px 36px 24px',
+            fontFamily: 'Roboto'
+        },
 
-    header: {
-        flex: '0 0 auto',
-        marginBottom: '16px',
-        width: '100%',
-        display: 'flex',
-        justifyContent: 'space-between'
-    },
+        header: {
+            flex: '0 0 auto',
+            marginBottom: '16px',
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'space-between'
+        },
 
-    title: {
-        display: 'inline-block',
-        marginLeft: '7px',
-        color: theme.palette.text.primary,
-        fontSize: '14px',
-        fontWeight: 500
-    },
+        title: {
+            display: 'inline-block',
+            marginLeft: '7px',
+            color: theme.palette.text.primary,
+            fontSize: '14px',
+            fontWeight: 500
+        },
 
-    /**
-     * @deprecated FOUND BUT UNUSED
-     */
-    // noMargin: {
-    //     marginLeft: '0px'
-    // },
+        /**
+         * @deprecated FOUND BUT UNUSED
+         */
+        // noMargin: {
+        //     marginLeft: '0px'
+        // },
 
-    reset: {
-        alignSelf: 'left'
-    },
+        reset: {
+            alignSelf: 'left'
+        },
 
-    resetLink: {
-        marginLeft: '16px',
-        fontSize: '12px',
-        cursor: 'pointer'
-    },
+        resetLink: {
+            marginLeft: '16px',
+            fontSize: '12px',
+            cursor: 'pointer'
+        },
 
-    filtersSelected: {
-        alignSelf: 'right'
-    }
+        filtersSelected: {
+            alignSelf: 'right'
+        }
 
-    /**
-     * @deprecated FOUND BUT UNUSED
-     */
-    // checkboxFormGroup: {
-    //     marginTop: '8px'
-    // },
-}))
+        /**
+         * @deprecated FOUND BUT UNUSED
+         */
+        // checkboxFormGroup: {
+        //     marginTop: '8px'
+        // },
+    }))
 
 type FilterListType = string[][]
 

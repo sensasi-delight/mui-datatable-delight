@@ -1,5 +1,5 @@
 import React, { JSX, RefObject, useEffect, useState } from 'react'
-import { makeStyles } from 'tss-react/mui'
+import { tss } from 'tss-react/mui'
 // locals
 import { useMainContext } from '../hooks/use-main-context'
 
@@ -381,7 +381,7 @@ interface DataTableResizeProps {
     classes?: ReturnType<typeof useStyles>['classes']
 }
 
-const useStyles = makeStyles()({
+const useStyles = tss.create({
     root: {
         position: 'absolute'
     },

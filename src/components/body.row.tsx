@@ -1,5 +1,5 @@
-import { TableRow, type TableRowProps, type Theme } from '@mui/material'
-import { makeStyles } from 'tss-react/mui'
+import { TableRow, type TableRowProps } from '@mui/material'
+import { tss } from 'tss-react/mui'
 import clsx from 'clsx'
 import { useMainContext } from '../hooks/use-main-context'
 
@@ -57,35 +57,35 @@ export interface DataTableBodyRowProps extends TableRowProps {
     // classes: PropTypes.object
 }
 
-const useStyles = makeStyles({
-    name: 'datatable-delight--body--row'
-})((theme: Theme) => ({
-    root: {
-        // material v4
-        '&.Mui-selected': {
-            backgroundColor: theme.palette.action.selected
-        },
+const useStyles = tss
+    .withName('datatable-delight--body--row')
+    .create(({ theme }) => ({
+        root: {
+            // material v4
+            '&.Mui-selected': {
+                backgroundColor: theme.palette.action.selected
+            },
 
-        // material v3 workaround
-        '&.mui-row-selected': {
-            backgroundColor: theme.palette.action.selected
+            // material v3 workaround
+            '&.mui-row-selected': {
+                backgroundColor: theme.palette.action.selected
+            }
+        },
+        hoverCursor: { cursor: 'pointer' },
+        responsiveStacked: {
+            [theme.breakpoints.down('md')]: {
+                borderTop: 'solid 2px rgba(0, 0, 0, 0.15)',
+                borderBottom: 'solid 2px rgba(0, 0, 0, 0.15)',
+                padding: 0,
+                margin: 0
+            }
+        },
+        responsiveSimple: {
+            [theme.breakpoints.down('sm')]: {
+                borderTop: 'solid 2px rgba(0, 0, 0, 0.15)',
+                borderBottom: 'solid 2px rgba(0, 0, 0, 0.15)',
+                padding: 0,
+                margin: 0
+            }
         }
-    },
-    hoverCursor: { cursor: 'pointer' },
-    responsiveStacked: {
-        [theme.breakpoints.down('md')]: {
-            borderTop: 'solid 2px rgba(0, 0, 0, 0.15)',
-            borderBottom: 'solid 2px rgba(0, 0, 0, 0.15)',
-            padding: 0,
-            margin: 0
-        }
-    },
-    responsiveSimple: {
-        [theme.breakpoints.down('sm')]: {
-            borderTop: 'solid 2px rgba(0, 0, 0, 0.15)',
-            borderBottom: 'solid 2px rgba(0, 0, 0, 0.15)',
-            padding: 0,
-            margin: 0
-        }
-    }
-}))
+    }))
