@@ -43,7 +43,6 @@ export function Table({
 
             <components.TableHead
                 columns={state.columns}
-                // @ts-expect-error WILL FIX THIS LATER
                 activeColumn={state.activeColumn}
                 data={state.displayData}
                 count={state.count}

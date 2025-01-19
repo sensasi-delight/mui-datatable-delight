@@ -1,9 +1,9 @@
-import type { TableProps as MuiTableProps } from '@mui/material'
+import type { RefObject } from 'react'
 
 export interface TableProps {
-    ref: MuiTableProps['ref']
+    ref: RefObject<HTMLTableElement | null>
     selectRowUpdate: unknown
     setHeadCellRef: unknown
-    draggableHeadCellRefs: HTMLTableCellElement[]
-    timers: unknown
+    draggableHeadCellRefs: RefObject<HTMLTableCellElement[]>
+    timers: RefObject<unknown>
 }

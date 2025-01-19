@@ -1,4 +1,4 @@
-import React, { JSX, useEffect, useState } from 'react'
+import React, { JSX, RefObject, useEffect, useState } from 'react'
 import { makeStyles } from 'tss-react/mui'
 // locals
 import { useMainContext } from '../hooks/use-main-context'
@@ -64,9 +64,11 @@ export default function TableResize({
     useEffect(() => {
         props.setResizable(
             (forwardedTableHeadCellElements, forwardedTableElement) => {
-                if (forwardedTableElement) {
-                    setTableHeadCellElements(forwardedTableHeadCellElements)
-                    setTableElement(forwardedTableElement)
+                if (forwardedTableElement.current) {
+                    setTableHeadCellElements(
+                        forwardedTableHeadCellElements.current
+                    )
+                    setTableElement(forwardedTableElement.current)
                 }
             }
         )
@@ -365,13 +367,13 @@ export default function TableResize({
     )
 }
 
+export type SetResizableCallback = (
+    tableHeadCellElements: RefObject<HTMLTableCellElement[]>,
+    tableElement: RefObject<HTMLTableElement | null>
+) => void
+
 interface DataTableResizeProps {
-    setResizable: (
-        callback: (
-            tableHeadCellElements: HTMLTableCellElement[],
-            tableElement: HTMLTableElement
-        ) => void
-    ) => void
+    setResizable: (callback: SetResizableCallback) => void
 
     updateDividers: (callback: () => void) => void
 

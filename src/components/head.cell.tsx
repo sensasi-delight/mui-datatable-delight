@@ -129,7 +129,7 @@ export default function TableHeadCell({
         item: {
             type: 'HEADER',
             colIndex: index,
-            headCellRefs: draggableHeadCellRefs
+            headCellRefs: draggableHeadCellRefs.current
         },
         begin: () => {
             setTimeout(() => {
@@ -167,7 +167,7 @@ export default function TableHeadCell({
             setDragging(false)
         },
         index,
-        headCellRefs: draggableHeadCellRefs,
+        headCellRefs: draggableHeadCellRefs.current,
         updateColumnOrder: handleColumnOrderUpdate,
         columnOrder,
         columns,
@@ -176,7 +176,7 @@ export default function TableHeadCell({
             : 300,
         tableRef: tableRef?.current,
         tableId: options.tableId ?? 'none',
-        timers
+        timers: timers.current
     })
 
     const cellClass = clsx({
@@ -326,4 +326,8 @@ interface DataTableHeadCellProps {
     column?: Object
 
     tableRef: RefObject<HTMLTableElement | null>
+
+    timers: RefObject<unknown>
+
+    draggableHeadCellRefs: RefObject<HTMLTableCellElement[]>
 }

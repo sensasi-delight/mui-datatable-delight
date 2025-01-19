@@ -302,4 +302,6 @@ interface DataTableHeadProps {
     columns: DataTableState['columns']
 
     tableRef: RefObject<HTMLTableElement | null>
+
+    timers: RefObject<unknown>
 }

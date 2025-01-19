@@ -27,6 +27,7 @@ import { FilterTypeEnum } from './data-table.props.type/columns'
 import { AnnounceText, Table } from './components'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
+import { SetResizableCallback } from './components/resize'
 
 /**
  * A responsive DataTable component built with Material UI for React-based project.
@@ -64,13 +65,7 @@ function _DataTable({
     const tableHeadCellElements = useRef<HTMLTableCellElement[]>([])
     const draggableHeadCellRefs = useRef<HTMLTableCellElement[]>([])
 
-    const setHeadResizable =
-        useRef<
-            (
-                tableHeadCellElements: HTMLTableCellElement[],
-                tableRef: HTMLTableElement
-            ) => void
-        >(undefined)
+    const setHeadResizable = useRef<SetResizableCallback>(undefined)
 
     const updateDividers = useRef<() => void>(undefined)
 
@@ -113,12 +108,8 @@ function _DataTable({
         //     this.context.onAction?.(TableAction.PROP_UPDATE, newState)
         // }
 
-        if (options.resizableColumns && tableRef.current) {
-            console.dir(tableHeadCellElements.current)
-            setHeadResizable.current?.(
-                tableHeadCellElements.current?.map(el => el) ?? [],
-                tableRef.current
-            )
+        if (options.resizableColumns && tableRef) {
+            setHeadResizable.current?.(tableHeadCellElements, tableRef)
             updateDividers.current?.()
         }
     }, [])
@@ -432,10 +423,8 @@ function _DataTable({
                         ref={tableRef}
                         selectRowUpdate={selectRowUpdate}
                         setHeadCellRef={setHeadCellRef}
-                        draggableHeadCellRefs={
-                            draggableHeadCellRefs.current ?? []
-                        }
-                        timers={timers.current}
+                        draggableHeadCellRefs={draggableHeadCellRefs}
+                        timers={timers}
                     />
                 </DndProvider>
             </div>
