@@ -11,16 +11,3 @@ export type {
 } from './data-table.props.type/options'
 
 export { DataTable as default } from './data-table'
-
-export {
-    ExpandButton,
-    DataTableBody,
-    DataTableToolbarFilter,
-    TableFilterList,
-    TableFooter,
-    TableHead,
-    TableResize,
-    TableToolbar,
-    TableToolbarSelect,
-    ToolbarViewCol
-} from './components'

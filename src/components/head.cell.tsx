@@ -1,7 +1,7 @@
 // vendors
 import { makeStyles } from 'tss-react/mui'
 import { useDrag } from 'react-dnd'
-import { useState } from 'react'
+import { RefObject, useState } from 'react'
 import clsx from 'clsx'
 // materials
 import { Button, TableCell, TableSortLabel } from '@mui/material'
@@ -129,7 +129,7 @@ export default function TableHeadCell({
         item: {
             type: 'HEADER',
             colIndex: index,
-            headCellRefs: draggableHeadCellRefs
+            headCellRefs: draggableHeadCellRefs.current
         },
         begin: () => {
             setTimeout(() => {
@@ -167,16 +167,16 @@ export default function TableHeadCell({
             setDragging(false)
         },
         index,
-        headCellRefs: draggableHeadCellRefs,
+        headCellRefs: draggableHeadCellRefs.current,
         updateColumnOrder: handleColumnOrderUpdate,
         columnOrder,
         columns,
         transitionTime: options.draggableColumns
             ? options.draggableColumns.transitionTime
             : 300,
-        tableRef: tableRef ? tableRef() : null,
+        tableRef: tableRef?.current,
         tableId: options.tableId ?? 'none',
-        timers
+        timers: timers.current
     })
 
     const cellClass = clsx({
@@ -324,4 +324,10 @@ interface DataTableHeadCellProps {
 
     /** Optional to be used with `textLabels.body.columnHeaderTooltip` */
     column?: Object
+
+    tableRef: RefObject<HTMLTableElement | null>
+
+    timers: RefObject<unknown>
+
+    draggableHeadCellRefs: RefObject<HTMLTableCellElement[]>
 }

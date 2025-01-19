@@ -251,7 +251,7 @@ export default function TableToolbar(props: ToolbarProps) {
                         onPopoverExited={() => setActiveIcon(undefined)}
                         title={toolbarTextLabels.viewColumns}
                     >
-                        <components.TableViewCol />
+                        <components.ColumnVisibilityBox />
                     </ToolbarPopover>
                 )}
 
@@ -279,7 +279,7 @@ export default function TableToolbar(props: ToolbarProps) {
                         }}
                         title={toolbarTextLabels.filterTable}
                     >
-                        <components.TableFilter
+                        <components.DataFilterBox
                             customFooter={options.customFilterDialogFooter}
                             columns={state.columns}
                             filterList={state.filterList}

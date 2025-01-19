@@ -3,9 +3,8 @@
 // types
 import type { DataTableProps } from './data-table.props.type'
 // vendors
-import { Paper } from '@mui/material'
-import { makeStyles } from 'tss-react/mui'
-import { createRef, useEffect } from 'react'
+import { useEffect, useRef } from 'react'
+import { Paper, PaperProps } from '@mui/material'
 // locals
 import {
     buildMap,
@@ -18,24 +17,38 @@ import {
     type DataTableOptions
 } from './data-table.props.type/options'
 import { type DataTableState } from './data-table.props.type/state'
-import { MainContextProvider, useMainContext } from './hooks/use-main-context'
+import {
+    DataTableContextProvider,
+    useDataTableContext,
+    useStyles
+} from './hooks'
 import { FilterTypeEnum } from './data-table.props.type/columns'
-import { InnerTable } from './data-table.inner-table'
+// components
+import { AnnounceText, Table } from './components'
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
+import { SetResizableCallback } from './components/resize'
 
 /**
  * A responsive DataTable component built with Material UI for React-based project.
  *
  * @see https://mui-datatable-delight.vercel.app
  */
-export function DataTable({ className, ...props }: DataTableProps) {
+export function DataTable({ className, ref, ...props }: DataTableProps) {
     return (
-        <MainContextProvider datatableProps={props}>
-            <_DataTable className={className} />
-        </MainContextProvider>
+        <DataTableContextProvider datatableProps={props}>
+            <_DataTable className={className} ref={ref} />
+        </DataTableContextProvider>
     )
 }
 
-function _DataTable({ className }: { className: DataTableProps['className'] }) {
+function _DataTable({
+    className,
+    ref
+}: {
+    className: DataTableProps['className']
+    ref: PaperProps['ref']
+}) {
     const { classes, cx } = useStyles()
 
     const {
@@ -45,24 +58,16 @@ function _DataTable({ className }: { className: DataTableProps['className'] }) {
         props: datatableRootProps,
         setState,
         state
-    } = useMainContext()
+    } = useDataTableContext()
 
-    const rootRef = createRef<HTMLDivElement>()
+    const timers = useRef<unknown>({})
+    const tableRef = useRef<HTMLTableElement>(null)
+    const tableHeadCellElements = useRef<HTMLTableCellElement[]>([])
+    const draggableHeadCellRefs = useRef<HTMLTableCellElement[]>([])
 
-    const timers = createRef<unknown>()
-    const tableRef = createRef<HTMLTableElement>()
-    const tableHeadCellElements = createRef<HTMLTableCellElement[]>()
-    const draggableHeadCellRefs = createRef<HTMLTableCellElement[]>()
+    const setHeadResizable = useRef<SetResizableCallback>(undefined)
 
-    const setHeadResizable =
-        createRef<
-            (
-                tableHeadCellElements: HTMLTableCellElement[],
-                tableRef: HTMLTableElement
-            ) => void
-        >()
-
-    const updateDividers = createRef<() => void>()
+    const updateDividers = useRef<() => void>(undefined)
 
     // component did mount
     // useEffect(() => {
@@ -103,12 +108,8 @@ function _DataTable({ className }: { className: DataTableProps['className'] }) {
         //     this.context.onAction?.(TableAction.PROP_UPDATE, newState)
         // }
 
-        if (options.resizableColumns && tableRef.current) {
-            console.dir(tableHeadCellElements.current)
-            setHeadResizable.current?.(
-                tableHeadCellElements.current?.map(el => el) ?? [],
-                tableRef.current
-            )
+        if (options.resizableColumns && tableRef) {
+            setHeadResizable.current?.(tableHeadCellElements, tableRef)
             updateDividers.current?.()
         }
     }, [])
@@ -374,85 +375,66 @@ function _DataTable({ className }: { className: DataTableProps['className'] }) {
         )
             ? classes.paperResponsiveScrollFullHeightFullWidth
             : '',
+        classes.root,
         className
     )
 
+    const { tableHeightVal, responsiveClass } =
+        getTableHeightAndResponsiveClasses(options, classes)
+
     return (
-        <>
-            <Paper
-                elevation={options?.elevation}
-                ref={rootRef}
-                className={paperClasses}
-            >
-                {isShowToolbarSelect && (
-                    <components.TableToolbarSelect
-                        selectRowUpdate={selectRowUpdate}
-                    />
-                )}
-
-                {isShowToolbar && (
-                    <components.TableToolbar
-                        filterUpdate={filterUpdate}
-                        tableRef={tableRef}
-                    />
-                )}
-
-                <components.TableFilterList filterUpdate={filterUpdate} />
-
-                <InnerTable
-                    // new this
-                    forwardUpdateDividers={fn => (updateDividers.current = fn)}
-                    forwardSetHeadResizable={fn =>
-                        (setHeadResizable.current = fn)
-                    }
-                    // this section
-                    tableRef={tableRef}
+        <Paper
+            elevation={options?.elevation}
+            ref={ref}
+            className={paperClasses}
+        >
+            {isShowToolbarSelect && (
+                <components.SelectedRowsToolbar
                     selectRowUpdate={selectRowUpdate}
-                    setHeadCellRef={setHeadCellRef}
-                    draggableHeadCellRefs={draggableHeadCellRefs.current ?? []}
-                    getCurrentRootRef={rootRef.current}
-                    timers={timers.current}
                 />
-
-                <components.TableFooter />
-            </Paper>
-
-            {state.announceText && (
-                <div className={classes.liveAnnounce} aria-live="polite">
-                    {state.announceText}
-                </div>
             )}
-        </>
+
+            {isShowToolbar && (
+                <components.Toolbar
+                    filterUpdate={filterUpdate}
+                    tableRef={tableRef}
+                />
+            )}
+
+            <components.FilteredValuesList filterUpdate={filterUpdate} />
+
+            <div
+                style={{ position: 'relative', ...tableHeightVal }}
+                className={responsiveClass}
+            >
+                {options.resizableColumns && (
+                    <components.ColumnsResizer
+                        updateDividers={fn => (updateDividers.current = fn)}
+                        setResizable={fn => (setHeadResizable.current = fn)}
+                    />
+                )}
+
+                {/* @ts-expect-error WILL FIX THIS LATER */}
+                <DndProvider
+                    backend={HTML5Backend}
+                    context={typeof window === 'undefined' ? undefined : window}
+                >
+                    <Table
+                        ref={tableRef}
+                        selectRowUpdate={selectRowUpdate}
+                        setHeadCellRef={setHeadCellRef}
+                        draggableHeadCellRefs={draggableHeadCellRefs}
+                        timers={timers}
+                    />
+                </DndProvider>
+            </div>
+
+            <components.BottomBar />
+
+            <AnnounceText />
+        </Paper>
     )
 }
-
-const useStyles = makeStyles({
-    name: 'datatable-delight'
-})({
-    root: {
-        '& .datatables-no-print': {
-            '@media print': {
-                display: 'none'
-            }
-        }
-    },
-    paper: {
-        isolation: 'isolate'
-    },
-    paperResponsiveScrollFullHeightFullWidth: {
-        position: 'absolute'
-    },
-    liveAnnounce: {
-        border: '0',
-        clip: 'rect(0 0 0 0)',
-        height: '1px',
-        margin: '-1px',
-        overflow: 'hidden',
-        padding: '0',
-        position: 'absolute',
-        width: '1px'
-    }
-})
 
 // enum TABLE_LOAD {
 //     INITIAL = 1,
@@ -549,3 +531,59 @@ export type FilterUpdateType = (
      */
     next?: (filterList: DataTableState['filterList']) => void
 ) => void
+
+function getTableHeightAndResponsiveClasses(
+    options: DataTableOptions,
+    classes: ReturnType<typeof useStyles>['classes']
+) {
+    const responsiveOption = options.responsive
+
+    let maxHeight = options.tableBodyMaxHeight
+    let responsiveClass
+
+    switch (responsiveOption) {
+        // deprecated
+        case 'scroll':
+            responsiveClass = classes.responsiveScroll
+            maxHeight = '499px'
+            break
+        // deprecated
+        case 'scrollMaxHeight':
+            responsiveClass = classes.responsiveScrollMaxHeight
+            maxHeight = '499px'
+            break
+        // deprecated
+        case 'scrollFullHeight':
+            responsiveClass = classes.responsiveScrollFullHeight
+            maxHeight = 'none'
+            break
+        // deprecated
+        case 'scrollFullHeightFullWidth':
+            responsiveClass = classes.responsiveScrollFullHeight
+            break
+        // deprecated
+        case 'stacked':
+            responsiveClass = classes.responsiveStacked
+            maxHeight = 'none'
+            break
+        // deprecated
+        case 'stackedFullWidth':
+            responsiveClass = classes.responsiveStackedFullWidth
+            maxHeight = 'none'
+            break
+
+        default:
+            responsiveClass = classes.responsiveBase
+            break
+    }
+
+    const tableHeightVal = {
+        maxHeight: maxHeight,
+        height: options.tableBodyHeight
+    }
+
+    return {
+        tableHeightVal,
+        responsiveClass
+    }
+}
