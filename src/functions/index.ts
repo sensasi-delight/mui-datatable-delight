@@ -1,5 +1,4 @@
 export { buildMap } from './build-map'
-export { cloneDeep } from './clone-deep'
 // export { getCollatorComparator } from './get-collator-comparator'
 export { load } from './load'
 export { save } from './save'
