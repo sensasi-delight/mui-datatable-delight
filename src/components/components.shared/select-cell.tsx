@@ -155,7 +155,7 @@ export function DataTableTableSelectCell({
         >
             <div style={{ display: 'flex', alignItems: 'center' }}>
                 {expandableOn && (
-                    <components.ExpandButton
+                    <components.RowExpansionButton
                         areAllRowsExpanded={areAllRowsExpanded}
                         buttonClass={buttonClass}
                         dataIndex={dataIndex}

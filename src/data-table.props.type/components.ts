@@ -1,30 +1,30 @@
 // materials
-import { Checkbox, Tooltip } from '@mui/material'
+import { Checkbox as MuiCheckbox, Tooltip as MuiTooltip } from '@mui/material'
 // locals
 import {
-    ExpandButton,
-    DataTableBody,
-    DataTableToolbarFilter,
-    TableFilterList,
-    TableFooter,
+    BottomBar,
+    ColumnsResizer,
+    ColumnVisibilityBox,
+    DataFilterBox,
+    FilteredValuesList,
+    RowExpansionButton,
+    SelectedRowsToolbar,
+    TableBody,
     TableHead,
-    TableResize,
-    TableToolbar,
-    TableToolbarSelect,
-    ToolbarViewCol
+    Toolbar
 } from '../components'
 
 export interface DataTableComponents {
-    Checkbox: typeof Checkbox
-    ExpandButton: typeof ExpandButton
-    TableBody: typeof DataTableBody
-    TableFilter: typeof DataTableToolbarFilter
-    TableFilterList: typeof TableFilterList
-    TableFooter: typeof TableFooter
+    BottomBar: typeof BottomBar
+    Checkbox: typeof MuiCheckbox
+    ColumnsResizer: typeof ColumnsResizer
+    ColumnVisibilityBox: typeof ColumnVisibilityBox
+    DataFilterBox: typeof DataFilterBox
+    FilteredValuesList: typeof FilteredValuesList
+    RowExpansionButton: typeof RowExpansionButton
+    SelectedRowsToolbar: typeof SelectedRowsToolbar
+    TableBody: typeof TableBody
     TableHead: typeof TableHead
-    TableResize: typeof TableResize
-    TableToolbar: typeof TableToolbar
-    TableToolbarSelect: typeof TableToolbarSelect
-    TableViewCol: typeof ToolbarViewCol
-    Tooltip: typeof Tooltip
+    Toolbar: typeof Toolbar
+    Tooltip: typeof MuiTooltip
 }

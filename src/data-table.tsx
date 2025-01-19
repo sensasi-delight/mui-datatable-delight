@@ -385,19 +385,19 @@ function _DataTable({ className }: { className: DataTableProps['className'] }) {
                 className={paperClasses}
             >
                 {isShowToolbarSelect && (
-                    <components.TableToolbarSelect
+                    <components.SelectedRowsToolbar
                         selectRowUpdate={selectRowUpdate}
                     />
                 )}
 
                 {isShowToolbar && (
-                    <components.TableToolbar
+                    <components.Toolbar
                         filterUpdate={filterUpdate}
                         tableRef={tableRef}
                     />
                 )}
 
-                <components.TableFilterList filterUpdate={filterUpdate} />
+                <components.FilteredValuesList filterUpdate={filterUpdate} />
 
                 <InnerTable
                     // new this
@@ -414,7 +414,7 @@ function _DataTable({ className }: { className: DataTableProps['className'] }) {
                     timers={timers.current}
                 />
 
-                <components.TableFooter />
+                <components.BottomBar />
             </Paper>
 
             {state.announceText && (

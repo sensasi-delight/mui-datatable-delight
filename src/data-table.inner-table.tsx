@@ -47,7 +47,7 @@ export function InnerTable({
             className={responsiveClass}
         >
             {options.resizableColumns && (
-                <components.TableResize
+                <components.ColumnsResizer
                     updateDividers={forwardUpdateDividers}
                     // @ts-expect-error WILL FIX THIS LATER
                     setResizable={forwardSetHeadResizable}
