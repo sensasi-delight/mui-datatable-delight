@@ -5,7 +5,6 @@ import type {
     DataTableSortOrderOption
 } from '../data-table.props.type/options'
 import type { DataTableState } from '../data-table.props.type/state'
-import { cloneDeep } from './clone-deep'
 import { getCollatorComparator } from './get-collator-comparator'
 import { transformData } from './transform-data'
 import { sortCompare as defaultSortCompare } from './sort-compare'
@@ -236,8 +235,8 @@ function updateDataCol(
     datatableProps: DataTableProps,
     setState: (newState: DataTableState) => void
 ) {
-    let changedData = cloneDeep(prevState.data)
-    let filterData = cloneDeep(prevState.filterData)
+    let changedData = prevState.data
+    let filterData = prevState.filterData
 
     const tableMeta = getTableMeta(
         row,
@@ -600,23 +599,23 @@ export function getNewStateOnDataChange(
 
         if (column.filterOptions) {
             if (Array.isArray(column.filterOptions)) {
-                filterData[colIndex] = cloneDeep(column.filterOptions)
+                filterData[colIndex] = column.filterOptions
                 warnDeprecated(
                     'filterOptions must now be an object. see https://github.com/gregnb/mui-datatables/tree/master/examples/customize-filter example'
                 )
             } else if (Array.isArray(column.filterOptions.names)) {
-                filterData[colIndex] = cloneDeep(column.filterOptions.names)
+                filterData[colIndex] = column.filterOptions.names
             }
         }
 
         if (column.filterList) {
-            filterList[colIndex] = cloneDeep(column.filterList)
+            filterList[colIndex] = column.filterList
         } else if (
             state.filterList &&
             state.filterList[colIndex] &&
             state.filterList[colIndex].length > 0
         ) {
-            filterList[colIndex] = cloneDeep(state.filterList[colIndex])
+            filterList[colIndex] = state.filterList[colIndex]
         }
 
         if (options.sortFilterList) {
