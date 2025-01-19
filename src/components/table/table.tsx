@@ -6,7 +6,7 @@ import { useStyles } from './hooks'
 import type { TableProps } from './types'
 
 export function Table({
-    ref,
+    tableRef,
     selectRowUpdate,
     setHeadCellRef,
     draggableHeadCellRefs,
@@ -24,7 +24,7 @@ export function Table({
 
     return (
         <MuiTable
-            ref={ref}
+            ref={tableRef}
             tabIndex={0}
             role="grid"
             {...tablePropsFromOption}
@@ -43,6 +43,7 @@ export function Table({
 
             <components.TableHead
                 columns={state.columns}
+                // @ts-expect-error WILL FIX THIS LATER
                 activeColumn={state.activeColumn}
                 data={state.displayData}
                 count={state.count}
@@ -55,7 +56,7 @@ export function Table({
                 sortOrder={state.sortOrder}
                 columnOrder={state.columnOrder}
                 draggableHeadCellRefs={draggableHeadCellRefs}
-                tableRef={ref}
+                tableRef={tableRef}
                 timers={timers}
             />
 

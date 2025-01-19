@@ -1,7 +1,7 @@
 import type { RefObject } from 'react'
 
 export interface TableProps {
-    ref: RefObject<HTMLTableElement | null>
+    tableRef: RefObject<HTMLTableElement | null>
     selectRowUpdate: unknown
     setHeadCellRef: unknown
     draggableHeadCellRefs: RefObject<HTMLTableCellElement[]>
