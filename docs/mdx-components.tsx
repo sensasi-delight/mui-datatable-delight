@@ -1,11 +1,15 @@
 import type { MDXComponents } from 'mdx/types'
 import { Alert, Link, Typography } from '@mui/material'
 import { CodeSnippet, InlineCode } from './components'
+import { Mermaid } from './app/(main)/_components/mermaid'
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
     return {
         pre: props => {
             const lang = props.children.props.className.replace('language-', '')
+
+            if (lang === 'mermaid')
+                return <Mermaid>{props.children.props.children}</Mermaid>
 
             return (
                 <CodeSnippet
