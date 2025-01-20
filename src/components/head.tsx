@@ -1,5 +1,5 @@
 import { tss } from 'tss-react/mui'
-import MuiTableHead from '@mui/material/TableHead'
+import { TableHead as MuiTableHead } from '@mui/material'
 import { RefObject } from 'react'
 import { TableHeadCell } from './table-head/components'
 import { TableHeadRow } from './head.row'
@@ -220,7 +220,7 @@ export function TableHead({
                 />
 
                 {orderedColumns.map(
-                    ({ column, index, colPos }) =>
+                    ({ column = {}, index, colPos }) =>
                         column.display === 'true' &&
                         (column.customHeadRender ? (
                             column.customHeadRender(

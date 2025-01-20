@@ -1,8 +1,9 @@
 // vendors
 import { tss } from 'tss-react/mui'
-import MuiTablePagination, {
+import {
+    TablePagination as MuiTablePagination,
     type TablePaginationProps as MuiTablePaginationProps
-} from '@mui/material/TablePagination'
+} from '@mui/material'
 // locals
 import type { DataTableFooterPaginationProps } from './footer.pagination.props.type'
 // functions
