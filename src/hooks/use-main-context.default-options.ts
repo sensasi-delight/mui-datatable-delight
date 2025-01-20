@@ -34,7 +34,6 @@ export const DEFAULT_OPTIONS: DataTableOptions = {
     selectableRowsOnClick: false,
     selectableRowsHeader: true,
     serverSide: false,
-    serverSideFilterList: null,
     setTableProps: () => ({}),
     sort: true,
     sortFilterList: true,
