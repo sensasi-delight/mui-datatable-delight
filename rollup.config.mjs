@@ -44,11 +44,17 @@ const TS_OPTS_FOR_CJS_BUILD = {
 
 /** @type {import('rollup').RollupOptions} */
 const ROLLUP_BASE_OPTS = {
-    external: [/node_modules/],
+    external: id => {
+        if (id.includes('dnd-core') || id.includes('react-dnd')) {
+            return false
+        }
+
+        return /node_modules/.test(id)
+    },
     input: 'src/index.ts'
 }
 
-/** @type {import('rollup').RollupOptions} */
+/** @type {import('rollup').RollupOptions[]} */
 export default [
     {
         ...ROLLUP_BASE_OPTS,
