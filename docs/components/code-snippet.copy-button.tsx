@@ -24,7 +24,16 @@ export function CopyButton({ text }: { text: string }) {
             }}
         >
             <Fade in={!isCopied} {...STATIC_FADE_PROPS}>
-                <Tooltip title="Copy">
+                <Tooltip
+                    title="Copy"
+                    sx={{
+                        color: 'GrayText',
+
+                        ':hover': {
+                            color: 'inherit'
+                        }
+                    }}
+                >
                     <IconButton
                         onClick={() => {
                             navigator.clipboard.writeText(text)
@@ -47,7 +56,12 @@ export function CopyButton({ text }: { text: string }) {
                         }
                     }}
                 >
-                    <IconButton color="success">
+                    <IconButton
+                        color="success"
+                        sx={{
+                            bgcolor: 'var(--IconButton-hoverBg)'
+                        }}
+                    >
                         <Check />
                     </IconButton>
                 </Tooltip>
