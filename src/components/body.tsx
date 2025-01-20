@@ -5,7 +5,7 @@ import React from 'react'
 import type { TableRowProps } from '@mui/material'
 import { Typography, TableBody as MuiTableBody } from '@mui/material'
 // locals
-import TableBodyCell from './body.cell'
+import { TableBodyCell } from './body.cell'
 import { DataTableBodyRow } from './body.row'
 import { DataTableTableSelectCell } from './components.shared/select-cell'
 import { getPageValue } from '../functions.shared/get-page-value'

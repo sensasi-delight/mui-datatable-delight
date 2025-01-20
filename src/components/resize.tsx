@@ -8,7 +8,7 @@ import { useDataTableContext } from '../hooks'
  *
  * @see https://mui-datatable-delight.vercel.app/docs/features/resizable-columns
  */
-export default function TableResize({
+export function TableResize({
     classes: classesFromProp,
     ...props
 }: DataTableResizeProps): JSX.Element {

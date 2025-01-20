@@ -23,7 +23,7 @@ import { getDisplayData } from '../functions'
  *
  * @see {@link http://mui-datatable-delight.vercel.app/examples/customize-toolbar|Customize Toolbar Example}.
  */
-export default function TableToolbar(props: ToolbarProps) {
+export function TableToolbar(props: ToolbarProps) {
     const {
         components,
         icons,

@@ -1,7 +1,7 @@
 import { TableRow } from '@mui/material'
 import { tss } from 'tss-react/mui'
 
-export default function TableHeadRow({
+export function TableHeadRow({
     children
 }: {
     children: React.ReactNode

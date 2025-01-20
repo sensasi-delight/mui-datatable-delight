@@ -5,7 +5,7 @@ import { MUIDataTableBodyCell } from 'mui-datatables'
 import { DataTableState } from '../data-table.props.type/state'
 import { useDataTableContext } from '../hooks'
 
-export default function TableBodyCell({
+export function TableBodyCell({
     children,
     colIndex,
     columnHeader,
