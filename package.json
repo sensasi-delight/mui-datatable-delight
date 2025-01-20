@@ -1,13 +1,20 @@
 {
     "name": "mui-datatable-delight",
-    "version": "0.0.0-experimental.19",
+    "version": "0.0.0-experimental.20",
     "description": "A responsive DataTable component built with MUI for React-based project.",
-    "module": "dist/index.js",
-    "types": "dist/index.d.ts",
-    "type": "module",
     "files": [
         "dist"
     ],
+    "types": "./dist/cjs/index.d.ts",
+    "main": "./dist/cjs/index.js",
+    "module": "./dist/esm/index.js",
+    "exports": {
+        ".": {
+            "types": "./dist/cjs/index.d.ts",
+            "module": "./dist/esm/index.js",
+            "default": "./dist/cjs/index.js"
+        }
+    },
     "scripts": {
         "build": "rollup -c",
         "build:docs": "next build docs",
@@ -23,8 +30,9 @@
         "url": "git+https://github.com/sensasi-delight/mui-datatable-delight.git"
     },
     "keywords": [
-        "material-ui",
-        "datatables",
+        "data table",
+        "mui",
+        "material ui",
         "react"
     ],
     "author": "gregnb <gregnb@gmail.com>",
