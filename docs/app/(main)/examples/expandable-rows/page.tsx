@@ -5,7 +5,7 @@ import TableRow from '@mui/material/TableRow'
 import TableCell from '@mui/material/TableCell'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
 
-import DataTable, { ExpandButton } from '@src'
+import DataTable, { DataTableOptions, RowExpansionButton } from '@src'
 
 class Example extends React.Component {
     render() {
@@ -124,12 +124,12 @@ class Example extends React.Component {
             ['Mason Ray', 'Computer Scientist', 'San Francisco', 39, '$142,000']
         ]
 
-        const options = {
+        const options: DataTableOptions = {
             filter: true,
             filterType: 'dropdown',
             responsive: 'standard',
             expandableRows: true,
-            expandableRowsHeader: false,
+            expandableRowsHeader: true,
             expandableRowsOnClick: true,
             isRowExpandable: (dataIndex, expandedRows) => {
                 if (dataIndex === 3 || dataIndex === 4) return false
@@ -171,10 +171,11 @@ class Example extends React.Component {
         })
 
         const components = {
-            ExpandButton: function (props) {
+            RowExpansionButton: function (props) {
                 if (props.dataIndex === 3 || props.dataIndex === 4)
                     return <div style={{ width: '24px' }} />
-                return <ExpandButton {...props} />
+
+                return <RowExpansionButton {...props} />
             }
         }
 
