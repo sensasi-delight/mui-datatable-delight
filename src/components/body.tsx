@@ -16,12 +16,12 @@ import {
     SomeRowsIDK,
     TableAction
 } from '../data-table.props.type/options'
-import { useMainContext } from '../hooks/use-main-context'
+import { useDataTableContext } from '../hooks'
 import { buildMap } from '../functions'
 
 export function DataTableBody(props: DataTableBodyProps) {
     const { classes } = useStyles()
-    const { options, textLabels } = useMainContext()
+    const { options, textLabels } = useDataTableContext()
 
     const { columns } = props
 
@@ -287,7 +287,7 @@ function RenderRow({
     columnOrder: number[]
 }) {
     const { classes, cx } = useStyles()
-    const { onAction, options, state } = useMainContext()
+    const { onAction, options, state } = useDataTableContext()
 
     const { selectedRows, columns } = parentProps
 

@@ -1,6 +1,6 @@
 // materials
 import { Table as MuiTable } from '@mui/material'
-import { useMainContext } from '../../hooks/use-main-context'
+import { useDataTableContext } from '../../hooks'
 import { useStyles } from './hooks'
 // types
 import type { TableProps } from './types'
@@ -17,7 +17,7 @@ export function Table({
         options,
         props: datatableRootProps,
         state
-    } = useMainContext()
+    } = useDataTableContext()
 
     const tablePropsFromOption = options.setTableProps?.() ?? {}
 

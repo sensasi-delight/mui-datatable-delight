@@ -2,7 +2,7 @@ import { CheckboxProps } from '@mui/material/Checkbox'
 import TableCell from '@mui/material/TableCell'
 import { tss } from 'tss-react/mui'
 import { DataTableOptions } from '../../data-table.props.type/options'
-import { useMainContext } from '../../hooks/use-main-context'
+import { useDataTableContext } from '../../hooks'
 
 export function DataTableTableSelectCell({
     fixedHeader,
@@ -23,7 +23,7 @@ export function DataTableTableSelectCell({
     onChange,
     ...otherProps
 }: DataTableTableSelectCellProps & IsHeaderCell) {
-    const { components, state } = useMainContext()
+    const { components, state } = useDataTableContext()
     const { classes, cx } = useStyles()
 
     function areAllRowsExpanded() {

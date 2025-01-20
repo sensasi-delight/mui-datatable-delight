@@ -7,7 +7,7 @@ import MuiTablePagination, {
 import type { DataTableFooterPaginationProps } from './footer.pagination.props.type'
 // functions
 import { getPageValue } from '../functions.shared/get-page-value'
-import { useMainContext } from '../hooks/use-main-context'
+import { useDataTableContext } from '../hooks'
 import { ClassName } from '../enums/class-name'
 
 export function DataTableFooterPagination({
@@ -17,7 +17,7 @@ export function DataTableFooterPagination({
     changeRowsPerPage,
     changePage
 }: DataTableFooterPaginationProps) {
-    const { options, textLabels } = useMainContext()
+    const { options, textLabels } = useDataTableContext()
     const { classes, cx } = useStyles()
 
     const handleRowChange: MuiTablePaginationProps['onRowsPerPageChange'] = ({

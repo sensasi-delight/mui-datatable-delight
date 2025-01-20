@@ -3,7 +3,7 @@ import TableCell, { type TableCellProps } from '@mui/material/TableCell'
 import { tss } from 'tss-react/mui'
 import { MUIDataTableBodyCell } from 'mui-datatables'
 import { DataTableState } from '../data-table.props.type/state'
-import { useMainContext } from '../hooks/use-main-context'
+import { useDataTableContext } from '../hooks'
 
 export default function TableBodyCell({
     children,
@@ -17,7 +17,7 @@ export default function TableBodyCell({
 }: Omit<MUIDataTableBodyCell & TableCellProps, 'options'> & {
     print: DataTableState['columns'][0]['print']
 }) {
-    const { options } = useMainContext()
+    const { options } = useDataTableContext()
     const { classes, cx } = useStyles()
 
     const onCellClick = options?.onCellClick

@@ -2,7 +2,7 @@
 import { InputBase, MenuItem, Select, Typography } from '@mui/material'
 import { tss } from 'tss-react/mui'
 // globals
-import { useMainContext } from '../hooks/use-main-context'
+import { useDataTableContext } from '../hooks'
 import { ClassName } from '../enums/class-name'
 
 export function DataTableFooterJumpToPage({
@@ -16,7 +16,7 @@ export function DataTableFooterJumpToPage({
     rowsPerPage: number
     changePage: (pageNo: number) => void
 }) {
-    const { textLabels } = useMainContext()
+    const { textLabels } = useDataTableContext()
     const { classes, cx } = useStyles()
 
     const pages = getPageOptions(count, rowsPerPage)

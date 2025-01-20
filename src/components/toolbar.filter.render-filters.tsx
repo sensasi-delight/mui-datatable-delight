@@ -19,7 +19,7 @@ import { tss } from 'tss-react/mui'
 // locals
 import type { DataTableToolbarFilterProps } from './toolbar.filter'
 import { type DataTableState } from '../data-table.props.type/state'
-import { useMainContext } from '../hooks/use-main-context'
+import { useDataTableContext } from '../hooks'
 import { FilterTypeEnum } from '../data-table.props.type/columns'
 
 export function DataTableToolbarFilterRenderFilters({
@@ -32,7 +32,7 @@ export function DataTableToolbarFilterRenderFilters({
     innerFilterList: string[][]
     setFilterList: React.Dispatch<React.SetStateAction<string[][]>>
 }) {
-    const { textLabels, options } = useMainContext()
+    const { textLabels, options } = useDataTableContext()
     const { classes } = useStyles()
     const { filterData, filterUpdate } = parentProps
 
@@ -183,7 +183,7 @@ function DataTableToolbarFilterCheckbox({
     filterList: DataTableToolbarFilterProps['filterList']
     handleCheckboxChange: (value: string) => void
 }) {
-    const { components } = useMainContext()
+    const { components } = useDataTableContext()
     const { classes } = useStyles()
     const renderItem = column?.filterOptions?.renderValue ?? (v => v)
 
@@ -254,7 +254,7 @@ function DataTableToolbarFilterMultiselect({
     onSelectChange: SelectProps<string[]>['onChange']
     filterData: string[][]
 }) {
-    const { components } = useMainContext()
+    const { components } = useDataTableContext()
     const { classes } = useStyles()
 
     const renderItem = column.filterOptions?.renderValue ?? (v => v)
@@ -430,7 +430,7 @@ function RenderSelect({
     parentProps: DataTableToolbarFilterProps
     onChange: SelectProps<string>['onChange']
 }) {
-    const { textLabels } = useMainContext()
+    const { textLabels } = useDataTableContext()
     const { classes } = useStyles()
 
     const renderItem = column.filterOptions?.renderValue ?? (v => v)

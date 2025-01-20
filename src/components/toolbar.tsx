@@ -5,7 +5,7 @@ import { useState, type RefObject } from 'react'
 import { IconButton, Toolbar as VendorToolbar, Typography } from '@mui/material'
 // globals
 import { TableAction } from '../data-table.props.type/options'
-import { useMainContext } from '../hooks/use-main-context'
+import { useDataTableContext } from '../hooks'
 import { ClassName } from '../enums/class-name'
 // sub-components
 import { DataTableToolbarSearch } from './toolbar.search'
@@ -33,7 +33,7 @@ export default function TableToolbar(props: ToolbarProps) {
         setState,
         state,
         textLabels: { toolbar: toolbarTextLabels }
-    } = useMainContext()
+    } = useDataTableContext()
     const { classes } = useStyles()
 
     const [showSearch, setShowSearch] = useState(

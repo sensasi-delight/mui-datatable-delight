@@ -1,6 +1,6 @@
 import { TableRow, type TableRowProps } from '@mui/material'
 import { tss } from 'tss-react/mui'
-import { useMainContext } from '../hooks/use-main-context'
+import { useDataTableContext } from '../hooks'
 
 export function DataTableBodyRow({
     rowSelected,
@@ -10,7 +10,7 @@ export function DataTableBodyRow({
     className
 }: DataTableBodyRowProps) {
     const { classes, cx } = useStyles()
-    const { options } = useMainContext()
+    const { options } = useDataTableContext()
 
     return (
         <TableRow

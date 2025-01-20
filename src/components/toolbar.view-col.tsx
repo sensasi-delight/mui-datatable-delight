@@ -7,14 +7,14 @@ import {
 } from '@mui/material'
 import { tss } from 'tss-react/mui'
 // globals
-import { useMainContext } from '../hooks/use-main-context'
+import { useDataTableContext } from '../hooks'
 import { TableAction } from '../data-table.props.type/options'
 
 const CLASS_ID = 'datatable-delight--toolbar--view-col'
 
 export function ToolbarViewCol({}: ToolbarViewColProps) {
     const { components, onAction, options, state, textLabels } =
-        useMainContext()
+        useDataTableContext()
     const { classes, cx } = useStyles()
 
     const handleColChange = (index: number) => {
