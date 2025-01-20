@@ -42,7 +42,7 @@ import { SetResizableCallback } from './components/resize'
  *
  * @see https://mui-datatable-delight.vercel.app
  */
-export function DataTable({ className, ref, ...props }: DataTableProps) {
+export function DataTable<T>({ className, ref, ...props }: DataTableProps<T>) {
     return (
         <DataTableContextProvider datatableProps={props}>
             <_DataTable className={className} ref={ref} />
@@ -54,7 +54,7 @@ function _DataTable({
     className,
     ref
 }: {
-    className: DataTableProps['className']
+    className?: string
     ref: PaperProps['ref']
 }) {
     const { classes, cx } = useStyles()
