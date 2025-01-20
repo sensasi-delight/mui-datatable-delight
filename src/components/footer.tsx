@@ -4,7 +4,7 @@ import { tss } from 'tss-react/mui'
 import { DataTableFooterPagination } from './footer.pagination'
 import { DataTableFooterJumpToPage } from './footer.jump-to-page'
 // globals
-import { useMainContext } from '../hooks/use-main-context'
+import { useDataTableContext } from '../hooks'
 import { TableAction } from '../data-table.props.type/options'
 import { getPageValue } from '../functions.shared/get-page-value'
 import { ClassName } from '../enums/class-name'
@@ -15,7 +15,7 @@ import { DataTableState } from '../data-table.props.type/state'
  * @todo  RENAME COMPONENT TO `<BottomToolbar />`
  */
 export default function TableFooter({}: TableFooterProps) {
-    const { options, state, textLabels, onAction } = useMainContext()
+    const { options, state, textLabels, onAction } = useDataTableContext()
     const { classes, cx } = useStyles()
     const { customFooter, pagination = true, jumpToPage } = options
 

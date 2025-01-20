@@ -3,7 +3,7 @@ import { useReactToPrint, UseReactToPrintOptions } from 'react-to-print'
 // materials
 import { IconButton, Tooltip } from '@mui/material'
 // locals
-import { useMainContext } from '../hooks/use-main-context'
+import { useDataTableContext } from '../hooks'
 import { ICON_BUTTON_DEFAULT_SX } from './toolbar.icon-button-default-sx'
 
 export function ToolbarPrintButton({
@@ -15,7 +15,7 @@ export function ToolbarPrintButton({
         icons,
         options,
         textLabels: { toolbar: toolbarTextLabels }
-    } = useMainContext()
+    } = useDataTableContext()
 
     const handlePrint = useReactToPrint({
         contentRef: printContent

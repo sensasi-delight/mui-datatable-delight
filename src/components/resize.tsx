@@ -1,7 +1,7 @@
 import React, { JSX, RefObject, useEffect, useState } from 'react'
 import { tss } from 'tss-react/mui'
 // locals
-import { useMainContext } from '../hooks/use-main-context'
+import { useDataTableContext } from '../hooks'
 
 /**
  * Column resize slider component.
@@ -14,7 +14,7 @@ export default function TableResize({
 }: DataTableResizeProps): JSX.Element {
     const tssHook = useStyles()
     const classes = classesFromProp ?? tssHook.classes
-    const { options } = useMainContext()
+    const { options } = useDataTableContext()
 
     /**
      * ##### STATES ########

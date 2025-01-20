@@ -4,7 +4,7 @@ import { RefObject } from 'react'
 import { TableHeadCell } from './table-head/components'
 import TableHeadRow from './head.row'
 import { DataTableTableSelectCell } from './components.shared/select-cell'
-import { useMainContext } from '../hooks/use-main-context'
+import { useDataTableContext } from '../hooks'
 import { DataTableState } from '../data-table.props.type/state'
 import {
     DataTableOptions,
@@ -33,7 +33,7 @@ export default function TableHead({
         props: datatableRootProps,
         setState,
         state
-    } = useMainContext()
+    } = useDataTableContext()
 
     if (columnOrder === null) {
         columnOrder = columns ? columns.map((_, idx) => idx) : []

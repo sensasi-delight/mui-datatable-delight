@@ -1,9 +1,9 @@
-import { useMainContext } from '../../hooks/use-main-context'
+import { useDataTableContext } from '../../hooks'
 import { useStyles } from './hooks'
 
 export function AnnounceText() {
     const { classes } = useStyles()
-    const { state } = useMainContext()
+    const { state } = useDataTableContext()
 
     if (!state.announceText) return null
 

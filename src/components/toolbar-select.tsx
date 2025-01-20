@@ -9,7 +9,7 @@ import {
     TableAction,
     type DataTableOptions
 } from '../data-table.props.type/options'
-import { useMainContext } from '../hooks/use-main-context'
+import { useDataTableContext } from '../hooks'
 import { ClassName } from '../enums/class-name'
 import { buildMap, getNewStateOnDataChange } from '../functions'
 
@@ -24,7 +24,7 @@ export function TableToolbarSelect({
         state,
         setState,
         textLabels: { selectedRows: selectedRowsTextLabels }
-    } = useMainContext()
+    } = useDataTableContext()
     const { classes } = useStyles()
 
     function onRowsDelete() {

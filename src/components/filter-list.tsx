@@ -2,7 +2,7 @@ import { tss } from 'tss-react/mui'
 import { Chip } from '@mui/material'
 // local types
 import type { DataTableState } from '../data-table.props.type/state'
-import { useMainContext } from '../hooks/use-main-context'
+import { useDataTableContext } from '../hooks'
 import { FilterTypeType } from '../data-table.props.type/shared/filter-type-type'
 import { FilterUpdateType } from '../data-table'
 
@@ -13,7 +13,7 @@ const CLASS_ID = 'datatable-delight--filter-list'
  */
 export function TableFilterList({ filterUpdate }: TableFilterListProps) {
     const { classes, cx } = useStyles()
-    const { options, state } = useMainContext()
+    const { options, state } = useDataTableContext()
     const { serverSide } = options
 
     const columnNames = state.columns.map(column => ({

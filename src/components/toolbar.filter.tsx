@@ -5,7 +5,7 @@ import { ReactNode, useState } from 'react'
 // locals
 import { type DataTableState } from '../data-table.props.type/state'
 import { DataTableToolbarFilterRenderFilters } from './toolbar.filter.render-filters'
-import { useMainContext } from '../hooks/use-main-context'
+import { useDataTableContext } from '../hooks'
 import { FilterTypeEnum } from '../data-table.props.type/columns'
 import { FilterUpdateType } from '../data-table'
 import { getDisplayData } from '../functions'
@@ -19,7 +19,7 @@ export function DataTableToolbarFilter(props: DataTableToolbarFilterProps) {
         setState,
         state,
         textLabels
-    } = useMainContext()
+    } = useDataTableContext()
     const {
         columns,
         customFooter,
