@@ -4,6 +4,8 @@ import { useDataTableContext } from '../../hooks'
 import { useStyles } from './hooks'
 // types
 import type { TableProps } from './types'
+import { TableHead } from '../head'
+import { DataTableBody } from '../body'
 
 export function Table({
     tableRef,
@@ -20,6 +22,9 @@ export function Table({
     } = useDataTableContext()
 
     const tablePropsFromOption = options.setTableProps?.() ?? {}
+
+    const _TableHead = components.TableHead ?? TableHead
+    const _TableBody = components.TableBody ?? DataTableBody
 
     return (
         <MuiTable
@@ -40,7 +45,7 @@ export function Table({
                 </caption>
             )}
 
-            <components.TableHead
+            <_TableHead
                 columns={state.columns}
                 // @ts-expect-error WILL FIX THIS LATER
                 activeColumn={state.activeColumn}
@@ -58,7 +63,7 @@ export function Table({
                 tableRef={tableRef}
             />
 
-            <components.TableBody
+            <_TableBody
                 data={state.displayData}
                 count={state.count}
                 columns={state.columns}

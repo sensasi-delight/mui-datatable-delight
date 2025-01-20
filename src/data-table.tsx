@@ -24,7 +24,15 @@ import {
 } from './hooks'
 import { FilterTypeEnum } from './data-table.props.type/columns'
 // components
-import { AnnounceText, Table } from './components'
+import {
+    AnnounceText,
+    BottomBar,
+    ColumnsResizer,
+    FilteredValuesList,
+    SelectedRowsToolbar,
+    Table,
+    Toolbar
+} from './components'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { SetResizableCallback } from './components/resize'
@@ -381,6 +389,15 @@ function _DataTable({
     const { tableHeightVal, responsiveClass } =
         getTableHeightAndResponsiveClasses(options, classes)
 
+    // ####### COMPONENT HANDLER ###########
+    const _SelectedRowsToolbar =
+        components.SelectedRowsToolbar ?? SelectedRowsToolbar
+    const _Toolbar = components.Toolbar ?? Toolbar
+    const _FilteredValuesList =
+        components.FilteredValuesList ?? FilteredValuesList
+    const _ColumnsResizer = components.ColumnsResizer ?? ColumnsResizer
+    const _BottomBar = components.BottomBar ?? BottomBar
+
     return (
         <Paper
             elevation={options?.elevation}
@@ -388,26 +405,21 @@ function _DataTable({
             className={paperClasses}
         >
             {isShowToolbarSelect && (
-                <components.SelectedRowsToolbar
-                    selectRowUpdate={selectRowUpdate}
-                />
+                <_SelectedRowsToolbar selectRowUpdate={selectRowUpdate} />
             )}
 
             {isShowToolbar && (
-                <components.Toolbar
-                    filterUpdate={filterUpdate}
-                    tableRef={tableRef}
-                />
+                <_Toolbar filterUpdate={filterUpdate} tableRef={tableRef} />
             )}
 
-            <components.FilteredValuesList filterUpdate={filterUpdate} />
+            <_FilteredValuesList filterUpdate={filterUpdate} />
 
             <div
                 style={{ position: 'relative', ...tableHeightVal }}
                 className={responsiveClass}
             >
                 {options.resizableColumns && (
-                    <components.ColumnsResizer
+                    <_ColumnsResizer
                         updateDividers={fn => (updateDividers.current = fn)}
                         setResizable={fn => (setHeadResizable.current = fn)}
                     />
@@ -423,7 +435,7 @@ function _DataTable({
                 </DndProvider>
             </div>
 
-            <components.BottomBar />
+            <_BottomBar />
 
             <AnnounceText />
         </Paper>

@@ -2,7 +2,12 @@
 import { tss } from 'tss-react/mui'
 import { useState, type RefObject } from 'react'
 // materials
-import { IconButton, Toolbar as VendorToolbar, Typography } from '@mui/material'
+import {
+    IconButton,
+    Toolbar as VendorToolbar,
+    Typography,
+    Tooltip
+} from '@mui/material'
 // globals
 import { TableAction } from '../data-table.props.type/options'
 import { useDataTableContext } from '../hooks'
@@ -14,6 +19,8 @@ import { ToolbarPrintButton } from './toolbar.print-button'
 import { ToolbarDownloadButton } from './toolbar.download-button'
 import { FilterUpdateType } from '../data-table'
 import { getDisplayData } from '../functions'
+import { ToolbarViewCol } from './toolbar.view-col'
+import { DataTableToolbarFilter } from './toolbar.filter'
 
 /**
  * DataTable Delight Toolbar
@@ -174,6 +181,11 @@ export function TableToolbar(props: ToolbarProps) {
 
     const [isDialogFilterOpen, setIsDialogFilterOpen] = useState(false)
 
+    const _Tooltip = components.Tooltip ?? Tooltip
+    const _ColumnVisibilityBox =
+        components.ColumnVisibilityBox ?? ToolbarViewCol
+    const _DataFilterBox = components.DataFilterBox ?? DataTableToolbarFilter
+
     return (
         <VendorToolbar className={classes.root} role="table toolbar">
             <div className={classes.left}>
@@ -207,7 +219,7 @@ export function TableToolbar(props: ToolbarProps) {
                     options.search === false ||
                     options.searchAlwaysOpen === true
                 ) && (
-                    <components.Tooltip
+                    <_Tooltip
                         title={toolbarTextLabels.search}
                         disableFocusListener
                     >
@@ -223,7 +235,7 @@ export function TableToolbar(props: ToolbarProps) {
                                 <icons.SearchIcon />
                             </IconButton>
                         </span>
-                    </components.Tooltip>
+                    </_Tooltip>
                 )}
 
                 {options.download && <ToolbarDownloadButton />}
@@ -246,7 +258,7 @@ export function TableToolbar(props: ToolbarProps) {
                         onPopoverExited={() => setActiveIcon(undefined)}
                         title={toolbarTextLabels.viewColumns}
                     >
-                        <components.ColumnVisibilityBox />
+                        <_ColumnVisibilityBox />
                     </ToolbarPopover>
                 )}
 
@@ -274,7 +286,7 @@ export function TableToolbar(props: ToolbarProps) {
                         }}
                         title={toolbarTextLabels.filterTable}
                     >
-                        <components.DataFilterBox
+                        <_DataFilterBox
                             customFooter={options.customFilterDialogFooter}
                             columns={state.columns}
                             filterList={state.filterList}

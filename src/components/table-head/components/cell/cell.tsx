@@ -7,7 +7,8 @@ import {
     ButtonProps,
     TableCell,
     TableSortLabel,
-    TableSortLabelProps
+    TableSortLabelProps,
+    Tooltip
 } from '@mui/material'
 import { Help as HelpIcon } from '@mui/icons-material'
 // locals
@@ -123,6 +124,8 @@ export function TableHeadCell({
         : // : (textLabels.body.columnHeaderTooltip?.(column) ??
           textLabels.body.toolTip
 
+    const _Tooltip = components.Tooltip ?? Tooltip
+
     return (
         <TableCell
             ref={(ref: HTMLTableCellElement) => {
@@ -141,7 +144,7 @@ export function TableHeadCell({
         >
             {options.sort && sort ? (
                 <span className={classes.contentWrapper}>
-                    <components.Tooltip
+                    <_Tooltip
                         title={tooltipTitle}
                         placement="bottom"
                         open={sortTooltipOpen}
@@ -185,10 +188,10 @@ export function TableHeadCell({
                                 </div>
                             </div>
                         </Button>
-                    </components.Tooltip>
+                    </_Tooltip>
 
                     {hint && (
-                        <components.Tooltip title={hint}>
+                        <_Tooltip title={hint}>
                             <HelpIcon
                                 className={
                                     !sortActive
@@ -197,7 +200,7 @@ export function TableHeadCell({
                                 }
                                 fontSize="small"
                             />
-                        </components.Tooltip>
+                        </_Tooltip>
                     )}
                 </span>
             ) : (
@@ -213,7 +216,7 @@ export function TableHeadCell({
                 >
                     {children}
                     {hint && (
-                        <components.Tooltip
+                        <_Tooltip
                             title={hint}
                             placement="bottom-end"
                             open={hintTooltipOpen}
@@ -229,7 +232,7 @@ export function TableHeadCell({
                                 className={classes.hintIconAlone}
                                 fontSize="small"
                             />
-                        </components.Tooltip>
+                        </_Tooltip>
                     )}
                 </div>
             )}

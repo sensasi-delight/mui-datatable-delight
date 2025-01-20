@@ -1,8 +1,9 @@
-import { CheckboxProps } from '@mui/material/Checkbox'
+import Checkbox, { CheckboxProps } from '@mui/material/Checkbox'
 import TableCell from '@mui/material/TableCell'
 import { tss } from 'tss-react/mui'
 import { DataTableOptions } from '../../data-table.props.type/options'
 import { useDataTableContext } from '../../hooks'
+import { ExpandButton } from './select-cell.expand-button'
 
 export function DataTableTableSelectCell({
     fixedHeader,
@@ -59,6 +60,8 @@ export function DataTableTableSelectCell({
         [classes.hide]: isHeaderCell && !expandableRowsHeader
     })
 
+    const _Checkbox = components.Checkbox ?? Checkbox
+
     const renderCheckBox = () => {
         if (
             isHeaderCell &&
@@ -68,7 +71,7 @@ export function DataTableTableSelectCell({
             return null
         }
         return (
-            <components.Checkbox
+            <_Checkbox
                 classes={{
                     root: classes.checkboxRoot,
                     checked: classes.checked,
@@ -141,6 +144,8 @@ export function DataTableTableSelectCell({
         )
     }
 
+    const _RowExpansionButton = components.RowExpansionButton ?? ExpandButton
+
     return (
         <TableCell
             className={cellClass}
@@ -154,7 +159,7 @@ export function DataTableTableSelectCell({
         >
             <div style={{ display: 'flex', alignItems: 'center' }}>
                 {expandableOn && (
-                    <components.RowExpansionButton
+                    <_RowExpansionButton
                         areAllRowsExpanded={areAllRowsExpanded}
                         buttonClass={buttonClass}
                         dataIndex={dataIndex}

@@ -2,7 +2,7 @@
 import type { MUIDataTableToolbarSelect } from 'mui-datatables'
 import { tss } from 'tss-react/mui'
 // materials
-import { IconButton, Typography } from '@mui/material'
+import { IconButton, Tooltip, Typography } from '@mui/material'
 import { Delete as DeleteIcon } from '@mui/icons-material'
 // locals
 import {
@@ -59,6 +59,8 @@ export function TableToolbarSelect({
         onAction?.(TableAction.ROW_DELETE, newState)
     }
 
+    const _Tooltip = components.Tooltip ?? Tooltip
+
     return (
         <div className={classes.root}>
             <div>
@@ -76,7 +78,7 @@ export function TableToolbarSelect({
             )}
 
             {!options.customToolbarSelect && (
-                <components.Tooltip title={selectedRowsTextLabels.delete}>
+                <_Tooltip title={selectedRowsTextLabels.delete}>
                     <IconButton
                         className={classes.iconButton}
                         onClick={() => onRowsDelete()}
@@ -84,7 +86,7 @@ export function TableToolbarSelect({
                     >
                         <DeleteIcon className={classes.deleteIcon} />
                     </IconButton>
-                </components.Tooltip>
+                </_Tooltip>
             )}
         </div>
     )
