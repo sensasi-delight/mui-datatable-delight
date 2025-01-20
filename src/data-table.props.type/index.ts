@@ -6,10 +6,25 @@ import type { PaperProps, SxProps } from '@mui/material'
 import type { DataTableColumnObject } from './columns'
 import { DataTableIcons } from './icons'
 
-export type DefaultDataItem = Object | (number | string | null)[]
-export type DataTableData = DefaultDataItem[]
+type DataType = number | string | null
 
-export interface DataTableProps<Item = DefaultDataItem> {
+export type DefaultRowDataType =
+    | {
+          [key: string]: DataType
+      }
+    | DataType[]
+
+/**
+ * @deprecated  WILL BE UNEXPORTED. USE `DefaultRowDataType` INSTEAD
+ */
+export type DefaultDataItem = DefaultRowDataType
+
+/**
+ * @deprecated  WILL BE UNEXPORTED
+ */
+export type DataTableData = DefaultRowDataType[]
+
+export interface DataTableProps<RowDataType = DefaultRowDataType> {
     /** Pass and use className to style MUIDataTable as desired */
     className?: string
 
@@ -29,7 +44,7 @@ export interface DataTableProps<Item = DefaultDataItem> {
      *  ];
      * ```
      */
-    data: Item[]
+    data: RowDataType[]
 
     icons?: Partial<DataTableIcons>
 
