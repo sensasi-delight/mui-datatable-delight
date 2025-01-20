@@ -27,7 +27,7 @@ export function CodeSnippet({
 
     return (
         <AlwaysDarkThemeProvider>
-            <Paper elevation={4} sx={{ position: 'relative' }}>
+            <Paper elevation={4} sx={{ position: 'relative', my: 3 }}>
                 <Box
                     component="pre"
                     sx={{
@@ -36,7 +36,8 @@ export function CodeSnippet({
                         fontSize: '0.95rem',
                         p: 2.5,
                         pt: 2,
-                        m: 0
+                        mt: 3,
+                        mb: 5
                     }}
                 >
                     <code

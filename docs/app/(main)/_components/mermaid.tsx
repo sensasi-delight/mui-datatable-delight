@@ -20,6 +20,7 @@ export function Mermaid({ children }: { children: string }) {
             ref={mermaidRef}
             sx={{
                 p: 4,
+                mt: 3,
                 mb: 4,
                 maxHeight: 500,
                 overflow: 'auto'

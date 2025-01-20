@@ -17,8 +17,8 @@ export function InlineCode({
             sx={[
                 {
                     borderRadius: 1,
-                    px: 0.5,
-                    py: 0.5,
+                    px: 0.4,
+                    py: 0,
                     bgcolor: !disableBg ? grey['200'] : undefined
                 },
                 theme =>
