@@ -19,6 +19,21 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
             )
         },
         code: ({ children }) => <InlineCode text={children} />,
+        h1: ({ children }) => (
+            <Typography variant="h3" component="h1">
+                {children}
+            </Typography>
+        ),
+        h2: ({ children }) => (
+            <Typography variant="h4" component="h2" pt={1}>
+                {children}
+            </Typography>
+        ),
+        h3: ({ children }) => (
+            <Typography variant="h5" component="h3" pt={1}>
+                {children}
+            </Typography>
+        ),
         blockquote: ({ children }) => (
             <Alert
                 component="blockquote"

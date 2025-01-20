@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { Box, Container, Grid2 } from '@mui/material'
+import { Box, Grid2 } from '@mui/material'
 import SideTopBar from './_components/side-top-bar'
 import { Breadcrumbs } from './_components/breadcrumbs'
 
@@ -16,6 +16,7 @@ export default function Layout({ children }: { children: ReactNode }) {
                 }}
             >
                 <Grid2
+                    paddingX={7}
                     size={{
                         xs: 12,
                         sm: 12,
@@ -24,11 +25,9 @@ export default function Layout({ children }: { children: ReactNode }) {
                         xl: 9
                     }}
                 >
-                    <Container>
-                        <Breadcrumbs />
+                    <Breadcrumbs />
 
-                        <Box component="main">{children}</Box>
-                    </Container>
+                    <Box component="main">{children}</Box>
                 </Grid2>
 
                 <Grid2
@@ -41,13 +40,11 @@ export default function Layout({ children }: { children: ReactNode }) {
                     }}
                     sx={{
                         display: {
-                            sm: 'none',
-                            md: 'block'
+                            md: 'none',
+                            lg: 'block'
                         }
                     }}
-                >
-                    <Container></Container>
-                </Grid2>
+                ></Grid2>
             </Grid2>
         </Box>
     )
