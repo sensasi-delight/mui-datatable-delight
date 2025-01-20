@@ -11,7 +11,7 @@
     "scripts": {
         "build": "rollup -c && npm run build:types",
         "build:docs": "next build docs",
-        "build:types": "tsc ./src/index.ts --declaration --emitDeclarationOnly --outDir ./dist/types",
+        "build:types": "tsc ./src/index.ts --allowUnreachableCode --noCheck --declaration --emitDeclarationOnly --outDir ./dist/types",
         "dev": "next docs",
         "lint": "eslint src",
         "prepublishOnly": "npm run build",
