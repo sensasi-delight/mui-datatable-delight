@@ -1,23 +1,17 @@
 {
     "name": "mui-datatable-delight",
-    "version": "0.0.0-experimental.21",
+    "version": "0.0.0-experimental.23",
     "description": "A responsive DataTable component built with MUI for React-based project.",
     "files": [
-        "dist"
+        "./dist"
     ],
-    "types": "./dist/cjs/index.d.ts",
+    "types": "./dist/types/index.d.ts",
     "main": "./dist/cjs/src/index.js",
     "module": "./dist/esm/src/index.js",
-    "exports": {
-        ".": {
-            "types": "./dist/cjs/index.d.ts",
-            "module": "./dist/esm/src/index.js",
-            "default": "./dist/cjs/src/index.js"
-        }
-    },
     "scripts": {
-        "build": "rollup -c",
+        "build": "rollup -c && npm run build:types",
         "build:docs": "next build docs",
+        "build:types": "tsc ./src/index.ts --declaration --emitDeclarationOnly --outDir ./dist/types",
         "dev": "next docs",
         "lint": "eslint src",
         "prepublishOnly": "npm run build",
