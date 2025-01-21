@@ -48,7 +48,8 @@ const PLUGINS = [
         outputToFilesystem: true,
 
         compilerOptions: {
-            allowImportingTsExtensions: false
+            composite: false,
+            declarationMap: false
         }
     })
 ]
