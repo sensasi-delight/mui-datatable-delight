@@ -1,5 +1,7 @@
+import babel from '@rollup/plugin-babel'
 import commonjs from '@rollup/plugin-commonjs'
 import del from 'rollup-plugin-delete'
+import dts from 'rollup-plugin-dts'
 import nodeResolve from '@rollup/plugin-node-resolve'
 import preserveDirectives from 'rollup-preserve-directives'
 import terser from '@rollup/plugin-terser'
@@ -22,6 +24,12 @@ const PLUGINS = [
     /** To preserve `use client` directive */
     preserveDirectives(),
 
+    babel({
+        babelHelpers: 'bundled',
+        exclude: /node_modules/,
+        presets: ['@babel/preset-react', '@babel/preset-typescript']
+    }),
+
     /** To build from tsx files */
     typescript({
         compilerOptions: {
@@ -31,34 +39,51 @@ const PLUGINS = [
 ]
 
 /** @type {import('rollup').RollupOptions[]} */
-export default {
-    /**
-     * @todo REMOVE THIS TO DECREASE BUNDLE SIZE
-     * @todo ALSO DO NOT FORGET TO REMOVE `redux` THAT ONLY REQUIRED BY `react-dnd`
-     * @todo ALSO DO NOT FORGET TO REMOVE `src/` IN `main` AND `module` IN PACKAGE JSON
-     */
-    external: id => {
-        if (id.includes('dnd-core') || id.includes('react-dnd')) {
-            return false
-        }
+export default [
+    {
+        /**
+         * @todo REMOVE THIS TO DECREASE BUNDLE SIZE
+         * @todo ALSO DO NOT FORGET TO REMOVE `redux` THAT ONLY REQUIRED BY `react-dnd`
+         * @todo ALSO DO NOT FORGET TO REMOVE `src/` IN `main` AND `module` IN PACKAGE JSON
+         */
+        external: id => {
+            if (id.includes('dnd-core') || id.includes('react-dnd')) {
+                return false
+            }
 
-        return /node_modules/.test(id)
-    },
-    input: 'src/index.ts',
-    output: [
-        {
-            dir: 'dist/cjs',
-            format: 'cjs',
-            exports: 'named',
-            preserveModules: true,
-            sourcemap: true
+            return /node_modules/.test(id)
         },
-        {
-            dir: 'dist/esm',
-            format: 'es',
-            preserveModules: true,
-            sourcemap: true
-        }
-    ],
-    plugins: PLUGINS
-}
+        input: 'src/index.ts',
+        output: [
+            {
+                dir: 'dist/cjs',
+                format: 'cjs',
+                exports: 'named',
+                preserveModules: true,
+                sourcemap: true
+            },
+            {
+                dir: 'dist/esm',
+                format: 'es',
+                preserveModules: true,
+                sourcemap: true
+            }
+        ],
+        plugins: PLUGINS
+    },
+    {
+        // Type Definitions
+        input: 'src/index.ts',
+        output: {
+            file: 'dist/types/index.d.ts',
+            format: 'es'
+        },
+        plugins: [
+            dts({
+                compilerOptions: {
+                    noCheck: true // REMOVE THIS WHEN THIS PROJECT IS FULLY TYPE SAFE
+                }
+            })
+        ]
+    }
+]

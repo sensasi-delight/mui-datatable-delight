@@ -1,6 +1,6 @@
 {
     "name": "mui-datatable-delight",
-    "version": "0.0.0-experimental.24",
+    "version": "0.0.0-experimental.25",
     "description": "A responsive DataTable component built with MUI for React-based project.",
     "files": [
         "./dist"
@@ -9,9 +9,8 @@
     "main": "./dist/cjs/src/index.js",
     "module": "./dist/esm/src/index.js",
     "scripts": {
-        "build": "rollup -c && npm run build:types",
+        "build": "rollup -c",
         "build:docs": "next build docs",
-        "build:types": "tsc --project tsconfig.types-build.json",
         "dev": "next docs",
         "lint": "eslint src",
         "prepublishOnly": "npm run build",
@@ -47,6 +46,7 @@
         "@mui/material": "^6.4.0",
         "@mui/material-nextjs": "^6.3.0",
         "@next/mdx": "^15.1.3",
+        "@rollup/plugin-babel": "^6.0.4",
         "@rollup/plugin-commonjs": "^28.0.2",
         "@rollup/plugin-node-resolve": "^16.0.0",
         "@rollup/plugin-terser": "^0.4.4",
@@ -82,6 +82,7 @@
         "react-waypoint": "^10.1.0",
         "rollup": "^4.29.1",
         "rollup-plugin-delete": "^2.1.0",
+        "rollup-plugin-dts": "^6.1.1",
         "rollup-pluginutils": "^2.8.2",
         "rollup-preserve-directives": "^1.1.3",
         "typescript": "^5.7.2",
