@@ -14,13 +14,13 @@ import type { DataTableOptions, DataTableProps } from '..'
 import { processTextLabels } from './use-main-context.process-text-labels'
 // defaults
 import { DEFAULT_ICONS } from './use-main-context.default-icons'
-import { DEFAULT_COMPONENTS } from './use-main-context.default-components'
 import { DataTableState } from '../data-table.props.type/state'
 import { TableAction } from '../data-table.props.type/options'
 import { getNewStateOnDataChange, load, save, warnInfo } from '../functions'
 import { DEFAULT_OPTIONS } from './use-main-context.default-options'
 import { handleDeprecatedOptions } from './use-main-context.handle-deprecated-options'
 import { DefaultDataItem } from '../data-table.props.type'
+import { DataTableComponents } from '../data-table.props.type/components'
 
 type ContextDatatableProps = Omit<DataTableProps, 'className'>
 
@@ -84,10 +84,7 @@ export function MainContextProvider({
     return (
         <MainContext.Provider
             value={{
-                components: {
-                    ...datatableProps.components,
-                    ...DEFAULT_COMPONENTS
-                },
+                components: datatableProps.components ?? {},
                 icons: {
                     ...DEFAULT_ICONS,
                     ...datatableProps.icons
@@ -140,7 +137,7 @@ export const DEFAULT_STATE: DataTableState = {
  * @deprecated WILL UNEXPORT, use `useMainContext` instead.
  */
 export const MainContext = createContext<ContextValueType>({
-    components: DEFAULT_COMPONENTS,
+    components: {},
     icons: DEFAULT_ICONS,
     options: DEFAULT_OPTIONS,
     state: DEFAULT_STATE,
@@ -148,7 +145,7 @@ export const MainContext = createContext<ContextValueType>({
 })
 
 interface ContextValueType {
-    components: typeof DEFAULT_COMPONENTS
+    components: DataTableComponents
     icons: typeof DEFAULT_ICONS
     /**
      * @deprecated  WILL CHANGE THIS TO `onAction`

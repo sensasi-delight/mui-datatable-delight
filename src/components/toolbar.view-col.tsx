@@ -1,5 +1,6 @@
 // vendors
 import {
+    Checkbox,
     FormControl,
     FormControlLabel,
     FormGroup,
@@ -35,6 +36,8 @@ export function ToolbarViewCol({}: ToolbarViewColProps) {
         )
     }
 
+    const _Checkbox = components.Checkbox ?? Checkbox
+
     return (
         <FormControl
             component="fieldset"
@@ -59,7 +62,7 @@ export function ToolbarViewCol({}: ToolbarViewColProps) {
                                 label: classes.label
                             }}
                             control={
-                                <components.Checkbox
+                                <_Checkbox
                                     color="primary"
                                     data-description="table-view-col"
                                     className={classes.checkbox}

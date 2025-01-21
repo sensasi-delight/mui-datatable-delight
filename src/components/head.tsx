@@ -1,8 +1,8 @@
 import { tss } from 'tss-react/mui'
-import MuiTableHead from '@mui/material/TableHead'
+import { TableHead as MuiTableHead } from '@mui/material'
 import { RefObject } from 'react'
 import { TableHeadCell } from './table-head/components'
-import TableHeadRow from './head.row'
+import { TableHeadRow } from './head.row'
 import { DataTableTableSelectCell } from './components.shared/select-cell'
 import { useDataTableContext } from '../hooks'
 import { DataTableState } from '../data-table.props.type/state'
@@ -13,7 +13,7 @@ import {
 } from '../data-table.props.type/options'
 import { getDisplayData, sortTable } from '../functions'
 
-export default function TableHead({
+export function TableHead({
     columnOrder = null,
     columns,
     count,
@@ -220,7 +220,7 @@ export default function TableHead({
                 />
 
                 {orderedColumns.map(
-                    ({ column, index, colPos }) =>
+                    ({ column = {}, index, colPos }) =>
                         column.display === 'true' &&
                         (column.customHeadRender ? (
                             column.customHeadRender(
@@ -246,7 +246,7 @@ export default function TableHead({
                                 sortDirection={
                                     column.name === sortOrder.name
                                         ? sortOrder.direction
-                                        : 'none'
+                                        : undefined
                                 }
                                 toggleSort={handleToggleColumn}
                                 hint={column.hint}

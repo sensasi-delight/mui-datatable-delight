@@ -1,5 +1,6 @@
 // materials
 import {
+    Checkbox,
     FormControl,
     FormControlLabel,
     FormGroup,
@@ -187,6 +188,8 @@ function DataTableToolbarFilterCheckbox({
     const { classes } = useStyles()
     const renderItem = column?.filterOptions?.renderValue ?? (v => v)
 
+    const _Checkbox = components.Checkbox ?? Checkbox
+
     return (
         <Grid item xs={6}>
             <FormGroup>
@@ -208,7 +211,7 @@ function DataTableToolbarFilterCheckbox({
                                     label: classes.checkboxFormControlLabel
                                 }}
                                 control={
-                                    <components.Checkbox
+                                    <_Checkbox
                                         data-description="table-filter"
                                         color="primary"
                                         className={classes.checkboxIcon}
@@ -261,6 +264,8 @@ function DataTableToolbarFilterMultiselect({
 
     const width = column.filterOptions?.fullWidth ? 12 : 6
 
+    const _Checkbox = components.Checkbox ?? Checkbox
+
     return (
         <Grid
             item
@@ -287,7 +292,7 @@ function DataTableToolbarFilterMultiselect({
                 >
                     {filterData[index].map((filterValue, filterIndex) => (
                         <MenuItem value={filterValue} key={filterIndex + 1}>
-                            <components.Checkbox
+                            <_Checkbox
                                 data-description="table-filter"
                                 color="primary"
                                 checked={

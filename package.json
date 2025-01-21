@@ -1,23 +1,17 @@
 {
     "name": "mui-datatable-delight",
-    "version": "0.0.0-experimental.20",
+    "version": "0.0.0-experimental.24",
     "description": "A responsive DataTable component built with MUI for React-based project.",
     "files": [
-        "dist"
+        "./dist"
     ],
-    "types": "./dist/cjs/index.d.ts",
-    "main": "./dist/cjs/index.js",
-    "module": "./dist/esm/index.js",
-    "exports": {
-        ".": {
-            "types": "./dist/cjs/index.d.ts",
-            "module": "./dist/esm/index.js",
-            "default": "./dist/cjs/index.js"
-        }
-    },
+    "types": "./dist/types/index.d.ts",
+    "main": "./dist/cjs/src/index.js",
+    "module": "./dist/esm/src/index.js",
     "scripts": {
-        "build": "rollup -c",
+        "build": "rollup -c && npm run build:types",
         "build:docs": "next build docs",
+        "build:types": "tsc --project tsconfig.types-build.json",
         "dev": "next docs",
         "lint": "eslint src",
         "prepublishOnly": "npm run build",
@@ -80,6 +74,8 @@
         "prettier": "^3.4.2",
         "prismjs": "^1.29.0",
         "react": "^18.3.1",
+        "react-dnd": "^16.0.1",
+        "react-dnd-html5-backend": "^16.0.1",
         "react-dnd-test-backend": "^16.0.1",
         "react-dnd-test-utils": "^16.0.1",
         "react-dom": "^18.3.1",
@@ -95,12 +91,12 @@
     },
     "dependencies": {
         "@emotion/react": "^11.4.1",
+        "@emotion/styled": "^11.4.1",
         "@mui/icons-material": "^5.9.3 || ^6.0.0",
         "@mui/material": "^5.9.3 || ^6.0.0",
         "react": "^17.0.2 || ^18.0.0 || ^19.0.0",
-        "react-dnd": "^16.0.1",
-        "react-dnd-html5-backend": "^16.0.1",
         "react-to-print": "^3.0.4",
+        "redux": "^4.2.0",
         "tss-react": "^4.9.14"
     }
 }

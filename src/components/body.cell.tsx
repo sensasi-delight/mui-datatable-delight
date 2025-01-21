@@ -1,11 +1,11 @@
 import { useCallback } from 'react'
-import TableCell, { type TableCellProps } from '@mui/material/TableCell'
+import { TableCell, type TableCellProps } from '@mui/material'
 import { tss } from 'tss-react/mui'
 import { MUIDataTableBodyCell } from 'mui-datatables'
 import { DataTableState } from '../data-table.props.type/state'
 import { useDataTableContext } from '../hooks'
 
-export default function TableBodyCell({
+export function TableBodyCell({
     children,
     colIndex,
     columnHeader,

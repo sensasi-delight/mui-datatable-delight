@@ -14,7 +14,7 @@ import { DataTableState } from '../data-table.props.type/state'
  * @todo  FIX FONT SIZES ARE DIFFERENT IN SUB-COMPONENTS
  * @todo  RENAME COMPONENT TO `<BottomToolbar />`
  */
-export default function TableFooter({}: TableFooterProps) {
+export function TableFooter({}: TableFooterProps) {
     const { options, state, textLabels, onAction } = useDataTableContext()
     const { classes, cx } = useStyles()
     const { customFooter, pagination = true, jumpToPage } = options

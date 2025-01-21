@@ -1,12 +1,14 @@
 import type { MUIDataTableExpandButton } from 'mui-datatables'
-import IconButton from '@mui/material/IconButton'
-import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight'
-import RemoveIcon from '@mui/icons-material/Remove'
+import { IconButton } from '@mui/material'
+import {
+    KeyboardArrowRight as KeyboardArrowRightIcon,
+    Remove as RemoveIcon
+} from '@mui/icons-material'
 
 /**
  * @todo  IMPROVE PROP TYPES
  */
-export default function ExpandButton({
+export function ExpandButton({
     areAllRowsExpanded,
     buttonClass,
     expandableRowsHeader,
