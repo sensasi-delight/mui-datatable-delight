@@ -1,5 +1,5 @@
 import { tss } from 'tss-react/mui'
-import { TableHead as MuiTableHead } from '@mui/material'
+import MuiTableHead from '@mui/material/TableHead'
 import { TableHeadCell } from './table-head/components'
 import { TableHeadRow } from './head.row'
 import { DataTableTableSelectCell } from './components.shared/select-cell'

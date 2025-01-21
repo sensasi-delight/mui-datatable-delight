@@ -1,5 +1,5 @@
 import { tss } from 'tss-react/mui'
-import { Chip } from '@mui/material'
+import Chip from '@mui/material/Chip'
 // local types
 import type { DataTableState } from '../data-table.props.type/state'
 import { useDataTableContext } from '../hooks'

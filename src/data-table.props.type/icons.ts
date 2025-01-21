@@ -1,4 +1,6 @@
-import { SvgIconComponent } from '@mui/icons-material'
+import SvgIcon from '@mui/material/SvgIcon'
+
+type SvgIconComponent = typeof SvgIcon
 
 export interface DataTableIcons {
     SearchIcon: SvgIconComponent

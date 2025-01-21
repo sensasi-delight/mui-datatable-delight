@@ -2,8 +2,11 @@
 import { tss } from 'tss-react/mui'
 import { useEffect, useState } from 'react'
 // materials
-import { Grow, IconButton, TextField, TextFieldProps } from '@mui/material'
-import { Clear, Search } from '@mui/icons-material'
+import Grow from '@mui/material/Grow'
+import IconButton from '@mui/material/IconButton'
+import TextField, { type TextFieldProps } from '@mui/material/TextField'
+import Clear from '@mui/icons-material/Clear'
+import Search from '@mui/icons-material/Search'
 // locals
 import { useDataTableContext } from '../hooks'
 import { ClassName } from '../enums/class-name'

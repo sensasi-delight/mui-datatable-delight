@@ -1,11 +1,10 @@
 // vendors
 import { tss } from 'tss-react/mui'
-import {
-    TablePagination as MuiTablePagination,
-    type TablePaginationProps as MuiTablePaginationProps
-} from '@mui/material'
-// locals
 import type { DataTableFooterPaginationProps } from './footer.pagination.props.type'
+import TablePagination, {
+    type TablePaginationProps
+} from '@mui/material/TablePagination'
+// locals
 // functions
 import { getPageValue } from '../functions.shared/get-page-value'
 import { useDataTableContext } from '../hooks'
@@ -21,13 +20,13 @@ export function DataTableFooterPagination({
     const { options, textLabels } = useDataTableContext()
     const { classes, cx } = useStyles()
 
-    const handleRowChange: MuiTablePaginationProps['onRowsPerPageChange'] = ({
+    const handleRowChange: TablePaginationProps['onRowsPerPageChange'] = ({
         target: { value }
     }) => {
         changeRowsPerPage(parseInt(value))
     }
 
-    const handlePageChange: MuiTablePaginationProps['onPageChange'] = (
+    const handlePageChange: TablePaginationProps['onPageChange'] = (
         _,
         page
     ) => {
@@ -44,7 +43,7 @@ export function DataTableFooterPagination({
 
     return (
         <div className={cx(ClassName.FOOTER__PAGINATION, classes.root)}>
-            <MuiTablePagination
+            <TablePagination
                 component="div"
                 count={count}
                 labelDisplayedRows={({ from, to, count }) =>

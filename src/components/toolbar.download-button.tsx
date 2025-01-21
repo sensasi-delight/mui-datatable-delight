@@ -1,5 +1,6 @@
 // materials
-import { IconButton, Tooltip } from '@mui/material'
+import IconButton from '@mui/material/IconButton'
+import Tooltip from '@mui/material/Tooltip'
 // locals
 import type { DataTableOptions } from '../data-table.props.type/options'
 import type { DataTableState } from '../data-table.props.type/state'

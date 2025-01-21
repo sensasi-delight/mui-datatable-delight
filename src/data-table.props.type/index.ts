@@ -1,10 +1,13 @@
+// vendors
 import type { MUIDataTableTextLabels } from 'mui-datatables'
 import type { ReactNode } from 'react'
+import type { PaperProps } from '@mui/material/Paper'
+import type { SxProps } from '@mui/system/styleFunctionSx'
+//
 import type { DataTableOptions } from './options'
 import type { DataTableComponents } from './components'
-import type { PaperProps, SxProps } from '@mui/material'
 import type { DataTableColumnObject } from './columns'
-import { DataTableIcons } from './icons'
+import type { DataTableIcons } from './icons'
 
 type DataType = number | string | null
 

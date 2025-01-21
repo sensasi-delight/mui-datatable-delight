@@ -1,13 +1,9 @@
 import { ReactNode, useEffect, useRef, useState } from 'react'
 // materials
-import {
-    IconButton,
-    IconButtonProps,
-    Popover as MuiPopover,
-    PopoverProps,
-    Tooltip as VendorTooltip
-} from '@mui/material'
-import { Close as CloseIcon } from '@mui/icons-material'
+import IconButton, { type IconButtonProps } from '@mui/material/IconButton'
+import MuiPopover, { type PopoverProps } from '@mui/material/Popover'
+import VendorTooltip from '@mui/material/Tooltip'
+import CloseIcon from '@mui/icons-material/Close'
 import type { TransitionProps } from '@mui/material/transitions'
 
 export function ToolbarPopover({

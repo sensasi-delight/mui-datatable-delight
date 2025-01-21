@@ -1,20 +1,16 @@
 // materials
-import {
-    Checkbox,
-    FormControl,
-    FormControlLabel,
-    FormGroup,
-    Grid,
-    Input,
-    InputLabel,
-    ListItemText,
-    MenuItem,
-    Select,
-    SelectProps,
-    TextField,
-    TextFieldProps,
-    Typography
-} from '@mui/material'
+import Checkbox from '@mui/material/Checkbox'
+import FormControl from '@mui/material/FormControl'
+import FormControlLabel from '@mui/material/FormControlLabel'
+import FormGroup from '@mui/material/FormGroup'
+import Grid from '@mui/material/Grid'
+import Input from '@mui/material/Input'
+import InputLabel from '@mui/material/InputLabel'
+import ListItemText from '@mui/material/ListItemText'
+import MenuItem from '@mui/material/MenuItem'
+import Select, { type SelectProps } from '@mui/material/Select'
+import TextField, { type TextFieldProps } from '@mui/material/TextField'
+import Typography from '@mui/material/Typography'
 // vendors
 import { tss } from 'tss-react/mui'
 // locals

@@ -1,5 +1,6 @@
 // materials
-import { Checkbox as MuiCheckbox, Tooltip as MuiTooltip } from '@mui/material'
+import Checkbox from '@mui/material/Checkbox'
+import Tooltip from '@mui/material/Tooltip'
 // locals
 import {
     BottomBar,
@@ -16,7 +17,7 @@ import {
 
 export interface DataTableComponents {
     BottomBar?: typeof BottomBar
-    Checkbox?: typeof MuiCheckbox
+    Checkbox?: typeof Checkbox
     ColumnsResizer?: typeof ColumnsResizer
     ColumnVisibilityBox?: typeof ColumnVisibilityBox
     DataFilterBox?: typeof DataFilterBox
@@ -26,5 +27,5 @@ export interface DataTableComponents {
     TableBody?: typeof TableBody
     TableHead?: typeof TableHead
     Toolbar?: typeof Toolbar
-    Tooltip?: typeof MuiTooltip
+    Tooltip?: typeof Tooltip
 }

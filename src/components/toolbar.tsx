@@ -2,12 +2,10 @@
 import { tss } from 'tss-react/mui'
 import { useState, type RefObject } from 'react'
 // materials
-import {
-    IconButton,
-    Toolbar as VendorToolbar,
-    Typography,
-    Tooltip
-} from '@mui/material'
+import IconButton from '@mui/material/IconButton'
+import VendorToolbar from '@mui/material/Toolbar'
+import Typography from '@mui/material/Typography'
+import Tooltip from '@mui/material/Tooltip'
 // globals
 import { TableAction } from '../data-table.props.type/options'
 import { useDataTableContext } from '../hooks'

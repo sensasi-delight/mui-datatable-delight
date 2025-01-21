@@ -2,8 +2,9 @@
 import { tss } from 'tss-react/mui'
 import React from 'react'
 // materials
-import type { TableRowProps } from '@mui/material'
-import { Typography, TableBody as MuiTableBody } from '@mui/material'
+import type { TableRowProps } from '@mui/material/TableRow'
+import MuiTableBody from '@mui/material/TableBody'
+import Typography from '@mui/material/Typography'
 // locals
 import { TableBodyCell } from './body.cell'
 import { DataTableBodyRow } from './body.row'

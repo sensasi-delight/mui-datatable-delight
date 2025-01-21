@@ -2,17 +2,15 @@
 import { useDrag } from 'react-dnd'
 import { useState } from 'react'
 // materials
-import {
-    Button,
-    ButtonProps,
-    TableCell,
-    TableSortLabel,
-    TableSortLabelProps,
-    Tooltip
-} from '@mui/material'
-import { Help as HelpIcon } from '@mui/icons-material'
+import Button, { type ButtonProps } from '@mui/material/Button'
+import TableCell from '@mui/material/TableCell'
+import TableSortLabel, {
+    type TableSortLabelProps
+} from '@mui/material/TableSortLabel'
+import Tooltip from '@mui/material/Tooltip'
+import HelpIcon from '@mui/icons-material/Help'
 // locals
-import type { Props } from './types/props'
+import type Props from './types/props'
 import { useDataTableContext } from '../../../../hooks'
 import { useColumnDrop } from './hooks'
 import { tss } from 'tss-react/mui'

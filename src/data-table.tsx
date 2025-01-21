@@ -6,7 +6,7 @@ import type { DataTableProps } from './data-table.props.type'
 import { tss } from 'tss-react/mui'
 import { ClassName } from './enums'
 import { useEffect, useRef } from 'react'
-import { Paper, PaperProps } from '@mui/material'
+import Paper, { type PaperProps } from '@mui/material/Paper'
 // locals
 import {
     buildMap,

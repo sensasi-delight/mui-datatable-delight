@@ -1,5 +1,5 @@
 // materials
-import { Table as MuiTable } from '@mui/material'
+import MuiTable from '@mui/material/Table'
 import { useDataTableContext } from '../../hooks'
 import { tss } from 'tss-react/mui'
 // globals

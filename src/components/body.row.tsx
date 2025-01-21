@@ -1,4 +1,4 @@
-import { TableRow, type TableRowProps } from '@mui/material'
+import TableRow, { type TableRowProps } from '@mui/material/TableRow'
 import { tss } from 'tss-react/mui'
 import { useDataTableContext } from '../hooks'
 

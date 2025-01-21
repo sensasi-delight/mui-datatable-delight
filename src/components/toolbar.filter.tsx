@@ -1,9 +1,10 @@
 // materials
-import { Button, Typography } from '@mui/material'
+import Button from '@mui/material/Button'
+import Typography from '@mui/material/Typography'
 import { tss } from 'tss-react/mui'
 import { ReactNode, useState } from 'react'
 // locals
-import { type DataTableState } from '../data-table.props.type/state'
+import type { DataTableState } from '../data-table.props.type/state'
 import { DataTableToolbarFilterRenderFilters } from './toolbar.filter.render-filters'
 import { useDataTableContext } from '../hooks'
 import { FilterTypeEnum } from '../data-table.props.type/columns'

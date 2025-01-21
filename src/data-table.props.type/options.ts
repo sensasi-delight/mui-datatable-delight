@@ -1,4 +1,6 @@
-import type { TableProps, TableRowProps, TextFieldProps } from '@mui/material'
+import type { TableProps } from '@mui/material/Table'
+import type { TableRowProps } from '@mui/material/TableRow'
+import type { TextFieldProps } from '@mui/material/TextField'
 import type {
     DisplayData,
     MUIDataTableChip,

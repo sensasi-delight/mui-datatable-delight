@@ -2,8 +2,10 @@
 import type { MUIDataTableToolbarSelect } from 'mui-datatables'
 import { tss } from 'tss-react/mui'
 // materials
-import { IconButton, Tooltip, Typography } from '@mui/material'
-import { Delete as DeleteIcon } from '@mui/icons-material'
+import IconButton from '@mui/material/IconButton'
+import Tooltip from '@mui/material/Tooltip'
+import Typography from '@mui/material/Typography'
+import DeleteIcon from '@mui/icons-material/Delete'
 // locals
 import {
     TableAction,

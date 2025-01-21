@@ -1,8 +1,9 @@
-import { TableCellProps, TableSortLabelProps } from '@mui/material'
+import type { TableCellProps } from '@mui/material/TableCell'
+import type { TableSortLabelProps } from '@mui/material/TableSortLabel'
 import type { ReactNode, RefObject } from 'react'
-import { DataTableState } from '../../../../../data-table.props.type/state'
+import type { DataTableState } from '../../../../../data-table.props.type/state'
 
-export interface Props {
+export default interface Props {
     /** Current sort direction */
     sortDirection?: TableSortLabelProps['direction']
 
