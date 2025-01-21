@@ -11,6 +11,9 @@ export type {
 } from './data-table.props.type/options'
 
 export { DataTable as default } from './data-table'
-export { useDataTableContext, DataTableContextProvider } from './hooks'
+export {
+    default as useDataTableContext,
+    DataTableContextProvider
+} from './hooks/use-data-table-context'
 
 export * from './components'

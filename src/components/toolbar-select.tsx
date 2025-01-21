@@ -13,7 +13,7 @@ import {
     TableAction,
     type DataTableOptions
 } from '../data-table.props.type/options'
-import { useDataTableContext } from '../hooks'
+import useDataTableContext from '../hooks/use-data-table-context'
 import { ClassName } from '../enums/class-name'
 import { buildMap, getNewStateOnDataChange } from '../functions'
 

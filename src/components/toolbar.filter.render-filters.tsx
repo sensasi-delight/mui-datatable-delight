@@ -18,7 +18,7 @@ import { tss } from 'tss-react/mui'
 // locals
 import type { DataTableToolbarFilterProps } from './toolbar.filter'
 import { type DataTableState } from '../data-table.props.type/state'
-import { useDataTableContext } from '../hooks'
+import useDataTableContext from '../hooks/use-data-table-context'
 import { FilterTypeEnum } from '../data-table.props.type/columns'
 
 export function DataTableToolbarFilterRenderFilters({

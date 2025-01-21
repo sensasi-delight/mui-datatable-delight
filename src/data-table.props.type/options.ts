@@ -12,7 +12,7 @@ import type { ReactNode } from 'react'
 import type { DataTableState } from './state'
 import type { DataTableColumnObjectOptions, FilterTypeEnum } from './columns'
 import type { FilterTypeType } from './shared/filter-type-type'
-import { DEFAULT_TEXT_LABELS } from '../hooks/use-main-context.process-text-labels.default-text-labels'
+import { DEFAULT_TEXT_LABELS } from '../hooks/use-data-table-context/function/statics/default-text-labels'
 
 export interface DataTableSortOrderOption {
     name: string

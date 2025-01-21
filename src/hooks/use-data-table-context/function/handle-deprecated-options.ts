@@ -1,6 +1,6 @@
-import { DataTableProps } from '../data-table.props.type'
-import { DataTableOptions, STP } from '../data-table.props.type/options'
-import { warnDeprecated, warnInfo } from '../functions'
+import type { DataTableProps } from '../../../data-table.props.type'
+import { type DataTableOptions, STP } from '../../../data-table.props.type/options'
+import { warnDeprecated, warnInfo } from '../../../functions'
 
 export function handleDeprecatedOptions(
     props: DataTableProps,

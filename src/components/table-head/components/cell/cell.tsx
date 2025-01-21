@@ -13,7 +13,7 @@ import Tooltip from '@mui/material/Tooltip'
 import HelpIcon from '@mui/icons-material/Help'
 // locals
 import type Props from './types/props'
-import { useDataTableContext } from '../../../../hooks'
+import useDataTableContext from '../../../../hooks/use-data-table-context'
 import { useColumnDrop } from './hooks'
 import { tss } from 'tss-react/mui'
 

@@ -7,7 +7,7 @@ import {
     DataTableOptions,
     TableAction
 } from '../../data-table.props.type/options'
-import { useDataTableContext } from '../../hooks'
+import useDataTableContext from '../../hooks/use-data-table-context'
 import { ExpandButton } from './select-cell.expand-button'
 import { buildMap } from '../../functions'
 

@@ -1,5 +1,5 @@
-import { DataTableProps } from '..'
-import { DEFAULT_TEXT_LABELS } from './use-main-context.process-text-labels.default-text-labels'
+import { type DataTableProps } from '../../..'
+import { DEFAULT_TEXT_LABELS } from './statics/default-text-labels'
 
 /**
  * ⚠️ THIS FUNCTION SHOULD NOT BE USED OUTSIDE THE `use-main-context.tsx` ⚠️

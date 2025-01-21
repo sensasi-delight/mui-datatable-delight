@@ -9,7 +9,7 @@ import TablePagination, {
 // locals
 // functions
 import { getPageValue } from '../functions.shared/get-page-value'
-import { useDataTableContext } from '../hooks'
+import useDataTableContext from '../hooks/use-data-table-context'
 import { ClassName } from '../enums/class-name'
 
 export function DataTableFooterPagination({

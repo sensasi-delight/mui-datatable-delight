@@ -5,7 +5,7 @@ import MuiTableHead from '@mui/material/TableHead'
 import { TableHeadCell } from './table-head/components'
 import { TableHeadRow } from './head.row'
 import { DataTableTableSelectCell } from './components.shared/select-cell'
-import { useDataTableContext } from '../hooks'
+import useDataTableContext from '../hooks/use-data-table-context'
 import { DataTableState } from '../data-table.props.type/state'
 import {
     DataTableOptions,

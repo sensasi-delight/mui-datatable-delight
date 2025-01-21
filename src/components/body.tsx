@@ -19,7 +19,7 @@ import {
     SomeRowsIDK,
     TableAction
 } from '../data-table.props.type/options'
-import { useDataTableContext } from '../hooks'
+import useDataTableContext from '../hooks/use-data-table-context'
 import { buildMap } from '../functions'
 
 export function DataTableBody(props: DataTableBodyProps) {

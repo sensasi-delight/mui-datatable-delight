@@ -3,26 +3,26 @@
 // vendors
 import {
     createContext,
-    Dispatch,
-    ReactNode,
-    SetStateAction,
+    type Dispatch,
+    type ReactNode,
+    type SetStateAction,
     useContext,
     useEffect,
     useState
 } from 'react'
 // local types
-import type { DataTableOptions, DataTableProps } from '..'
+import type { DataTableOptions, DataTableProps } from '../..'
 // functions
-import { processTextLabels } from './use-main-context.process-text-labels'
+import { processTextLabels } from './function/process-text-labels'
 // defaults
-import { DEFAULT_ICONS } from './use-main-context.default-icons'
-import { DataTableState } from '../data-table.props.type/state'
-import { TableAction } from '../data-table.props.type/options'
-import { getNewStateOnDataChange, load, save, warnInfo } from '../functions'
-import { DEFAULT_OPTIONS } from './use-main-context.default-options'
-import { handleDeprecatedOptions } from './use-main-context.handle-deprecated-options'
-import { DefaultDataItem } from '../data-table.props.type'
-import { DataTableComponents } from '../data-table.props.type/components'
+import { DEFAULT_ICONS } from './statics/default-icons'
+import type { DataTableState } from '../../data-table.props.type/state'
+import { TableAction } from '../../data-table.props.type/options'
+import { getNewStateOnDataChange, load, save, warnInfo } from '../../functions'
+import { DEFAULT_OPTIONS } from './statics/default-options'
+import { handleDeprecatedOptions } from './function/handle-deprecated-options'
+import type { DefaultDataItem } from '../../data-table.props.type'
+import type { DataTableComponents } from '../../data-table.props.type/components'
 
 type ContextDatatableProps = Omit<DataTableProps, 'className'>
 

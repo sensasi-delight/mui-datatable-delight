@@ -10,7 +10,7 @@ import Typography from '@mui/material/Typography'
 import Tooltip from '@mui/material/Tooltip'
 // globals
 import { TableAction } from '../data-table.props.type/options'
-import { useDataTableContext } from '../hooks'
+import useDataTableContext from '../hooks/use-data-table-context'
 import { ClassName } from '../enums/class-name'
 // sub-components
 import { DataTableToolbarSearch } from './toolbar.search'

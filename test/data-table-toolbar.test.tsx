@@ -13,9 +13,9 @@ import {
     DataTableOptions,
     DataTableProps
 } from '../src'
-import { DEFAULT_TEXT_LABELS } from '../src/hooks/use-main-context.process-text-labels.default-text-labels'
+import { DEFAULT_TEXT_LABELS } from '../src/hooks/use-data-table-context/function/statics/default-text-labels'
 import { ClassName } from '../src/enums/class-name'
-import { MainContextProvider } from '../src/hooks/use-main-context'
+import { MainContextProvider } from '../src/hooks/use-data-table-context/use-main-context'
 
 describe('<TableToolbar />', function () {
     function setup(override?: DataTableProps) {

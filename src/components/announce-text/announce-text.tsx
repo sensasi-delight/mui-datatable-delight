@@ -2,7 +2,7 @@
 
 import { tss } from 'tss-react/mui'
 import { ClassName } from '../../enums/class-name'
-import { useDataTableContext } from '../../hooks'
+import useDataTableContext from '../../hooks/use-data-table-context'
 
 export function AnnounceText() {
     const { classes } = useStyles()

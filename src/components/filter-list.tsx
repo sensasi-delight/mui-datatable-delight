@@ -4,7 +4,7 @@ import { tss } from 'tss-react/mui'
 import Chip from '@mui/material/Chip'
 // local types
 import type { DataTableState } from '../data-table.props.type/state'
-import { useDataTableContext } from '../hooks'
+import useDataTableContext from '../hooks/use-data-table-context'
 import { FilterTypeType } from '../data-table.props.type/shared/filter-type-type'
 import { FilterUpdateType } from '../data-table'
 

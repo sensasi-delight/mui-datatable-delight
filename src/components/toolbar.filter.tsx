@@ -8,7 +8,7 @@ import { ReactNode, useState } from 'react'
 // locals
 import type { DataTableState } from '../data-table.props.type/state'
 import { DataTableToolbarFilterRenderFilters } from './toolbar.filter.render-filters'
-import { useDataTableContext } from '../hooks'
+import useDataTableContext from '../hooks/use-data-table-context'
 import { FilterTypeEnum } from '../data-table.props.type/columns'
 import { FilterUpdateType } from '../data-table'
 import { getDisplayData } from '../functions'

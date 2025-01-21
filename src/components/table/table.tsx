@@ -2,7 +2,7 @@
 
 // materials
 import MuiTable from '@mui/material/Table'
-import { useDataTableContext } from '../../hooks'
+import useDataTableContext from '../../hooks/use-data-table-context'
 import { tss } from 'tss-react/mui'
 // globals
 import { ClassName } from '../../enums'

@@ -19,7 +19,9 @@ import {
     type DataTableOptions
 } from './data-table.props.type/options'
 import { type DataTableState } from './data-table.props.type/state'
-import { DataTableContextProvider, useDataTableContext } from './hooks'
+import useDataTableContext, {
+    DataTableContextProvider
+} from './hooks/use-data-table-context'
 import { FilterTypeEnum } from './data-table.props.type/columns'
 // components
 import {
