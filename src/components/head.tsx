@@ -1,3 +1,5 @@
+'use client'
+
 import { tss } from 'tss-react/mui'
 import MuiTableHead from '@mui/material/TableHead'
 import { TableHeadCell } from './table-head/components'

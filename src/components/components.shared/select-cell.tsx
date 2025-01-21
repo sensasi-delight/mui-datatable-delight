@@ -1,3 +1,5 @@
+'use client'
+
 import Checkbox, { type CheckboxProps } from '@mui/material/Checkbox'
 import TableCell from '@mui/material/TableCell'
 import { tss } from 'tss-react/mui'

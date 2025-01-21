@@ -1,3 +1,5 @@
+'use client'
+
 import Button from '@mui/material/Button'
 import type { ReactNode } from 'react'
 

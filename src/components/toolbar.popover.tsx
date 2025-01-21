@@ -1,3 +1,5 @@
+'use client'
+
 import { ReactNode, useEffect, useRef, useState } from 'react'
 // materials
 import IconButton, { type IconButtonProps } from '@mui/material/IconButton'

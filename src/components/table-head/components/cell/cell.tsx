@@ -1,3 +1,5 @@
+'use client'
+
 // vendors
 import { useDrag } from 'react-dnd'
 import { useState } from 'react'

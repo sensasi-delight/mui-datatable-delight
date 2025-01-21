@@ -1,3 +1,5 @@
+'use client'
+
 import TableRow from '@mui/material/TableRow'
 import { tss } from 'tss-react/mui'
 

@@ -1,3 +1,5 @@
+'use client'
+
 import { tss } from 'tss-react/mui'
 import Chip from '@mui/material/Chip'
 // local types

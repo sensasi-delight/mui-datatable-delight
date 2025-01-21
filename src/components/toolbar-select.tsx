@@ -1,3 +1,5 @@
+'use client'
+
 // vendors
 import type { MUIDataTableToolbarSelect } from 'mui-datatables'
 import { tss } from 'tss-react/mui'

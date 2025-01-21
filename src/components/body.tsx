@@ -1,3 +1,5 @@
+'use client'
+
 // vendors
 import { tss } from 'tss-react/mui'
 import React from 'react'

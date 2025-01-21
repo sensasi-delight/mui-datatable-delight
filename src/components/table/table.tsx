@@ -1,3 +1,5 @@
+'use client'
+
 // materials
 import MuiTable from '@mui/material/Table'
 import { useDataTableContext } from '../../hooks'

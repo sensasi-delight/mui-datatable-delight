@@ -1,3 +1,5 @@
+'use client'
+
 // vendors
 import { useReactToPrint, UseReactToPrintOptions } from 'react-to-print'
 // materials

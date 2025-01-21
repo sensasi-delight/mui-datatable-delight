@@ -1,3 +1,5 @@
+'use client'
+
 // vendors
 import {
     createContext,

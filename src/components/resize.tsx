@@ -1,3 +1,5 @@
+'use client'
+
 import React, { JSX, RefObject, useEffect, useState } from 'react'
 import { tss } from 'tss-react/mui'
 // locals

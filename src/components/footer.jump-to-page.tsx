@@ -1,3 +1,5 @@
+'use client'
+
 // vendors
 import InputBase from '@mui/material/InputBase'
 import MenuItem from '@mui/material/MenuItem'

@@ -1,3 +1,5 @@
+'use client'
+
 import { useCallback } from 'react'
 import TableCell, { type TableCellProps } from '@mui/material/TableCell'
 import { tss } from 'tss-react/mui'
