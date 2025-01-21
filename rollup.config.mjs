@@ -13,17 +13,29 @@ const PLUGINS = [
     del({ targets: 'dist/*' }),
 
     /** Locate modules using the Node resolution algorithm, for using third party modules in node_modules */
-    nodeResolve(),
+    nodeResolve({
+        browser: true,
+        preferBuiltins: false
+    }),
 
     /** Convert CommonJS modules to ES6, so they can be included in a Rollup bundle */
     commonjs(),
 
     /** To minify the bundled files */
-    terser(),
+    terser({
+        format: {
+            comments: false
+        },
+        compress: {
+            drop_console: true,
+            drop_debugger: true
+        }
+    }),
 
     /** To preserve `use client` directive */
     preserveDirectives(),
 
+    /** Transpile the code using Babel */
     babel({
         babelHelpers: 'bundled',
         exclude: /node_modules/,
@@ -32,6 +44,9 @@ const PLUGINS = [
 
     /** To build from tsx files */
     typescript({
+        tsconfig: './tsconfig.json',
+        outputToFilesystem: true,
+
         compilerOptions: {
             allowImportingTsExtensions: false
         }
@@ -72,7 +87,7 @@ export default [
         plugins: PLUGINS
     },
     {
-        // Type Definitions
+        // Bundling Type Definitions
         input: 'src/index.ts',
         output: {
             file: 'dist/types/index.d.ts',

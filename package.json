@@ -1,6 +1,6 @@
 {
     "name": "mui-datatable-delight",
-    "version": "0.0.0-experimental.25",
+    "version": "0.0.0-experimental.28",
     "description": "A responsive DataTable component built with MUI for React-based project.",
     "files": [
         "./dist"
@@ -35,6 +35,8 @@
     },
     "homepage": "https://mui-datatable-delight.vercel.app",
     "devDependencies": {
+        "@babel/preset-react": "^7.26.3",
+        "@babel/preset-typescript": "^7.26.0",
         "@emotion/cache": "^11.14.0",
         "@emotion/react": "^11.14.0",
         "@emotion/styled": "^11.14.0",
@@ -96,6 +98,7 @@
         "@mui/icons-material": "^5.9.3 || ^6.0.0",
         "@mui/material": "^5.9.3 || ^6.0.0",
         "react": "^17.0.2 || ^18.0.0 || ^19.0.0",
+        "react-dom": "^17.0.2 || ^18.0.0 || ^19.0.0",
         "react-to-print": "^3.0.4",
         "redux": "^4.2.0",
         "tss-react": "^4.9.14"
