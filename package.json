@@ -1,6 +1,6 @@
 {
     "name": "mui-datatable-delight",
-    "version": "0.0.0-experimental.23",
+    "version": "0.0.0-experimental.24",
     "description": "A responsive DataTable component built with MUI for React-based project.",
     "files": [
         "./dist"
@@ -11,7 +11,7 @@
     "scripts": {
         "build": "rollup -c && npm run build:types",
         "build:docs": "next build docs",
-        "build:types": "tsc ./src/index.ts --allowUnreachableCode --noCheck --declaration --emitDeclarationOnly --outDir ./dist/types",
+        "build:types": "tsc --project tsconfig.types-build.json",
         "dev": "next docs",
         "lint": "eslint src",
         "prepublishOnly": "npm run build",
