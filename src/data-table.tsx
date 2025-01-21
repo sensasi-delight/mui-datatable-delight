@@ -35,7 +35,7 @@ import {
 } from './components'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
-import { SetResizableCallback } from './components/resize'
+import type { SetResizableCallback } from './components/resize'
 
 /**
  * A responsive DataTable component built with Material UI for React-based project.

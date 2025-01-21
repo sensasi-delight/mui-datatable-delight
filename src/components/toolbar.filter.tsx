@@ -4,13 +4,13 @@
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 import { tss } from 'tss-react/mui'
-import { ReactNode, useState } from 'react'
+import { type ReactNode, useState } from 'react'
 // locals
 import type { DataTableState } from '../data-table.props.type/state'
 import { DataTableToolbarFilterRenderFilters } from './toolbar.filter.render-filters'
 import useDataTableContext from '../hooks/use-data-table-context'
 import { FilterTypeEnum } from '../data-table.props.type/columns'
-import { FilterUpdateType } from '../data-table'
+import type { FilterUpdateType } from '../data-table'
 import { getDisplayData } from '../functions'
 import { TableAction } from '../data-table.props.type/options'
 

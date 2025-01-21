@@ -3,8 +3,8 @@
 import { useCallback } from 'react'
 import TableCell, { type TableCellProps } from '@mui/material/TableCell'
 import { tss } from 'tss-react/mui'
-import { MUIDataTableBodyCell } from 'mui-datatables'
-import { DataTableState } from '../data-table.props.type/state'
+import type { MUIDataTableBodyCell } from 'mui-datatables'
+import type { DataTableState } from '../data-table.props.type/state'
 import useDataTableContext from '../hooks/use-data-table-context'
 
 export function TableBodyCell({

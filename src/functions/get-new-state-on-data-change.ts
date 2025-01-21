@@ -1,4 +1,4 @@
-import React from 'react'
+import { isValidElement } from 'react'
 import type { DataTableProps } from '../data-table.props.type'
 import type {
     DataTableOptions,
@@ -10,7 +10,7 @@ import { transformData } from './transform-data'
 import { sortCompare as defaultSortCompare } from './sort-compare'
 import { buildMap } from './build-map'
 import { warnDeprecated } from './warn-deprecated'
-import { MUIDataTableMeta } from 'mui-datatables'
+import type { MUIDataTableMeta } from 'mui-datatables'
 
 enum TABLE_LOAD {
     INITIAL = 1,
@@ -253,7 +253,7 @@ function updateDataCol(
     )
 
     const filterValue =
-        React.isValidElement(funcResult) && funcResult.props.value
+        isValidElement(funcResult) && funcResult.props.value
             ? funcResult.props.value
             : prevState['data'][row][index]
 
@@ -552,10 +552,7 @@ export function getNewStateOnDataChange(
                     )
                     const funcResult = column.customBodyRender(value, tableMeta)
 
-                    if (
-                        React.isValidElement(funcResult) &&
-                        funcResult.props.value
-                    ) {
+                    if (isValidElement(funcResult) && funcResult.props.value) {
                         value = funcResult.props.value
                     } else if (typeof funcResult === 'string') {
                         value = funcResult

@@ -1,6 +1,6 @@
-import { DataTableProps } from '../data-table.props.type'
-import { DataTableOptions } from '../data-table.props.type/options'
-import { DataTableState } from '../data-table.props.type/state'
+import type { DataTableProps } from '../data-table.props.type'
+import type { DataTableOptions } from '../data-table.props.type/options'
+import type { DataTableState } from '../data-table.props.type/state'
 
 export function transformData(
     columns: DataTableState['columns'],

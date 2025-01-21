@@ -1,4 +1,4 @@
-import { type DataTableProps } from '../../..'
+import { type DataTableProps } from '../../../data-table.props.type'
 import { DEFAULT_TEXT_LABELS } from './statics/default-text-labels'
 
 /**

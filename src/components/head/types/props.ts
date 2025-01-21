@@ -1,5 +1,5 @@
 import type { RefObject } from 'react'
-import { DataTableState } from '../../..'
+import type { DataTableState } from '../../../data-table.props.type/state'
 
 export interface Props {
     draggableHeadCellRefs: RefObject<HTMLTableCellElement[]>

@@ -1,7 +1,7 @@
 import type { MUIDataTableStateRows } from 'mui-datatables'
 import type { DataTableSortOrderOption } from './options'
-import { DataTableColumnObject } from './columns'
-import { DefaultDataItem } from '.'
+import type { DataTableColumnObject } from './columns'
+import type { DefaultDataItem } from '.'
 
 export interface DataTableState<DataItem = DefaultDataItem> {
     activeColumn: number | null

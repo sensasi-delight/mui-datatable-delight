@@ -11,7 +11,7 @@ import type { TableProps } from './types'
 // components
 import { TableHead } from '../head'
 import { DataTableBody } from '../body'
-import { HeadProps } from '../head/types'
+import type { HeadProps } from '../head/types'
 
 export function Table({
     draggableHeadCellRefs, // TEMPORARY PASSING HEAD PROPS

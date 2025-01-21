@@ -1,7 +1,7 @@
 import type { MUIDataTableColumnOptions } from 'mui-datatables'
-import { DataTableSortOrderOption } from './options'
-import { DataTableState } from './state'
-import { ReactNode } from 'react'
+import type { DataTableSortOrderOption } from './options'
+import type { DataTableState } from './state'
+import type { ReactNode } from 'react'
 import type { FilterTypeType } from './shared/filter-type-type'
 
 export interface DataTableColumnObject {

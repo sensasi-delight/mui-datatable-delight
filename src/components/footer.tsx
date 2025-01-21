@@ -10,7 +10,7 @@ import useDataTableContext from '../hooks/use-data-table-context'
 import { TableAction } from '../data-table.props.type/options'
 import { getPageValue } from '../functions.shared/get-page-value'
 import { ClassName } from '../enums/class-name'
-import { DataTableState } from '../data-table.props.type/state'
+import type { DataTableState } from '../data-table.props.type/state'
 
 /**
  * @todo  FIX FONT SIZES ARE DIFFERENT IN SUB-COMPONENTS

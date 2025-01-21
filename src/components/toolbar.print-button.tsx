@@ -1,7 +1,7 @@
 'use client'
 
 // vendors
-import { useReactToPrint, UseReactToPrintOptions } from 'react-to-print'
+import { useReactToPrint, type UseReactToPrintOptions } from 'react-to-print'
 // materials
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'

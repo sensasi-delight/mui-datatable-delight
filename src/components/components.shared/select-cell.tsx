@@ -4,7 +4,7 @@ import Checkbox, { type CheckboxProps } from '@mui/material/Checkbox'
 import TableCell from '@mui/material/TableCell'
 import { tss } from 'tss-react/mui'
 import {
-    DataTableOptions,
+    type DataTableOptions,
     TableAction
 } from '../../data-table.props.type/options'
 import useDataTableContext from '../../hooks/use-data-table-context'
