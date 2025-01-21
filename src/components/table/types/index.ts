@@ -1,1 +1,1 @@
-export type { TableProps } from './table-props'
+export type { Props as TableProps } from './table-props'

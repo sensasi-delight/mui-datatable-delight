@@ -1,6 +1,5 @@
 import { tss } from 'tss-react/mui'
 import { TableHead as MuiTableHead } from '@mui/material'
-import { RefObject } from 'react'
 import { TableHeadCell } from './table-head/components'
 import { TableHeadRow } from './head.row'
 import { DataTableTableSelectCell } from './components.shared/select-cell'
@@ -12,20 +11,14 @@ import {
     TableAction
 } from '../data-table.props.type/options'
 import { getDisplayData, sortTable } from '../functions'
+import type { HeadProps } from './head/types'
 
 export function TableHead({
-    columnOrder = null,
-    columns,
-    count,
-    data,
     draggableHeadCellRefs,
-    expandedRows,
-    selectedRows,
     selectRowUpdate,
-    setCellRef,
-    sortOrder = {},
+    setHeadCellsRef,
     tableRef
-}: DataTableHeadProps) {
+}: HeadProps) {
     const { classes, cx } = useStyles()
     const {
         onAction,
@@ -35,9 +28,16 @@ export function TableHead({
         state
     } = useDataTableContext()
 
-    if (columnOrder === null) {
-        columnOrder = columns ? columns.map((_, idx) => idx) : []
-    }
+    const {
+        columns,
+        count,
+        data,
+        expandedRows,
+        selectedRows,
+        sortOrder = {}
+    } = state
+
+    const columnOrder = state.columnOrder ? columns.map((_, idx) => idx) : []
 
     function handleToggleColumn(columnIndex: number) {
         const prevState = state
@@ -201,7 +201,7 @@ export function TableHead({
         >
             <TableHeadRow>
                 <DataTableTableSelectCell
-                    setHeadCellRef={setCellRef}
+                    setHeadCellRef={setHeadCellsRef}
                     onChange={handleRowSelect.bind(null)}
                     indeterminate={isIndeterminate}
                     checked={isChecked}
@@ -231,17 +231,15 @@ export function TableHead({
                         ) : (
                             <TableHeadCell
                                 cellHeaderProps={
-                                    columns[index].setCellHeaderProps
-                                        ? columns[index].setCellHeaderProps({
-                                              index,
-                                              ...column
-                                          }) || {}
-                                        : {}
+                                    columns[index].setCellHeaderProps?.({
+                                        index,
+                                        ...column
+                                    }) || {}
                                 }
                                 key={index}
                                 index={index}
                                 colPosition={colPos}
-                                setCellRef={setCellRef}
+                                setHeadCellsRef={setHeadCellsRef}
                                 sort={column.sort}
                                 sortDirection={
                                     column.name === sortOrder.name
@@ -288,9 +286,3 @@ const useStyles = tss.withName('MUIDataTableHead').create(({ theme }) => ({
         }
     }
 }))
-
-interface DataTableHeadProps {
-    columns: DataTableState['columns']
-
-    tableRef: RefObject<HTMLTableElement | null>
-}

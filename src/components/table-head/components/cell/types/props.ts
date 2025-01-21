@@ -37,7 +37,7 @@ export interface Props {
 
     colPosition: number
 
-    setCellRef: (
+    setHeadCellsRef: (
         rowIndex: number,
         colIndex: number,
         ref: HTMLTableCellElement

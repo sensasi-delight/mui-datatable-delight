@@ -1,18 +1,24 @@
 // materials
 import { Table as MuiTable } from '@mui/material'
 import { useDataTableContext } from '../../hooks'
-import { useStyles } from './hooks'
+import { tss } from 'tss-react/mui'
+// globals
+import { ClassName } from '../../enums'
 // types
 import type { TableProps } from './types'
+// components
 import { TableHead } from '../head'
 import { DataTableBody } from '../body'
+import { HeadProps } from '../head/types'
 
 export function Table({
-    tableRef,
-    selectRowUpdate,
-    setHeadCellRef,
-    draggableHeadCellRefs
-}: TableProps) {
+    draggableHeadCellRefs, // TEMPORARY PASSING HEAD PROPS
+    selectRowUpdate, // TEMPORARY PASSING HEAD PROPS
+    setHeadCellsRef, // TEMPORARY PASSING HEAD PROPS
+    tableRef // TEMPORARY PASSING HEAD PROPS
+}: TableProps &
+    // TEMPORARY PASSING HEAD PROPS
+    HeadProps) {
     const { classes, cx } = useStyles()
     const {
         components,
@@ -46,19 +52,8 @@ export function Table({
             )}
 
             <_TableHead
-                columns={state.columns}
-                // @ts-expect-error WILL FIX THIS LATER
-                activeColumn={state.activeColumn}
-                data={state.displayData}
-                count={state.count}
-                page={state.page}
-                rowsPerPage={state.rowsPerPage}
-                selectedRows={state.selectedRows}
                 selectRowUpdate={selectRowUpdate}
-                setCellRef={setHeadCellRef}
-                expandedRows={state.expandedRows}
-                sortOrder={state.sortOrder}
-                columnOrder={state.columnOrder}
+                setHeadCellsRef={setHeadCellsRef}
                 draggableHeadCellRefs={draggableHeadCellRefs}
                 tableRef={tableRef}
             />
@@ -70,7 +65,6 @@ export function Table({
                 page={state.page}
                 rowsPerPage={state.rowsPerPage}
                 selectedRows={state.selectedRows}
-                // @ts-expect-error WILL FIX THIS LATER
                 selectRowUpdate={selectRowUpdate}
                 previousSelectedRow={state.previousSelectedRow}
                 // @ts-expect-error WILL FIX THIS LATER
@@ -90,3 +84,9 @@ export function Table({
         </MuiTable>
     )
 }
+
+const useStyles = tss.withName(ClassName.TABLE).create({
+    root: {
+        outline: 'none'
+    }
+})
