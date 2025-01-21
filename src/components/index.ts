@@ -17,3 +17,5 @@ export { TableFooter as BottomBar } from './footer'
 export { AnnounceText } from './announce-text'
 
 export { Table } from './table'
+
+export { ExperimentalButton } from './experimental-button'
