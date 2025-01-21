@@ -1,5 +1,6 @@
+import { tss } from 'tss-react/mui'
+import { ClassName } from '../../enums/class-name'
 import { useDataTableContext } from '../../hooks'
-import { useStyles } from './hooks'
 
 export function AnnounceText() {
     const { classes } = useStyles()
@@ -13,3 +14,16 @@ export function AnnounceText() {
         </div>
     )
 }
+
+const useStyles = tss.withName(ClassName.ANNOUNCE_TEXT).create({
+    root: {
+        border: '0',
+        clip: 'rect(0 0 0 0)',
+        height: '1px',
+        margin: '-1px',
+        overflow: 'hidden',
+        padding: '0',
+        position: 'absolute',
+        width: '1px'
+    }
+})

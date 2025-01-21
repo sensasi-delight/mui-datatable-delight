@@ -3,6 +3,8 @@
 // types
 import type { DataTableProps } from './data-table.props.type'
 // vendors
+import { tss } from 'tss-react/mui'
+import { ClassName } from './enums'
 import { useEffect, useRef } from 'react'
 import { Paper, PaperProps } from '@mui/material'
 // locals
@@ -17,11 +19,7 @@ import {
     type DataTableOptions
 } from './data-table.props.type/options'
 import { type DataTableState } from './data-table.props.type/state'
-import {
-    DataTableContextProvider,
-    useDataTableContext,
-    useStyles
-} from './hooks'
+import { DataTableContextProvider, useDataTableContext } from './hooks'
 import { FilterTypeEnum } from './data-table.props.type/columns'
 // components
 import {
@@ -121,7 +119,10 @@ function _DataTable({
         }
     }, [])
 
-    function setHeadCellRef(
+    /**
+     * I THINK THIS COULD BE MOVED TO `<Table />`
+     */
+    function setHeadCellsRef(
         index: number,
         pos: number,
         el: HTMLTableCellElement
@@ -195,7 +196,7 @@ function _DataTable({
     function selectRowUpdate(
         type: string,
         value: DataTableState['previousSelectedRow'],
-        shiftAdjacentRows = []
+        shiftAdjacentRows: unknown[] = []
     ) {
         // safety check
         const { selectableRows } = options
@@ -427,10 +428,10 @@ function _DataTable({
 
                 <DndProvider backend={HTML5Backend}>
                     <Table
-                        tableRef={tableRef}
-                        selectRowUpdate={selectRowUpdate}
-                        setHeadCellRef={setHeadCellRef}
                         draggableHeadCellRefs={draggableHeadCellRefs}
+                        selectRowUpdate={selectRowUpdate}
+                        setHeadCellsRef={setHeadCellsRef}
+                        tableRef={tableRef}
                     />
                 </DndProvider>
             </div>
@@ -593,3 +594,52 @@ function getTableHeightAndResponsiveClasses(
         responsiveClass
     }
 }
+
+const useStyles = tss.withName(ClassName.ROOT).create(({ theme }) => ({
+    root: {
+        '& .datatables-no-print': {
+            '@media print': {
+                display: 'none'
+            }
+        }
+    },
+
+    paper: {
+        isolation: 'isolate'
+    },
+
+    paperResponsiveScrollFullHeightFullWidth: {
+        position: 'absolute'
+    },
+
+    responsiveBase: {
+        overflow: 'auto',
+        '@media print': {
+            height: 'auto !important'
+        }
+    },
+
+    // deprecated, but continuing support through v3.x
+    responsiveScroll: {
+        overflow: 'auto',
+        height: '100%'
+    },
+    // deprecated, but continuing support through v3.x
+    responsiveScrollMaxHeight: {
+        overflow: 'auto',
+        height: '100%'
+    },
+    // deprecated, but continuing support through v3.x
+    responsiveScrollFullHeight: {
+        height: '100%'
+    },
+    // deprecated, but continuing support through v3.x
+    responsiveStacked: {
+        overflow: 'auto',
+        [theme.breakpoints.down('md')]: {
+            overflow: 'hidden'
+        }
+    },
+    // deprecated, but continuing support through v3.x
+    responsiveStackedFullWidth: {}
+}))

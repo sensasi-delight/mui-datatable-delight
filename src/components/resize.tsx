@@ -9,11 +9,12 @@ import { useDataTableContext } from '../hooks'
  * @see https://mui-datatable-delight.vercel.app/docs/features/resizable-columns
  */
 export function TableResize({
-    classes: classesFromProp,
+    // classes: classesFromProp,
     ...props
 }: DataTableResizeProps): JSX.Element {
     const tssHook = useStyles()
-    const classes = classesFromProp ?? tssHook.classes
+    // const classes = classesFromProp ?? tssHook.classes
+    const classes = tssHook.classes
     const { options } = useDataTableContext()
 
     /**
@@ -378,7 +379,7 @@ interface DataTableResizeProps {
     updateDividers: (callback: () => void) => void
 
     /** Extend the style applied to components */
-    classes?: ReturnType<typeof useStyles>['classes']
+    // classes?: ReturnType<typeof useStyles>['classes']
 }
 
 const useStyles = tss.create({
