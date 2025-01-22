@@ -1,6 +1,7 @@
 export enum Route {
     GETTING_STARTED = 'getting-started',
     GETTING_STARTED__ANATOMY = GETTING_STARTED + '/anatomy',
+    GETTING_STARTED__SSR = GETTING_STARTED + '/ssr',
 
     FEATURES = 'features',
     FEATURES__CUSTOM_COMPONENTS = FEATURES + '/custom-components',

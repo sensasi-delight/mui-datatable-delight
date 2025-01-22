@@ -12,40 +12,42 @@ import React from 'react'
 export function Breadcrumbs() {
     const pathname = usePathname()
 
-    const temp = pathname.split('/').slice(0, -1)
-
-    const prevPaths = temp
-        .map((path, i) => temp.slice(0, i).join('/') + '/' + path)
-        .slice(1)
+    const paths = pathname
+        .split('/')
+        .slice(2)
+        .map(path => path.replace('-', ' '))
 
     return (
-        <Box display="flex" alignItems="center" mb={3}>
+        <Box display="flex" alignItems="center" mb={1}>
             <Tooltip title="Home" arrow placement="top">
                 <IconButton color="primary" href="/">
                     <Home fontSize="small" />
                 </IconButton>
             </Tooltip>
 
-            <NavigateNext
-                fontSize="small"
-                sx={{
-                    color: 'GrayText'
-                }}
-            />
+            {paths.map((path, i) => {
+                // const text = path.split('/')
 
-            {prevPaths.map((path, i) => {
-                const text = path.split('/').pop()
+                const href = '/' + paths.slice(0, i + 1).join('/')
 
                 return (
                     <React.Fragment key={i}>
-                        <Button href={path}>{text}</Button>
-
                         <NavigateNext
                             fontSize="small"
                             sx={{
                                 color: 'GrayText'
                             }}
                         />
+
+                        <Button
+                            href={href}
+                            disabled={i === paths.length - 1}
+                            sx={{
+                                minWidth: 'unset'
+                            }}
+                        >
+                            {path}
+                        </Button>
                     </React.Fragment>
                 )
             })}
