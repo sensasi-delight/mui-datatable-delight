@@ -1,1 +1,0 @@
-export { TableHeadCell } from './cell'

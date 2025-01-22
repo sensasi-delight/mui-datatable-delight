@@ -7,11 +7,11 @@ import { tss } from 'tss-react/mui'
 // globals
 import { ClassName } from '../../enums'
 // types
-import type { TableProps } from './types'
+import type { Props as TableProps } from './types/props'
 // components
-import { TableHead } from '../head'
-import { DataTableBody } from '../body'
-import type { HeadProps } from '../head/types'
+import TableHead from './components/head'
+import { DataTableBody } from './components/body'
+import type { Props as HeadProps } from './components/head/types/props'
 
 export function Table({
     draggableHeadCellRefs, // TEMPORARY PASSING HEAD PROPS

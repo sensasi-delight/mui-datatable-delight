@@ -8,19 +8,19 @@ import type { TableRowProps } from '@mui/material/TableRow'
 import MuiTableBody from '@mui/material/TableBody'
 import Typography from '@mui/material/Typography'
 // locals
-import { TableBodyCell } from './body.cell'
-import { DataTableBodyRow } from './body.row'
-import { DataTableTableSelectCell } from './components.shared/select-cell'
-import { getPageValue } from '../functions.shared/get-page-value'
-import type { DataTableState } from '../types/state'
+import { TableBodyCell } from './components/cell'
+import { DataTableBodyRow } from './components/row'
+import CheckboxCell from '../_shared/checkbox-cell'
+import { getPageValue } from '../../../../functions.shared/get-page-value'
+import type { DataTableState } from '../../../../types/state'
 import {
     type DataTableOptions,
     type RowTypeIDK,
     type SomeRowsIDK,
     TableAction
-} from '../types/options'
-import useDataTableContext from '../hooks/use-data-table-context'
-import { buildMap } from '../functions'
+} from '../../../../types/options'
+import useDataTableContext from '../../../../hooks/use-data-table-context'
+import { buildMap } from '../../../../functions'
 
 export function DataTableBody(props: DataTableBodyProps) {
     const { classes } = useStyles()
@@ -400,7 +400,7 @@ function RenderRow({
                 id={`MUIDataTableBodyRow-${options.tableId}-${dataIndex}`}
                 {...overriddenBodyProps}
             >
-                <DataTableTableSelectCell
+                <CheckboxCell
                     isHeaderCell={false}
                     onChange={event =>
                         handleRowSelect(

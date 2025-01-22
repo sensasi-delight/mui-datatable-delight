@@ -1,6 +1,6 @@
 import { type DropTargetMonitor, useDrop } from 'react-dnd'
-import useDataTableContext from '../../../../../hooks/use-data-table-context'
-import { TableAction } from '../../../../../types/options'
+import useDataTableContext from '../../../../../../../hooks/use-data-table-context'
+import { TableAction } from '../../../../../../../types/options'
 import type Props from '../types/props'
 import { type RefObject, useRef } from 'react'
 

@@ -6,12 +6,12 @@ import { tss } from 'tss-react/mui'
 import {
     type DataTableOptions,
     TableAction
-} from '../../types/options'
-import useDataTableContext from '../../hooks/use-data-table-context'
-import { ExpandButton } from './select-cell.expand-button'
-import { buildMap } from '../../functions'
+} from '../../../../../types/options'
+import useDataTableContext from '../../../../../hooks/use-data-table-context'
+import { ExpandButton } from './components/row-expansion-button'
+import { buildMap } from '../../../../../functions'
 
-export function DataTableTableSelectCell({
+export default function CheckboxCell({
     fixedHeader,
     fixedSelectColumn,
     isHeaderCell,

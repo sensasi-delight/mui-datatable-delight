@@ -2,7 +2,7 @@
 
 import TableRow, { type TableRowProps } from '@mui/material/TableRow'
 import { tss } from 'tss-react/mui'
-import useDataTableContext from '../hooks/use-data-table-context'
+import useDataTableContext from '../../../../../hooks/use-data-table-context'
 
 export function DataTableBodyRow({
     rowSelected,

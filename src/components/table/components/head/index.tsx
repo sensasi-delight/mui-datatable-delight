@@ -2,25 +2,25 @@
 
 import { tss } from 'tss-react/mui'
 import MuiTableHead from '@mui/material/TableHead'
-import { TableHeadCell } from './table-head/components'
-import { TableHeadRow } from './head.row'
-import { DataTableTableSelectCell } from './components.shared/select-cell'
-import useDataTableContext from '../hooks/use-data-table-context'
-import type { DataTableState } from '../types/state'
+import { TableHeadCell } from './components/cell'
+import { TableHeadRow } from './components/row'
+import CheckboxCell from '../_shared/checkbox-cell'
+import useDataTableContext from '../../../../hooks/use-data-table-context'
+import type { DataTableState } from '../../../../types/state'
 import {
     type DataTableOptions,
     type DataTableSortOrderOption,
     TableAction
-} from '../types/options'
-import { getDisplayData, sortTable } from '../functions'
-import type { HeadProps } from './head/types'
+} from '../../../../types/options'
+import { getDisplayData, sortTable } from '../../../../functions'
+import type { Props } from './types/props'
 
-export function TableHead({
+export default function TableHead({
     draggableHeadCellRefs,
     selectRowUpdate,
     setHeadCellsRef,
     tableRef
-}: HeadProps) {
+}: Props) {
     const { classes, cx } = useStyles()
     const {
         onAction,
@@ -202,7 +202,7 @@ export function TableHead({
             })}
         >
             <TableHeadRow>
-                <DataTableTableSelectCell
+                <CheckboxCell
                     setHeadCellRef={setHeadCellsRef}
                     onChange={handleRowSelect.bind(null)}
                     indeterminate={isIndeterminate}
