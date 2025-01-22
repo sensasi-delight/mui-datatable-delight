@@ -1,3 +1,5 @@
+'use client'
+
 import Typography from '@mui/material/Typography'
 import DataTable, { type DataTableOptions, type DataTableProps } from '@src'
 
@@ -82,5 +84,12 @@ export function DataTableApiTable() {
         pagination: false
     }
 
-    return <DataTable data={data} columns={columns} options={options} />
+    return (
+        <DataTable
+            title="DataTableProps"
+            data={data}
+            columns={columns}
+            options={options}
+        />
+    )
 }

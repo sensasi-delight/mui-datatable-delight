@@ -16,11 +16,12 @@ import type { DataTableState } from '../../../../types/state'
 import {
     type DataTableOptions,
     type RowTypeIDK,
-    type SomeRowsIDK,
-    TableAction
+    type SomeRowsIDK
 } from '../../../../types/options'
 import useDataTableContext from '../../../../hooks/use-data-table-context'
 import { buildMap } from '../../../../functions'
+// global enums
+import TableAction from '../../../../enums/table-action'
 
 export default function TableBody(props: DataTableBodyProps) {
     const { classes } = useStyles()

@@ -9,11 +9,12 @@ import useDataTableContext from '../../../../hooks/use-data-table-context'
 import type { DataTableState } from '../../../../types/state'
 import {
     type DataTableOptions,
-    type DataTableSortOrderOption,
-    TableAction
+    type DataTableSortOrderOption
 } from '../../../../types/options'
 import { getDisplayData, sortTable } from '../../../../functions'
 import type { Props } from './types/props'
+// global enums
+import TableAction from '../../../../enums/table-action'
 
 export default function TableHead({
     draggableHeadCellRefs,

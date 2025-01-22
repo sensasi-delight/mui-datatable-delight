@@ -6,7 +6,7 @@ import type {
 } from '../types/options'
 import type { DataTableState } from '../types/state'
 import { getCollatorComparator } from './get-collator-comparator'
-import { transformData } from './transform-data'
+import transformData from './transform-data'
 import { sortCompare as defaultSortCompare } from './sort-compare'
 import { buildMap } from './_shared/build-map'
 import { warnDeprecated } from './warn-deprecated'

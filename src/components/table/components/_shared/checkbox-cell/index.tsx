@@ -3,13 +3,13 @@
 import Checkbox, { type CheckboxProps } from '@mui/material/Checkbox'
 import TableCell from '@mui/material/TableCell'
 import { tss } from 'tss-react/mui'
-import {
-    type DataTableOptions,
-    TableAction
-} from '../../../../../types/options'
+import { type DataTableOptions } from '../../../../../types/options'
 import useDataTableContext from '../../../../../hooks/use-data-table-context'
-import { ExpandButton } from './components/row-expansion-button'
 import { buildMap } from '../../../../../functions'
+// components
+import RowExpansionButton from './components/row-expansion-button'
+// global enums
+import TableAction from '../../../../../enums/table-action'
 
 export default function CheckboxCell({
     fixedHeader,
@@ -150,7 +150,8 @@ export default function CheckboxCell({
         )
     }
 
-    const _RowExpansionButton = components.RowExpansionButton ?? ExpandButton
+    const _RowExpansionButton =
+        components.RowExpansionButton ?? RowExpansionButton
 
     return (
         <TableCell

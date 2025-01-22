@@ -13,7 +13,7 @@ type DataType = number | string | null
 
 export type DefaultRowDataType =
     | {
-          [key: string]: DataType
+          [key: string]: DataType | undefined
       }
     | DataType[]
 
