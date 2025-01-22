@@ -1,4 +1,6 @@
-import { type DataTableOptions, STP } from '../../../types/options'
+import { type DataTableOptions } from '../../../types/options'
+// global enums
+import RowsSelectedToolbarPlacement from '../../../enums/rows-selected-toolbar-placement'
 
 export const DEFAULT_OPTIONS: DataTableOptions = {
     caseSensitive: false,
@@ -39,5 +41,5 @@ export const DEFAULT_OPTIONS: DataTableOptions = {
     sortFilterList: true,
     tableBodyHeight: 'auto',
     viewColumns: true,
-    selectToolbarPlacement: STP.REPLACE
+    selectToolbarPlacement: RowsSelectedToolbarPlacement.REPLACE
 }

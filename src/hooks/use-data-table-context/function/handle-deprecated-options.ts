@@ -1,6 +1,8 @@
 import type { DataTableProps } from '../../../types'
-import { type DataTableOptions, STP } from '../../../types/options'
+import { type DataTableOptions } from '../../../types/options'
 import { warnDeprecated, warnInfo } from '../../../functions'
+// global enums
+import RowsSelectedToolbarPlacement from '../../../enums/rows-selected-toolbar-placement'
 
 export function handleDeprecatedOptions(
     props: DataTableProps,
@@ -99,7 +101,9 @@ export function handleDeprecatedOptions(
     // only give this warning message in newer browsers
     if (
         options?.selectToolbarPlacement &&
-        Object.values(STP).indexOf(options.selectToolbarPlacement) === -1
+        Object.values(RowsSelectedToolbarPlacement).indexOf(
+            options.selectToolbarPlacement
+        ) === -1
     ) {
         warnInfo(
             'Invalid option value for `selectToolbarPlacement`. Please check the documentation: https://github.com/gregnb/mui-datatables#options'

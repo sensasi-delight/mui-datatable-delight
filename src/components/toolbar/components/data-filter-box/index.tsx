@@ -9,10 +9,11 @@ import { type ReactNode, useState } from 'react'
 import type { DataTableState } from '../../../../types/state'
 import { DataTableToolbarFilterRenderFilters } from './components/filter-inputs'
 import useDataTableContext from '../../../../hooks/use-data-table-context'
-import { FilterTypeEnum } from '../../../../types/columns'
 import type { FilterUpdateType } from '../../../../data-table'
 import { getDisplayData } from '../../../../functions'
-import { TableAction } from '../../../../types/options'
+// global enums
+import FilterType from '../../../../enums/filter-type'
+import TableAction from '../../../../enums/table-action'
 
 export default function DataFilterBox(props: DataTableToolbarFilterProps) {
     const {
@@ -107,7 +108,7 @@ export default function DataFilterBox(props: DataTableToolbarFilterProps) {
                             index,
                             filter,
                             columns[index],
-                            FilterTypeEnum.CUSTOM
+                            FilterType.CUSTOM
                         )
                     })
                 })

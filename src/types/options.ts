@@ -10,9 +10,13 @@ import type {
 } from 'mui-datatables'
 import type { ReactNode } from 'react'
 import type { DataTableState } from './state'
-import type { DataTableColumnObjectOptions, FilterTypeEnum } from './columns'
+import type { DataTableColumnObjectOptions } from './columns'
 import type { FilterTypeType } from './shared/filter-type-type'
 import { DEFAULT_TEXT_LABELS } from '../hooks/use-data-table-context/function/statics/default-text-labels'
+// enums
+import type FilterType from '../enums/filter-type'
+import type RowsSelectedToolbarPlacement from '../enums/rows-selected-toolbar-placement'
+import type TableAction from '../enums/table-action'
 
 export interface DataTableSortOrderOption {
     name: string
@@ -20,27 +24,6 @@ export interface DataTableSortOrderOption {
 }
 
 type BooleanOrDisabled = Boolean | 'disabled'
-
-export enum TableAction {
-    SORT = 'sort',
-    CHANGE_ROWS_PER_PAGE = 'changeRowsPerPage',
-    COLUMN_ORDER_CHANGE = 'columnOrderChange',
-    CHANGE_PAGE = 'changePage',
-    INITIALIZED = 'tableInitialized',
-    PROP_UPDATE = 'propsUpdate',
-    RESET_FILTERS = 'resetFilters',
-    FILTER_CHANGE = 'filterChange',
-    ON_SEARCH_CLOSE = 'onSearchClose',
-    ON_SEARCH_OPEN = 'onSearchOpen',
-    ROW_DELETE = 'rowDelete',
-    ROW_EXPANSION_CHANGE = 'rowExpansionChange',
-    ROW_SELECTION_CHANGE = 'rowSelectionChange',
-    ON_FILTER_DIALOG_OPEN = 'onFilterDialogOpen',
-    ON_FILTER_DIALOG_CLOSE = 'onFilterDialogClose',
-    EXPAND_ROW = 'expandRow',
-    SEARCH = 'search',
-    VIEW_COLUMNS_CHANGE = 'viewColumnsChange'
-}
 
 /**
  * @deprecated FOUND THIS TYPE BUT CAN'T DESCRIBED YET
@@ -284,7 +267,7 @@ export interface DataTableOptions extends DataTableCustomsOptions {
     onFilterChange?: (
         changedColumn: string | MUIDataTableColumn | null,
         filterList: DataTableState['filterList'],
-        type: FilterTypeEnum | 'reset',
+        type: FilterType | 'reset',
         changedColumnIndex: number | null,
         displayData: DataTableState['displayData']
     ) => void
@@ -557,8 +540,10 @@ export interface DataTableOptions extends DataTableCustomsOptions {
      * - 'replace': Select toolbar replaces default toolbar.
      *
      * @default replace
+     *
+     * @see  {@link RowsSelectedToolbarPlacement}
      */
-    selectToolbarPlacement?: STP
+    selectToolbarPlacement?: RowsSelectedToolbarPlacement
 
     /**
      * Enable remote data source
@@ -865,11 +850,3 @@ interface DataTableCustomsOptions {
 //             'disabled'
 //         ])
 //     }),
-
-// Select Toolbar Placement options
-export enum STP {
-    ABOVE = 'above',
-    ALWAYS = 'always',
-    NONE = 'none',
-    REPLACE = 'replace'
-}

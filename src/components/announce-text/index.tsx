@@ -1,8 +1,9 @@
 'use client'
 
 import { tss } from 'tss-react/mui'
-import { ClassName } from '../../enums/class-name'
 import useDataTableContext from '../../hooks/use-data-table-context'
+// global enums
+import ClassName from '../../enums/class-name'
 
 export default function AnnounceText() {
     const { classes } = useStyles()

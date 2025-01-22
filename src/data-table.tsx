@@ -9,18 +9,16 @@ import { tss } from 'tss-react/mui'
 import { useEffect, useRef } from 'react'
 import Paper, { type PaperProps } from '@mui/material/Paper'
 // locals
-import { ClassName } from './enums'
 import {
     buildMap,
     getDisplayData
     // getNewStateOnDataChange
 } from './functions'
-import { STP, TableAction, type DataTableOptions } from './types/options'
+import { type DataTableOptions } from './types/options'
 import { type DataTableState } from './types/state'
 import useDataTableContext, {
     DataTableContextProvider
 } from './hooks/use-data-table-context'
-import { FilterTypeEnum } from './types/columns'
 // components
 import AnnounceText from './components/announce-text'
 import BottomBar from './components/bottom-bar'
@@ -31,6 +29,11 @@ import FilteredValuesList from './components/filtered-values-list'
 import SelectedRowsToolbar from './components/selected-rows-toolbar'
 import Table from './components/table'
 import Toolbar from './components/toolbar'
+// enums
+import ClassName from './enums/class-name'
+import FilterType from './enums/filter-type'
+import RowsSelectedToolbarPlacement from './enums/rows-selected-toolbar-placement'
+import TableAction from './enums/table-action'
 
 /**
  * A responsive DataTable component built with Material UI for React-based project.
@@ -232,7 +235,10 @@ function _DataTable({
             let selectedMap = buildMap(newRows)
 
             // if the select toolbar is disabled, the rules are a little different
-            if (options.selectToolbarPlacement === STP.NONE) {
+            if (
+                options.selectToolbarPlacement ===
+                RowsSelectedToolbarPlacement.NONE
+            ) {
                 if (selectedRowsLen > displayData.length) {
                     isDeselect = true
                 } else {
@@ -364,15 +370,20 @@ function _DataTable({
     }
 
     const isShowToolbarSelect =
-        options.selectToolbarPlacement === STP.ALWAYS ||
+        options.selectToolbarPlacement ===
+            RowsSelectedToolbarPlacement.ALWAYS ||
         (state.selectedRows.data.length > 0 &&
-            options.selectToolbarPlacement !== STP.NONE)
+            options.selectToolbarPlacement !==
+                RowsSelectedToolbarPlacement.NONE)
 
     const isShowToolbar =
         !isShowToolbarSelect &&
         hasToolbarItem(options) &&
         options.selectToolbarPlacement &&
-        ![STP.ABOVE, STP.NONE].includes(options.selectToolbarPlacement)
+        ![
+            RowsSelectedToolbarPlacement.ABOVE,
+            RowsSelectedToolbarPlacement.NONE
+        ].includes(options.selectToolbarPlacement)
 
     const paperClasses = cx(
         ['scrollFullHeightFullWidth', 'stackedFullWidth'].some(
@@ -439,11 +450,6 @@ function _DataTable({
         </Paper>
     )
 }
-
-// enum TABLE_LOAD {
-//     INITIAL = 1,
-//     UPDATE = 2
-// }
 
 function hasToolbarItem(options: DataTableOptions) {
     // Populate this list with anything that might render in the toolbar to determine if we hide the toolbar
@@ -519,7 +525,7 @@ export type FilterUpdateType = (
     index: number,
     value: string | string[],
     column: DataTableState['columns'][0],
-    type: FilterTypeEnum,
+    type: FilterType,
 
     /**
      * customUpdate is called `<FilterList />` (onDelete)

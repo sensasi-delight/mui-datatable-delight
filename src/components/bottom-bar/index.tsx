@@ -7,10 +7,11 @@ import { DataTableFooterPagination } from './components/pagination'
 import { DataTableFooterJumpToPage } from './components/jump-to-page'
 // globals
 import useDataTableContext from '../../hooks/use-data-table-context'
-import { TableAction } from '../../types/options'
 import { getPageValue } from '../../functions/_shared/get-page-value'
-import { ClassName } from '../../enums/class-name'
 import type { DataTableState } from '../../types/state'
+// global enums
+import ClassName from '../../enums/class-name'
+import TableAction from '../../enums/table-action'
 
 /**
  * @todo  FIX FONT SIZES ARE DIFFERENT IN SUB-COMPONENTS

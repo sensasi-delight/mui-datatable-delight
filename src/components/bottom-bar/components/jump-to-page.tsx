@@ -8,7 +8,8 @@ import Typography from '@mui/material/Typography'
 import { tss } from 'tss-react/mui'
 // globals
 import useDataTableContext from '../../../hooks/use-data-table-context'
-import { ClassName } from '../../../enums/class-name'
+// global enums
+import ClassName from '../../../enums/class-name'
 
 export function DataTableFooterJumpToPage({
     count,

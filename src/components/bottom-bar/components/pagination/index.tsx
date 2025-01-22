@@ -10,7 +10,8 @@ import TablePagination, {
 // functions
 import { getPageValue } from '../../../../functions/_shared/get-page-value'
 import useDataTableContext from '../../../../hooks/use-data-table-context'
-import { ClassName } from '../../../../enums/class-name'
+// global enums
+import ClassName from '../../../../enums/class-name'
 
 export function DataTableFooterPagination({
     count,

@@ -17,12 +17,13 @@ import { processTextLabels } from './function/process-text-labels'
 // defaults
 import { DEFAULT_ICONS } from './statics/default-icons'
 import type { DataTableState } from '../../types/state'
-import { TableAction } from '../../types/options'
 import { getNewStateOnDataChange, load, save, warnInfo } from '../../functions'
 import { DEFAULT_OPTIONS } from './statics/default-options'
 import { handleDeprecatedOptions } from './function/handle-deprecated-options'
 import type { DefaultDataItem } from '../../types'
 import type { DataTableComponents } from '../../types/components'
+// enums
+import TableAction from '../../enums/table-action'
 
 type ContextDatatableProps = Omit<DataTableProps, 'className'>
 

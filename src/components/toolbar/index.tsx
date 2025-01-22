@@ -9,11 +9,12 @@ import VendorToolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
 import Tooltip from '@mui/material/Tooltip'
 // globals
-import { TableAction } from '../../types/options'
 import useDataTableContext from '../../hooks/use-data-table-context'
-import { ClassName } from '../../enums/class-name'
 import type { FilterUpdateType } from '../../data-table'
 import { getDisplayData } from '../../functions'
+// global enums
+import ClassName from '../../enums/class-name'
+import TableAction from '../../enums/table-action'
 // sub-components
 import { DataTableToolbarSearch } from './components/search-text-field'
 import { ToolbarPopover } from './components/popover'

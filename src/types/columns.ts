@@ -108,15 +108,6 @@ export interface DataTableColumnObjectOptions
     filterOptions?: DataTableStateColumnFilterOptions
 }
 
-export enum FilterTypeEnum {
-    CHECKBOX = 'checkbox',
-    TEXTFIELD = 'textField',
-    MULTISELECT = 'multiselect',
-    CUSTOM = 'custom',
-    DROPDOWN = 'dropdown',
-    CHIP = 'chip'
-}
-
 export interface DataTableStateColumnFilterOptions {
     /**
      * Custom names for the filter fields.

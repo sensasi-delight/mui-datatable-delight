@@ -4,8 +4,8 @@
 import MuiTable from '@mui/material/Table'
 import useDataTableContext from '../../hooks/use-data-table-context'
 import { tss } from 'tss-react/mui'
-// globals
-import { ClassName } from '../../enums'
+// global enums
+import ClassName from '../../enums/class-name'
 // types
 import type { Props as TableProps } from './types/props'
 // components

@@ -1,8 +1,9 @@
 import { type DropTargetMonitor, useDrop } from 'react-dnd'
 import useDataTableContext from '../../../../../../../hooks/use-data-table-context'
-import { TableAction } from '../../../../../../../types/options'
 import type Props from '../types/props'
 import { type RefObject, useRef } from 'react'
+// enums
+import TableAction from '../../../../../../../enums/table-action'
 
 /**
  * This hook handles the dragging and dropping effects that occur for columns.

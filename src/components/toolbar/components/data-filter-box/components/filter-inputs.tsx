@@ -19,7 +19,8 @@ import { tss } from 'tss-react/mui'
 import type { DataTableToolbarFilterProps } from '..'
 import { type DataTableState } from '../../../../../types/state'
 import useDataTableContext from '../../../../../hooks/use-data-table-context'
-import { FilterTypeEnum } from '../../../../../types/columns'
+// global enums
+import FilterType from '../../../../../enums/filter-type'
 
 export function DataTableToolbarFilterRenderFilters({
     columns,
@@ -40,7 +41,7 @@ export function DataTableToolbarFilterRenderFilters({
 
         const filterType = column.filterType ?? options.filterType
 
-        if (filterType === FilterTypeEnum.CHECKBOX) {
+        if (filterType === FilterType.CHECKBOX) {
             return (
                 <DataTableToolbarFilterCheckbox
                     index={index}
@@ -54,7 +55,7 @@ export function DataTableToolbarFilterRenderFilters({
                                 index,
                                 value,
                                 column,
-                                FilterTypeEnum.CHECKBOX
+                                FilterType.CHECKBOX
                             )
                         }
                     }}
@@ -62,7 +63,7 @@ export function DataTableToolbarFilterRenderFilters({
             )
         }
 
-        if (filterType === FilterTypeEnum.MULTISELECT) {
+        if (filterType === FilterType.MULTISELECT) {
             return (
                 <DataTableToolbarFilterMultiselect
                     column={column}
@@ -76,7 +77,7 @@ export function DataTableToolbarFilterRenderFilters({
                                 index,
                                 event.target.value,
                                 column,
-                                FilterTypeEnum.MULTISELECT
+                                FilterType.MULTISELECT
                             )
                         }
                     }}
@@ -84,7 +85,7 @@ export function DataTableToolbarFilterRenderFilters({
             )
         }
 
-        if (filterType === FilterTypeEnum.TEXTFIELD) {
+        if (filterType === FilterType.TEXTFIELD) {
             return (
                 <RenderTextField
                     parentProps={parentProps}
@@ -97,7 +98,7 @@ export function DataTableToolbarFilterRenderFilters({
                                 index,
                                 event.target.value,
                                 column,
-                                FilterTypeEnum.TEXTFIELD
+                                FilterType.TEXTFIELD
                             )
                         }
                     }}
@@ -105,7 +106,7 @@ export function DataTableToolbarFilterRenderFilters({
             )
         }
 
-        if (filterType === FilterTypeEnum.CUSTOM) {
+        if (filterType === FilterType.CUSTOM) {
             return (
                 <RenderCustomField
                     column={column}
@@ -122,7 +123,7 @@ export function DataTableToolbarFilterRenderFilters({
                                 index,
                                 value,
                                 column,
-                                column.filterType ?? FilterTypeEnum.DROPDOWN
+                                column.filterType ?? FilterType.DROPDOWN
                             )
                         }
                     }}
@@ -147,7 +148,7 @@ export function DataTableToolbarFilterRenderFilters({
                             index,
                             value,
                             column,
-                            FilterTypeEnum.DROPDOWN
+                            FilterType.DROPDOWN
                         )
                     }
                 }}
