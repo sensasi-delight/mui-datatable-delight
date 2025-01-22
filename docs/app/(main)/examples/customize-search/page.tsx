@@ -1,5 +1,3 @@
-'use client'
-
 import React, { Fragment } from 'react'
 import DataTable from '@src'
 

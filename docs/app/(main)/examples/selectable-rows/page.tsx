@@ -1,5 +1,3 @@
-'use client'
-
 import React from 'react'
 import DataTable from '@src'
 import Switch from '@mui/material/Switch'

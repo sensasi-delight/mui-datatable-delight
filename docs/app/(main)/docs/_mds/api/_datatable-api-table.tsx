@@ -1,5 +1,3 @@
-'use client'
-
 import Typography from '@mui/material/Typography'
 import DataTable, { type DataTableOptions, type DataTableProps } from '@src'
 

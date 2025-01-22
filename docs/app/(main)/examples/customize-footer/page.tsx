@@ -1,5 +1,3 @@
-'use client'
-
 import { useState } from 'react'
 import DataTable from '@src'
 import { tss } from 'tss-react/mui'

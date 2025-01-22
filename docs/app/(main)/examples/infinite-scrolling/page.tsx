@@ -1,5 +1,3 @@
-'use client'
-
 import React, { useState, useEffect } from 'react'
 import { Waypoint } from 'react-waypoint'
 import DataTable from '@src'

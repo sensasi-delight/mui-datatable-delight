@@ -1,5 +1,3 @@
-'use client'
-
 import React from 'react'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import TextField from '@mui/material/TextField'

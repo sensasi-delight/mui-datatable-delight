@@ -1,5 +1,3 @@
-'use client'
-
 import React, { useState } from 'react'
 import DataTable from '@src'
 import Chip from '@mui/material/Chip'

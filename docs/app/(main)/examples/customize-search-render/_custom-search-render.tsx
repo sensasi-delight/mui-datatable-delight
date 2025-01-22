@@ -1,5 +1,3 @@
-'use client'
-
 import React, { useEffect } from 'react'
 import Grow from '@mui/material/Grow'
 import TextField from '@mui/material/TextField'
