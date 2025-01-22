@@ -1,3 +1,5 @@
+'use client'
+
 // vendors
 import InputLabel from '@mui/material/InputLabel'
 import FormControl from '@mui/material/FormControl'
