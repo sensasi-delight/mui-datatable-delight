@@ -12,18 +12,26 @@ export default function Layout({ children }: { children: ReactNode }) {
             <Grid2
                 container
                 sx={{
-                    py: 12,
+                    py: {
+                        xs: 11,
+                        sm: 12
+                    },
                     flexGrow: 1
                 }}
             >
                 <Grid2
-                    paddingX={7}
                     size={{
                         xs: 12,
                         sm: 12,
                         md: 12,
                         lg: 9,
                         xl: 9
+                    }}
+                    sx={{
+                        px: {
+                            xs: 4,
+                            sm: 7
+                        }
                     }}
                 >
                     <Breadcrumbs />
