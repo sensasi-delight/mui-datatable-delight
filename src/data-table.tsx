@@ -3,39 +3,34 @@
 // types
 import type { DataTableProps } from './types'
 // vendors
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
 import { tss } from 'tss-react/mui'
-import { ClassName } from './enums'
 import { useEffect, useRef } from 'react'
 import Paper, { type PaperProps } from '@mui/material/Paper'
 // locals
+import { ClassName } from './enums'
 import {
     buildMap,
     getDisplayData
     // getNewStateOnDataChange
 } from './functions'
-import {
-    STP,
-    TableAction,
-    type DataTableOptions
-} from './types/options'
+import { STP, TableAction, type DataTableOptions } from './types/options'
 import { type DataTableState } from './types/state'
 import useDataTableContext, {
     DataTableContextProvider
 } from './hooks/use-data-table-context'
 import { FilterTypeEnum } from './types/columns'
 // components
-import {
-    AnnounceText,
-    BottomBar,
-    ColumnsResizer,
-    FilteredValuesList,
-    SelectedRowsToolbar,
-    Table,
-    Toolbar
-} from './components'
-import { DndProvider } from 'react-dnd'
-import { HTML5Backend } from 'react-dnd-html5-backend'
-import type { SetResizableCallback } from './components/columns-resizer'
+import AnnounceText from './components/announce-text'
+import BottomBar from './components/bottom-bar'
+import ColumnsResizer, {
+    type SetResizableCallback
+} from './components/columns-resizer'
+import FilteredValuesList from './components/filtered-values-list'
+import SelectedRowsToolbar from './components/selected-rows-toolbar'
+import Table from './components/table'
+import Toolbar from './components/toolbar'
 
 /**
  * A responsive DataTable component built with Material UI for React-based project.

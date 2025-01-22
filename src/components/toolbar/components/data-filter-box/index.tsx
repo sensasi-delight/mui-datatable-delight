@@ -14,7 +14,7 @@ import type { FilterUpdateType } from '../../../../data-table'
 import { getDisplayData } from '../../../../functions'
 import { TableAction } from '../../../../types/options'
 
-export function DataTableToolbarFilter(props: DataTableToolbarFilterProps) {
+export default function DataFilterBox(props: DataTableToolbarFilterProps) {
     const {
         onAction,
         options,

@@ -22,7 +22,7 @@ import {
 import useDataTableContext from '../../../../hooks/use-data-table-context'
 import { buildMap } from '../../../../functions'
 
-export function DataTableBody(props: DataTableBodyProps) {
+export default function TableBody(props: DataTableBodyProps) {
     const { classes } = useStyles()
     const { options, textLabels } = useDataTableContext()
 

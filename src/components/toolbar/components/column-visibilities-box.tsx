@@ -13,7 +13,7 @@ import { TableAction } from '../../../types/options'
 
 const CLASS_ID = 'datatable-delight--toolbar--view-col'
 
-export function ToolbarViewCol({}: ToolbarViewColProps) {
+export default function ColumnVisibilitiesBox({}: ToolbarViewColProps) {
     const { components, onAction, options, state, textLabels } =
         useDataTableContext()
     const { classes, cx } = useStyles()

@@ -12,15 +12,15 @@ import Tooltip from '@mui/material/Tooltip'
 import { TableAction } from '../../types/options'
 import useDataTableContext from '../../hooks/use-data-table-context'
 import { ClassName } from '../../enums/class-name'
+import type { FilterUpdateType } from '../../data-table'
+import { getDisplayData } from '../../functions'
 // sub-components
 import { DataTableToolbarSearch } from './components/search-text-field'
 import { ToolbarPopover } from './components/popover'
 import { ToolbarPrintButton } from './components/print-button'
 import { ToolbarDownloadButton } from './components/download-button'
-import type { FilterUpdateType } from '../../data-table'
-import { getDisplayData } from '../../functions'
-import { ToolbarViewCol } from './components/column-visibilities-box'
-import { DataTableToolbarFilter } from './components/data-filter-box'
+import ColumnVisibilityBox from './components/column-visibilities-box'
+import DataFilterBox from './components/data-filter-box'
 
 /**
  * DataTable Delight Toolbar
@@ -30,7 +30,7 @@ import { DataTableToolbarFilter } from './components/data-filter-box'
  *
  * @see {@link http://mui-datatable-delight.vercel.app/examples/customize-toolbar|Customize Toolbar Example}.
  */
-export function TableToolbar(props: ToolbarProps) {
+export default function Toolbar(props: ToolbarProps) {
     const {
         components,
         icons,
@@ -183,8 +183,8 @@ export function TableToolbar(props: ToolbarProps) {
 
     const _Tooltip = components.Tooltip ?? Tooltip
     const _ColumnVisibilityBox =
-        components.ColumnVisibilityBox ?? ToolbarViewCol
-    const _DataFilterBox = components.DataFilterBox ?? DataTableToolbarFilter
+        components.ColumnVisibilityBox ?? ColumnVisibilityBox
+    const _DataFilterBox = components.DataFilterBox ?? DataFilterBox
 
     return (
         <VendorToolbar className={classes.root} role="table toolbar">

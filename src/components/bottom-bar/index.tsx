@@ -16,7 +16,7 @@ import type { DataTableState } from '../../types/state'
  * @todo  FIX FONT SIZES ARE DIFFERENT IN SUB-COMPONENTS
  * @todo  RENAME COMPONENT TO `<BottomToolbar />`
  */
-export function TableFooter({}: TableFooterProps) {
+export default function BottomBar() {
     const { options, state, textLabels, onAction } = useDataTableContext()
     const { classes, cx } = useStyles()
     const { customFooter, pagination = true, jumpToPage } = options
@@ -77,8 +77,6 @@ export function TableFooter({}: TableFooterProps) {
         </div>
     )
 }
-
-interface TableFooterProps {}
 
 const useStyles = tss.withName(ClassName.FOOTER + '-').create(({ theme }) => ({
     root: {

@@ -8,7 +8,7 @@ import RemoveIcon from '@mui/icons-material/Remove'
 /**
  * @todo  IMPROVE PROP TYPES
  */
-export function ExpandButton({
+export default function RowExpansionButton({
     areAllRowsExpanded,
     buttonClass,
     expandableRowsHeader,

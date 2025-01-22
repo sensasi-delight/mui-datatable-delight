@@ -10,10 +10,10 @@ import { ClassName } from '../../enums'
 import type { Props as TableProps } from './types/props'
 // components
 import TableHead from './components/head'
-import { DataTableBody } from './components/body'
+import TableBody from './components/body'
 import type { Props as HeadProps } from './components/head/types/props'
 
-export function Table({
+export default function Table({
     draggableHeadCellRefs, // TEMPORARY PASSING HEAD PROPS
     selectRowUpdate, // TEMPORARY PASSING HEAD PROPS
     setHeadCellsRef, // TEMPORARY PASSING HEAD PROPS
@@ -32,7 +32,7 @@ export function Table({
     const tablePropsFromOption = options.setTableProps?.() ?? {}
 
     const _TableHead = components.TableHead ?? TableHead
-    const _TableBody = components.TableBody ?? DataTableBody
+    const _TableBody = components.TableBody ?? TableBody
 
     return (
         <MuiTable
