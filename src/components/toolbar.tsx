@@ -9,7 +9,7 @@ import VendorToolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
 import Tooltip from '@mui/material/Tooltip'
 // globals
-import { TableAction } from '../data-table.props.type/options'
+import { TableAction } from '../types/options'
 import useDataTableContext from '../hooks/use-data-table-context'
 import { ClassName } from '../enums/class-name'
 // sub-components

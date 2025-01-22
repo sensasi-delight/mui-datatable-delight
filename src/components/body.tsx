@@ -12,13 +12,13 @@ import { TableBodyCell } from './body.cell'
 import { DataTableBodyRow } from './body.row'
 import { DataTableTableSelectCell } from './components.shared/select-cell'
 import { getPageValue } from '../functions.shared/get-page-value'
-import type { DataTableState } from '../data-table.props.type/state'
+import type { DataTableState } from '../types/state'
 import {
     type DataTableOptions,
     type RowTypeIDK,
     type SomeRowsIDK,
     TableAction
-} from '../data-table.props.type/options'
+} from '../types/options'
 import useDataTableContext from '../hooks/use-data-table-context'
 import { buildMap } from '../functions'
 

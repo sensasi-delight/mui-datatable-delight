@@ -1,4 +1,4 @@
-import { type DataTableOptions, STP } from '../../../data-table.props.type/options'
+import { type DataTableOptions, STP } from '../../../types/options'
 
 export const DEFAULT_OPTIONS: DataTableOptions = {
     caseSensitive: false,

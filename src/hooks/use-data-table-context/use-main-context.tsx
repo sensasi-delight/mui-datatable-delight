@@ -16,13 +16,13 @@ import type { DataTableOptions, DataTableProps } from '../..'
 import { processTextLabels } from './function/process-text-labels'
 // defaults
 import { DEFAULT_ICONS } from './statics/default-icons'
-import type { DataTableState } from '../../data-table.props.type/state'
-import { TableAction } from '../../data-table.props.type/options'
+import type { DataTableState } from '../../types/state'
+import { TableAction } from '../../types/options'
 import { getNewStateOnDataChange, load, save, warnInfo } from '../../functions'
 import { DEFAULT_OPTIONS } from './statics/default-options'
 import { handleDeprecatedOptions } from './function/handle-deprecated-options'
-import type { DefaultDataItem } from '../../data-table.props.type'
-import type { DataTableComponents } from '../../data-table.props.type/components'
+import type { DefaultDataItem } from '../../types'
+import type { DataTableComponents } from '../../types/components'
 
 type ContextDatatableProps = Omit<DataTableProps, 'className'>
 

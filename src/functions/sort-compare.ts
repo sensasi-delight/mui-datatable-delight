@@ -1,5 +1,5 @@
-import type { DataTableSortOrderOption } from '../data-table.props.type/options'
-import type { DataTableState } from '../data-table.props.type/state'
+import type { DataTableSortOrderOption } from '../types/options'
+import type { DataTableState } from '../types/state'
 
 export function sortCompare(order: DataTableSortOrderOption['direction']) {
     return (a: DataTableState['data'][0], b: DataTableState['data'][0]) => {

@@ -12,7 +12,7 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import {
     TableAction,
     type DataTableOptions
-} from '../data-table.props.type/options'
+} from '../types/options'
 import useDataTableContext from '../hooks/use-data-table-context'
 import { ClassName } from '../enums/class-name'
 import { buildMap, getNewStateOnDataChange } from '../functions'

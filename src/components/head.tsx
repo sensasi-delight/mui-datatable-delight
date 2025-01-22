@@ -6,12 +6,12 @@ import { TableHeadCell } from './table-head/components'
 import { TableHeadRow } from './head.row'
 import { DataTableTableSelectCell } from './components.shared/select-cell'
 import useDataTableContext from '../hooks/use-data-table-context'
-import type { DataTableState } from '../data-table.props.type/state'
+import type { DataTableState } from '../types/state'
 import {
     type DataTableOptions,
     type DataTableSortOrderOption,
     TableAction
-} from '../data-table.props.type/options'
+} from '../types/options'
 import { getDisplayData, sortTable } from '../functions'
 import type { HeadProps } from './head/types'
 

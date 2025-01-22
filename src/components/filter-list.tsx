@@ -3,9 +3,9 @@
 import { tss } from 'tss-react/mui'
 import Chip from '@mui/material/Chip'
 // local types
-import type { DataTableState } from '../data-table.props.type/state'
+import type { DataTableState } from '../types/state'
 import useDataTableContext from '../hooks/use-data-table-context'
-import type { FilterTypeType } from '../data-table.props.type/shared/filter-type-type'
+import type { FilterTypeType } from '../types/shared/filter-type-type'
 import type { FilterUpdateType } from '../data-table'
 
 const CLASS_ID = 'datatable-delight--filter-list'

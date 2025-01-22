@@ -1,10 +1,10 @@
 import { isValidElement } from 'react'
-import type { DataTableProps } from '../data-table.props.type'
+import type { DataTableProps } from '../types'
 import type {
     DataTableOptions,
     DataTableSortOrderOption
-} from '../data-table.props.type/options'
-import type { DataTableState } from '../data-table.props.type/state'
+} from '../types/options'
+import type { DataTableState } from '../types/state'
 import { getCollatorComparator } from './get-collator-comparator'
 import { transformData } from './transform-data'
 import { sortCompare as defaultSortCompare } from './sort-compare'

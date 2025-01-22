@@ -1,4 +1,4 @@
-import type { DataTableState } from '../data-table.props.type/state'
+import type { DataTableState } from '../types/state'
 
 /**
  * Load DataTableState from localStorage

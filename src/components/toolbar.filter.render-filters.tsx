@@ -17,9 +17,9 @@ import Typography from '@mui/material/Typography'
 import { tss } from 'tss-react/mui'
 // locals
 import type { DataTableToolbarFilterProps } from './toolbar.filter'
-import { type DataTableState } from '../data-table.props.type/state'
+import { type DataTableState } from '../types/state'
 import useDataTableContext from '../hooks/use-data-table-context'
-import { FilterTypeEnum } from '../data-table.props.type/columns'
+import { FilterTypeEnum } from '../types/columns'
 
 export function DataTableToolbarFilterRenderFilters({
     columns,

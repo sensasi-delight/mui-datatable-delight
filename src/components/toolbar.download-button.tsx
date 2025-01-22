@@ -4,8 +4,8 @@
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 // locals
-import type { DataTableOptions } from '../data-table.props.type/options'
-import type { DataTableState } from '../data-table.props.type/state'
+import type { DataTableOptions } from '../types/options'
+import type { DataTableState } from '../types/state'
 import useDataTableContext from '../hooks/use-data-table-context'
 import { ICON_BUTTON_DEFAULT_SX } from './toolbar.icon-button-default-sx'
 import { createCsvDownload } from './toolbar.functions.create-csv-download'

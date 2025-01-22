@@ -1,7 +1,7 @@
 'use client'
 
 // types
-import type { DataTableProps } from './data-table.props.type'
+import type { DataTableProps } from './types'
 // vendors
 import { tss } from 'tss-react/mui'
 import { ClassName } from './enums'
@@ -17,12 +17,12 @@ import {
     STP,
     TableAction,
     type DataTableOptions
-} from './data-table.props.type/options'
-import { type DataTableState } from './data-table.props.type/state'
+} from './types/options'
+import { type DataTableState } from './types/state'
 import useDataTableContext, {
     DataTableContextProvider
 } from './hooks/use-data-table-context'
-import { FilterTypeEnum } from './data-table.props.type/columns'
+import { FilterTypeEnum } from './types/columns'
 // components
 import {
     AnnounceText,

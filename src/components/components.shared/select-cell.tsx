@@ -6,7 +6,7 @@ import { tss } from 'tss-react/mui'
 import {
     type DataTableOptions,
     TableAction
-} from '../../data-table.props.type/options'
+} from '../../types/options'
 import useDataTableContext from '../../hooks/use-data-table-context'
 import { ExpandButton } from './select-cell.expand-button'
 import { buildMap } from '../../functions'
