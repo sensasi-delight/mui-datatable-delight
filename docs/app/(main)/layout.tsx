@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
-import { Box, Grid2 } from '@mui/material'
+import Box from '@mui/material/Box'
+import Grid2 from '@mui/material/Grid2'
 import SideTopBar from './_components/side-top-bar'
 import { Breadcrumbs } from './_components/breadcrumbs'
 

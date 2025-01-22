@@ -5,7 +5,7 @@ import FormControl from '@mui/material/FormControl'
 import FormGroup from '@mui/material/FormGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import { tss } from 'tss-react/mui'
-import { ToolbarViewCol } from '../../../../../src/components/toolbar.view-col'
+import { ToolbarViewCol } from '../../../../../src/components/toolbar/components/column-visibilities-box'
 
 function TableViewCol({
     columns,

@@ -1,5 +1,3 @@
-'use client'
-
 import DataTable from '@src'
 
 export default function Example() {

@@ -1,7 +1,8 @@
 'use client'
 
 import React from 'react'
-import { CircularProgress, Typography } from '@mui/material'
+import CircularProgress from '@mui/material/CircularProgress'
+import Typography from '@mui/material/Typography'
 import DataTable from '@src'
 
 class Example extends React.Component {

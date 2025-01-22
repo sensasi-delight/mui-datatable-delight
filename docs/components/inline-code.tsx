@@ -1,7 +1,7 @@
 'use client'
 
-import { Box } from '@mui/material'
-import { grey } from '@mui/material/colors'
+import Box from '@mui/material/Box'
+import grey from '@mui/material/colors/grey'
 
 export function InlineCode({
     text,

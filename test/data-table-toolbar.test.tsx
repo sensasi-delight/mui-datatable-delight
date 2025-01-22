@@ -7,15 +7,15 @@ import {
 } from '@testing-library/react'
 // locals
 import TableToolbar from '../src/components/toolbar'
-import {
+import type {
     DataTableColumns,
     DataTableData,
     DataTableOptions,
     DataTableProps
 } from '../src'
-import { DEFAULT_TEXT_LABELS } from '../src/hooks/use-main-context.process-text-labels.default-text-labels'
-import { ClassName } from '../src/enums/class-name'
-import { MainContextProvider } from '../src/hooks/use-main-context'
+import { DEFAULT_TEXT_LABELS } from '../src/hooks/use-data-table-context/function/statics/default-text-labels'
+import ClassName from '../src/enums/class-name'
+import { DataTableContextProvider } from '../src'
 
 describe('<TableToolbar />', function () {
     function setup(override?: DataTableProps) {
@@ -33,7 +33,7 @@ describe('<TableToolbar />', function () {
 
         return {
             result: render(
-                <MainContextProvider
+                <DataTableContextProvider
                     datatableProps={{
                         columns,
                         data,
@@ -45,7 +45,7 @@ describe('<TableToolbar />', function () {
                         options={options}
                         // setTableAction={setTableAction}
                     />
-                </MainContextProvider>
+                </DataTableContextProvider>
             )
         }
     }

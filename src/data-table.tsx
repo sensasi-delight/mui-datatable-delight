@@ -1,41 +1,39 @@
 'use client'
 
 // types
-import type { DataTableProps } from './data-table.props.type'
+import type { DataTableProps } from './types'
 // vendors
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
+import { tss } from 'tss-react/mui'
 import { useEffect, useRef } from 'react'
-import { Paper, PaperProps } from '@mui/material'
+import Paper, { type PaperProps } from '@mui/material/Paper'
 // locals
 import {
     buildMap,
     getDisplayData
     // getNewStateOnDataChange
 } from './functions'
-import {
-    STP,
-    TableAction,
-    type DataTableOptions
-} from './data-table.props.type/options'
-import { type DataTableState } from './data-table.props.type/state'
-import {
-    DataTableContextProvider,
-    useDataTableContext,
-    useStyles
-} from './hooks'
-import { FilterTypeEnum } from './data-table.props.type/columns'
+import { type DataTableOptions } from './types/options'
+import { type DataTableState } from './types/state'
+import DataTableContextProvider from './hooks/use-data-table-context/components/provider'
+// hooks
+import useDataTableContext from './hooks/use-data-table-context'
 // components
-import {
-    AnnounceText,
-    BottomBar,
-    ColumnsResizer,
-    FilteredValuesList,
-    SelectedRowsToolbar,
-    Table,
-    Toolbar
-} from './components'
-import { DndProvider } from 'react-dnd'
-import { HTML5Backend } from 'react-dnd-html5-backend'
-import { SetResizableCallback } from './components/resize'
+import AnnounceText from './components/announce-text'
+import BottomBar from './components/bottom-bar'
+import ColumnsResizer, {
+    type SetResizableCallback
+} from './components/columns-resizer'
+import FilteredValuesList from './components/filtered-values-list'
+import SelectedRowsToolbar from './components/selected-rows-toolbar'
+import Table from './components/table'
+import Toolbar from './components/toolbar'
+// enums
+import ClassName from './enums/class-name'
+import FilterType from './enums/filter-type'
+import RowsSelectedToolbarPlacement from './enums/rows-selected-toolbar-placement'
+import TableAction from './enums/table-action'
 
 /**
  * A responsive DataTable component built with Material UI for React-based project.
@@ -121,7 +119,10 @@ function _DataTable({
         }
     }, [])
 
-    function setHeadCellRef(
+    /**
+     * I THINK THIS COULD BE MOVED TO `<Table />`
+     */
+    function setHeadCellsRef(
         index: number,
         pos: number,
         el: HTMLTableCellElement
@@ -195,7 +196,7 @@ function _DataTable({
     function selectRowUpdate(
         type: string,
         value: DataTableState['previousSelectedRow'],
-        shiftAdjacentRows = []
+        shiftAdjacentRows: unknown[] = []
     ) {
         // safety check
         const { selectableRows } = options
@@ -234,7 +235,10 @@ function _DataTable({
             let selectedMap = buildMap(newRows)
 
             // if the select toolbar is disabled, the rules are a little different
-            if (options.selectToolbarPlacement === STP.NONE) {
+            if (
+                options.selectToolbarPlacement ===
+                RowsSelectedToolbarPlacement.NONE
+            ) {
                 if (selectedRowsLen > displayData.length) {
                     isDeselect = true
                 } else {
@@ -366,15 +370,20 @@ function _DataTable({
     }
 
     const isShowToolbarSelect =
-        options.selectToolbarPlacement === STP.ALWAYS ||
+        options.selectToolbarPlacement ===
+            RowsSelectedToolbarPlacement.ALWAYS ||
         (state.selectedRows.data.length > 0 &&
-            options.selectToolbarPlacement !== STP.NONE)
+            options.selectToolbarPlacement !==
+                RowsSelectedToolbarPlacement.NONE)
 
     const isShowToolbar =
         !isShowToolbarSelect &&
         hasToolbarItem(options) &&
         options.selectToolbarPlacement &&
-        ![STP.ABOVE, STP.NONE].includes(options.selectToolbarPlacement)
+        ![
+            RowsSelectedToolbarPlacement.ABOVE,
+            RowsSelectedToolbarPlacement.NONE
+        ].includes(options.selectToolbarPlacement)
 
     const paperClasses = cx(
         ['scrollFullHeightFullWidth', 'stackedFullWidth'].some(
@@ -427,10 +436,10 @@ function _DataTable({
 
                 <DndProvider backend={HTML5Backend}>
                     <Table
-                        tableRef={tableRef}
-                        selectRowUpdate={selectRowUpdate}
-                        setHeadCellRef={setHeadCellRef}
                         draggableHeadCellRefs={draggableHeadCellRefs}
+                        selectRowUpdate={selectRowUpdate}
+                        setHeadCellsRef={setHeadCellsRef}
+                        tableRef={tableRef}
                     />
                 </DndProvider>
             </div>
@@ -441,11 +450,6 @@ function _DataTable({
         </Paper>
     )
 }
-
-// enum TABLE_LOAD {
-//     INITIAL = 1,
-//     UPDATE = 2
-// }
 
 function hasToolbarItem(options: DataTableOptions) {
     // Populate this list with anything that might render in the toolbar to determine if we hide the toolbar
@@ -521,7 +525,7 @@ export type FilterUpdateType = (
     index: number,
     value: string | string[],
     column: DataTableState['columns'][0],
-    type: FilterTypeEnum,
+    type: FilterType,
 
     /**
      * customUpdate is called `<FilterList />` (onDelete)
@@ -593,3 +597,52 @@ function getTableHeightAndResponsiveClasses(
         responsiveClass
     }
 }
+
+const useStyles = tss.withName(ClassName.ROOT).create(({ theme }) => ({
+    root: {
+        '& .datatables-no-print': {
+            '@media print': {
+                display: 'none'
+            }
+        }
+    },
+
+    paper: {
+        isolation: 'isolate'
+    },
+
+    paperResponsiveScrollFullHeightFullWidth: {
+        position: 'absolute'
+    },
+
+    responsiveBase: {
+        overflow: 'auto',
+        '@media print': {
+            height: 'auto !important'
+        }
+    },
+
+    // deprecated, but continuing support through v3.x
+    responsiveScroll: {
+        overflow: 'auto',
+        height: '100%'
+    },
+    // deprecated, but continuing support through v3.x
+    responsiveScrollMaxHeight: {
+        overflow: 'auto',
+        height: '100%'
+    },
+    // deprecated, but continuing support through v3.x
+    responsiveScrollFullHeight: {
+        height: '100%'
+    },
+    // deprecated, but continuing support through v3.x
+    responsiveStacked: {
+        overflow: 'auto',
+        [theme.breakpoints.down('md')]: {
+            overflow: 'hidden'
+        }
+    },
+    // deprecated, but continuing support through v3.x
+    responsiveStackedFullWidth: {}
+}))

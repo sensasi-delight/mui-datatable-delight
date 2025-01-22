@@ -1,4 +1,4 @@
-export enum ClassName {
+enum ClassName {
     ROOT = 'datatable-delight',
 
     ANNOUNCE_TEXT = ROOT + '--announce-text',
@@ -13,3 +13,5 @@ export enum ClassName {
     FOOTER__JUMP_TO_PAGE = FOOTER + '--jump-to-page',
     FOOTER__PAGINATION = FOOTER + '--pagination'
 }
+
+export default ClassName

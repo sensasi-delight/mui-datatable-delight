@@ -1,7 +1,11 @@
 'use client'
 
-import { Home, NavigateNext } from '@mui/icons-material'
-import { Box, Button, IconButton, Tooltip } from '@mui/material'
+import Home from '@mui/icons-material/Home'
+import NavigateNext from '@mui/icons-material/NavigateNext'
+import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
+import IconButton from '@mui/material/IconButton'
+import Tooltip from '@mui/material/Tooltip'
 import { usePathname } from 'next/navigation'
 import React from 'react'
 

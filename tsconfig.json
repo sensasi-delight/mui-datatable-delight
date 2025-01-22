@@ -1,28 +1,28 @@
 {
     "compilerOptions": {
-        // "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.tsbuildinfo",
-        "target": "ES2020",
-        "useDefineForClassFields": true,
-        "lib": ["ES2021", "DOM", "DOM.Iterable"],
-        "module": "ESNext",
+        "esModuleInterop": true,
         "skipLibCheck": true,
+        "target": "ES2022",
+        "verbatimModuleSyntax": true,
 
         /* Bundler mode */
-        "moduleResolution": "bundler",
-        "allowImportingTsExtensions": true,
+        "composite": true,
+        "jsx": "react-jsx",
         "isolatedModules": true,
+        "moduleResolution": "bundler",
+        "module": "ESNext",
         "moduleDetection": "force",
         "noEmit": true,
-        "jsx": "react-jsx",
 
         /* Linting */
-        "strict": true,
+        "declarationMap": true,
+        "lib": ["ES2022", "DOM", "DOM.Iterable"],
+        "noFallthroughCasesInSwitch": true,
+        "noUncheckedIndexedAccess": true,
+        // "noUncheckedSideEffectImports": true, // DISABLED DUE ERROR: Unknown compiler option noUncheckedSideEffectImports .
         "noUnusedLocals": true,
         "noUnusedParameters": true,
-        "noFallthroughCasesInSwitch": true,
-        // "noUncheckedSideEffectImports": true,
-
-        "esModuleInterop": true
+        "strict": true
     },
     "exclude": ["node_modules", "dist"]
 }

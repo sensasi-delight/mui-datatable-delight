@@ -1,6 +1,7 @@
 {
     "extends": "../tsconfig.json",
     "compilerOptions": {
+        "composite": true,
         "allowJs": true,
         "incremental": true,
         "jsx": "preserve",
@@ -12,12 +13,20 @@
                 "name": "next"
             }
         ],
+        "rootDir": "../",
         "paths": {
             "@src": ["./../src"],
+            "@dist/*": ["../dist/*"],
             "@dist": [".."],
             "@/*": ["./*"]
         }
     },
-    "include": ["next-env.d.ts", ".next/types/**/*.ts", "**/*.ts", "**/*.tsx"],
+    "include": [
+        "next-env.d.ts",
+        ".next/types/**/*.ts",
+        "**/*.ts",
+        "**/*.tsx",
+        "../src"
+    ],
     "exclude": ["node_modules"]
 }

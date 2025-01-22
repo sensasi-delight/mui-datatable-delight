@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react'
 import mermaid from 'mermaid'
-import { Paper } from '@mui/material'
+import Paper from '@mui/material/Paper'
 
 export function Mermaid({ children }: { children: string }) {
     const mermaidRef = useRef<HTMLDivElement>(null)

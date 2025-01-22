@@ -2,7 +2,7 @@
 import { test, expect, describe, vi } from 'vitest'
 import { fireEvent, render } from '@testing-library/react'
 // locals
-import TableResize from '../src/components/resize'
+import TableResize from '../src/components/columns-resizer'
 import DataTable from '../src'
 
 describe('<TableResize />', function () {

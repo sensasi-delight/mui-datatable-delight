@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { Chip } from '@mui/material'
+import Chip from '@mui/material/Chip'
 import DataTable from '@src'
 
 class Example extends React.Component {

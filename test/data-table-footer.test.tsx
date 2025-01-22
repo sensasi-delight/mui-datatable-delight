@@ -1,11 +1,11 @@
 // vendors
 import { test, expect, describe } from 'vitest'
-import { TablePagination as OriginalPaginationFromMui } from '@mui/material'
+import OriginalPaginationFromMui from '@mui/material/TablePagination'
 import { render } from '@testing-library/react'
 // locals
 import type { DataTableOptions, DataTableProps } from '../src'
-import TableFooter from '../src/components/footer'
-import { MainContextProvider } from '../src/hooks/use-main-context'
+import TableFooter from '../src'
+import { DataTableContextProvider } from '../src'
 import { ClassName } from '../src/enums/class-name'
 
 describe('<DataTableFooter />', function () {
@@ -20,7 +20,7 @@ describe('<DataTableFooter />', function () {
 
         return {
             result: render(
-                <MainContextProvider
+                <DataTableContextProvider
                     datatableProps={{
                         columns,
                         data,
@@ -28,7 +28,7 @@ describe('<DataTableFooter />', function () {
                     }}
                 >
                     <TableFooter />
-                </MainContextProvider>
+                </DataTableContextProvider>
             )
         }
     }

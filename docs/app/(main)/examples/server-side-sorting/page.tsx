@@ -2,7 +2,8 @@
 
 import React from 'react'
 import DataTable from '@src'
-import { CircularProgress, Typography } from '@mui/material'
+import CircularProgress from '@mui/material/CircularProgress'
+import Typography from '@mui/material/Typography'
 import Cities from '../_shared-components/cities'
 
 class Example extends React.Component {

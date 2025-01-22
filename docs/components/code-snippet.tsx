@@ -1,4 +1,5 @@
-import { Box, Paper } from '@mui/material'
+import Box from '@mui/material/Box'
+import Paper from '@mui/material/Paper'
 // internals
 import { AlwaysDarkThemeProvider } from './code-snippet.always-dark-theme-provider'
 import { CopyButton } from './code-snippet.copy-button'
@@ -9,7 +10,6 @@ import 'prismjs/components/prism-jsx'
 import 'prismjs/components/prism-bash'
 import 'prismjs/components/prism-typescript'
 import 'prismjs/components/prism-tsx'
-// @ts-expect-error IDK
 import 'prismjs/themes/prism-tomorrow.css'
 
 export function CodeSnippet({

@@ -1,6 +1,6 @@
-import { ReactNode } from 'react'
-import { Link } from '@mui/material'
-import { OpenInNew } from '@mui/icons-material'
+import type { ReactNode } from 'react'
+import Link from '@mui/material/Link'
+import OpenInNew from '@mui/icons-material/OpenInNew'
 
 export function LinkNewTab({
     href,

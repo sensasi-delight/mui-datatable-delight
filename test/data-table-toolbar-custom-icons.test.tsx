@@ -1,8 +1,8 @@
-import Chip, { ChipProps } from '@mui/material/Chip'
+import Chip, { type ChipProps } from '@mui/material/Chip'
 import { describe, expect, test } from 'vitest'
 import { render } from '@testing-library/react'
-import TableToolbar from '../src/components/toolbar'
-import { DEFAULT_TEXT_LABELS } from '../src/hooks/use-main-context.process-text-labels.default-text-labels'
+import { Toolbar } from '../src/components'
+import { DEFAULT_TEXT_LABELS } from '../src/hooks/use-data-table-context/function/statics/default-text-labels'
 
 const CustomChip = (props: ChipProps) => {
     return <Chip variant="outlined" color="secondary" label={props.label} />
@@ -51,9 +51,7 @@ const testCustomIcon = (iconName: string) => {
     const components = { icons: { [iconName]: CustomChip } }
 
     const result = render(
-        <TableToolbar
-            {...{ columns, data, options, setTableAction, components }}
-        />
+        <Toolbar {...{ columns, data, options, setTableAction, components }} />
     )
 
     expect(result.getAllByRole('button').length).toBe(7)
@@ -69,7 +67,7 @@ const testCustomIcon = (iconName: string) => {
     // )
 }
 
-describe('<TableToolbar /> with custom icons', function () {
+describe('<Toolbar /> with custom icons', function () {
     Object.values(DEFAULT_TEXT_LABELS.toolbar).forEach(iconLabel =>
         test(`should render a toolbar with a custom chip in place of the ${iconLabel} icon`, () =>
             testCustomIcon(iconLabel))

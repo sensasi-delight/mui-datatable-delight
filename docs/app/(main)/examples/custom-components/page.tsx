@@ -10,7 +10,7 @@ import Checkbox from '@mui/material/Checkbox'
 import Radio, { type RadioProps } from '@mui/material/Radio'
 import TableViewCol from './_table-view-col'
 //
-import DataTable, { TableFilterList } from '@src'
+import DataTable, { FilteredValuesList } from '@src'
 
 const CustomChip = props => {
     const { label, onDelete, columnNames, className, index } = props
@@ -55,7 +55,7 @@ const CustomCheckbox = (props: RadioProps) => {
 }
 
 const CustomFilterList = props => {
-    return <TableFilterList {...props} ItemComponent={CustomChip} />
+    return <FilteredValuesList {...props} ItemComponent={CustomChip} />
 }
 
 class Example extends React.Component {
@@ -143,7 +143,7 @@ class Example extends React.Component {
                 columns={columns}
                 options={options}
                 components={{
-                    TableFilterList: CustomFilterList,
+                    FilteredValuesList: CustomFilterList,
                     Tooltip: CustomTooltip,
                     Checkbox: CustomCheckbox,
                     TableViewCol: TableViewCol

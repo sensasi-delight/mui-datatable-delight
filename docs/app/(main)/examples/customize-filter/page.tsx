@@ -1,17 +1,15 @@
 'use client'
 
-import {
-    FormGroup,
-    FormLabel,
-    FormControl,
-    ListItemText,
-    TextField,
-    Checkbox,
-    FormControlLabel,
-    Select,
-    InputLabel,
-    MenuItem
-} from '@mui/material'
+import FormGroup from '@mui/material/FormGroup'
+import FormLabel from '@mui/material/FormLabel'
+import FormControl from '@mui/material/FormControl'
+import ListItemText from '@mui/material/ListItemText'
+import Checkbox from '@mui/material/Checkbox'
+import TextField from '@mui/material/TextField'
+import Select from '@mui/material/Select'
+import InputLabel from '@mui/material/InputLabel'
+import MenuItem from '@mui/material/MenuItem'
+import FormControlLabel from '@mui/material/FormControlLabel'
 import React from 'react'
 import DataTable from '@src'
 

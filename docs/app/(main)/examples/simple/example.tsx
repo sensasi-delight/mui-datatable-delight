@@ -1,7 +1,10 @@
 'use client'
 
 // vendors
-import { InputLabel, FormControl, MenuItem, Select } from '@mui/material'
+import InputLabel from '@mui/material/InputLabel'
+import FormControl from '@mui/material/FormControl'
+import MenuItem from '@mui/material/MenuItem'
+import Select from '@mui/material/Select'
 import { useState } from 'react'
 // DataTable
 import DataTable, { type DataTableOptions, type DataTableProps } from '@src'
