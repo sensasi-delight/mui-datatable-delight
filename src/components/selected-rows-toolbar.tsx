@@ -9,15 +9,12 @@ import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
 import DeleteIcon from '@mui/icons-material/Delete'
 // locals
-import {
-    TableAction,
-    type DataTableOptions
-} from '../types/options'
+import { TableAction, type DataTableOptions } from '../types/options'
 import useDataTableContext from '../hooks/use-data-table-context'
 import { ClassName } from '../enums/class-name'
 import { buildMap, getNewStateOnDataChange } from '../functions'
 
-export function TableToolbarSelect({
+export default function SelectedRowsToolbar({
     selectRowUpdate
 }: TableToolbarSelectProps) {
     const {

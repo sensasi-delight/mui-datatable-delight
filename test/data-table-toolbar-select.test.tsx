@@ -1,4 +1,4 @@
-import { TableToolbarSelect } from '../src/components/selected-row-toolbar'
+import { TableToolbarSelect } from '../src/components/selected-rows-toolbar'
 import { describe, expect, test, vi } from 'vitest'
 import { render } from '@testing-library/react'
 import { DataTableOptions } from '../src'

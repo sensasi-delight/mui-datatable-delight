@@ -13,7 +13,9 @@ const CLASS_ID = 'datatable-delight--filter-list'
 /**
  * SHOW LIST OF VALUES OF FILTERS THAT APPLIED
  */
-export function TableFilterList({ filterUpdate }: TableFilterListProps) {
+export default function FilteredValuesList({
+    filterUpdate
+}: TableFilterListProps) {
     const { classes, cx } = useStyles()
     const { options, state } = useDataTableContext()
     const { serverSide } = options
