@@ -1,26 +1,21 @@
 'use client'
 
 // materials
-import {
-    ArrowRight,
-    KeyboardArrowDown,
-    KeyboardArrowRight
-} from '@mui/icons-material'
-import {
-    Button,
-    ButtonProps,
-    Collapse,
-    Drawer,
-    List,
-    ListItem,
-    ListItemButton,
-    ListItemIcon,
-    ListItemText,
-    ListSubheader,
-    useMediaQuery,
-    useTheme
-} from '@mui/material'
-import { grey } from '@mui/material/colors'
+import { useTheme } from '@mui/material/styles'
+import ArrowRight from '@mui/icons-material/ArrowRight'
+import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown'
+import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight'
+import Button, { type ButtonProps } from '@mui/material/Button'
+import Collapse from '@mui/material/Collapse'
+import Drawer from '@mui/material/Drawer'
+import List from '@mui/material/List'
+import ListItem from '@mui/material/ListItem'
+import ListItemButton from '@mui/material/ListItemButton'
+import ListItemIcon from '@mui/material/ListItemIcon'
+import ListItemText from '@mui/material/ListItemText'
+import ListSubheader from '@mui/material/ListSubheader'
+import grey from '@mui/material/colors/grey'
+import useMediaQuery from '@mui/material/useMediaQuery'
 // locals
 import { DRAWER_WIDTH } from '../_constants'
 import { useEffect, useState } from 'react'

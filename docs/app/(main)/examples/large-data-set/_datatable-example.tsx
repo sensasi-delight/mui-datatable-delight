@@ -1,9 +1,9 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import { Button } from '@mui/material'
+import Button from '@mui/material/Button'
 
-import DataTable, { DataTableOptions, DataTableProps } from '@src'
+import DataTable, { type DataTableOptions, type DataTableProps } from '@src'
 
 export function DataTableExample() {
     const [data, setData] = useState<DataItem[]>([])

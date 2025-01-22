@@ -1,7 +1,11 @@
 'use client'
 
-import { Check, CopyAll } from '@mui/icons-material'
-import { Box, Fade, IconButton, Tooltip } from '@mui/material'
+import Check from '@mui/icons-material/Check'
+import CopyAll from '@mui/icons-material/CopyAll'
+import Box from '@mui/material/Box'
+import Fade from '@mui/material/Fade'
+import IconButton from '@mui/material/IconButton'
+import Tooltip from '@mui/material/Tooltip'
 import { useEffect, useState } from 'react'
 
 export function CopyButton({ text }: { text: string }) {

@@ -1,8 +1,10 @@
 'use client'
 
-import { IconButton, Tooltip } from '@mui/material'
-import { Download, Refresh } from '@mui/icons-material'
-import DataTable, { DataTableOptions } from '@src'
+import IconButton from '@mui/material/IconButton'
+import Tooltip from '@mui/material/Tooltip'
+import Download from '@mui/icons-material/Download'
+import Refresh from '@mui/icons-material/Refresh'
+import DataTable, { type DataTableOptions } from '@src'
 
 /**
  * @deprecated FOR TEMPORARY DEVELOPMENT ONLY

@@ -1,7 +1,7 @@
 'use client'
 
-import { Typography } from '@mui/material'
-import DataTable, { DataTableOptions, DataTableProps } from '@src'
+import Typography from '@mui/material/Typography'
+import DataTable, { type DataTableOptions, type DataTableProps } from '@src'
 
 export function DataTableApiTable() {
     const columns: DataTableProps['columns'] = [

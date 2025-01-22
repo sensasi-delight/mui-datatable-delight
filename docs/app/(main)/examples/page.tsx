@@ -1,15 +1,12 @@
 'use client'
 
-import {
-    Box,
-    Card,
-    CardActionArea,
-    CardContent,
-    Grid,
-    TextField,
-    TextFieldProps,
-    Typography
-} from '@mui/material'
+import Box from '@mui/material/Box'
+import Card from '@mui/material/Card'
+import CardActionArea from '@mui/material/CardActionArea'
+import CardContent from '@mui/material/CardContent'
+import Grid from '@mui/material/Grid'
+import TextField, { type TextFieldProps } from '@mui/material/TextField'
+import Typography from '@mui/material/Typography'
 import { useState } from 'react'
 // locals
 import { Route } from './_route--enum'

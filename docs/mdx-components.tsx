@@ -1,5 +1,7 @@
 import type { MDXComponents } from 'mdx/types'
-import { Alert, Link, Typography } from '@mui/material'
+import Alert from '@mui/material/Alert'
+import Link from '@mui/material/Link'
+import Typography from '@mui/material/Typography'
 import { CodeSnippet, InlineCode } from './components'
 import { Mermaid } from './app/(main)/_components/mermaid'
 
