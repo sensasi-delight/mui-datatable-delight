@@ -25,7 +25,7 @@ import DataFilterBox from '../components/toolbar/components/data-filter-box'
 import ColumnVisibilitiesBox from '../components/toolbar/components/column-visibilities-box'
 
 export interface DataTableComponents {
-    AnnounceText: typeof AnnounceText
+    AnnounceText?: typeof AnnounceText
     BottomBar?: typeof BottomBar
 
     /**

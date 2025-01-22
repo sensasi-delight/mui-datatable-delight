@@ -16,9 +16,9 @@ import {
 } from './functions'
 import { type DataTableOptions } from './types/options'
 import { type DataTableState } from './types/state'
-import useDataTableContext, {
-    DataTableContextProvider
-} from './hooks/use-data-table-context'
+import DataTableContextProvider from './hooks/use-data-table-context/components/provider'
+// hooks
+import useDataTableContext from './hooks/use-data-table-context'
 // components
 import AnnounceText from './components/announce-text'
 import BottomBar from './components/bottom-bar'

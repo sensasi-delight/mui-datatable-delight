@@ -11,10 +11,10 @@ export type {
 } from './types/options'
 
 export { DataTable as default } from './data-table'
-export {
-    default as useDataTableContext,
-    DataTableContextProvider
-} from './hooks/use-data-table-context'
+
+// ########## CONTEXT ##########
+export { default as useDataTableContext } from './hooks/use-data-table-context'
+export { default as DataTableContextProvider } from './hooks/use-data-table-context/components/provider'
 
 // ########## <Datatable /> sub-components ##########
 export { default as AnnounceText } from './components/announce-text'
