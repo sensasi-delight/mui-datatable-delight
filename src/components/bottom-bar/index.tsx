@@ -3,14 +3,14 @@
 // vendors
 import { tss } from 'tss-react/mui'
 // local sub-components
-import { DataTableFooterPagination } from './footer.pagination'
-import { DataTableFooterJumpToPage } from './footer.jump-to-page'
+import { DataTableFooterPagination } from './components/pagination'
+import { DataTableFooterJumpToPage } from './components/jump-to-page'
 // globals
-import useDataTableContext from '../hooks/use-data-table-context'
-import { TableAction } from '../types/options'
-import { getPageValue } from '../functions.shared/get-page-value'
-import { ClassName } from '../enums/class-name'
-import type { DataTableState } from '../types/state'
+import useDataTableContext from '../../hooks/use-data-table-context'
+import { TableAction } from '../../types/options'
+import { getPageValue } from '../../functions.shared/get-page-value'
+import { ClassName } from '../../enums/class-name'
+import type { DataTableState } from '../../types/state'
 
 /**
  * @todo  FIX FONT SIZES ARE DIFFERENT IN SUB-COMPONENTS

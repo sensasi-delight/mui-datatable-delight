@@ -2,15 +2,15 @@
 
 // vendors
 import { tss } from 'tss-react/mui'
-import type { DataTableFooterPaginationProps } from './footer.pagination.props.type'
+import type { DataTableFooterPaginationProps } from './types/props'
 import TablePagination, {
     type TablePaginationProps
 } from '@mui/material/TablePagination'
 // locals
 // functions
-import { getPageValue } from '../functions.shared/get-page-value'
-import useDataTableContext from '../hooks/use-data-table-context'
-import { ClassName } from '../enums/class-name'
+import { getPageValue } from '../../../../functions.shared/get-page-value'
+import useDataTableContext from '../../../../hooks/use-data-table-context'
+import { ClassName } from '../../../../enums/class-name'
 
 export function DataTableFooterPagination({
     count,

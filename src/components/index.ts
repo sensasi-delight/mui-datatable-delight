@@ -12,7 +12,7 @@ export { TableFilterList as FilteredValuesList } from './filter-list'
 export { DataTableBody as TableBody } from './table/components/body'
 export { default as TableHead } from './table/components/head'
 
-export { TableFooter as BottomBar } from './footer'
+export { TableFooter as BottomBar } from './bottom-bar'
 
 export { AnnounceText } from './announce-text'
 
