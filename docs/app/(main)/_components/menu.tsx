@@ -16,7 +16,6 @@ import useMediaQuery from '@mui/material/useMediaQuery'
 import { DRAWER_WIDTH } from '../_constants'
 import { useEffect, useState } from 'react'
 import { Route as DocsRoute } from '../docs/_route--enum'
-import { Route as ExamplesRoute } from '../examples/_route--enum'
 import { snakeCaseToKebab, snakeCaseToTitle } from '@/utils'
 import { Box } from '@mui/material'
 
@@ -48,13 +47,19 @@ export default function Menu({
                 zIndex: 0
             }}
             PaperProps={{
-                sx: {
+                sx: theme => ({
                     width: DRAWER_WIDTH,
                     // boxSizing: 'border-box',
                     pb: 10,
-                    mt: 8,
-                    height: 'calc(100% - 64px)'
-                }
+                    mt: {
+                        xs: 7,
+                        sm: 8
+                    },
+                    height: {
+                        xs: `calc(100% - ${theme.spacing(7)})`,
+                        sm: `calc(100% - ${theme.spacing(8)})`
+                    }
+                })
             }}
         >
             <List component="nav">
@@ -106,11 +111,7 @@ function CustomListItem({ href, text }: { href: string; text: string }) {
 }
 
 function MenuSection({ sectionId }: { sectionId: Section }) {
-    const isExampleSection = sectionId === 'EXAMPLES'
-
-    const routes = isExampleSection
-        ? getExampleRoutes()
-        : getDocRoutes(sectionId)
+    const routes = getDocRoutes(sectionId)
 
     return (
         <>
@@ -132,11 +133,7 @@ function MenuSection({ sectionId }: { sectionId: Section }) {
             </ListSubheader>
 
             <CustomListItem
-                href={
-                    isExampleSection
-                        ? '/examples'
-                        : '/docs/' + snakeCaseToKebab(sectionId)
-                }
+                href={'/docs/' + snakeCaseToKebab(sectionId)}
                 text="Overview"
             />
 
@@ -144,7 +141,8 @@ function MenuSection({ sectionId }: { sectionId: Section }) {
                 <CustomListItem
                     key={i}
                     href={
-                        (isExampleSection ? '/examples/' : '/docs/') +
+                        '/docs/' +
+                        // (isExampleSection ? '/examples/' : '/docs/') +
                         route.href
                     }
                     text={route.title}
@@ -157,32 +155,31 @@ function MenuSection({ sectionId }: { sectionId: Section }) {
 enum Section {
     GETTING_STARTED = 'GETTING_STARTED',
     FEATURES = 'FEATURES',
-    EXAMPLES = 'EXAMPLES',
     API = 'API'
 }
 
 function getDocRoutes(sectionId: Section): Route[] {
-    return Object.keys(DocsRoute)
+    return (Object.keys(DocsRoute) as (keyof typeof DocsRoute)[])
         .filter(enumKey => enumKey.includes(sectionId))
         .map(enumKey => ({
-            href: snakeCaseToKebab(enumKey).replaceAll('--', '/'),
+            href: snakeCaseToKebab(DocsRoute[enumKey]),
             title: snakeCaseToTitle(enumKey).split('  ').pop() ?? ''
         }))
 }
 
-function getExampleRoutes(): Route[] {
-    const SORTED_EXAMPLES = [
-        '',
-        ...Object.keys(ExamplesRoute)
-            .filter(key => isNaN(parseInt(key)))
-            .sort()
-    ]
+// function getExampleRoutes(): Route[] {
+//     const SORTED_EXAMPLES = [
+//         '',
+//         ...Object.keys(ExamplesRoute)
+//             .filter(key => isNaN(parseInt(key)))
+//             .sort()
+//     ]
 
-    return SORTED_EXAMPLES.map(enumKey => ({
-        href: snakeCaseToKebab(enumKey),
-        title: snakeCaseToTitle(enumKey)
-    }))
-}
+//     return SORTED_EXAMPLES.map(enumKey => ({
+//         href: snakeCaseToKebab(enumKey),
+//         title: snakeCaseToTitle(enumKey)
+//     }))
+// }
 
 interface Route {
     href: string
