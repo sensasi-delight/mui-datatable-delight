@@ -1,3 +1,5 @@
+'use client'
+
 import FormGroup from '@mui/material/FormGroup'
 import FormLabel from '@mui/material/FormLabel'
 import FormControl from '@mui/material/FormControl'

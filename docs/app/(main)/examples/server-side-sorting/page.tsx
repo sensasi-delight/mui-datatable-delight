@@ -1,3 +1,5 @@
+'use client'
+
 import React from 'react'
 import DataTable from '@src'
 import CircularProgress from '@mui/material/CircularProgress'

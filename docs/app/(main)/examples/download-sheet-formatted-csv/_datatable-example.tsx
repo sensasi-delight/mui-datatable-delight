@@ -1,3 +1,5 @@
+'use client'
+
 import Button from '@mui/material/Button'
 import React from 'react'
 import DataTable, { DataTableOptions, DataTableProps } from '@src'
