@@ -1,3 +1,5 @@
+'use client'
+
 import { createContext } from 'react'
 import { processTextLabels } from './function/process-text-labels'
 import type ContextValue from './types/context-value'
