@@ -1,0 +1,20 @@
+# Server-Side Rendering (SSR)
+
+When using the **`<DataTable />`** component in a server-rendered application such as Next.js, you might encounter the following error:
+
+```bash
+ ⨯ [Error: In order to get SSR working with tss-react you need to explicitly provide an Emotion cache.
+MUI users be aware: This is not an error strictly related to tss-react, with or without tss-react,
+MUI needs an Emotion cache to be provided for SSR to work.
+Here is the MUI documentation related to SSR setup: https://mui.com/material-ui/guides/server-rendering/
+TSS provides helper that makes the process of setting up SSR easier: https://docs.tss-react.dev/ssr]
+```
+
+This happens because **`<DataTable />`** uses **[MUI](https://mui.com/material-ui/)**, which requires **[Emotion cache](https://emotion.sh/docs/cache-provider)** to render properly in a server-rendered environment.
+
+However, the MUI documentation has provided a convenient guide on how to set up an Emotion cache for SSR:
+
+- 👉 [MUI Server Rendering Guide](https://mui.com/material-ui/guides/server-rendering/). or,
+- 👉 [Integrating MUI with next.js](https://mui.com/material-ui/integrations/nextjs/) if you are using Next.js.
+
+By following the provided steps, you can ensure that **`<DataTable />`** works flawlessly in a server-rendered environment.
