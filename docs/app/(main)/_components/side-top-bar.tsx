@@ -1,5 +1,9 @@
 'use client'
 
+// vendors
+import { usePathname } from 'next/navigation'
+import { useEffect } from 'react'
+// materials
 import AppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
 import IconButton from '@mui/material/IconButton'
@@ -14,29 +18,30 @@ import GitHub from '@mui/icons-material/GitHub'
 import LightMode from '@mui/icons-material/LightMode'
 import MenuIcon from '@mui/icons-material/Menu'
 import Menu from './menu'
-import { DRAWER_WIDTH } from '../_constants'
 import { useState } from 'react'
 import { InlineCode } from '@/components'
 
 export default function SideTopBar() {
+    const pathname = usePathname()
     const { mode, setMode } = useColorScheme()
     const theme = useTheme()
     const isBelowMd = useMediaQuery(theme.breakpoints.down('md'))
     const [isDrawerOpen, setIsDrawerOpen] = useState(false)
 
+    useEffect(() => {
+        setIsDrawerOpen(false)
+    }, [pathname])
+
     return (
         <>
             <AppBar
                 position="fixed"
+                color="default"
+                variant="outlined"
                 sx={theme => ({
-                    width: {
-                        sm: '100%',
-                        md: `calc(100% - ${DRAWER_WIDTH}px)`
-                    },
-                    marginLeft: {
-                        sm: undefined,
-                        md: `${DRAWER_WIDTH}px`
-                    },
+                    backdropFilter: 'blur(5px)',
+                    backgroundColor:
+                        'rgba(var(--mui-palette-background-defaultChannel) / 0.8) !important',
                     transition: theme.transitions.create(['margin', 'width'], {
                         easing: theme.transitions.easing.easeOut,
                         duration: theme.transitions.duration.enteringScreen
@@ -61,8 +66,18 @@ export default function SideTopBar() {
 
                         <Link href="/" color="inherit" underline="hover">
                             <Typography fontWeight="bold">
-                                MUI <InlineCode text="<DataTable/>" disableBg />{' '}
-                                Delight
+                                {isBelowMd ? (
+                                    <InlineCode text="<DataTable/>" disableBg />
+                                ) : (
+                                    <>
+                                        MUI{' '}
+                                        <InlineCode
+                                            text="<DataTable/>"
+                                            disableBg
+                                        />{' '}
+                                        Delight
+                                    </>
+                                )}
                             </Typography>
                         </Link>
                     </Box>
