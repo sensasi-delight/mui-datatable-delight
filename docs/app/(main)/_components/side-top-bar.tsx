@@ -39,6 +39,9 @@ export default function SideTopBar() {
                 color="default"
                 variant="outlined"
                 sx={theme => ({
+                    borderLeft: 0,
+                    borderRight: 0,
+                    borderTop: 0,
                     backdropFilter: 'blur(5px)',
                     backgroundColor:
                         'rgba(var(--mui-palette-background-defaultChannel) / 0.8) !important',

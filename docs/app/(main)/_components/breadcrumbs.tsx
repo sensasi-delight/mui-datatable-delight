@@ -12,23 +12,30 @@ import React from 'react'
 export function Breadcrumbs() {
     const pathname = usePathname()
 
-    const paths = pathname
+    const isExamplePages = pathname.startsWith('/examples')
+
+    const pathsWithoutDocs = (
+        isExamplePages ? '/docs/getting-started' + pathname : pathname
+    )
+        .substring(1) // remove leading slash
         .split('/')
-        .slice(2)
-        .map(path => path.replace('-', ' '))
+        .slice(1) // remove 'docs'
 
     return (
-        <Box display="flex" alignItems="center" mb={1}>
+        <Box
+            display="flex"
+            alignItems="center"
+            mb={1}
+            sx={{ overflowX: 'auto' }}
+        >
             <Tooltip title="Home" arrow placement="top">
                 <IconButton color="primary" href="/">
                     <Home fontSize="small" />
                 </IconButton>
             </Tooltip>
 
-            {paths.map((path, i) => {
-                // const text = path.split('/')
-
-                const href = '/' + paths.slice(0, i + 1).join('/')
+            {pathsWithoutDocs.map((path, i) => {
+                const href = `/docs/${pathsWithoutDocs.slice(0, i + 1).join('/')}`
 
                 return (
                     <React.Fragment key={i}>
@@ -41,12 +48,13 @@ export function Breadcrumbs() {
 
                         <Button
                             href={href}
-                            disabled={i === paths.length - 1}
+                            disabled={i === pathsWithoutDocs.length - 1}
                             sx={{
+                                whiteSpace: 'nowrap',
                                 minWidth: 'unset'
                             }}
                         >
-                            {path}
+                            {path.replace('-', ' ')}
                         </Button>
                     </React.Fragment>
                 )
