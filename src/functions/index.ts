@@ -1,4 +1,4 @@
-export { buildMap } from './build-map'
+export { buildMap } from './_shared/build-map'
 // export { getCollatorComparator } from './get-collator-comparator'
 export { load } from './load'
 export { save } from './save'

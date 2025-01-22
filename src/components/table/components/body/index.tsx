@@ -11,7 +11,7 @@ import Typography from '@mui/material/Typography'
 import { TableBodyCell } from './components/cell'
 import { DataTableBodyRow } from './components/row'
 import CheckboxCell from '../_shared/checkbox-cell'
-import { getPageValue } from '../../../../functions.shared/get-page-value'
+import { getPageValue } from '../../../../functions/_shared/get-page-value'
 import type { DataTableState } from '../../../../types/state'
 import {
     type DataTableOptions,

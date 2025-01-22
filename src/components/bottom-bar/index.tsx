@@ -8,7 +8,7 @@ import { DataTableFooterJumpToPage } from './components/jump-to-page'
 // globals
 import useDataTableContext from '../../hooks/use-data-table-context'
 import { TableAction } from '../../types/options'
-import { getPageValue } from '../../functions.shared/get-page-value'
+import { getPageValue } from '../../functions/_shared/get-page-value'
 import { ClassName } from '../../enums/class-name'
 import type { DataTableState } from '../../types/state'
 
