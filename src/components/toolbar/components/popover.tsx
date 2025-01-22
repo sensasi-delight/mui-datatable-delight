@@ -1,6 +1,6 @@
 'use client'
 
-import { ReactNode, useEffect, useRef, useState } from 'react'
+import { type ReactNode, useEffect, useRef, useState } from 'react'
 // materials
 import IconButton, { type IconButtonProps } from '@mui/material/IconButton'
 import MuiPopover, { type PopoverProps } from '@mui/material/Popover'

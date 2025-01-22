@@ -6,13 +6,13 @@ import Typography from '@mui/material/Typography'
 import { tss } from 'tss-react/mui'
 import { type ReactNode, useState } from 'react'
 // locals
-import type { DataTableState } from '../types/state'
-import { DataTableToolbarFilterRenderFilters } from './toolbar.filter.render-filters'
-import useDataTableContext from '../hooks/use-data-table-context'
-import { FilterTypeEnum } from '../types/columns'
-import type { FilterUpdateType } from '../data-table'
-import { getDisplayData } from '../functions'
-import { TableAction } from '../types/options'
+import type { DataTableState } from '../../../../types/state'
+import { DataTableToolbarFilterRenderFilters } from './components/filter-inputs'
+import useDataTableContext from '../../../../hooks/use-data-table-context'
+import { FilterTypeEnum } from '../../../../types/columns'
+import type { FilterUpdateType } from '../../../../data-table'
+import { getDisplayData } from '../../../../functions'
+import { TableAction } from '../../../../types/options'
 
 export function DataTableToolbarFilter(props: DataTableToolbarFilterProps) {
     const {

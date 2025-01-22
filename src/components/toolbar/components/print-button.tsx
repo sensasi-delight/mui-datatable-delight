@@ -6,8 +6,8 @@ import { useReactToPrint, type UseReactToPrintOptions } from 'react-to-print'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 // locals
-import useDataTableContext from '../hooks/use-data-table-context'
-import { ICON_BUTTON_DEFAULT_SX } from './toolbar.icon-button-default-sx'
+import useDataTableContext from '../../../hooks/use-data-table-context'
+import { ICON_BUTTON_DEFAULT_SX } from './statics/icon-button-default-sx'
 
 export function ToolbarPrintButton({
     printContent

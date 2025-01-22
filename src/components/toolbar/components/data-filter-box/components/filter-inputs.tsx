@@ -16,10 +16,10 @@ import Typography from '@mui/material/Typography'
 // vendors
 import { tss } from 'tss-react/mui'
 // locals
-import type { DataTableToolbarFilterProps } from './toolbar.filter'
-import { type DataTableState } from '../types/state'
-import useDataTableContext from '../hooks/use-data-table-context'
-import { FilterTypeEnum } from '../types/columns'
+import type { DataTableToolbarFilterProps } from '..'
+import { type DataTableState } from '../../../../../types/state'
+import useDataTableContext from '../../../../../hooks/use-data-table-context'
+import { FilterTypeEnum } from '../../../../../types/columns'
 
 export function DataTableToolbarFilterRenderFilters({
     columns,

@@ -10,8 +10,8 @@ import TextField, { type TextFieldProps } from '@mui/material/TextField'
 import Clear from '@mui/icons-material/Clear'
 import Search from '@mui/icons-material/Search'
 // locals
-import useDataTableContext from '../hooks/use-data-table-context'
-import { ClassName } from '../enums/class-name'
+import useDataTableContext from '../../../hooks/use-data-table-context'
+import { ClassName } from '../../../enums/class-name'
 
 export function DataTableToolbarSearch({
     onSearch,

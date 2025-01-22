@@ -1,6 +1,6 @@
-import type { DataTableProps } from '../types'
-import type { DataTableOptions } from '../types/options'
-import type { DataTableState } from '../types/state'
+import type { DataTableProps } from '../../../../../types'
+import type { DataTableOptions } from '../../../../../types/options'
+import type { DataTableState } from '../../../../../types/state'
 
 /**
  * @todo Add datetime on default filename

@@ -8,8 +8,8 @@ import FormGroup from '@mui/material/FormGroup'
 import Typography from '@mui/material/Typography'
 import { tss } from 'tss-react/mui'
 // globals
-import useDataTableContext from '../hooks/use-data-table-context'
-import { TableAction } from '../types/options'
+import useDataTableContext from '../../../hooks/use-data-table-context'
+import { TableAction } from '../../../types/options'
 
 const CLASS_ID = 'datatable-delight--toolbar--view-col'
 

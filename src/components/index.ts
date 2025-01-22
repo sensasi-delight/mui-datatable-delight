@@ -1,12 +1,12 @@
 export { TableResize as ColumnsResizer } from './resize'
 
-export { TableToolbarSelect as SelectedRowsToolbar } from './toolbar-select'
+export { TableToolbarSelect as SelectedRowsToolbar } from './selected-row-toolbar'
 
 export { TableToolbar as Toolbar } from './toolbar'
-export { DataTableToolbarFilter as DataFilterBox } from './toolbar.filter'
-export { ExpandButton as RowExpansionButton } from './table/components/_shared/checkbox-cell/components/row-expansion-button'
-export { ToolbarViewCol as ColumnVisibilityBox } from './toolbar.view-col'
+export { DataTableToolbarFilter as DataFilterBox } from './toolbar/components/data-filter-box'
+export { ToolbarViewCol as ColumnVisibilitiesBox } from './toolbar/components/column-visibilities-box'
 
+export { ExpandButton as RowExpansionButton } from './table/components/_shared/checkbox-cell/components/row-expansion-button'
 export { TableFilterList as FilteredValuesList } from './filter-list'
 
 export { DataTableBody as TableBody } from './table/components/body'
