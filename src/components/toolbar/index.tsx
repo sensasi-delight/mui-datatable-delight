@@ -5,7 +5,7 @@ import { tss } from 'tss-react/mui'
 import { useState, type RefObject } from 'react'
 // materials
 import IconButton from '@mui/material/IconButton'
-import VendorToolbar from '@mui/material/Toolbar'
+import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Tooltip from '@mui/material/Tooltip'
 // globals
@@ -20,7 +20,7 @@ import { DataTableToolbarSearch } from './components/search-text-field'
 import { ToolbarPopover } from './components/popover'
 import { ToolbarPrintButton } from './components/print-button'
 import { ToolbarDownloadButton } from './components/download-button'
-import ColumnVisibilityBox from './components/column-visibilities-box'
+import ColumnVisibilitiesBox from './components/column-visibilities-box'
 import DataFilterBox from './components/data-filter-box'
 
 /**
@@ -184,11 +184,11 @@ export default function Toolbar(props: ToolbarProps) {
 
     const _Tooltip = components.Tooltip ?? Tooltip
     const _ColumnVisibilityBox =
-        components.ColumnVisibilityBox ?? ColumnVisibilityBox
+        components.ColumnVisibilitiesBox ?? ColumnVisibilitiesBox
     const _DataFilterBox = components.DataFilterBox ?? DataFilterBox
 
     return (
-        <VendorToolbar className={classes.root} role="table toolbar">
+        <Box className={classes.root} role="table toolbar">
             <div className={classes.left}>
                 {showSearch && (
                     <DataTableToolbarSearch
@@ -305,7 +305,7 @@ export default function Toolbar(props: ToolbarProps) {
                         displayData: state.displayData
                     })}
             </div>
-        </VendorToolbar>
+        </Box>
     )
 }
 
@@ -320,7 +320,13 @@ const useStyles = tss.withName(ClassName.TOOLBAR).create(({ theme }) => ({
         display: 'flex'
     },
     root: {
+        display: 'flex',
+        alignItems: 'center',
         overflowX: 'auto',
+        paddingTop: '12px',
+        paddingBottom: '12px',
+        paddingLeft: '24px',
+        paddingRight: '16px',
 
         '@media print': {
             display: 'none !important'
