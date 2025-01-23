@@ -1,5 +1,5 @@
 import React from 'react';
-import { createRoot } from 'react-dom/client';
+import { render } from 'react-dom';
 import { HashRouter as Router, Route, Switch, withRouter } from 'react-router-dom';
 import { withStyles } from 'tss-react/mui';
 import ExamplesGrid from './ExamplesGrid';
@@ -69,6 +69,5 @@ function App() {
     </Router>
   );
 }
-const container = document.getElementById('app-root');
-const root = createRoot(container);
-root.render(<App />);
+
+render(<App />, document.getElementById('app-root'));

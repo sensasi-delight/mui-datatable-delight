@@ -18,8 +18,8 @@
     "coverage:html": "cross-env NODE_ENV=test nyc check-coverage --lines 55 --reporter=html --reporter=text mocha --require @babel/register test/*.js && nyc report --reporter=html",
     "prettier": "find src/ docs/ test/ -type f -name \"*.js\" ! -path \"*/.next/*\" | xargs prettier --write",
     "lint": "eslint src",
-    "build": "cross-env NODE_ENV=production npm run prettier && rollup -c",
-    "prepare": "npm run build"
+    "build": "cross-env NODE_ENV=production && rollup -c",
+    "prepublishOnly": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -82,10 +82,10 @@
     "prettier": "^1.18.2",
     "prismjs": "^1.20.0",
     "raw-loader": "^4.0.1",
-    "react": "^18.2.0",
+    "react": "^17.0.2",
     "react-dnd-test-backend": "^11.1.3",
     "react-dnd-test-utils": "^11.1.3",
-    "react-dom": "^18.2.0",
+    "react-dom": "^17.0.2",
     "react-router-dom": "^5.0.1",
     "react-waypoint": "^10.1.0",
     "rollup": "^2.3.4",
@@ -107,7 +107,6 @@
   "dependencies": {
     "@babel/runtime-corejs3": "^7.12.1",
     "@emotion/cache": "^11.7.1",
-    "tss-react": "^4.1.3",
     "clsx": "^1.1.1",
     "lodash.assignwith": "^4.2.0",
     "lodash.clonedeep": "^4.5.0",
