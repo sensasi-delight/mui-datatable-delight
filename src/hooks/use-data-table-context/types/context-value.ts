@@ -15,13 +15,6 @@ import type DEFAULT_STATE from '../statics/default-state'
 export default interface ContextValue {
     components: DataTableComponents
     icons: typeof DEFAULT_ICONS
-    /**
-     * @deprecated  WILL CHANGE THIS TO `onAction`
-     */
-    onStateChange?: (
-        action: TableAction,
-        state: Partial<DataTableState>
-    ) => void
     onAction?: (action: TableAction, state: Partial<DataTableState>) => void
     options: DataTableOptions
     props?: DataTableProps

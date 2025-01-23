@@ -43,29 +43,6 @@ export default function DataTableContextProvider({
         )
     )
 
-    function onAction(
-        action: TableAction,
-        newPartialState: Partial<DataTableState>
-    ) {
-        setState(prev => {
-            const newState = {
-                ...prev,
-                ...newPartialState
-            }
-
-            datatableProps.options?.onTableChange?.(action, newState)
-
-            if (datatableProps.options?.storageKey)
-                save(datatableProps.options.storageKey, newState)
-
-            return newState
-        })
-    }
-
-    useEffect(() => {
-        datatableProps.options?.onTableInit?.(TableAction.INITIALIZED, state)
-    }, [])
-
     useEffect(() => {
         datatableProps.options?.onTableInit?.(TableAction.INITIALIZED, state)
     }, [])
@@ -81,8 +58,28 @@ export default function DataTableContextProvider({
                     ...DEFAULT_ICONS,
                     ...datatableProps.icons
                 },
-                onAction,
-                onStateChange: onAction,
+                onAction(action, newPartialState) {
+                    setState(prev => {
+                        const newState = {
+                            ...prev,
+                            ...newPartialState
+                        }
+
+                        datatableProps.options?.onTableChange?.(
+                            action,
+                            newState
+                        )
+
+                        if (JSON.stringify(prev) === JSON.stringify(newState)) {
+                            return prev
+                        }
+
+                        if (datatableProps.options?.storageKey)
+                            save(datatableProps.options.storageKey, newState)
+
+                        return newState
+                    })
+                },
                 options,
                 props: datatableProps,
                 setState,
