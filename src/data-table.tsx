@@ -74,45 +74,7 @@ function _DataTable({
 
     const updateDividers = useRef<() => void>(undefined)
 
-    // component did mount
-    // useEffect(() => {
-    //     if (tableRef.current) {
-    //         console.log('##############################')
-    //         setHeadResizable?.(tableHeadCellElements, tableRef.current)
-    //     }
-    // }, [])
-
-    // component did update
     useEffect(() => {
-        // if (
-        //     this.props.data !== prevProps.data ||
-        //     this.props.columns !== prevProps.columns ||
-        //     this.props.options !== prevProps.options
-        // ) {
-        //     const didDataUpdate =
-        //         this.props.data && prevProps.data
-        //             ? this.props.data.length === prevProps.data.length
-        //             : this.props.data !== prevProps.data
-        //     const pageNo =
-        //         this.props.options?.searchText !==
-        //             prevProps.options?.searchText &&
-        //         !this.props.options?.serverSide
-        //             ? 0 // When we have a search, we must reset page to view it unless on serverSide since paging is handled by the user.
-        //             : this.context.state.page
-        //     const newState = {
-        //         ...getNewStateOnDataChange(
-        //             this.props,
-        //             TABLE_LOAD.INITIAL,
-        //             didDataUpdate,
-        //             this.context.options,
-        //             this.context.state,
-        //             this.context.setState
-        //         ),
-        //         page: pageNo
-        //     }
-        //     this.context.onAction?.(TableAction.PROP_UPDATE, newState)
-        // }
-
         if (options.resizableColumns && tableRef) {
             setHeadResizable.current?.(tableHeadCellElements, tableRef)
             updateDividers.current?.()
