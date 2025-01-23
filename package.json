@@ -18,9 +18,9 @@
     "coverage:html": "cross-env NODE_ENV=test nyc check-coverage --lines 55 --reporter=html --reporter=text mocha --require @babel/register test/*.js && nyc report --reporter=html",
     "prettier": "find src/ docs/ test/ -type f -name \"*.js\" ! -path \"*/.next/*\" | xargs prettier --write",
     "lint": "eslint src",
-    "build": "cross-env NODE_ENV=production npm run prettier && rollup -c",
-    "prepare": "npm run build"
-  },
+    "build": "cross-env NODE_ENV=production && rollup -c",
+    "prepublishOnly": "npm run build"
+    },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/gregnb/mui-datatables.git"
@@ -107,7 +107,6 @@
   "dependencies": {
     "@babel/runtime-corejs3": "^7.12.1",
     "@emotion/cache": "^11.7.1",
-    "tss-react": "^4.1.3",
     "clsx": "^1.1.1",
     "lodash.assignwith": "^4.2.0",
     "lodash.clonedeep": "^4.5.0",
