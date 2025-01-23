@@ -5,19 +5,16 @@
 > [!NOTE]
 > As a passionate fan of MUI Datatables, I’ve continued the development of this project out of appreciation for its simplicity and power, especially after the original repository was no longer maintained. This is not a claim to the original work, but a tribute to the community and the power of Material-UI v6!.
 >
-> &mdash; @sensasi-delight🍕
+> Sincerely,\
+> @sensasi-delight 🍕
 
 # MUI `<DataTable />` Delight
 
-[![npm version](https://badge.fury.io/js/mui-datatable-delight.svg)](https://badge.fury.io/js/mui-datatable-delight)
-[![NPM Downloads](https://img.shields.io/npm/dt/mui-datatable-delight.svg?style=flat)](https://npmcharts.com/compare/mui-datatable-delight?minimal=true)
-
-<!-- [![Build Status](https://travis-ci.org/gregnb/mui-datatables.svg?branch=master)](https://travis-ci.org/gregnb/mui-datatables)
-[![Coverage Status](https://coveralls.io/repos/github/gregnb/mui-datatables/badge.svg?branch=master)](https://coveralls.io/github/gregnb/mui-datatables?branch=master)-->
-
-<!-- MUI-Datatables is a responsive datatables component built on [Material-UI](https://www.material-ui.com). It comes with features like filtering, [resizable columns](https://codesandbox.io/s/muidatatables-custom-toolbar-zomv5?file=/index.js), view/hide columns, [draggable columns](https://codesandbox.io/s/muidatatables-resize-columns-example-tnrkc?file=/index.js), search, export to CSV download, printing, selectable rows, expandable rows, pagination, and sorting. On top of the ability to customize styling on most views, there are three responsive modes "vertical", "standard", and "simple" for mobile/tablet devices.
-
-Version 3 has been released! You can read about the [updates here](https://github.com/gregnb/mui-datatables/blob/master/docs/v2_to_v3_guide.md)! -->
+[![NPM Version](https://img.shields.io/npm/v/mui-datatable-delight)](https://npmjs.com/mui-datatable-delight)
+[![NPM License](https://img.shields.io/npm/l/mui-datatable-delight)](https://raw.githubusercontent.com/sensasi-delight/mui-datatable-delight/refs/heads/next/LICENSE)
+[![NPM Downloads](https://img.shields.io/npm/dw/mui-datatable-delight)](https://www.npmjs.com/package/mui-datatable-delight?activeTab=versions)
+[![Libraries.io dependency status for latest release](https://img.shields.io/librariesio/release/npm/mui-datatable-delight)](https://www.npmjs.com/package/mui-datatable-delight?activeTab=dependencies)
+[![GitHub Issues or Pull Requests](https://img.shields.io/github/issues/sensasi-delight/mui-datatable-delight)](https://github.com/sensasi-delight/mui-datatable-delight/issues)
 
 **MUI `<DataTable />` Delight** is a modern revival of the popular [gregnb/mui-datatables](https://github.com/gregnb/mui-datatables), offering a sleek, feature-rich table component built with the latest [Material UI](https://mui.com/material-ui/getting-started/). Designed for effortless data handling, it includes robust support for sorting, filtering, pagination, and row selection. With its intuitive interface and responsive design, **MUI `<DataTable />` Delight** is perfect for enhancing any modern web application. Experience the power of Material-UI v6 with this versatile and easy-to-use data table solution!
 
