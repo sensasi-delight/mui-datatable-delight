@@ -22,7 +22,11 @@
         // "noUncheckedSideEffectImports": true, // DISABLED DUE ERROR: Unknown compiler option noUncheckedSideEffectImports .
         "noUnusedLocals": true,
         "noUnusedParameters": true,
-        "strict": true
+        "strict": true,
+
+        "paths": {
+            "@/*": ["./src/*"]
+        }
     },
     "exclude": ["node_modules", "dist"]
 }
