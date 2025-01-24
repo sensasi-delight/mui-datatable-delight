@@ -5,17 +5,21 @@ import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 import { tss } from 'tss-react/mui'
 import { type ReactNode, useState } from 'react'
-// locals
-import type { DataTableState } from '../../../../types/state'
-import { DataTableToolbarFilterRenderFilters } from './components/filter-inputs'
-import useDataTableContext from '../../../../hooks/use-data-table-context'
-import type { FilterUpdateType } from '../../../../data-table'
-import { getDisplayData } from '../../../../functions'
+// globals
+import type { DataTableState } from '@/types/state'
+import type { FilterUpdateType } from '@/data-table'
+import useDataTableContext from '@/hooks/use-data-table-context'
+import { getDisplayData } from '@/functions'
 // global enums
-import FilterType from '../../../../enums/filter-type'
-import TableAction from '../../../../enums/table-action'
+import FilterType from '@/enums/filter-type'
+import TableAction from '@/enums/table-action'
+import ComponentClassName from '@/enums/class-name'
+// locals
+import ToolbarDataFilterBoxFilters from './components/filter-inputs'
 
-export default function DataFilterBox(props: DataTableToolbarFilterProps) {
+export default function ToolbarDataFilterBox(
+    props: DataTableToolbarFilterProps
+) {
     const {
         onAction,
         options,
@@ -94,7 +98,7 @@ export default function DataFilterBox(props: DataTableToolbarFilterProps) {
                 <div className={classes.filtersSelected} />
             </div>
 
-            <DataTableToolbarFilterRenderFilters
+            <ToolbarDataFilterBoxFilters
                 columns={columns}
                 parentProps={{ ...props, filterList: filterList }}
                 innerFilterList={filterList}
@@ -124,7 +128,7 @@ export default function DataFilterBox(props: DataTableToolbarFilterProps) {
 }
 
 const useStyles = tss
-    .withName('datatable-delight--toolbar--filter')
+    .withName(ComponentClassName.TOOLBAR__DATA_FILTER_BOX)
     .create(({ theme }) => ({
         root: {
             backgroundColor: theme.palette.background.default,

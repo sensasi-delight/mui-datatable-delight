@@ -3,6 +3,7 @@
 import TableRow, { type TableRowProps } from '@mui/material/TableRow'
 import { tss } from 'tss-react/mui'
 import useDataTableContext from '../../../../../hooks/use-data-table-context'
+import ComponentClassName from '../../../../../enums/class-name'
 
 export function DataTableBodyRow({
     rowSelected,
@@ -59,7 +60,7 @@ export interface DataTableBodyRowProps extends TableRowProps {
 }
 
 const useStyles = tss
-    .withName('datatable-delight--body--row')
+    .withName(ComponentClassName.TABLE__BODY__ROW)
     .create(({ theme }) => ({
         root: {
             // material v4

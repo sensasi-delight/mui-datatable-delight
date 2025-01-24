@@ -22,7 +22,7 @@ import useDataTableContext from '../../../../../hooks/use-data-table-context'
 // global enums
 import FilterType from '../../../../../enums/filter-type'
 
-export function DataTableToolbarFilterRenderFilters({
+export default function ToolbarDataFilterBoxFilters({
     columns,
     parentProps,
     innerFilterList: filterList
@@ -169,6 +169,39 @@ export function DataTableToolbarFilterRenderFilters({
         </Grid>
     )
 }
+
+const useStyles = tss
+    // .withName()
+    .create(({ theme }) => ({
+        root: {},
+        checkboxListTitle: {
+            marginLeft: '7px',
+            marginBottom: '8px',
+            fontSize: '14px',
+            color: theme.palette.text.secondary,
+            textAlign: 'left',
+            fontWeight: 500
+        },
+
+        checkboxFormControl: {
+            margin: '0px'
+        },
+
+        checkboxFormControlLabel: {
+            fontSize: '15px',
+            marginLeft: '8px',
+            color: theme.palette.text.primary
+        },
+        checkboxIcon: {
+            width: '32px',
+            height: '32px'
+        },
+        checkbox: {},
+        checked: {},
+        gridListTile: {
+            marginTop: '16px'
+        }
+    }))
 
 function DataTableToolbarFilterCheckbox({
     index,
@@ -478,36 +511,3 @@ function RenderSelect({
         </Grid>
     )
 }
-
-const useStyles = tss
-    .withName('datatable-delight--toolbar--filter--render-filters')
-    .create(({ theme }) => ({
-        root: {},
-        checkboxListTitle: {
-            marginLeft: '7px',
-            marginBottom: '8px',
-            fontSize: '14px',
-            color: theme.palette.text.secondary,
-            textAlign: 'left',
-            fontWeight: 500
-        },
-
-        checkboxFormControl: {
-            margin: '0px'
-        },
-
-        checkboxFormControlLabel: {
-            fontSize: '15px',
-            marginLeft: '8px',
-            color: theme.palette.text.primary
-        },
-        checkboxIcon: {
-            width: '32px',
-            height: '32px'
-        },
-        checkbox: {},
-        checked: {},
-        gridListTile: {
-            marginTop: '16px'
-        }
-    }))

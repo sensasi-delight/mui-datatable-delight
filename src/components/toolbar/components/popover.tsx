@@ -7,6 +7,8 @@ import MuiPopover, { type PopoverProps } from '@mui/material/Popover'
 import VendorTooltip from '@mui/material/Tooltip'
 import CloseIcon from '@mui/icons-material/Close'
 import type { TransitionProps } from '@mui/material/transitions'
+import { tss } from 'tss-react/mui'
+import ComponentClassName from '@/enums/class-name'
 
 export function ToolbarPopover({
     children,
@@ -16,6 +18,7 @@ export function ToolbarPopover({
     slotProps,
     title
 }: ToolbarPopoverProps) {
+    const { classes } = useStyles()
     const [isOpen, open] = useState(false)
     const anchorEl = useRef<EventTarget & HTMLSpanElement>(null)
 
@@ -58,6 +61,7 @@ export function ToolbarPopover({
             </VendorTooltip>
 
             <MuiPopover
+                className={classes.root}
                 elevation={2}
                 open={isOpen}
                 TransitionProps={{ onExited: onPopoverExited }}
@@ -99,3 +103,7 @@ interface ToolbarPopoverProps {
     slotProps?: PopoverProps['slotProps']
     title: string
 }
+
+const useStyles = tss.withName(ComponentClassName.TOOLBAR__POPOVER).create({
+    root: {}
+})

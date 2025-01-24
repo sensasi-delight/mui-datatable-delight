@@ -8,16 +8,15 @@ import FormGroup from '@mui/material/FormGroup'
 import Typography from '@mui/material/Typography'
 import { tss } from 'tss-react/mui'
 // globals
-import useDataTableContext from '../../../hooks/use-data-table-context'
+import useDataTableContext from '@/hooks/use-data-table-context'
 // global enums
-import TableAction from '../../../enums/table-action'
-
-const CLASS_ID = 'datatable-delight--toolbar--view-col'
+import TableAction from '@/enums/table-action'
+import ComponentClassName from '@/enums/class-name'
 
 export default function ColumnVisibilitiesBox({}: ToolbarViewColProps) {
     const { components, onAction, options, state, textLabels } =
         useDataTableContext()
-    const { classes, cx } = useStyles()
+    const { classes } = useStyles()
 
     const handleColChange = (index: number) => {
         const newColumns = [...state.columns]
@@ -42,7 +41,7 @@ export default function ColumnVisibilitiesBox({}: ToolbarViewColProps) {
     return (
         <FormControl
             component="fieldset"
-            className={cx(CLASS_ID, classes.root)}
+            className={classes.root}
             aria-label={textLabels.viewColumns.titleAria}
         >
             <Typography variant="caption" className={classes.title}>
@@ -85,36 +84,38 @@ export default function ColumnVisibilitiesBox({}: ToolbarViewColProps) {
     )
 }
 
-const useStyles = tss.create(({ theme }) => ({
-    root: {
-        padding: '16px 24px 16px 24px',
-        fontFamily: 'Roboto'
-    },
-    title: {
-        marginLeft: '-7px',
-        marginRight: '24px',
-        fontSize: '14px',
-        color: theme.palette.text.secondary,
-        textAlign: 'left',
-        fontWeight: 500
-    },
-    formGroup: {
-        marginTop: '8px'
-    },
-    formControl: {},
-    checkbox: {
-        padding: '0px',
-        width: '32px',
-        height: '32px'
-    },
-    checkboxRoot: {},
-    checked: {},
-    label: {
-        fontSize: '15px',
-        marginLeft: '8px',
-        color: theme.palette.text.primary
-    }
-}))
+const useStyles = tss
+    .withName(ComponentClassName.TOOLBAR__COLUMN_VISIBILITIES_BOX)
+    .create(({ theme }) => ({
+        root: {
+            padding: '16px 24px 16px 24px',
+            fontFamily: 'Roboto'
+        },
+        title: {
+            marginLeft: '-7px',
+            marginRight: '24px',
+            fontSize: '14px',
+            color: theme.palette.text.secondary,
+            textAlign: 'left',
+            fontWeight: 500
+        },
+        formGroup: {
+            marginTop: '8px'
+        },
+        formControl: {},
+        checkbox: {
+            padding: '0px',
+            width: '32px',
+            height: '32px'
+        },
+        checkboxRoot: {},
+        checked: {},
+        label: {
+            fontSize: '15px',
+            marginLeft: '8px',
+            color: theme.palette.text.primary
+        }
+    }))
 
 export interface ToolbarViewColProps {
     /** Extend the style applied to components */

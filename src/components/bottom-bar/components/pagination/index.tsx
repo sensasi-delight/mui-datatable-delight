@@ -21,7 +21,7 @@ export function DataTableFooterPagination({
     changePage
 }: DataTableFooterPaginationProps) {
     const { options, textLabels } = useDataTableContext()
-    const { classes, cx } = useStyles()
+    const { classes } = useStyles()
 
     const handleRowChange: TablePaginationProps['onRowsPerPageChange'] = ({
         target: { value }
@@ -45,7 +45,7 @@ export function DataTableFooterPagination({
         : finalRowsPerPageOptions[0]
 
     return (
-        <div className={cx(ClassName.FOOTER__PAGINATION, classes.root)}>
+        <div className={classes.root}>
             <TablePagination
                 component="div"
                 count={count}
@@ -97,7 +97,7 @@ export function DataTableFooterPagination({
 }
 
 const useStyles = tss
-    .withName(ClassName.FOOTER__PAGINATION + '-')
+    .withName(ClassName.BOTTOM_BAR__PAGINATION)
     .create(({ theme }) => ({
         root: {
             maxWidth: '100%',

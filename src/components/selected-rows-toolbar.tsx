@@ -96,7 +96,7 @@ export default function SelectedRowsToolbar({
 }
 
 const useStyles = tss
-    .withName(ClassName.TOOLBAR__SELECT)
+    .withName(ClassName.SELECTED_ROWS_TOOLBAR)
     .create(({ theme }) => ({
         root: {
             flex: '1 1 100%',

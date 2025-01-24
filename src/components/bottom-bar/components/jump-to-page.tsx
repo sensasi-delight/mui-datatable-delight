@@ -29,7 +29,7 @@ export function DataTableFooterJumpToPage({
     const page = pages.length < pageProp ? pages.length - 1 : pageProp
 
     return (
-        <div className={cx(ClassName.FOOTER__JUMP_TO_PAGE, classes.root)}>
+        <div className={classes.root}>
             <Typography
                 color="inherit"
                 variant="body2"
@@ -66,7 +66,7 @@ export function DataTableFooterJumpToPage({
 }
 
 const useStyles = tss
-    .withName(ClassName.FOOTER__JUMP_TO_PAGE + '-')
+    .withName(ClassName.BOTTOM_BAR__JUMP_TO_PAGE)
     .create(({ theme }) => ({
         root: {
             alignItems: 'center',

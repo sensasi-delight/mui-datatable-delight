@@ -19,7 +19,7 @@ import TableAction from '../../enums/table-action'
  */
 export default function BottomBar() {
     const { options, state, textLabels, onAction } = useDataTableContext()
-    const { classes, cx } = useStyles()
+    const { classes } = useStyles()
     const { customFooter, pagination = true, jumpToPage } = options
 
     function changePage(page: number) {
@@ -56,7 +56,7 @@ export default function BottomBar() {
     if (!jumpToPage && !pagination) return <></>
 
     return (
-        <div className={cx(ClassName.FOOTER, classes.root)}>
+        <div className={classes.root}>
             {jumpToPage && (
                 <DataTableFooterJumpToPage
                     count={state.displayData.length}
@@ -79,7 +79,7 @@ export default function BottomBar() {
     )
 }
 
-const useStyles = tss.withName(ClassName.FOOTER + '-').create(({ theme }) => ({
+const useStyles = tss.withName(ClassName.BOTTOM_BAR).create(({ theme }) => ({
     root: {
         display: 'flex',
         justifyContent: 'flex-end',
