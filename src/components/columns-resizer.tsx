@@ -3,11 +3,11 @@
 import React, { type JSX, type RefObject, useEffect, useState } from 'react'
 import { tss } from 'tss-react/mui'
 // locals
-import useDataTableContext from '../hooks/use-data-table-context'
+import useDataTableContext from '@src/hooks/use-data-table-context'
 import ComponentClassName from '@src/enums/class-name'
 
 /**
- * Column resize slider component.
+ * Column resizer/slider component.
  *
  * @see https://mui-datatable-delight.vercel.app/docs/features/resizable-columns
  */
@@ -176,9 +176,9 @@ export default function ColumnsResizer({
         }
 
         const lastColumnIndex = (tableHeadCellElements?.length ?? 0) - 1
-        const fixedMinWidth1 = minWidths[columnId]
+        const fixedMinWidth1 = minWidths[columnId] ?? 0
         const fixedMinWidth2 =
-            minWidths[nextCol(columnId)] ?? minWidths[columnId]
+            minWidths[nextCol(columnId)] ?? minWidths[columnId] ?? 0
 
         if (!tableElement) {
             throw new Error('tableElement is undefined')
@@ -242,8 +242,11 @@ export default function ColumnsResizer({
                 fixedMinWidth: number
             ) => {
                 if (typeof nextCoord(columnId) === 'undefined') return leftPos
-                if (leftPos > nextCoord(columnId).left - fixedMinWidth) {
-                    return nextCoord(columnId).left - fixedMinWidth
+                if (
+                    leftPos >
+                    (nextCoord(columnId)?.left ?? 0) - fixedMinWidth
+                ) {
+                    return (nextCoord(columnId)?.left ?? 0) - fixedMinWidth
                 }
                 return leftPos
             }
@@ -255,8 +258,11 @@ export default function ColumnsResizer({
             ) => {
                 if (typeof prevCoord(columnId) === 'undefined') return leftPos
 
-                if (leftPos < prevCoord(columnId).left + fixedMinWidth) {
-                    return prevCoord(columnId).left + fixedMinWidth
+                if (
+                    leftPos <
+                    (nextCoord(columnId)?.left ?? 0) + fixedMinWidth
+                ) {
+                    return (nextCoord(columnId)?.left ?? 0) + fixedMinWidth
                 }
 
                 return leftPos
