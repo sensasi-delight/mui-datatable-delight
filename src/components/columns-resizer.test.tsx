@@ -2,10 +2,10 @@
 import { test, expect, describe, vi } from 'vitest'
 import { fireEvent, render } from '@testing-library/react'
 // locals
-import TableResize from '../src/components/columns-resizer'
-import DataTable from '../src'
+import ColumnsResizer from './columns-resizer'
+import DataTable from '@src/index'
 
-describe('<TableResize />', function () {
+describe('<ColumnsResizer />', function () {
     const options = {
         resizableColumns: true,
         tableBodyHeight: '500px'
@@ -16,7 +16,7 @@ describe('<TableResize />', function () {
         const setResizable = vi.fn()
 
         const { container } = render(
-            <TableResize
+            <ColumnsResizer
                 options={options}
                 updateDividers={updateDividers}
                 setResizable={setResizable}
@@ -43,7 +43,7 @@ describe('<TableResize />', function () {
         const updateDividers = vi.fn()
 
         const { container } = render(
-            <TableResize
+            <ColumnsResizer
                 updateDividers={updateDividers}
                 setResizable={forwardElements => {
                     const fakeCellElements = [
