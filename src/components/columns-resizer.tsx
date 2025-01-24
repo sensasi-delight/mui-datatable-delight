@@ -4,7 +4,7 @@ import React, { type JSX, type RefObject, useEffect, useState } from 'react'
 import { tss } from 'tss-react/mui'
 // locals
 import useDataTableContext from '../hooks/use-data-table-context'
-import ComponentClassName from '@/enums/class-name'
+import ComponentClassName from '@src/enums/class-name'
 
 /**
  * Column resize slider component.

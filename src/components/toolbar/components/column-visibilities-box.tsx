@@ -8,10 +8,10 @@ import FormGroup from '@mui/material/FormGroup'
 import Typography from '@mui/material/Typography'
 import { tss } from 'tss-react/mui'
 // globals
-import useDataTableContext from '@/hooks/use-data-table-context'
+import useDataTableContext from '@src/hooks/use-data-table-context'
 // global enums
-import TableAction from '@/enums/table-action'
-import ComponentClassName from '@/enums/class-name'
+import TableAction from '@src/enums/table-action'
+import ComponentClassName from '@src/enums/class-name'
 
 export default function ColumnVisibilitiesBox({}: ToolbarViewColProps) {
     const { components, onAction, options, state, textLabels } =

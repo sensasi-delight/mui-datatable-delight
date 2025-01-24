@@ -7,7 +7,7 @@ import type { DataTableState } from '../types/state'
 import useDataTableContext from '../hooks/use-data-table-context'
 import type { FilterTypeType } from '../types/shared/filter-type-type'
 import type { FilterUpdateType } from '../data-table'
-import ComponentClassName from '@/enums/class-name'
+import ComponentClassName from '@src/enums/class-name'
 
 const CLASS_ID = 'datatable-delight--filter-list'
 

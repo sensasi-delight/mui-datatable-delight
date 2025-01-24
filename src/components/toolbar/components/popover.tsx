@@ -8,7 +8,7 @@ import VendorTooltip from '@mui/material/Tooltip'
 import CloseIcon from '@mui/icons-material/Close'
 import type { TransitionProps } from '@mui/material/transitions'
 import { tss } from 'tss-react/mui'
-import ComponentClassName from '@/enums/class-name'
+import ComponentClassName from '@src/enums/class-name'
 
 export function ToolbarPopover({
     children,

@@ -9,7 +9,7 @@ import Tooltip from '@mui/material/Tooltip'
 // locals
 import useDataTableContext from '../../../hooks/use-data-table-context'
 import { ICON_BUTTON_DEFAULT_SX } from './statics/icon-button-default-sx'
-import ComponentClassName from '@/enums/class-name'
+import ComponentClassName from '@src/enums/class-name'
 
 export function ToolbarPrintButton({
     printContent

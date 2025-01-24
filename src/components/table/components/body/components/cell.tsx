@@ -6,9 +6,9 @@ import TableCell, { type TableCellProps } from '@mui/material/TableCell'
 import { tss } from 'tss-react/mui'
 import type { MUIDataTableBodyCell } from 'mui-datatables'
 // globals
-import type { DataTableState } from '@/types/state'
-import useDataTableContext from '@/hooks/use-data-table-context'
-import ComponentClassName from '@/enums/class-name'
+import type { DataTableState } from '@src/types/state'
+import useDataTableContext from '@src/hooks/use-data-table-context'
+import ComponentClassName from '@src/enums/class-name'
 
 export function TableBodyCell({
     children,

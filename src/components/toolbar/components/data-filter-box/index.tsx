@@ -6,14 +6,14 @@ import Typography from '@mui/material/Typography'
 import { tss } from 'tss-react/mui'
 import { type ReactNode, useState } from 'react'
 // globals
-import type { DataTableState } from '@/types/state'
-import type { FilterUpdateType } from '@/data-table'
-import useDataTableContext from '@/hooks/use-data-table-context'
-import { getDisplayData } from '@/functions'
+import type { DataTableState } from '@src/types/state'
+import type { FilterUpdateType } from '@src/data-table'
+import useDataTableContext from '@src/hooks/use-data-table-context'
+import { getDisplayData } from '@src/functions'
 // global enums
-import FilterType from '@/enums/filter-type'
-import TableAction from '@/enums/table-action'
-import ComponentClassName from '@/enums/class-name'
+import FilterType from '@src/enums/filter-type'
+import TableAction from '@src/enums/table-action'
+import ComponentClassName from '@src/enums/class-name'
 // locals
 import ToolbarDataFilterBoxFilters from './components/filter-inputs'
 
