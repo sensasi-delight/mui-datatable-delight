@@ -80,7 +80,7 @@ export function DataTableToolbarSearch({
 }
 
 const useStyles = tss
-    .withName(ClassName.TOOLBAR__SEARCH_BAR)
+    .withName(ClassName.TOOLBAR__SEARCH_TEXT_FIELD)
     .create(({ theme }) => ({
         clearButton: {
             '&:hover': {

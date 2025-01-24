@@ -4,6 +4,7 @@ import React, { type JSX, type RefObject, useEffect, useState } from 'react'
 import { tss } from 'tss-react/mui'
 // locals
 import useDataTableContext from '../hooks/use-data-table-context'
+import ComponentClassName from '@src/enums/class-name'
 
 /**
  * Column resize slider component.
@@ -384,7 +385,7 @@ interface DataTableResizeProps {
     // classes?: ReturnType<typeof useStyles>['classes']
 }
 
-const useStyles = tss.create({
+const useStyles = tss.withName(ComponentClassName.COLUMN_RESIZER).create({
     root: {
         position: 'absolute'
     },

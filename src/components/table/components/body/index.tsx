@@ -22,6 +22,7 @@ import useDataTableContext from '../../../../hooks/use-data-table-context'
 import { buildMap } from '../../../../functions'
 // global enums
 import TableAction from '../../../../enums/table-action'
+import ComponentClassName from '../../../../enums/class-name'
 
 export default function TableBody(props: DataTableBodyProps) {
     const { classes } = useStyles()
@@ -117,7 +118,7 @@ interface DataTableBodyProps {
 }
 
 const useStyles = tss
-    .withName('datatable-delight--Body')
+    .withName(ComponentClassName.TABLE__BODY)
     .create(({ theme }) => ({
         root: {},
         emptyTitle: {

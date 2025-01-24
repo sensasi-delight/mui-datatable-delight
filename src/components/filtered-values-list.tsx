@@ -7,6 +7,7 @@ import type { DataTableState } from '../types/state'
 import useDataTableContext from '../hooks/use-data-table-context'
 import type { FilterTypeType } from '../types/shared/filter-type-type'
 import type { FilterUpdateType } from '../data-table'
+import ComponentClassName from '@src/enums/class-name'
 
 const CLASS_ID = 'datatable-delight--filter-list'
 
@@ -185,7 +186,7 @@ interface TableFilterListProps {
     filterUpdate: FilterUpdateType
 }
 
-const useStyles = tss.create({
+const useStyles = tss.withName(ComponentClassName.FILTERED_VALUES_LIST).create({
     root: {
         display: 'flex',
         justifyContent: 'left',

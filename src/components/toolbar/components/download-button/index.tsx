@@ -1,16 +1,20 @@
 'use client'
 
 // materials
+import { tss } from 'tss-react/mui'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
+// globals
+import type { DataTableOptions } from '@src/types/options'
+import type { DataTableState } from '@src/types/state'
+import useDataTableContext from '@src/hooks/use-data-table-context'
+import ComponentClassName from '@src/enums/class-name'
 // locals
-import type { DataTableOptions } from '../../../../types/options'
-import type { DataTableState } from '../../../../types/state'
-import useDataTableContext from '../../../../hooks/use-data-table-context'
 import { ICON_BUTTON_DEFAULT_SX } from '../statics/icon-button-default-sx'
 import { createCsvDownload } from './functions/create-csv-download'
 
 export function ToolbarDownloadButton() {
+    const { classes } = useStyles()
     const {
         icons,
         options,
@@ -22,6 +26,7 @@ export function ToolbarDownloadButton() {
         <Tooltip title={toolbarTextLabels.downloadCsv} disableFocusListener>
             <span>
                 <IconButton
+                    className={classes.root}
                     aria-label={toolbarTextLabels.downloadCsv}
                     disabled={options.download === 'disabled'}
                     onClick={() => handleCSVDownload(state, options)}
@@ -33,6 +38,12 @@ export function ToolbarDownloadButton() {
         </Tooltip>
     )
 }
+
+const useStyles = tss
+    .withName(ComponentClassName.TOOLBAR__DOWNLOAD_BUTTON)
+    .create({
+        root: {}
+    })
 
 function handleCSVDownload(
     { columns, columnOrder, data, displayData }: DataTableState,
