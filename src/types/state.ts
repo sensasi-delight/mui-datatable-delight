@@ -2,6 +2,7 @@ import type { MUIDataTableStateRows } from 'mui-datatables'
 import type { DataTableSortOrderOption } from './options'
 import type { DataTableColumnObject } from './columns'
 import type { DefaultDataItem } from '.'
+import type DataTableSearchOptions from './options/search'
 
 export interface DataTableState<DataItem = DefaultDataItem> {
     activeColumn: number | null
@@ -27,8 +28,13 @@ export interface DataTableState<DataItem = DefaultDataItem> {
     rowsPerPage: number
     rowsPerPageOptions: number[]
     rowsSelected: number[]
-    searchText?: string
-    searchProps: React.HTMLAttributes<HTMLInputElement> | null
+
+    /**
+     * Search text
+     */
+    searchText: string
+
+    searchProps: DataTableSearchOptions['searchProps']
 
     /**
      * Current row selected or not
