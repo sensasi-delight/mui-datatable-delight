@@ -1,21 +1,18 @@
 'use client'
 
 import { useState, type ReactNode, useEffect } from 'react'
-import type { DataTableProps } from '../../../../types'
-import {
-    getNewStateOnDataChange,
-    load,
-    save,
-    warnInfo
-} from '../../../../functions'
-import type { DataTableOptions, DataTableState } from '../../../..'
 import DEFAULT_STATE from '../../statics/default-state'
-import TableAction from '../../../../enums/table-action'
 import { handleDeprecatedOptions } from '../../function/handle-deprecated-options'
 import DataTableContext from '../../context'
 import { DEFAULT_ICONS } from '../../statics/default-icons'
 import { processTextLabels } from '../../function/process-text-labels'
 import { DEFAULT_OPTIONS } from '../../statics/default-options'
+// globals
+import type { DataTableProps } from '@src/types'
+import type { DataTableOptions, DataTableState } from '@src/index'
+import { load, save, warnInfo } from '@src/functions'
+import getNewStateOnDataChange from '@src/functions/get-new-state-on-data-change'
+import TableAction from '@src/enums/table-action'
 
 export default function DataTableContextProvider({
     datatableProps,
