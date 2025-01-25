@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import { getNewStateOnDataChange } from './get-new-state-on-data-change'
 import { DEFAULT_OPTIONS } from '../hooks/use-data-table-context/statics/default-options'
+import { type DataTableState } from '@src/index'
+import DEFAULT_STATE from '@src/hooks/use-data-table-context/statics/default-state'
 
 describe('get-new-state-on-data-change', () => {
     const data = [
@@ -154,7 +156,8 @@ describe('get-new-state-on-data-change', () => {
         }
     ]
 
-    const expected = {
+    const expected: DataTableState = {
+        ...DEFAULT_STATE,
         // activeColumn: null, // new value = undefined prop
         // announceText: null, // new value = undefined prop
 
@@ -261,18 +264,13 @@ describe('get-new-state-on-data-change', () => {
 
         // previousSelectedRow: null,  // legacy value
         // searchProps: {},  // legacy value
-
-        searchText: undefined, // new value
         // searchText: null, // legacy value
+
         selectedRows: {
             data: [],
             lookup: {}
         },
         // showResponsive: false, // legacy value
-
-        page: undefined, // new value
-        // page: 0, // legacy value
-
         sortOrder: undefined, // new value
         // sortOrder: {}, // legacy value
 
@@ -330,7 +328,7 @@ describe('get-new-state-on-data-change', () => {
             1,
             true,
             options,
-            {},
+            DEFAULT_STATE,
             () => {}
         )
 
@@ -452,7 +450,7 @@ describe('get-new-state-on-data-change', () => {
             1,
             true,
             options,
-            {},
+            DEFAULT_STATE,
             () => {
                 console.log('setState')
             }
@@ -531,7 +529,7 @@ describe('get-new-state-on-data-change', () => {
             2,
             true,
             options,
-            {},
+            DEFAULT_STATE,
             () => {
                 console.log('setState')
             }

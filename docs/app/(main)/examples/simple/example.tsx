@@ -266,8 +266,10 @@ const COLUMNS: DataTableProps['columns'] = [
 const STATIC_OPTIONS: DataTableOptions = {
     filterType: 'checkbox',
     onTableChange: (action, state) => {
-        console.log(action)
-        console.dir(state)
+        console.dir({
+            action,
+            state
+        })
     }
 }
 

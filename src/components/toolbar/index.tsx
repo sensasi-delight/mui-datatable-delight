@@ -53,7 +53,6 @@ export default function Toolbar(props: ToolbarProps) {
         )
     )
 
-    const [searchText, setSearchText] = useState(state.searchText)
     const [activeIcon, _setActiveIcon] = useState<
         'search' | 'filter' | 'viewColumns'
     >()
@@ -73,33 +72,6 @@ export default function Toolbar(props: ToolbarProps) {
         setShowSearch(isSearchShown(iconName))
     }
 
-    function handleSearch(newSearchText: string) {
-        const prevState = state
-
-        const displayData = options.serverSide
-            ? prevState.displayData
-            : getDisplayData(
-                  prevState.columns,
-                  prevState.data,
-                  prevState.filterList,
-                  newSearchText,
-                  null,
-                  datatableRootProps,
-                  prevState,
-                  options,
-                  setState
-              )
-
-        onAction?.(TableAction.SEARCH, {
-            searchText: newSearchText,
-            page: 0,
-            displayData
-        })
-
-        setSearchText(newSearchText)
-        options.onSearchChange?.(newSearchText)
-    }
-
     function hideSearch() {
         onAction?.(TableAction.ON_SEARCH_CLOSE, {})
         options?.onSearchClose?.()
@@ -107,7 +79,6 @@ export default function Toolbar(props: ToolbarProps) {
 
         setActiveIcon(undefined)
         setShowSearch(false)
-        setSearchText(undefined)
     }
 
     function getIconClasses(
@@ -115,14 +86,14 @@ export default function Toolbar(props: ToolbarProps) {
     ) {
         const isActive =
             iconName === 'search'
-                ? Boolean(showSearch || searchText)
+                ? Boolean(showSearch || state.searchText)
                 : activeIcon === iconName
 
         return isActive ? classes.iconActive : classes.icon
     }
 
     function handleSearchIconClick() {
-        if (showSearch && !searchText) {
+        if (showSearch && !state.searchText) {
             hideSearch()
         } else {
             setActiveIcon('search')
@@ -137,7 +108,7 @@ export default function Toolbar(props: ToolbarProps) {
         let nextVal = false
 
         if (showSearch) {
-            if (searchText) {
+            if (state.searchText) {
                 nextVal = true
             } else {
                 onAction?.(TableAction.ON_SEARCH_CLOSE, {})
@@ -157,11 +128,10 @@ export default function Toolbar(props: ToolbarProps) {
     function searchClose() {
         const prevState = state
 
-        // reset searchText
-        const searchText = undefined
+        const newSearchText = ''
 
         onAction?.(TableAction.SEARCH, {
-            searchText,
+            searchText: newSearchText,
             displayData: options.serverSide
                 ? prevState.displayData
                 : getDisplayData(
@@ -177,7 +147,7 @@ export default function Toolbar(props: ToolbarProps) {
                   )
         })
 
-        options.onSearchChange?.(searchText)
+        options.onSearchChange?.(newSearchText)
     }
 
     const [isDialogFilterOpen, setIsDialogFilterOpen] = useState(false)
@@ -190,12 +160,7 @@ export default function Toolbar(props: ToolbarProps) {
     return (
         <Box className={classes.root} role="table toolbar">
             <div className={classes.left}>
-                {showSearch && (
-                    <DataTableToolbarSearch
-                        onSearch={handleSearch}
-                        onHide={hideSearch}
-                    />
-                )}
+                {showSearch && <DataTableToolbarSearch onHide={hideSearch} />}
 
                 {datatableRootProps?.title && (
                     <div
@@ -311,7 +276,6 @@ export default function Toolbar(props: ToolbarProps) {
 
 interface ToolbarProps {
     filterUpdate: FilterUpdateType
-    searchText?: string
     tableRef: RefObject<HTMLTableElement | null>
 }
 

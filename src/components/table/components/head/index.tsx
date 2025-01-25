@@ -48,7 +48,7 @@ export default function TableHead({
 
         let newOrder: DataTableSortOrderOption['direction'] = columns[
             columnIndex
-        ].sortDescFirst
+        ]?.sortDescFirst
             ? 'desc'
             : 'asc'
 
@@ -57,16 +57,16 @@ export default function TableHead({
             'desc'
         ]
 
-        if (columns[columnIndex].sortDescFirst) {
+        if (columns[columnIndex]?.sortDescFirst) {
             sequenceOrder.reverse()
         }
 
-        if (columns[columnIndex].sortThirdClickReset) {
+        if (columns[columnIndex]?.sortThirdClickReset) {
             sequenceOrder.push('none')
         }
 
-        if (columns[columnIndex].name === prevState.sortOrder?.name) {
-            let position = sequenceOrder.indexOf(prevState.sortOrder.direction)
+        if (columns[columnIndex]?.name === prevState.sortOrder?.name) {
+            let position = sequenceOrder.indexOf(prevState.sortOrder?.direction)
 
             if (position !== -1) {
                 position++

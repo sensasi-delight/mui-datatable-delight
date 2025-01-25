@@ -18,6 +18,7 @@ const DEFAULT_STATE: DataTableState = {
     rowsPerPage: 10,
     rowsPerPageOptions: [10, 20, 50, 100],
     rowsSelected: [],
+    searchText: '',
     searchProps: {},
     selectedRows: {
         data: [],

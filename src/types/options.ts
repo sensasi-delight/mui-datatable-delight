@@ -1,6 +1,5 @@
 import type { TableProps } from '@mui/material/Table'
 import type { TableRowProps } from '@mui/material/TableRow'
-import type { TextFieldProps } from '@mui/material/TextField'
 import type {
     DisplayData,
     MUIDataTableChip,
@@ -17,13 +16,13 @@ import { DEFAULT_TEXT_LABELS } from '../hooks/use-data-table-context/function/st
 import type FilterType from '../enums/filter-type'
 import type RowsSelectedToolbarPlacement from '../enums/rows-selected-toolbar-placement'
 import type TableAction from '../enums/table-action'
+import type DataTableSearchOptions from './options/search'
+import type { BooleanOrDisabled } from './values/boolean-or-disabled'
 
 export interface DataTableSortOrderOption {
     name: string
     direction: 'asc' | 'desc' | 'none'
 }
-
-type BooleanOrDisabled = Boolean | 'disabled'
 
 /**
  * @deprecated FOUND THIS TYPE BUT CAN'T DESCRIBED YET
@@ -41,7 +40,9 @@ export interface SomeRowsIDK {
     lookup: boolean[]
 }
 
-export interface DataTableOptions extends DataTableCustomsOptions {
+export interface DataTableOptions
+    extends DataTableCustomsOptions,
+        DataTableSearchOptions {
     /** Enable/disable case sensitivity for search */
     caseSensitive?: boolean
 
@@ -334,15 +335,6 @@ export interface DataTableOptions extends DataTableCustomsOptions {
         rowsSelected?: any[]
     ) => void
 
-    /** Callback function that triggers when the search text value has changed. */
-    onSearchChange?: (searchText?: string) => void
-
-    /** Callback function that triggers when the searchbox closes. */
-    onSearchClose?: () => void
-
-    /** Callback function that triggers when the searchbox opens.  */
-    onSearchOpen?: () => void
-
     /**
      * Callback function that triggers when table state has changed.
      *
@@ -450,56 +442,6 @@ export interface DataTableOptions extends DataTableCustomsOptions {
 
     /** User provided array of number (dataIndexes) which indicated the selected row. */
     rowsSelected?: any[]
-
-    /**
-     * Possible Values:
-     * - true       = Button visible and clickable
-     * - false      = Button not visible
-     * - 'disabled' = Button is visible but not clickable
-     *
-     * @default true
-     */
-    search?: BooleanOrDisabled
-
-    /**
-     * Initially displays search bar.
-     * @default false
-     */
-    searchOpen?: boolean
-
-    /**
-     * Always displays search bar, and hides search icon in toolbar.
-     *
-     * @default false
-     */
-    searchAlwaysOpen?: boolean
-
-    /**
-     * The delay in milliseconds to wait before triggering the search.
-     * For example, setting searchDelay: 300 means the search will only execute 300ms after the user stops typing.
-     *
-     * @see https://mui-datatable-delight.vercel.app/features/debounce-search
-     *
-     * @default 0
-     */
-    searchDelay?: number
-
-    /**
-     * Props applied to the search text box. You can set method callbacks like onBlur, onKeyUp, etc, this way.
-     *
-     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-search/index.tsx
-     */
-    searchProps?: TextFieldProps
-
-    /**
-     * Search text placeholder.
-     *
-     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-search/index.tsx
-     */
-    searchPlaceholder?: string
-
-    /** Search text for the table. */
-    searchText?: string
 
     /**
      * Indicates if rows can be selected.
@@ -702,17 +644,6 @@ interface DataTableCustomsOptions {
     ) => ReactNode
 
     /**
-     * Override default search with custom function.
-     *
-     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-search/index.tsx
-     */
-    customSearch?: (
-        searchText: string,
-        currentRow: any[],
-        columns: any[]
-    ) => boolean
-
-    /**
      * Override default sorting with custom function.
      *
      * If you just need to override the sorting for a particular column, see the {@link DataTableColumnObjectOptions.sortCompare} method in the Column options.
@@ -804,7 +735,6 @@ interface DataTableCustomsOptions {
 //         page: PropTypes.number,
 //         pagination: PropTypes.bool,
 //         print: PropTypes.oneOf([true, false, 'true', 'false', 'disabled']),
-//         searchProps: PropTypes.object,
 //         selectableRows: PropTypes.oneOfType([
 //             PropTypes.bool,
 //             PropTypes.oneOf(['none', 'single', 'multiple'])
@@ -832,11 +762,6 @@ interface DataTableCustomsOptions {
 //         rowsPerPage: PropTypes.number,
 //         rowsPerPageOptions: PropTypes.array,
 //         rowsSelected: PropTypes.array,
-//         search: PropTypes.oneOf([true, false, 'true', 'false', 'disabled']),
-//         searchOpen: PropTypes.bool,
-//         searchAlwaysOpen: PropTypes.bool,
-//         searchPlaceholder: PropTypes.string,
-//         searchText: PropTypes.string,
 //         setFilterChipProps: PropTypes.func,
 //         setRowProps: PropTypes.func,
 //         setTableProps: PropTypes.func,
