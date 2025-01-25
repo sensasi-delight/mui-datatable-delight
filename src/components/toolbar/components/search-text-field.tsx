@@ -2,44 +2,68 @@
 
 // vendors
 import { tss } from 'tss-react/mui'
-import { useEffect, useState } from 'react'
 // materials
 import Grow from '@mui/material/Grow'
 import IconButton from '@mui/material/IconButton'
 import TextField, { type TextFieldProps } from '@mui/material/TextField'
 import Clear from '@mui/icons-material/Clear'
 import Search from '@mui/icons-material/Search'
-// locals
-import useDataTableContext from '../../../hooks/use-data-table-context'
+// globals
+import { getDisplayData } from '@src/functions'
+import useDataTableContext from '@src/hooks/use-data-table-context'
 // global enums
-import ClassName from '../../../enums/class-name'
+import ClassName from '@src/enums/class-name'
+import TableAction from '@src/enums/table-action'
+import { useRef, useState } from 'react'
 
-export function DataTableToolbarSearch({
-    onSearch,
-    onHide
-}: {
-    onSearch: (searchText: string) => void
-    onHide: () => void
-}) {
-    const { options, textLabels } = useDataTableContext()
+export function DataTableToolbarSearch({ onHide }: { onHide: () => void }) {
+    const {
+        onAction,
+        options,
+        props: datatableRootProps,
+        setState,
+        state,
+        textLabels
+    } = useDataTableContext()
     const { classes } = useStyles()
-    const [searchText, setSearchText] = useState(options?.searchText ?? '')
 
+    const timeout = useRef<NodeJS.Timeout>(undefined)
     const searchDelay = options?.searchDelay ?? 0
     const clearIconVisibility = options?.searchAlwaysOpen ? 'hidden' : 'visible'
 
-    useEffect(() => {
-        const timeout = setTimeout(() => {
-            onSearch(searchText)
+    const [searchText, setSearchText] = useState(state.searchText)
+
+    function handleSearch(newSearchText: string) {
+        const displayData = options.serverSide
+            ? state.displayData
+            : getDisplayData(
+                  state.columns,
+                  state.data,
+                  state.filterList,
+                  newSearchText,
+                  null,
+                  datatableRootProps,
+                  state,
+                  options,
+                  setState
+              )
+
+        onAction?.(TableAction.SEARCH, {
+            searchText: newSearchText,
+            page: 0,
+            displayData
+        })
+
+        options.onSearchChange?.(newSearchText)
+    }
+
+    const onSearch: TextFieldProps['onChange'] = event => {
+        setSearchText(event.target.value)
+        clearTimeout(timeout.current)
+
+        timeout.current = setTimeout(() => {
+            handleSearch(event.target.value)
         }, searchDelay)
-
-        return () => clearTimeout(timeout)
-    }, [searchText, searchDelay])
-
-    const handleSearch: TextFieldProps['onChange'] = ({
-        target: { value }
-    }) => {
-        setSearchText(value)
     }
 
     const handleKeyDown: TextFieldProps['onKeyDown'] = event => {
@@ -59,7 +83,7 @@ export function DataTableToolbarSearch({
                     className={classes.textField}
                     fullWidth={true}
                     onKeyDown={handleKeyDown}
-                    onChange={handleSearch}
+                    onChange={onSearch}
                     placeholder={options?.searchPlaceholder}
                     value={searchText}
                     variant="standard"

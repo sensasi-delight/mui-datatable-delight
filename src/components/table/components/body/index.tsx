@@ -107,9 +107,6 @@ interface DataTableBodyProps {
     /** The most recent row to have been selected/unselected */
     previousSelectedRow: DataTableState['previousSelectedRow']
 
-    /** Data used to search table against */
-    searchText: string
-
     columnOrder: number[] | undefined
 
     page: DataTableState['page']

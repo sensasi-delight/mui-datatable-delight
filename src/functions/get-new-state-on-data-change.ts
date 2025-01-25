@@ -375,9 +375,9 @@ function computeDisplayRow(
         let columnValue: unknown = row[index]
         const column = columns[index]
 
-        if (column.customBodyRenderLite) {
+        if (column?.customBodyRenderLite) {
             displayRow.push(column.customBodyRenderLite)
-        } else if (column.customBodyRender) {
+        } else if (column?.customBodyRender) {
             const tableMeta = getTableMeta(
                 rowIndex,
                 index,
@@ -386,8 +386,7 @@ function computeDisplayRow(
                 dataForTableMeta,
                 {
                     ...state,
-                    filterList,
-                    searchText
+                    filterList
                 },
                 currentTableData
             )
@@ -429,12 +428,13 @@ function computeDisplayRow(
 
         const filterVal = filterList[index]
         const caseSensitive = options.caseSensitive
-        const filterType = column.filterType ?? options.filterType
+        const filterType = column?.filterType ?? options.filterType
 
-        if (filterVal.length || filterType === 'custom') {
-            if (column.filterOptions && column.filterOptions.logic) {
-                if (column.filterOptions.logic(columnValue, filterVal, row))
+        if (filterVal?.length || filterType === 'custom') {
+            if (column?.filterOptions && column.filterOptions.logic) {
+                if (column.filterOptions.logic(columnValue, filterVal, row)) {
                     isFiltered = true
+                }
             } else if (
                 filterType === 'textField' &&
                 !hasSearchText(columnVal, filterVal, caseSensitive)
@@ -443,7 +443,7 @@ function computeDisplayRow(
             } else if (
                 filterType !== 'textField' &&
                 !Array.isArray(columnValue) &&
-                filterVal.indexOf(columnValue) < 0
+                filterVal?.indexOf(columnValue) < 0
             ) {
                 isFiltered = true
             } else if (
@@ -451,16 +451,17 @@ function computeDisplayRow(
                 Array.isArray(columnValue)
             ) {
                 if (options.filterArrayFullMatch) {
-                    const isFullMatch = filterVal.every(el => {
-                        return columnValue.indexOf(el) >= 0
-                    })
+                    const isFullMatch = filterVal?.every(
+                        el => columnValue?.indexOf(el) >= 0
+                    )
                     if (!isFullMatch) {
                         isFiltered = true
                     }
                 } else {
-                    const isAnyMatch = filterVal.some(el => {
-                        return columnValue.indexOf(el) >= 0
-                    })
+                    const isAnyMatch = filterVal?.some(
+                        el => columnValue?.indexOf(el) >= 0
+                    )
+
                     if (!isAnyMatch) {
                         isFiltered = true
                     }
@@ -470,10 +471,10 @@ function computeDisplayRow(
 
         if (
             searchText &&
-            column.display !== 'excluded' &&
+            column?.display !== 'excluded' &&
             hasSearchText(columnVal, searchText, caseSensitive) &&
-            column.display !== 'false' &&
-            column.searchable
+            column?.display !== 'false' &&
+            column?.searchable
         ) {
             isSearchFound = true
         }
@@ -539,7 +540,7 @@ export function getDisplayData(
     const dataForTableMeta = tableMeta ? tableMeta.tableData : props.data
 
     for (let index = 0; index < data.length; index++) {
-        const value = data[index].data
+        const value = data[index]?.data
         const displayRow = computeDisplayRow(
             columns,
             value,
@@ -846,22 +847,24 @@ export function getNewStateOnDataChange(
     }
 
     const searchText =
-        status === TABLE_LOAD.INITIAL ? options?.searchText : state.searchText
+        status === TABLE_LOAD.INITIAL
+            ? (options?.searchText ?? state.searchText)
+            : state.searchText
 
     const newState: DataTableState = {
         ...state,
-        columns: columns,
-        filterData: filterData,
-        filterList: filterList,
-        searchText: searchText,
-        selectedRows: selectedRowsData,
-        expandedRows: expandedRowsData,
         count: options.count ?? tableData.length,
+        columnOrder,
+        columns,
+        expandedRows: expandedRowsData,
         data: tableData,
-        sortOrder: sortOrder,
-        rowsPerPage,
+        filterData,
+        filterList,
         page,
-        columnOrder
+        rowsPerPage,
+        searchText,
+        selectedRows: selectedRowsData,
+        sortOrder
     }
 
     return {
