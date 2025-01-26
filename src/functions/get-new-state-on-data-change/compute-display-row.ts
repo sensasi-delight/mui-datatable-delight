@@ -5,30 +5,32 @@ import type {
 } from '@src/index'
 import getTableMeta from './get-table-meta'
 import hasSearchText from './has-search-text'
+import updateDataCol from './update-data-col'
+import type DataTableMeta from '@src/types/table-meta'
 
 /*
  * Build the table data used to display to the user (i.e., after filter/search applied)
  */
 export default function computeDisplayRow(
     columns: DataTableState['columns'],
-    row: unknown[],
+    row: DataTableState['data'][0]['data'],
     rowIndex: number,
     filterList: DataTableState['filterList'],
     searchText: DataTableState['searchText'],
-    dataForTableMeta: DataTableState['data'],
+    dataForTableMeta: DataTableMeta['tableData'] | DataTableProps['data'],
     options: DataTableOptions,
     props: DataTableProps,
     currentTableData: DataTableState['data'],
     state: DataTableState,
     setState: (newState: DataTableState) => void
-): unknown[] | null {
+): DataTableState['displayData'] | null {
     let isFiltered = false
     let isSearchFound = false
-    let displayRow: unknown[] = []
+    const displayRow: DataTableState['displayData'] = []
 
     for (let index = 0; index < row.length; index++) {
-        let columnDisplay: unknown = row[index]
-        let columnValue: unknown = row[index]
+        let columnDisplay = row[index]
+        let columnValue = row[index]
         const column = columns[index]
 
         if (column?.customBodyRenderLite) {
@@ -88,7 +90,13 @@ export default function computeDisplayRow(
 
         if (filterVal?.length || filterType === 'custom') {
             if (column?.filterOptions && column.filterOptions.logic) {
-                if (column.filterOptions.logic(columnValue, filterVal, row)) {
+                if (
+                    column.filterOptions.logic(
+                        columnValue,
+                        filterVal ?? [],
+                        row
+                    )
+                ) {
                     isFiltered = true
                 }
             } else if (
@@ -157,6 +165,5 @@ export default function computeDisplayRow(
         return displayRow
     }
 
-    if (isFiltered || (searchText && !isSearchFound)) return null
-    else return displayRow
+    return isFiltered || (searchText && !isSearchFound) ? null : displayRow
 }

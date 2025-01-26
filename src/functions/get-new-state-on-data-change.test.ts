@@ -31,6 +31,7 @@ describe('get-new-state-on-data-change', () => {
     ]
 
     const options = {
+        ...DEFAULT_OPTIONS,
         search: true,
         download: true,
         print: true,

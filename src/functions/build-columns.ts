@@ -15,81 +15,85 @@ export default function buildColumns(
     newColumnOrder: DataTableState['columnOrder'] | undefined,
     prevColumnOrder: DataTableState['columnOrder'] = []
 ) {
-    const columnData: DataTableState['columns'] = []
     const filterData: DataTableState['filterData'] = []
     const filterList: DataTableState['filterList'] = []
 
     let columnOrder: number[] = []
 
-    newColumns.forEach((column, colIndex) => {
-        let columnOptions: DataTableState['columns'][0] = {
-            display: 'true',
-            empty: false,
-            filter: true,
-            sort: true,
-            print: true,
-            searchable: true,
-            download: true,
-            viewColumns: true,
-            sortCompare: undefined,
-            sortThirdClickReset: false,
-            sortDescFirst: false
-        }
+    const columnData: DataTableState['columns'] = newColumns.map(
+        (column, colIndex) => {
+            columnOrder.push(colIndex)
+            filterData[colIndex] = []
+            filterList[colIndex] = []
 
-        columnOrder.push(colIndex)
+            const columnOptions: Partial<DataTableState['columns'][0]> = {
+                download: true,
+                empty: false,
+                filter: true,
+                print: true,
+                searchable: true,
+                sort: true,
+                sortCompare: undefined,
+                sortThirdClickReset: false,
+                sortDescFirst: false,
+                viewColumns: true
+            }
 
-        const options = {
-            ...(typeof column === 'string' ? {} : column.options)
-        }
-
-        if (typeof column === 'object') {
-            if (options) {
-                if (options.display !== undefined) {
-                    options.display = options.display
+            function getOtherOptions(): Partial<DataTableState['columns'][0]> {
+                if (typeof column === 'string') {
+                    return {
+                        // remember stored version of display if not overwritten
+                        display: prevColumns[colIndex]?.display
+                    }
                 }
+
+                const options =
+                    { ...column.options, display: column.options?.display } ??
+                    {}
 
                 if (options.sortDirection === null || options.sortDirection) {
                     warnDeprecated(
                         'The sortDirection column field has been deprecated. Please use the sortOrder option on the options object. More info: https://github.com/gregnb/mui-datatables/tree/master/docs/v2_to_v3_guide.md'
                     )
                 }
+
+                if (
+                    typeof options.display === 'undefined' &&
+                    prevColumns[colIndex] &&
+                    prevColumns[colIndex]?.name === column.name &&
+                    prevColumns[colIndex]?.display
+                ) {
+                    // remember stored version of display if not overwritten
+                    options.display = prevColumns[colIndex]?.display
+                }
+
+                return options
             }
 
-            // remember stored version of display if not overwritten
-            if (
-                typeof options.display === 'undefined' &&
-                prevColumns[colIndex] &&
-                prevColumns[colIndex]?.name === column.name &&
-                prevColumns[colIndex]?.display
-            ) {
-                options.display = prevColumns[colIndex]?.display
-            }
+            const otherOptions = getOtherOptions()
 
-            columnOptions = {
-                name: column.name,
-                label: column.label ? column.label : column.name,
-                ...columnOptions,
-                ...options
-            }
-        } else {
-            // remember stored version of display if not overwritten
-            if (prevColumns[colIndex] && prevColumns[colIndex]?.display) {
-                options.display = prevColumns[colIndex]?.display
-            }
+            const display =
+                typeof otherOptions.display === 'undefined'
+                    ? 'true'
+                    : otherOptions.display
 
-            columnOptions = {
-                ...columnOptions,
-                ...options,
-                name: column,
-                label: column
-            }
+            return typeof column === 'object'
+                ? {
+                      name: column.name,
+                      label: column.label ? column.label : column.name,
+                      ...columnOptions,
+                      ...otherOptions,
+                      display
+                  }
+                : {
+                      ...columnOptions,
+                      ...otherOptions,
+                      name: column,
+                      label: column,
+                      display
+                  }
         }
-
-        columnData.push(columnOptions)
-
-        filterData[colIndex] = []
-        filterList[colIndex] = []
-    })
+    )
 
     if (Array.isArray(newColumnOrder)) {
         columnOrder = newColumnOrder

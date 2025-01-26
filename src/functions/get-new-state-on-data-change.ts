@@ -8,11 +8,11 @@ import type { DataTableState } from '../types/state'
 import { getCollatorComparator } from './get-collator-comparator'
 import transformData from './transform-data'
 import { warnDeprecated } from './warn-deprecated'
-import type { MUIDataTableMeta } from 'mui-datatables'
 import buildColumns from './build-columns'
 import sortTable from './sort-table'
 import getDisplayData from './get-new-state-on-data-change/get-display-data'
 import getTableMeta from './get-new-state-on-data-change/get-table-meta'
+import type DataTableMeta from '@src/types/table-meta'
 
 enum TABLE_LOAD {
     INITIAL = 1,
@@ -51,7 +51,7 @@ export default function getNewStateOnDataChange(
 
     let sortIndex: number | null = null
     let sortDirection: DataTableSortOrderOption['direction'] = 'none'
-    let tableMeta: MUIDataTableMeta | undefined
+    let tableMeta: DataTableMeta | undefined
 
     const data =
         status === TABLE_LOAD.INITIAL

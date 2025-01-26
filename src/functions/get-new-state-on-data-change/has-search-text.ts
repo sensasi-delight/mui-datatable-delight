@@ -12,7 +12,7 @@
 export default function hasSearchText(
     toSearch: string,
     toFind: string,
-    caseSensitive: boolean
+    caseSensitive: boolean = false
 ) {
     let stack = toSearch.toString()
     let needle = toFind.toString()

@@ -10,7 +10,9 @@ export function sortCompare(order: DataTableSortOrderOption['direction']) {
             b.data === null || typeof b.data === 'undefined' ? '' : b.data
 
         return (
-            (typeof aData.localeCompare === 'function'
+            (typeof aData === 'object' &&
+            'localeCompare' in aData &&
+            typeof aData.localeCompare === 'function'
                 ? aData.localeCompare(bData)
                 : aData - bData) * (order === 'asc' ? 1 : -1)
         )
