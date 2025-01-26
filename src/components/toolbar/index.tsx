@@ -9,12 +9,12 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Tooltip from '@mui/material/Tooltip'
 // globals
-import useDataTableContext from '../../hooks/use-data-table-context'
-import type { FilterUpdateType } from '../../data-table'
-import { getDisplayData } from '../../functions'
+import type { FilterUpdateType } from '@src/data-table'
+import useDataTableContext from '@src/hooks/use-data-table-context'
+import getDisplayData from '@src/functions/get-new-state-on-data-change/get-display-data'
 // global enums
-import ClassName from '../../enums/class-name'
-import TableAction from '../../enums/table-action'
+import ClassName from '@src/enums/class-name'
+import TableAction from '@src/enums/table-action'
 // sub-components
 import { DataTableToolbarSearch } from './components/search-text-field'
 import { ToolbarPopover } from './components/popover'
