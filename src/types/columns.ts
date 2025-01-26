@@ -141,7 +141,7 @@ export interface DataTableStateColumnFilterOptions {
      * @see {@link https://mui-datatable-delight.vercel.app/examples/customize-filter|Customize Filter Example}.
      */
     logic?:
-        | ((prop: string, filterValue: any[], row?: any[]) => boolean)
+        | ((prop: string, filterValue: string[], row?: any[]) => boolean)
         | undefined
 
     /**

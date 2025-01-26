@@ -8,10 +8,12 @@ import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
 import DeleteIcon from '@mui/icons-material/Delete'
+// globals
+import { buildMap } from '../functions'
+import getNewStateOnDataChange from '@src/functions/get-new-state-on-data-change'
 // locals
 import { type DataTableOptions } from '../types/options'
 import useDataTableContext from '../hooks/use-data-table-context'
-import { buildMap, getNewStateOnDataChange } from '../functions'
 // enums
 import ClassName from '../enums/class-name'
 import TableAction from '../enums/table-action'

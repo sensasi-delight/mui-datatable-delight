@@ -5,16 +5,19 @@ import MuiTableHead from '@mui/material/TableHead'
 import { TableHeadCell } from './components/cell'
 import { TableHeadRow } from './components/row'
 import CheckboxCell from '../_shared/checkbox-cell'
-import useDataTableContext from '../../../../hooks/use-data-table-context'
-import type { DataTableState } from '../../../../types/state'
+// globals
+import useDataTableContext from '@src/hooks/use-data-table-context'
+import type { DataTableState } from '@src/types/state'
 import {
     type DataTableOptions,
     type DataTableSortOrderOption
-} from '../../../../types/options'
-import { getDisplayData, sortTable } from '../../../../functions'
+} from '@src/types/options'
 import type { Props } from './types/props'
 // global enums
-import TableAction from '../../../../enums/table-action'
+import TableAction from '@src/enums/table-action'
+// global functions
+import getDisplayData from '@src/functions/get-new-state-on-data-change/get-display-data'
+import sortTable from '@src/functions/sort-table'
 
 export default function TableHead({
     draggableHeadCellRefs,

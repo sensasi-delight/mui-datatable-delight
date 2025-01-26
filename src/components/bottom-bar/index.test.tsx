@@ -3,12 +3,15 @@ import { test, expect, describe } from 'vitest'
 import OriginalPaginationFromMui from '@mui/material/TablePagination'
 import { render } from '@testing-library/react'
 // locals
-import type { DataTableOptions, DataTableProps } from '../src'
-import TableFooter from '../src'
-import { DataTableContextProvider } from '../src'
-import { ClassName } from '../src/enums/class-name'
+import {
+    DataTableContextProvider,
+    type DataTableOptions,
+    type DataTableProps
+} from '@src/index'
+import BottomBar from './'
+import ComponentClassName from '@src/enums/class-name'
 
-describe('<DataTableFooter />', function () {
+describe('<BottomBar />', function () {
     function setup(props?: Partial<DataTableProps>) {
         const {
             columns = [],
@@ -27,7 +30,7 @@ describe('<DataTableFooter />', function () {
                         options
                     }}
                 >
-                    <TableFooter />
+                    <BottomBar />
                 </DataTableContextProvider>
             )
         }
@@ -41,8 +44,10 @@ describe('<DataTableFooter />', function () {
         })
 
         expect(
-            result.container.getElementsByClassName(ClassName.FOOTER).length
-        ).toBe(1)
+            result.container.children[0]?.className.includes(
+                ComponentClassName.BOTTOM_BAR + '-root'
+            )
+        ).toBe(true)
 
         /**
          * prev and next button
@@ -101,7 +106,7 @@ describe('<DataTableFooter />', function () {
         ).toBe(1)
     })
 
-    test('should not render a table footer', () => {
+    test('should not render the <BottomBar />', () => {
         const { result } = setup({
             options: {
                 pagination: false
@@ -109,7 +114,9 @@ describe('<DataTableFooter />', function () {
         })
 
         expect(
-            result.container.getElementsByClassName(ClassName.FOOTER).length
+            result.container.querySelectorAll(
+                `[class*="${ComponentClassName.BOTTOM_BAR}-root"]`
+            ).length
         ).toBe(0)
     })
 
@@ -121,8 +128,8 @@ describe('<DataTableFooter />', function () {
         })
 
         expect(
-            result.container.getElementsByClassName(
-                'datatable-delight--footer--jump-to-page'
+            result.container.querySelectorAll(
+                `[class*="${ComponentClassName.BOTTOM_BAR__JUMP_TO_PAGE}-root"]`
             ).length
         ).toBe(1)
     })

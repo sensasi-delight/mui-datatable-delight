@@ -4,8 +4,9 @@
 import { usePathname } from 'next/navigation'
 // materials
 import { useTheme } from '@mui/material/styles'
-import TagIcon from '@mui/icons-material/Tag'
+import Box from '@mui/material/Box'
 import Drawer from '@mui/material/Drawer'
+import TagIcon from '@mui/icons-material/Tag'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import ListItemButton from '@mui/material/ListItemButton'
@@ -17,7 +18,6 @@ import { DRAWER_WIDTH } from '../_constants'
 import { useEffect, useState } from 'react'
 import { Route as DocsRoute } from '../docs/_route--enum'
 import { snakeCaseToKebab, snakeCaseToTitle } from '@/utils'
-import { Box } from '@mui/material'
 
 export default function Menu({
     isOpen,

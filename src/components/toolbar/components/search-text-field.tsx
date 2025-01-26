@@ -9,7 +9,7 @@ import TextField, { type TextFieldProps } from '@mui/material/TextField'
 import Clear from '@mui/icons-material/Clear'
 import Search from '@mui/icons-material/Search'
 // globals
-import { getDisplayData } from '@src/functions'
+import getDisplayData from '@src/functions/get-new-state-on-data-change/get-display-data'
 import useDataTableContext from '@src/hooks/use-data-table-context'
 // global enums
 import ClassName from '@src/enums/class-name'

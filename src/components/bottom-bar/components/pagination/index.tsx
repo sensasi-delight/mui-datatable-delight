@@ -14,14 +14,14 @@ import useDataTableContext from '../../../../hooks/use-data-table-context'
 import ClassName from '../../../../enums/class-name'
 
 export function DataTableFooterPagination({
-    count,
     rowsPerPage,
-    page,
     changeRowsPerPage,
     changePage
 }: DataTableFooterPaginationProps) {
-    const { options, textLabels } = useDataTableContext()
+    const { options, state, textLabels } = useDataTableContext()
     const { classes } = useStyles()
+
+    const { displayData, page } = state
 
     const handleRowChange: TablePaginationProps['onRowsPerPageChange'] = ({
         target: { value }
@@ -40,9 +40,13 @@ export function DataTableFooterPagination({
         10, 20, 50, 100
     ]
 
-    const finalRowPerPage = finalRowsPerPageOptions.includes(rowsPerPage)
+    const finalRowPerPage: number = finalRowsPerPageOptions.includes(
+        rowsPerPage
+    )
         ? rowsPerPage
         : finalRowsPerPageOptions[0]
+
+    const count = displayData.length
 
     return (
         <div className={classes.root}>

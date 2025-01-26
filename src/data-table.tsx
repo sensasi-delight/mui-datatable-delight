@@ -9,11 +9,8 @@ import { tss } from 'tss-react/mui'
 import { useEffect, useRef } from 'react'
 import Paper, { type PaperProps } from '@mui/material/Paper'
 // locals
-import {
-    buildMap,
-    getDisplayData
-    // getNewStateOnDataChange
-} from './functions'
+import { buildMap } from './functions'
+import getDisplayData from './functions/get-new-state-on-data-change/get-display-data'
 import { type DataTableOptions } from './types/options'
 import { type DataTableState } from './types/state'
 import DataTableContextProvider from './hooks/use-data-table-context/components/provider'

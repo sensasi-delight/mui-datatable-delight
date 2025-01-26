@@ -59,8 +59,6 @@ export default function BottomBar() {
         <div className={classes.root}>
             {jumpToPage && (
                 <DataTableFooterJumpToPage
-                    count={state.displayData.length}
-                    page={state.page}
                     rowsPerPage={rowsPerPage}
                     changePage={changePage}
                 />
@@ -68,8 +66,6 @@ export default function BottomBar() {
 
             {pagination && (
                 <DataTableFooterPagination
-                    count={state.displayData.length}
-                    page={state.page}
                     rowsPerPage={rowsPerPage}
                     changeRowsPerPage={changeRowsPerPage}
                     changePage={changePage}
