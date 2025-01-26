@@ -11,27 +11,54 @@ import Typography from '@mui/material/Typography'
 import { TableBodyCell } from './components/cell'
 import { DataTableBodyRow } from './components/row'
 import CheckboxCell from '../_shared/checkbox-cell'
-import { getPageValue } from '../../../../functions/_shared/get-page-value'
-import type { DataTableState } from '../../../../types/state'
+// globals
+import { getPageValue } from '@src/functions/_shared/get-page-value'
+import type { DataTableState } from '@src/types/state'
 import {
     type DataTableOptions,
     type RowTypeIDK,
     type SomeRowsIDK
-} from '../../../../types/options'
-import useDataTableContext from '../../../../hooks/use-data-table-context'
-import { buildMap } from '../../../../functions'
+} from '@src/types/options'
+import useDataTableContext from '@src/hooks/use-data-table-context'
+import { buildMap } from '@src/functions'
 // global enums
-import TableAction from '../../../../enums/table-action'
-import ComponentClassName from '../../../../enums/class-name'
+import TableAction from '@src/enums/table-action'
+import ComponentClassName from '@src/enums/class-name'
 
-export default function TableBody(props: DataTableBodyProps) {
+export default function TableBody({ selectRowUpdate }: DataTableBodyProps) {
     const { classes } = useStyles()
-    const { options, textLabels } = useDataTableContext()
+    const { options, state, textLabels } = useDataTableContext()
 
-    const { columns } = props
+    const {
+        displayData: data,
+        count,
+        columns,
+        page,
+        rowsPerPage,
+        selectedRows,
+        previousSelectedRow,
+        expandedRows,
+        columnOrder: columnOrderFromState,
+        filterList
+    } = state
 
-    const columnOrder = props.columnOrder ?? columns.map((_, id) => id)
-    const tableRows = buildRows(props, options)
+    const fakeParentProps = {
+        data,
+        count,
+        columns,
+        page,
+        rowsPerPage,
+        selectedRows,
+        previousSelectedRow,
+        expandedRows,
+        columnOrderFromState,
+        filterList,
+        selectRowUpdate
+    }
+
+    const columnOrder = columnOrderFromState ?? columns.map((_, id) => id)
+    const tableRows = buildRows(fakeParentProps, options)
+
     const visibleColCnt = columns.filter(c => c.display === 'true').length
 
     return (
@@ -43,7 +70,7 @@ export default function TableBody(props: DataTableBodyProps) {
                         data={data}
                         key={rowIndex}
                         rowIndex={rowIndex}
-                        parentProps={props}
+                        parentProps={fakeParentProps}
                         columnOrder={columnOrder}
                     />
                 ))}
@@ -87,9 +114,6 @@ interface DataTableBodyProps {
 
     /** Data used to filter table against */
     filterList: DataTableState['filterList']
-
-    /** Callback to execute when row is clicked */
-    onRowClick: DataTableOptions['onRowClick']
 
     /** Table rows expanded */
     expandedRows: SomeRowsIDK
@@ -240,7 +264,7 @@ function handleRowSelect(
         let curIndex = previousSelectedRow.index
 
         while (curIndex !== data.index) {
-            const dataIndex = parentProps.data[curIndex].dataIndex
+            const dataIndex = parentProps.data[curIndex]?.dataIndex
 
             if (
                 getIsRowSelectable(
@@ -539,5 +563,5 @@ function handleRowClick(
     // Don't trigger onRowClick if the event was actually a row selection via click
     if (options.selectableRowsOnClick) return
 
-    options.onRowClick && options.onRowClick(row, data, event)
+    options.onRowClick?.(row, data, event)
 }

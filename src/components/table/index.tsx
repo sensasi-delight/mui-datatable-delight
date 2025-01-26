@@ -60,20 +60,8 @@ export default function Table({
                 tableRef={tableRef}
             />
 
-            <_TableBody
-                data={state.displayData}
-                count={state.count}
-                columns={state.columns}
-                page={state.page}
-                rowsPerPage={state.rowsPerPage}
-                selectedRows={state.selectedRows}
-                selectRowUpdate={selectRowUpdate}
-                previousSelectedRow={state.previousSelectedRow}
-                // @ts-expect-error WILL FIX THIS LATER
-                expandedRows={state.expandedRows}
-                columnOrder={state.columnOrder}
-                filterList={state.filterList}
-            />
+            {/* @ts-expect-error VALUES ARE NOT PASSING PROPS ANYMORE - WILL REMOVE TYPES LATER */}
+            <_TableBody selectRowUpdate={selectRowUpdate} />
 
             {options.customTableBodyFooterRender?.({
                 data: state.displayData,

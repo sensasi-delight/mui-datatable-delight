@@ -1,10 +1,4 @@
 export interface DataTableFooterPaginationProps {
-    /** Total number of table rows */
-    count: number
-
-    /** Current page index */
-    page: number
-
     /** Total number allowed of rows per page */
     rowsPerPage: number
 

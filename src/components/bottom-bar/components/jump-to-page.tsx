@@ -12,21 +12,19 @@ import useDataTableContext from '../../../hooks/use-data-table-context'
 import ClassName from '../../../enums/class-name'
 
 export function DataTableFooterJumpToPage({
-    count,
     rowsPerPage,
-    page: pageProp,
     changePage
 }: {
-    count: number
-    page: number
     rowsPerPage: number
     changePage: (pageNo: number) => void
 }) {
-    const { textLabels } = useDataTableContext()
+    const { state, textLabels } = useDataTableContext()
     const { classes, cx } = useStyles()
 
-    const pages = getPageOptions(count, rowsPerPage)
-    const page = pages.length < pageProp ? pages.length - 1 : pageProp
+    const { displayData, page: pageFromState } = state
+
+    const pages = getPageOptions(displayData.length, rowsPerPage)
+    const page = pages.length < pageFromState ? pages.length - 1 : pageFromState
 
     return (
         <div className={classes.root}>

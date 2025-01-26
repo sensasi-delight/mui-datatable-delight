@@ -6,16 +6,16 @@ import Typography from '@mui/material/Typography'
 import { tss } from 'tss-react/mui'
 import { type ReactNode, useState } from 'react'
 // globals
-import type { DataTableState } from '@src/types/state'
 import type { FilterUpdateType } from '@src/data-table'
 import useDataTableContext from '@src/hooks/use-data-table-context'
-import { getDisplayData } from '@src/functions'
+import getDisplayData from '@src/functions/get-new-state-on-data-change/get-display-data'
 // global enums
 import FilterType from '@src/enums/filter-type'
 import TableAction from '@src/enums/table-action'
 import ComponentClassName from '@src/enums/class-name'
 // locals
 import ToolbarDataFilterBoxFilters from './components/filter-inputs'
+import type { DataTableState } from '@src/index'
 
 export default function ToolbarDataFilterBox(
     props: DataTableToolbarFilterProps
@@ -28,16 +28,19 @@ export default function ToolbarDataFilterBox(
         state,
         textLabels
     } = useDataTableContext()
-    const {
-        columns,
-        customFooter,
-        filterList: filterListFromProp,
-        filterUpdate,
-        handleClose
-    } = props
+    const { customFooter, filterUpdate, handleClose } = props
+
+    const { columns, filterList: filterListFromProp, filterData } = state
 
     const { classes, cx } = useStyles()
     const [filterList, setFilterList] = useState(filterListFromProp)
+
+    const fakeProps = {
+        ...props,
+        columns,
+        filterList,
+        filterData
+    }
 
     function handleFilterReset() {
         const prevState = state
@@ -100,7 +103,7 @@ export default function ToolbarDataFilterBox(
 
             <ToolbarDataFilterBoxFilters
                 columns={columns}
-                parentProps={{ ...props, filterList: filterList }}
+                parentProps={fakeProps}
                 innerFilterList={filterList}
                 setFilterList={setFilterList}
             />
@@ -198,8 +201,6 @@ export interface DataTableToolbarFilterProps {
 
     /** Callback to trigger filter update */
     filterUpdate: FilterUpdateType
-
-    columns: DataTableState['columns']
 
     handleClose: () => void
 

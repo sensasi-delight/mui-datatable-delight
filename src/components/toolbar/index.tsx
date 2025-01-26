@@ -252,11 +252,9 @@ export default function Toolbar(props: ToolbarProps) {
                         }}
                         title={toolbarTextLabels.filterTable}
                     >
+                        {/* @ts-expect-error STATE ARE NOT PASS FROM PROPS ANYMORE */}
                         <_DataFilterBox
                             customFooter={options.customFilterDialogFooter}
-                            columns={state.columns}
-                            filterList={state.filterList}
-                            filterData={state.filterData}
                             filterUpdate={props.filterUpdate}
                             handleClose={() => {
                                 setIsDialogFilterOpen(false)
