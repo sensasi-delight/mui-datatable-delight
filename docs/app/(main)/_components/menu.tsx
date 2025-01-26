@@ -3,7 +3,6 @@
 // vendors
 import { usePathname } from 'next/navigation'
 // materials
-import { useTheme } from '@mui/material/styles'
 import Box from '@mui/material/Box'
 import Drawer from '@mui/material/Drawer'
 import TagIcon from '@mui/icons-material/Tag'
@@ -12,66 +11,85 @@ import ListItem from '@mui/material/ListItem'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemText from '@mui/material/ListItemText'
 import ListSubheader from '@mui/material/ListSubheader'
-import useMediaQuery from '@mui/material/useMediaQuery'
 // locals
 import { DRAWER_WIDTH } from '../_constants'
-import { useEffect, useState } from 'react'
 import { Route as DocsRoute } from '../docs/_route--enum'
 import { snakeCaseToKebab, snakeCaseToTitle } from '@/utils'
+import { Dialog } from '@mui/material'
 
 export default function Menu({
-    isOpen,
-    toggle
+    isOpen
 }: {
+    /** Applied only for mobile */
     isOpen: boolean
-    toggle: ToggleType
 }) {
-    const theme = useTheme()
-    const [isClient, setIsClient] = useState(false)
-    const isBelowMd = useMediaQuery(theme.breakpoints.down('md'))
-
-    useEffect(() => {
-        setIsClient(true)
-    })
-
     return (
-        <Drawer
-            open={isOpen || (!isBelowMd && isClient)}
-            anchor="left"
-            onClose={toggle}
-            variant={isClient && isBelowMd ? 'temporary' : 'permanent'}
-            elevation={0}
-            sx={{
-                width: DRAWER_WIDTH,
-                flexShrink: 0,
-                zIndex: 0
-            }}
-            PaperProps={{
-                sx: theme => ({
-                    width: DRAWER_WIDTH,
-                    // boxSizing: 'border-box',
-                    pb: 10,
-                    mt: {
-                        xs: 7,
-                        sm: 8
+        <>
+            <Drawer
+                anchor="left"
+                variant="permanent"
+                elevation={0}
+                sx={{
+                    display: {
+                        xs: 'none',
+                        sm: 'none',
+                        md: 'block'
                     },
-                    height: {
-                        xs: `calc(100% - ${theme.spacing(7)})`,
-                        sm: `calc(100% - ${theme.spacing(8)})`
-                    }
-                })
-            }}
-        >
-            <List component="nav">
-                {Object.values(Section).map((section, i) => (
-                    <MenuSection sectionId={section} key={i} />
-                ))}
-            </List>
-        </Drawer>
+                    width: DRAWER_WIDTH,
+                    flexShrink: 0,
+                    zIndex: 0
+                }}
+                PaperProps={{
+                    sx: theme => ({
+                        width: DRAWER_WIDTH,
+                        // boxSizing: 'border-box',
+                        pb: 10,
+                        mt: {
+                            xs: 7,
+                            sm: 8
+                        },
+                        height: {
+                            xs: `calc(100% - ${theme.spacing(7)})`,
+                            sm: `calc(100% - ${theme.spacing(8)})`
+                        }
+                    })
+                }}
+            >
+                <Nav />
+            </Drawer>
+
+            <Dialog
+                disableRestoreFocus
+                fullScreen
+                open={isOpen}
+                PaperProps={{
+                    elevation: 0
+                }}
+                sx={{
+                    display: {
+                        xs: 'block',
+                        sm: 'block',
+                        md: 'none'
+                    },
+                    mt: 8,
+                    zIndex: 1
+                }}
+            >
+                <Nav />
+            </Dialog>
+        </>
     )
 }
 
-type ToggleType = () => void
+function Nav() {
+    return (
+        <List component="nav" disablePadding>
+            {Object.values(Section).map((section, i) => (
+                <MenuSection sectionId={section} key={i} />
+            ))}
+        </List>
+    )
+}
 
 function CustomListItem({ href, text }: { href: string; text: string }) {
     const pathname = usePathname()

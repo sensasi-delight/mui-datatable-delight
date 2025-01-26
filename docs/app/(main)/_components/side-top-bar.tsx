@@ -2,7 +2,7 @@
 
 // vendors
 import { usePathname } from 'next/navigation'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 // materials
 import AppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
@@ -11,25 +11,22 @@ import Link from '@mui/material/Link'
 import Toolbar from '@mui/material/Toolbar'
 import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
-import useMediaQuery from '@mui/material/useMediaQuery'
-import { useTheme, useColorScheme } from '@mui/material/styles'
+import { useColorScheme } from '@mui/material/styles'
 import DarkMode from '@mui/icons-material/DarkMode'
 import GitHub from '@mui/icons-material/GitHub'
 import LightMode from '@mui/icons-material/LightMode'
 import MenuIcon from '@mui/icons-material/Menu'
+
 import Menu from './menu'
-import { useState } from 'react'
 import { InlineCode } from '@/components'
 
 export default function SideTopBar() {
     const pathname = usePathname()
     const { mode, setMode } = useColorScheme()
-    const theme = useTheme()
-    const isBelowMd = useMediaQuery(theme.breakpoints.down('md'))
-    const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+    const [isMenuOpen, setIsMenuOpen] = useState(false)
 
     useEffect(() => {
-        setIsDrawerOpen(false)
+        setIsMenuOpen(false)
     }, [pathname])
 
     return (
@@ -53,34 +50,49 @@ export default function SideTopBar() {
             >
                 <Toolbar
                     sx={{
+                        pl: {
+                            xs: 4,
+                            sm: 7,
+                            md: 3
+                        },
+                        pr: {
+                            xs: 3,
+                            sm: 6,
+                            md: 3
+                        },
                         justifyContent: 'space-between'
                     }}
                 >
                     <Box display="flex" alignItems="center" gap={2}>
-                        {isBelowMd && (
-                            <IconButton
-                                onClick={() => setIsDrawerOpen(prev => !prev)}
-                                color="inherit"
-                                aria-label="open drawer"
-                            >
-                                <MenuIcon />
-                            </IconButton>
-                        )}
-
                         <Link href="/" color="inherit" underline="hover">
                             <Typography fontWeight="bold">
-                                {isBelowMd ? (
+                                <Box
+                                    sx={{
+                                        display: {
+                                            sx: 'block',
+                                            sm: 'block',
+                                            md: 'none'
+                                        }
+                                    }}
+                                    component="span"
+                                >
                                     <InlineCode text="<DataTable/>" disableBg />
-                                ) : (
-                                    <>
-                                        MUI{' '}
-                                        <InlineCode
-                                            text="<DataTable/>"
-                                            disableBg
-                                        />{' '}
-                                        Delight
-                                    </>
-                                )}
+                                </Box>
+
+                                <Box
+                                    sx={{
+                                        display: {
+                                            xs: 'none',
+                                            sm: 'none',
+                                            md: 'block'
+                                        }
+                                    }}
+                                    component="span"
+                                >
+                                    MUI{' '}
+                                    <InlineCode text="<DataTable/>" disableBg />{' '}
+                                    Delight
+                                </Box>
                             </Typography>
                         </Link>
                     </Box>
@@ -114,16 +126,29 @@ export default function SideTopBar() {
                                 )}
                             </IconButton>
                         </Tooltip>
+
+                        <Tooltip title="Menu" arrow>
+                            <IconButton
+                                onClick={() => setIsMenuOpen(prev => !prev)}
+                                color={isMenuOpen ? 'primary' : 'inherit'}
+                                sx={{
+                                    bgcolor: isMenuOpen
+                                        ? 'var(--IconButton-hoverBg)'
+                                        : undefined,
+                                    display: {
+                                        sm: undefined,
+                                        md: 'none'
+                                    }
+                                }}
+                            >
+                                <MenuIcon />
+                            </IconButton>
+                        </Tooltip>
                     </Box>
                 </Toolbar>
             </AppBar>
 
-            <Menu
-                isOpen={isDrawerOpen}
-                toggle={() => {
-                    setIsDrawerOpen(prev => !prev)
-                }}
-            />
+            <Menu isOpen={isMenuOpen} />
         </>
     )
 }
