@@ -16,6 +16,7 @@ import DarkMode from '@mui/icons-material/DarkMode'
 import GitHub from '@mui/icons-material/GitHub'
 import LightMode from '@mui/icons-material/LightMode'
 import MenuIcon from '@mui/icons-material/Menu'
+import OpenInNew from '@mui/icons-material/OpenInNew'
 
 import Menu from './menu'
 import { InlineCode } from '@/components'
@@ -98,14 +99,29 @@ export default function SideTopBar() {
                     </Box>
 
                     <Box display="flex" alignItems="center" gap={0.5}>
-                        <IconButton
-                            component="a"
-                            target="_blank"
-                            color="inherit"
-                            href="https://github.com/sensasi-delight/mui-datatable-delight"
+                        <Tooltip
+                            title={
+                                <>
+                                    GitHub{' '}
+                                    <OpenInNew
+                                        fontSize="inherit"
+                                        sx={{
+                                            verticalAlign: 'middle'
+                                        }}
+                                    />
+                                </>
+                            }
+                            arrow
                         >
-                            <GitHub />
-                        </IconButton>
+                            <IconButton
+                                component="a"
+                                target="_blank"
+                                color="inherit"
+                                href="https://github.com/sensasi-delight/mui-datatable-delight"
+                            >
+                                <GitHub />
+                            </IconButton>
+                        </Tooltip>
 
                         <Tooltip
                             title={
