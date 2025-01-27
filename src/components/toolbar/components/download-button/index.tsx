@@ -27,7 +27,6 @@ export function ToolbarDownloadButton() {
             <span>
                 <IconButton
                     className={classes.root}
-                    aria-label={toolbarTextLabels.downloadCsv}
                     disabled={options.download === 'disabled'}
                     onClick={() => handleCSVDownload(state, options)}
                     sx={ICON_BUTTON_DEFAULT_SX}

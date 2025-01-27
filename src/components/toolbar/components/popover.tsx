@@ -52,7 +52,6 @@ export function ToolbarPopover({
             <VendorTooltip title={title} disableFocusListener>
                 <span>
                     <IconButton
-                        aria-label={title}
                         {...iconButtonProps}
                         onClick={handleTriggerClick}
                         onKeyDown={handleTriggerClick}
