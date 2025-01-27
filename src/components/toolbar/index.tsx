@@ -191,7 +191,6 @@ export default function Toolbar(props: ToolbarProps) {
                     >
                         <span>
                             <IconButton
-                                aria-label={toolbarTextLabels.search}
                                 classes={{
                                     root: getIconClasses('search')
                                 }}
