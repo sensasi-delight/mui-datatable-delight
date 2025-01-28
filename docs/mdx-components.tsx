@@ -24,7 +24,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         },
         code: ({ children }) => <InlineCode text={children} />,
         h1: ({ children }) => (
-            <Typography variant="h3" component="h1" mt={1} mb={4}>
+            <Typography variant="h3" component="h1" mt={3} mb={4}>
                 {children}
             </Typography>
         ),
