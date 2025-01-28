@@ -5,6 +5,7 @@ import SideTopBar from './_components/side-top-bar'
 import { Breadcrumbs } from './_components/breadcrumbs'
 import ContentOutline from './_components/content-outline'
 import EditPageButton from './_components/edit-page-button'
+import ContentOutlineIconButton from './_components/content-outline-icon-button'
 
 export default function Layout({ children }: { children: ReactNode }) {
     return (
@@ -36,6 +37,27 @@ export default function Layout({ children }: { children: ReactNode }) {
                         }
                     }}
                 >
+                    <Box
+                        display="flex"
+                        gap={1}
+                        zIndex={1}
+                        sx={{
+                            float: 'right',
+                            display: {
+                                lg: 'none'
+                            },
+                            position: 'sticky',
+                            transform: 'translateX(8px)',
+                            top: {
+                                xs: 11 * 8,
+                                sm: 12 * 8
+                            }
+                        }}
+                    >
+                        <EditPageButton iconOnly />
+                        <ContentOutlineIconButton />
+                    </Box>
+
                     <Breadcrumbs />
 
                     <Box component="main">{children}</Box>
@@ -45,6 +67,8 @@ export default function Layout({ children }: { children: ReactNode }) {
                     size={3}
                     sx={{
                         display: {
+                            xs: 'none',
+                            sm: 'none',
                             md: 'none',
                             lg: 'block'
                         }
@@ -57,7 +81,9 @@ export default function Layout({ children }: { children: ReactNode }) {
                             pr: 4
                         }}
                     >
-                        <EditPageButton />
+                        <Box mb={4}>
+                            <EditPageButton />
+                        </Box>
                         <ContentOutline />
                     </Box>
                 </Grid2>

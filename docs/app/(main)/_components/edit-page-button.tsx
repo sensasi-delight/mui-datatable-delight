@@ -2,6 +2,8 @@
 
 import { usePathname } from 'next/navigation'
 import Button from '@mui/material/Button'
+import IconButton from '@mui/material/IconButton'
+import Tooltip from '@mui/material/Tooltip'
 import GitHub from '@mui/icons-material/GitHub'
 
 const BASE_URL =
@@ -10,7 +12,7 @@ const BASE_URL =
 const DOCS_PATH = BASE_URL + '/docs/app/(main)/docs/_mds'
 const EXAMPLES_PATH = BASE_URL + '/docs/app/(main)'
 
-export default function EditPageButton() {
+export default function EditPageButton({ iconOnly }: { iconOnly?: boolean }) {
     const pathname = usePathname()
 
     const isExamplePages = pathname.startsWith('/examples')
@@ -20,14 +22,27 @@ export default function EditPageButton() {
         : pathname.replace('/docs', '') +
           (pathname.split('/').length === 3 ? '/index.mdx' : '.mdx')
 
+    if (iconOnly) {
+        return (
+            <Tooltip title="Edit this page" arrow>
+                <IconButton
+                    color="primary"
+                    href={
+                        (isExamplePages ? EXAMPLES_PATH : DOCS_PATH) + mdxPath
+                    }
+                    target="_blank"
+                >
+                    <GitHub />
+                </IconButton>
+            </Tooltip>
+        )
+    }
+
     return (
         <Button
             startIcon={<GitHub />}
             href={(isExamplePages ? EXAMPLES_PATH : DOCS_PATH) + mdxPath}
             target="_blank"
-            sx={{
-                mb: 4
-            }}
         >
             Edit this page
         </Button>
