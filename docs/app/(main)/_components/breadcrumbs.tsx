@@ -22,20 +22,18 @@ export function Breadcrumbs() {
         .slice(1) // remove 'docs'
 
     return (
-        <Box
-            display="flex"
-            alignItems="center"
-            mb={1}
-            sx={{ overflowX: 'auto' }}
-        >
+        <Box display="flex" alignItems="center" sx={{ overflowX: 'auto' }}>
             <Tooltip title="Home" arrow placement="top">
                 <IconButton color="primary" href="/">
-                    <Home fontSize="small" />
+                    <Home />
                 </IconButton>
             </Tooltip>
 
             {pathsWithoutDocs.map((path, i) => {
-                const href = `/docs/${pathsWithoutDocs.slice(0, i + 1).join('/')}`
+                const href =
+                    path === 'examples'
+                        ? '/examples'
+                        : `/docs/${pathsWithoutDocs.slice(0, i + 1).join('/')}`
 
                 return (
                     <React.Fragment key={i}>
