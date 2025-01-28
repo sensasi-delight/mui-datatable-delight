@@ -35,7 +35,10 @@ export function Breadcrumbs() {
             </Tooltip>
 
             {pathsWithoutDocs.map((path, i) => {
-                const href = `/docs/${pathsWithoutDocs.slice(0, i + 1).join('/')}`
+                const href =
+                    path === 'examples'
+                        ? '/examples'
+                        : `/docs/${pathsWithoutDocs.slice(0, i + 1).join('/')}`
 
                 return (
                     <React.Fragment key={i}>
