@@ -1,10 +1,9 @@
 'use client'
 
+import { tss } from 'tss-react/mui'
 import Checkbox, { type CheckboxProps } from '@mui/material/Checkbox'
 import TableCell from '@mui/material/TableCell'
-import { tss } from 'tss-react/mui'
 // globals
-import { type DataTableOptions } from '@src/types/options'
 import useDataTableContext from '@src/hooks/use-data-table-context'
 import { buildMap } from '@src/functions'
 // global enums
@@ -13,19 +12,11 @@ import TableAction from '@src/enums/table-action'
 import RowExpansionButton from './components/row-expansion-button'
 
 export default function CheckboxCell({
-    fixedHeader,
-    fixedSelectColumn,
     isHeaderCell,
-    expandableOn = false,
-    selectableOn = 'none',
     isRowExpanded = false,
     onExpand,
     isRowSelectable,
-    selectableRowsHeader,
     hideExpandButton,
-    expandableRowsHeader,
-    expandedRows,
-    selectableRowsHideCheckboxes,
     setHeadCellRef,
     dataIndex,
     onChange,
@@ -35,8 +26,9 @@ export default function CheckboxCell({
     const { classes, cx } = useStyles()
 
     if (
-        expandableOn === false &&
-        (selectableOn === 'none' || selectableRowsHideCheckboxes === true)
+        options.expandableRows === false &&
+        (options.selectableRows === 'none' ||
+            options.selectableRowsHideCheckboxes)
     ) {
         return null
     }
@@ -46,8 +38,8 @@ export default function CheckboxCell({
     }
 
     const cellClasses = cx(classes.root, {
-        [classes.fixedHeader]: fixedHeader && isHeaderCell,
-        [classes.fixedLeft]: fixedSelectColumn,
+        [classes.fixedHeader]: options.fixedHeader && isHeaderCell,
+        [classes.fixedLeft]: options.fixedSelectColumn,
         [classes.headerCell]: isHeaderCell
     })
 
@@ -56,12 +48,12 @@ export default function CheckboxCell({
     })
 
     const iconClass = cx(classes.icon, {
-        [classes.hide]: isHeaderCell && !expandableRowsHeader,
+        [classes.hide]: isHeaderCell && !options.expandableRowsHeader,
         [classes.expanded]:
             isRowExpanded || (isHeaderCell && areAllRowsExpanded())
     })
     const iconIndeterminateClass = cx(classes.icon, {
-        [classes.hide]: isHeaderCell && !expandableRowsHeader
+        [classes.hide]: isHeaderCell && !options.expandableRowsHeader
     })
 
     const _Checkbox = components.Checkbox ?? Checkbox
@@ -69,7 +61,8 @@ export default function CheckboxCell({
     const renderCheckBox = () => {
         if (
             isHeaderCell &&
-            (selectableOn !== 'multiple' || selectableRowsHeader === false)
+            (options.selectableRows !== 'multiple' ||
+                !options.selectableRowsHeader)
         ) {
             // only display the header checkbox for multiple selection.
             return null
@@ -173,13 +166,13 @@ export default function CheckboxCell({
             }}
         >
             <div style={{ display: 'flex', alignItems: 'center' }}>
-                {expandableOn && (
+                {options.expandableRows && (
                     <_RowExpansionButton
                         areAllRowsExpanded={areAllRowsExpanded}
                         buttonClass={buttonClass}
                         dataIndex={dataIndex}
-                        expandedRows={expandedRows}
-                        expandableRowsHeader={expandableRowsHeader}
+                        expandedRows={state.expandedRows}
+                        expandableRowsHeader={options.expandableRowsHeader}
                         iconClass={iconClass}
                         iconIndeterminateClass={iconIndeterminateClass}
                         isHeaderCell={isHeaderCell}
@@ -189,8 +182,8 @@ export default function CheckboxCell({
                     />
                 )}
 
-                {selectableOn !== 'none' &&
-                    selectableRowsHideCheckboxes !== true &&
+                {options.selectableRows !== 'none' &&
+                    !options.selectableRowsHideCheckboxes &&
                     renderCheckBox()}
             </div>
         </TableCell>
@@ -211,30 +204,17 @@ export interface DataTableTableSelectCellProps {
     /** Select cell checked on/off */
     checked: boolean
 
-    /** Select cell part of fixed header */
-    fixedHeader?: boolean
-
     /** Callback to trigger cell update */
     onChange?: CheckboxProps['onChange']
 
     /** Extend the style applied to components */
     // classes?: PropTypes.object
 
-    /** Is expandable option enabled */
-    expandableOn?: boolean
-
     /** Adds extra class, `expandDisabled` when the row is not expandable. */
     hideExpandButton?: boolean
 
-    /** Is selectable option enabled */
-    selectableOn?: string
-
     /** Select cell disabled on/off */
     isRowSelectable?: boolean
-
-    fixedSelectColumn: boolean
-
-    selectableRowsHideCheckboxes: DataTableOptions['selectableRowsHideCheckboxes']
 
     isRowExpanded: boolean
 

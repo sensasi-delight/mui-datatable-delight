@@ -440,10 +440,7 @@ function RenderRow({
                             dataIndex
                         })
                     }
-                    fixedHeader={options.fixedHeader}
-                    fixedSelectColumn={options.fixedSelectColumn ?? true}
                     checked={isRowSelected}
-                    expandableOn={options.expandableRows}
                     // When rows are expandable, but this particular row isn't expandable, set this to true.
                     // This will add a new class to the toggle button, datatable-delight--body--select-cell-expandDisabled.
                     hideExpandButton={
@@ -453,10 +450,6 @@ function RenderRow({
                                 parentProps.expandedRows
                             ) ?? true
                         ) && options.expandableRows
-                    }
-                    selectableOn={options.selectableRows}
-                    selectableRowsHideCheckboxes={
-                        options.selectableRowsHideCheckboxes
                     }
                     isRowExpanded={isRowExpanded(dataIndex, parentProps)}
                     isRowSelectable={isRowSelectable}
