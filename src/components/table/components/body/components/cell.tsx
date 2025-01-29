@@ -22,7 +22,7 @@ export function TableBodyCell({
 }: Omit<MUIDataTableBodyCell & TableCellProps, 'options'> & {
     print: DataTableState['columns'][0]['print']
 }) {
-    const { options } = useDataTableContext()
+    const { options, textLabels } = useDataTableContext()
     const { classes, cx } = useStyles()
 
     const onCellClick = options?.onCellClick
@@ -104,13 +104,14 @@ export function TableBodyCell({
     ]
 
     const innerCells =
-        options?.responsive &&
-        [
-            'standard',
-            'scrollMaxHeight',
-            'scrollFullHeight',
-            'scrollFullHeightFullWidth'
-        ].indexOf(options.responsive) !== -1
+        children === textLabels.body.noMatch ||
+        (options?.responsive &&
+            [
+                'standard',
+                'scrollMaxHeight',
+                'scrollFullHeight',
+                'scrollFullHeightFullWidth'
+            ].indexOf(options.responsive) !== -1)
             ? cells.slice(1, 2)
             : cells
 
