@@ -6,7 +6,6 @@ import React from 'react'
 // materials
 import type { TableRowProps } from '@mui/material/TableRow'
 import MuiTableBody from '@mui/material/TableBody'
-import Typography from '@mui/material/Typography'
 // locals
 import { TableBodyCell } from './components/cell'
 import { DataTableBodyRow } from './components/row'
@@ -78,6 +77,7 @@ export default function TableBody({ selectRowUpdate }: DataTableBodyProps) {
             {(!tableRows || tableRows.length === 0) && (
                 <DataTableBodyRow isRowSelectable={false}>
                     <TableBodyCell
+                        className={classes.emptyTitle}
                         colSpan={
                             options.selectableRows !== 'none' ||
                             options.expandableRows
@@ -88,13 +88,7 @@ export default function TableBody({ selectRowUpdate }: DataTableBodyProps) {
                         rowIndex={0}
                         print
                     >
-                        <Typography
-                            variant="body1"
-                            className={classes.emptyTitle}
-                            component="div"
-                        >
-                            {textLabels.body.noMatch}
-                        </Typography>
+                        {textLabels.body.noMatch}
                     </TableBodyCell>
                 </DataTableBodyRow>
             )}
@@ -194,7 +188,7 @@ function isRowExpanded(
     dataIndex: number,
     { expandedRows }: DataTableBodyProps
 ): boolean {
-    return expandedRows.lookup && expandedRows.lookup[dataIndex]
+    return (expandedRows.lookup && expandedRows.lookup[dataIndex]) ?? false
 }
 
 function getIsRowSelectable(
@@ -248,7 +242,7 @@ function handleRowSelect(
         }
 
         // Add the clicked on row to our copy of selectedRows (if it isn't already present).
-        const clickedDataIndex = parentProps.data[data.index].dataIndex
+        const clickedDataIndex = parentProps.data[data.index]?.dataIndex
 
         if (
             selectedRows.data.filter(d => d.dataIndex === clickedDataIndex)
@@ -354,7 +348,7 @@ function RenderRow({
         let removedRow: string[] = []
 
         for (var cIndex = 0; cIndex < expandedRowsData.length; cIndex++) {
-            if (expandedRowsData[cIndex].dataIndex === dataIndex) {
+            if (expandedRowsData[cIndex]?.dataIndex === dataIndex) {
                 shouldCollapseExpandedRow = true
                 break
             }
@@ -446,10 +440,7 @@ function RenderRow({
                             dataIndex
                         })
                     }
-                    fixedHeader={options.fixedHeader}
-                    fixedSelectColumn={options.fixedSelectColumn ?? true}
                     checked={isRowSelected}
-                    expandableOn={options.expandableRows}
                     // When rows are expandable, but this particular row isn't expandable, set this to true.
                     // This will add a new class to the toggle button, datatable-delight--body--select-cell-expandDisabled.
                     hideExpandButton={
@@ -460,10 +451,6 @@ function RenderRow({
                             ) ?? true
                         ) && options.expandableRows
                     }
-                    selectableOn={options.selectableRows}
-                    selectableRowsHideCheckboxes={
-                        options.selectableRowsHideCheckboxes
-                    }
                     isRowExpanded={isRowExpanded(dataIndex, parentProps)}
                     isRowSelectable={isRowSelectable}
                     dataIndex={dataIndex}
@@ -472,10 +459,10 @@ function RenderRow({
 
                 {processedRow.map(
                     column =>
-                        columns[column.index].display === 'true' && (
+                        columns[column.index]?.display === 'true' && (
                             <TableBodyCell
-                                {...(columns[column.index].setCellProps?.(
-                                    column.value,
+                                {...(columns[column.index]?.setCellProps?.(
+                                    column.value ?? '',
                                     dataIndex,
                                     column.index
                                 ) ?? {})}
@@ -483,8 +470,8 @@ function RenderRow({
                                 dataIndex={dataIndex}
                                 rowIndex={rowIndex}
                                 colIndex={column.index}
-                                columnHeader={columns[column.index].label}
-                                print={columns[column.index].print}
+                                columnHeader={columns[column.index]?.label}
+                                print={columns[column.index]?.print}
                                 key={column.index}
                             >
                                 {column.value}

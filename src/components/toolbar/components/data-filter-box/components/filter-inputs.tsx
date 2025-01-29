@@ -234,7 +234,7 @@ function DataTableToolbarFilterCheckbox({
                     </Typography>
                 </Grid>
                 <Grid container>
-                    {filterData[index].map((filterValue, filterIndex) => (
+                    {filterData[index]?.map((filterValue, filterIndex) => (
                         <Grid item key={filterIndex}>
                             <FormControlLabel
                                 key={filterIndex}
@@ -251,7 +251,7 @@ function DataTableToolbarFilterCheckbox({
                                             handleCheckboxChange(filterValue)
                                         }
                                         checked={
-                                            filterList[index].indexOf(
+                                            filterList[index]?.indexOf(
                                                 filterValue
                                             ) >= 0
                                         }

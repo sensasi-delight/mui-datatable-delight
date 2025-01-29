@@ -34,14 +34,7 @@ export default function TableHead({
         state
     } = useDataTableContext()
 
-    const {
-        columns,
-        count,
-        data,
-        expandedRows,
-        selectedRows,
-        sortOrder = {}
-    } = state
+    const { columns, count, data, selectedRows, sortOrder = {} } = state
 
     const columnOrder = state.columnOrder ? columns.map((_, idx) => idx) : []
 
@@ -212,16 +205,6 @@ export default function TableHead({
                     indeterminate={isIndeterminate}
                     checked={isChecked}
                     isHeaderCell={true}
-                    expandedRows={expandedRows}
-                    expandableRowsHeader={options.expandableRowsHeader}
-                    expandableOn={options.expandableRows}
-                    selectableOn={options.selectableRows}
-                    fixedHeader={options.fixedHeader}
-                    fixedSelectColumn={options.fixedSelectColumn}
-                    selectableRowsHeader={options.selectableRowsHeader}
-                    selectableRowsHideCheckboxes={
-                        options.selectableRowsHideCheckboxes
-                    }
                     isRowSelectable={true}
                 />
 
@@ -237,7 +220,7 @@ export default function TableHead({
                         ) : (
                             <TableHeadCell
                                 cellHeaderProps={
-                                    columns[index].setCellHeaderProps?.({
+                                    columns[index]?.setCellHeaderProps?.({
                                         index,
                                         ...column
                                     }) || {}

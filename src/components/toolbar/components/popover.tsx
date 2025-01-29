@@ -24,8 +24,7 @@ export function ToolbarPopover({
 
     useEffect(() => {
         if (isOpen) {
-            const shouldHide = typeof hide === 'boolean' ? hide : false
-            if (shouldHide) {
+            if (hide) {
                 open(false)
             }
         }

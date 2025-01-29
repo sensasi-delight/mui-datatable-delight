@@ -674,9 +674,26 @@ interface DataTableCustomsOptions {
     }) => ReactNode
 
     /**
+     * Render a custom selected rows ToolBar.
+     *
+     * @see  {@link https://mui-datatable-delight.vercel.app/examples/customize-toolbar-select|Custom Selected Rows ToolBar Example}
+     */
+    customSelectedRowsToolbar?: (
+        selectedRows: {
+            data: Array<{ index: number; dataIndex: number }>
+            lookup: { [key: number]: boolean }
+        },
+        displayData: DisplayData,
+        setSelectedRows: (rows: number[]) => void
+    ) => ReactNode
+
+    /**
      * Render a custom selected row ToolBar.
      *
-     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-toolbarselect/CustomToolbarSelect.tsx
+     * @deprecated  Use `customSelectedRowsToolbar` instead
+     *
+     * @see  {@link https://mui-datatable-delight.vercel.app/examples/customize-toolbar-select|Custom Selected Rows ToolBar Example}
+     *
      */
     customToolbarSelect?: (
         selectedRows: {

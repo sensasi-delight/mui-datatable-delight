@@ -1,10 +1,10 @@
 'use client'
 
 // materials
+import { tss } from 'tss-react/mui'
+import { useState } from 'react'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
-import { tss } from 'tss-react/mui'
-import { type ReactNode, useState } from 'react'
 // globals
 import type { FilterUpdateType } from '@src/data-table'
 import useDataTableContext from '@src/hooks/use-data-table-context'
@@ -28,7 +28,7 @@ export default function ToolbarDataFilterBox(
         state,
         textLabels
     } = useDataTableContext()
-    const { customFooter, filterUpdate, handleClose } = props
+    const { filterUpdate, handleClose } = props
 
     const { columns, filterList: filterListFromProp, filterData } = state
 
@@ -108,7 +108,7 @@ export default function ToolbarDataFilterBox(
                 setFilterList={setFilterList}
             />
 
-            {customFooter?.(filterList, () => {
+            {options.customFilterDialogFooter?.(filterList, () => {
                 filterList.forEach((filters, index) => {
                     filters.forEach(filter => {
                         filterUpdate?.(
@@ -203,9 +203,4 @@ export interface DataTableToolbarFilterProps {
     filterUpdate: FilterUpdateType
 
     handleClose: () => void
-
-    customFooter?: (
-        filterList: FilterListType,
-        applyFilters: () => FilterListType
-    ) => ReactNode
 }

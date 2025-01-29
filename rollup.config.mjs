@@ -49,7 +49,8 @@ const PLUGINS = [
 
         compilerOptions: {
             composite: false,
-            declarationMap: false
+            declarationMap: false,
+            verbatimModuleSyntax: false
         }
     })
 ]
