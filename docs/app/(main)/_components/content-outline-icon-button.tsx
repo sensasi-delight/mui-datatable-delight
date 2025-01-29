@@ -7,9 +7,12 @@ import Menu from '@mui/material/Menu'
 
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted'
 import ContentOutlineItems from './content-outline-items'
+import useHeadings from './use-headings'
 
 export default function ContentOutlineIconButton() {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+    const headings = useHeadings()
+
     const open = Boolean(anchorEl)
     const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         setAnchorEl(event.currentTarget)
@@ -17,6 +20,8 @@ export default function ContentOutlineIconButton() {
     const handleClose = () => {
         setAnchorEl(null)
     }
+
+    if (headings.length === 0) return null
 
     return (
         <>
