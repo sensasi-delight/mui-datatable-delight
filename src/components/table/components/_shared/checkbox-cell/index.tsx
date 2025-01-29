@@ -3,13 +3,14 @@
 import Checkbox, { type CheckboxProps } from '@mui/material/Checkbox'
 import TableCell from '@mui/material/TableCell'
 import { tss } from 'tss-react/mui'
-import { type DataTableOptions } from '../../../../../types/options'
-import useDataTableContext from '../../../../../hooks/use-data-table-context'
-import { buildMap } from '../../../../../functions'
-// components
-import RowExpansionButton from './components/row-expansion-button'
+// globals
+import { type DataTableOptions } from '@src/types/options'
+import useDataTableContext from '@src/hooks/use-data-table-context'
+import { buildMap } from '@src/functions'
 // global enums
-import TableAction from '../../../../../enums/table-action'
+import TableAction from '@src/enums/table-action'
+// local components
+import RowExpansionButton from './components/row-expansion-button'
 
 export default function CheckboxCell({
     fixedHeader,
@@ -44,8 +45,7 @@ export default function CheckboxCell({
         return state.expandedRows.data.length === state.data.length
     }
 
-    const cellClass = cx({
-        [classes.root]: true,
+    const cellClasses = cx(classes.root, {
         [classes.fixedHeader]: fixedHeader && isHeaderCell,
         [classes.fixedLeft]: fixedSelectColumn,
         [classes.headerCell]: isHeaderCell
@@ -55,14 +55,12 @@ export default function CheckboxCell({
         [classes.expandDisabled]: hideExpandButton
     })
 
-    const iconClass = cx({
-        [classes.icon]: true,
+    const iconClass = cx(classes.icon, {
         [classes.hide]: isHeaderCell && !expandableRowsHeader,
         [classes.expanded]:
             isRowExpanded || (isHeaderCell && areAllRowsExpanded())
     })
-    const iconIndeterminateClass = cx({
-        [classes.icon]: true,
+    const iconIndeterminateClass = cx(classes.icon, {
         [classes.hide]: isHeaderCell && !expandableRowsHeader
     })
 
@@ -86,7 +84,7 @@ export default function CheckboxCell({
                 data-description={
                     isHeaderCell ? 'row-select-header' : 'row-select'
                 }
-                data-index={dataIndex || null}
+                data-index={dataIndex ?? null}
                 color="primary"
                 disabled={!isRowSelectable}
                 onChange={onChange}
@@ -108,7 +106,7 @@ export default function CheckboxCell({
                 let item = expandedRowsData[ii]
                 if (
                     !isRowExpandable ||
-                    isRowExpandable(item.dataIndex, state.expandedRows)
+                    isRowExpandable(item?.dataIndex, state.expandedRows)
                 ) {
                     affectedRows.push(expandedRowsData.splice(ii, 1))
                 }
@@ -120,7 +118,7 @@ export default function CheckboxCell({
                 if (
                     !isRowExpandable ||
                     (isRowExpandable &&
-                        isRowExpandable(item.dataIndex, state.expandedRows))
+                        isRowExpandable(item?.dataIndex, state.expandedRows))
                 ) {
                     if (state.expandedRows.lookup[item.index] !== true) {
                         let newItem = {
@@ -155,13 +153,23 @@ export default function CheckboxCell({
 
     return (
         <TableCell
-            className={cellClass}
+            className={cellClasses}
             padding="checkbox"
-            sx={{
-                bgcolor: isHeaderCell ? 'background.paper' : undefined
-            }}
             ref={el => {
                 setHeadCellRef?.(0, 0, el)
+            }}
+            sx={{
+                borderBottom:
+                    !isHeaderCell &&
+                    (options?.responsive === 'vertical' ||
+                        options?.responsive === 'stacked' ||
+                        options?.responsive === 'stackedFullWidth')
+                        ? {
+                              xs: 'none',
+                              sm: 'none',
+                              md: '1px solid var(--mui-palette-TableCell-border)'
+                          }
+                        : undefined
             }}
         >
             <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -262,7 +270,8 @@ const useStyles = tss.withName('datatable-delight--body--select-cell').create({
         visibility: 'hidden'
     },
     headerCell: {
-        zIndex: 110
+        zIndex: 110,
+        backgroundColor: 'var(--mui-palette-background-paper)'
     },
     expandDisabled: {},
     checkboxRoot: {},
