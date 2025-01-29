@@ -45,8 +45,12 @@ export default function DataTableContextProvider({
     useEffect(() => {
         setState(prev => {
             const isDataTablePropsChanged =
-                JSON.stringify(datatableProps) !==
-                JSON.stringify(lastDatatableProps)
+                JSON.stringify(datatableProps.data) !==
+                    JSON.stringify(lastDatatableProps.current?.data) ||
+                JSON.stringify(datatableProps.columns) !==
+                    JSON.stringify(lastDatatableProps.current?.columns) ||
+                JSON.stringify(datatableProps.options) !==
+                    JSON.stringify(lastDatatableProps.current?.options)
 
             if (!isDataTablePropsChanged) {
                 return prev
