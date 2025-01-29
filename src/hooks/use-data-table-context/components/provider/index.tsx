@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, type ReactNode, useEffect } from 'react'
+import { useState, type ReactNode, useEffect, useRef } from 'react'
 import DEFAULT_STATE from '../../statics/default-state'
 import { handleDeprecatedOptions } from '../../function/handle-deprecated-options'
 import DataTableContext from '../../context'
@@ -21,6 +21,8 @@ export default function DataTableContextProvider({
     datatableProps: DataTableProps
     children: ReactNode
 }): ReactNode {
+    const lastDatatableProps = useRef<DataTableProps>(null)
+
     const restoredState = datatableProps.options?.storageKey
         ? load(datatableProps.options.storageKey)
         : undefined
@@ -33,7 +35,7 @@ export default function DataTableContextProvider({
             datatableProps.options ?? {},
             {
                 ...DEFAULT_STATE,
-                ...getInitTableOptions(datatableProps.options),
+                ...getStateFromDataTableOptionsProp(datatableProps.options),
                 ...restoredState
             },
             () => {}
@@ -41,6 +43,42 @@ export default function DataTableContextProvider({
     )
 
     useEffect(() => {
+        setState(prev => {
+            const isDataTablePropsChanged =
+                JSON.stringify(datatableProps) !==
+                JSON.stringify(lastDatatableProps)
+
+            if (!isDataTablePropsChanged) {
+                return prev
+            }
+
+            const newState = getNewStateOnDataChange(
+                datatableProps,
+                1,
+                true,
+                datatableProps.options ?? {},
+                {
+                    ...prev,
+                    ...getStateFromDataTableOptionsProp(datatableProps.options),
+                    ...restoredState
+                },
+                () => {}
+            )
+
+            // store last datatableProps for comparison
+            lastDatatableProps.current = datatableProps
+
+            datatableProps.options?.onTableInit?.(
+                TableAction.INITIALIZED,
+                newState
+            )
+
+            return newState
+        })
+    }, [datatableProps])
+
+    useEffect(() => {
+        lastDatatableProps.current = datatableProps
         datatableProps.options?.onTableInit?.(TableAction.INITIALIZED, state)
     }, [])
 
@@ -92,7 +130,7 @@ export default function DataTableContextProvider({
 /**
  * @todo RENAME THIS TO SOMETHING CLEARER
  */
-function getInitTableOptions({
+function getStateFromDataTableOptionsProp({
     rowsPerPage,
     page,
     rowsSelected,
