@@ -35,7 +35,7 @@ export default function updateDataCol(
     options: DataTableOptions,
     datatableProps: DataTableProps,
     setState: (newState: DataTableState) => void
-) {
+): DataTableState {
     let changedData = prevState.data
     let filterData = prevState.filterData
 
