@@ -35,18 +35,16 @@ export default function transformData(
     }
 
     return data.map(row => {
-        const transformedRow = columns.map(column => {
-            if (column.empty) {
-                return undefined
-            }
+        if (Array.isArray(row)) {
+            let i = -1
 
-            if (Array.isArray(row)) {
-                return row[columns.indexOf(column)] as AllowedTypes
-            }
+            return columns.map(column => {
+                if (!column.empty) i++
 
-            return getLeafValue(row, column.name)
-        })
+                return column.empty ? undefined : row[i]
+            })
+        }
 
-        return transformedRow
+        return columns.map(column => getLeafValue(row, column.name))
     })
 }
