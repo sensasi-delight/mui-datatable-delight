@@ -5,6 +5,7 @@ import Button from '@mui/material/Button'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import GitHub from '@mui/icons-material/GitHub'
+import OpenInNew from '@mui/icons-material/OpenInNew'
 
 const BASE_URL =
     'https://github.com/sensasi-delight/mui-datatable-delight/edit/alpha'
@@ -24,7 +25,14 @@ export default function EditPageButton({ iconOnly }: { iconOnly?: boolean }) {
 
     if (iconOnly) {
         return (
-            <Tooltip title="Edit this page" arrow>
+            <Tooltip
+                title={
+                    <>
+                        Edit this page <OpenInNew fontSize="inherit" />
+                    </>
+                }
+                arrow
+            >
                 <IconButton
                     color="primary"
                     href={
