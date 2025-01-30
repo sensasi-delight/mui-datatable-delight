@@ -25,26 +25,29 @@ export function TableBodyCell({
     const { options, textLabels } = useDataTableContext()
     const { classes, cx } = useStyles()
 
-    const onCellClick = options?.onCellClick
-
     const handleClick = useCallback<Required<TableCellProps>['onClick']>(
-        event =>
-            colIndex !== undefined &&
-            rowIndex !== undefined &&
-            dataIndex !== undefined
-                ? onCellClick?.(children, {
-                      colIndex,
-                      rowIndex,
-                      dataIndex,
-                      event
-                  })
-                : console.error(`
+        event => {
+            if (
+                colIndex !== undefined &&
+                rowIndex !== undefined &&
+                dataIndex !== undefined
+            ) {
+                options?.onCellClick?.(children, {
+                    colIndex,
+                    rowIndex,
+                    dataIndex,
+                    event
+                })
+            } else {
+                console.error(`
                     Required param is undefined:
                     - colIndex: ${colIndex}
                     - rowIndex: ${rowIndex}
                     - dataIndex: ${dataIndex}
-                    `),
-        [onCellClick, children, colIndex, rowIndex, dataIndex]
+                    `)
+            }
+        },
+        [options?.onCellClick, children, colIndex, rowIndex, dataIndex]
     )
 
     const cells = [
@@ -117,7 +120,6 @@ export function TableBodyCell({
 
     return (
         <TableCell
-            // Event listeners. Avoid attaching them if they're not necessary.
             onClick={handleClick}
             data-colindex={colIndex}
             data-tableid={options.tableId}
