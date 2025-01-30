@@ -260,19 +260,20 @@ export default function ColumnsResizer({
 
                 if (
                     leftPos <
-                    (nextCoord(columnId)?.left ?? 0) + fixedMinWidth
+                    (prevCoord(columnId)?.left ?? 0) + fixedMinWidth
                 ) {
-                    return (nextCoord(columnId)?.left ?? 0) + fixedMinWidth
+                    return (prevCoord(columnId)?.left ?? 0) + fixedMinWidth
                 }
 
                 return leftPos
             }
 
-            const isFirstColumn = (
+            const _isFirstColumn = (
                 selectableRows: unknown,
                 columnId: number
             ) => {
                 let firstColumn = 1
+
                 while (!resizeCoords[firstColumn] && firstColumn < 20) {
                     firstColumn++
                 }
@@ -283,40 +284,27 @@ export default function ColumnsResizer({
                 )
             }
 
-            const isLastColumn = (columnId: number) => {
-                return columnId === prevCol(lastColumnIndex)
-            }
+            const isFirstColumn = _isFirstColumn(selectableRows, columnId)
+            const isLastColumn = columnId === prevCol(lastColumnIndex)
 
-            if (
-                isFirstColumn(selectableRows, columnId) &&
-                isLastColumn(columnId)
-            ) {
+            if (isFirstColumn && isLastColumn) {
                 leftPos = handleMoveLeftmostBoundary(leftPos, fixedMinWidth1)
                 leftPos = handleMoveRightmostBoundary(
                     leftPos,
                     tableWidth,
                     fixedMinWidth2
                 )
-            } else if (
-                !isFirstColumn(selectableRows, columnId) &&
-                isLastColumn(columnId)
-            ) {
+            } else if (!isFirstColumn && isLastColumn) {
                 leftPos = handleMoveRightmostBoundary(
                     leftPos,
                     tableWidth,
                     fixedMinWidth2
                 )
                 leftPos = handleMoveLeft(leftPos, columnId, fixedMinWidth1)
-            } else if (
-                isFirstColumn(selectableRows, columnId) &&
-                !isLastColumn(columnId)
-            ) {
+            } else if (isFirstColumn && !isLastColumn) {
                 leftPos = handleMoveLeftmostBoundary(leftPos, fixedMinWidth1)
                 leftPos = handleMoveRight(leftPos, columnId, fixedMinWidth2)
-            } else if (
-                !isFirstColumn(selectableRows, columnId) &&
-                !isLastColumn(columnId)
-            ) {
+            } else if (!isFirstColumn && !isLastColumn) {
                 leftPos = handleMoveLeft(leftPos, columnId, fixedMinWidth1)
                 leftPos = handleMoveRight(leftPos, columnId, fixedMinWidth2)
             }
