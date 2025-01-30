@@ -74,6 +74,12 @@ function _DataTable({
     useEffect(() => {
         if (options.resizableColumns && tableRef) {
             setHeadResizable.current?.(tableHeadCellElements, tableRef)
+
+            /**
+             * Should re-fired when datatableProps change
+             *
+             * see #152
+             */
             updateDividers.current?.()
         }
     }, [])
