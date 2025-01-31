@@ -80,15 +80,15 @@ export default function DataTableContextProvider({
                 },
                 onAction(action, newPartialState) {
                     setState(prev => {
-                        const isStateChange = (
-                            Object.keys(
-                                newPartialState
-                            ) as (keyof DataTableState)[]
-                        ).some(key => prev[key] !== newPartialState[key])
+                        // const isStateChange = (
+                        //     Object.keys(
+                        //         newPartialState
+                        //     ) as (keyof DataTableState)[]
+                        // ).some(key => prev[key] !== newPartialState[key])
 
-                        if (!isStateChange) {
-                            return prev
-                        }
+                        // if (!isStateChange) {
+                        //     return prev
+                        // }
 
                         const newState = {
                             ...prev,
