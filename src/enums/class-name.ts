@@ -17,6 +17,8 @@ enum ComponentClassName {
     TABLE__BODY__CELL = TABLE__BODY + '__cell',
     TABLE__BODY__ROW = TABLE__BODY + '__row',
 
+    TABLE__HEAD__CELL = TABLE__HEAD + '__cell',
+
     TOOLBAR__COLUMN_VISIBILITIES_BOX = TOOLBAR + '__column-visibilities-box',
     TOOLBAR__DATA_FILTER_BOX = TOOLBAR + '__data-filter-box',
     TOOLBAR__DOWNLOAD_BUTTON = TOOLBAR + '__download-button',

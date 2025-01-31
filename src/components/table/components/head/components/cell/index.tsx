@@ -14,6 +14,7 @@ import Tooltip from '@mui/material/Tooltip'
 import HelpIcon from '@mui/icons-material/Help'
 // globals
 import useDataTableContext from '@src/hooks/use-data-table-context'
+import ComponentClassName from '@src/enums/class-name'
 // locals
 import type Props from './types/props'
 import { useColumnDrop } from './hooks'
@@ -239,14 +240,13 @@ export function TableHeadCell({
     )
 }
 
-const useStyles = tss.withName('datatable-delight--head--cell').create({
+const useStyles = tss.withName(ComponentClassName.TABLE__HEAD__CELL).create({
     root: {
         backgroundColor: 'var(--mui-palette-background-paper)'
     },
     fixedHeader: {
         position: 'sticky',
-        top: '0px',
-        zIndex: 1
+        top: '0px'
     },
     tooltip: {
         cursor: 'pointer'
