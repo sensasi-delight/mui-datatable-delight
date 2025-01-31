@@ -17,21 +17,16 @@ import useDataTableContext from '@src/hooks/use-data-table-context'
 import ComponentClassName from '@src/enums/class-name'
 // locals
 import type Props from './types/props'
-import { useColumnDrop } from './hooks'
+import useColumnDrop from './hooks/use-column-drop'
 
 export function TableHeadCell({
     cellHeaderProps = {},
     children,
     colPosition,
     column,
-    columns,
-    columnOrder = [],
     draggableHeadCellRefs,
-    hint,
     index,
-    print,
     setHeadCellsRef,
-    sort,
     sortDirection,
     tableRef,
     toggleSort
@@ -70,8 +65,6 @@ export function TableHeadCell({
     const [, dropRef] = useColumnDrop({
         index,
         headCellRefs: draggableHeadCellRefs,
-        columnOrder,
-        columns,
         transitionTime: options.draggableColumns
             ? (options.draggableColumns.transitionTime ?? 0)
             : 300,
@@ -106,7 +99,7 @@ export function TableHeadCell({
 
     const cellClass = cx(className, classes.root, {
         [classes.fixedHeader]: options.fixedHeader,
-        'datatables-noprint': !print
+        'datatables-noprint': !column.print
     })
 
     const showHintTooltip = () => {
@@ -137,11 +130,11 @@ export function TableHeadCell({
             className={cellClass}
             scope="col"
             sortDirection={sortDirection}
-            data-colindex={index}
+            data-column-index={index}
             onMouseDown={closeTooltip}
             {...otherProps}
         >
-            {options.sort && sort ? (
+            {options.sort && column.sort ? (
                 <span className={classes.contentWrapper}>
                     <_Tooltip
                         title={tooltipTitle}
@@ -189,8 +182,8 @@ export function TableHeadCell({
                         </Button>
                     </_Tooltip>
 
-                    {hint && (
-                        <_Tooltip title={hint}>
+                    {column.hint && (
+                        <_Tooltip title={column.hint}>
                             <HelpIcon
                                 className={
                                     !sortActive
@@ -204,7 +197,7 @@ export function TableHeadCell({
                 </span>
             ) : (
                 <div
-                    className={hint ? classes.sortAction : undefined}
+                    className={column.hint ? classes.sortAction : undefined}
                     ref={
                         isDraggingEnabled()
                             ? ref => {
@@ -214,9 +207,9 @@ export function TableHeadCell({
                     }
                 >
                     {children}
-                    {hint && (
+                    {column.hint && (
                         <_Tooltip
-                            title={hint}
+                            title={column.hint}
                             placement="bottom-end"
                             open={hintTooltipOpen}
                             onOpen={() => showHintTooltip()}
