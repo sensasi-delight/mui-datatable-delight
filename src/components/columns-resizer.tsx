@@ -1,6 +1,6 @@
 'use client'
 
-import React, { type JSX, type RefObject, useEffect, useState } from 'react'
+import React, { type JSX, useEffect, useState } from 'react'
 import { tss } from 'tss-react/mui'
 // locals
 import useDataTableContext from '@src/hooks/use-data-table-context'
@@ -11,14 +11,11 @@ import ComponentClassName from '@src/enums/class-name'
  *
  * @see https://mui-datatable-delight.vercel.app/docs/features/resizable-columns
  */
-export default function ColumnsResizer({
-    // classes: classesFromProp,
-    ...props
-}: DataTableResizeProps): JSX.Element {
+export default function ColumnsResizer({}: DataTableResizeProps): JSX.Element {
     const tssHook = useStyles()
     // const classes = classesFromProp ?? tssHook.classes
     const classes = tssHook.classes
-    const { options } = useDataTableContext()
+    const { options, tableRef, tableHeadCellElements } = useDataTableContext()
 
     /**
      * ##### STATES ########
@@ -35,21 +32,17 @@ export default function ColumnsResizer({
     const [resizingOnCellIndex, setResizingOnCellIndex] = useState<
         number | undefined
     >()
-    const [tableElement, setTableElement] = useState<HTMLTableElement>()
-    const [tableHeadCellElements, setTableHeadCellElements] = useState<
-        HTMLTableCellElement[]
-    >([])
     const [minWidths, setMinWidths] = useState<number[]>([])
 
     useEffect(() => {
-        if (tableElement) {
-            const tableElementRect = tableElement.getBoundingClientRect()
+        if (tableRef.current) {
+            const tableElementRect = tableRef.current.getBoundingClientRect()
             setTableWidth(tableElementRect.width)
             setTableHeight(tableElementRect.height)
 
-            const parentOffsetLeft = getParentOffsetLeft(tableElement)
+            const parentOffsetLeft = getParentOffsetLeft(tableRef.current)
             setResizeCoords(
-                tableHeadCellElements.slice(0, -1).map(cellElement => {
+                tableHeadCellElements.current.slice(0, -1).map(cellElement => {
                     const elRect = cellElement.getBoundingClientRect()
 
                     return {
@@ -63,22 +56,9 @@ export default function ColumnsResizer({
 
             updateCellWidths()
         }
-    }, [tableElement, currentWindowWidth])
+    }, [tableRef.current, currentWindowWidth])
 
     useEffect(() => {
-        props.setResizable(
-            (forwardedTableHeadCellElements, forwardedTableElement) => {
-                if (forwardedTableElement.current) {
-                    setTableHeadCellElements(
-                        forwardedTableHeadCellElements.current
-                    )
-                    setTableElement(forwardedTableElement.current)
-                }
-            }
-        )
-
-        props.updateDividers(updateCellWidths)
-
         function updateCurrentWidth() {
             setCurrentWindowWidth(prev => {
                 const newWindowWidth = window.innerWidth
@@ -109,7 +89,7 @@ export default function ColumnsResizer({
              */
             const newWidth = Math.round(newWidthRaw * 100) / 100
 
-            const thCell = tableHeadCellElements?.[columnId]
+            const thCell = tableHeadCellElements.current?.[columnId]
 
             if (thCell) thCell.style.width = newWidth + '%'
 
@@ -118,18 +98,18 @@ export default function ColumnsResizer({
     }
 
     function onResizeStart(columnId: number) {
-        if (!tableElement) {
-            throw new Error('tableElement is undefined')
+        if (!tableRef.current) {
+            throw new Error('tableRef.current is undefined')
         }
 
         setIsResizing(true)
         setResizingOnCellIndex(columnId)
 
-        const originalWidth = tableElement.style.width
-        tableElement.style.width = '1px'
+        const originalWidth = tableRef.current.style.width
+        tableRef.current.style.width = '1px'
 
         setMinWidths(
-            tableHeadCellElements.map(
+            tableHeadCellElements.current.map(
                 cellElement => cellElement.getBoundingClientRect().width
             )
         )
@@ -140,7 +120,7 @@ export default function ColumnsResizer({
          * 2025-01-04 - CAN NOT FOUND THE EXPLANATION
          * 2025-01-04 - [ORIGINAL GIT BLAME](https://github.com/gregnb/mui-datatables/blame/e09c39cb3c5713c7c157845b3d3e4b7d77c77649/src/components/TableResize.js#L130)
          */
-        tableElement.style.width = originalWidth
+        tableRef.current.style.width = originalWidth
     }
 
     function onResizeMove(
@@ -175,23 +155,23 @@ export default function ColumnsResizer({
             return nextId
         }
 
-        const lastColumnIndex = (tableHeadCellElements?.length ?? 0) - 1
+        const lastColumnIndex = (tableHeadCellElements.current?.length ?? 0) - 1
         const fixedMinWidth1 = minWidths[columnId] ?? 0
         const fixedMinWidth2 =
             minWidths[nextCol(columnId)] ?? minWidths[columnId] ?? 0
 
-        if (!tableElement) {
-            throw new Error('tableElement is undefined')
+        if (!tableRef.current) {
+            throw new Error('tableRef.current is undefined')
         }
 
         const { width: tableWidth, height: tableHeight } =
-            tableElement.getBoundingClientRect()
+            tableRef.current.getBoundingClientRect()
 
         setTableHeight(tableHeight)
 
         const selectableRows = options?.selectableRows ?? 'multiple'
 
-        let parentOffsetLeft = getParentOffsetLeft(tableElement)
+        let parentOffsetLeft = getParentOffsetLeft(tableRef.current)
 
         const nextCoord = (columnId: number) => {
             let nextId = columnId + 1
@@ -365,16 +345,7 @@ export default function ColumnsResizer({
     )
 }
 
-export type SetResizableCallback = (
-    tableHeadCellElements: RefObject<HTMLTableCellElement[]>,
-    tableElement: RefObject<HTMLTableElement | null>
-) => void
-
 interface DataTableResizeProps {
-    setResizable: (callback: SetResizableCallback) => void
-
-    updateDividers: (callback: () => void) => void
-
     /** Extend the style applied to components */
     // classes?: ReturnType<typeof useStyles>['classes']
 }

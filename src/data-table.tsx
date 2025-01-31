@@ -6,7 +6,6 @@ import type { DataTableProps } from './types'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { tss } from 'tss-react/mui'
-import { useEffect } from 'react'
 import Paper, { type PaperProps } from '@mui/material/Paper'
 // locals
 import { buildMap } from './functions'
@@ -58,25 +57,8 @@ function _DataTable({
         options,
         props: datatableRootProps,
         setState,
-        state,
-        setHeadResizable,
-        tableHeadCellElements,
-        tableRef,
-        updateDividers
+        state
     } = useDataTableContext()
-
-    useEffect(() => {
-        if (options.resizableColumns && tableRef.current) {
-            setHeadResizable.current?.(tableHeadCellElements, tableRef)
-
-            /**
-             * Should re-fired when datatableProps change
-             *
-             * see #152
-             */
-            updateDividers.current?.()
-        }
-    }, [])
 
     const filterUpdate: FilterUpdateType = (
         index,
@@ -363,12 +345,7 @@ function _DataTable({
                 style={{ position: 'relative', ...tableHeightVal }}
                 className={responsiveClass}
             >
-                {options.resizableColumns && (
-                    <_ColumnsResizer
-                        updateDividers={fn => (updateDividers.current = fn)}
-                        setResizable={fn => (setHeadResizable.current = fn)}
-                    />
-                )}
+                {options.resizableColumns && <_ColumnsResizer />}
 
                 <DndProvider backend={HTML5Backend}>
                     <Table selectRowUpdate={selectRowUpdate} />

@@ -25,14 +25,6 @@ const DataTableContext = createContext<ContextValue>({
 
     tableRef: {
         current: null
-    },
-
-    setHeadResizable: {
-        current: undefined
-    },
-
-    updateDividers: {
-        current: undefined
     }
 })
 
