@@ -10,6 +10,7 @@ import { buildMap } from '@src/functions'
 import TableAction from '@src/enums/table-action'
 // local components
 import RowExpansionButton from './components/row-expansion-button'
+import ComponentClassName from '@src/enums/class-name'
 
 export default function CheckboxCell({
     isHeaderCell,
@@ -223,7 +224,7 @@ export interface DataTableTableSelectCellProps {
     id: string
 }
 
-const useStyles = tss.withName('datatable-delight--body--select-cell').create({
+const useStyles = tss.withName(ComponentClassName.TABLE__CHECKBOX_CELL).create({
     root: {
         '@media print': {
             display: 'none'

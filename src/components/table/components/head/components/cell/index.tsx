@@ -75,8 +75,7 @@ export function TableHeadCell({
         transitionTime: options.draggableColumns
             ? (options.draggableColumns.transitionTime ?? 0)
             : 300,
-        tableRef: tableRef,
-        tableId: options.tableId ?? 'none'
+        tableRef: tableRef
     })
 
     const handleKeyboardSortInput: ButtonProps['onKeyUp'] = e => {

@@ -42,7 +42,6 @@ interface OptsType {
     columns: Props['columns']
     transitionTime: number
     tableRef: RefObject<HTMLTableElement | null>
-    tableId: string
 }
 
 function getColModel(
@@ -179,7 +178,6 @@ function handleHover(
         columnOrder,
         transitionTime = 300,
         tableRef,
-        tableId,
         timeoutRef,
         columns,
         handleColumnOrderUpdate

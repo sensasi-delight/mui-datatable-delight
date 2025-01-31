@@ -32,7 +32,6 @@ export function ToolbarPrintButton({
             <span>
                 <IconButton
                     className={classes.root}
-                    data-testid={toolbarTextLabels.print + '-iconButton'}
                     aria-label={toolbarTextLabels.print}
                     disabled={options.print === 'disabled'}
                     onClick={() => handlePrint()}

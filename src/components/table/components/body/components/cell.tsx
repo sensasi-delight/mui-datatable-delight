@@ -122,7 +122,6 @@ export function TableBodyCell({
         <TableCell
             onClick={handleClick}
             data-colindex={colIndex}
-            data-tableid={options.tableId}
             className={cx(
                 {
                     [classes.root]: true,

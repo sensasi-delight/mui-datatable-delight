@@ -413,8 +413,6 @@ function RenderRow({
                     },
                     overriddenBodyProps?.className
                 )}
-                data-testid={'MUIDataTableBodyRow-' + dataIndex}
-                id={`MUIDataTableBodyRow-${options.tableId}-${dataIndex}`}
                 {...overriddenBodyProps}
             >
                 <CheckboxCell
@@ -442,7 +440,7 @@ function RenderRow({
                     }
                     checked={isRowSelected}
                     // When rows are expandable, but this particular row isn't expandable, set this to true.
-                    // This will add a new class to the toggle button, datatable-delight--body--select-cell-expandDisabled.
+                    // This will add a new class to the toggle button, `ComponentClassName.TABLE__CHECKBOX_CELL`-expandDisabled.
                     hideExpandButton={
                         !(
                             options.isRowExpandable?.(
@@ -454,7 +452,6 @@ function RenderRow({
                     isRowExpanded={isRowExpanded(dataIndex, parentProps)}
                     isRowSelectable={isRowSelectable}
                     dataIndex={dataIndex}
-                    id={`datatable-delight--body--select-cell--${options.tableId}-${dataIndex}`}
                 />
 
                 {processedRow.map(
@@ -466,7 +463,6 @@ function RenderRow({
                                     dataIndex,
                                     column.index
                                 ) ?? {})}
-                                data-testid={`datatable-delight--body--cell-${column.index}-${rowIndex}`}
                                 dataIndex={dataIndex}
                                 rowIndex={rowIndex}
                                 colIndex={column.index}
@@ -506,12 +502,10 @@ function handleRowClick(
         clickedElement.closest('#expandable-button')
     )
 
-    const isTheInternalSelectCell = clickedElement.id.startsWith(
-        'datatable-delight--body--select-cell'
-    )
+    const isClickFromCheckbox = clickedElement.tagName === 'INPUT'
 
-    // Don't trigger onRowClick if the event was actually the expandable icon.
-    if (isExpandButtonClick || isTheInternalSelectCell) {
+    // Don't trigger onRowClick if the event was actually the row expand button or checkbox
+    if (isExpandButtonClick || isClickFromCheckbox) {
         return
     }
 

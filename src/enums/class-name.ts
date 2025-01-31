@@ -13,6 +13,7 @@ enum ComponentClassName {
 
     TABLE__BODY = TABLE + '__body',
     TABLE__HEAD = TABLE + '__head',
+    TABLE__CHECKBOX_CELL = TABLE + '__checkbox-cell',
 
     TABLE__BODY__CELL = TABLE__BODY + '__cell',
     TABLE__BODY__ROW = TABLE__BODY + '__row',

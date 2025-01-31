@@ -86,7 +86,6 @@ export default function ToolbarDataFilterBox(
                         className={classes.resetLink}
                         tabIndex={0}
                         aria-label={textLabels.filter.reset}
-                        data-testid="filterReset-button"
                         onClick={() => {
                             if (options.confirmFilters !== true) {
                                 setFilterList(columns.map(() => []))
