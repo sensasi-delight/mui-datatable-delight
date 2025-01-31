@@ -1,10 +1,11 @@
 'use client'
 
 import { tss } from 'tss-react/mui'
-import MuiTableHead from '@mui/material/TableHead'
 import { TableHeadCell } from './components/cell'
-import { TableHeadRow } from './components/row'
 import CheckboxCell from '../_shared/checkbox-cell'
+// materials
+import MuiTableHead from '@mui/material/TableHead'
+import TableRow from '@mui/material/TableRow'
 // globals
 import useDataTableContext from '@src/hooks/use-data-table-context'
 import type { DataTableState } from '@src/types/state'
@@ -15,6 +16,7 @@ import {
 import type { Props } from './types/props'
 // global enums
 import TableAction from '@src/enums/table-action'
+import ComponentClassName from '@src/enums/class-name'
 // global functions
 import getDisplayData from '@src/functions/get-new-state-on-data-change/get-display-data'
 import sortTable from '@src/functions/sort-table'
@@ -36,7 +38,7 @@ export default function TableHead({
 
     const { columns, count, data, selectedRows, sortOrder = {} } = state
 
-    const columnOrder = state.columnOrder ? columns.map((_, idx) => idx) : []
+    const columnOrder = state.columnOrder ?? columns.map((_, idx) => idx) ?? []
 
     function handleToggleColumn(columnIndex: number) {
         const prevState = state
@@ -187,18 +189,17 @@ export default function TableHead({
 
     return (
         <MuiTableHead
-            className={cx({
+            className={cx(classes.root, {
                 [classes.responsiveStacked]:
                     options.responsive === 'vertical' ||
                     options.responsive === 'stacked' ||
                     options.responsive === 'stackedFullWidth',
                 [classes.responsiveStackedAlways]:
                     options.responsive === 'verticalAlways',
-                [classes.responsiveSimple]: options.responsive === 'simple',
-                [classes.main]: true
+                [classes.responsiveSimple]: options.responsive === 'simple'
             })}
         >
-            <TableHeadRow>
+            <TableRow className={classes.row}>
                 <CheckboxCell
                     setHeadCellRef={setHeadCellsRef}
                     onChange={handleRowSelect.bind(null)}
@@ -254,24 +255,27 @@ export default function TableHead({
                             </TableHeadCell>
                         ))
                 )}
-            </TableHeadRow>
+            </TableRow>
         </MuiTableHead>
     )
 }
 
-const useStyles = tss.withName('MUIDataTableHead').create(({ theme }) => ({
-    main: {},
-    responsiveStacked: {
-        [theme.breakpoints.down('md')]: {
+const useStyles = tss
+    .withName(ComponentClassName.TABLE__HEAD)
+    .create(({ theme }) => ({
+        root: {},
+        row: {},
+        responsiveStacked: {
+            [theme.breakpoints.down('md')]: {
+                display: 'none'
+            }
+        },
+        responsiveStackedAlways: {
             display: 'none'
+        },
+        responsiveSimple: {
+            [theme.breakpoints.down('sm')]: {
+                display: 'none'
+            }
         }
-    },
-    responsiveStackedAlways: {
-        display: 'none'
-    },
-    responsiveSimple: {
-        [theme.breakpoints.down('sm')]: {
-            display: 'none'
-        }
-    }
-}))
+    }))

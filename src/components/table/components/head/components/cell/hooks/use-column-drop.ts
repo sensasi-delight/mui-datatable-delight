@@ -1,9 +1,9 @@
 import { type DropTargetMonitor, useDrop } from 'react-dnd'
-import useDataTableContext from '../../../../../../../hooks/use-data-table-context'
 import type Props from '../types/props'
 import { type RefObject, useRef } from 'react'
-// enums
-import TableAction from '../../../../../../../enums/table-action'
+// globals
+import useDataTableContext from '@src/hooks/use-data-table-context'
+import TableAction from '@src/enums/table-action'
 
 /**
  * This hook handles the dragging and dropping effects that occur for columns.
@@ -244,11 +244,7 @@ function handleHover(
             for (let ii = 0; ii < columnOrder.length; ii++) {
                 const elms =
                     tableRef.current?.querySelectorAll<HTMLTableCellElement>(
-                        '[data-colindex="' +
-                            ii +
-                            '"][data-tableid="' +
-                            tableId +
-                            '"]'
+                        `[data-colindex="${ii}"]`
                     ) ?? []
 
                 for (let jj = 0; jj < elms.length; jj++) {
@@ -258,20 +254,17 @@ function handleHover(
                     allElms.push(elms[jj])
                 }
 
-                const divider =
+                const tempDividers =
                     tableRef.current?.querySelectorAll<HTMLTableCellElement>(
-                        '[data-divider-index="' +
-                            (ii + 1) +
-                            '"][data-tableid="' +
-                            tableId +
-                            '"]'
+                        `[data-divider-index="${ii + 1}"]`
                     ) ?? []
 
-                for (let jj = 0; jj < divider.length; jj++) {
-                    divider[jj].style.transition = transitionTime + 'ms'
-                    divider[jj].style.transform =
+                for (let jj = 0; jj < tempDividers.length; jj++) {
+                    tempDividers[jj].style.transition = transitionTime + 'ms'
+                    tempDividers[jj].style.transform =
                         'translateX(' + transitions[columnOrder[ii]] + 'px)'
-                    dividers.push(divider[jj])
+
+                    dividers.push(tempDividers[jj])
                 }
             }
 
