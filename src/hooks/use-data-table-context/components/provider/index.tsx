@@ -21,7 +21,7 @@ export default function DataTableContextProvider({
     datatableProps: DataTableProps
     children: ReactNode
 }): ReactNode {
-    const lastDatatableProps = useRef<DataTableProps>(null)
+    const lastDatatableProps = useRef<DataTableProps>(datatableProps)
 
     const restoredState = datatableProps.options?.storageKey
         ? load(datatableProps.options.storageKey)
@@ -46,15 +46,18 @@ export default function DataTableContextProvider({
         setState(prev => {
             const isDataTablePropsChanged =
                 JSON.stringify(datatableProps.data) !==
-                    JSON.stringify(lastDatatableProps.current?.data) ||
+                    JSON.stringify(lastDatatableProps.current.data) ||
                 JSON.stringify(datatableProps.columns) !==
-                    JSON.stringify(lastDatatableProps.current?.columns) ||
+                    JSON.stringify(lastDatatableProps.current.columns) ||
                 JSON.stringify(datatableProps.options) !==
-                    JSON.stringify(lastDatatableProps.current?.options)
+                    JSON.stringify(lastDatatableProps.current.options)
 
             if (!isDataTablePropsChanged) {
                 return prev
             }
+
+            // store last datatableProps for comparison
+            lastDatatableProps.current = datatableProps
 
             const newState = getNewStateOnDataChange(
                 datatableProps,
@@ -69,9 +72,6 @@ export default function DataTableContextProvider({
                 () => {}
             )
 
-            // store last datatableProps for comparison
-            lastDatatableProps.current = datatableProps
-
             datatableProps.options?.onTableInit?.(
                 TableAction.INITIALIZED,
                 newState
@@ -80,11 +80,6 @@ export default function DataTableContextProvider({
             return newState
         })
     }, [datatableProps])
-
-    useEffect(() => {
-        lastDatatableProps.current = datatableProps
-        datatableProps.options?.onTableInit?.(TableAction.INITIALIZED, state)
-    }, [])
 
     const options = getConstructedOption(datatableProps?.options)
 
