@@ -48,8 +48,17 @@ describe('<SelectedRowsToolbar />', function () {
                 data: [],
                 lookup: {}
             },
-            [],
-            () => {}
+            [
+                {
+                    data: [1, 2, 3],
+                    dataIndex: 0
+                },
+                {
+                    data: [4, 5, 6],
+                    dataIndex: 1
+                }
+            ],
+            expect.any(Function)
         )
     })
 

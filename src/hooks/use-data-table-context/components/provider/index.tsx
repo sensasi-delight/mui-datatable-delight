@@ -21,14 +21,14 @@ export default function DataTableContextProvider({
     datatableProps: DataTableProps
     children: ReactNode
 }): ReactNode {
-    const lastDatatableProps = useRef<DataTableProps>(null)
+    const lastDatatableProps = useRef<DataTableProps>(datatableProps)
 
     const restoredState = datatableProps.options?.storageKey
         ? load(datatableProps.options.storageKey)
         : undefined
 
-    const [state, setState] = useState<DataTableState>(
-        getNewStateOnDataChange(
+    function getInitialState() {
+        const newState = getNewStateOnDataChange(
             datatableProps,
             1,
             true,
@@ -40,51 +40,32 @@ export default function DataTableContextProvider({
             },
             () => {}
         )
-    )
+
+        datatableProps.options?.onTableInit?.(TableAction.INITIALIZED, newState)
+
+        return newState
+    }
+
+    const [state, setState] = useState<DataTableState>(getInitialState)
 
     useEffect(() => {
         setState(prev => {
-            const isDataTablePropsChanged =
-                JSON.stringify(datatableProps.data) !==
-                    JSON.stringify(lastDatatableProps.current?.data) ||
-                JSON.stringify(datatableProps.columns) !==
-                    JSON.stringify(lastDatatableProps.current?.columns) ||
-                JSON.stringify(datatableProps.options) !==
-                    JSON.stringify(lastDatatableProps.current?.options)
+            const isDataTablePropsChanged = (
+                Object.keys(datatableProps) as (keyof DataTableProps)[]
+            ).some(
+                key => lastDatatableProps.current[key] !== datatableProps[key]
+            )
 
             if (!isDataTablePropsChanged) {
                 return prev
             }
 
-            const newState = getNewStateOnDataChange(
-                datatableProps,
-                1,
-                true,
-                datatableProps.options ?? {},
-                {
-                    ...prev,
-                    ...getStateFromDataTableOptionsProp(datatableProps.options),
-                    ...restoredState
-                },
-                () => {}
-            )
-
             // store last datatableProps for comparison
             lastDatatableProps.current = datatableProps
 
-            datatableProps.options?.onTableInit?.(
-                TableAction.INITIALIZED,
-                newState
-            )
-
-            return newState
+            return getInitialState()
         })
     }, [datatableProps])
-
-    useEffect(() => {
-        lastDatatableProps.current = datatableProps
-        datatableProps.options?.onTableInit?.(TableAction.INITIALIZED, state)
-    }, [])
 
     const options = getConstructedOption(datatableProps?.options)
 
@@ -99,6 +80,16 @@ export default function DataTableContextProvider({
                 },
                 onAction(action, newPartialState) {
                     setState(prev => {
+                        // const isStateChange = (
+                        //     Object.keys(
+                        //         newPartialState
+                        //     ) as (keyof DataTableState)[]
+                        // ).some(key => prev[key] !== newPartialState[key])
+
+                        // if (!isStateChange) {
+                        //     return prev
+                        // }
+
                         const newState = {
                             ...prev,
                             ...newPartialState
@@ -108,10 +99,6 @@ export default function DataTableContextProvider({
                             action,
                             newState
                         )
-
-                        if (JSON.stringify(prev) === JSON.stringify(newState)) {
-                            return prev
-                        }
 
                         if (datatableProps.options?.storageKey)
                             save(datatableProps.options.storageKey, newState)

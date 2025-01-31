@@ -10,6 +10,7 @@ import { buildMap } from '@src/functions'
 import TableAction from '@src/enums/table-action'
 // local components
 import RowExpansionButton from './components/row-expansion-button'
+import ComponentClassName from '@src/enums/class-name'
 
 export default function CheckboxCell({
     isHeaderCell,
@@ -223,7 +224,7 @@ export interface DataTableTableSelectCellProps {
     id: string
 }
 
-const useStyles = tss.withName('datatable-delight--body--select-cell').create({
+const useStyles = tss.withName(ComponentClassName.TABLE__CHECKBOX_CELL).create({
     root: {
         '@media print': {
             display: 'none'
@@ -231,13 +232,11 @@ const useStyles = tss.withName('datatable-delight--body--select-cell').create({
     },
     fixedHeader: {
         position: 'sticky',
-        top: '0px',
-        zIndex: 100
+        top: '0px'
     },
     fixedLeft: {
         position: 'sticky',
-        left: '0px',
-        zIndex: 100
+        left: '0px'
     },
     icon: {
         cursor: 'pointer',
@@ -250,8 +249,8 @@ const useStyles = tss.withName('datatable-delight--body--select-cell').create({
         visibility: 'hidden'
     },
     headerCell: {
-        zIndex: 110,
-        backgroundColor: 'var(--mui-palette-background-paper)'
+        backgroundColor: 'var(--mui-palette-background-paper)',
+        zIndex: 1
     },
     expandDisabled: {},
     checkboxRoot: {},

@@ -104,7 +104,6 @@ const useStyles = tss
             flex: '1 1 100%',
             display: 'flex',
             position: 'relative',
-            zIndex: 120,
             justifyContent: 'space-between',
             alignItems: 'center',
             paddingTop: theme.spacing(1),

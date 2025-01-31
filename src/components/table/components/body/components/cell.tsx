@@ -118,27 +118,27 @@ export function TableBodyCell({
             ? cells.slice(1, 2)
             : cells
 
+    /** NOTE: NOT SURE WITH VAR NAME */
+    const isAppendStackedParentClassName =
+        options?.responsive === 'vertical' ||
+        options?.responsive === 'stacked' ||
+        options?.responsive === 'stackedFullWidth'
+
     return (
         <TableCell
             onClick={handleClick}
-            data-colindex={colIndex}
-            data-tableid={options.tableId}
+            data-column-index={colIndex}
             className={cx(
+                classes.root,
                 {
-                    [classes.root]: true,
-                    [classes.stackedParent]:
-                        options?.responsive === 'vertical' ||
-                        options?.responsive === 'stacked' ||
-                        options?.responsive === 'stackedFullWidth',
+                    [classes.simpleCell]: options?.responsive === 'simple',
                     [classes.stackedParentAlways]:
                         options?.responsive === 'verticalAlways',
+                    [classes.stackedParent]: isAppendStackedParentClassName,
                     [classes.responsiveStackedSmallParent]:
-                        options?.responsive === 'vertical' ||
-                        options?.responsive === 'stacked' ||
-                        (options?.responsive === 'stackedFullWidth' &&
-                            (options.setTableProps?.().padding === 'none' ||
-                                options.setTableProps?.().size === 'small')),
-                    [classes.simpleCell]: options?.responsive === 'simple',
+                        isAppendStackedParentClassName &&
+                        (options.setTableProps?.().padding === 'none' ||
+                            options.setTableProps?.().size === 'small'),
                     'datatables-noprint': !print
                 },
                 className

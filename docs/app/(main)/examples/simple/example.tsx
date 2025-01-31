@@ -270,6 +270,12 @@ const STATIC_OPTIONS: DataTableOptions = {
             action,
             state
         })
+    },
+    onTableInit: (action, state) => {
+        console.dir({
+            action,
+            state
+        })
     }
 }
 

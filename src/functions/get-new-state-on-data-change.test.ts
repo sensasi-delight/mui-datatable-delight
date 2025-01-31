@@ -286,10 +286,7 @@ describe('get-new-state-on-data-change', () => {
             columns,
             title: 'ACME Employee list',
 
-            options: {
-                ...options,
-                tableId: '04420830074435995' // appended from legacy code
-            },
+            options,
 
             // appended from legacy code
             className: 'tss-1x5mjc5-MUIDataTable-root',
@@ -430,8 +427,7 @@ describe('get-new-state-on-data-change', () => {
                 filterType: 'dropdown',
                 responsive: 'vertical',
                 tableBodyHeight: '400px',
-                tableBodyMaxHeight: '',
-                tableId: '003744953708467347'
+                tableBodyMaxHeight: ''
             },
             components: {
                 TableBody: {},

@@ -81,8 +81,7 @@ export function ToolbarPopover({
                     sx={{
                         position: 'absolute',
                         right: 0,
-                        top: 0,
-                        zIndex: 100
+                        top: 0
                     }}
                 >
                     <CloseIcon />

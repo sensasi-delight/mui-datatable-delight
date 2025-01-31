@@ -383,8 +383,7 @@ function RenderTextField({
                     fullWidth
                     variant="standard"
                     label={column.label}
-                    value={filterList[index].toString() || ''}
-                    data-testid={`filtertextfield-${column.name}`}
+                    value={filterList[index]?.toString() ?? ''}
                     onChange={onChange}
                 />
             </FormControl>

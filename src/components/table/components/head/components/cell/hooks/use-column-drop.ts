@@ -1,33 +1,37 @@
 import { type DropTargetMonitor, useDrop } from 'react-dnd'
-import useDataTableContext from '../../../../../../../hooks/use-data-table-context'
-import type Props from '../types/props'
 import { type RefObject, useRef } from 'react'
-// enums
-import TableAction from '../../../../../../../enums/table-action'
+import type { DataTableState } from '@src/index'
+// globals
+import useDataTableContext from '@src/hooks/use-data-table-context'
+import TableAction from '@src/enums/table-action'
 
 /**
  * This hook handles the dragging and dropping effects that occur for columns.
  */
-export function useColumnDrop(opts: OptsType) {
-    const { onAction, options } = useDataTableContext()
+export default function useColumnDrop(opts: OptsType) {
+    const { onAction, options, state } = useDataTableContext()
     const timeoutRef = useRef<NodeJS.Timeout>(null)
 
     function handleColumnOrderUpdate(
-        columnOrder: number[],
+        newColumnOrder: number[],
         columnIndex: number,
         newPosition: number
     ) {
         onAction?.(TableAction.COLUMN_ORDER_CHANGE, {
-            columnOrder
+            columnOrder: newColumnOrder
         })
 
-        options.onColumnOrderChange?.(columnOrder, columnIndex, newPosition)
+        options.onColumnOrderChange?.(newColumnOrder, columnIndex, newPosition)
     }
 
     return useDrop({
         accept: 'HEADER',
         hover: (_, mon) =>
-            handleHover({ ...opts, mon, handleColumnOrderUpdate, timeoutRef }),
+            handleHover(
+                { ...opts, mon, handleColumnOrderUpdate, timeoutRef },
+                state.columnOrder,
+                state.columns
+            ),
         collect: mon => ({
             isOver: !!mon.isOver(),
             canDrop: !!mon.canDrop()
@@ -38,17 +42,25 @@ export function useColumnDrop(opts: OptsType) {
 interface OptsType {
     index: number
     headCellRefs: RefObject<HTMLTableCellElement[]>
-    columnOrder: Props['columnOrder']
-    columns: Props['columns']
     transitionTime: number
     tableRef: RefObject<HTMLTableElement | null>
-    tableId: string
 }
 
-function getColModel(
+/**
+ * Given the head cell refs, column order, and columns, this function builds an array of column models.
+ * A column model is an object with the following properties:
+ *      - left: the distance from the left edge of the table container to the left edge of the column
+ *      - width: the width of the column
+ *      - columnIndex: the index of the column in the columns array
+ *      - ref: a reference to the column's html element
+ * The column model is used to calculate the position of the drag preview.
+ *
+ * NOTE: EXPORTED ONLY FOR TESTING
+ */
+export function getColModel(
     headCellRefs: OptsType['headCellRefs'],
-    columnOrder: OptsType['columnOrder'],
-    columns: OptsType['columns']
+    columnOrder: DataTableState['columnOrder'],
+    columns: DataTableState['columns']
 ) {
     let colModel = []
 
@@ -111,18 +123,20 @@ function getColModel(
         }
     }
 
-    columnOrder.forEach(colIdx => {
-        let col = headCellRefs.current[colIdx + 1]
-        let cmIndx = colModel.length - 1
-        if (!(columns[colIdx] && columns[colIdx].display !== 'true')) {
-            let prevLeft =
+    columnOrder.forEach(colId => {
+        const col = headCellRefs.current[colId + 1]
+        const cmIndx = colModel.length - 1
+
+        if (!(columns[colId] && columns[colId]?.display !== 'true')) {
+            const prevLeft =
                 cmIndx !== -1
                     ? colModel[cmIndx].left + colModel[cmIndx].width
                     : parentOffsetLeft + leftMostCell.offsetLeft
+
             colModel.push({
                 left: prevLeft,
                 width: col.offsetWidth,
-                columnIndex: colIdx,
+                columnIndex: colId,
                 ref: col
             })
         }
@@ -131,31 +145,47 @@ function getColModel(
     return colModel
 }
 
-const reorderColumns = (
+/**
+ * Reorders the columns given the previous column order, the column index, and the new position.
+ *
+ * NOTE: EXPORTED ONLY FOR TESTING
+ */
+export function reorderColumns(
     prevColumnOrder: number[],
     columnIndex: number,
     newPosition: number
-) => {
-    let columnOrder = prevColumnOrder.slice()
-    let srcIndex = columnOrder.indexOf(columnIndex)
-    let targetIndex = columnOrder.indexOf(newPosition)
+): number[] {
+    const srcIndex = prevColumnOrder.indexOf(columnIndex)
+    const targetIndex = prevColumnOrder.indexOf(newPosition)
 
-    if (srcIndex !== -1 && targetIndex !== -1) {
-        let newItem = columnOrder[srcIndex]
-        columnOrder = [
-            ...columnOrder.slice(0, srcIndex),
-            ...columnOrder.slice(srcIndex + 1)
-        ]
-        columnOrder = [
-            ...columnOrder.slice(0, targetIndex),
-            newItem,
-            ...columnOrder.slice(targetIndex)
-        ]
+    if (srcIndex === -1 || targetIndex === -1) {
+        return prevColumnOrder
     }
-    return columnOrder
+
+    const srcColId = prevColumnOrder[srcIndex]
+
+    if (!srcColId) {
+        throw new Error('srcColId is undefined')
+    }
+
+    const tempColumnOrder = [
+        ...prevColumnOrder.slice(0, srcIndex),
+        ...prevColumnOrder.slice(srcIndex + 1)
+    ]
+
+    return [
+        ...tempColumnOrder.slice(0, targetIndex),
+        srcColId,
+        ...tempColumnOrder.slice(targetIndex)
+    ]
 }
 
-function handleHover(
+/**
+ * Handles the hover event on a column drop target.
+ *
+ * NOTE: EXPORTED ONLY FOR TESTING
+ */
+export function handleHover(
     opts: OptsType & {
         mon: DropTargetMonitor<
             {
@@ -170,124 +200,94 @@ function handleHover(
             columnIndex: number,
             newPosition: number
         ) => void
-    }
+    },
+    columnOrder: DataTableState['columnOrder'],
+    columns: DataTableState['columns']
 ) {
     const {
         mon,
         index,
         headCellRefs,
-        columnOrder,
         transitionTime = 300,
         tableRef,
-        tableId,
         timeoutRef,
-        columns,
         handleColumnOrderUpdate
     } = opts
 
     const item = mon.getItem()
 
-    const hoverIdx = item.colIndex
+    if (item.colIndex === index) return
 
     if (headCellRefs.current !== item.headCellRefs.current) return
 
-    if (hoverIdx !== index) {
-        let reorderedCols = reorderColumns(columnOrder, item.colIndex, index)
-        let newColModel = getColModel(headCellRefs, reorderedCols, columns)
+    const reorderedCols = reorderColumns(columnOrder, item.colIndex, index)
+    const newColModel = getColModel(headCellRefs, reorderedCols, columns)
 
-        let newX = mon.getClientOffset()?.x ?? 0
+    const newX = mon.getClientOffset()?.x ?? 0
 
-        let modelIdx = -1
+    const modelIdx =
+        newColModel.find(
+            item => newX > item.left && newX < item.left + item.width
+        )?.columnIndex ?? -1
 
-        for (let ii = 0; ii < newColModel.length; ii++) {
-            if (
-                newX > newColModel[ii].left &&
-                newX < newColModel[ii].left + newColModel[ii].width
-            ) {
-                modelIdx = newColModel[ii].columnIndex
-
-                break
-            }
-        }
-
-        if (modelIdx === item.colIndex) {
-            clearTimeout(timeoutRef.current ?? undefined)
-
-            let curColModel = getColModel(headCellRefs, columnOrder, columns)
-
-            let transitions: number[] = []
-
-            newColModel.forEach(item => {
-                transitions[item.columnIndex] = item.left
-            })
-            curColModel.forEach(item => {
-                transitions[item.columnIndex] =
-                    transitions[item.columnIndex] - item.left
-            })
-
-            for (let idx = 1; idx < columnOrder.length; idx++) {
-                let colIndex = columnOrder[idx]
-                if (columns[colIndex] && columns[colIndex].display !== 'true') {
-                    // skip
-                } else {
-                    if (headCellRefs.current[idx])
-                        headCellRefs.current[idx].style.transition = '280ms'
-                    if (headCellRefs.current[idx])
-                        headCellRefs.current[idx].style.transform =
-                            'translateX(' + transitions[idx - 1] + 'px)'
-                }
-            }
-
-            const allElms: HTMLTableCellElement[] = []
-            const dividers: HTMLTableCellElement[] = []
-
-            for (let ii = 0; ii < columnOrder.length; ii++) {
-                const elms =
-                    tableRef.current?.querySelectorAll<HTMLTableCellElement>(
-                        '[data-colindex="' +
-                            ii +
-                            '"][data-tableid="' +
-                            tableId +
-                            '"]'
-                    ) ?? []
-
-                for (let jj = 0; jj < elms.length; jj++) {
-                    elms[jj].style.transition = transitionTime + 'ms'
-                    elms[jj].style.transform =
-                        'translateX(' + transitions[ii] + 'px)'
-                    allElms.push(elms[jj])
-                }
-
-                const divider =
-                    tableRef.current?.querySelectorAll<HTMLTableCellElement>(
-                        '[data-divider-index="' +
-                            (ii + 1) +
-                            '"][data-tableid="' +
-                            tableId +
-                            '"]'
-                    ) ?? []
-
-                for (let jj = 0; jj < divider.length; jj++) {
-                    divider[jj].style.transition = transitionTime + 'ms'
-                    divider[jj].style.transform =
-                        'translateX(' + transitions[columnOrder[ii]] + 'px)'
-                    dividers.push(divider[jj])
-                }
-            }
-
-            const newColIndex = item.colIndex
-
-            timeoutRef.current = setTimeout(() => {
-                allElms.forEach(item => {
-                    item.style.transition = '0s'
-                    item.style.transform = 'translateX(0)'
-                })
-                dividers.forEach(item => {
-                    item.style.transition = '0s'
-                    item.style.transform = 'translateX(0)'
-                })
-                handleColumnOrderUpdate(reorderedCols, newColIndex, index)
-            }, transitionTime)
-        }
+    if (modelIdx !== item.colIndex) {
+        return
     }
+
+    clearTimeout(timeoutRef.current ?? undefined)
+
+    const transitions: number[] = []
+
+    newColModel.forEach(item => {
+        transitions[item.columnIndex] = item.left
+    })
+
+    const curColModel = getColModel(headCellRefs, columnOrder, columns)
+
+    curColModel.forEach(item => {
+        transitions[item.columnIndex] =
+            transitions[item.columnIndex] - item.left
+    })
+
+    const transitionedElements: HTMLElement[] = columnOrder.flatMap(
+        (columnIndex, i) => {
+            const colCellEls =
+                tableRef.current?.querySelectorAll<HTMLTableCellElement>(
+                    `[data-column-index="${i}"]`
+                ) ?? []
+
+            colCellEls.forEach(el => {
+                el.style.transition = transitionTime + 'ms'
+                el.style.transform = 'translateX(' + transitions[i] + 'px)'
+            })
+
+            /** resizable sliders */
+            const colDividerEls =
+                tableRef.current?.querySelectorAll<HTMLElement>(
+                    `[data-divider-index="${i + 1}"]`
+                ) ?? []
+
+            colDividerEls.forEach(el => {
+                el.style.transition = transitionTime + 'ms'
+                el.style.transform = `translateX(${transitions[columnIndex]}px)`
+            })
+
+            return [...Array.from(colCellEls), ...Array.from(colDividerEls)]
+        }
+    )
+
+    timeoutRef.current = setTimeout(() => {
+        resetElementTransitions(transitionedElements)
+        handleColumnOrderUpdate(reorderedCols, item.colIndex, index)
+    }, transitionTime)
+}
+
+/**
+ * Resets the CSS transitions and transforms for the given elements.
+ */
+function resetElementTransitions(elements: HTMLElement[]) {
+    elements.forEach(item => {
+        item.style.transition = '0s'
+        item.style.transform = 'translateX(0)'
+    })
 }

@@ -1,10 +1,11 @@
 'use client'
 
 import { tss } from 'tss-react/mui'
-import MuiTableHead from '@mui/material/TableHead'
 import { TableHeadCell } from './components/cell'
-import { TableHeadRow } from './components/row'
 import CheckboxCell from '../_shared/checkbox-cell'
+// materials
+import MuiTableHead from '@mui/material/TableHead'
+import TableRow from '@mui/material/TableRow'
 // globals
 import useDataTableContext from '@src/hooks/use-data-table-context'
 import type { DataTableState } from '@src/types/state'
@@ -15,6 +16,7 @@ import {
 import type { Props } from './types/props'
 // global enums
 import TableAction from '@src/enums/table-action'
+import ComponentClassName from '@src/enums/class-name'
 // global functions
 import getDisplayData from '@src/functions/get-new-state-on-data-change/get-display-data'
 import sortTable from '@src/functions/sort-table'
@@ -34,15 +36,8 @@ export default function TableHead({
         state
     } = useDataTableContext()
 
-    const { columns, count, data, selectedRows, sortOrder = {} } = state
-
-    const columnOrder = state.columnOrder ? columns.map((_, idx) => idx) : []
-
     function handleToggleColumn(columnIndex: number) {
-        const prevState = state
-        const { columns, data } = prevState
-
-        let newOrder: DataTableSortOrderOption['direction'] = columns[
+        let newOrder: DataTableSortOrderOption['direction'] = state.columns[
             columnIndex
         ]?.sortDescFirst
             ? 'desc'
@@ -53,16 +48,16 @@ export default function TableHead({
             'desc'
         ]
 
-        if (columns[columnIndex]?.sortDescFirst) {
+        if (state.columns[columnIndex]?.sortDescFirst) {
             sequenceOrder.reverse()
         }
 
-        if (columns[columnIndex]?.sortThirdClickReset) {
+        if (state.columns[columnIndex]?.sortThirdClickReset) {
             sequenceOrder.push('none')
         }
 
-        if (columns[columnIndex]?.name === prevState.sortOrder?.name) {
-            let position = sequenceOrder.indexOf(prevState.sortOrder?.direction)
+        if (state.columns[columnIndex]?.name === state.sortOrder?.name) {
+            let position = sequenceOrder.indexOf(state.sortOrder?.direction)
 
             if (position !== -1) {
                 position++
@@ -74,7 +69,7 @@ export default function TableHead({
         }
 
         const newSortOrder: DataTableSortOrderOption = {
-            name: columns[columnIndex].name,
+            name: state.columns[columnIndex].name,
             direction: newOrder
         }
 
@@ -94,29 +89,25 @@ export default function TableHead({
         }
 
         const orderLabel = getSortDirectionLabel(newSortOrder)
-        const announceText = `Table now sorted by ${columns[columnIndex].name} : ${orderLabel}`
+        const announceText = `Table now sorted by ${state.columns[columnIndex].name} : ${orderLabel}`
 
         let newState: DataTableState = {
-            ...prevState,
+            ...state,
             announceText,
-            columns: columns,
             activeColumn: columnIndex
         }
 
         if (options.serverSide) {
             newState = {
                 ...newState,
-                data: prevState.data,
-                displayData: prevState.displayData,
-                selectedRows: prevState.selectedRows,
                 sortOrder: newSortOrder
             }
         } else {
             const sortedData = sortTable(
-                data,
+                state.data,
                 columnIndex,
                 newOrder,
-                columns[columnIndex],
+                state.columns[columnIndex],
                 options,
                 newState
             )
@@ -130,10 +121,10 @@ export default function TableHead({
             }
 
             newState.displayData = getDisplayData(
-                columns,
+                state.columns,
                 sortedData.data,
-                prevState.filterList,
-                prevState.searchText,
+                state.filterList,
+                state.searchText,
                 null,
                 datatableRootProps,
                 newState,
@@ -150,9 +141,10 @@ export default function TableHead({
         selectRowUpdate('head', null)
     }
 
-    const numSelected = (selectedRows && selectedRows.data.length) || 0
-    let isIndeterminate = numSelected > 0 && numSelected < count
-    let isChecked = numSelected > 0 && numSelected >= count
+    const numSelected =
+        (state.selectedRows && state.selectedRows.data.length) || 0
+    let isIndeterminate = numSelected > 0 && numSelected < state.count
+    let isChecked = numSelected > 0 && numSelected >= state.count
 
     // When the disableToolbarSelect option is true, there can be
     // selected items that aren't visible, so we need to be more
@@ -163,23 +155,29 @@ export default function TableHead({
         options.selectToolbarPlacement === 'above'
     ) {
         if (isChecked) {
-            for (let ii = 0; ii < data.length; ii++) {
-                if (!selectedRows.lookup[data[ii].dataIndex]) {
+            for (let ii = 0; ii < state.data.length; ii++) {
+                if (!state.selectedRows.lookup[state.data[ii].dataIndex]) {
                     isChecked = false
                     isIndeterminate = true
                     break
                 }
             }
         } else {
-            if (numSelected > count) {
+            if (numSelected > state.count) {
                 isIndeterminate = true
             }
         }
     }
 
-    const orderedColumns = columnOrder.map((colIndex, idx) => {
+    const orderedColumns = state.columnOrder.map((colIndex, idx) => {
+        const column = state.columns[colIndex]
+
+        if (!column) {
+            throw new Error('Column is undefined')
+        }
+
         return {
-            column: columns[colIndex],
+            column,
             index: colIndex,
             colPos: idx
         }
@@ -187,91 +185,84 @@ export default function TableHead({
 
     return (
         <MuiTableHead
-            className={cx({
+            className={cx(classes.root, {
                 [classes.responsiveStacked]:
                     options.responsive === 'vertical' ||
                     options.responsive === 'stacked' ||
                     options.responsive === 'stackedFullWidth',
                 [classes.responsiveStackedAlways]:
                     options.responsive === 'verticalAlways',
-                [classes.responsiveSimple]: options.responsive === 'simple',
-                [classes.main]: true
+                [classes.responsiveSimple]: options.responsive === 'simple'
             })}
         >
-            <TableHeadRow>
+            <TableRow className={classes.row}>
                 <CheckboxCell
                     setHeadCellRef={setHeadCellsRef}
-                    onChange={handleRowSelect.bind(null)}
+                    onChange={handleRowSelect}
                     indeterminate={isIndeterminate}
                     checked={isChecked}
-                    isHeaderCell={true}
-                    isRowSelectable={true}
+                    isHeaderCell
+                    isRowSelectable
                 />
 
                 {orderedColumns.map(
-                    ({ column = {}, index, colPos }) =>
+                    ({ column, index, colPos }) =>
                         column.display === 'true' &&
-                        (column.customHeadRender ? (
-                            column.customHeadRender(
-                                { index, ...column },
-                                handleToggleColumn,
-                                sortOrder
-                            )
-                        ) : (
+                        (column.customHeadRender?.(
+                            { index, ...column },
+                            handleToggleColumn,
+                            state.sortOrder
+                        ) ?? (
                             <TableHeadCell
                                 cellHeaderProps={
-                                    columns[index]?.setCellHeaderProps?.({
+                                    state.columns[index]?.setCellHeaderProps?.({
                                         index,
                                         ...column
-                                    }) || {}
+                                    }) ?? {}
                                 }
                                 key={index}
                                 index={index}
                                 colPosition={colPos}
                                 setHeadCellsRef={setHeadCellsRef}
-                                sort={column.sort}
                                 sortDirection={
-                                    column.name === sortOrder.name
-                                        ? sortOrder.direction
+                                    column.name === state.sortOrder?.name
+                                        ? state.sortOrder?.direction
                                         : undefined
                                 }
                                 toggleSort={handleToggleColumn}
-                                hint={column.hint}
-                                print={column.print}
                                 column={column}
-                                columns={columns}
-                                columnOrder={columnOrder}
                                 draggableHeadCellRefs={draggableHeadCellRefs}
                                 tableRef={tableRef}
                             >
-                                {column.customHeadLabelRender
-                                    ? column.customHeadLabelRender({
-                                          index,
-                                          colPos,
-                                          ...column
-                                      })
-                                    : column.label}
+                                {column.customHeadLabelRender?.({
+                                    index,
+                                    colPos,
+                                    ...column
+                                }) ?? column.label}
                             </TableHeadCell>
                         ))
                 )}
-            </TableHeadRow>
+            </TableRow>
         </MuiTableHead>
     )
 }
 
-const useStyles = tss.withName('MUIDataTableHead').create(({ theme }) => ({
-    main: {},
-    responsiveStacked: {
-        [theme.breakpoints.down('md')]: {
+const useStyles = tss
+    .withName(ComponentClassName.TABLE__HEAD)
+    .create(({ theme }) => ({
+        root: {},
+        row: {},
+        responsiveStacked: {
+            [theme.breakpoints.down('md')]: {
+                display: 'none'
+            }
+        },
+        responsiveStackedAlways: {
             display: 'none'
+        },
+        responsiveSimple: {
+            [theme.breakpoints.down('sm')]: {
+                display: 'none'
+            }
         }
-    },
-    responsiveStackedAlways: {
-        display: 'none'
-    },
-    responsiveSimple: {
-        [theme.breakpoints.down('sm')]: {
-            display: 'none'
-        }
-    }
-}))
+    }))

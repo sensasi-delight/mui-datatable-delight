@@ -547,13 +547,6 @@ export interface DataTableOptions
     sortOrder?: DataTableSortOrderOption
 
     /**
-     * A string that is used internally for identifying the table.
-     * This property is auto-generated. However, if you need it set to a custom value (ex: server-side rendering), you can set it here.
-     * @default auto-generated string
-     */
-    tableId?: string
-
-    /**
      * CSS string for the height of the table.
      * @example '500px'
      * @example '100%'
@@ -760,7 +753,6 @@ interface DataTableCustomsOptions {
 //         selectableRowsHideCheckboxes: PropTypes.bool,
 //         selectableRowsOnClick: PropTypes.bool,
 //         serverSide: PropTypes.bool,
-//         tableId: PropTypes.string,
 //         tableBodyHeight: PropTypes.string,
 //         tableBodyMaxHeight: PropTypes.string,
 //         renderExpandableRow: PropTypes.func,

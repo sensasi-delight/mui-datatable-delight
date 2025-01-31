@@ -349,7 +349,7 @@ export default function ColumnsResizer({
                             position: 'absolute',
                             height: tableHeight,
                             cursor: 'ew-resize',
-                            zIndex: 1000
+                            zIndex: 1
                         }}
                     >
                         <div
