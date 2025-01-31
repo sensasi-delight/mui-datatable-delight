@@ -145,7 +145,6 @@ describe('useColumnDrop', function () {
                     })
                 } as DropTargetMonitor,
                 index: 0,
-                headCellRefs,
                 handleColumnOrderUpdate: vi.fn(),
                 transitionTime: 0,
                 timeoutRef
@@ -160,7 +159,8 @@ describe('useColumnDrop', function () {
                         }
                     ]
                 } as unknown as HTMLTableElement
-            }
+            },
+            headCellRefs
         )
 
         expect(timeoutRef.current).to.not.equal(null)
