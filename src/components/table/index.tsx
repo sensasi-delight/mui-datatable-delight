@@ -14,9 +14,7 @@ import TableBody from './components/body'
 import type { Props as HeadProps } from './components/head/types/props'
 
 export default function Table({
-    draggableHeadCellRefs, // TEMPORARY PASSING HEAD PROPS
-    selectRowUpdate, // TEMPORARY PASSING HEAD PROPS
-    setHeadCellsRef // TEMPORARY PASSING HEAD PROPS
+    selectRowUpdate // TEMPORARY PASSING HEAD PROPS
 }: TableProps &
     // TEMPORARY PASSING HEAD PROPS
     HeadProps) {
@@ -53,11 +51,7 @@ export default function Table({
                 </caption>
             )}
 
-            <_TableHead
-                selectRowUpdate={selectRowUpdate}
-                setHeadCellsRef={setHeadCellsRef}
-                draggableHeadCellRefs={draggableHeadCellRefs}
-            />
+            <_TableHead selectRowUpdate={selectRowUpdate} />
 
             {/* @ts-expect-error VALUES ARE NOT PASSING PROPS ANYMORE - WILL REMOVE TYPES LATER */}
             <_TableBody selectRowUpdate={selectRowUpdate} />

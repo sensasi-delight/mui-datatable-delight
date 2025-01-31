@@ -21,16 +21,14 @@ import ComponentClassName from '@src/enums/class-name'
 import getDisplayData from '@src/functions/get-new-state-on-data-change/get-display-data'
 import sortTable from '@src/functions/sort-table'
 
-export default function TableHead({
-    draggableHeadCellRefs,
-    selectRowUpdate,
-    setHeadCellsRef
-}: Props) {
+export default function TableHead({ selectRowUpdate }: Props) {
     const { classes, cx } = useStyles()
     const {
+        draggableHeadCellRefs,
         onAction,
         options,
         props: datatableRootProps,
+        tableHeadCellElements,
         setState,
         state
     } = useDataTableContext()
@@ -140,6 +138,15 @@ export default function TableHead({
         selectRowUpdate('head', null)
     }
 
+    function setHeadCellsRef(
+        index: number,
+        pos: number,
+        el: HTMLTableCellElement
+    ) {
+        draggableHeadCellRefs.current[index] = el
+        tableHeadCellElements.current[pos] = el
+    }
+
     const numSelected =
         (state.selectedRows && state.selectedRows.data.length) || 0
     let isIndeterminate = numSelected > 0 && numSelected < state.count
@@ -230,7 +237,6 @@ export default function TableHead({
                                 }
                                 toggleSort={handleToggleColumn}
                                 column={column}
-                                draggableHeadCellRefs={draggableHeadCellRefs}
                             >
                                 {column.customHeadLabelRender?.({
                                     index,

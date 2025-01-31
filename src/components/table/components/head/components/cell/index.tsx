@@ -24,14 +24,14 @@ export function TableHeadCell({
     children,
     colPosition,
     column,
-    draggableHeadCellRefs,
     index,
     setHeadCellsRef,
     sortDirection,
     toggleSort
 }: Props) {
     const { classes, cx } = useStyles()
-    const { components, options, textLabels } = useDataTableContext()
+    const { components, draggableHeadCellRefs, options, textLabels } =
+        useDataTableContext()
     const [sortTooltipOpen, setSortTooltipOpen] = useState(false)
     const [hintTooltipOpen, setHintTooltipOpen] = useState(false)
     const [dragging, setDragging] = useState(false)
@@ -63,7 +63,6 @@ export function TableHeadCell({
 
     const [, dropRef] = useColumnDrop({
         index,
-        headCellRefs: draggableHeadCellRefs,
         transitionTime: options.draggableColumns
             ? (options.draggableColumns.transitionTime ?? 0)
             : 300

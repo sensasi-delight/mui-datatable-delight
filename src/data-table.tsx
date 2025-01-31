@@ -54,7 +54,6 @@ function _DataTable({
 
     const {
         components,
-        draggableHeadCellRefs,
         onAction,
         options,
         props: datatableRootProps,
@@ -78,27 +77,6 @@ function _DataTable({
             updateDividers.current?.()
         }
     }, [])
-
-    /**
-     * I THINK THIS COULD BE MOVED TO `<Table />`
-     */
-    function setHeadCellsRef(
-        index: number,
-        pos: number,
-        el: HTMLTableCellElement
-    ) {
-        if (!draggableHeadCellRefs.current) {
-            draggableHeadCellRefs.current = []
-        }
-
-        draggableHeadCellRefs.current[index] = el
-
-        if (!tableHeadCellElements.current) {
-            tableHeadCellElements.current = []
-        }
-
-        tableHeadCellElements.current[pos] = el
-    }
 
     const filterUpdate: FilterUpdateType = (
         index,
@@ -393,11 +371,7 @@ function _DataTable({
                 )}
 
                 <DndProvider backend={HTML5Backend}>
-                    <Table
-                        draggableHeadCellRefs={draggableHeadCellRefs}
-                        selectRowUpdate={selectRowUpdate}
-                        setHeadCellsRef={setHeadCellsRef}
-                    />
+                    <Table selectRowUpdate={selectRowUpdate} />
                 </DndProvider>
             </div>
 
