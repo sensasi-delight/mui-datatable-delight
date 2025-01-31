@@ -28,7 +28,6 @@ export function TableHeadCell({
     index,
     setHeadCellsRef,
     sortDirection,
-    tableRef,
     toggleSort
 }: Props) {
     const { classes, cx } = useStyles()
@@ -67,8 +66,7 @@ export function TableHeadCell({
         headCellRefs: draggableHeadCellRefs,
         transitionTime: options.draggableColumns
             ? (options.draggableColumns.transitionTime ?? 0)
-            : 300,
-        tableRef: tableRef
+            : 300
     })
 
     const handleKeyboardSortInput: ButtonProps['onKeyUp'] = e => {

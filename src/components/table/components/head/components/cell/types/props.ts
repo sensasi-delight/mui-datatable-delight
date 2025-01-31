@@ -13,8 +13,6 @@ export default interface Props {
     /** Optional to be used with `textLabels.body.columnHeaderTooltip` */
     column: DataTableState['columns'][0]
 
-    tableRef: RefObject<HTMLTableElement | null>
-
     draggableHeadCellRefs: RefObject<HTMLTableCellElement[]>
 
     index: number

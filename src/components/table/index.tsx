@@ -16,8 +16,7 @@ import type { Props as HeadProps } from './components/head/types/props'
 export default function Table({
     draggableHeadCellRefs, // TEMPORARY PASSING HEAD PROPS
     selectRowUpdate, // TEMPORARY PASSING HEAD PROPS
-    setHeadCellsRef, // TEMPORARY PASSING HEAD PROPS
-    tableRef // TEMPORARY PASSING HEAD PROPS
+    setHeadCellsRef // TEMPORARY PASSING HEAD PROPS
 }: TableProps &
     // TEMPORARY PASSING HEAD PROPS
     HeadProps) {
@@ -26,7 +25,8 @@ export default function Table({
         components,
         options,
         props: datatableRootProps,
-        state
+        state,
+        tableRef
     } = useDataTableContext()
 
     const tablePropsFromOption = options.setTableProps?.() ?? {}
@@ -57,7 +57,6 @@ export default function Table({
                 selectRowUpdate={selectRowUpdate}
                 setHeadCellsRef={setHeadCellsRef}
                 draggableHeadCellRefs={draggableHeadCellRefs}
-                tableRef={tableRef}
             />
 
             {/* @ts-expect-error VALUES ARE NOT PASSING PROPS ANYMORE - WILL REMOVE TYPES LATER */}

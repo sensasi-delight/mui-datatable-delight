@@ -13,5 +13,4 @@ export interface Props {
         pos: number,
         el: HTMLTableCellElement
     ) => void
-    tableRef: RefObject<HTMLTableElement | null>
 }

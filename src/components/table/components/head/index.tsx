@@ -24,8 +24,7 @@ import sortTable from '@src/functions/sort-table'
 export default function TableHead({
     draggableHeadCellRefs,
     selectRowUpdate,
-    setHeadCellsRef,
-    tableRef
+    setHeadCellsRef
 }: Props) {
     const { classes, cx } = useStyles()
     const {
@@ -232,7 +231,6 @@ export default function TableHead({
                                 toggleSort={handleToggleColumn}
                                 column={column}
                                 draggableHeadCellRefs={draggableHeadCellRefs}
-                                tableRef={tableRef}
                             >
                                 {column.customHeadLabelRender?.({
                                     index,

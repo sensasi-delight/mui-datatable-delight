@@ -148,19 +148,19 @@ describe('useColumnDrop', function () {
                 headCellRefs,
                 handleColumnOrderUpdate: vi.fn(),
                 transitionTime: 0,
-                tableRef: {
-                    current: {
-                        querySelectorAll: () => [
-                            {
-                                style: {}
-                            }
-                        ]
-                    } as unknown as HTMLTableElement
-                },
                 timeoutRef
             },
             columnOrder,
-            columns
+            columns,
+            {
+                current: {
+                    querySelectorAll: () => [
+                        {
+                            style: {}
+                        }
+                    ]
+                } as unknown as HTMLTableElement
+            }
         )
 
         expect(timeoutRef.current).to.not.equal(null)

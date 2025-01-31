@@ -377,9 +377,7 @@ function _DataTable({
                 <_SelectedRowsToolbar selectRowUpdate={selectRowUpdate} />
             )}
 
-            {isShowToolbar && (
-                <_Toolbar filterUpdate={filterUpdate} tableRef={tableRef} />
-            )}
+            {isShowToolbar && <_Toolbar filterUpdate={filterUpdate} />}
 
             <_FilteredValuesList filterUpdate={filterUpdate} />
 
@@ -399,7 +397,6 @@ function _DataTable({
                         draggableHeadCellRefs={draggableHeadCellRefs}
                         selectRowUpdate={selectRowUpdate}
                         setHeadCellsRef={setHeadCellsRef}
-                        tableRef={tableRef}
                     />
                 </DndProvider>
             </div>
