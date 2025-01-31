@@ -1,6 +1,6 @@
 import type { TableCellProps } from '@mui/material/TableCell'
 import type { TableSortLabelProps } from '@mui/material/TableSortLabel'
-import type { ReactNode, RefObject } from 'react'
+import type { ReactNode } from 'react'
 import type { DataTableState } from '@src/types/state'
 
 export default interface Props {
@@ -12,10 +12,6 @@ export default interface Props {
 
     /** Optional to be used with `textLabels.body.columnHeaderTooltip` */
     column: DataTableState['columns'][0]
-
-    tableRef: RefObject<HTMLTableElement | null>
-
-    draggableHeadCellRefs: RefObject<HTMLTableCellElement[]>
 
     index: number
 

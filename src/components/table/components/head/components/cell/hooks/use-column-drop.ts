@@ -9,7 +9,8 @@ import TableAction from '@src/enums/table-action'
  * This hook handles the dragging and dropping effects that occur for columns.
  */
 export default function useColumnDrop(opts: OptsType) {
-    const { onAction, options, state } = useDataTableContext()
+    const { draggableHeadCellRefs, onAction, options, state, tableRef } =
+        useDataTableContext()
     const timeoutRef = useRef<NodeJS.Timeout>(null)
 
     function handleColumnOrderUpdate(
@@ -30,7 +31,9 @@ export default function useColumnDrop(opts: OptsType) {
             handleHover(
                 { ...opts, mon, handleColumnOrderUpdate, timeoutRef },
                 state.columnOrder,
-                state.columns
+                state.columns,
+                tableRef,
+                draggableHeadCellRefs
             ),
         collect: mon => ({
             isOver: !!mon.isOver(),
@@ -41,9 +44,7 @@ export default function useColumnDrop(opts: OptsType) {
 
 interface OptsType {
     index: number
-    headCellRefs: RefObject<HTMLTableCellElement[]>
     transitionTime: number
-    tableRef: RefObject<HTMLTableElement | null>
 }
 
 /**
@@ -58,7 +59,7 @@ interface OptsType {
  * NOTE: EXPORTED ONLY FOR TESTING
  */
 export function getColModel(
-    headCellRefs: OptsType['headCellRefs'],
+    headCellRefs: RefObject<HTMLTableCellElement[]>,
     columnOrder: DataTableState['columnOrder'],
     columns: DataTableState['columns']
 ) {
@@ -202,14 +203,14 @@ export function handleHover(
         ) => void
     },
     columnOrder: DataTableState['columnOrder'],
-    columns: DataTableState['columns']
+    columns: DataTableState['columns'],
+    tableRef: RefObject<HTMLTableElement | null>,
+    headCellRefs: RefObject<HTMLTableCellElement[]>
 ) {
     const {
         mon,
         index,
-        headCellRefs,
         transitionTime = 300,
-        tableRef,
         timeoutRef,
         handleColumnOrderUpdate
     } = opts

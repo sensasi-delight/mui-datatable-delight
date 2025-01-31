@@ -2,7 +2,7 @@
 
 // vendors
 import { tss } from 'tss-react/mui'
-import { useState, type RefObject } from 'react'
+import { useState } from 'react'
 // materials
 import IconButton from '@mui/material/IconButton'
 import Box from '@mui/material/Box'
@@ -205,9 +205,7 @@ export default function Toolbar(props: ToolbarProps) {
 
                 {options.download && <ToolbarDownloadButton />}
 
-                {options.print && (
-                    <ToolbarPrintButton printContent={props.tableRef} />
-                )}
+                {options.print && <ToolbarPrintButton />}
 
                 {options.viewColumns && (
                     <ToolbarPopover
@@ -272,7 +270,6 @@ export default function Toolbar(props: ToolbarProps) {
 
 interface ToolbarProps {
     filterUpdate: FilterUpdateType
-    tableRef: RefObject<HTMLTableElement | null>
 }
 
 const useStyles = tss.withName(ClassName.TOOLBAR).create(({ theme }) => ({

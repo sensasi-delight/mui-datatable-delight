@@ -21,6 +21,10 @@ export default function DataTableContextProvider({
     datatableProps: DataTableProps
     children: ReactNode
 }): ReactNode {
+    const draggableHeadCellRefs = useRef<HTMLTableCellElement[]>([])
+    const tableHeadCellElements = useRef<HTMLTableCellElement[]>([])
+    const tableRef = useRef<HTMLTableElement>(null)
+
     const lastDatatableProps = useRef<DataTableProps>(datatableProps)
 
     const restoredState = datatableProps.options?.storageKey
@@ -74,6 +78,7 @@ export default function DataTableContextProvider({
         <DataTableContext.Provider
             value={{
                 components: datatableProps.components ?? {},
+                draggableHeadCellRefs,
                 icons: {
                     ...DEFAULT_ICONS,
                     ...datatableProps.icons
@@ -109,6 +114,8 @@ export default function DataTableContextProvider({
                 options,
                 props: datatableProps,
                 setState,
+                tableHeadCellElements,
+                tableRef,
                 state,
                 textLabels: processTextLabels(datatableProps.textLabels)
             }}

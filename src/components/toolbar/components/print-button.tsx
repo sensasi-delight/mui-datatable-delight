@@ -2,29 +2,26 @@
 
 // vendors
 import { tss } from 'tss-react/mui'
-import { useReactToPrint, type UseReactToPrintOptions } from 'react-to-print'
+import { useReactToPrint } from 'react-to-print'
 // materials
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
-// locals
-import useDataTableContext from '../../../hooks/use-data-table-context'
+// globals
 import { ICON_BUTTON_DEFAULT_SX } from './statics/icon-button-default-sx'
+import useDataTableContext from '@src/hooks/use-data-table-context'
 import ComponentClassName from '@src/enums/class-name'
 
-export function ToolbarPrintButton({
-    printContent
-}: {
-    printContent: UseReactToPrintOptions['contentRef']
-}) {
+export function ToolbarPrintButton() {
     const { classes } = useStyles()
     const {
         icons,
         options,
+        tableRef,
         textLabels: { toolbar: toolbarTextLabels }
     } = useDataTableContext()
 
     const handlePrint = useReactToPrint({
-        contentRef: printContent
+        contentRef: tableRef
     })
 
     return (
