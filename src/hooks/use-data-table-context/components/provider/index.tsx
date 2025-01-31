@@ -13,6 +13,7 @@ import type { DataTableOptions, DataTableState } from '@src/index'
 import { load, save, warnInfo } from '@src/functions'
 import getNewStateOnDataChange from '@src/functions/get-new-state-on-data-change'
 import TableAction from '@src/enums/table-action'
+import type { SetResizableCallback } from '@src/components/columns-resizer'
 
 export default function DataTableContextProvider({
     datatableProps,
@@ -21,6 +22,12 @@ export default function DataTableContextProvider({
     datatableProps: DataTableProps
     children: ReactNode
 }): ReactNode {
+    const draggableHeadCellRefs = useRef<HTMLTableCellElement[]>([])
+    const setHeadResizable = useRef<SetResizableCallback>(undefined)
+    const tableHeadCellElements = useRef<HTMLTableCellElement[]>([])
+    const tableRef = useRef<HTMLTableElement>(null)
+    const updateDividers = useRef<() => void>(undefined)
+
     const lastDatatableProps = useRef<DataTableProps>(datatableProps)
 
     const restoredState = datatableProps.options?.storageKey
@@ -74,6 +81,7 @@ export default function DataTableContextProvider({
         <DataTableContext.Provider
             value={{
                 components: datatableProps.components ?? {},
+                draggableHeadCellRefs,
                 icons: {
                     ...DEFAULT_ICONS,
                     ...datatableProps.icons
@@ -109,6 +117,10 @@ export default function DataTableContextProvider({
                 options,
                 props: datatableProps,
                 setState,
+                setHeadResizable,
+                tableHeadCellElements,
+                tableRef,
+                updateDividers,
                 state,
                 textLabels: processTextLabels(datatableProps.textLabels)
             }}

@@ -6,7 +6,7 @@ import type { DataTableProps } from './types'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { tss } from 'tss-react/mui'
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 import Paper, { type PaperProps } from '@mui/material/Paper'
 // locals
 import { buildMap } from './functions'
@@ -19,9 +19,7 @@ import useDataTableContext from './hooks/use-data-table-context'
 // components
 import AnnounceText from './components/announce-text'
 import BottomBar from './components/bottom-bar'
-import ColumnsResizer, {
-    type SetResizableCallback
-} from './components/columns-resizer'
+import ColumnsResizer from './components/columns-resizer'
 import FilteredValuesList from './components/filtered-values-list'
 import SelectedRowsToolbar from './components/selected-rows-toolbar'
 import Table from './components/table'
@@ -56,23 +54,20 @@ function _DataTable({
 
     const {
         components,
+        draggableHeadCellRefs,
         onAction,
         options,
         props: datatableRootProps,
         setState,
-        state
+        state,
+        setHeadResizable,
+        tableHeadCellElements,
+        tableRef,
+        updateDividers
     } = useDataTableContext()
 
-    const tableRef = useRef<HTMLTableElement>(null)
-    const tableHeadCellElements = useRef<HTMLTableCellElement[]>([])
-    const draggableHeadCellRefs = useRef<HTMLTableCellElement[]>([])
-
-    const setHeadResizable = useRef<SetResizableCallback>(undefined)
-
-    const updateDividers = useRef<() => void>(undefined)
-
     useEffect(() => {
-        if (options.resizableColumns && tableRef) {
+        if (options.resizableColumns && tableRef.current) {
             setHeadResizable.current?.(tableHeadCellElements, tableRef)
 
             /**

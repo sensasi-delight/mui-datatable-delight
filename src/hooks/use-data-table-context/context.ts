@@ -13,7 +13,27 @@ const DataTableContext = createContext<ContextValue>({
     icons: DEFAULT_ICONS,
     options: DEFAULT_OPTIONS,
     state: DEFAULT_STATE,
-    textLabels: processTextLabels(undefined)
+    textLabels: processTextLabels(undefined),
+
+    draggableHeadCellRefs: {
+        current: []
+    },
+
+    tableHeadCellElements: {
+        current: []
+    },
+
+    tableRef: {
+        current: null
+    },
+
+    setHeadResizable: {
+        current: undefined
+    },
+
+    updateDividers: {
+        current: undefined
+    }
 })
 
 export default DataTableContext
