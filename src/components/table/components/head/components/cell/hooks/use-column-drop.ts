@@ -29,7 +29,8 @@ export default function useColumnDrop(opts: OptsType) {
         hover: (_, mon) =>
             handleHover(
                 { ...opts, mon, handleColumnOrderUpdate, timeoutRef },
-                state
+                state.columnOrder,
+                state.columns
             ),
         collect: mon => ({
             isOver: !!mon.isOver(),
@@ -45,7 +46,18 @@ interface OptsType {
     tableRef: RefObject<HTMLTableElement | null>
 }
 
-function getColModel(
+/**
+ * Given the head cell refs, column order, and columns, this function builds an array of column models.
+ * A column model is an object with the following properties:
+ *      - left: the distance from the left edge of the table container to the left edge of the column
+ *      - width: the width of the column
+ *      - columnIndex: the index of the column in the columns array
+ *      - ref: a reference to the column's html element
+ * The column model is used to calculate the position of the drag preview.
+ *
+ * NOTE: EXPORTED ONLY FOR TESTING
+ */
+export function getColModel(
     headCellRefs: OptsType['headCellRefs'],
     columnOrder: DataTableState['columnOrder'],
     columns: DataTableState['columns']
@@ -133,7 +145,12 @@ function getColModel(
     return colModel
 }
 
-function reorderColumns(
+/**
+ * Reorders the columns given the previous column order, the column index, and the new position.
+ *
+ * NOTE: EXPORTED ONLY FOR TESTING
+ */
+export function reorderColumns(
     prevColumnOrder: number[],
     columnIndex: number,
     newPosition: number
@@ -163,7 +180,12 @@ function reorderColumns(
     ]
 }
 
-function handleHover(
+/**
+ * Handles the hover event on a column drop target.
+ *
+ * NOTE: EXPORTED ONLY FOR TESTING
+ */
+export function handleHover(
     opts: OptsType & {
         mon: DropTargetMonitor<
             {
@@ -179,7 +201,8 @@ function handleHover(
             newPosition: number
         ) => void
     },
-    state: DataTableState
+    columnOrder: DataTableState['columnOrder'],
+    columns: DataTableState['columns']
 ) {
     const {
         mon,
@@ -197,12 +220,8 @@ function handleHover(
 
     if (headCellRefs.current !== item.headCellRefs.current) return
 
-    const reorderedCols = reorderColumns(
-        state.columnOrder,
-        item.colIndex,
-        index
-    )
-    const newColModel = getColModel(headCellRefs, reorderedCols, state.columns)
+    const reorderedCols = reorderColumns(columnOrder, item.colIndex, index)
+    const newColModel = getColModel(headCellRefs, reorderedCols, columns)
 
     const newX = mon.getClientOffset()?.x ?? 0
 
@@ -223,18 +242,14 @@ function handleHover(
         transitions[item.columnIndex] = item.left
     })
 
-    const curColModel = getColModel(
-        headCellRefs,
-        state.columnOrder,
-        state.columns
-    )
+    const curColModel = getColModel(headCellRefs, columnOrder, columns)
 
     curColModel.forEach(item => {
         transitions[item.columnIndex] =
             transitions[item.columnIndex] - item.left
     })
 
-    const transitionedElements: HTMLElement[] = state.columnOrder.flatMap(
+    const transitionedElements: HTMLElement[] = columnOrder.flatMap(
         (columnIndex, i) => {
             const colCellEls =
                 tableRef.current?.querySelectorAll<HTMLTableCellElement>(
