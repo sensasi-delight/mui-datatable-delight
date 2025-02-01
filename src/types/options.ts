@@ -7,9 +7,8 @@ import type {
     MUIDataTableDraggableColumns,
     SelectableRows
 } from 'mui-datatables'
-import type { ReactNode } from 'react'
+import type { MouseEvent, ReactNode } from 'react'
 import type { DataTableState } from './state'
-import type { DataTableColumnObjectOptions } from './columns'
 import type { FilterTypeType } from './shared/filter-type-type'
 import { DEFAULT_TEXT_LABELS } from '../hooks/use-data-table-context/function/statics/default-text-labels'
 // enums
@@ -18,6 +17,7 @@ import type TableAction from '../enums/table-action'
 import type DataTableSearchOptions from './options/search'
 import type { BooleanOrDisabled } from './values/boolean-or-disabled'
 import type { DefaultDataRowItemType } from './values/default-data-row-item-type'
+import type { SelectedRowDataState } from './state/selected-row-data'
 
 export interface DataTableSortOrderOption {
     name: string
@@ -210,7 +210,7 @@ export interface DataTableOptions<DataRowItemType = DefaultDataRowItemType>
             colIndex: number
             rowIndex: number
             dataIndex: number
-            event: React.MouseEvent
+            event: MouseEvent
         }
     ) => void
     onChangePage?: (currentPage: number) => void
@@ -300,7 +300,7 @@ export interface DataTableOptions<DataRowItemType = DefaultDataRowItemType>
     onRowClick?: (
         rowData: string[],
         rowMeta: { dataIndex: number; rowIndex: number },
-        event: React.MouseEvent<HTMLTableRowElement, MouseEvent>
+        event: MouseEvent<HTMLTableRowElement, MouseEvent>
     ) => void
 
     /**
@@ -318,8 +318,8 @@ export interface DataTableOptions<DataRowItemType = DefaultDataRowItemType>
      */
     onRowsDelete?: (
         rowsDeleted: {
-            lookup: { [dataIndex: number]: boolean }
-            data: Array<{ index: number; dataIndex: number }>
+            lookup: boolean[]
+            data: SelectedRowDataState[]
         },
         newTableData: any[]
         // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
@@ -642,7 +642,7 @@ interface DataTableCustomsOptions<DataRowItemType> {
     /**
      * Override default sorting with custom function.
      *
-     * If you just need to override the sorting for a particular column, see the {@link DataTableColumnObjectOptions.sortCompare} method in the Column options.
+     * If you just need to override the sorting for a particular column, see the {@link ./columns/DataTableColumnObjectOptions.sortCompare} method in the Column options.
      *
      * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-sorting/index.tsx
      */
@@ -676,8 +676,8 @@ interface DataTableCustomsOptions<DataRowItemType> {
      */
     customSelectedRowsToolbar?: (
         selectedRows: {
-            data: Array<{ index: number; dataIndex: number }>
-            lookup: { [key: number]: boolean }
+            data: SelectedRowDataState[]
+            lookup: boolean[]
         },
         displayData: DisplayData,
         setSelectedRows: (rows: number[]) => void
@@ -693,8 +693,8 @@ interface DataTableCustomsOptions<DataRowItemType> {
      */
     customToolbarSelect?: (
         selectedRows: {
-            data: Array<{ index: number; dataIndex: number }>
-            lookup: { [key: number]: boolean }
+            data: SelectedRowDataState[]
+            lookup: boolean[]
         },
         displayData: DisplayData,
         setSelectedRows: (rows: number[]) => void

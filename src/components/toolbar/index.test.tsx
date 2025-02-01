@@ -52,12 +52,7 @@ describe('<Toolbar />', function () {
         return {
             result: render(
                 <DataTableContextProvider datatableProps={props}>
-                    <Toolbar
-                        filterUpdate={() => {}}
-                        tableRef={{
-                            current: null
-                        }}
-                    />
+                    <Toolbar filterUpdate={() => {}} />
                 </DataTableContextProvider>
             )
         }

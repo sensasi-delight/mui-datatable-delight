@@ -42,7 +42,7 @@ export interface DataTableColumnObjectOptions<T> {
      * This method only affects the display in the table's header, other areas of the table (such as the View Columns popover), will use the column's label.
      */
     customHeadLabelRender?:
-        | ((options: CustomHeadLabelRenderOptions) => string | React.ReactNode)
+        | ((options: CustomHeadLabelRenderOptions) => string | ReactNode)
         | undefined
 
     /**
@@ -60,7 +60,7 @@ export interface DataTableColumnObjectOptions<T> {
               columnMeta: MUIDataTableCustomHeadRenderer,
               handleToggleColumn: (columnIndex: number) => void,
               sortOrder: DataTableSortOrderOption
-          ) => string | React.ReactNode)
+          ) => string | ReactNode)
         | undefined
 
     /**
@@ -79,7 +79,7 @@ export interface DataTableColumnObjectOptions<T> {
      *
      * @default true
      */
-    display: Boolean | 'excluded'
+    display: boolean | 'excluded'
 
     /**
      * Display column in the CSV download file.

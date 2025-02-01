@@ -313,7 +313,7 @@ function RenderRow<T>({
 
     const isRowSelected: boolean =
         options.selectableRows !== 'none'
-            ? Boolean(selectedRows.lookup && selectedRows.lookup[dataIndex])
+            ? Boolean(selectedRows.lookup[dataIndex])
             : false
 
     const isRowSelectable = getIsRowSelectable(
@@ -336,32 +336,38 @@ function RenderRow<T>({
         const { dataIndex } = row
         const { isRowExpandable } = options
 
-        let { expandedRows } = state
+        const { expandedRows } = state
         const expandedRowsData = [...expandedRows.data]
         let shouldCollapseExpandedRow = false
 
         let hasRemovedRow = false
         let removedRow: string[] = []
 
-        for (var cIndex = 0; cIndex < expandedRowsData.length; cIndex++) {
-            if (expandedRowsData[cIndex]?.dataIndex === dataIndex) {
+        for (const item of expandedRowsData) {
+            if (item?.dataIndex === dataIndex) {
                 shouldCollapseExpandedRow = true
                 break
             }
         }
 
+        const cIndex = expandedRowsData.findIndex(
+            item => item?.dataIndex === dataIndex
+        )
+
         if (shouldCollapseExpandedRow) {
             if (
-                (isRowExpandable && isRowExpandable(dataIndex, expandedRows)) ||
+                isRowExpandable?.(dataIndex, expandedRows) ||
                 !isRowExpandable
             ) {
                 removedRow = expandedRowsData.splice(cIndex, 1)
                 hasRemovedRow = true
             }
         } else {
-            if (isRowExpandable && isRowExpandable(dataIndex, expandedRows))
+            if (isRowExpandable?.(dataIndex, expandedRows)) {
                 expandedRowsData.push(row)
-            else if (!isRowExpandable) expandedRowsData.push(row)
+            } else if (!isRowExpandable) {
+                expandedRowsData.push(row)
+            }
         }
 
         const newState = {

@@ -32,11 +32,9 @@ export default function FilteredValuesList<T>({
     })
 
     const filterListRenderers = state.columns.map(column => {
-        if (
-            column.customFilterListOptions &&
-            column.customFilterListOptions.render
-        )
+        if (column.customFilterListOptions?.render) {
             return column.customFilterListOptions.render
+        }
 
         // DEPRECATED: This option is being replaced with customFilterListOptions.render
         return column.customFilterListRender ?? (<T,>(f: T) => f)

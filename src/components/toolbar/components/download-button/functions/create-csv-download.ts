@@ -118,7 +118,7 @@ function prepare(data: Primitive): Primitive {
         // Places single quote before the appearance of dangerous characters if they
         // are the first in the data string.
         return data
-            .replace(/\"/g, '""') // replaceDoubleQuoteInString
+            .replace(/"/g, '""') // replaceDoubleQuoteInString
             .replace(/^\+|^-|^=|^@/g, "'$&")
     }
 

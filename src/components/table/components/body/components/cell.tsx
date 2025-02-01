@@ -47,7 +47,7 @@ export function TableBodyCell<T>({
                     `)
             }
         },
-        [options?.onCellClick, children, colIndex, rowIndex, dataIndex]
+        [children, colIndex, rowIndex, dataIndex, options]
     )
 
     const cells = [
@@ -114,7 +114,7 @@ export function TableBodyCell<T>({
                 'scrollMaxHeight',
                 'scrollFullHeight',
                 'scrollFullHeightFullWidth'
-            ].indexOf(options.responsive) !== -1)
+            ].includes(options.responsive))
             ? cells.slice(1, 2)
             : cells
 

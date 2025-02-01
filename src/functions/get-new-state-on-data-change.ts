@@ -116,7 +116,7 @@ export default function getNewStateOnDataChange<T>(
                 }
 
                 if (
-                    filterData[colIndex]?.indexOf(value as string) < 0 &&
+                    !filterData[colIndex]?.includes(value as string) &&
                     !Array.isArray(value)
                 ) {
                     filterData[colIndex]?.push(value as string)
@@ -132,7 +132,7 @@ export default function getNewStateOnDataChange<T>(
                             elmVal = element
                         }
 
-                        if (filterData[colIndex]?.indexOf(elmVal) < 0) {
+                        if (!filterData[colIndex]?.includes(elmVal)) {
                             filterData[colIndex]?.push(elmVal)
                         }
                     })
@@ -153,11 +153,7 @@ export default function getNewStateOnDataChange<T>(
 
         if (column.filterList) {
             filterList[colIndex] = column.filterList
-        } else if (
-            state.filterList &&
-            state.filterList[colIndex] &&
-            (state.filterList[colIndex]?.length ?? 0) > 0
-        ) {
+        } else if ((state.filterList[colIndex]?.length ?? 0) > 0) {
             filterList[colIndex] = state.filterList[colIndex]
         }
 
@@ -184,8 +180,7 @@ export default function getNewStateOnDataChange<T>(
 
     if (status === TABLE_LOAD.INITIAL) {
         if (
-            options.rowsSelected &&
-            options.rowsSelected.length &&
+            options.rowsSelected?.length &&
             options.selectableRows === 'multiple'
         ) {
             options.rowsSelected
@@ -253,11 +248,7 @@ export default function getNewStateOnDataChange<T>(
             }
         }
 
-        if (
-            options.rowsExpanded &&
-            options.rowsExpanded.length &&
-            options.expandableRows
-        ) {
+        if (options.rowsExpanded?.length && options.expandableRows) {
             options.rowsExpanded.forEach(row => {
                 let rowPos = row
 

@@ -75,9 +75,7 @@ export default function computeDisplayRow<T>(
             columnValue =
                 typeof funcResult === 'string' || !funcResult
                     ? funcResult
-                    : funcResult.props && funcResult.props.value
-                      ? funcResult.props.value
-                      : columnValue
+                    : (funcResult.props?.value ?? columnValue)
 
             displayRow.push(columnDisplay)
         } else {
@@ -94,16 +92,14 @@ export default function computeDisplayRow<T>(
         const filterType = column?.filterType ?? options.filterType
 
         if (filterVal?.length || filterType === 'custom') {
-            if (column?.filterOptions && column.filterOptions.logic) {
-                if (
-                    column.filterOptions.logic(
-                        columnValue,
-                        filterVal ?? [],
-                        row
-                    )
-                ) {
-                    isFiltered = true
-                }
+            if (
+                column?.filterOptions?.logic?.(
+                    columnValue,
+                    filterVal ?? [],
+                    row
+                )
+            ) {
+                isFiltered = true
             } else if (
                 filterType === 'textField' &&
                 !hasSearchText(columnVal, filterVal, caseSensitive)
@@ -120,15 +116,15 @@ export default function computeDisplayRow<T>(
                 Array.isArray(columnValue)
             ) {
                 if (options.filterArrayFullMatch) {
-                    const isFullMatch = filterVal?.every(
-                        el => columnValue?.indexOf(el) >= 0
+                    const isFullMatch = filterVal?.every(el =>
+                        columnValue?.includes(el)
                     )
                     if (!isFullMatch) {
                         isFiltered = true
                     }
                 } else {
-                    const isAnyMatch = filterVal?.some(
-                        el => columnValue?.indexOf(el) >= 0
+                    const isAnyMatch = filterVal?.some(el =>
+                        columnValue?.includes(el)
                     )
 
                     if (!isAnyMatch) {

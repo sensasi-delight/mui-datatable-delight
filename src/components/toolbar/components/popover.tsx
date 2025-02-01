@@ -1,6 +1,13 @@
 'use client'
 
-import { type ReactNode, useEffect, useRef, useState } from 'react'
+import {
+    type ReactNode,
+    useEffect,
+    useRef,
+    useState,
+    type KeyboardEvent,
+    type MouseEvent
+} from 'react'
 // materials
 import IconButton, { type IconButtonProps } from '@mui/material/IconButton'
 import MuiPopover, { type PopoverProps } from '@mui/material/Popover'
@@ -35,13 +42,11 @@ export function ToolbarPopover({
     }
 
     function handleTriggerClick(
-        event:
-            | React.KeyboardEvent<HTMLButtonElement>
-            | React.MouseEvent<HTMLButtonElement>
+        event: KeyboardEvent<HTMLButtonElement> | MouseEvent<HTMLButtonElement>
     ) {
         anchorEl.current = event.currentTarget
 
-        iconButtonProps.onClick?.(event as React.MouseEvent<HTMLButtonElement>)
+        iconButtonProps.onClick?.(event as MouseEvent<HTMLButtonElement>)
 
         open(true)
     }

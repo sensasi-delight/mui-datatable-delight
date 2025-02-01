@@ -84,12 +84,12 @@ function getDataToDownload(data: any[], columnOrderIndices: number[]): any[] {
 }
 
 function shouldUseDisplayedRowsOnly(options: DataTableOptions): boolean {
-    return options.downloadOptions?.filterOptions?.useDisplayedRowsOnly || false
+    return options.downloadOptions?.filterOptions?.useDisplayedRowsOnly ?? false
 }
 
-function getFilteredDataToDownload(
-    displayData: DataTableState['displayData'],
-    data: DataTableState['data'],
+function getFilteredDataToDownload<T>(
+    displayData: DataTableState<T>['displayData'],
+    data: DataTableState<T>['data'],
     columnOrderIndices: number[]
 ): any[] {
     return displayData
@@ -125,7 +125,7 @@ function isReactElement(obj: any): boolean {
 
 function shouldUseDisplayedColumnsOnly(options: DataTableOptions): boolean {
     return (
-        options.downloadOptions?.filterOptions?.useDisplayedColumnsOnly || false
+        options.downloadOptions?.filterOptions?.useDisplayedColumnsOnly ?? false
     )
 }
 

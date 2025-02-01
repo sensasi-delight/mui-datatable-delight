@@ -1,1 +1,1 @@
-export type BooleanOrDisabled = Boolean | 'disabled'
+export type BooleanOrDisabled = boolean | 'disabled'

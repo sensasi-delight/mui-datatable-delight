@@ -3,12 +3,12 @@ import { warnDeprecated } from '.'
 import type { ColumnState } from '@src/types/state/column'
 
 /*
- *  Build the source table data
+ * Build the source table data
  *
- *  newColumns - columns from the options object.
- *  prevColumns - columns object saved onto ths state.
- *  newColumnOrder - columnOrder from the options object.
- *  prevColumnOrder - columnOrder object saved onto the state.
+ * newColumns - columns from the options object.
+ * prevColumns - columns object saved onto ths state.
+ * newColumnOrder - columnOrder from the options object.
+ * prevColumnOrder - columnOrder object saved onto the state.
  */
 export default function buildColumns<T>(
     newColumns: DataTableProps<T>['columns'],
@@ -52,8 +52,10 @@ export default function buildColumns<T>(
                 }
             }
 
-            const options =
-                { ...column.options, display: column.options?.display } ?? {}
+            const options = {
+                ...column.options,
+                display: column.options?.display
+            }
 
             if (options.sortDirection === null || options.sortDirection) {
                 warnDeprecated(

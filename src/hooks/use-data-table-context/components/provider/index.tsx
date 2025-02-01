@@ -6,7 +6,8 @@ import {
     type ReactNode,
     useEffect,
     useRef,
-    type Context
+    type Context,
+    useCallback
 } from 'react'
 // globals
 import type { DataTableProps } from '@src/types'
@@ -40,7 +41,7 @@ export default function DataTableContextProvider<DataRowItemType>({
         ? load(datatableProps.options.storageKey)
         : undefined
 
-    function getInitialState() {
+    const getInitialState = useCallback(() => {
         const newState = getNewStateOnDataChange(
             datatableProps,
             1,
@@ -57,7 +58,7 @@ export default function DataTableContextProvider<DataRowItemType>({
         datatableProps.options?.onTableInit?.(TableAction.INITIALIZED, newState)
 
         return newState
-    }
+    }, [datatableProps, restoredState])
 
     const [state, setState] =
         useState<DataTableState<DataRowItemType>>(getInitialState)
@@ -81,7 +82,7 @@ export default function DataTableContextProvider<DataRowItemType>({
 
             return getInitialState()
         })
-    }, [datatableProps])
+    }, [datatableProps, getInitialState])
 
     const options = getConstructedOption(datatableProps?.options)
 

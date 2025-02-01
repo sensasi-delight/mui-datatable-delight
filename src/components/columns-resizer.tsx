@@ -1,6 +1,6 @@
 'use client'
 
-import React, { type JSX, useEffect, useState } from 'react'
+import React, { type JSX, useEffect, useState, useCallback } from 'react'
 import { tss } from 'tss-react/mui'
 // locals
 import useDataTableContext from '@src/hooks/use-data-table-context'
@@ -11,7 +11,7 @@ import ComponentClassName from '@src/enums/class-name'
  *
  * @see https://mui-datatable-delight.vercel.app/docs/features/resizable-columns
  */
-export default function ColumnsResizer({}: DataTableResizeProps): JSX.Element {
+export default function ColumnsResizer(): JSX.Element {
     const tssHook = useStyles()
     // const classes = classesFromProp ?? tssHook.classes
     const classes = tssHook.classes
@@ -33,6 +33,29 @@ export default function ColumnsResizer({}: DataTableResizeProps): JSX.Element {
         number | undefined
     >()
     const [minWidths, setMinWidths] = useState<number[]>([])
+
+    const updateCellWidths = useCallback(() => {
+        let lastLeft = 0
+
+        resizeCoords.forEach((item, columnId) => {
+            const newWidthRaw =
+                ((item.left - lastLeft) / (tableWidth ?? 100)) * 100
+
+            /**
+             * Using .toFixed(2) causes the columns to jitter when resized. On all browsers I (Patrojk) have tested,
+             * a width with a floating point decimal works fine. It's unclear to me why the numbers were being rounded.
+             * However, I'm putting in an undocumented escape hatch to use toFixed in case the change introduces a bug.
+             * The below code will be removed in a later release if no problems with non-rounded widths are reported.
+             */
+            const newWidth = Math.round(newWidthRaw * 100) / 100
+
+            const thCell = tableHeadCellElements.current?.[columnId]
+
+            if (thCell) thCell.style.width = newWidth + '%'
+
+            lastLeft = item.left
+        })
+    }, [resizeCoords, tableWidth, tableHeadCellElements])
 
     useEffect(() => {
         if (tableRef.current) {
@@ -56,7 +79,7 @@ export default function ColumnsResizer({}: DataTableResizeProps): JSX.Element {
 
             updateCellWidths()
         }
-    }, [tableRef.current, currentWindowWidth])
+    }, [tableRef, currentWindowWidth, tableHeadCellElements, updateCellWidths])
 
     useEffect(() => {
         function updateCurrentWidth() {
@@ -73,29 +96,6 @@ export default function ColumnsResizer({}: DataTableResizeProps): JSX.Element {
             window.removeEventListener('resize', updateCurrentWidth, false)
         }
     }, [])
-
-    function updateCellWidths() {
-        let lastLeft = 0
-
-        resizeCoords.forEach((item, columnId) => {
-            const newWidthRaw =
-                ((item.left - lastLeft) / (tableWidth ?? 100)) * 100
-
-            /**
-             * Using .toFixed(2) causes the columns to jitter when resized. On all browsers I (Patrojk) have tested,
-             * a width with a floating point decimal works fine. It's unclear to me why the numbers were being rounded.
-             * However, I'm putting in an undocumented escape hatch to use toFixed in case the change introduces a bug.
-             * The below code will be removed in a later release if no problems with non-rounded widths are reported.
-             */
-            const newWidth = Math.round(newWidthRaw * 100) / 100
-
-            const thCell = tableHeadCellElements.current?.[columnId]
-
-            if (thCell) thCell.style.width = newWidth + '%'
-
-            lastLeft = item.left
-        })
-    }
 
     function onResizeStart(columnId: number) {
         if (!tableRef.current) {
@@ -171,7 +171,7 @@ export default function ColumnsResizer({}: DataTableResizeProps): JSX.Element {
 
         const selectableRows = options?.selectableRows ?? 'multiple'
 
-        let parentOffsetLeft = getParentOffsetLeft(tableRef.current)
+        const parentOffsetLeft = getParentOffsetLeft(tableRef.current)
 
         const nextCoord = (columnId: number) => {
             let nextId = columnId + 1
@@ -343,11 +343,6 @@ export default function ColumnsResizer({}: DataTableResizeProps): JSX.Element {
             })}
         </div>
     )
-}
-
-interface DataTableResizeProps {
-    /** Extend the style applied to components */
-    // classes?: ReturnType<typeof useStyles>['classes']
 }
 
 const useStyles = tss.withName(ComponentClassName.COLUMN_RESIZER).create({

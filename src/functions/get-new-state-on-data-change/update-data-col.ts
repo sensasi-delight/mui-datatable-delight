@@ -36,8 +36,8 @@ export default function updateDataCol<T>(
     datatableProps: DataTableProps<T>,
     setState: (newState: DataTableState<T>) => void
 ): DataTableState<T> {
-    let changedData = prevState.data
-    let filterData = prevState.filterData
+    const changedData = prevState.data
+    const filterData = prevState.filterData
 
     const tableMeta = getTableMeta(
         row,
@@ -57,7 +57,7 @@ export default function updateDataCol<T>(
     const filterValue =
         isValidElement(funcResult) && funcResult.props?.value
             ? funcResult.props.value
-            : prevState['data'][row][index]
+            : prevState.data[row][index]
 
     const prevFilterIndex = filterData[index]?.indexOf(filterValue)
     filterData[index]?.splice(prevFilterIndex ?? 0, 1, filterValue)

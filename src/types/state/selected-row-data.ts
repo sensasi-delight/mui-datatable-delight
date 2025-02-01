@@ -1,1 +1,4 @@
-export type SelectedRowDataState = { index: number; dataIndex: number }
+export interface SelectedRowDataState {
+    index: number
+    dataIndex: number
+}

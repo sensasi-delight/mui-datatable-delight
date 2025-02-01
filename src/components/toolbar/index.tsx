@@ -46,9 +46,9 @@ export default function Toolbar(props: ToolbarProps) {
 
     const [showSearch, setShowSearch] = useState(
         Boolean(
-            state.searchText ||
-                options.searchText ||
-                options.searchOpen ||
+            state.searchText ??
+                options.searchText ??
+                options.searchOpen ??
                 options.searchAlwaysOpen
         )
     )
@@ -259,10 +259,9 @@ export default function Toolbar(props: ToolbarProps) {
                     </ToolbarPopover>
                 )}
 
-                {options.customToolbar &&
-                    options.customToolbar({
-                        displayData: state.displayData
-                    })}
+                {options.customToolbar?.({
+                    displayData: state.displayData
+                })}
             </div>
         </Box>
     )

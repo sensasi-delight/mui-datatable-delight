@@ -147,8 +147,7 @@ export default function TableHead({ selectRowUpdate }: Props) {
         tableHeadCellElements.current[pos] = el
     }
 
-    const numSelected =
-        (state.selectedRows && state.selectedRows.data.length) || 0
+    const numSelected = state.selectedRows.data.length ?? 0
     let isIndeterminate = numSelected > 0 && numSelected < state.count
     let isChecked = numSelected > 0 && numSelected >= state.count
 
@@ -161,8 +160,8 @@ export default function TableHead({ selectRowUpdate }: Props) {
         options.selectToolbarPlacement === 'above'
     ) {
         if (isChecked) {
-            for (let ii = 0; ii < state.data.length; ii++) {
-                if (!state.selectedRows.lookup[state.data[ii].dataIndex]) {
+            for (const item of state.data) {
+                if (!state.selectedRows.lookup[item.dataIndex]) {
                     isChecked = false
                     isIndeterminate = true
                     break

@@ -1,5 +1,5 @@
 // vendors
-import type { Dispatch, SetStateAction } from 'react'
+import type { Dispatch, RefObject, SetStateAction } from 'react'
 // local types
 import type { DataTableComponents } from '@src/types/components'
 import type { DataTableOptions } from '@src/types/options'
@@ -13,7 +13,7 @@ import type { processTextLabels } from '../function/process-text-labels'
 
 export default interface ContextValue<DataRowItemType> {
     components: DataTableComponents
-    draggableHeadCellRefs: React.RefObject<HTMLTableCellElement[]>
+    draggableHeadCellRefs: RefObject<HTMLTableCellElement[]>
     icons: typeof DEFAULT_ICONS
     onAction?: (
         action: TableAction,
@@ -23,7 +23,7 @@ export default interface ContextValue<DataRowItemType> {
     props: DataTableProps<DataRowItemType>
     setState: Dispatch<SetStateAction<DataTableState<DataRowItemType>>>
     state: DataTableState<DataRowItemType>
-    tableHeadCellElements: React.RefObject<HTMLTableCellElement[]>
-    tableRef: React.RefObject<HTMLTableElement | null>
+    tableHeadCellElements: RefObject<HTMLTableCellElement[]>
+    tableRef: RefObject<HTMLTableElement | null>
     textLabels: ReturnType<typeof processTextLabels>
 }

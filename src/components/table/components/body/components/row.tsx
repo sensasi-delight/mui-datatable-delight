@@ -20,16 +20,14 @@ export function DataTableBodyRow({
             hover={options.rowHover}
             onClick={onClick}
             className={cx(
+                classes.root,
                 {
-                    [classes.root]: true,
-
                     /**
                      * @todo CHECK THIS `.hover` class ON OLDER CODE
                      */
                     // [classes.hover]: options.rowHover,
-
                     [classes.hoverCursor]:
-                        (options.selectableRowsOnClick && isRowSelectable) ||
+                        (options.selectableRowsOnClick && isRowSelectable) ??
                         options.expandableRowsOnClick,
                     [classes.responsiveSimple]: options.responsive === 'simple',
                     [classes.responsiveStacked]:

@@ -13,7 +13,7 @@ import useDataTableContext from '@src/hooks/use-data-table-context'
 import TableAction from '@src/enums/table-action'
 import ComponentClassName from '@src/enums/class-name'
 
-export default function ColumnVisibilitiesBox({}: ToolbarViewColProps) {
+export default function ColumnVisibilitiesBox() {
     const { components, onAction, options, state, textLabels } =
         useDataTableContext()
     const { classes } = useStyles()
@@ -28,7 +28,7 @@ export default function ColumnVisibilitiesBox({}: ToolbarViewColProps) {
             columns: newColumns
         })
 
-        const cb = options.onViewColumnsChange || options.onColumnViewChange
+        const cb = options.onViewColumnsChange ?? options.onColumnViewChange
 
         cb?.(
             newColumns[index].name,
@@ -117,7 +117,7 @@ const useStyles = tss
         }
     }))
 
-export interface ToolbarViewColProps {
-    /** Extend the style applied to components */
-    // classes?: PropTypes.object
-}
+// export interface ToolbarViewColProps {
+//     /** Extend the style applied to components */
+//     // classes?: PropTypes.object
+// }

@@ -12,7 +12,7 @@
 export default function hasSearchText(
     toSearch: string,
     toFind: string,
-    caseSensitive: boolean = false
+    caseSensitive = false
 ) {
     let stack = toSearch.toString()
     let needle = toFind.toString()
@@ -22,5 +22,5 @@ export default function hasSearchText(
         stack = stack.toLowerCase()
     }
 
-    return stack.indexOf(needle) >= 0
+    return stack.includes(needle)
 }

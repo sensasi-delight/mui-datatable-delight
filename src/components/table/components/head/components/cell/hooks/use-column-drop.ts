@@ -63,7 +63,7 @@ export function getColModel<T>(
     columnOrder: DataTableState<T>['columnOrder'],
     columns: DataTableState<T>['columns']
 ) {
-    let colModel = []
+    const colModel = []
 
     function getFakeCell() {
         let leftMostCell = { offsetLeft: Infinity }
@@ -88,9 +88,7 @@ export function getColModel<T>(
     }
 
     // left most cell is the select cell, if it exists
-    const leftMostCell = headCellRefs.current[0]
-        ? headCellRefs.current[0]
-        : getFakeCell()
+    const leftMostCell = headCellRefs.current[0] ?? getFakeCell()
 
     let ii = 0,
         parentOffsetLeft = 0,

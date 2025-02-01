@@ -45,12 +45,12 @@ export function DataTable<DataRowItemType = DefaultDataRowItemType>({
 }: DataTableProps<DataRowItemType>) {
     return (
         <DataTableContextProvider datatableProps={props}>
-            <_DataTable className={className} ref={ref} />
+            <DataTable_ className={className} ref={ref} />
         </DataTableContextProvider>
     )
 }
 
-function _DataTable({
+function DataTable_({
     className,
     ref
 }: {
@@ -170,11 +170,8 @@ function _DataTable({
                 if (selectedRowsLen > displayData.length) {
                     isDeselect = true
                 } else {
-                    for (let ii = 0; ii < displayData.length; ii++) {
-                        const dataIndex = displayData[ii]?.dataIndex
-                        if (dataIndex) {
-                            isDeselect = !selectedMap[dataIndex]
-                        }
+                    for (const item of selectedRows) {
+                        isDeselect = !selectedMap[item.dataIndex]
                     }
                 }
             }
@@ -223,7 +220,7 @@ function _DataTable({
 
                 // handle rows affected by shift+click
                 if (shiftAdjacentRows.length > 0) {
-                    let shiftAdjacentMap = buildMap(shiftAdjacentRows)
+                    const shiftAdjacentMap = buildMap(shiftAdjacentRows)
 
                     const temp = selectedRows.slice().reverse()
 
@@ -241,7 +238,7 @@ function _DataTable({
 
                 // handle rows affected by shift+click
                 if (shiftAdjacentRows.length > 0) {
-                    let selectedMap = buildMap(selectedRows)
+                    const selectedMap = buildMap(selectedRows)
                     shiftAdjacentRows.forEach(aRow => {
                         if (!selectedMap[aRow.dataIndex]) {
                             selectedRows.push(aRow)

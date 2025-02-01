@@ -5,6 +5,7 @@ import type {
     MUIDataTableTextLabelsToolbar,
     MUIDataTableTextLabelsViewColumns
 } from 'mui-datatables'
+import type { ReactNode } from 'react'
 
 /*
  * Default text labels.
@@ -46,7 +47,7 @@ export const DEFAULT_TEXT_LABELS: TextLabelsType = {
 
 interface TextLabelsType {
     body: {
-        noMatch: string | React.ReactNode
+        noMatch: string | ReactNode
         toolTip: string
     }
     filter: MUIDataTableTextLabelsFilter
