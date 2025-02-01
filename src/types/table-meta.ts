@@ -1,11 +1,11 @@
 import type { DataTableState } from '..'
 
-export default interface DataTableMeta {
-    columnData: DataTableState['columns'][0]
+export default interface DataTableMeta<T> {
+    columnData: DataTableState<T>['columns'][0]
     columnIndex: number
-    currentTableData: DataTableState['data']
-    rowData: DataTableState['data']
+    currentTableData: DataTableState<T>['data']
+    rowData: DataTableState<T>['data']
     rowIndex: number
-    tableData: DataTableState['data']
-    tableState: DataTableState
+    tableData: DataTableState<T>['data']
+    tableState: DataTableState<T>
 }

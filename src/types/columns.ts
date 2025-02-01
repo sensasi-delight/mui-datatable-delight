@@ -1,73 +1,178 @@
-import type { MUIDataTableColumnOptions } from 'mui-datatables'
 import type { DataTableSortOrderOption } from './options'
 import type { DataTableState } from './state'
 import type { ReactNode } from 'react'
 import type { FilterTypeType } from './shared/filter-type-type'
+import type DataTableMeta from './table-meta'
+import type {
+    CustomHeadLabelRenderOptions,
+    MUIDataTableCustomFilterListOptions,
+    MUIDataTableCustomHeadRenderer
+} from 'mui-datatables'
 
-export interface DataTableColumnObject {
+export interface DataTableColumnObject<T> {
     label?: string
     name: string
-    options?: DataTableColumnObjectOptions
-    // options?: {
-    //     display?: boolean | 'excluded' | 'always'
-    //     empty?: boolean
-    //     filter?: boolean
-    //     sort?: boolean
-    //     print?: boolean
-    //     searchable?: boolean
-    //     download?: boolean
-    //     viewColumns?: boolean
-
-    //     filterList?: MUIDataTableColumnOptions['filterList']
-
-    //     // PROPS TYPE DECLARATION
-    //     // filterOptions: PropTypes.oneOfType([
-    //     //     PropTypes.array,
-    //     //     PropTypes.shape({
-    //     //         names: PropTypes.array,
-    //     //         logic: PropTypes.func,
-    //     //         display: PropTypes.func
-    //     //     })
-    //     // ]),
-    //     filterOptions?: MUIDataTableColumnOptions['filterOptions']
-
-    //     filterType?:
-    //         | 'dropdown'
-    //         | 'checkbox'
-    //         | 'multiselect'
-    //         | 'textField'
-    //         | 'custom'
-
-    //     customHeadRender?: MUIDataTableColumnOptions['customHeadRender']
-    //     customBodyRender?: MUIDataTableColumnOptions['customBodyRender']
-    //     customBodyRenderLite?: MUIDataTableColumnOptions['customBodyRenderLite']
-    //     customHeadLabelRender?: MUIDataTableColumnOptions['customHeadLabelRender']
-    //     customFilterListOptions?: MUIDataTableColumnOptions['customFilterListOptions']
-
-    //     /**
-    //      * @deprecated  Use {@link customFilterListOptions} instead.
-    //      */
-    //     customFilterListRender?: MUIDataTableColumnOptions['customHeadRender']
-    //     setCellProps?: (
-    //         cellValue: string,
-    //         rowIndex: number,
-    //         columnIndex: number
-    //     ) => object
-
-    //     setCellHeaderProps?: (
-    //         columnMeta: MUIDataTableCustomHeadRenderer
-    //     ) => object
-
-    //     sortThirdClickReset?: boolean
-    //     sortDescFirst?: boolean
-    // }
+    options?: DataTableColumnObjectOptions<T>
 }
 
-export interface DataTableColumnObjectOptions
-    extends Omit<
-        MUIDataTableColumnOptions,
-        'filterType' | 'filterOptions' | 'filterList' | 'sortCompare'
-    > {
+export interface DataTableColumnObjectOptions<T> {
+    /**
+     * Function that returns a string or React component.
+     * Used to display data within all table cells of a given column.
+     * The value returned from this function will be used for filtering in the filter dialog.
+     * If this isn't need, you may want to consider customBodyRenderLite instead.
+     *
+     * [Example](https://github.com/gregnb/mui-datatables/blob/master/examples/component/index.js)
+     */
+    customBodyRender?:
+        | ((
+              value: any,
+              tableMeta: DataTableMeta<T>,
+              updateValue: (value: string) => void
+          ) => string | React.ReactNode)
+        | undefined
+
+    /**
+     * Similar to and performing better than `customBodyRender`, however with the following caveats:
+     * 1. The value returned from this function is not used for filtering, so the filter dialog will use the raw data from the data array.
+     * 2. This method only gives you the dataIndex and rowIndex, leaving you to lookup the column value.
+     *
+     * [Example](https://github.com/gregnb/mui-datatables/blob/master/examples/large-data-set/index.js)
+     */
+    customBodyRenderLite?:
+        | ((dataIndex: number, rowIndex: number) => string | React.ReactNode)
+        | undefined
+
+    /**
+     * Function that returns a string or React component.
+     * Used for creating a custom header to a column.
+     * This method only affects the display in the table's header, other areas of the table (such as the View Columns popover), will use the column's label.
+     */
+    customHeadLabelRender?:
+        | ((options: CustomHeadLabelRenderOptions) => string | React.ReactNode)
+        | undefined
+
+    /**
+     * These options only affect the filter chips that display after filter are selected.
+     * To modify the filters themselves, see filterOptions.
+     */
+    customFilterListOptions?: MUIDataTableCustomFilterListOptions
+
+    /** @deprecated use customFilterListOptions.render */
+    customFilterListRender?: ((value: any) => string) | undefined
+
+    /** Function that returns a string or React component. Used as display for column header. */
+    customHeadRender?:
+        | ((
+              columnMeta: MUIDataTableCustomHeadRenderer,
+              handleToggleColumn: (columnIndex: number) => void,
+              sortOrder: DataTableSortOrderOption
+          ) => string | React.ReactNode)
+        | undefined
+
+    /**
+     * Determines if the column can be dragged.
+     * The draggableColumns.enabled option must also be true.
+     * @default true
+     */
+    draggable?: boolean | undefined
+
+    /**
+     * Display the column.
+     * Possible values:
+     * - true: Column is visible and toggleable via the View Columns Popover
+     * - false: Column is not visible but can be made so in the View Columns Popover
+     * - 'excluded': Column is not visible and not toggleable in the View Column Popover
+     *
+     * @default true
+     */
+    display?: Boolean | 'excluded'
+
+    /**
+     * Display column in the CSV download file.
+     * @default true
+     */
+    download?: boolean | undefined
+
+    /**
+     * This denote whether the column has data or not.
+     * For use with intentionally empty columns.
+     * @default false
+     */
+    empty?: boolean | undefined
+
+    /**
+     * Display column in filter list
+     * @default true
+     */
+    filter?: boolean | undefined
+
+    /** Display hint icon with string as tooltip on hover. */
+    hint?: string | undefined
+
+    /**
+     * Display column when printing.
+     * @default true
+     */
+    print?: boolean | undefined
+
+    /**
+     * Exclude/include column from search results.
+     * @default true
+     */
+    searchable?: boolean | undefined
+
+    /**
+     * Is called for each header cell and allows you to return custom props for the header cell based on its data.
+     *
+     * [Example](https://github.com/gregnb/mui-datatables/blob/master/examples/customize-styling/index.js)
+     */
+    setCellHeaderProps?:
+        | ((columnMeta: MUIDataTableCustomHeadRenderer) => object)
+        | undefined
+
+    /**
+     * Is called for each cell and allows to you return custom props for this cell based on its data.
+     *
+     * [Example](https://github.com/gregnb/mui-datatables/blob/master/examples/customize-styling/index.js)
+     */
+    setCellProps?:
+        | ((cellValue: string, rowIndex: number, columnIndex: number) => object)
+        | undefined
+
+    /**
+     * Enable/disable sorting on column.
+     * @default true
+     */
+    sort?: boolean
+
+    /**
+     * Causes the first click on a column to sort by desc rather than asc.
+     *
+     * [Example](https://github.com/gregnb/mui-datatables/blob/master/examples/customize-columns/index.js)
+     *
+     * @default false
+     */
+    sortDescFirst?: boolean | undefined
+
+    /**
+     * Allows for a third click on a column header to undo any sorting on the column.
+     *
+     * [Example](https://github.com/gregnb/mui-datatables/blob/master/examples/customize-columns/index.js)
+     *
+     * @default false
+     */
+    sortThirdClickReset?: boolean | undefined
+
+    /** @deprecated use `sortOrder` instead */
+    sortDirection?: 'asc' | 'desc' | 'none' | undefined
+
+    /**
+     * Allow user to toggle column visibility through 'View Column' list.
+     * @default true
+     */
+    viewColumns?: boolean | undefined
+
     /**
      * Custom sort function for the column. Takes in an order string and returns a function that compares the two column values.
      * If this method and options.customSort are both defined, this method will take precedence.
@@ -105,10 +210,10 @@ export interface DataTableColumnObjectOptions
      *
      * @see  {@link DataTableStateColumnFilterOptions}.
      */
-    filterOptions?: DataTableStateColumnFilterOptions
+    filterOptions?: DataTableStateColumnFilterOptions<T>
 }
 
-export interface DataTableStateColumnFilterOptions {
+export interface DataTableStateColumnFilterOptions<T> {
     /**
      * Custom names for the filter fields.
      *
@@ -124,15 +229,15 @@ export interface DataTableStateColumnFilterOptions {
      * @see {@link https://mui-datatable-delight.vercel.app/examples/customize-filter|Customize Filter Example}.
      */
     display?: (
-        filterList: DataTableState['filterList'],
+        filterList: DataTableState<T>['filterList'],
         onChange: (
             val: string | string[],
             index: number,
-            column: DataTableColumnObject
+            column: DataTableColumnObject<T>
         ) => void,
         index: number,
-        column: DataTableColumnObject,
-        filterData: DataTableState['filterData']
+        column: DataTableColumnObject<T>,
+        filterData: DataTableState<T>['filterData']
     ) => ReactNode
 
     /**

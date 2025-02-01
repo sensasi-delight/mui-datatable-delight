@@ -122,7 +122,7 @@ export default function TableHead({ selectRowUpdate }: Props) {
                 sortedData.data,
                 state.filterList,
                 state.searchText,
-                null,
+                undefined,
                 datatableRootProps,
                 newState,
                 options,

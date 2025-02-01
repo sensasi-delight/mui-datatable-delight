@@ -2,7 +2,7 @@ import { type DataTableOptions } from '../../../types/options'
 // global enums
 import RowsSelectedToolbarPlacement from '../../../enums/rows-selected-toolbar-placement'
 
-export const DEFAULT_OPTIONS: DataTableOptions = {
+export const DEFAULT_OPTIONS: DataTableOptions<unknown> = {
     caseSensitive: false,
     download: true,
     downloadOptions: {

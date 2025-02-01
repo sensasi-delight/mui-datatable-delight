@@ -27,15 +27,15 @@ import { getCollatorComparator } from '../get-collator-comparator'
  * @param setState - A function to update the state of the data table.
  * @returns The new state of the data table after the update.
  */
-export default function updateDataCol(
+export default function updateDataCol<T>(
     row: number,
     index: number,
     value: unknown,
-    prevState: DataTableState,
-    options: DataTableOptions,
-    datatableProps: DataTableProps,
-    setState: (newState: DataTableState) => void
-): DataTableState {
+    prevState: DataTableState<T>,
+    options: DataTableOptions<T>,
+    datatableProps: DataTableProps<T>,
+    setState: (newState: DataTableState<T>) => void
+): DataTableState<T> {
     let changedData = prevState.data
     let filterData = prevState.filterData
 
@@ -70,7 +70,7 @@ export default function updateDataCol(
         filterData[index]?.sort(comparator)
     }
 
-    const newState: DataTableState = {
+    const newState: DataTableState<T> = {
         ...prevState,
         data: changedData,
         filterData: filterData

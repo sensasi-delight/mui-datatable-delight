@@ -40,8 +40,8 @@ export interface SomeRowsIDK {
     lookup: boolean[]
 }
 
-export interface DataTableOptions
-    extends DataTableCustomsOptions,
+export interface DataTableOptions<DataRowItemType>
+    extends DataTableCustomsOptions<DataRowItemType>,
         DataTableSearchOptions {
     /** Enable/disable case sensitivity for search */
     caseSensitive?: boolean
@@ -255,22 +255,27 @@ export interface DataTableOptions
      * @see [On Download example](https://mui-datatatable-delight.vercel.app/examples/on-download)
      */
     onDownload?: (
-        buildHead: (columns: DataTableState['columns']) => string,
-        buildBody: (data: DataTableState['data']) => string,
-        columns: DataTableState['columns'],
-        data: DataTableState['data']
+        buildHead: (
+            columns: DataTableState<DataRowItemType>['columns']
+        ) => string,
+        buildBody: (data: DataTableState<DataRowItemType>['data']) => string,
+        columns: DataTableState<DataRowItemType>['columns'],
+        data: DataTableState<DataRowItemType>['data']
     ) =>
-        | { data: DisplayData[]; columns: DataTableState['columns'] }
+        | {
+              data: DisplayData[]
+              columns: DataTableState<DataRowItemType>['columns']
+          }
         | string
         | false
 
     /** Callback function that triggers when filters have changed. */
     onFilterChange?: (
         changedColumn: string | MUIDataTableColumn | null,
-        filterList: DataTableState['filterList'],
+        filterList: DataTableState<DataRowItemType>['filterList'],
         type: FilterType | 'reset',
         changedColumnIndex: number | null,
-        displayData: DataTableState['displayData']
+        displayData: DataTableState<DataRowItemType>['displayData']
     ) => void
 
     /**
@@ -281,7 +286,7 @@ export interface DataTableOptions
     onFilterChipClose?: (
         index: number,
         removedFilter: string | string[],
-        filterList: DataTableState['filterList']
+        filterList: DataTableState<DataRowItemType>['filterList']
     ) => void
 
     /**
@@ -291,7 +296,9 @@ export interface DataTableOptions
      * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/serverside-filters/index.tsx
      */
 
-    onFilterConfirm?: (filterList: DataTableState['filterList']) => void
+    onFilterConfirm?: (
+        filterList: DataTableState<DataRowItemType>['filterList']
+    ) => void
 
     /** Callback function that triggers when the filter dialog closes. */
     onFilterDialogClose?: () => void
@@ -341,7 +348,10 @@ export interface DataTableOptions
      * @see {@link TableAction} enum.
      * @see {@link DataTableState} interface.
      */
-    onTableChange?: (action: TableAction, tableState: DataTableState) => void
+    onTableChange?: (
+        action: TableAction,
+        tableState: DataTableState<DataRowItemType>
+    ) => void
 
     /**
      * Callback function that triggers when table state has been initialized.
@@ -349,7 +359,10 @@ export interface DataTableOptions
      * @see {@link TableAction} enum.
      * @see {@link DataTableState} interface.
      */
-    onTableInit?: (action: TableAction, tableState: DataTableState) => void
+    onTableInit?: (
+        action: TableAction,
+        tableState: DataTableState<DataRowItemType>
+    ) => void
 
     /** Callback function that triggers when a column view has been changed. Previously known as onColumnViewChange. */
     onViewColumnsChange?: (changedColumn: string, action: string) => void
@@ -589,25 +602,25 @@ export interface DataTableOptions
      *
      * @see  {@link onRowExpansionChange}
      */
-    onRowsExpand?: DataTableOptions['onRowExpansionChange']
+    onRowsExpand?: DataTableOptions<DataRowItemType>['onRowExpansionChange']
 
     /**
      * @deprecated Use `onRowSelectionChange` instead.
      *
      * @see  {@link onRowSelectionChange}
      */
-    onRowsSelect?: DataTableOptions['onRowSelectionChange']
+    onRowsSelect?: DataTableOptions<DataRowItemType>['onRowSelectionChange']
 
     /**
      * @deprecated  in favor of the {@link confirmFilters} option.
      */
-    serverSideFilterList?: DataTableState['filterList']
+    serverSideFilterList?: DataTableState<DataRowItemType>['filterList']
 }
 
-interface DataTableCustomsOptions {
+interface DataTableCustomsOptions<DataRowItemType> {
     /** Add a custom footer to the filter dialog. */
     customFilterDialogFooter?: (
-        filterList: DataTableState['filterList'],
+        filterList: DataTableState<DataRowItemType>['filterList'],
         applyNewFilters?: (...args: any[]) => any
     ) => ReactNode
 
@@ -663,7 +676,7 @@ interface DataTableCustomsOptions {
      * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-toolbar/CustomToolbar.tsx
      */
     customToolbar?: (data: {
-        displayData: DataTableState['displayData']
+        displayData: DataTableState<DataRowItemType>['displayData']
     }) => ReactNode
 
     /**

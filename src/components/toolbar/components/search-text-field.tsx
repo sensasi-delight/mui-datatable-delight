@@ -41,7 +41,7 @@ export function DataTableToolbarSearch({ onHide }: { onHide: () => void }) {
                   state.data,
                   state.filterList,
                   newSearchText,
-                  null,
+                  undefined,
                   datatableRootProps,
                   state,
                   options,

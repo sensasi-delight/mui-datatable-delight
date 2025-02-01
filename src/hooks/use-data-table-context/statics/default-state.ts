@@ -1,6 +1,6 @@
 import type { DataTableState } from '../../../types/state'
 
-const DEFAULT_STATE: DataTableState = {
+const DEFAULT_STATE: DataTableState<unknown> = {
     activeColumn: null,
     count: 0,
     columnOrder: [0],

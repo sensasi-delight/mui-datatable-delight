@@ -129,7 +129,7 @@ function handleCustomSelectedRows(
     /** Array of rows indexes that are selected, e.g. [0, 2] will select first and third rows in table */
     selectedRows: number[],
     options: DataTableOptions,
-    selectRowUpdate: MUIDataTableToolbarSelect['selectRowUpdate']
+    selectRowUpdate: TableToolbarSelectProps['selectRowUpdate']
 ) {
     if (!Array.isArray(selectedRows)) {
         throw new TypeError(

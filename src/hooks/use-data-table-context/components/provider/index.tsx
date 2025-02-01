@@ -1,31 +1,40 @@
 'use client'
 
-import { useState, type ReactNode, useEffect, useRef } from 'react'
-import DEFAULT_STATE from '../../statics/default-state'
-import { handleDeprecatedOptions } from '../../function/handle-deprecated-options'
-import DataTableContext from '../../context'
-import { DEFAULT_ICONS } from '../../statics/default-icons'
-import { processTextLabels } from '../../function/process-text-labels'
-import { DEFAULT_OPTIONS } from '../../statics/default-options'
+// vendors
+import {
+    useState,
+    type ReactNode,
+    useEffect,
+    useRef,
+    type Context
+} from 'react'
 // globals
 import type { DataTableProps } from '@src/types'
 import type { DataTableOptions, DataTableState } from '@src/index'
 import { load, save, warnInfo } from '@src/functions'
 import getNewStateOnDataChange from '@src/functions/get-new-state-on-data-change'
 import TableAction from '@src/enums/table-action'
+// locals
+import { DEFAULT_ICONS } from '../../statics/default-icons'
+import { DEFAULT_OPTIONS } from '../../statics/default-options'
+import { handleDeprecatedOptions } from '../../function/handle-deprecated-options'
+import { processTextLabels } from '../../function/process-text-labels'
+import DEFAULT_STATE from '../../statics/default-state'
+import DataTableContext from '../../context'
+import type ContextValue from '../../types/context-value'
 
-export default function DataTableContextProvider({
+export default function DataTableContextProvider<DataRowItemType>({
     datatableProps,
     children
 }: {
-    datatableProps: DataTableProps
+    datatableProps: DataTableProps<DataRowItemType>
     children: ReactNode
 }): ReactNode {
     const draggableHeadCellRefs = useRef<HTMLTableCellElement[]>([])
     const tableHeadCellElements = useRef<HTMLTableCellElement[]>([])
     const tableRef = useRef<HTMLTableElement>(null)
 
-    const lastDatatableProps = useRef<DataTableProps>(datatableProps)
+    const lastDatatableProps = useRef(datatableProps)
 
     const restoredState = datatableProps.options?.storageKey
         ? load(datatableProps.options.storageKey)
@@ -50,12 +59,15 @@ export default function DataTableContextProvider({
         return newState
     }
 
-    const [state, setState] = useState<DataTableState>(getInitialState)
+    const [state, setState] =
+        useState<DataTableState<DataRowItemType>>(getInitialState)
 
     useEffect(() => {
         setState(prev => {
             const isDataTablePropsChanged = (
-                Object.keys(datatableProps) as (keyof DataTableProps)[]
+                Object.keys(
+                    datatableProps
+                ) as (keyof DataTableProps<DataRowItemType>)[]
             ).some(
                 key => lastDatatableProps.current[key] !== datatableProps[key]
             )
@@ -74,8 +86,13 @@ export default function DataTableContextProvider({
     const options = getConstructedOption(datatableProps?.options)
 
     handleDeprecatedOptions(datatableProps, options)
+
+    const _DataTableContext = DataTableContext as Context<
+        ContextValue<DataRowItemType>
+    >
+
     return (
-        <DataTableContext.Provider
+        <_DataTableContext.Provider
             value={{
                 components: datatableProps.components ?? {},
                 draggableHeadCellRefs,
@@ -121,24 +138,24 @@ export default function DataTableContextProvider({
             }}
         >
             {children}
-        </DataTableContext.Provider>
+        </_DataTableContext.Provider>
     )
 }
 
 /**
  * @todo RENAME THIS TO SOMETHING CLEARER
  */
-function getStateFromDataTableOptionsProp({
+function getStateFromDataTableOptionsProp<T>({
     rowsPerPage,
     page,
     rowsSelected,
     rowsPerPageOptions
-}: DataTableProps['options'] = {}) {
+}: DataTableProps<T>['options'] = {}) {
     const optState: {
-        page?: DataTableState['page']
-        rowsPerPage?: DataTableState['rowsPerPage']
-        rowsPerPageOptions?: DataTableState['rowsPerPageOptions']
-        rowsSelected?: DataTableState['rowsSelected']
+        page?: DataTableState<T>['page']
+        rowsPerPage?: DataTableState<T>['rowsPerPage']
+        rowsPerPageOptions?: DataTableState<T>['rowsPerPageOptions']
+        rowsSelected?: DataTableState<T>['rowsSelected']
     } = {}
 
     if (rowsPerPage) {
@@ -157,7 +174,7 @@ function getStateFromDataTableOptionsProp({
         optState.rowsPerPageOptions = rowsPerPageOptions
     }
 
-    function validateOptions(options: DataTableOptions) {
+    function validateOptions<T>(options: DataTableOptions<T>) {
         if (options.serverSide && options.onTableChange === undefined) {
             throw Error(
                 'onTableChange callback must be provided when using serverSide option'
@@ -187,11 +204,11 @@ function getStateFromDataTableOptionsProp({
     return optState
 }
 
-function getConstructedOption(
-    optionsFromProp: DataTableProps['options']
-): DataTableOptions {
+function getConstructedOption<T>(
+    optionsFromProp: DataTableProps<T>['options']
+): DataTableOptions<T> {
     return {
-        ...DEFAULT_OPTIONS,
+        ...(DEFAULT_OPTIONS as DataTableOptions<T>),
         ...(optionsFromProp ?? {}),
         downloadOptions: {
             ...DEFAULT_OPTIONS.downloadOptions,

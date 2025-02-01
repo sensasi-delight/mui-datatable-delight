@@ -1,32 +1,55 @@
 import type { MUIDataTableStateRows } from 'mui-datatables'
 import type { DataTableSortOrderOption } from './options'
 import type { DataTableColumnObject } from './columns'
-import type { DefaultDataItem } from '.'
+import type { DisplayDataState } from './state/display-data'
 import type DataTableSearchOptions from './options/search'
 
-export interface DataTableState<DataItem = DefaultDataItem> {
+export interface DataTableState<DataRowItemType> {
     activeColumn: number | null
+
     announceText?: string
+
     columnOrder: number[]
-    columns: (Omit<DataTableColumnObject, 'options'> &
-        DataTableColumnObject['options'])[]
+
+    columns: Required<
+        Omit<DataTableColumnObject<DataRowItemType>, 'options'> &
+            DataTableColumnObject<DataRowItemType>['options']
+    >[]
+
     curExpandedRows?: MUIDataTableStateRows
+
     count: number
+
     data: {
+        data: DataRowItemType
         index: number
-        data: DataItem
     }[]
-    displayData: {
-        index: number
-        data: DataItem
-    }[]
-    expandedRows: MUIDataTableStateRows
+
+    displayData: DisplayDataState
+
+    expandedRows: {
+        data: string[]
+        lookup: object
+    }
+
+    /** All data per column */
     filterData: string[][]
+
+    /** Filtered values per column */
     filterList: string[][]
+
+    /** Current page number starting from 0 */
     page: number
+
     previousSelectedRow: null | { index: number; dataIndex: number }
+
+    /** Current rows per page */
     rowsPerPage: number
+
+    /** Available rows per page */
     rowsPerPageOptions: number[]
+
+    /** ⚠️ PENDING ⚠️ */
     rowsSelected: number[]
 
     /**
@@ -39,15 +62,16 @@ export interface DataTableState<DataItem = DefaultDataItem> {
     /**
      * Current row selected or not
      */
-    selectedRows: StateRows
-    showResponsive: boolean
-    sortOrder?: DataTableSortOrderOption
-}
+    selectedRows: {
+        data: {
+            index: number
+            dataIndex: number
+        }[]
 
-interface StateRows {
-    data: {
-        index: number
-        dataIndex: number
-    }[]
-    lookup: any
+        lookup: boolean[]
+    }
+
+    showResponsive: boolean
+
+    sortOrder: DataTableSortOrderOption | undefined
 }

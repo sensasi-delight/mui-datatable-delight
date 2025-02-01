@@ -26,21 +26,18 @@ import type DataTableMeta from '@src/types/table-meta'
  * @param setState - A function to update the state of the data table.
  * @returns An array of rows to be displayed, each containing the processed data and its index.
  */
-export default function getDisplayData(
-    columns: DataTableState['columns'],
-    data: DataTableState['data'],
-    filterList: DataTableState['filterList'],
-    searchText: DataTableState['searchText'],
-    tableMeta: DataTableMeta | undefined,
-    props: DataTableProps,
-    state: DataTableState,
-    options: DataTableOptions,
-    setState: (newState: DataTableState) => void
-) {
-    const newRows: {
-        data: DataTableState['displayData']
-        dataIndex: number
-    }[] = []
+export default function getDisplayData<T>(
+    columns: DataTableState<T>['columns'],
+    data: DataTableState<T>['data'],
+    filterList: DataTableState<T>['filterList'],
+    searchText: DataTableState<T>['searchText'],
+    tableMeta: DataTableMeta<T> | undefined,
+    props: DataTableProps<T>,
+    state: DataTableState<T>,
+    options: DataTableOptions<T>,
+    setState: (newState: DataTableState<T>) => void
+): DataTableState<T>['displayData'] {
+    const newRows: DataTableState<T>['displayData'] = []
 
     data.forEach((row, index) => {
         const displayRow = computeDisplayRow(
@@ -56,6 +53,8 @@ export default function getDisplayData(
             state,
             setState
         )
+
+        console.log(displayRow)
 
         if (displayRow) {
             newRows.push({

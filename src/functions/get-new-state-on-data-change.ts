@@ -34,14 +34,14 @@ enum TABLE_LOAD {
  * @param state - The current state of the data table.
  * @returns The updated state of the data table.
  */
-export default function getNewStateOnDataChange(
-    props: DataTableProps,
+export default function getNewStateOnDataChange<T>(
+    props: DataTableProps<T>,
     status: TABLE_LOAD,
     dataUpdated: boolean,
-    options: DataTableOptions,
-    state: DataTableState,
-    setState?: (newState: DataTableState) => void
-): DataTableState {
+    options: DataTableOptions<T>,
+    state: DataTableState<T>,
+    setState: (newState: DataTableState<T>) => void
+): DataTableState<T> {
     const { columns, filterData, filterList, columnOrder } = buildColumns(
         props.columns,
         state.columns,
@@ -51,7 +51,7 @@ export default function getNewStateOnDataChange(
 
     let sortIndex: number | null = null
     let sortDirection: DataTableSortOrderOption['direction'] = 'none'
-    let tableMeta: DataTableMeta | undefined
+    let tableMeta: DataTableMeta<T> | undefined
 
     const data =
         status === TABLE_LOAD.INITIAL
@@ -62,7 +62,7 @@ export default function getNewStateOnDataChange(
     const page = options.page ?? state.page
     const sortOrder = options.sortOrder ?? state.sortOrder
 
-    let tableData: DataTableState['data'] = []
+    let tableData: DataTableState<T>['data'] = []
 
     columns.forEach((column, colIndex) => {
         for (let rowIndex = 0; rowIndex < data.length; rowIndex++) {
@@ -172,12 +172,12 @@ export default function getNewStateOnDataChange(
         }
     })
 
-    let selectedRowsData: DataTableState['selectedRows'] = {
+    let selectedRowsData: DataTableState<T>['selectedRows'] = {
         data: [],
         lookup: {}
     }
 
-    let expandedRowsData: DataTableState['expandedRows'] = {
+    let expandedRowsData: DataTableState<T>['expandedRows'] = {
         data: [],
         lookup: {}
     }
@@ -305,7 +305,7 @@ export default function getNewStateOnDataChange(
             ? (options?.searchText ?? state.searchText)
             : state.searchText
 
-    const newState: DataTableState = {
+    const newState: DataTableState<T> = {
         ...state,
         count: options.count ?? tableData.length,
         columnOrder,

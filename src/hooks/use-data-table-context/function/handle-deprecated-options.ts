@@ -1,11 +1,11 @@
-import type { DataTableProps } from '../../../types'
-import { type DataTableOptions } from '../../../types/options'
-import { warnDeprecated, warnInfo } from '../../../functions'
-// global enums
-import RowsSelectedToolbarPlacement from '../../../enums/rows-selected-toolbar-placement'
+// globals
+import { type DataTableProps } from '@src/types'
+import { type DataTableOptions } from '@src/types/options'
+import { warnDeprecated, warnInfo } from '@src/functions'
+import RowsSelectedToolbarPlacement from '@src/enums/rows-selected-toolbar-placement'
 
-export function handleDeprecatedOptions(
-    props: DataTableProps,
+export function handleDeprecatedOptions<DT>(
+    props: DataTableProps<DT>,
     options: DataTableOptions & DeprecatedOptions
 ) {
     if (typeof options?.selectableRows === 'boolean') {

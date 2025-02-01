@@ -28,13 +28,18 @@ import ClassName from './enums/class-name'
 import FilterType from './enums/filter-type'
 import RowsSelectedToolbarPlacement from './enums/rows-selected-toolbar-placement'
 import TableAction from './enums/table-action'
+import type { DefaultDataRowItemType } from './types/values/default-data-row-item-type'
 
 /**
  * A responsive DataTable component built with Material UI for React-based project.
  *
  * @see https://mui-datatable-delight.vercel.app
  */
-export function DataTable<T>({ className, ref, ...props }: DataTableProps<T>) {
+export function DataTable<DataRowItemType = DefaultDataRowItemType>({
+    className,
+    ref,
+    ...props
+}: DataTableProps<DataRowItemType>) {
     return (
         <DataTableContextProvider datatableProps={props}>
             <_DataTable className={className} ref={ref} />
@@ -90,7 +95,7 @@ function _DataTable({
                   prevState.data,
                   prevState.filterList,
                   prevState.searchText,
-                  null,
+                  undefined,
                   datatableRootProps,
                   newState,
                   options,
@@ -113,10 +118,13 @@ function _DataTable({
         next?.(prevState.filterList)
     }
 
-    function selectRowUpdate(
+    function selectRowUpdate<T>(
         type: string,
-        value: DataTableState['previousSelectedRow'],
-        shiftAdjacentRows: unknown[] = []
+        value: DataTableState<T>['previousSelectedRow'],
+        shiftAdjacentRows: {
+            index: number
+            dataIndex: number
+        }[] = []
     ) {
         // safety check
         const { selectableRows } = options
@@ -203,7 +211,7 @@ function _DataTable({
             let rowPos = -1
 
             for (let cIndex = 0; cIndex < selectedRows.length; cIndex++) {
-                if (selectedRows[cIndex].dataIndex === dataIndex) {
+                if (selectedRows[cIndex]?.dataIndex === dataIndex) {
                     rowPos = cIndex
                     break
                 }
@@ -220,7 +228,7 @@ function _DataTable({
                         cIndex >= 0;
                         cIndex--
                     ) {
-                        if (shiftAdjacentMap[selectedRows[cIndex].dataIndex]) {
+                        if (shiftAdjacentMap[selectedRows[cIndex]?.dataIndex]) {
                             selectedRows.splice(cIndex, 1)
                         }
                     }
@@ -266,7 +274,7 @@ function _DataTable({
 
             const data = value?.map(index => ({
                 index,
-                dataIndex: displayData[index].dataIndex
+                dataIndex: displayData[index]?.dataIndex
             }))
 
             const lookup = buildMap(data)
@@ -359,7 +367,7 @@ function _DataTable({
     )
 }
 
-function hasToolbarItem(options: DataTableOptions) {
+function hasToolbarItem<T>(options: DataTableOptions<T>) {
     // Populate this list with anything that might render in the toolbar to determine if we hide the toolbar
     const TOOLBAR_ITEMS = [
         'title',
@@ -376,32 +384,31 @@ function hasToolbarItem(options: DataTableOptions) {
     )
 }
 
-function updateFilterByType(
-    filterList: DataTableState['filterList'],
+function updateFilterByType<T>(
+    filterList: DataTableState<T>['filterList'],
     index: number,
     value: string | string[],
-    type: DataTableOptions['filterType'],
+    type: DataTableOptions<T>['filterType'],
     customUpdate?: (
-        filterList: DataTableState['filterList'],
+        filterList: DataTableState<T>['filterList'],
         filterPos: number,
         index: number
     ) => string[][]
 ) {
-    const filterIndexPosition: number = filterList[index].findIndex(
-        filter => filter === value
-    )
+    const filterIndexPosition: number =
+        filterList[index]?.findIndex(filter => filter === value) ?? -1
 
     switch (type) {
         case 'checkbox':
             filterIndexPosition >= 0
-                ? filterList[index].splice(filterIndexPosition, 1)
-                : typeof value === 'string' && filterList[index].push(value)
+                ? filterList[index]?.splice(filterIndexPosition, 1)
+                : typeof value === 'string' && filterList[index]?.push(value)
             break
 
         case 'chip':
             filterIndexPosition >= 0
-                ? filterList[index].splice(filterIndexPosition, 1)
-                : typeof value === 'string' && filterList[index].push(value)
+                ? filterList[index]?.splice(filterIndexPosition, 1)
+                : typeof value === 'string' && filterList[index]?.push(value)
             break
 
         case 'multiselect':
@@ -429,17 +436,17 @@ function updateFilterByType(
     }
 }
 
-export type FilterUpdateType = (
+export type FilterUpdateType<T = unknown> = (
     index: number,
     value: string | string[],
-    column: DataTableState['columns'][0],
+    column: DataTableState<T>['columns'][0],
     type: FilterType,
 
     /**
      * customUpdate is called `<FilterList />` (onDelete)
      */
     customUpdate?: (
-        filterList: DataTableState['filterList'],
+        filterList: DataTableState<T>['filterList'],
         filterPos: number,
         index: number
     ) => string[][],
@@ -447,11 +454,11 @@ export type FilterUpdateType = (
     /**
      * next is called `<FilterList />` (onDelete)
      */
-    next?: (filterList: DataTableState['filterList']) => void
+    next?: (filterList: DataTableState<T>['filterList']) => void
 ) => void
 
-function getTableHeightAndResponsiveClasses(
-    options: DataTableOptions,
+function getTableHeightAndResponsiveClasses<T>(
+    options: DataTableOptions<T>,
     classes: ReturnType<typeof useStyles>['classes']
 ) {
     const responsiveOption = options.responsive

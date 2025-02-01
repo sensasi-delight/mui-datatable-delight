@@ -9,30 +9,12 @@ import type { DataTableComponents } from './components'
 import type { DataTableColumnObject } from './columns'
 import type { DataTableIcons } from './icons'
 
-type DataType = number | string | null
-
-export type DefaultRowDataType =
-    | {
-          [key: string]: DataType | undefined
-      }
-    | DataType[]
-
-/**
- * @deprecated  WILL BE UNEXPORTED. USE `DefaultRowDataType` INSTEAD
- */
-export type DefaultDataItem = DefaultRowDataType
-
-/**
- * @deprecated  WILL BE UNEXPORTED
- */
-export type DataTableData = DefaultRowDataType[]
-
-export interface DataTableProps<RowDataType = DefaultRowDataType> {
+export interface DataTableProps<DataRowItemType> {
     /** Pass and use className to style MUIDataTable as desired */
     className?: string
 
     /** Columns used to describe table */
-    columns: (string | DataTableColumnObject)[]
+    columns: (string | DataTableColumnObject<DataRowItemType>)[]
 
     components?: Partial<DataTableComponents>
 
@@ -47,7 +29,7 @@ export interface DataTableProps<RowDataType = DefaultRowDataType> {
      *  ];
      * ```
      */
-    data: RowDataType[]
+    data: DataRowItemType[]
 
     icons?: Partial<DataTableIcons>
 
@@ -56,7 +38,7 @@ export interface DataTableProps<RowDataType = DefaultRowDataType> {
      */
     title?: string | ReactNode
 
-    options?: DataTableOptions
+    options?: DataTableOptions<DataRowItemType>
 
     /**
      * User provided labels to localize text.

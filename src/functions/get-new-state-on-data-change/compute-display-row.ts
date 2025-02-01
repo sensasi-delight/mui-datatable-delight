@@ -7,26 +7,27 @@ import getTableMeta from './get-table-meta'
 import hasSearchText from './has-search-text'
 import updateDataCol from './update-data-col'
 import type DataTableMeta from '@src/types/table-meta'
+import type { Primitive } from '@src/types/values/primitive'
 
 /*
  * Build the table data used to display to the user (i.e., after filter/search applied)
  */
-export default function computeDisplayRow(
-    columns: DataTableState['columns'],
-    row: DataTableState['data'][0]['data'],
+export default function computeDisplayRow<T>(
+    columns: DataTableState<T>['columns'],
+    row: DataTableState<T>['data'][0]['data'],
     rowIndex: number,
-    filterList: DataTableState['filterList'],
-    searchText: DataTableState['searchText'],
-    dataForTableMeta: DataTableMeta['tableData'] | DataTableProps['data'],
-    options: DataTableOptions,
-    props: DataTableProps,
-    currentTableData: DataTableState['data'],
-    state: DataTableState,
-    setState: (newState: DataTableState) => void
-): DataTableState['displayData'] | null {
+    filterList: DataTableState<T>['filterList'],
+    searchText: DataTableState<T>['searchText'],
+    dataForTableMeta: DataTableMeta<T>['tableData'] | DataTableProps<T>['data'],
+    options: DataTableOptions<T>,
+    props: DataTableProps<T>,
+    currentTableData: DataTableState<T>['data'],
+    state: DataTableState<T>,
+    setState: (newState: DataTableState<T>) => void
+): Primitive[] | null {
     let isFiltered = false
     let isSearchFound = false
-    const displayRow: DataTableState['displayData'] = []
+    const displayRow: Primitive[] = []
 
     for (let index = 0; index < row.length; index++) {
         let columnDisplay = row[index]

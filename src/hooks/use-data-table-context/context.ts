@@ -8,12 +8,17 @@ import { DEFAULT_ICONS } from './statics/default-icons'
 import { DEFAULT_OPTIONS } from './statics/default-options'
 import DEFAULT_STATE from './statics/default-state'
 
-const DataTableContext = createContext<ContextValue>({
+const DataTableContext = createContext<ContextValue<unknown>>({
     components: {},
     icons: DEFAULT_ICONS,
     options: DEFAULT_OPTIONS,
     state: DEFAULT_STATE,
     textLabels: processTextLabels(undefined),
+
+    props: {
+        data: [],
+        columns: []
+    },
 
     draggableHeadCellRefs: {
         current: []
@@ -25,7 +30,9 @@ const DataTableContext = createContext<ContextValue>({
 
     tableRef: {
         current: null
-    }
+    },
+
+    setState: () => {}
 })
 
 export default DataTableContext
