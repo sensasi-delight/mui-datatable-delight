@@ -3,6 +3,7 @@ import type { DataTableSortOrderOption } from './options'
 import type { DataTableColumnObject } from './columns'
 import type { DisplayDataState } from './state/display-data'
 import type DataTableSearchOptions from './options/search'
+import type { FilterList } from './state/filter-list'
 
 export interface DataTableState<DataRowItemType> {
     activeColumn: number | null
@@ -36,7 +37,7 @@ export interface DataTableState<DataRowItemType> {
     filterData: string[][]
 
     /** Filtered values per column */
-    filterList: string[][]
+    filterList: FilterList
 
     /** Current page number starting from 0 */
     page: number

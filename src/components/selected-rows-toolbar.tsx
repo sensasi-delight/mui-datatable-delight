@@ -125,10 +125,10 @@ export interface TableToolbarSelectProps {
     selectRowUpdate?: MUIDataTableToolbarSelect['selectRowUpdate']
 }
 
-function handleCustomSelectedRows(
+function handleCustomSelectedRows<T>(
     /** Array of rows indexes that are selected, e.g. [0, 2] will select first and third rows in table */
     selectedRows: number[],
-    options: DataTableOptions,
+    options: DataTableOptions<T>,
     selectRowUpdate: TableToolbarSelectProps['selectRowUpdate']
 ) {
     if (!Array.isArray(selectedRows)) {

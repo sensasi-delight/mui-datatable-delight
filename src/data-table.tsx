@@ -25,10 +25,11 @@ import Table from './components/table'
 import Toolbar from './components/toolbar'
 // enums
 import ClassName from './enums/class-name'
-import FilterType from './enums/filter-type'
 import RowsSelectedToolbarPlacement from './enums/rows-selected-toolbar-placement'
 import TableAction from './enums/table-action'
 import type { DefaultDataRowItemType } from './types/values/default-data-row-item-type'
+import type { FilterList } from './types/state/filter-list'
+import type { FilterTypeType } from './types/shared/filter-type-type'
 
 /**
  * A responsive DataTable component built with Material UI for React-based project.
@@ -121,40 +122,36 @@ function _DataTable({
     function selectRowUpdate<T>(
         type: string,
         value: DataTableState<T>['previousSelectedRow'],
-        shiftAdjacentRows: {
-            index: number
-            dataIndex: number
-        }[] = []
+        shiftAdjacentRows: DataTableState<T>['selectedRows']['data'] = []
     ) {
-        // safety check
-        const { selectableRows } = options
-        if (selectableRows === 'none') {
+        if (options.selectableRows === 'none') {
             return
         }
 
         if (type === 'head') {
-            const { isRowSelectable } = options
             const prevState = state
 
             const { displayData, selectedRows: prevSelectedRows } = prevState
-            const selectedRowsLen = prevState.selectedRows.data.length
+            const selectedRowsLen = state.selectedRows.data.length
             let isDeselect =
                 selectedRowsLen === displayData.length ||
                 (selectedRowsLen < displayData.length && selectedRowsLen > 0)
 
-            const selectedRows = displayData.reduce((arr, _, i) => {
-                const selected = isRowSelectable
-                    ? isRowSelectable(
-                          displayData[i].dataIndex,
-                          prevSelectedRows
-                      )
-                    : true
+            const selectedRows = displayData.reduce<
+                DataTableState<T>['selectedRows']['data']
+            >((arr, item, i) => {
+                const selected =
+                    options.isRowSelectable?.(
+                        item.dataIndex,
+                        prevSelectedRows
+                    ) ?? true
 
-                if (selected)
+                if (selected) {
                     arr.push({
                         index: i,
-                        dataIndex: displayData[i].dataIndex
+                        dataIndex: item.dataIndex
                     })
+                }
 
                 return arr
             }, [])
@@ -171,9 +168,7 @@ function _DataTable({
                     isDeselect = true
                 } else {
                     for (let ii = 0; ii < displayData.length; ii++) {
-                        if (!selectedMap[displayData[ii].dataIndex]) {
-                            isDeselect = true
-                        }
+                        isDeselect = !selectedMap[displayData[ii].dataIndex]
                     }
                 }
             }
@@ -223,17 +218,16 @@ function _DataTable({
                 // handle rows affected by shift+click
                 if (shiftAdjacentRows.length > 0) {
                     let shiftAdjacentMap = buildMap(shiftAdjacentRows)
-                    for (
-                        let cIndex = selectedRows.length - 1;
-                        cIndex >= 0;
-                        cIndex--
-                    ) {
-                        if (shiftAdjacentMap[selectedRows[cIndex]?.dataIndex]) {
-                            selectedRows.splice(cIndex, 1)
+
+                    const temp = selectedRows.slice().reverse()
+
+                    temp.forEach((row, i) => {
+                        if (shiftAdjacentMap[row.dataIndex]) {
+                            selectedRows.splice(i, 1)
                         }
-                    }
+                    })
                 }
-            } else if (selectableRows === 'single') {
+            } else if (options.selectableRows === 'single') {
                 selectedRows = [value]
             } else {
                 // multiple
@@ -279,7 +273,10 @@ function _DataTable({
 
             const lookup = buildMap(data)
 
-            const selectedRows = { data, lookup }
+            const selectedRows: DataTableState<T>['selectedRows'] = {
+                data,
+                lookup
+            }
 
             onAction?.(TableAction.ROW_SELECTION_CHANGE, {
                 selectedRows,
@@ -384,13 +381,13 @@ function hasToolbarItem<T>(options: DataTableOptions<T>) {
     )
 }
 
-function updateFilterByType<T>(
-    filterList: DataTableState<T>['filterList'],
+function updateFilterByType(
+    filterList: FilterList,
     index: number,
     value: string | string[],
-    type: DataTableOptions<T>['filterType'],
+    type: FilterTypeType,
     customUpdate?: (
-        filterList: DataTableState<T>['filterList'],
+        filterList: FilterList,
         filterPos: number,
         index: number
     ) => string[][]
@@ -440,13 +437,13 @@ export type FilterUpdateType<T = unknown> = (
     index: number,
     value: string | string[],
     column: DataTableState<T>['columns'][0],
-    type: FilterType,
+    type: FilterTypeType,
 
     /**
      * customUpdate is called `<FilterList />` (onDelete)
      */
     customUpdate?: (
-        filterList: DataTableState<T>['filterList'],
+        filterList: FilterList,
         filterPos: number,
         index: number
     ) => string[][],
@@ -454,7 +451,7 @@ export type FilterUpdateType<T = unknown> = (
     /**
      * next is called `<FilterList />` (onDelete)
      */
-    next?: (filterList: DataTableState<T>['filterList']) => void
+    next?: (filterList: FilterList) => void
 ) => void
 
 function getTableHeightAndResponsiveClasses<T>(

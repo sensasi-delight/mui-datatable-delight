@@ -24,13 +24,11 @@ export interface DataTableColumnObjectOptions<T> {
      *
      * [Example](https://github.com/gregnb/mui-datatables/blob/master/examples/component/index.js)
      */
-    customBodyRender?:
-        | ((
-              value: any,
-              tableMeta: DataTableMeta<T>,
-              updateValue: (value: string) => void
-          ) => string | React.ReactNode)
-        | undefined
+    customBodyRender?: (
+        value: any,
+        tableMeta: DataTableMeta<T>,
+        updateValue: (value: string) => void
+    ) => ReactNode
 
     /**
      * Similar to and performing better than `customBodyRender`, however with the following caveats:

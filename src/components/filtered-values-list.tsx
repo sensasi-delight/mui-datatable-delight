@@ -8,17 +8,18 @@ import useDataTableContext from '../hooks/use-data-table-context'
 import type { FilterTypeType } from '../types/shared/filter-type-type'
 import type { FilterUpdateType } from '../data-table'
 import ComponentClassName from '@src/enums/class-name'
+import type { ReactNode } from 'react'
 
 const CLASS_ID = 'datatable-delight--filter-list'
 
 /**
  * SHOW LIST OF VALUES OF FILTERS THAT APPLIED
  */
-export default function FilteredValuesList({
+export default function FilteredValuesList<T>({
     filterUpdate
-}: TableFilterListProps) {
+}: TableFilterListProps<T>) {
     const { classes, cx } = useStyles()
-    const { options, state } = useDataTableContext()
+    const { options, state } = useDataTableContext<T>()
     const { serverSide } = options
 
     const columnNames = state.columns.map(column => ({
@@ -41,10 +42,10 @@ export default function FilteredValuesList({
         return column.customFilterListRender ?? (<T,>(f: T) => f)
     })
 
-    function removeFilter(
+    function removeFilter<T>(
         index: number,
         filterValue: string,
-        columnName: string,
+        columnName: string | undefined,
         filterType: FilterTypeType
     ) {
         const removedFilter =
@@ -52,22 +53,30 @@ export default function FilteredValuesList({
                 ? state.filterList[index]
                 : filterValue
 
-        console.log(columnName)
+        const column = state.columns.find(column => column.name === columnName)
+
+        if (!column) {
+            throw new Error('Column not found')
+        }
 
         filterUpdate(
             index,
             filterValue,
-            state.columns.find(column => column.name === columnName),
+            column,
             filterType,
-            customFilterListUpdate,
-            (filterList: DataTableState['filterList']) => {
-                options.onFilterChipClose?.(index, removedFilter, filterList)
+            column.customFilterListOptions?.update,
+            (filterList: DataTableState<T>['filterList']) => {
+                options.onFilterChipClose?.(
+                    index,
+                    removedFilter ?? [],
+                    filterList
+                )
             }
         )
     }
 
     const customFilterChip = (
-        customFilterItem: string,
+        customFilterItem: ReactNode,
         index: number,
         customFilterItemIndex: number,
         item: string[],
@@ -79,7 +88,7 @@ export default function FilteredValuesList({
         const type: FilterTypeType =
             (isArray && customFilterListUpdate[index]
                 ? 'custom'
-                : columnNames[index].filterType) ?? 'chip'
+                : columnNames[index]?.filterType) ?? 'chip'
 
         return (
             <Chip
@@ -88,8 +97,8 @@ export default function FilteredValuesList({
                 onDelete={() =>
                     removeFilter(
                         index,
-                        item[customFilterItemIndex],
-                        columnNames[index].name,
+                        item[customFilterItemIndex] ?? '',
+                        columnNames[index]?.name ?? '',
                         type
                         // customFilterListUpdate[index]
                     )
@@ -114,10 +123,10 @@ export default function FilteredValuesList({
 
     const filterChip = (index: number, data: string, colIndex: number) => (
         <Chip
-            label={filterListRenderers[index](data)}
+            label={filterListRenderers[index]?.(data)}
             key={colIndex}
             onDelete={() =>
-                removeFilter(index, data, columnNames[index].name, 'chip')
+                removeFilter(index, data, columnNames[index]?.name, 'chip')
             }
             className={classes.chip}
             // itemKey={colIndex}
@@ -136,14 +145,14 @@ export default function FilteredValuesList({
         />
     )
 
-    const getFilterList = (filterList: DataTableState['filterList']) => {
+    const getFilterList = (filterList: DataTableState<T>['filterList']) => {
         return filterList.map((item, index) => {
             if (
-                columnNames[index].filterType === 'custom' &&
-                filterList[index].length
+                columnNames[index]?.filterType === 'custom' &&
+                filterList[index]?.length
             ) {
                 const filterListRenderersValue =
-                    filterListRenderers[index](item)
+                    filterListRenderers[index]?.(item)
 
                 if (Array.isArray(filterListRenderersValue)) {
                     return filterListRenderersValue.map(
@@ -182,8 +191,8 @@ export default function FilteredValuesList({
     )
 }
 
-interface TableFilterListProps {
-    filterUpdate: FilterUpdateType
+interface TableFilterListProps<T = unknown> {
+    filterUpdate: FilterUpdateType<T>
 }
 
 const useStyles = tss.withName(ComponentClassName.FILTERED_VALUES_LIST).create({

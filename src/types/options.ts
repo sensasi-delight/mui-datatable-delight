@@ -13,11 +13,11 @@ import type { DataTableColumnObjectOptions } from './columns'
 import type { FilterTypeType } from './shared/filter-type-type'
 import { DEFAULT_TEXT_LABELS } from '../hooks/use-data-table-context/function/statics/default-text-labels'
 // enums
-import type FilterType from '../enums/filter-type'
 import type RowsSelectedToolbarPlacement from '../enums/rows-selected-toolbar-placement'
 import type TableAction from '../enums/table-action'
 import type DataTableSearchOptions from './options/search'
 import type { BooleanOrDisabled } from './values/boolean-or-disabled'
+import type { DefaultDataRowItemType } from './values/default-data-row-item-type'
 
 export interface DataTableSortOrderOption {
     name: string
@@ -40,7 +40,7 @@ export interface SomeRowsIDK {
     lookup: boolean[]
 }
 
-export interface DataTableOptions<DataRowItemType>
+export interface DataTableOptions<DataRowItemType = DefaultDataRowItemType>
     extends DataTableCustomsOptions<DataRowItemType>,
         DataTableSearchOptions {
     /** Enable/disable case sensitivity for search */
@@ -273,7 +273,7 @@ export interface DataTableOptions<DataRowItemType>
     onFilterChange?: (
         changedColumn: string | MUIDataTableColumn | null,
         filterList: DataTableState<DataRowItemType>['filterList'],
-        type: FilterType | 'reset',
+        type: FilterTypeType | 'reset',
         changedColumnIndex: number | null,
         displayData: DataTableState<DataRowItemType>['displayData']
     ) => void

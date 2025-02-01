@@ -1,9 +1,9 @@
 import type { DataTableState } from '@src/types/state'
 
 export interface Props {
-    selectRowUpdate: (
+    selectRowUpdate: <T>(
         type: string,
-        value: DataTableState['previousSelectedRow'],
-        shiftAdjacentRows: unknown[]
+        value: DataTableState<T>['previousSelectedRow'],
+        shiftAdjacentRows: DataTableState<T>['selectedRows']['data']
     ) => void
 }

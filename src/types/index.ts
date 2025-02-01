@@ -8,8 +8,9 @@ import type { DataTableOptions } from './options'
 import type { DataTableComponents } from './components'
 import type { DataTableColumnObject } from './columns'
 import type { DataTableIcons } from './icons'
+import type { DefaultDataRowItemType } from './values/default-data-row-item-type'
 
-export interface DataTableProps<DataRowItemType> {
+export interface DataTableProps<DataRowItemType = DefaultDataRowItemType> {
     /** Pass and use className to style MUIDataTable as desired */
     className?: string
 
