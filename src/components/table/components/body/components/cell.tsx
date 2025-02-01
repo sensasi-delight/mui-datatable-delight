@@ -10,7 +10,7 @@ import type { DataTableState } from '@src/types/state'
 import useDataTableContext from '@src/hooks/use-data-table-context'
 import ComponentClassName from '@src/enums/class-name'
 
-export function TableBodyCell({
+export function TableBodyCell<T>({
     children,
     colIndex,
     columnHeader,
@@ -20,7 +20,7 @@ export function TableBodyCell({
     print,
     ...otherProps
 }: Omit<MUIDataTableBodyCell & TableCellProps, 'options'> & {
-    print: DataTableState['columns'][0]['print']
+    print: DataTableState<T>['columns'][0]['print']
 }) {
     const { options, textLabels } = useDataTableContext()
     const { classes, cx } = useStyles()

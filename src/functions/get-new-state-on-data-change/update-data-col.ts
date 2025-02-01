@@ -42,7 +42,7 @@ export default function updateDataCol<T>(
     const tableMeta = getTableMeta(
         row,
         index,
-        row,
+        value,
         prevState.columns[index],
         prevState.data,
         prevState,

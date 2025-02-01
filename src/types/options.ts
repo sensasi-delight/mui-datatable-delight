@@ -24,25 +24,9 @@ export interface DataTableSortOrderOption {
     direction: 'asc' | 'desc' | 'none'
 }
 
-/**
- * @deprecated FOUND THIS TYPE BUT CAN'T DESCRIBED YET
- */
-export interface RowTypeIDK {
-    index: number
-    dataIndex: number
-}
-
-/**
- * @deprecated FOUND THIS TYPE BUT CAN'T DESCRIBED YET
- */
-export interface SomeRowsIDK {
-    data: RowTypeIDK[]
-    lookup: boolean[]
-}
-
 export interface DataTableOptions<DataRowItemType = DefaultDataRowItemType>
     extends DataTableCustomsOptions<DataRowItemType>,
-        DataTableSearchOptions {
+        DataTableSearchOptions<DataRowItemType> {
     /** Enable/disable case sensitivity for search */
     caseSensitive?: boolean
 
@@ -200,10 +184,16 @@ export interface DataTableOptions<DataRowItemType = DefaultDataRowItemType>
      * Enable/disable expansion or collapse on certain expandable rows with custom function.
      * Returns `true` if not provided.
      */
-    isRowExpandable?: (dataIndex: number, expandedRows?: SomeRowsIDK) => boolean
+    isRowExpandable?: (
+        dataIndex: number,
+        expandedRows: DataTableState<DataRowItemType>['expandedRows']
+    ) => boolean
 
     /** Enable/disable selection on certain rows with custom function. Returns true if not provided. */
-    isRowSelectable?: (dataIndex: number, selectedRows?: SomeRowsIDK) => boolean
+    isRowSelectable?: (
+        dataIndex: number,
+        selectedRows: DataTableState<DataRowItemType>['selectedRows']
+    ) => boolean
 
     /**
      * When true, the option adds a dropdown to the table's footer that allows a user to navigate to a specific page.

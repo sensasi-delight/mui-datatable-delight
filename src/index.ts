@@ -1,10 +1,7 @@
-export type {
-    DataTableColumnObject,
-    DataTableColumnObjectOptions
-} from './types/columns'
+export type { DataTableColumnObjectOptions } from './types/columns'
 export type { DataTableIcons } from './types/icons'
 export type { DataTableState } from './types/state'
-export type { DataTableProps, DataTableData } from './types'
+export type { DataTableProps } from './types'
 export type {
     DataTableOptions,
     DataTableSortOrderOption

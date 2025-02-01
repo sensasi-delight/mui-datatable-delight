@@ -54,8 +54,6 @@ export default function getDisplayData<T>(
             setState
         )
 
-        console.log(displayRow)
-
         if (displayRow) {
             newRows.push({
                 data: displayRow,

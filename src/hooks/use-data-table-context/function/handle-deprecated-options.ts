@@ -4,9 +4,9 @@ import { type DataTableOptions } from '@src/types/options'
 import { warnDeprecated, warnInfo } from '@src/functions'
 import RowsSelectedToolbarPlacement from '@src/enums/rows-selected-toolbar-placement'
 
-export function handleDeprecatedOptions<DT>(
-    props: DataTableProps<DT>,
-    options: DataTableOptions & DeprecatedOptions
+export function handleDeprecatedOptions<T>(
+    props: DataTableProps<T>,
+    options: DataTableOptions<T> & DeprecatedOptions
 ) {
     if (typeof options?.selectableRows === 'boolean') {
         warnDeprecated(

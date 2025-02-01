@@ -1,5 +1,6 @@
 import type { DataTableProps, DataTableState } from '@src/index'
 import { warnDeprecated } from '.'
+import type { ColumnState } from '@src/types/state/column'
 
 /*
  *  Build the source table data
@@ -9,91 +10,83 @@ import { warnDeprecated } from '.'
  *  newColumnOrder - columnOrder from the options object.
  *  prevColumnOrder - columnOrder object saved onto the state.
  */
-export default function buildColumns(
-    newColumns: DataTableProps['columns'],
-    prevColumns: DataTableState['columns'] = [],
-    newColumnOrder: DataTableState['columnOrder'] | undefined,
-    prevColumnOrder: DataTableState['columnOrder'] = []
+export default function buildColumns<T>(
+    newColumns: DataTableProps<T>['columns'],
+    prevColumns: DataTableState<T>['columns'] = [],
+    newColumnOrder: DataTableState<T>['columnOrder'] | undefined,
+    prevColumnOrder: DataTableState<T>['columnOrder'] = []
 ) {
-    const filterData: DataTableState['filterData'] = []
-    const filterList: DataTableState['filterList'] = []
+    const filterData: DataTableState<T>['filterData'] = []
+    const filterList: DataTableState<T>['filterList'] = []
 
     let columnOrder: number[] = []
 
-    const columnData: DataTableState['columns'] = newColumns.map(
-        (column, colIndex) => {
-            columnOrder.push(colIndex)
-            filterData[colIndex] = []
-            filterList[colIndex] = []
+    const columnData: ColumnState<T>[] = newColumns.map((column, colIndex) => {
+        columnOrder.push(colIndex)
 
-            const columnOptions: Partial<DataTableState['columns'][0]> = {
-                download: true,
-                empty: false,
-                filter: true,
-                print: true,
-                searchable: true,
-                sort: true,
-                sortCompare: undefined,
-                sortThirdClickReset: false,
-                sortDescFirst: false,
-                viewColumns: true
-            }
+        filterData[colIndex] = []
+        filterList[colIndex] = []
 
-            function getOtherOptions(): Partial<DataTableState['columns'][0]> {
-                if (typeof column === 'string') {
-                    return {
-                        // remember stored version of display if not overwritten
-                        display: prevColumns[colIndex]?.display
-                    }
-                }
+        const isColumnString = typeof column === 'string'
 
-                const options =
-                    { ...column.options, display: column.options?.display } ??
-                    {}
-
-                if (options.sortDirection === null || options.sortDirection) {
-                    warnDeprecated(
-                        'The sortDirection column field has been deprecated. Please use the sortOrder option on the options object. More info: https://github.com/gregnb/mui-datatables/tree/master/docs/v2_to_v3_guide.md'
-                    )
-                }
-
-                if (
-                    typeof options.display === 'undefined' &&
-                    prevColumns[colIndex] &&
-                    prevColumns[colIndex]?.name === column.name &&
-                    prevColumns[colIndex]?.display
-                ) {
-                    // remember stored version of display if not overwritten
-                    options.display = prevColumns[colIndex]?.display
-                }
-
-                return options
-            }
-
-            const otherOptions = getOtherOptions()
-
-            const display =
-                typeof otherOptions.display === 'undefined'
-                    ? 'true'
-                    : otherOptions.display
-
-            return typeof column === 'object'
-                ? {
-                      name: column.name,
-                      label: column.label ? column.label : column.name,
-                      ...columnOptions,
-                      ...otherOptions,
-                      display
-                  }
-                : {
-                      ...columnOptions,
-                      ...otherOptions,
-                      name: column,
-                      label: column,
-                      display
-                  }
+        const columnOptions = {
+            name: isColumnString ? column : column.name,
+            label: isColumnString ? column : (column.label ?? column.name),
+            download: true,
+            empty: false,
+            filter: true,
+            print: true,
+            searchable: true,
+            sort: true,
+            sortCompare: undefined,
+            sortThirdClickReset: false,
+            sortDescFirst: false,
+            viewColumns: true
         }
-    )
+
+        function getOtherOptions() {
+            if (isColumnString) {
+                return {
+                    // remember stored version of display if not overwritten
+                    display: prevColumns[colIndex]?.display
+                }
+            }
+
+            const options =
+                { ...column.options, display: column.options?.display } ?? {}
+
+            if (options.sortDirection === null || options.sortDirection) {
+                warnDeprecated(
+                    'The sortDirection column field has been deprecated. Please use the sortOrder option on the options object. More info: https://github.com/gregnb/mui-datatables/tree/master/docs/v2_to_v3_guide.md'
+                )
+            }
+
+            if (
+                typeof options.display === 'undefined' &&
+                prevColumns[colIndex] &&
+                prevColumns[colIndex]?.name === column.name &&
+                prevColumns[colIndex]?.display
+            ) {
+                // remember stored version of display if not overwritten
+                options.display = prevColumns[colIndex]?.display
+            }
+
+            return options
+        }
+
+        const otherOptions = getOtherOptions()
+
+        const display =
+            typeof otherOptions.display === 'undefined'
+                ? true
+                : otherOptions.display
+
+        return {
+            ...columnOptions,
+            ...otherOptions,
+            display
+        }
+    })
 
     if (Array.isArray(newColumnOrder)) {
         columnOrder = newColumnOrder

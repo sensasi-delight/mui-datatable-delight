@@ -58,10 +58,10 @@ interface OptsType {
  *
  * NOTE: EXPORTED ONLY FOR TESTING
  */
-export function getColModel(
+export function getColModel<T>(
     headCellRefs: RefObject<HTMLTableCellElement[]>,
-    columnOrder: DataTableState['columnOrder'],
-    columns: DataTableState['columns']
+    columnOrder: DataTableState<T>['columnOrder'],
+    columns: DataTableState<T>['columns']
 ) {
     let colModel = []
 
@@ -186,7 +186,7 @@ export function reorderColumns(
  *
  * NOTE: EXPORTED ONLY FOR TESTING
  */
-export function handleHover(
+export function handleHover<T>(
     opts: OptsType & {
         mon: DropTargetMonitor<
             {
@@ -202,8 +202,8 @@ export function handleHover(
             newPosition: number
         ) => void
     },
-    columnOrder: DataTableState['columnOrder'],
-    columns: DataTableState['columns'],
+    columnOrder: DataTableState<T>['columnOrder'],
+    columns: DataTableState<T>['columns'],
     tableRef: RefObject<HTMLTableElement | null>,
     headCellRefs: RefObject<HTMLTableCellElement[]>
 ) {

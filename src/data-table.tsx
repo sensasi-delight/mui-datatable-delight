@@ -11,7 +11,6 @@ import Paper, { type PaperProps } from '@mui/material/Paper'
 import { buildMap } from './functions'
 import getDisplayData from './functions/get-new-state-on-data-change/get-display-data'
 import { type DataTableOptions } from './types/options'
-import { type DataTableState } from './types/state'
 import DataTableContextProvider from './hooks/use-data-table-context/components/provider'
 // hooks
 import useDataTableContext from './hooks/use-data-table-context'
@@ -30,6 +29,9 @@ import TableAction from './enums/table-action'
 import type { DefaultDataRowItemType } from './types/values/default-data-row-item-type'
 import type { FilterList } from './types/state/filter-list'
 import type { FilterTypeType } from './types/shared/filter-type-type'
+import type { FilterUpdateType } from './types/filter-update'
+import type { SelectRowUpdateType } from './types/select-row-update'
+import type { SelectedRowDataState } from './types/state/selected-row-data'
 
 /**
  * A responsive DataTable component built with Material UI for React-based project.
@@ -119,11 +121,11 @@ function _DataTable({
         next?.(prevState.filterList)
     }
 
-    function selectRowUpdate<T>(
-        type: string,
-        value: DataTableState<T>['previousSelectedRow'],
-        shiftAdjacentRows: DataTableState<T>['selectedRows']['data'] = []
-    ) {
+    const selectRowUpdate: SelectRowUpdateType = (
+        type,
+        value,
+        shiftAdjacentRows
+    ) => {
         if (options.selectableRows === 'none') {
             return
         }
@@ -137,24 +139,25 @@ function _DataTable({
                 selectedRowsLen === displayData.length ||
                 (selectedRowsLen < displayData.length && selectedRowsLen > 0)
 
-            const selectedRows = displayData.reduce<
-                DataTableState<T>['selectedRows']['data']
-            >((arr, item, i) => {
-                const selected =
-                    options.isRowSelectable?.(
-                        item.dataIndex,
-                        prevSelectedRows
-                    ) ?? true
+            const selectedRows = displayData.reduce<SelectedRowDataState[]>(
+                (arr, item, i) => {
+                    const selected =
+                        options.isRowSelectable?.(
+                            item.dataIndex,
+                            prevSelectedRows
+                        ) ?? true
 
-                if (selected) {
-                    arr.push({
-                        index: i,
-                        dataIndex: item.dataIndex
-                    })
-                }
+                    if (selected) {
+                        arr.push({
+                            index: i,
+                            dataIndex: item.dataIndex
+                        })
+                    }
 
-                return arr
-            }, [])
+                    return arr
+                },
+                []
+            )
 
             let newRows = [...selectedRows]
             let selectedMap = buildMap(newRows)
@@ -168,7 +171,10 @@ function _DataTable({
                     isDeselect = true
                 } else {
                     for (let ii = 0; ii < displayData.length; ii++) {
-                        isDeselect = !selectedMap[displayData[ii].dataIndex]
+                        const dataIndex = displayData[ii]?.dataIndex
+                        if (dataIndex) {
+                            isDeselect = !selectedMap[dataIndex]
+                        }
                     }
                 }
             }
@@ -186,7 +192,7 @@ function _DataTable({
                     data: newRows,
                     lookup: selectedMap
                 },
-                previousSelectedRow: null
+                previousSelectedRow: undefined
             }
 
             onAction?.(TableAction.ROW_SELECTION_CHANGE, newState)
@@ -264,23 +270,16 @@ function _DataTable({
                 newState.selectedRows.data.map(item => item.dataIndex)
             )
         } else if (type === 'custom') {
-            const { displayData } = state
+            const lookup = buildMap([value])
 
-            const data = value?.map(index => ({
-                index,
-                dataIndex: displayData[index]?.dataIndex
-            }))
-
-            const lookup = buildMap(data)
-
-            const selectedRows: DataTableState<T>['selectedRows'] = {
-                data,
+            const selectedRows = {
+                data: [value],
                 lookup
             }
 
             onAction?.(TableAction.ROW_SELECTION_CHANGE, {
                 selectedRows,
-                previousSelectedRow: null
+                previousSelectedRow: undefined
             })
 
             const onRowSelectionChange =
@@ -432,27 +431,6 @@ function updateFilterByType(
             filterList[index] = typeof value === 'string' ? [value] : value
     }
 }
-
-export type FilterUpdateType<T = unknown> = (
-    index: number,
-    value: string | string[],
-    column: DataTableState<T>['columns'][0],
-    type: FilterTypeType,
-
-    /**
-     * customUpdate is called `<FilterList />` (onDelete)
-     */
-    customUpdate?: (
-        filterList: FilterList,
-        filterPos: number,
-        index: number
-    ) => string[][],
-
-    /**
-     * next is called `<FilterList />` (onDelete)
-     */
-    next?: (filterList: FilterList) => void
-) => void
 
 function getTableHeightAndResponsiveClasses<T>(
     options: DataTableOptions<T>,

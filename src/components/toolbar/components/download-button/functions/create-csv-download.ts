@@ -1,3 +1,4 @@
+import type { Primitive } from '@src/types/values/primitive'
 import type { DataTableProps } from '../../../../../types'
 import type { DataTableOptions } from '../../../../../types/options'
 import type { DataTableState } from '../../../../../types/state'
@@ -5,10 +6,10 @@ import type { DataTableState } from '../../../../../types/state'
 /**
  * @todo Add datetime on default filename
  */
-export function createCsvDownload(
-    columns: DataTableState['columns'],
-    data: DataTableState['data'],
-    options: DataTableOptions
+export function createCsvDownload<T>(
+    columns: DataTableState<T>['columns'],
+    data: DataTableState<T>['data'],
+    options: DataTableOptions<T>
 ) {
     const fromUser = options.onDownload?.(
         columns => buildHead(columns, options),
@@ -55,12 +56,11 @@ const buildHead = (
         )
         .slice(0, -1) + '\r\n'
 
-const buildBody = (
-    data: DataTableState['data'],
-    columns: DataTableState['columns'],
-    options: DataTableProps['options']
+const buildBody = <T>(
+    data: DataTableState<T>['data'],
+    columns: DataTableState<T>['columns'],
+    options: DataTableProps<T>['options']
 ) => {
-    console.log(columns)
     if (!data.length) return ''
 
     return data
@@ -113,9 +113,7 @@ function getSeparator(separator = ',') {
     return separator
 }
 
-function prepare(
-    data: DataTableState['data'][0]
-): DataTableState['data'][0][0] {
+function prepare(data: Primitive): Primitive {
     if (typeof data === 'string') {
         // Places single quote before the appearance of dangerous characters if they
         // are the first in the data string.

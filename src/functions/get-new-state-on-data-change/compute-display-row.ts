@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import type {
     DataTableOptions,
     DataTableProps,
@@ -8,26 +9,27 @@ import hasSearchText from './has-search-text'
 import updateDataCol from './update-data-col'
 import type DataTableMeta from '@src/types/table-meta'
 import type { Primitive } from '@src/types/values/primitive'
+import type { FilterList } from '@src/types/state/filter-list'
 
 /*
  * Build the table data used to display to the user (i.e., after filter/search applied)
  */
 export default function computeDisplayRow<T>(
     columns: DataTableState<T>['columns'],
-    row: DataTableState<T>['data'][0]['data'],
+    row: Primitive[],
     rowIndex: number,
-    filterList: DataTableState<T>['filterList'],
-    searchText: DataTableState<T>['searchText'],
+    filterList: FilterList,
+    searchText: string,
     dataForTableMeta: DataTableMeta<T>['tableData'] | DataTableProps<T>['data'],
     options: DataTableOptions<T>,
     props: DataTableProps<T>,
     currentTableData: DataTableState<T>['data'],
     state: DataTableState<T>,
     setState: (newState: DataTableState<T>) => void
-): Primitive[] | null {
+): ReactNode[] | undefined {
     let isFiltered = false
     let isSearchFound = false
-    const displayRow: Primitive[] = []
+    const displayRow: ReactNode[] = []
 
     for (let index = 0; index < row.length; index++) {
         let columnDisplay = row[index]
@@ -62,10 +64,12 @@ export default function computeDisplayRow<T>(
                             state,
                             options,
                             props
+                            // setState
                         )
                     )
                 }
             )
+
             columnDisplay = funcResult
 
             columnValue =
@@ -138,17 +142,19 @@ export default function computeDisplayRow<T>(
             searchText &&
             column?.display !== 'excluded' &&
             hasSearchText(columnVal, searchText, caseSensitive) &&
-            column?.display !== 'false' &&
+            column?.display !== false &&
             column?.searchable
         ) {
             isSearchFound = true
         }
     }
 
-    const { customSearch } = props.options ?? {}
-
-    if (searchText && customSearch) {
-        const customSearchResult = customSearch(searchText, row, columns)
+    if (searchText && props.options?.customSearch) {
+        const customSearchResult = props.options.customSearch(
+            searchText,
+            row,
+            columns
+        )
         if (typeof customSearchResult !== 'boolean') {
             console.error('customSearch must return a boolean')
         } else {
@@ -157,7 +163,7 @@ export default function computeDisplayRow<T>(
     }
 
     if (options.serverSide) {
-        if (customSearch) {
+        if (props.options?.customSearch) {
             console.warn(
                 'Server-side filtering is enabled, hence custom search will be ignored.'
             )
@@ -166,5 +172,5 @@ export default function computeDisplayRow<T>(
         return displayRow
     }
 
-    return isFiltered || (searchText && !isSearchFound) ? null : displayRow
+    return isFiltered || (searchText && !isSearchFound) ? undefined : displayRow
 }

@@ -14,7 +14,6 @@ const DEFAULT_STATE: DataTableState<unknown> = {
     filterData: [],
     filterList: [],
     page: 0,
-    previousSelectedRow: null,
     rowsPerPage: 10,
     rowsPerPageOptions: [10, 20, 50, 100],
     rowsSelected: [],
@@ -22,8 +21,9 @@ const DEFAULT_STATE: DataTableState<unknown> = {
     searchProps: {},
     selectedRows: {
         data: [],
-        lookup: {}
+        lookup: []
     },
+    sortOrder: undefined,
     showResponsive: false
 }
 

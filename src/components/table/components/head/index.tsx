@@ -213,7 +213,7 @@ export default function TableHead({ selectRowUpdate }: Props) {
 
                 {orderedColumns.map(
                     ({ column, index, colPos }) =>
-                        column.display === 'true' &&
+                        column.display &&
                         (column.customHeadRender?.(
                             { index, ...column },
                             handleToggleColumn,

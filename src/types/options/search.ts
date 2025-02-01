@@ -1,7 +1,8 @@
 import type { TextFieldProps } from '@mui/material/TextField'
 import type { BooleanOrDisabled } from '../values/boolean-or-disabled'
+import type { ColumnState } from '../state/column'
 
-export default interface DataTableSearchOptions {
+export default interface DataTableSearchOptions<T> {
     /**
      * Override default search with custom function.
      *
@@ -9,8 +10,8 @@ export default interface DataTableSearchOptions {
      */
     customSearch?: (
         searchText: string,
-        currentRow: any[],
-        columns: any[]
+        currentRow: T,
+        columns: ColumnState<T>[]
     ) => boolean
 
     /** Callback function that triggers when the search text value has changed. */

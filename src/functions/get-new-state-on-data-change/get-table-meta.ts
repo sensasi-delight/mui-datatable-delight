@@ -17,15 +17,15 @@ import type DataTableMeta from '@src/types/table-meta'
  * @param currentTableData - The current table data.
  * @return  A table meta object.
  */
-export default function getTableMeta(
+export default function getTableMeta<T>(
     rowIndex: number,
     columnIndex: number,
-    rowData: DataTableState['data'][0],
-    columnData: DataTableState['columns'][0],
-    tableData: DataTableState['data'],
-    curState: DataTableState,
-    currentTableData: DataTableState['data']
-): DataTableMeta {
+    rowData: DataTableState<T>['data'][0],
+    columnData: DataTableState<T>['columns'][0],
+    tableData: DataTableState<T>['data'],
+    curState: DataTableState<T>,
+    currentTableData: DataTableState<T>['data']
+): DataTableMeta<T> {
     return {
         columnIndex,
         columnData,

@@ -9,12 +9,6 @@ import type {
     MUIDataTableCustomHeadRenderer
 } from 'mui-datatables'
 
-export interface DataTableColumnObject<T> {
-    label?: string
-    name: string
-    options?: DataTableColumnObjectOptions<T>
-}
-
 export interface DataTableColumnObjectOptions<T> {
     /**
      * Function that returns a string or React component.
@@ -27,7 +21,7 @@ export interface DataTableColumnObjectOptions<T> {
     customBodyRender?: (
         value: any,
         tableMeta: DataTableMeta<T>,
-        updateValue: (value: string) => void
+        updateValue?: (value: string) => void
     ) => ReactNode
 
     /**
@@ -37,9 +31,10 @@ export interface DataTableColumnObjectOptions<T> {
      *
      * [Example](https://github.com/gregnb/mui-datatables/blob/master/examples/large-data-set/index.js)
      */
-    customBodyRenderLite?:
-        | ((dataIndex: number, rowIndex: number) => string | React.ReactNode)
-        | undefined
+    customBodyRenderLite?: (
+        dataIndex: number,
+        rowIndex: number
+    ) => string | ReactNode
 
     /**
      * Function that returns a string or React component.
@@ -84,13 +79,14 @@ export interface DataTableColumnObjectOptions<T> {
      *
      * @default true
      */
-    display?: Boolean | 'excluded'
+    display: Boolean | 'excluded'
 
     /**
      * Display column in the CSV download file.
+     *
      * @default true
      */
-    download?: boolean | undefined
+    download: boolean
 
     /**
      * This denote whether the column has data or not.
@@ -101,24 +97,27 @@ export interface DataTableColumnObjectOptions<T> {
 
     /**
      * Display column in filter list
+     *
      * @default true
      */
-    filter?: boolean | undefined
+    filter: boolean
 
     /** Display hint icon with string as tooltip on hover. */
     hint?: string | undefined
 
     /**
      * Display column when printing.
+     *
      * @default true
      */
-    print?: boolean | undefined
+    print: boolean
 
     /**
      * Exclude/include column from search results.
+     *
      * @default true
      */
-    searchable?: boolean | undefined
+    searchable: boolean
 
     /**
      * Is called for each header cell and allows you to return custom props for the header cell based on its data.
@@ -140,9 +139,10 @@ export interface DataTableColumnObjectOptions<T> {
 
     /**
      * Enable/disable sorting on column.
+     *
      * @default true
      */
-    sort?: boolean
+    sort: boolean
 
     /**
      * Causes the first click on a column to sort by desc rather than asc.
@@ -151,7 +151,7 @@ export interface DataTableColumnObjectOptions<T> {
      *
      * @default false
      */
-    sortDescFirst?: boolean | undefined
+    sortDescFirst: boolean
 
     /**
      * Allows for a third click on a column header to undo any sorting on the column.
@@ -167,9 +167,10 @@ export interface DataTableColumnObjectOptions<T> {
 
     /**
      * Allow user to toggle column visibility through 'View Column' list.
+     *
      * @default true
      */
-    viewColumns?: boolean | undefined
+    viewColumns: boolean
 
     /**
      * Custom sort function for the column. Takes in an order string and returns a function that compares the two column values.
@@ -177,7 +178,7 @@ export interface DataTableColumnObjectOptions<T> {
      *
      * [Example](https://github.com/gregnb/mui-datatables/blob/master/examples/column-sort/index.js)
      */
-    sortCompare?:
+    sortCompare:
         | ((
               order: DataTableSortOrderOption['direction']
           ) => (obj1: { data: any }, obj2: { data: any }) => number)
@@ -231,10 +232,10 @@ export interface DataTableStateColumnFilterOptions<T> {
         onChange: (
             val: string | string[],
             index: number,
-            column: DataTableColumnObject<T>
+            column: DataTableState<T>['columns'][0]
         ) => void,
         index: number,
-        column: DataTableColumnObject<T>,
+        column: DataTableState<T>['columns'][0],
         filterData: DataTableState<T>['filterData']
     ) => ReactNode
 
@@ -243,9 +244,7 @@ export interface DataTableStateColumnFilterOptions<T> {
      *
      * @see {@link https://mui-datatable-delight.vercel.app/examples/customize-filter|Customize Filter Example}.
      */
-    logic?:
-        | ((prop: string, filterValue: string[], row?: any[]) => boolean)
-        | undefined
+    logic?: (prop: string, filterValue: string[], row: T) => boolean
 
     /**
      * A function to customize filter choices.

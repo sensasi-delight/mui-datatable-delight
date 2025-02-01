@@ -6,7 +6,7 @@ import type { SxProps } from '@mui/system/styleFunctionSx'
 //
 import type { DataTableOptions } from './options'
 import type { DataTableComponents } from './components'
-import type { DataTableColumnObject } from './columns'
+import type { DataTableColumnObjectOptions } from './columns'
 import type { DataTableIcons } from './icons'
 import type { DefaultDataRowItemType } from './values/default-data-row-item-type'
 
@@ -15,7 +15,14 @@ export interface DataTableProps<DataRowItemType = DefaultDataRowItemType> {
     className?: string
 
     /** Columns used to describe table */
-    columns: (string | DataTableColumnObject<DataRowItemType>)[]
+    columns: (
+        | string
+        | {
+              name: string
+              label?: string
+              options?: Partial<DataTableColumnObjectOptions<DataRowItemType>>
+          }
+    )[]
 
     components?: Partial<DataTableComponents>
 
