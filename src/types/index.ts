@@ -46,7 +46,7 @@ export interface DataTableProps<DataRowItemType = DefaultDataRowItemType> {
      */
     title?: string | ReactNode
 
-    options?: DataTableOptions<DataRowItemType>
+    options?: Partial<DataTableOptions<DataRowItemType>>
 
     /**
      * User provided labels to localize text.

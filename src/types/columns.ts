@@ -17,7 +17,8 @@ export interface DataTableColumnObjectOptions<T> {
      * The value returned from this function will be used for filtering in the filter dialog.
      * If this isn't need, you may want to consider customBodyRenderLite instead.
      *
-     * [Example](https://github.com/gregnb/mui-datatables/blob/master/examples/component/index.js)
+     * @see
+     * [Example](https://mui-datatable-delight.vercel.app/examples/component)
      */
     customBodyRender?: (
         value: unknown,
@@ -30,7 +31,8 @@ export interface DataTableColumnObjectOptions<T> {
      * 1. The value returned from this function is not used for filtering, so the filter dialog will use the raw data from the data array.
      * 2. This method only gives you the dataIndex and rowIndex, leaving you to lookup the column value.
      *
-     * [Example](https://github.com/gregnb/mui-datatables/blob/master/examples/large-data-set/index.js)
+     * @see
+     * [Example](https://mui-datatable-delight.vercel.app/examples/large-data-set)
      */
     customBodyRenderLite?: (
         dataIndex: number,
@@ -59,14 +61,16 @@ export interface DataTableColumnObjectOptions<T> {
         /**
          * Function that return a string or array of strings use as the chip label(s).
          *
-         * [Example](https://github.com/gregnb/mui-datatables/blob/master/examples/customize-filter/index.js)
+         * @see
+         * [Example](https://mui-datatable-delight.vercel.app/examples/customize-filter)
          */
         render?: (value: unknown) => ReactNode
         /**
          * Function that returns a filterList allowing for custom filter updates
          * when removing the filter chip. FilterType must be set to 'custom'.
          *
-         * [Example](https://github.com/gregnb/mui-datatables/blob/master/examples/customize-filter/index.js)
+         * @see
+         * [Example](https://mui-datatable-delight.vercel.app/examples/customize-filter)
          */
         update?: (
             filterList: FilterList,
@@ -146,7 +150,8 @@ export interface DataTableColumnObjectOptions<T> {
     /**
      * Is called for each header cell and allows you to return custom props for the header cell based on its data.
      *
-     * [Example](https://github.com/gregnb/mui-datatables/blob/master/examples/customize-styling/index.js)
+     * @see
+     * [Example](https://mui-datatable-delight.vercel.app/examples/customize-styling)
      */
     setCellHeaderProps?:
         | ((columnMeta: MUIDataTableCustomHeadRenderer<T>) => object)
@@ -155,7 +160,8 @@ export interface DataTableColumnObjectOptions<T> {
     /**
      * Is called for each cell and allows to you return custom props for this cell based on its data.
      *
-     * [Example](https://github.com/gregnb/mui-datatables/blob/master/examples/customize-styling/index.js)
+     * @see
+     * [Example](https://mui-datatable-delight.vercel.app/examples/customize-styling)
      */
     setCellProps?:
         | ((cellValue: string, rowIndex: number, columnIndex: number) => object)
@@ -171,7 +177,8 @@ export interface DataTableColumnObjectOptions<T> {
     /**
      * Causes the first click on a column to sort by desc rather than asc.
      *
-     * [Example](https://github.com/gregnb/mui-datatables/blob/master/examples/customize-columns/index.js)
+     * @see
+     * [Example](https://mui-datatable-delight.vercel.app/examples/customize-columns)
      *
      * @default false
      */
@@ -180,7 +187,8 @@ export interface DataTableColumnObjectOptions<T> {
     /**
      * Allows for a third click on a column header to undo any sorting on the column.
      *
-     * [Example](https://github.com/gregnb/mui-datatables/blob/master/examples/customize-columns/index.js)
+     * @see
+     * [Example](https://mui-datatable-delight.vercel.app/examples/customize-columns)
      *
      * @default false
      */
@@ -200,7 +208,8 @@ export interface DataTableColumnObjectOptions<T> {
      * Custom sort function for the column. Takes in an order string and returns a function that compares the two column values.
      * If this method and options.customSort are both defined, this method will take precedence.
      *
-     * [Example](https://github.com/gregnb/mui-datatables/blob/master/examples/column-sort/index.js)
+     * @see
+     * [Example](https://mui-datatable-delight.vercel.app/examples/column-sort)
      */
     sortCompare:
         | ((
@@ -213,7 +222,7 @@ export interface DataTableColumnObjectOptions<T> {
      *
      * Use 'custom' is you are supplying your own rendering via filterOptions.
      *
-     * @default  'dropdown'
+     * @default 'dropdown'
      *
      * @see  {@link FilterTypeType}
      */

@@ -41,12 +41,14 @@ export default function DataTableContextProvider<DataRowItemType>({
         ? load(datatableProps.options.storageKey)
         : undefined
 
+    const options = getConstructedOption(datatableProps?.options)
+
     const getInitialState = useCallback(() => {
         const newState = getNewStateOnDataChange(
             datatableProps,
             1,
             true,
-            datatableProps.options ?? {},
+            options,
             {
                 ...DEFAULT_STATE,
                 ...getStateFromDataTableOptionsProp(datatableProps.options),
@@ -55,10 +57,10 @@ export default function DataTableContextProvider<DataRowItemType>({
             undefined
         )
 
-        datatableProps.options?.onTableInit?.(TableAction.INITIALIZED, newState)
+        options?.onTableInit?.(TableAction.INITIALIZED, newState)
 
         return newState
-    }, [datatableProps, restoredState])
+    }, [options, restoredState, datatableProps])
 
     const [state, setState] =
         useState<DataTableState<DataRowItemType>>(getInitialState)
@@ -83,8 +85,6 @@ export default function DataTableContextProvider<DataRowItemType>({
             return getInitialState()
         })
     }, [datatableProps, getInitialState])
-
-    const options = getConstructedOption(datatableProps?.options)
 
     handleDeprecatedOptions(datatableProps, options)
 
@@ -175,7 +175,7 @@ function getStateFromDataTableOptionsProp<T>({
         optState.rowsPerPageOptions = rowsPerPageOptions
     }
 
-    function validateOptions<T>(options: DataTableOptions<T>) {
+    function validateOptions<T>(options: Partial<DataTableOptions<T>>) {
         if (options.serverSide && options.onTableChange === undefined) {
             throw Error(
                 'onTableChange callback must be provided when using serverSide option'

@@ -1,13 +1,12 @@
-import { type DataTableOptions } from '../../../types/options'
-// global enums
-import RowsSelectedToolbarPlacement from '../../../enums/rows-selected-toolbar-placement'
+import { type DataTableOptions } from '@src/types/options'
+import RowsSelectedToolbarPlacement from '@src/enums/rows-selected-toolbar-placement'
 
 export const DEFAULT_OPTIONS: DataTableOptions<unknown> = {
     caseSensitive: false,
     download: true,
     downloadOptions: {
-        filename: 'tableDownload.csv', // WILL REMOVE THIS LATER, DEFAULT VALUE HAS BEEN HANDLED BY `createCSVDownload` FUNCTION
-        separator: ',' // WILL REMOVE THIS LATER, DEFAULT VALUE HAS BEEN HANDLED BY `createCSVDownload` FUNCTION
+        filename: 'tableDownload.csv',
+        separator: ','
     },
     draggableColumns: {
         enabled: false,
@@ -23,6 +22,7 @@ export const DEFAULT_OPTIONS: DataTableOptions<unknown> = {
     filterType: 'dropdown',
     fixedHeader: true,
     fixedSelectColumn: true,
+    jumpToPage: false,
     pagination: true,
     print: true,
     resizableColumns: false,
@@ -31,15 +31,18 @@ export const DEFAULT_OPTIONS: DataTableOptions<unknown> = {
     rowsPerPage: 10,
     rowsPerPageOptions: [10, 20, 50, 100],
     search: true,
+    searchOpen: false,
+    searchAlwaysOpen: false,
+    searchDelay: 0,
     selectableRows: 'multiple',
     selectableRowsHideCheckboxes: false,
     selectableRowsOnClick: false,
     selectableRowsHeader: true,
+    selectToolbarPlacement: RowsSelectedToolbarPlacement.REPLACE,
     serverSide: false,
     setTableProps: () => ({}),
     sort: true,
     sortFilterList: true,
     tableBodyHeight: 'auto',
-    viewColumns: true,
-    selectToolbarPlacement: RowsSelectedToolbarPlacement.REPLACE
+    viewColumns: true
 }
