@@ -250,7 +250,6 @@ export default function Toolbar(props: ToolbarProps) {
                         }}
                         title={toolbarTextLabels.filterTable}
                     >
-                        {/* @ts-expect-error STATE ARE NOT PASS FROM PROPS ANYMORE */}
                         <_DataFilterBox
                             filterUpdate={props.filterUpdate}
                             handleClose={() => {

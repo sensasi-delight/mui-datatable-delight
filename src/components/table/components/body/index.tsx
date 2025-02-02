@@ -11,20 +11,18 @@ import { TableBodyCell } from './components/cell'
 import { DataTableBodyRow } from './components/row'
 import CheckboxCell from '../_shared/checkbox-cell'
 // globals
-import { getPageValue } from '@src/functions/_shared/get-page-value'
-import type { DataTableState } from '@src/types/state'
-import { type DataTableOptions } from '@src/types/options'
-import useDataTableContext from '@src/hooks/use-data-table-context'
+import type { SelectRowUpdateType } from '@src/types/select-row-update'
+import type { SelectedRowDataState } from '@src/types/state/selected-row-data'
+import type { DataTableOptions } from '@src/types/options'
 import { buildMap } from '@src/functions'
+import { getPageValue } from '@src/functions/_shared/get-page-value'
+import useDataTableContext from '@src/hooks/use-data-table-context'
 // global enums
 import TableAction from '@src/enums/table-action'
 import ComponentClassName from '@src/enums/class-name'
-import type { SelectRowUpdateType } from '@src/types/select-row-update'
-import type { SelectedRowDataState } from '@src/types/state/selected-row-data'
+import type { DataTableState } from '@src/index'
 
-export default function TableBody<T>({
-    selectRowUpdate
-}: DataTableBodyProps<T>) {
+export default function TableBody({ selectRowUpdate }: DataTableBodyProps) {
     const { classes } = useStyles()
     const { options, state, textLabels } = useDataTableContext()
 
@@ -84,6 +82,7 @@ export default function TableBody<T>({
                                 ? visibleColCnt + 1
                                 : visibleColCnt
                         }
+                        dataIndex={-1}
                         colIndex={0}
                         rowIndex={0}
                         print
@@ -96,36 +95,9 @@ export default function TableBody<T>({
     )
 }
 
-interface DataTableBodyProps<T> {
-    /** Data used to describe table */
-    data: DataTableState<T>['data']
-
-    /** Total number of data rows */
-    count: number
-
-    /** Columns used to describe table */
-    columns: DataTableState<T>['columns']
-
-    /** Data used to filter table against */
-    filterList: DataTableState<T>['filterList']
-
-    /** Table rows expanded */
-    expandedRows: DataTableState<T>['expandedRows']
-
-    /** Table rows selected */
-    selectedRows: DataTableState<T>['selectedRows']
-
+interface DataTableBodyProps {
     /** Callback to trigger table row select */
     selectRowUpdate: SelectRowUpdateType
-
-    /** The most recent row to have been selected/unselected */
-    previousSelectedRow: DataTableState<T>['previousSelectedRow']
-
-    columnOrder: number[] | undefined
-
-    page: DataTableState<T>['page']
-
-    rowsPerPage: DataTableState<T>['rowsPerPage']
 }
 
 const useStyles = tss
@@ -152,7 +124,7 @@ const useStyles = tss
     }))
 
 function buildRows<T>(
-    { data, page, rowsPerPage, count }: DataTableBodyProps<T>,
+    { data, page, rowsPerPage, count }: DataTableState<T>,
     options: DataTableOptions<T>
 ) {
     if (options.serverSide) return data.length ? data : null

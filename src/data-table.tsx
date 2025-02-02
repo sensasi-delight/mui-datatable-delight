@@ -91,6 +91,10 @@ function DataTable_({
             page: 0
         }
 
+        if (!setState) {
+            throw new Error('setState is not defined')
+        }
+
         const displayData = options.serverSide
             ? prevState.displayData
             : getDisplayData(

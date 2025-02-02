@@ -48,17 +48,9 @@ export default function Table({ selectRowUpdate }: Props) {
 
             <_TableHead selectRowUpdate={selectRowUpdate} />
 
-            {/* @ts-expect-error VALUES ARE NOT PASSING PROPS ANYMORE - WILL REMOVE TYPES LATER */}
             <_TableBody selectRowUpdate={selectRowUpdate} />
 
-            {options.customTableBodyFooterRender?.({
-                data: state.displayData,
-                count: state.count,
-                columns: state.columns,
-                selectedRows: state.selectedRows,
-                // @ts-expect-error WILL FIX THIS LATER
-                selectableRows: options.selectableRows
-            })}
+            {options.customTableBodyFooterRender?.(state, options)}
         </MuiTable>
     )
 }

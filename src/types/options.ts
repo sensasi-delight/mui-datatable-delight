@@ -654,11 +654,10 @@ interface DataTableCustomsOptions<DataRowItemType> {
      *
      * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-footer/index.tsx
      */
-    customTableBodyFooterRender?: (options: {
-        data: unknown[]
-        selectableRows: SelectableRowsType
-        columns: unknown[]
-    }) => unknown
+    customTableBodyFooterRender?: (
+        state: DataTableState<DataRowItemType>,
+        options: DataTableOptions<DataRowItemType>
+    ) => ReactNode
 
     /**
      * Render a custom Toolbar.

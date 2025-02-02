@@ -6,7 +6,6 @@ import { useState } from 'react'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 // globals
-import type { FilterUpdateType } from '@src/data-table'
 import useDataTableContext from '@src/hooks/use-data-table-context'
 import getDisplayData from '@src/functions/get-new-state-on-data-change/get-display-data'
 // global enums
@@ -15,10 +14,10 @@ import TableAction from '@src/enums/table-action'
 import ComponentClassName from '@src/enums/class-name'
 // locals
 import ToolbarDataFilterBoxFilters from './components/filter-inputs'
-import type { DataTableState } from '@src/index'
+import type { FilterUpdateType } from '@src/types/filter-update'
 
-export default function ToolbarDataFilterBox(
-    props: DataTableToolbarFilterProps
+export default function ToolbarDataFilterBox<T>(
+    props: DataTableToolbarFilterProps<T>
 ) {
     const {
         onAction,
@@ -44,6 +43,10 @@ export default function ToolbarDataFilterBox(
 
     function handleFilterReset() {
         const prevState = state
+
+        if (!setState) {
+            throw new Error('setState is not defined')
+        }
 
         const filterList = prevState.columns.map(() => [])
         const displayData = options.serverSide
@@ -109,13 +112,14 @@ export default function ToolbarDataFilterBox(
 
             {options.customFilterDialogFooter?.(filterList, () => {
                 filterList.forEach((filters, index) => {
+                    const column = columns[index]
+
+                    if (!column) {
+                        throw new Error('Column not found')
+                    }
+
                     filters.forEach(filter => {
-                        filterUpdate?.(
-                            index,
-                            filter,
-                            columns[index],
-                            FilterType.CUSTOM
-                        )
+                        filterUpdate?.(index, filter, column, FilterType.CUSTOM)
                     })
                 })
 
@@ -191,15 +195,9 @@ export type CustomUpdateType = (
     index: number
 ) => FilterListType
 
-export interface DataTableToolbarFilterProps {
-    /** Data used to populate filter dropdown/checkbox */
-    filterData: DataTableState['filterData']
-
-    /** Data selected to be filtered against dropdown/checkbox */
-    filterList: DataTableState['filterList']
-
+export interface DataTableToolbarFilterProps<T> {
     /** Callback to trigger filter update */
-    filterUpdate: FilterUpdateType
+    filterUpdate: FilterUpdateType<T>
 
     handleClose: () => void
 }
