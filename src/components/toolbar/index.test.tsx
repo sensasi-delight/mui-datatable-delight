@@ -5,9 +5,10 @@ import {
     render
     // RenderResult
 } from '@testing-library/react'
+import Chip from '@mui/material/Chip'
 // locals
 import Toolbar from '.'
-import type { DataTableOptions, DataTableProps } from '@src/index'
+import type { DataTableProps } from '@src/index'
 import { DEFAULT_TEXT_LABELS } from '../../hooks/use-data-table-context/function/statics/default-text-labels'
 import ClassName from '../../enums/class-name'
 import { DataTableContextProvider } from '../..'
@@ -23,7 +24,7 @@ describe('<Toolbar />', function () {
 
         const COLUMNS = ['First Name', 'Company', 'City', 'State']
 
-        const OPTIONS: DataTableOptions = {
+        const OPTIONS: DataTableProps['options'] = {
             print: true,
             download: true,
             search: true,
@@ -578,5 +579,51 @@ describe('<Toolbar />', function () {
         fireEvent.click(downloadButton)
 
         expect(onDownload).toHaveBeenCalledOnce()
+    })
+
+    describe('<Toolbar /> with custom icons', function () {
+        const CustomChip = ({
+            label,
+            testId
+        }: {
+            label: string
+            testId: string
+        }) => {
+            return (
+                <Chip
+                    data-testid={testId}
+                    variant="outlined"
+                    color="secondary"
+                    label={label}
+                />
+            )
+        }
+
+        const testCustomIcon = (iconName: string) => {
+            const { result } = setup({
+                icons: {
+                    [iconName]: () => (
+                        <CustomChip
+                            testId={'custom-icon-' + iconName}
+                            label="Custom"
+                        />
+                    )
+                }
+            })
+
+            expect(result.getAllByRole('button').length).toBe(5)
+            expect(result.getByTestId('custom-icon-' + iconName)).toBeDefined()
+        }
+
+        ;[
+            'SearchIcon',
+            'FilterIcon',
+            'DownloadIcon',
+            'PrintIcon',
+            'ViewColumnIcon'
+        ].forEach(iconName =>
+            test(`should render a toolbar with a custom chip in place of the ${iconName} icon`, () =>
+                testCustomIcon(iconName))
+        )
     })
 })
