@@ -9,7 +9,6 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Tooltip from '@mui/material/Tooltip'
 // globals
-import type { FilterUpdateType } from '@src/data-table'
 import useDataTableContext from '@src/hooks/use-data-table-context'
 import getDisplayData from '@src/functions/get-new-state-on-data-change/get-display-data'
 // global enums
@@ -22,6 +21,7 @@ import { ToolbarPrintButton } from './components/print-button'
 import { ToolbarDownloadButton } from './components/download-button'
 import ColumnVisibilitiesBox from './components/column-visibilities-box'
 import DataFilterBox from './components/data-filter-box'
+import type { FilterUpdateType } from '@src/types/filter-update'
 
 /**
  * DataTable Delight Toolbar
@@ -45,12 +45,9 @@ export default function Toolbar(props: ToolbarProps) {
     const { classes } = useStyles()
 
     const [showSearch, setShowSearch] = useState(
-        Boolean(
-            state.searchText ??
-                options.searchText ??
-                options.searchOpen ??
-                options.searchAlwaysOpen
-        )
+        Boolean(state.searchText ?? options.searchText) ||
+            Boolean(options.searchOpen) ||
+            Boolean(options.searchAlwaysOpen)
     )
 
     const [activeIcon, _setActiveIcon] = useState<
@@ -129,6 +126,10 @@ export default function Toolbar(props: ToolbarProps) {
         const prevState = state
 
         const newSearchText = ''
+
+        if (!setState) {
+            throw new Error('setState is not defined')
+        }
 
         onAction?.(TableAction.SEARCH, {
             searchText: newSearchText,

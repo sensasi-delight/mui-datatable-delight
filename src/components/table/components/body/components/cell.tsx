@@ -1,7 +1,7 @@
 'use client'
 
 // vendors
-import { type ReactNode, useCallback } from 'react'
+import { type ReactNode } from 'react'
 import TableCell, { type TableCellProps } from '@mui/material/TableCell'
 import { tss } from 'tss-react/mui'
 // globals
@@ -18,43 +18,18 @@ export function TableBodyCell({
     print,
     ...otherProps
 }: {
-    children?: ReactNode
+    children: ReactNode
     classes?: object | undefined
     className?: string | undefined
-    colIndex?: number | undefined
-    columnHeader?: unknown
-    dataIndex?: number | undefined
+    colIndex: number
+    columnHeader?: ReactNode
+    dataIndex: number
     otherProps?: unknown
-    rowIndex?: number | undefined
+    rowIndex: number
     print: boolean
 } & TableCellProps) {
     const { options, textLabels } = useDataTableContext()
     const { classes, cx } = useStyles()
-
-    const handleClick = useCallback<Required<TableCellProps>['onClick']>(
-        event => {
-            if (
-                colIndex !== undefined &&
-                rowIndex !== undefined &&
-                dataIndex !== undefined
-            ) {
-                options?.onCellClick?.(children, {
-                    colIndex,
-                    rowIndex,
-                    dataIndex,
-                    event
-                })
-            } else {
-                console.error(`
-                    Required param is undefined:
-                    - colIndex: ${colIndex}
-                    - rowIndex: ${rowIndex}
-                    - dataIndex: ${dataIndex}
-                    `)
-            }
-        },
-        [children, colIndex, rowIndex, dataIndex, options]
-    )
 
     const cells = [
         <div
@@ -132,7 +107,14 @@ export function TableBodyCell({
 
     return (
         <TableCell
-            onClick={handleClick}
+            onClick={event => {
+                options?.onCellClick?.(children, {
+                    colIndex,
+                    rowIndex,
+                    dataIndex,
+                    event
+                })
+            }}
             data-column-index={colIndex}
             className={cx(
                 classes.root,

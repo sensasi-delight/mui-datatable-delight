@@ -52,7 +52,7 @@ describe('get-new-state-on-data-change', () => {
         {
             name: 'Name',
             label: 'Name',
-            display: 'true',
+            display: true,
             empty: false,
             filter: true,
             sort: true,
@@ -69,7 +69,7 @@ describe('get-new-state-on-data-change', () => {
             }
         },
         {
-            display: 'true',
+            display: true,
             empty: false,
             filter: true,
             sort: true,
@@ -85,7 +85,7 @@ describe('get-new-state-on-data-change', () => {
             label: 'Title'
         },
         {
-            display: 'true',
+            display: true,
             empty: false,
             filter: true,
             sort: true,
@@ -157,7 +157,7 @@ describe('get-new-state-on-data-change', () => {
         }
     ]
 
-    const expected: DataTableState = {
+    const expected: DataTableState<(typeof data)[0]> = {
         ...DEFAULT_STATE,
         // activeColumn: null, // new value = undefined prop
         // announceText: null, // new value = undefined prop
