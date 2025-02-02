@@ -40,7 +40,7 @@ export default function getNewStateOnDataChange<T>(
     dataUpdated: boolean,
     options: DataTableOptions<T>,
     state: DataTableState<T>,
-    setState: (newState: DataTableState<T>) => void
+    setState: undefined | ((newState: DataTableState<T>) => void)
 ): DataTableState<T> {
     const { columns, filterData, filterList, columnOrder } = buildColumns(
         props.columns,

@@ -21,7 +21,7 @@ export default interface ContextValue<DataRowItemType> {
     ) => void
     options: DataTableOptions<DataRowItemType>
     props: DataTableProps<DataRowItemType>
-    setState: Dispatch<SetStateAction<DataTableState<DataRowItemType>>>
+    setState?: Dispatch<SetStateAction<DataTableState<DataRowItemType>>>
     state: DataTableState<DataRowItemType>
     tableHeadCellElements: RefObject<HTMLTableCellElement[]>
     tableRef: RefObject<HTMLTableElement | null>

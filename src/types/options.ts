@@ -1,12 +1,6 @@
 import type { TableProps } from '@mui/material/Table'
+import type { ChipProps } from '@mui/material/Chip'
 import type { TableRowProps } from '@mui/material/TableRow'
-import type {
-    DisplayData,
-    MUIDataTableChip,
-    MUIDataTableColumn,
-    MUIDataTableDraggableColumns,
-    SelectableRows
-} from 'mui-datatables'
 import type { MouseEvent, ReactNode } from 'react'
 import type { DataTableState } from './state'
 import type { FilterTypeType } from './shared/filter-type-type'
@@ -18,6 +12,9 @@ import type DataTableSearchOptions from './options/search'
 import type { BooleanOrDisabled } from './values/boolean-or-disabled'
 import type { DefaultDataRowItemType } from './values/default-data-row-item-type'
 import type { SelectedRowDataState } from './state/selected-row-data'
+import type { DisplayDataState } from './state/display-data'
+import type { SelectableRowsType } from './options/selectable-rows'
+import type { ColumnPropType } from './props/column'
 
 export interface DataTableSortOrderOption {
     name: string
@@ -82,7 +79,10 @@ export interface DataTableOptions<DataRowItemType = DefaultDataRowItemType>
      * To disable the dragging of a particular column, see the "draggable" option in the columns options.
      * Dragging a column to a new position updates the columnOrder array and triggers the onColumnOrderChange callback.
      */
-    draggableColumns?: MUIDataTableDraggableColumns
+    draggableColumns?: {
+        enabled: boolean
+        transitionTime?: number | undefined
+    }
 
     /**
      * Shadow depth applied to the `<Paper />` component.
@@ -205,7 +205,7 @@ export interface DataTableOptions<DataRowItemType = DefaultDataRowItemType>
 
     /** Callback function that triggers when a cell is clicked. */
     onCellClick?: (
-        colData: any,
+        colData: unknown,
         cellMeta: {
             colIndex: number
             rowIndex: number
@@ -253,7 +253,7 @@ export interface DataTableOptions<DataRowItemType = DefaultDataRowItemType>
         data: DataTableState<DataRowItemType>['data']
     ) =>
         | {
-              data: DisplayData[]
+              data: DisplayDataState
               columns: DataTableState<DataRowItemType>['columns']
           }
         | string
@@ -261,11 +261,11 @@ export interface DataTableOptions<DataRowItemType = DefaultDataRowItemType>
 
     /** Callback function that triggers when filters have changed. */
     onFilterChange?: (
-        changedColumn: string | MUIDataTableColumn | null,
+        changedColumn: ColumnPropType<DataRowItemType> | null,
         filterList: DataTableState<DataRowItemType>['filterList'],
         type: FilterTypeType | 'reset',
         changedColumnIndex: number | null,
-        displayData: DataTableState<DataRowItemType>['displayData']
+        displayData: DisplayDataState
     ) => void
 
     /**
@@ -307,9 +307,9 @@ export interface DataTableOptions<DataRowItemType = DefaultDataRowItemType>
      * Callback function that triggers when row(s) are expanded/collapsed.
      */
     onRowExpansionChange?: (
-        currentRowsExpanded: any[],
-        allRowsExpanded: any[],
-        rowsExpanded?: any[]
+        currentRowsExpanded: unknown[],
+        allRowsExpanded: unknown[],
+        rowsExpanded?: unknown[]
     ) => void
 
     /**
@@ -321,15 +321,15 @@ export interface DataTableOptions<DataRowItemType = DefaultDataRowItemType>
             lookup: boolean[]
             data: SelectedRowDataState[]
         },
-        newTableData: any[]
+        newTableData: unknown[]
         // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
     ) => void | false
 
     /** Callback function that triggers when row(s) are selected/deselected. */
     onRowSelectionChange?: (
-        currentRowsSelected: any[],
-        allRowsSelected: any[],
-        rowsSelected?: any[]
+        currentRowsSelected: unknown[],
+        allRowsSelected: unknown[],
+        rowsSelected?: unknown[]
     ) => void
 
     /**
@@ -427,7 +427,7 @@ export interface DataTableOptions<DataRowItemType = DefaultDataRowItemType>
     rowHover?: boolean
 
     /** User provided expanded rows */
-    rowsExpanded?: any[]
+    rowsExpanded?: unknown[]
 
     /**
      * Number of rows allowed per page.
@@ -444,14 +444,14 @@ export interface DataTableOptions<DataRowItemType = DefaultDataRowItemType>
     rowsPerPageOptions?: number[]
 
     /** User provided array of number (dataIndexes) which indicated the selected row. */
-    rowsSelected?: any[]
+    rowsSelected?: unknown[]
 
     /**
      * Indicates if rows can be selected.
      *
      * @default  'multiple'
      */
-    selectableRows?: 'multiple' | 'single' | 'none'
+    selectableRows?: SelectableRowsType
 
     /**
      * Show/hide the select all/deselect all checkbox header for selectable rows.
@@ -504,8 +504,8 @@ export interface DataTableOptions<DataRowItemType = DefaultDataRowItemType>
     setFilterChipProps?: (
         colIndex: number,
         colName: string,
-        data: readonly any[][]
-    ) => MUIDataTableChip
+        data: readonly unknown[][]
+    ) => Pick<ChipProps, 'color' | 'variant' | 'className'>
 
     /**
      * Is called for each row and allows you to return custom props for this row based on its data.
@@ -513,7 +513,7 @@ export interface DataTableOptions<DataRowItemType = DefaultDataRowItemType>
      * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-styling/index.tsx
      */
     setRowProps?: (
-        row: any[],
+        row: unknown[],
         dataIndex: number,
         rowIndex: number
     ) => TableRowProps
@@ -611,7 +611,7 @@ interface DataTableCustomsOptions<DataRowItemType> {
     /** Add a custom footer to the filter dialog. */
     customFilterDialogFooter?: (
         filterList: DataTableState<DataRowItemType>['filterList'],
-        applyNewFilters?: (...args: any[]) => any
+        applyNewFilters?: (...args: unknown[]) => unknown
     ) => ReactNode
 
     /**
@@ -634,7 +634,7 @@ interface DataTableCustomsOptions<DataRowItemType> {
      * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-rows/index.tsx
      */
     customRowRender?: (
-        data: any[],
+        data: unknown[],
         dataIndex: number,
         rowIndex: number
     ) => ReactNode
@@ -646,7 +646,7 @@ interface DataTableCustomsOptions<DataRowItemType> {
      *
      * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-sorting/index.tsx
      */
-    customSort?: (data: any[], colIndex: number, order: string) => any[]
+    customSort?: (data: unknown[], colIndex: number, order: string) => unknown[]
 
     /**
      * Render a footer under the table body but above the table's standard footer.
@@ -655,19 +655,17 @@ interface DataTableCustomsOptions<DataRowItemType> {
      * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-footer/index.tsx
      */
     customTableBodyFooterRender?: (options: {
-        data: any[]
-        selectableRows: SelectableRows
-        columns: any[]
-    }) => any
+        data: unknown[]
+        selectableRows: SelectableRowsType
+        columns: unknown[]
+    }) => unknown
 
     /**
      * Render a custom Toolbar.
      *
      * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-toolbar/CustomToolbar.tsx
      */
-    customToolbar?: (data: {
-        displayData: DataTableState<DataRowItemType>['displayData']
-    }) => ReactNode
+    customToolbar?: (data: { displayData: DisplayDataState }) => ReactNode
 
     /**
      * Render a custom selected rows ToolBar.
@@ -679,7 +677,7 @@ interface DataTableCustomsOptions<DataRowItemType> {
             data: SelectedRowDataState[]
             lookup: boolean[]
         },
-        displayData: DisplayData,
+        displayData: DisplayDataState,
         setSelectedRows: (rows: number[]) => void
     ) => ReactNode
 
@@ -696,7 +694,7 @@ interface DataTableCustomsOptions<DataRowItemType> {
             data: SelectedRowDataState[]
             lookup: boolean[]
         },
-        displayData: DisplayData,
+        displayData: DisplayDataState,
         setSelectedRows: (rows: number[]) => void
     ) => ReactNode
 }
@@ -748,10 +746,6 @@ interface DataTableCustomsOptions<DataRowItemType> {
 //         page: PropTypes.number,
 //         pagination: PropTypes.bool,
 //         print: PropTypes.oneOf([true, false, 'true', 'false', 'disabled']),
-//         selectableRows: PropTypes.oneOfType([
-//             PropTypes.bool,
-//             PropTypes.oneOf(['none', 'single', 'multiple'])
-//         ]),
 //         selectableRowsHeader: PropTypes.bool,
 //         selectableRowsHideCheckboxes: PropTypes.bool,
 //         selectableRowsOnClick: PropTypes.bool,

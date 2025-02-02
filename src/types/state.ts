@@ -1,4 +1,3 @@
-import type { MUIDataTableStateRows } from 'mui-datatables'
 import type { DataTableSortOrderOption } from './options'
 import type { DisplayDataState } from './state/display-data'
 import type DataTableSearchOptions from './options/search'
@@ -6,6 +5,11 @@ import type { FilterList } from './state/filter-list'
 import type { ColumnState } from './state/column'
 import type { Primitive } from './values/primitive'
 import type { SelectedRowDataState } from './state/selected-row-data'
+
+interface ExpandedRows {
+    data: string[]
+    lookup: boolean[]
+}
 
 export interface DataTableState<T> {
     activeColumn: number | null
@@ -16,7 +20,7 @@ export interface DataTableState<T> {
 
     columns: ColumnState<T>[]
 
-    curExpandedRows?: MUIDataTableStateRows
+    curExpandedRows?: ExpandedRows
 
     count: number
 
@@ -27,10 +31,7 @@ export interface DataTableState<T> {
 
     displayData: DisplayDataState
 
-    expandedRows: {
-        data: string[]
-        lookup: object
-    }
+    expandedRows: ExpandedRows
 
     /** All data per column */
     filterData: string[][]

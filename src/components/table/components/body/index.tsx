@@ -184,7 +184,7 @@ function isRowExpanded<T>(
     dataIndex: number,
     { expandedRows }: DataTableBodyProps<T>
 ): boolean {
-    return (expandedRows.lookup && expandedRows.lookup[dataIndex]) ?? false
+    return expandedRows.lookup[dataIndex] ?? false
 }
 
 function getIsRowSelectable<T>(

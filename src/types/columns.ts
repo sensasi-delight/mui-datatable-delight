@@ -3,11 +3,12 @@ import type { DataTableState } from './state'
 import type { ReactNode } from 'react'
 import type { FilterTypeType } from './shared/filter-type-type'
 import type DataTableMeta from './table-meta'
-import type {
-    CustomHeadLabelRenderOptions,
-    MUIDataTableCustomFilterListOptions,
-    MUIDataTableCustomHeadRenderer
-} from 'mui-datatables'
+import type { ColumnState } from './state/column'
+import type { FilterList } from './state/filter-list'
+
+export type MUIDataTableCustomHeadRenderer<T> = {
+    index: number
+} & ColumnState<T>
 
 export interface DataTableColumnObjectOptions<T> {
     /**
@@ -19,7 +20,7 @@ export interface DataTableColumnObjectOptions<T> {
      * [Example](https://github.com/gregnb/mui-datatables/blob/master/examples/component/index.js)
      */
     customBodyRender?: (
-        value: any,
+        value: unknown,
         tableMeta: DataTableMeta<T>,
         updateValue?: (value: string) => void
     ) => ReactNode
@@ -42,22 +43,45 @@ export interface DataTableColumnObjectOptions<T> {
      * This method only affects the display in the table's header, other areas of the table (such as the View Columns popover), will use the column's label.
      */
     customHeadLabelRender?:
-        | ((options: CustomHeadLabelRenderOptions) => string | ReactNode)
+        | ((
+              options: {
+                  index: number
+                  colPos: number
+              } & ColumnState<T>
+          ) => string | ReactNode)
         | undefined
 
     /**
      * These options only affect the filter chips that display after filter are selected.
      * To modify the filters themselves, see filterOptions.
      */
-    customFilterListOptions?: MUIDataTableCustomFilterListOptions
+    customFilterListOptions?: {
+        /**
+         * Function that return a string or array of strings use as the chip label(s).
+         *
+         * [Example](https://github.com/gregnb/mui-datatables/blob/master/examples/customize-filter/index.js)
+         */
+        render?: (value: unknown) => ReactNode
+        /**
+         * Function that returns a filterList allowing for custom filter updates
+         * when removing the filter chip. FilterType must be set to 'custom'.
+         *
+         * [Example](https://github.com/gregnb/mui-datatables/blob/master/examples/customize-filter/index.js)
+         */
+        update?: (
+            filterList: FilterList,
+            filterPos: number,
+            index: number
+        ) => FilterList
+    }
 
     /** @deprecated use customFilterListOptions.render */
-    customFilterListRender?: ((value: any) => string) | undefined
+    customFilterListRender?: ((value: unknown) => string) | undefined
 
     /** Function that returns a string or React component. Used as display for column header. */
     customHeadRender?:
         | ((
-              columnMeta: MUIDataTableCustomHeadRenderer,
+              columnMeta: MUIDataTableCustomHeadRenderer<T>,
               handleToggleColumn: (columnIndex: number) => void,
               sortOrder: DataTableSortOrderOption
           ) => string | ReactNode)
@@ -125,7 +149,7 @@ export interface DataTableColumnObjectOptions<T> {
      * [Example](https://github.com/gregnb/mui-datatables/blob/master/examples/customize-styling/index.js)
      */
     setCellHeaderProps?:
-        | ((columnMeta: MUIDataTableCustomHeadRenderer) => object)
+        | ((columnMeta: MUIDataTableCustomHeadRenderer<T>) => object)
         | undefined
 
     /**
@@ -181,7 +205,7 @@ export interface DataTableColumnObjectOptions<T> {
     sortCompare:
         | ((
               order: DataTableSortOrderOption['direction']
-          ) => (obj1: { data: any }, obj2: { data: any }) => number)
+          ) => (obj1: { data: unknown }, obj2: { data: unknown }) => number)
         | undefined
 
     /**

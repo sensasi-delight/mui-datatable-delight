@@ -12,6 +12,7 @@ import ComponentClassName from '@src/enums/class-name'
 // locals
 import { ICON_BUTTON_DEFAULT_SX } from '../statics/icon-button-default-sx'
 import { createCsvDownload } from './functions/create-csv-download'
+import type { ColumnState } from '@src/types/state/column'
 
 export function ToolbarDownloadButton() {
     const { classes } = useStyles()
@@ -44,8 +45,8 @@ const useStyles = tss
         root: {}
     })
 
-function handleCSVDownload(
-    { columns, columnOrder, data, displayData }: DataTableState,
+function handleCSVDownload<T>(
+    { columns, columnOrder, data, displayData }: DataTableState<T>,
     options: DataTableOptions
 ) {
     const columnOrderIndices = getColumnOrderIndices(columnOrder)
@@ -72,11 +73,11 @@ function handleCSVDownload(
     createCsvDownload(columnsToDownload, dataToDownload, options)
 }
 
-function getColumnOrderIndices(columnOrder: any[]): number[] {
+function getColumnOrderIndices(columnOrder: unknown[]): number[] {
     return Array.isArray(columnOrder) ? columnOrder.map((_, idx) => idx) : []
 }
 
-function getDataToDownload(data: any[], columnOrderIndices: number[]): any[] {
+function getDataToDownload(data: unknown[], columnOrderIndices: number[]) {
     return data.map(row => ({
         index: row.index,
         data: columnOrderIndices.map(idx => row.data[idx])
@@ -91,7 +92,7 @@ function getFilteredDataToDownload<T>(
     displayData: DataTableState<T>['displayData'],
     data: DataTableState<T>['data'],
     columnOrderIndices: number[]
-): any[] {
+) {
     return displayData
         .map(row => ({
             index: row.index,
@@ -106,11 +107,11 @@ function getFilteredDataToDownload<T>(
 }
 
 function getActualValue(
-    column: any,
+    column: unknown,
     dataIndex: number,
     colIndex: number,
-    data: any[]
-): any {
+    data: unknown[]
+) {
     if (isReactElement(column)) {
         return data.find(d => d.index === dataIndex)?.data[colIndex]
     }
@@ -119,7 +120,7 @@ function getActualValue(
         : column
 }
 
-function isReactElement(obj: any): boolean {
+function isReactElement(obj: unknown): boolean {
     return typeof obj === 'object' && obj !== null && !Array.isArray(obj)
 }
 
@@ -129,15 +130,15 @@ function shouldUseDisplayedColumnsOnly(options: DataTableOptions): boolean {
     )
 }
 
-function getDisplayedColumns(columns: any[]): any[] {
-    return columns.filter(column => column.display === 'true')
+function getDisplayedColumns<T>(columns: ColumnState<T>[]) {
+    return columns.filter(column => column.display)
 }
 
 function filterDataByDisplayedColumns(
-    data: any[],
-    columns: any[],
+    data: unknown[],
+    columns: unknown[],
     columnOrderIndices: number[]
-): any[] {
+) {
     return data.map(row => ({
         ...row,
         data: row.data.filter(

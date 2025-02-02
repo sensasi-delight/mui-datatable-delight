@@ -63,14 +63,19 @@ export function getColModel<T>(
     columnOrder: DataTableState<T>['columnOrder'],
     columns: DataTableState<T>['columns']
 ) {
-    const colModel = []
+    const colModel: {
+        left: number
+        width: number
+        columnIndex: number
+        ref: RefObject<HTMLTableCellElement>
+    }[] = []
 
     function getFakeCell() {
         let leftMostCell = { offsetLeft: Infinity }
 
         const headCells = Object.entries(headCellRefs.current)
 
-        headCells.forEach(([_, item]) => {
+        headCells.forEach(([, item]) => {
             if (item && item.offsetLeft < leftMostCell.offsetLeft) {
                 leftMostCell = item
             }

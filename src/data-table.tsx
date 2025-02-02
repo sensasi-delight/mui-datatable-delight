@@ -124,7 +124,7 @@ function DataTable_({
     const selectRowUpdate: SelectRowUpdateType = (
         type,
         value,
-        shiftAdjacentRows
+        shiftAdjacentRows = []
     ) => {
         if (options.selectableRows === 'none') {
             return
@@ -393,15 +393,20 @@ function updateFilterByType(
 
     switch (type) {
         case 'checkbox':
-            filterIndexPosition >= 0
-                ? filterList[index]?.splice(filterIndexPosition, 1)
-                : typeof value === 'string' && filterList[index]?.push(value)
+            if (filterIndexPosition >= 0) {
+                filterList[index]?.splice(filterIndexPosition, 1)
+            } else if (typeof value === 'string') {
+                filterList[index]?.push(value)
+            }
+
             break
 
         case 'chip':
-            filterIndexPosition >= 0
-                ? filterList[index]?.splice(filterIndexPosition, 1)
-                : typeof value === 'string' && filterList[index]?.push(value)
+            if (filterIndexPosition >= 0) {
+                filterList[index]?.splice(filterIndexPosition, 1)
+            } else if (typeof value === 'string') {
+                filterList[index]?.push(value)
+            }
             break
 
         case 'multiselect':

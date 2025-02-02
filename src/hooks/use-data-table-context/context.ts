@@ -30,9 +30,7 @@ const DataTableContext = createContext<ContextValue<unknown>>({
 
     tableRef: {
         current: null
-    },
-
-    setState: () => {}
+    }
 })
 
 export default DataTableContext

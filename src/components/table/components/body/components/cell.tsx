@@ -1,16 +1,14 @@
 'use client'
 
 // vendors
-import { useCallback } from 'react'
+import { type ReactNode, useCallback } from 'react'
 import TableCell, { type TableCellProps } from '@mui/material/TableCell'
 import { tss } from 'tss-react/mui'
-import type { MUIDataTableBodyCell } from 'mui-datatables'
 // globals
-import type { DataTableState } from '@src/types/state'
 import useDataTableContext from '@src/hooks/use-data-table-context'
 import ComponentClassName from '@src/enums/class-name'
 
-export function TableBodyCell<T>({
+export function TableBodyCell({
     children,
     colIndex,
     columnHeader,
@@ -19,9 +17,17 @@ export function TableBodyCell<T>({
     className,
     print,
     ...otherProps
-}: Omit<MUIDataTableBodyCell & TableCellProps, 'options'> & {
-    print: DataTableState<T>['columns'][0]['print']
-}) {
+}: {
+    children?: ReactNode
+    classes?: object | undefined
+    className?: string | undefined
+    colIndex?: number | undefined
+    columnHeader?: unknown
+    dataIndex?: number | undefined
+    otherProps?: unknown
+    rowIndex?: number | undefined
+    print: boolean
+} & TableCellProps) {
     const { options, textLabels } = useDataTableContext()
     const { classes, cx } = useStyles()
 

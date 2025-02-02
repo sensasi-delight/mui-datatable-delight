@@ -49,10 +49,13 @@ describe('<Toolbar />', function () {
             ...override
         }
 
+        const filterUpdate = vi.fn()
+
         return {
+            filterUpdate,
             result: render(
                 <DataTableContextProvider datatableProps={props}>
-                    <Toolbar filterUpdate={() => {}} />
+                    <Toolbar filterUpdate={filterUpdate} />
                 </DataTableContextProvider>
             )
         }

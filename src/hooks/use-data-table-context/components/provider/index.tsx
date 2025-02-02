@@ -52,7 +52,7 @@ export default function DataTableContextProvider<DataRowItemType>({
                 ...getStateFromDataTableOptionsProp(datatableProps.options),
                 ...restoredState
             },
-            () => {}
+            undefined
         )
 
         datatableProps.options?.onTableInit?.(TableAction.INITIALIZED, newState)

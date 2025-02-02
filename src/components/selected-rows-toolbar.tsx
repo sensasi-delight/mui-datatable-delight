@@ -1,7 +1,6 @@
 'use client'
 
 // vendors
-import type { MUIDataTableToolbarSelect } from 'mui-datatables'
 import { tss } from 'tss-react/mui'
 // materials
 import IconButton from '@mui/material/IconButton'
@@ -17,6 +16,7 @@ import useDataTableContext from '../hooks/use-data-table-context'
 // enums
 import ClassName from '../enums/class-name'
 import TableAction from '../enums/table-action'
+import type { SelectRowUpdateType } from '@src/types/select-row-update'
 
 export default function SelectedRowsToolbar({
     selectRowUpdate
@@ -57,7 +57,7 @@ export default function SelectedRowsToolbar({
                 true,
                 options,
                 state,
-                setState ?? (() => {})
+                setState
             )
         }
 
@@ -122,7 +122,7 @@ const useStyles = tss
     }))
 
 export interface TableToolbarSelectProps {
-    selectRowUpdate?: MUIDataTableToolbarSelect['selectRowUpdate']
+    selectRowUpdate: SelectRowUpdateType
 }
 
 function handleCustomSelectedRows<T>(
@@ -147,5 +147,5 @@ function handleCustomSelectedRows<T>(
         )
     }
 
-    selectRowUpdate?.('custom', selectedRows)
+    selectRowUpdate('custom', selectedRows)
 }
