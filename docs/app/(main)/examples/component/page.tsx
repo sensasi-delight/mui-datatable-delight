@@ -5,20 +5,18 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import TextField from '@mui/material/TextField'
 import Switch from '@mui/material/Switch'
 import Cities from '../_shared-components/cities'
-import DataTable from '@src'
+import DataTable, { type DataTableProps } from '@src'
 
 class Example extends React.Component {
     render() {
-        const columns = [
+        const columns: DataTableProps['columns'] = [
             {
                 name: 'Name',
                 options: {
                     filter: false,
-                    customBodyRender: (value, tableMeta, updateValue) => (
-                        <FormControlLabel
-                            label=""
+                    customBodyRender: (value, _, updateValue) => (
+                        <TextField
                             value={value}
-                            control={<TextField value={value} />}
                             onChange={event => updateValue(event.target.value)}
                         />
                     )
@@ -34,27 +32,24 @@ class Example extends React.Component {
                 name: 'Location',
                 options: {
                     filter: true,
-                    customBodyRender: (value, tableMeta, updateValue) => {
-                        return (
-                            <Cities
-                                value={value}
-                                index={tableMeta.columnIndex}
-                                change={event => updateValue(event)}
-                            />
-                        )
-                    }
+                    customBodyRender: (value, tableMeta, updateValue) => (
+                        <Cities
+                            value={value?.toString() ?? ''}
+                            index={tableMeta.columnIndex}
+                            change={event => updateValue(event)}
+                        />
+                    )
                 }
             },
             {
                 name: 'Age',
                 options: {
                     filter: false,
-                    customBodyRender: (value, tableMeta, updateValue) => (
-                        <FormControlLabel
-                            label=""
-                            control={
-                                <TextField value={value || ''} type="number" />
-                            }
+                    customBodyRender: (value, _, updateValue) => (
+                        <TextField
+                            name="age"
+                            value={value ?? ''}
+                            type="number"
                             onChange={event => updateValue(event.target.value)}
                         />
                     )
@@ -64,7 +59,7 @@ class Example extends React.Component {
                 name: 'Salary',
                 options: {
                     filter: true,
-                    customBodyRender: (value, tableMeta, updateValue) => {
+                    customBodyRender: value => {
                         const nf = new Intl.NumberFormat('en-US', {
                             style: 'currency',
                             currency: 'USD',
@@ -80,7 +75,7 @@ class Example extends React.Component {
                 name: 'Active',
                 options: {
                     filter: true,
-                    customBodyRender: (value, tableMeta, updateValue) => {
+                    customBodyRender: (value, _, updateValue) => {
                         return (
                             <FormControlLabel
                                 label={value ? 'Yes' : 'No'}
@@ -88,7 +83,7 @@ class Example extends React.Component {
                                 control={
                                     <Switch
                                         color="primary"
-                                        checked={value}
+                                        checked={Boolean(value)}
                                         value={value ? 'Yes' : 'No'}
                                     />
                                 }
@@ -222,7 +217,7 @@ class Example extends React.Component {
             ]
         ]
 
-        const options = {
+        const options: DataTableProps['options'] = {
             filter: true,
             filterType: 'dropdown',
             responsive: 'standard'

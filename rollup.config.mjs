@@ -68,7 +68,7 @@ export default [
                 return false
             }
 
-            return /node_modules/.test(id)
+            return id.includes('/node_modules/')
         },
         input: 'src/index.ts',
         output: [
@@ -97,6 +97,7 @@ export default [
         },
         plugins: [
             dts({
+                tsconfig: './tsconfig.json',
                 compilerOptions: {
                     noCheck: true // REMOVE THIS WHEN THIS PROJECT IS FULLY TYPE SAFE
                 }
