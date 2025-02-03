@@ -5,6 +5,7 @@ import type { FilterTypeType } from './shared/filter-type-type'
 import type DataTableMeta from './table-meta'
 import type { ColumnState } from './state/column'
 import type { FilterList } from './state/filter-list'
+import type { Primitive } from './values/primitive'
 
 export type MUIDataTableCustomHeadRenderer<T> = {
     index: number
@@ -21,9 +22,9 @@ export interface DataTableColumnObjectOptions<T> {
      * [Example](https://mui-datatable-delight.vercel.app/examples/component)
      */
     customBodyRender?: (
-        value: unknown,
+        value: Primitive,
         tableMeta: DataTableMeta<T>,
-        updateValue?: (value: string) => void
+        updateValue?: (value: Primitive) => void
     ) => ReactNode
 
     /**
@@ -64,7 +65,7 @@ export interface DataTableColumnObjectOptions<T> {
          * @see
          * [Example](https://mui-datatable-delight.vercel.app/examples/customize-filter)
          */
-        render?: (value: unknown) => ReactNode
+        render?: (value: ReactNode) => ReactNode
         /**
          * Function that returns a filterList allowing for custom filter updates
          * when removing the filter chip. FilterType must be set to 'custom'.

@@ -1,7 +1,7 @@
 import type { ColumnState } from '@src/types/state/column'
 import type { DataTableOptions } from '../types/options'
 import type { Primitive } from '@src/types/values/primitive'
-import type { DataTableProps } from '..'
+import type { DataTableProps } from '@src/data-table.props'
 
 export default function transformData<T>(
     columns: ColumnState<T>[],

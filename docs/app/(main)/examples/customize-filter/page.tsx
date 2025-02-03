@@ -11,7 +11,7 @@ import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import React from 'react'
-import DataTable from '@src'
+import DataTable, { type DataTableProps } from '@src'
 
 class Example extends React.Component {
     state = {
@@ -19,7 +19,7 @@ class Example extends React.Component {
     }
 
     render() {
-        const columns = [
+        const columns: DataTableProps['columns'] = [
             {
                 name: 'Name',
                 options: {
@@ -47,7 +47,7 @@ class Example extends React.Component {
                 name: 'Location',
                 options: {
                     filter: true,
-                    display: 'true',
+                    display: true,
                     filterType: 'custom',
                     customFilterListOptions: {
                         render: v => v.map(l => l.toUpperCase()),
@@ -236,15 +236,18 @@ class Example extends React.Component {
                     filterOptions: {
                         names: ['Lower wages', 'Average wages', 'Higher wages'],
                         logic(salary, filterVal) {
-                            salary = salary.replace(/[^\d]/g, '')
+                            const salaryFloat = parseFloat(
+                                salary.replace(/[^\d]/g, '')
+                            )
                             const show =
                                 (filterVal.indexOf('Lower wages') >= 0 &&
-                                    salary < 100000) ||
+                                    salaryFloat < 100000) ||
                                 (filterVal.indexOf('Average wages') >= 0 &&
-                                    salary >= 100000 &&
-                                    salary < 200000) ||
+                                    salaryFloat >= 100000 &&
+                                    salaryFloat < 200000) ||
                                 (filterVal.indexOf('Higher wages') >= 0 &&
-                                    salary >= 200000)
+                                    salaryFloat >= 200000)
+
                             return !show
                         }
                     },
@@ -334,12 +337,13 @@ class Example extends React.Component {
             ['Mason Ray', 'Computer Scientist', 'San Francisco', 39, '$142,000']
         ]
 
-        const options = {
+        const options: DataTableProps['options'] = {
             filter: true,
             filterType: 'multiselect',
             responsive: 'standard',
             setFilterChipProps: (colIndex, colName, data) => {
-                //console.log(colIndex, colName, data);
+                console.log(colIndex, colName, data)
+
                 return {
                     color: 'primary',
                     variant: 'outlined',

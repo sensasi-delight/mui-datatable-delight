@@ -15,6 +15,8 @@ import type { SelectedRowDataState } from './state/selected-row-data'
 import type { DisplayDataState } from './state/display-data'
 import type { SelectableRowsType } from './options/selectable-rows'
 import type { ColumnPropType } from './props/column'
+import type { ColumnState } from './state/column'
+import type { DataItemState } from './state/data-item'
 
 export interface DataTableSortOrderOption {
     name: string
@@ -259,16 +261,14 @@ export interface DataTableOptions<DataRowItemType = DefaultDataRowItemType>
      * @see [On Download example](https://mui-datatatable-delight.vercel.app/examples/on-download)
      */
     onDownload?: (
-        buildHead: (
-            columns: DataTableState<DataRowItemType>['columns']
-        ) => string,
-        buildBody: (data: DataTableState<DataRowItemType>['data']) => string,
-        columns: DataTableState<DataRowItemType>['columns'],
-        data: DataTableState<DataRowItemType>['data']
+        buildHead: (columns: ColumnState<DataRowItemType>[]) => string,
+        buildBody: (data: DataItemState[]) => string,
+        columns: ColumnState<DataRowItemType>[],
+        data: DataItemState[]
     ) =>
         | {
               data: DisplayDataState
-              columns: DataTableState<DataRowItemType>['columns']
+              columns: ColumnState<DataRowItemType>[]
           }
         | string
         | false
@@ -334,8 +334,8 @@ export interface DataTableOptions<DataRowItemType = DefaultDataRowItemType>
      */
     onRowsDelete?: (
         rowsDeleted: {
-            lookup: boolean[]
             data: SelectedRowDataState[]
+            lookup: Record<number, boolean>
         },
         newTableData: unknown[]
         // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
@@ -694,7 +694,7 @@ interface DataTableCustomsOptions<DataRowItemType> {
     customSelectedRowsToolbar?: (
         selectedRows: {
             data: SelectedRowDataState[]
-            lookup: boolean[]
+            lookup: Record<number, boolean>
         },
         displayData: DisplayDataState,
         setSelectedRows: (rows: number[]) => void
@@ -711,91 +711,9 @@ interface DataTableCustomsOptions<DataRowItemType> {
     customToolbarSelect?: (
         selectedRows: {
             data: SelectedRowDataState[]
-            lookup: boolean[]
+            lookup: Record<number, boolean>
         },
         displayData: DisplayDataState,
         setSelectedRows: (rows: number[]) => void
     ) => ReactNode
 }
-
-//     /** Options used to describe table */
-//     options: PropTypes.shape({
-//         caseSensitive: PropTypes.bool,
-//         columnOrder: PropTypes.array,
-//         count: PropTypes.number,
-//         confirmFilters: PropTypes.bool,
-//         consoleWarnings: PropTypes.bool,
-//         draggableColumns: PropTypes.object,
-//         enableNestedDataAccess: PropTypes.string,
-//         expandableRows: PropTypes.bool,
-//         expandableRowsHeader: PropTypes.bool,
-//         expandableRowsOnClick: PropTypes.bool,
-//         disableToolbarSelect: PropTypes.bool,
-//         download: PropTypes.oneOf([
-//             true,
-//             false,
-//             'true',
-//             'false',
-//             'disabled'
-//         ]),
-//         downloadOptions: PropTypes.shape({
-//             filename: PropTypes.string,
-//             separator: PropTypes.string,
-//             filterOptions: PropTypes.shape({
-//                 useDisplayedColumnsOnly: PropTypes.bool,
-//                 useDisplayedRowsOnly: PropTypes.bool
-//             })
-//         }),
-//         filter: PropTypes.oneOf([true, false, 'true', 'false', 'disabled']),
-//         filterArrayFullMatch: PropTypes.bool,
-//         fixedHeader: PropTypes.bool,
-//         fixedSelectColumn: PropTypes.bool,
-//         getTextLabels: PropTypes.func,
-//         isRowExpandable: PropTypes.func,
-//         isRowSelectable: PropTypes.func,
-//         jumpToPage: PropTypes.bool,
-//         onFilterChange: PropTypes.func,
-//         onFilterChipClose: PropTypes.func,
-//         onFilterConfirm: PropTypes.func,
-//         onFilterDialogOpen: PropTypes.func,
-//         onFilterDialogClose: PropTypes.func,
-//         onRowClick: PropTypes.func,
-//         onRowExpansionChange: PropTypes.func,
-//         onRowSelectionChange: PropTypes.func,
-//         page: PropTypes.number,
-//         pagination: PropTypes.bool,
-//         print: PropTypes.oneOf([true, false, 'true', 'false', 'disabled']),
-//         selectableRowsHeader: PropTypes.bool,
-//         selectableRowsHideCheckboxes: PropTypes.bool,
-//         selectableRowsOnClick: PropTypes.bool,
-//         serverSide: PropTypes.bool,
-//         tableBodyHeight: PropTypes.string,
-//         tableBodyMaxHeight: PropTypes.string,
-//         renderExpandableRow: PropTypes.func,
-//         resizableColumns: PropTypes.oneOfType([
-//             PropTypes.bool,
-//             PropTypes.object
-//         ]),
-//         responsive: PropTypes.oneOf([
-//             'standard',
-//             'vertical',
-//             'verticalAlways',
-//             'simple'
-//         ]),
-//         rowHover: PropTypes.bool,
-//         rowsExpanded: PropTypes.array,
-//         rowsPerPage: PropTypes.number,
-//         rowsPerPageOptions: PropTypes.array,
-//         setFilterChipProps: PropTypes.func,
-//         setRowProps: PropTypes.func,
-//         setTableProps: PropTypes.func,
-//         sort: PropTypes.bool,
-//         storageKey: PropTypes.string,
-//         viewColumns: PropTypes.oneOf([
-//             true,
-//             false,
-//             'true',
-//             'false',
-//             'disabled'
-//         ])
-//     }),

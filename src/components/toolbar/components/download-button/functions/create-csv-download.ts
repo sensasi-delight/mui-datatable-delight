@@ -1,5 +1,5 @@
 import type { Primitive } from '@src/types/values/primitive'
-import type { DataTableProps } from '../../../../../types'
+import type { DataTableProps } from '../../../../../data-table.props'
 import type { DataTableOptions } from '../../../../../types/options'
 import type { DataTableState } from '../../../../../types/state'
 

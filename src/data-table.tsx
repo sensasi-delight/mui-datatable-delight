@@ -1,7 +1,7 @@
 'use client'
 
 // types
-import type { DataTableProps } from './types'
+import type { DataTableProps } from './data-table.props'
 // vendors
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'

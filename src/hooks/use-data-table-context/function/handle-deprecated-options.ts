@@ -1,5 +1,5 @@
 // globals
-import { type DataTableProps } from '@src/types'
+import { type DataTableProps } from '@src/data-table.props'
 import { type DataTableOptions } from '@src/types/options'
 import { warnDeprecated, warnInfo } from '@src/functions'
 import RowsSelectedToolbarPlacement from '@src/enums/rows-selected-toolbar-placement'

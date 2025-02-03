@@ -1,4 +1,4 @@
-import type { DataTableState } from '@src/index'
+import type { DataTableState } from '@src/types/state'
 import type DataTableMeta from '@src/types/table-meta'
 
 /**

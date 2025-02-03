@@ -8,7 +8,6 @@ import { DataTableFooterJumpToPage } from './components/jump-to-page'
 // globals
 import useDataTableContext from '../../hooks/use-data-table-context'
 import { getPageValue } from '../../functions/_shared/get-page-value'
-import type { DataTableState } from '../../types/state'
 // global enums
 import ClassName from '../../enums/class-name'
 import TableAction from '../../enums/table-action'
@@ -27,7 +26,7 @@ export default function BottomBar() {
         options.onChangePage?.(page)
     }
 
-    function changeRowsPerPage(rowsPerPage: DataTableState['rowsPerPage']) {
+    function changeRowsPerPage(rowsPerPage: number) {
         const rowCount = options.count ?? state.displayData.length
 
         const newState = {

@@ -1,6 +1,7 @@
 'use client'
 
 // vendors
+import { useRef, useState } from 'react'
 import { tss } from 'tss-react/mui'
 // materials
 import Grow from '@mui/material/Grow'
@@ -14,7 +15,6 @@ import useDataTableContext from '@src/hooks/use-data-table-context'
 // global enums
 import ClassName from '@src/enums/class-name'
 import TableAction from '@src/enums/table-action'
-import { useRef, useState } from 'react'
 
 export function DataTableToolbarSearch({ onHide }: { onHide: () => void }) {
     const {

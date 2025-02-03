@@ -2,7 +2,7 @@
 
 import { forwardRef } from 'react'
 import { createTheme } from '@mui/material/styles'
-import Link, { LinkProps } from 'next/link'
+import Link, { type LinkProps } from 'next/link'
 import { blue } from '@mui/material/colors'
 
 const LinkBehavior = forwardRef<HTMLAnchorElement, LinkProps>(

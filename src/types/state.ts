@@ -3,12 +3,12 @@ import type { DisplayDataState } from './state/display-data'
 import type DataTableSearchOptions from './options/search'
 import type { FilterList } from './state/filter-list'
 import type { ColumnState } from './state/column'
-import type { Primitive } from './values/primitive'
 import type { SelectedRowDataState } from './state/selected-row-data'
+import type { DataItemState } from './state/data-item'
 
 interface ExpandedRows {
     data: string[]
-    lookup: boolean[]
+    lookup: Record<number, boolean>
 }
 
 export interface DataTableState<T> {
@@ -24,10 +24,7 @@ export interface DataTableState<T> {
 
     count: number
 
-    data: {
-        data: Primitive[]
-        index: number
-    }[]
+    data: DataItemState[]
 
     displayData: DisplayDataState
 
@@ -65,8 +62,7 @@ export interface DataTableState<T> {
      */
     selectedRows: {
         data: SelectedRowDataState[]
-
-        lookup: boolean[]
+        lookup: Record<number, boolean>
     }
 
     showResponsive: boolean

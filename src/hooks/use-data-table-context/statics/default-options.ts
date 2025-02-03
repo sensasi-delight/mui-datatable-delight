@@ -1,7 +1,7 @@
 import { type DataTableOptions } from '@src/types/options'
 import RowsSelectedToolbarPlacement from '@src/enums/rows-selected-toolbar-placement'
 
-export const DEFAULT_OPTIONS: DataTableOptions<unknown> = {
+export const DEFAULT_OPTIONS = {
     caseSensitive: false,
     download: true,
     downloadOptions: {
@@ -45,4 +45,4 @@ export const DEFAULT_OPTIONS: DataTableOptions<unknown> = {
     sortFilterList: true,
     tableBodyHeight: 'auto',
     viewColumns: true
-}
+} satisfies DataTableOptions

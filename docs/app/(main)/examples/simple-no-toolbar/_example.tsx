@@ -1,4 +1,4 @@
-import DataTable from '@src'
+import DataTable, { type DataTableProps } from '@src'
 
 export default function Example() {
     const columns = ['Name', 'Title', 'Location']
@@ -11,13 +11,13 @@ export default function Example() {
         ['Aaren Rose', null, 'Toledo']
     ]
 
-    const options = {
+    const options: DataTableProps['options'] = {
         filter: false,
         search: false,
         print: false,
         download: false,
         viewColumns: false,
-        responsive: 'vertical' as 'vertical'
+        responsive: 'vertical'
     }
 
     return <DataTable data={data} columns={columns} options={options} />

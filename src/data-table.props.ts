@@ -3,11 +3,11 @@ import type { ReactNode } from 'react'
 import type { PaperProps } from '@mui/material/Paper'
 import type { SxProps } from '@mui/system/styleFunctionSx'
 //
-import type { DataTableOptions } from './options'
-import type { DataTableComponents } from './components'
-import type { DataTableColumnObjectOptions } from './columns'
-import type { DataTableIcons } from './icons'
-import type { DefaultDataRowItemType } from './values/default-data-row-item-type'
+import type { DataTableOptions } from './types/options'
+import type { DataTableComponents } from './types/components'
+import type { DataTableColumnObjectOptions } from './types/columns'
+import type { DataTableIcons } from './types/icons'
+import type { DefaultDataRowItemType } from './types/values/default-data-row-item-type'
 import type { TextLabelsType } from '@src/hooks/use-data-table-context/function/statics/default-text-labels'
 
 export interface DataTableProps<DataRowItemType = DefaultDataRowItemType> {

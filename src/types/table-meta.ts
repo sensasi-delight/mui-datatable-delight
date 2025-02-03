@@ -1,11 +1,13 @@
-import type { DataTableState } from '..'
+import type { DataTableState } from './state'
+import type { ColumnState } from './state/column'
+import type { DataItemState } from './state/data-item'
 
 export default interface DataTableMeta<T> {
-    columnData: DataTableState<T>['columns'][0]
+    columnData: ColumnState<T>
     columnIndex: number
-    currentTableData: DataTableState<T>['data']
-    rowData: DataTableState<T>['data']
+    currentTableData: DataItemState[]
+    rowData: DataItemState[]
     rowIndex: number
-    tableData: DataTableState<T>['data']
+    tableData: DataItemState[]
     tableState: DataTableState<T>
 }

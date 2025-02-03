@@ -1,14 +1,14 @@
 'use client'
 
 import React from 'react'
-import DataTable from '@src'
+import DataTable, { type DataTableProps } from '@src'
 import CustomToolbar from './_custom-toolbar'
 
 class Example extends React.Component {
     render() {
         const columns = ['Name', 'Title', 'Location', 'Age', 'Salary']
 
-        let data = [
+        const data = [
             ['Gabby George', 'Business Analyst', 'Minneapolis', 30, 100000],
             ['Aiden Lloyd', 'Business Consultant', 'Dallas', 55, 200000],
             ['Jaden Collins', 'Attorney', 'Santa Ana', 27, 500000],
@@ -65,7 +65,7 @@ class Example extends React.Component {
             ['Mason Ray', 'Computer Scientist', 'San Francisco', 39, 142000]
         ]
 
-        const options = {
+        const options: DataTableProps['options'] = {
             filter: true,
             selectableRows: 'multiple',
             filterType: 'dropdown',

@@ -1,3 +1,3 @@
-import type { Primitive } from './primitive'
+import type { ReactNode } from 'react'
 
-export type DefaultDataRowItemType = Primitive[] | Record<string, Primitive>
+export type DefaultDataRowItemType = ReactNode[] | Record<string, ReactNode>

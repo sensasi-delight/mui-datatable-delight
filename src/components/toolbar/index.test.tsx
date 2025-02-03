@@ -8,7 +8,7 @@ import {
 import Chip from '@mui/material/Chip'
 // locals
 import Toolbar from '.'
-import type { DataTableProps } from '@src/index'
+import type { DataTableProps } from '@src/data-table.props'
 import { DEFAULT_TEXT_LABELS } from '../../hooks/use-data-table-context/function/statics/default-text-labels'
 import ClassName from '../../enums/class-name'
 import { DataTableContextProvider } from '../..'
@@ -533,8 +533,6 @@ describe('<Toolbar />', function () {
         )
 
         expect(activeButtons.length).toBe(1)
-
-        console.log()
 
         expect(activeButtons[0]?.parentElement?.ariaLabel).toBe(
             DEFAULT_TEXT_LABELS.toolbar.search

@@ -1,5 +1,5 @@
 import { isValidElement } from 'react'
-import type { DataTableProps } from '../types'
+import type { DataTableProps } from '../data-table.props'
 import type {
     DataTableOptions,
     DataTableSortOrderOption

@@ -1,6 +1,6 @@
 import type { DataTableState } from '../../../types/state'
 
-const DEFAULT_STATE: DataTableState<unknown> = {
+const DEFAULT_STATE = {
     activeColumn: null,
     count: 0,
     columnOrder: [0],
@@ -21,10 +21,10 @@ const DEFAULT_STATE: DataTableState<unknown> = {
     searchProps: {},
     selectedRows: {
         data: [],
-        lookup: []
+        lookup: {}
     },
     sortOrder: undefined,
     showResponsive: false
-}
+} satisfies DataTableState<unknown>
 
 export default DEFAULT_STATE

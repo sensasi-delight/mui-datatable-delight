@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import DataTable from '@src'
+import DataTable, { type DataTableProps } from '@src'
 
 class Example extends React.Component {
     render() {
@@ -367,7 +367,7 @@ class Example extends React.Component {
             ]
         ]
 
-        const options = {
+        const options: DataTableProps['options'] = {
             filter: true,
             filterType: 'dropdown',
             responsive: 'standard',

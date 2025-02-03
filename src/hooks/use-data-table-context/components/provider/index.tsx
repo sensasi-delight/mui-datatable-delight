@@ -2,16 +2,16 @@
 
 // vendors
 import {
-    useState,
-    type ReactNode,
-    useEffect,
-    useRef,
     type Context,
-    useCallback
+    type ReactNode,
+    useState,
+    useEffect,
+    useRef
 } from 'react'
 // globals
-import type { DataTableProps } from '@src/types'
-import type { DataTableOptions, DataTableState } from '@src/index'
+import type { DataTableProps } from '@src/data-table.props'
+import type { DataTableState } from '@src/types/state'
+import type { DataTableOptions } from '@src/types/options'
 import { load, save, warnInfo } from '@src/functions'
 import getNewStateOnDataChange from '@src/functions/get-new-state-on-data-change'
 import TableAction from '@src/enums/table-action'
@@ -37,33 +37,11 @@ export default function DataTableContextProvider<DataRowItemType>({
 
     const lastDatatableProps = useRef(datatableProps)
 
-    const restoredState = datatableProps.options?.storageKey
-        ? load(datatableProps.options.storageKey)
-        : undefined
-
     const options = getConstructedOption(datatableProps?.options)
 
-    const getInitialState = useCallback(() => {
-        const newState = getNewStateOnDataChange(
-            datatableProps,
-            1,
-            true,
-            options,
-            {
-                ...DEFAULT_STATE,
-                ...getStateFromDataTableOptionsProp(datatableProps.options),
-                ...restoredState
-            },
-            undefined
-        )
-
-        options?.onTableInit?.(TableAction.INITIALIZED, newState)
-
-        return newState
-    }, [options, restoredState, datatableProps])
-
-    const [state, setState] =
-        useState<DataTableState<DataRowItemType>>(getInitialState)
+    const [state, setState] = useState<DataTableState<DataRowItemType>>(() =>
+        getInitialState(datatableProps, options)
+    )
 
     useEffect(() => {
         setState(prev => {
@@ -82,9 +60,9 @@ export default function DataTableContextProvider<DataRowItemType>({
             // store last datatableProps for comparison
             lastDatatableProps.current = datatableProps
 
-            return getInitialState()
+            return getInitialState(datatableProps, options)
         })
-    }, [datatableProps, getInitialState])
+    }, [datatableProps, options])
 
     handleDeprecatedOptions(datatableProps, options)
 
@@ -151,7 +129,7 @@ function getStateFromDataTableOptionsProp<T>({
     page,
     rowsSelected,
     rowsPerPageOptions
-}: DataTableProps<T>['options'] = {}) {
+}: DataTableProps<T>['options'] = {}): Partial<DataTableState<T>> {
     const optState: {
         page?: DataTableState<T>['page']
         rowsPerPage?: DataTableState<T>['rowsPerPage']
@@ -209,11 +187,37 @@ function getConstructedOption<T>(
     optionsFromProp: DataTableProps<T>['options']
 ): DataTableOptions<T> {
     return {
-        ...(DEFAULT_OPTIONS as DataTableOptions<T>),
-        ...(optionsFromProp ?? {}),
+        ...DEFAULT_OPTIONS,
+        ...optionsFromProp,
         downloadOptions: {
             ...DEFAULT_OPTIONS.downloadOptions,
             ...optionsFromProp?.downloadOptions
         }
     }
+}
+
+function getInitialState<T>(
+    datatableProps: DataTableProps<T>,
+    options: DataTableOptions<T>
+): DataTableState<T> {
+    const restoredState = datatableProps.options?.storageKey
+        ? load<T>(datatableProps.options.storageKey)
+        : undefined
+
+    const newState = getNewStateOnDataChange<T>(
+        datatableProps,
+        1,
+        true,
+        options,
+        {
+            ...DEFAULT_STATE,
+            ...getStateFromDataTableOptionsProp(datatableProps.options),
+            ...restoredState
+        },
+        undefined
+    )
+
+    options?.onTableInit?.(TableAction.INITIALIZED, newState)
+
+    return newState
 }

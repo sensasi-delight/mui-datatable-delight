@@ -16,7 +16,7 @@ const SORTED_EXAMPLES = Object.keys(Route)
     .filter(key => isNaN(parseInt(key)))
     .sort()
 
-export default function page() {
+export default function Page() {
     const [searchVal, setSearchVal] = useState('')
 
     const examplesSortedKeys = searchVal

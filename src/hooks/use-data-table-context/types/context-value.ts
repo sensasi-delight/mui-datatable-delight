@@ -4,7 +4,7 @@ import type { Dispatch, RefObject, SetStateAction } from 'react'
 import type { DataTableComponents } from '@src/types/components'
 import type { DataTableOptions } from '@src/types/options'
 import type { DataTableState } from '@src/types/state'
-import type { DataTableProps } from '@src/types'
+import type { DataTableProps } from '@src/data-table.props'
 // enums
 import type TableAction from '@src/enums/table-action'
 // statics

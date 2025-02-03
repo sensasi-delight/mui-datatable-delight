@@ -1,11 +1,11 @@
 'use client'
 
 import React from 'react'
-import DataTable from '@src'
+import DataTable, { type DataTableProps } from '@src'
 
 class Example extends React.Component {
     render() {
-        const columns = [
+        const columns: DataTableProps['columns'] = [
             {
                 name: 'Name',
                 options: {
@@ -55,11 +55,11 @@ class Example extends React.Component {
                     sortDescFirst: true,
                     sortCompare: order => {
                         return (obj1, obj2) => {
-                            var val1 = parseInt(
+                            const val1 = parseInt(
                                 obj1.data.substr(1).replace(/,/g, ''),
                                 10
                             )
-                            var val2 = parseInt(
+                            const val2 = parseInt(
                                 obj2.data.substr(1).replace(/,/g, ''),
                                 10
                             )
@@ -151,7 +151,7 @@ class Example extends React.Component {
             ['Mason Ray', 'Computer Scientist', 'San Francisco', 39, '$142,000']
         ]
 
-        const options = {
+        const options: DataTableProps['options'] = {
             filter: true,
             filterType: 'dropdown',
             responsive: 'vertical',
