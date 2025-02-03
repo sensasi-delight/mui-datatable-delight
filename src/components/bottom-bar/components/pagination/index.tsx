@@ -44,7 +44,7 @@ export function DataTableFooterPagination({
         rowsPerPage
     )
         ? rowsPerPage
-        : finalRowsPerPageOptions[0]
+        : 10
 
     const count = displayData.length
 

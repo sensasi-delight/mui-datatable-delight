@@ -19,7 +19,7 @@ import ComponentClassName from '@src/enums/class-name'
 import type Props from './types/props'
 import useColumnDrop from './hooks/use-column-drop'
 
-export function TableHeadCell({
+export function TableHeadCell<T>({
     cellHeaderProps = {},
     children,
     colPosition,
@@ -28,7 +28,7 @@ export function TableHeadCell({
     setHeadCellsRef,
     sortDirection,
     toggleSort
-}: Props) {
+}: Props<T>) {
     const { classes, cx } = useStyles()
     const { components, draggableHeadCellRefs, options, textLabels } =
         useDataTableContext()

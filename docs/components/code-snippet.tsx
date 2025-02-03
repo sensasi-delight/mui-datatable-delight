@@ -19,11 +19,13 @@ export function CodeSnippet({
     language?: 'jsx' | 'bash'
     text: string
 }) {
-    const highlightedCode = prism.highlight(
-        text,
-        prism.languages[language],
-        language
-    )
+    const prismLang = prism.languages[language]
+
+    if (!prismLang) {
+        throw new Error(`Unknown language: ${language}`)
+    }
+
+    const highlightedCode = prism.highlight(text, prismLang, language)
 
     return (
         <AlwaysDarkThemeProvider>

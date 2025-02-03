@@ -666,7 +666,12 @@ interface DataTableCustomsOptions<DataRowItemType> {
      *
      * @see https://mui-datatable-delight.vercel.app/examples/customize-sorting
      */
-    customSort?: (data: unknown[], colIndex: number, order: string) => unknown[]
+    customSort?: (
+        data: DataItemState[],
+        colIndex: number,
+        order: string,
+        state: DataTableState<DataRowItemType>
+    ) => DataItemState[]
 
     /**
      * Render a footer under the table body but above the table's standard footer.

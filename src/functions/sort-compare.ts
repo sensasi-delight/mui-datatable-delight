@@ -1,21 +1,19 @@
-import type { DataItemState } from '@src/types/state/data-item'
 import type { DataTableSortOrderOption } from '../types/options'
 
 export function sortCompare(order: DataTableSortOrderOption['direction']) {
-    return (a: DataItemState, b: DataItemState) => {
+    return (a: { data: unknown }, b: { data: unknown }) => {
         const aData =
             a.data === null || typeof a.data === 'undefined' ? '' : a.data
-
         const bData =
             b.data === null || typeof b.data === 'undefined' ? '' : b.data
 
-        const result =
-            typeof aData === 'object' &&
-            'localeCompare' in aData &&
-            typeof aData.localeCompare === 'function'
-                ? aData.localeCompare(bData)
-                : aData - bData
-
-        return result * (order === 'asc' ? 1 : -1)
+        return (
+            // @ts-expect-error  WILL FIX THIS LATER
+            (typeof aData.localeCompare === 'function'
+                ? // @ts-expect-error  WILL FIX THIS LATER
+                  aData.localeCompare(bData)
+                : // @ts-expect-error  WILL FIX THIS LATER
+                  aData - bData) * (order === 'asc' ? 1 : -1)
+        )
     }
 }

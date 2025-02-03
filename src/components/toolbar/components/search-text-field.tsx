@@ -34,6 +34,10 @@ export function DataTableToolbarSearch({ onHide }: { onHide: () => void }) {
     const [searchText, setSearchText] = useState(state.searchText)
 
     function handleSearch(newSearchText: string) {
+        if (!setState) {
+            throw new Error('setState is not defined')
+        }
+
         const displayData = options.serverSide
             ? state.displayData
             : getDisplayData(

@@ -1,6 +1,7 @@
-import type { DataTableProps, DataTableState } from '@src/index'
+import type { DataTableProps } from '@src/data-table.props'
 import { warnDeprecated } from '.'
 import type { ColumnState } from '@src/types/state/column'
+import type { DataTableState } from '@src/types/state'
 
 /*
  * Build the source table data

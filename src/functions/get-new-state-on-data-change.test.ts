@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
 import getNewStateOnDataChange from './get-new-state-on-data-change'
 import { DEFAULT_OPTIONS } from '../hooks/use-data-table-context/statics/default-options'
-import { type DataTableState } from '@src/index'
+import { type DataTableState } from '@src/types/state'
 import DEFAULT_STATE from '@src/hooks/use-data-table-context/statics/default-state'
 
 describe('get-new-state-on-data-change', () => {
@@ -40,12 +40,11 @@ describe('get-new-state-on-data-change', () => {
         filterType: 'dropdown',
         responsive: 'vertical',
         tableBodyHeight: '400px',
-        tableBodyMaxHeight: '',
+        tableBodyMaxHeight: ''
         // onTableChange: (action, state) => {
         //     console.log(action)
         //     console.dir(state)
         // }
-        ...DEFAULT_OPTIONS
     }
 
     const expectedColumns = [

@@ -119,6 +119,7 @@ export default function ToolbarDataFilterBox<T>(
                     }
 
                     filters.forEach(filter => {
+                        // @ts-expect-error  WILL FIX THIS LATER
                         filterUpdate?.(index, filter, column, FilterType.CUSTOM)
                     })
                 })

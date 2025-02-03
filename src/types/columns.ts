@@ -2,7 +2,6 @@ import type { DataTableSortOrderOption } from './options'
 import type { DataTableState } from './state'
 import type { ReactNode } from 'react'
 import type { FilterTypeType } from './shared/filter-type-type'
-import type DataTableMeta from './table-meta'
 import type { ColumnState } from './state/column'
 import type { FilterList } from './state/filter-list'
 import type { Primitive } from './values/primitive'
@@ -22,8 +21,8 @@ export interface DataTableColumnObjectOptions<T> {
      * [Example](https://mui-datatable-delight.vercel.app/examples/component)
      */
     customBodyRender?: (
-        value: Primitive,
-        tableMeta: DataTableMeta<T>,
+        value: ReactNode,
+        state: DataTableState<T>,
         updateValue?: (value: Primitive) => void
     ) => ReactNode
 

@@ -11,7 +11,6 @@ import { warnDeprecated } from './warn-deprecated'
 import buildColumns from './build-columns'
 import sortTable from './sort-table'
 import getDisplayData from './get-new-state-on-data-change/get-display-data'
-import getTableMeta from './get-new-state-on-data-change/get-table-meta'
 import type DataTableMeta from '@src/types/table-meta'
 
 enum TABLE_LOAD {
@@ -42,7 +41,7 @@ export default function getNewStateOnDataChange<T>(
     state: DataTableState<T>,
     setState: undefined | ((newState: DataTableState<T>) => void)
 ): DataTableState<T> {
-    const { columns, filterData, filterList, columnOrder } = buildColumns(
+    const { columns, filterData, filterList, columnOrder } = buildColumns<T>(
         props.columns,
         state.columns,
         options.columnOrder,
@@ -88,17 +87,7 @@ export default function getNewStateOnDataChange<T>(
                 if (typeof column.customBodyRender === 'function') {
                     const rowData = tableData[rowIndex]?.data
 
-                    tableMeta = getTableMeta(
-                        rowIndex,
-                        colIndex,
-                        rowData,
-                        column,
-                        data,
-                        state,
-                        tableData
-                    )
-
-                    const funcResult = column.customBodyRender(value, tableMeta)
+                    const funcResult = column.customBodyRender(value, state)
 
                     if (isValidElement(funcResult) && funcResult.props.value) {
                         value = funcResult.props.value
@@ -197,7 +186,7 @@ export default function getNewStateOnDataChange<T>(
                         cIndex < state.displayData.length;
                         cIndex++
                     ) {
-                        if (state.displayData[cIndex].dataIndex === row) {
+                        if (state.displayData[cIndex]?.dataIndex === row) {
                             rowPos = cIndex
                             break
                         }

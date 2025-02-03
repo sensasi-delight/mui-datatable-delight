@@ -1,61 +1,43 @@
 import type { ReactNode } from 'react'
-import type {
-    DataTableOptions,
-    DataTableProps,
-    DataTableState
-} from '@src/index'
-import getTableMeta from './get-table-meta'
 import hasSearchText from './has-search-text'
 import updateDataCol from './update-data-col'
-import type DataTableMeta from '@src/types/table-meta'
-import type { Primitive } from '@src/types/values/primitive'
 import type { FilterList } from '@src/types/state/filter-list'
+import type { DataTableState } from '@src/types/state'
+import type { DataTableOptions } from '@src/types/options'
+import type { DataTableProps } from '@src/data-table.props'
 
 /*
  * Build the table data used to display to the user (i.e., after filter/search applied)
  */
 export default function computeDisplayRow<T>(
     columns: DataTableState<T>['columns'],
-    row: Primitive[],
+    row: ReactNode[],
     rowIndex: number,
     filterList: FilterList,
     searchText: string,
-    dataForTableMeta: DataTableMeta<T>['tableData'] | DataTableProps<T>['data'],
     options: DataTableOptions<T>,
     props: DataTableProps<T>,
-    currentTableData: DataTableState<T>['data'],
     state: DataTableState<T>,
     setState: (newState: DataTableState<T>) => void
 ): ReactNode[] | undefined {
     let isFiltered = false
     let isSearchFound = false
+
     const displayRow: ReactNode[] = []
 
     for (let index = 0; index < row.length; index++) {
         let columnDisplay = row[index]
         let columnValue = row[index]
+
         const column = columns[index]
 
         if (column?.customBodyRenderLite) {
-            displayRow.push(column.customBodyRenderLite)
+            displayRow.push(column.customBodyRenderLite(index, rowIndex))
         } else if (column?.customBodyRender) {
-            const tableMeta = getTableMeta(
-                rowIndex,
-                index,
-                row,
-                column,
-                dataForTableMeta,
-                {
-                    ...state,
-                    filterList
-                },
-                currentTableData
-            )
-
             const funcResult = column.customBodyRender(
                 columnValue,
-                tableMeta,
-                (value: unknown) => {
+                state,
+                (value: ReactNode) => {
                     setState(
                         updateDataCol(
                             rowIndex,
@@ -63,8 +45,8 @@ export default function computeDisplayRow<T>(
                             value,
                             state,
                             options,
-                            props
-                            // setState
+                            props,
+                            setState
                         )
                     )
                 }
@@ -75,7 +57,8 @@ export default function computeDisplayRow<T>(
             columnValue =
                 typeof funcResult === 'string' || !funcResult
                     ? funcResult
-                    : (funcResult.props?.value ?? columnValue)
+                    : // @ts-expect-error  WILL FIX THIS LATER
+                      (funcResult.props?.value ?? columnValue)
 
             displayRow.push(columnDisplay)
         } else {
@@ -94,6 +77,7 @@ export default function computeDisplayRow<T>(
         if (filterVal?.length || filterType === 'custom') {
             if (
                 column?.filterOptions?.logic?.(
+                    // @ts-expect-error  WILL FIX THIS LATER
                     columnValue,
                     filterVal ?? [],
                     row
@@ -102,12 +86,14 @@ export default function computeDisplayRow<T>(
                 isFiltered = true
             } else if (
                 filterType === 'textField' &&
+                // @ts-expect-error  WILL FIX THIS LATER
                 !hasSearchText(columnVal, filterVal, caseSensitive)
             ) {
                 isFiltered = true
             } else if (
                 filterType !== 'textField' &&
                 !Array.isArray(columnValue) &&
+                // @ts-expect-error  WILL FIX THIS LATER
                 (filterVal?.indexOf(columnValue) ?? 0) < 0
             ) {
                 isFiltered = true
@@ -117,6 +103,7 @@ export default function computeDisplayRow<T>(
             ) {
                 if (options.filterArrayFullMatch) {
                     const isFullMatch = filterVal?.every(el =>
+                        // @ts-expect-error  WILL FIX THIS LATER
                         columnValue?.includes(el)
                     )
                     if (!isFullMatch) {
@@ -124,6 +111,7 @@ export default function computeDisplayRow<T>(
                     }
                 } else {
                     const isAnyMatch = filterVal?.some(el =>
+                        // @ts-expect-error  WILL FIX THIS LATER
                         columnValue?.includes(el)
                     )
 

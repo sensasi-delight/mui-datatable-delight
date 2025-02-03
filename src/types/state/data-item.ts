@@ -1,6 +1,6 @@
-import type { Primitive } from '../values/primitive'
+import type { ReactNode } from 'react'
 
 export interface DataItemState {
-    data: Primitive[]
+    data: ReactNode[]
     index: number
 }
