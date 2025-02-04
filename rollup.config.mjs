@@ -68,7 +68,7 @@ export default [
                 return false
             }
 
-            return id.includes('/node_modules/')
+            return id.includes('node_modules')
         },
         input: 'src/index.ts',
         output: [
