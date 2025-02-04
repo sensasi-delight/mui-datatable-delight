@@ -36,6 +36,8 @@ export default function computeDisplayRow<T>(
         } else if (column?.customBodyRender) {
             const funcResult = column.customBodyRender(
                 columnValue,
+                rowIndex,
+                index,
                 state,
                 (value: ReactNode) => {
                     setState(

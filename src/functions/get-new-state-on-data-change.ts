@@ -85,9 +85,12 @@ export default function getNewStateOnDataChange<T>(
 
             if (column.filter !== false) {
                 if (typeof column.customBodyRender === 'function') {
-                    const rowData = tableData[rowIndex]?.data
-
-                    const funcResult = column.customBodyRender(value, state)
+                    const funcResult = column.customBodyRender(
+                        value,
+                        rowIndex,
+                        colIndex,
+                        state
+                    )
 
                     if (isValidElement(funcResult) && funcResult.props.value) {
                         value = funcResult.props.value
@@ -148,7 +151,7 @@ export default function getNewStateOnDataChange<T>(
 
         if (options.sortFilterList) {
             const comparator = getCollatorComparator()
-            filterData[colIndex].sort(comparator)
+            filterData[colIndex]?.sort(comparator)
         }
 
         if (column.name === sortOrder?.name) {

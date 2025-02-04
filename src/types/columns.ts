@@ -22,6 +22,8 @@ export interface DataTableColumnObjectOptions<T> {
      */
     customBodyRender?: (
         value: ReactNode,
+        rowIndex: number,
+        columnIndex: number,
         state: DataTableState<T>,
         updateValue?: (value: Primitive) => void
     ) => ReactNode

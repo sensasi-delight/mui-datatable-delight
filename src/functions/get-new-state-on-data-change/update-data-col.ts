@@ -41,7 +41,12 @@ export default function updateDataCol<T>(
         throw new Error(`Column ${index} does not exist`)
     }
 
-    const funcResult = columnState.customBodyRender?.(value, prevState)
+    const funcResult = columnState.customBodyRender?.(
+        value,
+        row,
+        index,
+        prevState
+    )
 
     const filterValue =
         // @ts-expect-error  WILL FIX THIS LATER

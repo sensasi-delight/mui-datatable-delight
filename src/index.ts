@@ -1,4 +1,7 @@
 export type { DataTableProps } from './data-table.props'
+export type { DataTableOptions } from './types/options'
+export type { DataTableState } from './types/state'
+
 export { DataTable as default } from './data-table'
 
 // ########## CONTEXT ##########
