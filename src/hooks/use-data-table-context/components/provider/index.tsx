@@ -23,6 +23,7 @@ import { processTextLabels } from '../../function/process-text-labels'
 import DEFAULT_STATE from '../../statics/default-state'
 import DataTableContext from '../../context'
 import type ContextValue from '../../types/context-value'
+import isEqual from 'react-fast-compare'
 
 export default function DataTableContextProvider<DataRowItemType>({
     datatableProps,
@@ -45,19 +46,11 @@ export default function DataTableContextProvider<DataRowItemType>({
 
     useEffect(() => {
         setState(prev => {
-            const isDataTablePropsChanged = (
-                Object.keys(
-                    datatableProps
-                ) as (keyof DataTableProps<DataRowItemType>)[]
-            ).some(
-                key => lastDatatableProps.current[key] !== datatableProps[key]
-            )
-
-            if (!isDataTablePropsChanged) {
+            if (isEqual(datatableProps, lastDatatableProps.current)) {
                 return prev
             }
 
-            // store last datatableProps for comparison
+            // store last datatableProps for next comparison
             lastDatatableProps.current = datatableProps
 
             return getInitialState(datatableProps, options)
@@ -81,20 +74,12 @@ export default function DataTableContextProvider<DataRowItemType>({
                 },
                 onAction(action, newPartialState) {
                     setState(prev => {
-                        // const isStateChange = (
-                        //     Object.keys(
-                        //         newPartialState
-                        //     ) as (keyof DataTableState)[]
-                        // ).some(key => prev[key] !== newPartialState[key])
-
-                        // if (!isStateChange) {
-                        //     return prev
-                        // }
-
                         const newState = {
                             ...prev,
                             ...newPartialState
                         }
+
+                        if (isEqual(newState, prev)) return prev
 
                         datatableProps.options?.onTableChange?.(
                             action,
