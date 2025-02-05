@@ -51,9 +51,16 @@ export interface DataTableProps<DataRowItemType = DefaultDataRowItemType> {
     /**
      * User provided labels to localize text.
      *
-     * @see [Localization Docs](https://mui-datatable-delight.vercel.app/docs/features/localization)
+     * @see  {@link https://mui-datatable-delight.vercel.app/docs/features/localization | Localization Docs}
      */
-    textLabels?: Partial<TextLabelsType>
+    textLabels?: Partial<{
+        body: Partial<TextLabelsType['body']>
+        filter: Partial<TextLabelsType['filter']>
+        pagination: Partial<TextLabelsType['pagination']>
+        selectedRows: Partial<TextLabelsType['selectedRows']>
+        toolbar: Partial<TextLabelsType['toolbar']>
+        viewColumns: Partial<TextLabelsType['viewColumns']>
+    }>
 
     ref?: PaperProps['ref']
 
