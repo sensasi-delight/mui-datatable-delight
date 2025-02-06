@@ -7,11 +7,11 @@ import { tss } from 'tss-react/mui'
 import { DataTableFooterPagination } from './components/pagination'
 import { DataTableFooterJumpToPage } from './components/jump-to-page'
 // globals
-import useDataTableContext from '../../hooks/use-data-table-context'
-import { getPageValue } from '../../functions/_shared/get-page-value'
+import useDataTableContext from '@src/hooks/use-data-table-context'
+import { getPageValue } from '@src/functions/_shared/get-page-value'
 // global enums
-import ClassName from '../../enums/class-name'
-import TableAction from '../../enums/table-action'
+import ClassName from '@src/enums/class-name'
+import TableAction from '@src/enums/table-action'
 
 /**
  * @todo  FIX FONT SIZES ARE DIFFERENT IN SUB-COMPONENTS
