@@ -1,4 +1,4 @@
-import type { DataTableState } from '../types/state'
+import type { DataTableState } from '@src/types/state'
 
 /**
  * Save DataTableState to localStorage

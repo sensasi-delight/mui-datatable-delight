@@ -1,7 +1,7 @@
 import type { Primitive } from '@src/types/values/primitive'
-import type { DataTableProps } from '../../../../../data-table.props'
-import type { DataTableOptions } from '../../../../../types/options'
-import type { DataTableState } from '../../../../../types/state'
+import type { DataTableProps } from '@src/data-table.props'
+import type { DataTableOptions } from '@src/types/options'
+import type { DataTableState } from '@src/types/state'
 
 /**
  * @todo Add datetime on default filename

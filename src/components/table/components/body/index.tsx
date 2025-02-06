@@ -11,16 +11,16 @@ import { TableBodyCell } from './components/cell'
 import { DataTableBodyRow } from './components/row'
 import CheckboxCell from '../_shared/checkbox-cell'
 // globals
+import type { DataTableState } from '@src/types/state'
+import type { DataTableOptions } from '@src/types/options'
 import type { SelectRowUpdateType } from '@src/types/select-row-update'
 import type { SelectedRowDataState } from '@src/types/state/selected-row-data'
-import type { DataTableOptions } from '@src/types/options'
 import { buildMap } from '@src/functions'
 import { getPageValue } from '@src/functions/_shared/get-page-value'
 import useDataTableContext from '@src/hooks/use-data-table-context'
 // global enums
 import TableAction from '@src/enums/table-action'
 import ComponentClassName from '@src/enums/class-name'
-import type { DataTableState } from '@src/index'
 
 export default function TableBody({ selectRowUpdate }: DataTableBodyProps) {
     const { classes } = useStyles()

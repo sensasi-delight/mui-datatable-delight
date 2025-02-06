@@ -1,6 +1,6 @@
+import type { DataTableState } from '@src/types/state'
 import { type DropTargetMonitor, useDrop } from 'react-dnd'
 import { type RefObject, useRef } from 'react'
-import type { DataTableState } from '@src/index'
 // globals
 import useDataTableContext from '@src/hooks/use-data-table-context'
 import TableAction from '@src/enums/table-action'

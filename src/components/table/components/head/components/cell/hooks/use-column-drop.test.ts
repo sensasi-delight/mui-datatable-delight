@@ -1,8 +1,8 @@
 import { describe, expect, it, vi } from 'vitest'
 
-import { getColModel, handleHover, reorderColumns } from './use-column-drop'
-import type { DataTableState } from '@src/index'
+import type { DataTableState } from '@src/types/state'
 import type { DropTargetMonitor } from 'react-dnd'
+import { getColModel, handleHover, reorderColumns } from './use-column-drop'
 
 describe('useColumnDrop', function () {
     it('should reorder columns when reorderColumns is called', () => {
