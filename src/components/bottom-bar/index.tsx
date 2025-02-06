@@ -1,6 +1,7 @@
 'use client'
 
 // vendors
+import type { ReactNode } from 'react'
 import { tss } from 'tss-react/mui'
 // local sub-components
 import { DataTableFooterPagination } from './components/pagination'
@@ -16,7 +17,7 @@ import TableAction from '../../enums/table-action'
  * @todo  FIX FONT SIZES ARE DIFFERENT IN SUB-COMPONENTS
  * @todo  RENAME COMPONENT TO `<BottomToolbar />`
  */
-export default function BottomBar() {
+export default function BottomBar(): ReactNode {
     const { options, state, textLabels, onAction } = useDataTableContext()
     const { classes } = useStyles()
     const { customFooter, pagination = true, jumpToPage } = options
