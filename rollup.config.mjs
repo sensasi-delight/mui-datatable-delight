@@ -4,7 +4,6 @@ import del from 'rollup-plugin-delete'
 import dts from 'rollup-plugin-dts'
 import nodeResolve from '@rollup/plugin-node-resolve'
 import preserveDirectives from 'rollup-preserve-directives'
-import terser from '@rollup/plugin-terser'
 import typescript from '@rollup/plugin-typescript'
 
 /** @type {import('rollup').RollupOptions['plugins']} */
@@ -20,17 +19,6 @@ const PLUGINS = [
 
     /** Convert CommonJS modules to ES6, so they can be included in a Rollup bundle */
     commonjs(),
-
-    /** To minify the bundled files */
-    terser({
-        format: {
-            comments: false
-        },
-        compress: {
-            drop_console: true,
-            drop_debugger: true
-        }
-    }),
 
     /** To preserve `use client` directive */
     preserveDirectives(),
