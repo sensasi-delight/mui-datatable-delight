@@ -8,6 +8,7 @@ import {
     useEffect,
     useRef
 } from 'react'
+import isEqual from 'react-fast-compare'
 // globals
 import type { DataTableProps } from '@src/data-table.props'
 import type { DataTableState } from '@src/types/state'
@@ -16,14 +17,13 @@ import { load, save, warnInfo } from '@src/functions'
 import getNewStateOnDataChange from '@src/functions/get-new-state-on-data-change'
 import TableAction from '@src/enums/table-action'
 // locals
+import type ContextValue from '../../types/context-value'
 import { DEFAULT_ICONS } from '../../statics/default-icons'
 import { DEFAULT_OPTIONS } from '../../statics/default-options'
 import { handleDeprecatedOptions } from '../../function/handle-deprecated-options'
 import { processTextLabels } from '../../function/process-text-labels'
 import DEFAULT_STATE from '../../statics/default-state'
 import DataTableContext from '../../context'
-import type ContextValue from '../../types/context-value'
-import isEqual from 'react-fast-compare'
 
 export default function DataTableContextProvider<DataRowItemType>({
     datatableProps,
@@ -33,31 +33,81 @@ export default function DataTableContextProvider<DataRowItemType>({
     children: ReactNode
 }): ReactNode {
     const draggableHeadCellRefs = useRef<HTMLTableCellElement[]>([])
+    const lastDatatableProps = useRef(datatableProps)
+    const options = useRef<DataTableOptions<DataRowItemType>>(
+        getConstructedOption(datatableProps?.options)
+    )
     const tableHeadCellElements = useRef<HTMLTableCellElement[]>([])
     const tableRef = useRef<HTMLTableElement>(null)
 
-    const lastDatatableProps = useRef(datatableProps)
-
-    const options = getConstructedOption(datatableProps?.options)
-
     const [state, setState] = useState<DataTableState<DataRowItemType>>(() =>
-        getInitialState(datatableProps, options)
+        getInitialState(datatableProps, options.current)
     )
 
     useEffect(() => {
-        setState(prev => {
-            if (isEqual(datatableProps, lastDatatableProps.current)) {
-                return prev
-            }
-
-            // store last datatableProps for next comparison
+        if (
+            datatableProps.data !== lastDatatableProps.current.data ||
+            datatableProps.columns !== lastDatatableProps.current.columns ||
+            datatableProps.options !== lastDatatableProps.current.options
+        ) {
             lastDatatableProps.current = datatableProps
 
-            return getInitialState(datatableProps, options)
-        })
-    }, [datatableProps, options])
+            options.current = {
+                ...options.current,
+                ...datatableProps.options
+            }
 
-    handleDeprecatedOptions(datatableProps, options)
+            let didDataUpdate =
+                datatableProps.data !== lastDatatableProps.current.data
+
+            if (datatableProps.data && lastDatatableProps.current.data) {
+                didDataUpdate =
+                    didDataUpdate &&
+                    datatableProps.data.length ===
+                        lastDatatableProps.current.data.length
+            }
+
+            setState(prev =>
+                getNewStateOnDataChange(
+                    datatableProps,
+                    1,
+                    didDataUpdate,
+                    options.current,
+                    prev,
+                    setState
+                )
+            )
+        }
+    }, [datatableProps])
+
+    const [forwardTableChange, setForwardTableChange] = useState<{
+        action: TableAction
+        state: DataTableState<DataRowItemType>
+    }>()
+
+    /**
+     * Forward table change after the state has been committed to prevent
+     * it re-written inside the `onTableChange` callback before the state has been committed.
+     */
+    useEffect(() => {
+        if (forwardTableChange) {
+            lastDatatableProps.current.options?.onTableChange?.(
+                forwardTableChange.action,
+                forwardTableChange.state
+            )
+
+            if (lastDatatableProps.current.options?.storageKey) {
+                save(
+                    lastDatatableProps.current.options.storageKey,
+                    forwardTableChange.state
+                )
+            }
+
+            setForwardTableChange(undefined)
+        }
+    }, [forwardTableChange])
+
+    handleDeprecatedOptions(datatableProps, options.current)
 
     const _DataTableContext = DataTableContext as Context<
         ContextValue<DataRowItemType>
@@ -74,30 +124,35 @@ export default function DataTableContextProvider<DataRowItemType>({
                 },
                 onAction(action, newPartialState) {
                     setState(prev => {
+                        const changedKeys = Object.keys(
+                            newPartialState
+                        ) as (keyof typeof newPartialState)[]
+
+                        const isChanged = changedKeys.some(
+                            key => !isEqual(prev[key], newPartialState[key])
+                        )
+
+                        if (!isChanged) return prev
+
                         const newState = {
                             ...prev,
                             ...newPartialState
                         }
 
-                        if (isEqual(newState, prev)) return prev
-
-                        datatableProps.options?.onTableChange?.(
+                        setForwardTableChange({
                             action,
-                            newState
-                        )
-
-                        if (datatableProps.options?.storageKey)
-                            save(datatableProps.options.storageKey, newState)
+                            state: newState
+                        })
 
                         return newState
                     })
                 },
-                options,
+                options: options.current,
                 props: datatableProps,
                 setState,
+                state,
                 tableHeadCellElements,
                 tableRef,
-                state,
                 textLabels: processTextLabels(datatableProps.textLabels)
             }}
         >
