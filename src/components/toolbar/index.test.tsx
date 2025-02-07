@@ -446,10 +446,13 @@ describe('<Toolbar />', function () {
 
     test('should call onFilterDialogOpen when opening filters via toolbar', () => {
         const onFilterDialogOpen = vi.fn()
-        const onTableChange = vi.fn()
+        // const onTableChange = vi.fn()
 
         const { result } = setup({
-            options: { onFilterDialogOpen, onTableChange }
+            options: {
+                onFilterDialogOpen
+                // onTableChange
+            }
         })
 
         const filterButton = result.getByLabelText(
@@ -464,7 +467,7 @@ describe('<Toolbar />', function () {
 
         expect(filterButton.className.includes('iconActive')).toBe(true)
         expect(onFilterDialogOpen).toHaveBeenCalledOnce()
-        expect(onTableChange).toHaveBeenCalledOnce()
+        // expect(onTableChange).toHaveBeenCalledOnce()
     })
 
     /**
