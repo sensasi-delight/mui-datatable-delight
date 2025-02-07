@@ -6,22 +6,19 @@ import type { DataTableFooterPaginationProps } from './types/props'
 import TablePagination, {
     type TablePaginationProps
 } from '@mui/material/TablePagination'
-// locals
 // functions
-import { getPageValue } from '../../../../functions/_shared/get-page-value'
-import useDataTableContext from '../../../../hooks/use-data-table-context'
+import { getPageValue } from '@src/functions/_shared/get-page-value'
+import useDataTableContext from '@src/hooks/use-data-table-context'
 // global enums
-import ClassName from '../../../../enums/class-name'
+import ClassName from '@src/enums/class-name'
 
 export function DataTableFooterPagination({
     rowsPerPage,
     changeRowsPerPage,
     changePage
 }: DataTableFooterPaginationProps) {
-    const { options, state, textLabels } = useDataTableContext()
+    const { state, textLabels } = useDataTableContext()
     const { classes } = useStyles()
-
-    const { displayData, page } = state
 
     const handleRowChange: TablePaginationProps['onRowsPerPageChange'] = ({
         target: { value }
@@ -36,32 +33,20 @@ export function DataTableFooterPagination({
         changePage(page)
     }
 
-    const finalRowsPerPageOptions = options.rowsPerPageOptions ?? [
-        10, 20, 50, 100
-    ]
-
-    const finalRowPerPage: number = finalRowsPerPageOptions.includes(
-        rowsPerPage
-    )
-        ? rowsPerPage
-        : 10
-
-    const count = displayData.length
-
     return (
         <div className={classes.root}>
             <TablePagination
                 component="div"
-                count={count}
+                count={state.count}
                 labelDisplayedRows={({ from, to, count }) =>
                     `${from}-${to} ${textLabels.pagination.displayRows} ${count}`
                 }
                 labelRowsPerPage={textLabels.pagination.rowsPerPage}
                 onPageChange={handlePageChange}
                 onRowsPerPageChange={handleRowChange}
-                page={getPageValue(count, finalRowPerPage, page)}
-                rowsPerPage={finalRowPerPage}
-                rowsPerPageOptions={finalRowsPerPageOptions}
+                page={getPageValue(state.count, rowsPerPage, state.page)}
+                rowsPerPage={rowsPerPage}
+                rowsPerPageOptions={state.rowsPerPageOptions}
                 slotProps={{
                     actions: {
                         previousButton: {
