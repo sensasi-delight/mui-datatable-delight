@@ -19,6 +19,9 @@ import type { ColumnState } from './state/column'
 import type { DataItemState } from './state/data-item'
 
 export interface DataTableSortOrderOption {
+    /**
+     * @todo  Type of name should be based on column name.
+     */
     name: string
     direction: 'asc' | 'desc' | 'none'
 }
