@@ -1,12 +1,11 @@
 'use client'
 
 import {
+    type MouseEvent,
     type ReactNode,
     useEffect,
     useRef,
-    useState,
-    type KeyboardEvent,
-    type MouseEvent
+    useState
 } from 'react'
 // materials
 import IconButton, { type IconButtonProps } from '@mui/material/IconButton'
@@ -26,29 +25,25 @@ export function ToolbarPopover({
     title
 }: ToolbarPopoverProps) {
     const { classes } = useStyles()
-    const [isOpen, open] = useState(false)
+    const [isOpen, setIsOpen] = useState(false)
     const anchorEl = useRef<EventTarget & HTMLSpanElement>(null)
 
     useEffect(() => {
-        if (isOpen) {
-            if (hide) {
-                open(false)
-            }
+        if (isOpen && hide) {
+            setIsOpen(false)
         }
-    }, [hide, isOpen, open])
+    }, [hide, isOpen])
 
     const handleRequestClose = () => {
-        open(false)
+        setIsOpen(false)
     }
 
-    function handleTriggerClick(
-        event: KeyboardEvent<HTMLButtonElement> | MouseEvent<HTMLButtonElement>
-    ) {
+    function handleTriggerClick(event: MouseEvent<HTMLButtonElement>) {
         anchorEl.current = event.currentTarget
 
         iconButtonProps.onClick?.(event as MouseEvent<HTMLButtonElement>)
 
-        open(true)
+        setIsOpen(true)
     }
 
     return (
@@ -58,7 +53,6 @@ export function ToolbarPopover({
                     <IconButton
                         {...iconButtonProps}
                         onClick={handleTriggerClick}
-                        onKeyDown={handleTriggerClick}
                     />
                 </span>
             </VendorTooltip>
@@ -83,10 +77,12 @@ export function ToolbarPopover({
                 <IconButton
                     aria-label="Close"
                     onClick={handleRequestClose}
+                    size="small"
                     sx={{
                         position: 'absolute',
-                        right: 0,
-                        top: 0
+                        right: 8,
+                        top: 8,
+                        zIndex: 1
                     }}
                 >
                     <CloseIcon />
