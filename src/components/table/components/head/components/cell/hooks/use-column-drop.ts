@@ -131,7 +131,7 @@ export function getColModel<T>(
         const col = headCellRefs.current[colId + 1]
         const cmIndx = colModel.length - 1
 
-        if (!(columns[colId] && columns[colId]?.display !== 'true')) {
+        if (!(columns[colId] && columns[colId]?.display !== true)) {
             const prevLeft =
                 cmIndx !== -1
                     ? colModel[cmIndx].left + colModel[cmIndx].width

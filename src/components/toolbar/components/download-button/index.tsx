@@ -10,9 +10,10 @@ import type { DataTableState } from '@src/types/state'
 import useDataTableContext from '@src/hooks/use-data-table-context'
 import ComponentClassName from '@src/enums/class-name'
 // locals
+import type { ColumnState } from '@src/types/state/column'
+import type { DataItemState } from '@src/types/state/data-item'
 import { ICON_BUTTON_DEFAULT_SX } from '../statics/icon-button-default-sx'
 import { createCsvDownload } from './functions/create-csv-download'
-import type { ColumnState } from '@src/types/state/column'
 
 export function ToolbarDownloadButton() {
     const { classes } = useStyles()
@@ -47,7 +48,7 @@ const useStyles = tss
 
 function handleCSVDownload<T>(
     { columns, columnOrder, data, displayData }: DataTableState<T>,
-    options: DataTableOptions
+    options: DataTableOptions<T>
 ) {
     const columnOrderIndices = getColumnOrderIndices(columnOrder)
     let columnsToDownload = columnOrderIndices.map(idx => columns[idx])
@@ -84,7 +85,7 @@ function getDataToDownload(data: unknown[], columnOrderIndices: number[]) {
     }))
 }
 
-function shouldUseDisplayedRowsOnly(options: DataTableOptions): boolean {
+function shouldUseDisplayedRowsOnly<T>(options: DataTableOptions<T>): boolean {
     return options.downloadOptions?.filterOptions?.useDisplayedRowsOnly ?? false
 }
 
@@ -124,7 +125,9 @@ function isReactElement(obj: unknown): boolean {
     return typeof obj === 'object' && obj !== null && !Array.isArray(obj)
 }
 
-function shouldUseDisplayedColumnsOnly(options: DataTableOptions): boolean {
+function shouldUseDisplayedColumnsOnly<T>(
+    options: DataTableOptions<T>
+): boolean {
     return (
         options.downloadOptions?.filterOptions?.useDisplayedColumnsOnly ?? false
     )
@@ -134,15 +137,15 @@ function getDisplayedColumns<T>(columns: ColumnState<T>[]) {
     return columns.filter(column => column.display)
 }
 
-function filterDataByDisplayedColumns(
-    data: unknown[],
-    columns: unknown[],
+function filterDataByDisplayedColumns<T>(
+    data: DataItemState[],
+    columns: ColumnState<T>[],
     columnOrderIndices: number[]
 ) {
     return data.map(row => ({
         ...row,
         data: row.data.filter(
-            (_, idx) => columns[columnOrderIndices[idx]].display === 'true'
+            (_, i) => columns[columnOrderIndices[i]].display === true
         )
     }))
 }
