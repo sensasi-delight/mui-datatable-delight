@@ -1,11 +1,11 @@
 'use client'
 
+// vendors
 import React from 'react'
 import TableRow from '@mui/material/TableRow'
 import TableCell from '@mui/material/TableCell'
-import { createTheme, ThemeProvider } from '@mui/material/styles'
-
-import DataTable, { DataTableOptions, RowExpansionButton } from '@src'
+// DataTable
+import DataTable, { RowExpansionButton, type DataTableProps } from '@src'
 
 class Example extends React.Component {
     render() {
@@ -124,7 +124,7 @@ class Example extends React.Component {
             ['Mason Ray', 'Computer Scientist', 'San Francisco', 39, '$142,000']
         ]
 
-        const options: DataTableOptions = {
+        const options: DataTableProps['options'] = {
             filter: true,
             filterType: 'dropdown',
             responsive: 'standard',
@@ -144,7 +144,7 @@ class Example extends React.Component {
                 return true
             },
             rowsExpanded: [0, 1],
-            renderExpandableRow: (rowData, rowMeta) => {
+            renderExpandableRow: rowData => {
                 const colSpan = rowData.length + 1
                 return (
                     <TableRow>
@@ -159,36 +159,21 @@ class Example extends React.Component {
                 console.log(curExpanded, allExpanded, rowsExpanded)
         }
 
-        const theme = createTheme({
-            overrides: {
-                MUIDataTableSelectCell: {
-                    expandDisabled: {
-                        // Soft hide the button.
-                        visibility: 'hidden'
-                    }
-                }
-            }
-        })
-
-        const components = {
-            RowExpansionButton: function (props) {
-                if (props.dataIndex === 3 || props.dataIndex === 4)
-                    return <div style={{ width: '24px' }} />
-
-                return <RowExpansionButton {...props} />
-            }
-        }
-
         return (
-            <ThemeProvider theme={theme}>
-                <DataTable
-                    title={'ACME Employee list'}
-                    data={data}
-                    columns={columns}
-                    options={options}
-                    components={components}
-                />
-            </ThemeProvider>
+            <DataTable
+                title="ACME Employee list"
+                data={data}
+                columns={columns}
+                options={options}
+                components={{
+                    RowExpansionButton(props) {
+                        if (props.dataIndex === 3 || props.dataIndex === 4)
+                            return <div style={{ width: '24px' }} />
+
+                        return <RowExpansionButton {...props} />
+                    }
+                }}
+            />
         )
     }
 }

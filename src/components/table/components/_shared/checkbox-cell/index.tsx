@@ -220,7 +220,7 @@ export interface DataTableTableSelectCellProps {
 
     dataIndex: number
 
-    id: string
+    // id: string
 }
 
 const useStyles = tss.withName(ComponentClassName.TABLE__CHECKBOX_CELL).create({

@@ -166,7 +166,11 @@ export interface DataTableColumnObjectOptions<T> {
      * [Example](https://mui-datatable-delight.vercel.app/examples/customize-styling)
      */
     setCellProps?:
-        | ((cellValue: string, rowIndex: number, columnIndex: number) => object)
+        | ((
+              cellValue: ReactNode,
+              rowIndex: number,
+              columnIndex: number
+          ) => object)
         | undefined
 
     /**

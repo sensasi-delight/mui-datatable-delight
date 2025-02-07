@@ -7,7 +7,7 @@ import type { SelectedRowDataState } from './state/selected-row-data'
 import type { DataItemState } from './state/data-item'
 
 interface ExpandedRows {
-    data: string[]
+    data: { index: number; dataIndex: number }[]
     lookup: Record<number, boolean>
 }
 
@@ -20,7 +20,7 @@ export interface DataTableState<T> {
 
     columns: ColumnState<T>[]
 
-    curExpandedRows?: ExpandedRows
+    curExpandedRows?: ExpandedRows['data']
 
     count: number
 

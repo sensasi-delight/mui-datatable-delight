@@ -317,9 +317,9 @@ export interface DataTableOptions<DataRowItemType = DefaultDataRowItemType>
 
     /** Callback function that triggers when a row is clicked. */
     onRowClick?: (
-        rowData: string[],
+        rowData: ReactNode[],
         rowMeta: { dataIndex: number; rowIndex: number },
-        event: MouseEvent<HTMLTableRowElement, MouseEvent>
+        event: React.MouseEvent<HTMLTableRowElement, globalThis.MouseEvent>
     ) => void
 
     /**
@@ -402,7 +402,7 @@ export interface DataTableOptions<DataRowItemType = DefaultDataRowItemType>
      * @see https://mui-datatable-delight.vercel.app/examples/expandable-rows
      */
     renderExpandableRow?: (
-        rowData: string[],
+        rowData: ReactNode[],
         rowMeta: { dataIndex: number; rowIndex: number }
     ) => ReactNode
 
