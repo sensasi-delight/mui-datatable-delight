@@ -30,7 +30,10 @@ export default function sortTable<T>(
     column: ColumnState<T> | undefined,
     options: DataTableOptions<T>,
     state: DataTableState<T>
-) {
+): {
+    data: DataItemState[]
+    selectedRows: DataTableState<T>['selectedRows']
+} {
     const isSortByCustomSortOption = options.customSort && !column?.sortCompare
 
     const dataSrc = isSortByCustomSortOption
@@ -84,7 +87,7 @@ export default function sortTable<T>(
     })
 
     return {
-        data: order === 'none' ? noSortData : tableData,
+        data: order === 'none' ? (noSortData ?? []) : tableData,
         selectedRows: {
             lookup: buildMap(selectedRows),
             data: selectedRows
