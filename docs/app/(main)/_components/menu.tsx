@@ -177,7 +177,11 @@ function MenuSection({ sectionId }: { sectionId: Section }) {
             {sectionId === 'GETTING_STARTED' && (
                 <>
                     <CustomListItem href="/examples" text="Examples" />
-                    <CustomListItem href="/api-docs" text="API Docs" newTab />
+                    <CustomListItem
+                        href="/api-docs/index.html"
+                        text="API Docs"
+                        newTab
+                    />
                 </>
             )}
         </>
