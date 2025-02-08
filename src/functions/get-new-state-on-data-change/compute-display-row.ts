@@ -5,6 +5,7 @@ import type { FilterList } from '@src/types/state/filter-list'
 import type { DataTableState } from '@src/types/state'
 import type { DataTableOptions } from '@src/types/options'
 import type { DataTableProps } from '@src/data-table.props'
+import type { DisplayDataState } from '@src/types/state/display-data'
 
 /*
  * Build the table data used to display to the user (i.e., after filter/search applied)
@@ -19,11 +20,11 @@ export default function computeDisplayRow<T>(
     props: DataTableProps<T>,
     state: DataTableState<T>,
     setState: (newState: DataTableState<T>) => void
-): ReactNode[] | undefined {
+): DisplayDataState<T>[number]['data'] | undefined {
     let isFiltered = false
     let isSearchFound = false
 
-    const displayRow: ReactNode[] = []
+    const displayRow: DisplayDataState<T>[number]['data'] = []
 
     for (let index = 0; index < row.length; index++) {
         let columnDisplay = row[index]
@@ -32,7 +33,7 @@ export default function computeDisplayRow<T>(
         const column = columns[index]
 
         if (column?.customBodyRenderLite) {
-            displayRow.push(column.customBodyRenderLite(index, rowIndex))
+            displayRow.push(column.customBodyRenderLite)
         } else if (column?.customBodyRender) {
             const funcResult = column.customBodyRender(
                 columnValue,
@@ -56,10 +57,15 @@ export default function computeDisplayRow<T>(
 
             columnDisplay = funcResult
 
-            columnValue =
-                typeof funcResult === 'string' || !funcResult
-                    ? funcResult
-                    : (funcResult.props?.value ?? columnValue)
+            /* drill down to get the value of a cell */
+            if (typeof funcResult === 'string' || !funcResult) {
+                columnValue = funcResult
+            } else if (
+                typeof funcResult === 'object' &&
+                'props' in funcResult
+            ) {
+                columnValue = funcResult.props.value ?? columnValue
+            }
 
             displayRow.push(columnDisplay)
         } else {
