@@ -48,7 +48,7 @@ export interface ColumnDefinitionOptions<T> {
          * `any` type is used because user can pass any value
          */
         updateValue: (value: any) => void // eslint-disable-line @typescript-eslint/no-explicit-any
-    ) => JSX.Element | undefined
+    ) => JSX.Element | ReactNode
 
     /**
      * Similar to and performing better than {@link ColumnDefinitionOptions.customBodyRender | `customBodyRender`}, however with the following caveats:
@@ -61,7 +61,7 @@ export interface ColumnDefinitionOptions<T> {
     customBodyRenderLite?: (
         dataIndex: number,
         rowIndex: number
-    ) => JSX.Element | undefined
+    ) => JSX.Element | ReactNode
 
     /**
      * Function that returns a string or React component.
