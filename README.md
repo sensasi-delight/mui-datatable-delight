@@ -41,7 +41,7 @@ See [the examples](https://mui-datatable-delight.vercel.app/examples).
 
 ## API
 
-See [the API docs](https://mui-datatable-delight.vercel.app/docs/api).
+See [the API docs](https://mui-datatable-delight.vercel.app/api-docs).
 
 ## Contributing
 

@@ -1,0 +1,11 @@
+{
+    "$schema": "https://typedoc.org/schema.json",
+    "entryPoints": ["./src/index.ts"],
+    "out": "./docs/out/api-docs",
+    "tsconfig": "./tsconfig.json",
+
+    /**
+     * @todo REMOVE THIS AFTER ALL CODES ARE FULLY TYPE SAFE
+     */
+    "skipErrorChecking": true
+}

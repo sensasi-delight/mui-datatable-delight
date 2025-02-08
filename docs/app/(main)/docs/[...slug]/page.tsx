@@ -20,8 +20,14 @@ export function generateStaticParams() {
 }
 
 function getRoutes() {
-    return Object.keys(Route)
-        .filter(key => key !== 'GETTING_STARTED__EXAMPLES') // ignore examples cause it's handled separately on '/examples'
+    return (Object.keys(Route) as (keyof typeof Route)[])
+        .filter(
+            key =>
+                // ignore examples cause it's handled separately on '/examples'
+                !['GETTING_STARTED__EXAMPLES', 'GETTING_STARTED__API'].includes(
+                    key
+                )
+        )
         .map(enumKey => ({
             slug: enumKey.toLowerCase().replaceAll('_', '-').split('--')
         }))
