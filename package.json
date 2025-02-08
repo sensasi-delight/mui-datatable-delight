@@ -10,7 +10,7 @@
     "module": "./dist/esm/src/index.js",
     "scripts": {
         "build": "rollup -c",
-        "build:docs": "next build docs && npx typedoc",
+        "build:docs": "typedoc && next build docs",
         "dev": "next docs",
         "lint": "eslint src",
         "prepublishOnly": "npm run build",
