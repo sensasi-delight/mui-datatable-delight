@@ -1,9 +1,8 @@
-'use client'
-
 // vendors
 import { usePathname } from 'next/navigation'
 // materials
 import Box from '@mui/material/Box'
+import Dialog from '@mui/material/Dialog'
 import Drawer from '@mui/material/Drawer'
 import TagIcon from '@mui/icons-material/Tag'
 import List from '@mui/material/List'
@@ -11,11 +10,12 @@ import ListItem from '@mui/material/ListItem'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemText from '@mui/material/ListItemText'
 import ListSubheader from '@mui/material/ListSubheader'
+// icons-materials
+import OpenInNew from '@mui/icons-material/OpenInNew'
 // locals
 import { DRAWER_WIDTH } from '../_constants'
 import { Route as DocsRoute } from '../docs/_route--enum'
 import { snakeCaseToKebab, snakeCaseToTitle } from '@/utils'
-import { Dialog } from '@mui/material'
 
 export default function Menu({
     isOpen
@@ -91,7 +91,15 @@ function Nav() {
     )
 }
 
-function CustomListItem({ href, text }: { href: string; text: string }) {
+function CustomListItem({
+    href,
+    text,
+    newTab: isNewTab
+}: {
+    href: string
+    text: string
+    newTab?: boolean
+}) {
     const pathname = usePathname()
     const isActive = pathname.replace('/overview', '') === href
 
@@ -99,6 +107,7 @@ function CustomListItem({ href, text }: { href: string; text: string }) {
         <ListItem disablePadding>
             <ListItemButton
                 href={href}
+                target={isNewTab ? '_blank' : undefined}
                 selected={isActive}
                 sx={{
                     py: 0,
@@ -123,6 +132,8 @@ function CustomListItem({ href, text }: { href: string; text: string }) {
                         }
                     }}
                 />
+
+                {isNewTab && <OpenInNew fontSize="inherit" />}
             </ListItemButton>
         </ListItem>
     )
@@ -158,22 +169,28 @@ function MenuSection({ sectionId }: { sectionId: Section }) {
             {routes.slice(1).map((route, i) => (
                 <CustomListItem
                     key={i}
-                    href={
-                        '/docs/' +
-                        // (isExampleSection ? '/examples/' : '/docs/') +
-                        route.href
-                    }
+                    href={'/docs/' + route.href}
                     text={route.title}
                 />
             ))}
+
+            {sectionId === 'GETTING_STARTED' && (
+                <>
+                    <CustomListItem href="/examples" text="Examples" />
+                    <CustomListItem
+                        href="/api-docs/index.html"
+                        text="API Docs"
+                        newTab
+                    />
+                </>
+            )}
         </>
     )
 }
 
 enum Section {
     GETTING_STARTED = 'GETTING_STARTED',
-    FEATURES = 'FEATURES',
-    API = 'API'
+    FEATURES = 'FEATURES'
 }
 
 function getDocRoutes(sectionId: Section): Route[] {
@@ -184,20 +201,6 @@ function getDocRoutes(sectionId: Section): Route[] {
             title: snakeCaseToTitle(enumKey).split('  ').pop() ?? ''
         }))
 }
-
-// function getExampleRoutes(): Route[] {
-//     const SORTED_EXAMPLES = [
-//         '',
-//         ...Object.keys(ExamplesRoute)
-//             .filter(key => isNaN(parseInt(key)))
-//             .sort()
-//     ]
-
-//     return SORTED_EXAMPLES.map(enumKey => ({
-//         href: snakeCaseToKebab(enumKey),
-//         title: snakeCaseToTitle(enumKey)
-//     }))
-// }
 
 interface Route {
     href: string

@@ -28,9 +28,6 @@
 - [Contributing](#contributing)
 - [License](#license)
 
-<!-- - [Plug-ins](#plug-ins)
-    - [Available Plug-ins:](#available-plug-ins) -->
-
 ## Getting Started
 
 See [the docs](https://mui-datatable-delight.vercel.app/docs/getting-started).
@@ -41,7 +38,7 @@ See [the examples](https://mui-datatable-delight.vercel.app/examples).
 
 ## API
 
-See [the API docs](https://mui-datatable-delight.vercel.app/docs/api).
+See [the API docs](https://mui-datatable-delight.vercel.app/api-docs/index.html).
 
 ## Contributing
 
