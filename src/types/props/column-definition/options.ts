@@ -22,6 +22,8 @@ export interface ColumnDefinitionOptions<T> {
     customBodyRender?: (
         /**
          * The value of the cell column
+         *
+         * `any` type is used because user can pass any value
          */
         value: T[keyof T] | any, // eslint-disable-line @typescript-eslint/no-explicit-any
 
@@ -42,9 +44,11 @@ export interface ColumnDefinitionOptions<T> {
 
         /**
          * A function to update the value of the cell
+         *
+         * `any` type is used because user can pass any value
          */
-        updateValue: (value: unknown) => void
-    ) => JSX.Element
+        updateValue: (value: any) => void // eslint-disable-line @typescript-eslint/no-explicit-any
+    ) => JSX.Element | undefined
 
     /**
      * Similar to and performing better than {@link ColumnDefinitionOptions.customBodyRender | `customBodyRender`}, however with the following caveats:
@@ -54,7 +58,10 @@ export interface ColumnDefinitionOptions<T> {
      * @see
      * [Example](https://mui-datatable-delight.vercel.app/examples/large-data-set)
      */
-    customBodyRenderLite?: (dataIndex: number, rowIndex: number) => JSX.Element
+    customBodyRenderLite?: (
+        dataIndex: number,
+        rowIndex: number
+    ) => JSX.Element | undefined
 
     /**
      * Function that returns a string or React component.

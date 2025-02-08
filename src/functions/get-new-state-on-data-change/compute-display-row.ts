@@ -39,7 +39,7 @@ export default function computeDisplayRow<T>(
                 rowIndex,
                 index,
                 state,
-                (value: ReactNode) => {
+                value => {
                     setState(
                         updateDataCol(
                             rowIndex,
@@ -59,8 +59,7 @@ export default function computeDisplayRow<T>(
             columnValue =
                 typeof funcResult === 'string' || !funcResult
                     ? funcResult
-                    : // @ts-expect-error  WILL FIX THIS LATER
-                      (funcResult.props?.value ?? columnValue)
+                    : (funcResult.props?.value ?? columnValue)
 
             displayRow.push(columnDisplay)
         } else {

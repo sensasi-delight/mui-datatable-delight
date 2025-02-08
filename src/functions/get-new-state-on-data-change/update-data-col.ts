@@ -1,4 +1,4 @@
-import { isValidElement, type ReactNode } from 'react'
+import { type ReactNode } from 'react'
 import getDisplayData from './get-display-data'
 import { getCollatorComparator } from '../get-collator-comparator'
 import type { DataTableState } from '@src/types/state'
@@ -45,14 +45,13 @@ export default function updateDataCol<T>(
         value,
         row,
         index,
-        prevState
+        prevState,
+        setState
     )
 
     const filterValue =
-        // @ts-expect-error  WILL FIX THIS LATER
-        isValidElement(funcResult) && funcResult.props?.value
-            ? // @ts-expect-error  WILL FIX THIS LATER
-              funcResult.props.value
+        'value' in (funcResult?.props ?? {})
+            ? funcResult?.props.value
             : prevState.data?.[row]?.data[index]
 
     const prevFilterIndex = filterData[index]?.indexOf(filterValue)
