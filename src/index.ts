@@ -1,3 +1,4 @@
+export type { ColumnDefinitionObject } from './types/props/column-definition/object'
 export type { DataTableProps } from './data-table.props'
 export type { DataTableOptions } from './types/options'
 export type { DataTableState } from './types/state'

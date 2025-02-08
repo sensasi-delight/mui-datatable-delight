@@ -36,7 +36,8 @@ export default function ColumnVisibilitiesBox() {
             columns: newColumns
         })
 
-        const cb = options.onViewColumnsChange ?? options.onColumnViewChange
+        const cb =
+            options.onColumnVisibilityChange ?? options.onViewColumnsChange
 
         cb?.(
             changedColumn.name,

@@ -8,9 +8,15 @@ import { HTML5Backend } from 'react-dnd-html5-backend'
 import { tss } from 'tss-react/mui'
 import Paper, { type PaperProps } from '@mui/material/Paper'
 // locals
+import type { DataTableOptions } from './types/options'
+import type { DefaultRow } from './types/default-row'
+import type { FilterList } from './types/state/filter-list'
+import type { FilterTypeType } from './types/shared/filter-type-type'
+import type { FilterUpdateType } from './types/filter-update'
+import type { SelectRowUpdateType } from './types/select-row-update'
+import type { SelectedRowDataState } from './types/state/selected-row-data'
 import { buildMap } from './functions'
 import getDisplayData from './functions/get-new-state-on-data-change/get-display-data'
-import { type DataTableOptions } from './types/options'
 import DataTableContextProvider from './hooks/use-data-table-context/components/provider'
 // hooks
 import useDataTableContext from './hooks/use-data-table-context'
@@ -26,23 +32,17 @@ import Toolbar from './components/toolbar'
 import ClassName from './enums/class-name'
 import RowsSelectedToolbarPlacement from './enums/rows-selected-toolbar-placement'
 import TableAction from './enums/table-action'
-import type { DefaultDataRowItemType } from './types/values/default-data-row-item-type'
-import type { FilterList } from './types/state/filter-list'
-import type { FilterTypeType } from './types/shared/filter-type-type'
-import type { FilterUpdateType } from './types/filter-update'
-import type { SelectRowUpdateType } from './types/select-row-update'
-import type { SelectedRowDataState } from './types/state/selected-row-data'
 
 /**
  * A responsive DataTable component built with Material UI for React-based project.
  *
  * @see https://mui-datatable-delight.vercel.app
  */
-export function DataTable<DataRowItemType = DefaultDataRowItemType>({
+export function DataTable<Row = DefaultRow>({
     className,
     ref,
     ...props
-}: DataTableProps<DataRowItemType>) {
+}: DataTableProps<Row>) {
     return (
         <DataTableContextProvider datatableProps={props}>
             <DataTable_ className={className} ref={ref} />

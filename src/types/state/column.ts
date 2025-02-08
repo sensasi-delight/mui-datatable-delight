@@ -1,6 +1,6 @@
-import type { DataTableColumnObjectOptions } from '../columns'
+import type { ColumnDefinitionOptions } from '../props/column-definition/options'
 
 export type ColumnState<T> = {
     name: string
     label: string
-} & DataTableColumnObjectOptions<T>
+} & ColumnDefinitionOptions<T>

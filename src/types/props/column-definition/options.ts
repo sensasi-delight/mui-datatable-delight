@@ -1,45 +1,60 @@
-import type { DataTableSortOrderOption } from './options'
-import type { DataTableState } from './state'
-import type { ReactNode } from 'react'
-import type { FilterTypeType } from './shared/filter-type-type'
-import type { ColumnState } from './state/column'
-import type { FilterList } from './state/filter-list'
-import type { Primitive } from './values/primitive'
+import type { DataTableSortOrderOption } from '../../options'
+import type { DataTableState } from '../../state'
+import type { JSX, ReactNode } from 'react'
+import type { FilterTypeType } from '../../shared/filter-type-type'
+import type { ColumnState } from '../../state/column'
+import type { FilterList } from '../../state/filter-list'
 
-export type MUIDataTableCustomHeadRenderer<T> = {
+type MUIDataTableCustomHeadRenderer<T> = {
     index: number
 } & ColumnState<T>
 
-export interface DataTableColumnObjectOptions<T> {
+export interface ColumnDefinitionOptions<T> {
     /**
      * Function that returns a string or React component.
      * Used to display data within all table cells of a given column.
      * The value returned from this function will be used for filtering in the filter dialog.
-     * If this isn't need, you may want to consider customBodyRenderLite instead.
+     * If this isn't need, you may want to consider {@link ColumnDefinitionOptions.customBodyRenderLite | `customBodyRenderLite`} instead.
      *
      * @see
      * [Example](https://mui-datatable-delight.vercel.app/examples/component)
      */
     customBodyRender?: (
-        value: ReactNode,
+        /**
+         * The value of the cell column
+         */
+        value: T[keyof T] | any, // eslint-disable-line @typescript-eslint/no-explicit-any
+
+        /**
+         * The index of the row
+         */
         rowIndex: number,
+
+        /**
+         * The index of the column
+         */
         columnIndex: number,
+
+        /**
+         * The current state of the table
+         */
         state: DataTableState<T>,
-        updateValue?: (value: Primitive) => void
-    ) => ReactNode
+
+        /**
+         * A function to update the value of the cell
+         */
+        updateValue: (value: unknown) => void
+    ) => JSX.Element
 
     /**
-     * Similar to and performing better than `customBodyRender`, however with the following caveats:
+     * Similar to and performing better than {@link ColumnDefinitionOptions.customBodyRender | `customBodyRender`}, however with the following caveats:
      * 1. The value returned from this function is not used for filtering, so the filter dialog will use the raw data from the data array.
      * 2. This method only gives you the dataIndex and rowIndex, leaving you to lookup the column value.
      *
      * @see
      * [Example](https://mui-datatable-delight.vercel.app/examples/large-data-set)
      */
-    customBodyRenderLite?: (
-        dataIndex: number,
-        rowIndex: number
-    ) => string | ReactNode
+    customBodyRenderLite?: (dataIndex: number, rowIndex: number) => JSX.Element
 
     /**
      * Function that returns a string or React component.

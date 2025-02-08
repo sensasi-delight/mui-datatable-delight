@@ -3,30 +3,32 @@ import type { ReactNode } from 'react'
 import type { PaperProps } from '@mui/material/Paper'
 import type { SxProps } from '@mui/system/styleFunctionSx'
 //
+import type { ColumnDefinition } from './types/props/column-definition'
 import type { DataTableOptions } from './types/options'
 import type { DataTableComponents } from './types/components'
-import type { DataTableColumnObjectOptions } from './types/columns'
 import type { DataTableIcons } from './types/icons'
-import type { DefaultDataRowItemType } from './types/values/default-data-row-item-type'
+import type { DefaultRow } from './types/default-row'
 import type { TextLabelsType } from '@src/hooks/use-data-table-context/function/statics/default-text-labels'
 
-export interface DataTableProps<DataRowItemType = DefaultDataRowItemType> {
-    /** Pass and use className to style MUIDataTable as desired */
+export interface DataTableProps<Row = DefaultRow> {
+    /**
+     * Pass and use `className` to style `<DataTable />` as desired
+     */
     className?: string
 
-    /** Columns used to describe table */
-    columns: (
-        | string
-        | {
-              name: string
-              label?: string
-              options?: Partial<DataTableColumnObjectOptions<DataRowItemType>>
-          }
-    )[]
+    /**
+     * Columns used to describe table
+     */
+    columns: ColumnDefinition<Row>[]
 
+    /**
+     * Override `<DataTable />` components
+     */
     components?: Partial<DataTableComponents>
 
     /**
+     * Data used to populate `<DataTable />`
+     *
      * @example
      * ```js
      *  const data = [
@@ -37,8 +39,11 @@ export interface DataTableProps<DataRowItemType = DefaultDataRowItemType> {
      *  ];
      * ```
      */
-    data: DataRowItemType[]
+    data: Row[]
 
+    /**
+     * Override `<DataTable />` icons
+     */
     icons?: Partial<DataTableIcons>
 
     /**
@@ -46,7 +51,7 @@ export interface DataTableProps<DataRowItemType = DefaultDataRowItemType> {
      */
     title?: string | ReactNode
 
-    options?: Partial<DataTableOptions<DataRowItemType>>
+    options?: Partial<DataTableOptions<Row>>
 
     /**
      * User provided labels to localize text.

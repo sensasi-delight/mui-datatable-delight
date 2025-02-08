@@ -1,7 +1,16 @@
-import type { TableProps } from '@mui/material/Table'
+// vendors
 import type { ChipProps } from '@mui/material/Chip'
-import type { TableRowProps } from '@mui/material/TableRow'
 import type { MouseEvent, ReactNode } from 'react'
+import type { TableProps } from '@mui/material/Table'
+import type { TableRowProps } from '@mui/material/TableRow'
+// locals
+import type { BooleanOrDisabled } from './values/boolean-or-disabled'
+import type { SelectedRowDataState } from './state/selected-row-data'
+import type { DisplayDataState } from './state/display-data'
+import type { SelectableRowsType } from './options/selectable-rows'
+import type { ColumnState } from './state/column'
+import type { DataItemState } from './state/data-item'
+import type { DefaultRow } from './default-row'
 import type { DataTableState } from './state'
 import type { FilterTypeType } from './shared/filter-type-type'
 import { DEFAULT_TEXT_LABELS } from '../hooks/use-data-table-context/function/statics/default-text-labels'
@@ -9,14 +18,10 @@ import { DEFAULT_TEXT_LABELS } from '../hooks/use-data-table-context/function/st
 import type RowsSelectedToolbarPlacement from '../enums/rows-selected-toolbar-placement'
 import type TableAction from '../enums/table-action'
 import type DataTableSearchOptions from './options/search'
-import type { BooleanOrDisabled } from './values/boolean-or-disabled'
-import type { DefaultDataRowItemType } from './values/default-data-row-item-type'
-import type { SelectedRowDataState } from './state/selected-row-data'
-import type { DisplayDataState } from './state/display-data'
-import type { SelectableRowsType } from './options/selectable-rows'
-import type { ColumnPropType } from './props/column'
-import type { ColumnState } from './state/column'
-import type { DataItemState } from './state/data-item'
+
+// Imported for linking documentation
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import type { ColumnDefinitionOptions } from './props/column-definition/options'
 
 export interface DataTableSortOrderOption {
     /**
@@ -26,9 +31,9 @@ export interface DataTableSortOrderOption {
     direction: 'asc' | 'desc' | 'none'
 }
 
-export interface DataTableOptions<DataRowItemType = DefaultDataRowItemType>
-    extends DataTableCustomsOptions<DataRowItemType>,
-        DataTableSearchOptions<DataRowItemType> {
+export interface DataTableOptions<Row = DefaultRow>
+    extends DataTableCustomsOptions<Row>,
+        DataTableSearchOptions<Row> {
     /**
      * Enable/disable case sensitivity for search
      *
@@ -204,13 +209,13 @@ export interface DataTableOptions<DataRowItemType = DefaultDataRowItemType>
      */
     isRowExpandable?: (
         dataIndex: number,
-        expandedRows: DataTableState<DataRowItemType>['expandedRows']
+        expandedRows: DataTableState<Row>['expandedRows']
     ) => boolean
 
     /** Enable/disable selection on certain rows with custom function. Returns true if not provided. */
     isRowSelectable?: (
         dataIndex: number,
-        selectedRows: DataTableState<DataRowItemType>['selectedRows']
+        selectedRows: DataTableState<Row>['selectedRows']
     ) => boolean
 
     /**
@@ -244,16 +249,21 @@ export interface DataTableOptions<DataRowItemType = DefaultDataRowItemType>
         newPosition: number
     ) => void
 
-    /** Callback function that triggers when a column has been sorted. */
+    /**
+     * Callback function that triggers when a column has been sorted.
+     */
     onColumnSortChange?: (
-        changedColumn: string,
+        /** Name of the column that was sorted */
+        columnName: string,
+
+        /** New sort order direction (`asc` or `desc`) */
         direction: DataTableSortOrderOption['direction']
     ) => void
 
-    /** @deprecated use `onViewColumnsChange` instead */
-    onColumnViewChange?:
-        | ((changedColumn: string, action: string) => void)
-        | undefined
+    /**
+     * @deprecated  Use {@link DataTableOptions.onColumnVisibilityChange | `onColumnVisibilityChange`} instead
+     */
+    onColumnViewChange?: never
 
     /**
      * A callback function that triggers when the user downloads the CSV file.
@@ -264,22 +274,22 @@ export interface DataTableOptions<DataRowItemType = DefaultDataRowItemType>
      * @see [On Download example](https://mui-datatatable-delight.vercel.app/examples/on-download)
      */
     onDownload?: (
-        buildHead: (columns: ColumnState<DataRowItemType>[]) => string,
+        buildHead: (columns: ColumnState<Row>[]) => string,
         buildBody: (data: DataItemState[]) => string,
-        columns: ColumnState<DataRowItemType>[],
+        columns: ColumnState<Row>[],
         data: DataItemState[]
     ) =>
         | {
               data: DisplayDataState
-              columns: ColumnState<DataRowItemType>[]
+              columns: ColumnState<Row>[]
           }
         | string
         | false
 
     /** Callback function that triggers when filters have changed. */
     onFilterChange?: (
-        changedColumn: ColumnPropType<DataRowItemType> | null,
-        filterList: DataTableState<DataRowItemType>['filterList'],
+        changedColumn: ColumnState<Row> | null,
+        filterList: DataTableState<Row>['filterList'],
         type: FilterTypeType | 'reset',
         changedColumnIndex: number | null,
         displayData: DisplayDataState
@@ -294,7 +304,7 @@ export interface DataTableOptions<DataRowItemType = DefaultDataRowItemType>
     onFilterChipClose?: (
         index: number,
         removedFilter: string | string[],
-        filterList: DataTableState<DataRowItemType>['filterList']
+        filterList: DataTableState<Row>['filterList']
     ) => void
 
     /**
@@ -305,9 +315,7 @@ export interface DataTableOptions<DataRowItemType = DefaultDataRowItemType>
      * [Server-side Filters Example](https://mui-datatable-delight.vercel.app/examples/server-side-filters)
      */
 
-    onFilterConfirm?: (
-        filterList: DataTableState<DataRowItemType>['filterList']
-    ) => void
+    onFilterConfirm?: (filterList: DataTableState<Row>['filterList']) => void
 
     /** Callback function that triggers when the filter dialog closes. */
     onFilterDialogClose?: () => void
@@ -359,7 +367,7 @@ export interface DataTableOptions<DataRowItemType = DefaultDataRowItemType>
      */
     onTableChange?: (
         action: TableAction,
-        tableState: DataTableState<DataRowItemType>
+        tableState: DataTableState<Row>
     ) => void
 
     /**
@@ -368,15 +376,28 @@ export interface DataTableOptions<DataRowItemType = DefaultDataRowItemType>
      * @see {@link TableAction} enum.
      * @see {@link DataTableState} interface.
      */
-    onTableInit?: (
-        action: TableAction,
-        tableState: DataTableState<DataRowItemType>
-    ) => void
+    onTableInit?: (action: TableAction, tableState: DataTableState<Row>) => void
 
-    /** Callback function that triggers when a column view has been changed. Previously known as onColumnViewChange. */
+    /**
+     * @deprecated  Use {@link DataTableOptions.onColumnVisibilityChange | `onColumnVisibilityChange`} instead
+     */
     onViewColumnsChange?: (changedColumn: string, action: string) => void
 
-    /** User provided page for pagination */
+    /**
+     * Callback function that triggers when a column view has been changed.
+     *
+     * Previously known as {@link DataTableOptions.onColumnViewChange | `onColumnViewChange`} or {@link DataTableOptions.onViewColumnsChange | `onViewColumnsChange`}.
+     */
+    onColumnVisibilityChange?: (
+        /** Name of the column that was changed */
+        columnName: string,
+
+        action: 'add' | 'remove'
+    ) => void
+
+    /**
+     * User provided page for pagination
+     */
     page?: number
 
     /**
@@ -615,25 +636,25 @@ export interface DataTableOptions<DataRowItemType = DefaultDataRowItemType>
      *
      * @see  {@link onRowExpansionChange}
      */
-    onRowsExpand?: DataTableOptions<DataRowItemType>['onRowExpansionChange']
+    onRowsExpand?: DataTableOptions<Row>['onRowExpansionChange']
 
     /**
      * @deprecated Use `onRowSelectionChange` instead.
      *
      * @see  {@link onRowSelectionChange}
      */
-    onRowsSelect?: DataTableOptions<DataRowItemType>['onRowSelectionChange']
+    onRowsSelect?: DataTableOptions<Row>['onRowSelectionChange']
 
     /**
      * @deprecated  in favor of the {@link confirmFilters} option.
      */
-    serverSideFilterList?: DataTableState<DataRowItemType>['filterList']
+    serverSideFilterList?: DataTableState<Row>['filterList']
 }
 
-interface DataTableCustomsOptions<DataRowItemType> {
+interface DataTableCustomsOptions<Row> {
     /** Add a custom footer to the filter dialog. */
     customFilterDialogFooter?: (
-        filterList: DataTableState<DataRowItemType>['filterList'],
+        filterList: DataTableState<Row>['filterList'],
         applyNewFilters?: (...args: unknown[]) => unknown
     ) => ReactNode
 
@@ -665,7 +686,7 @@ interface DataTableCustomsOptions<DataRowItemType> {
     /**
      * Override default sorting with custom function.
      *
-     * If you just need to override the sorting for a particular column, see the {@link ./columns/DataTableColumnObjectOptions.sortCompare} method in the Column options.
+     * If you just need to override the sorting for a particular column, see the {@link ColumnDefinitionOptions.sortCompare | `sortCompare`} method in the Column options.
      *
      * @see https://mui-datatable-delight.vercel.app/examples/customize-sorting
      */
@@ -673,7 +694,7 @@ interface DataTableCustomsOptions<DataRowItemType> {
         data: DataItemState[],
         colIndex: number,
         order: string,
-        state: DataTableState<DataRowItemType>
+        state: DataTableState<Row>
     ) => DataItemState[]
 
     /**
@@ -683,8 +704,8 @@ interface DataTableCustomsOptions<DataRowItemType> {
      * @see https://mui-datatable-delight.vercel.app/examples/customize-footer
      */
     customTableBodyFooterRender?: (
-        state: DataTableState<DataRowItemType>,
-        options: DataTableOptions<DataRowItemType>
+        state: DataTableState<Row>,
+        options: DataTableOptions<Row>
     ) => ReactNode
 
     /**
