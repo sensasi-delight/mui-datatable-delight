@@ -1,6 +1,6 @@
+import type { DataTableState } from '@src/types/state'
 import { type DropTargetMonitor, useDrop } from 'react-dnd'
 import { type RefObject, useRef } from 'react'
-import type { DataTableState } from '@src/index'
 // globals
 import useDataTableContext from '@src/hooks/use-data-table-context'
 import TableAction from '@src/enums/table-action'
@@ -58,19 +58,24 @@ interface OptsType {
  *
  * NOTE: EXPORTED ONLY FOR TESTING
  */
-export function getColModel(
+export function getColModel<T>(
     headCellRefs: RefObject<HTMLTableCellElement[]>,
-    columnOrder: DataTableState['columnOrder'],
-    columns: DataTableState['columns']
+    columnOrder: DataTableState<T>['columnOrder'],
+    columns: DataTableState<T>['columns']
 ) {
-    let colModel = []
+    const colModel: {
+        left: number
+        width: number
+        columnIndex: number
+        ref: RefObject<HTMLTableCellElement>
+    }[] = []
 
     function getFakeCell() {
         let leftMostCell = { offsetLeft: Infinity }
 
         const headCells = Object.entries(headCellRefs.current)
 
-        headCells.forEach(([_, item]) => {
+        headCells.forEach(([, item]) => {
             if (item && item.offsetLeft < leftMostCell.offsetLeft) {
                 leftMostCell = item
             }
@@ -88,9 +93,7 @@ export function getColModel(
     }
 
     // left most cell is the select cell, if it exists
-    const leftMostCell = headCellRefs.current[0]
-        ? headCellRefs.current[0]
-        : getFakeCell()
+    const leftMostCell = headCellRefs.current[0] ?? getFakeCell()
 
     let ii = 0,
         parentOffsetLeft = 0,
@@ -128,7 +131,7 @@ export function getColModel(
         const col = headCellRefs.current[colId + 1]
         const cmIndx = colModel.length - 1
 
-        if (!(columns[colId] && columns[colId]?.display !== 'true')) {
+        if (!(columns[colId] && columns[colId]?.display !== true)) {
             const prevLeft =
                 cmIndx !== -1
                     ? colModel[cmIndx].left + colModel[cmIndx].width
@@ -186,7 +189,7 @@ export function reorderColumns(
  *
  * NOTE: EXPORTED ONLY FOR TESTING
  */
-export function handleHover(
+export function handleHover<T>(
     opts: OptsType & {
         mon: DropTargetMonitor<
             {
@@ -202,8 +205,8 @@ export function handleHover(
             newPosition: number
         ) => void
     },
-    columnOrder: DataTableState['columnOrder'],
-    columns: DataTableState['columns'],
+    columnOrder: DataTableState<T>['columnOrder'],
+    columns: DataTableState<T>['columns'],
     tableRef: RefObject<HTMLTableElement | null>,
     headCellRefs: RefObject<HTMLTableCellElement[]>
 ) {

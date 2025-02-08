@@ -1,10 +1,9 @@
+import type { SelectedRowDataState } from '@src/types/state/selected-row-data'
+
 export function buildMap(
-    rows: {
-        index: number
-        dataIndex: number
-    }[]
-): boolean[] {
-    const map: boolean[] = []
+    rows: SelectedRowDataState[]
+): Record<number, boolean> {
+    const map: Record<number, boolean> = {}
 
     rows.forEach(({ dataIndex }) => (map[dataIndex] = true))
 

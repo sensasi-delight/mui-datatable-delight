@@ -1,32 +1,53 @@
-import type { MUIDataTableStateRows } from 'mui-datatables'
 import type { DataTableSortOrderOption } from './options'
-import type { DataTableColumnObject } from './columns'
-import type { DefaultDataItem } from '.'
+import type { DisplayDataState } from './state/display-data'
 import type DataTableSearchOptions from './options/search'
+import type { FilterList } from './state/filter-list'
+import type { ColumnState } from './state/column'
+import type { SelectedRowDataState } from './state/selected-row-data'
+import type { DataItemState } from './state/data-item'
 
-export interface DataTableState<DataItem = DefaultDataItem> {
+interface ExpandedRows {
+    data: { index: number; dataIndex: number }[]
+    lookup: Record<number, boolean>
+}
+
+export interface DataTableState<Row> {
     activeColumn: number | null
+
     announceText?: string
+
     columnOrder: number[]
-    columns: (Omit<DataTableColumnObject, 'options'> &
-        DataTableColumnObject['options'])[]
-    curExpandedRows?: MUIDataTableStateRows
+
+    columns: ColumnState<Row>[]
+
+    curExpandedRows?: ExpandedRows['data']
+
     count: number
-    data: {
-        index: number
-        data: DataItem
-    }[]
-    displayData: {
-        index: number
-        data: DataItem
-    }[]
-    expandedRows: MUIDataTableStateRows
+
+    data: DataItemState[]
+
+    displayData: DisplayDataState<Row>
+
+    expandedRows: ExpandedRows
+
+    /** All data per column */
     filterData: string[][]
-    filterList: string[][]
+
+    /** Filtered values per column */
+    filterList: FilterList
+
+    /** Current page number starting from 0 */
     page: number
-    previousSelectedRow: null | { index: number; dataIndex: number }
+
+    previousSelectedRow?: SelectedRowDataState
+
+    /** Current rows per page */
     rowsPerPage: number
+
+    /** Available rows per page */
     rowsPerPageOptions: number[]
+
+    /** ⚠️ PENDING ⚠️ */
     rowsSelected: number[]
 
     /**
@@ -34,20 +55,17 @@ export interface DataTableState<DataItem = DefaultDataItem> {
      */
     searchText: string
 
-    searchProps: DataTableSearchOptions['searchProps']
+    searchProps: DataTableSearchOptions<Row>['searchProps']
 
     /**
      * Current row selected or not
      */
-    selectedRows: StateRows
-    showResponsive: boolean
-    sortOrder?: DataTableSortOrderOption
-}
+    selectedRows: {
+        data: SelectedRowDataState[]
+        lookup: Record<number, boolean>
+    }
 
-interface StateRows {
-    data: {
-        index: number
-        dataIndex: number
-    }[]
-    lookup: any
+    showResponsive: boolean
+
+    sortOrder: DataTableSortOrderOption | undefined
 }

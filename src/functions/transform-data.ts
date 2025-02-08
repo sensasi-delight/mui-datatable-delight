@@ -1,36 +1,29 @@
+import type { ColumnState } from '@src/types/state/column'
 import type { DataTableOptions } from '../types/options'
-import type { DataTableState } from '../types/state'
+import type { Primitive } from '@src/types/values/primitive'
+import type { DataTableProps } from '@src/data-table.props'
 
-type AllowedTypes = string | number | null | undefined
-type AllowedObj = {
-    [key: string]:
-        | AllowedTypes
-        | {
-              [key: string]: AllowedTypes
-          }
-}
-
-export default function transformData(
-    columns: DataTableState['columns'],
-    data: AllowedTypes[][] | AllowedObj[],
-    options: DataTableOptions
-): AllowedTypes[][] {
+export default function transformData<T>(
+    columns: ColumnState<T>[],
+    data: DataTableProps<T>['data'],
+    options: DataTableOptions<T>
+): Primitive[][] {
     const { enableNestedDataAccess } = options
 
     /**
      * Retrieves the leaf value from a nested object using a specified path.
      */
-    const getLeafValue = (object: AllowedObj, path: string): AllowedTypes => {
+    const getLeafValue = (object: T, path: string): Primitive => {
         const pathSegments = enableNestedDataAccess
             ? path.split(enableNestedDataAccess)
             : path.split('.')
 
-        return pathSegments.reduce<AllowedTypes>(
+        return pathSegments.reduce<Primitive>(
             (value, segment) =>
                 value && typeof value === 'object' && segment in value
                     ? value[segment]
                     : undefined,
-            object as unknown as AllowedTypes
+            object as unknown as Primitive
         )
     }
 

@@ -54,14 +54,16 @@ export default function TableHead({ selectRowUpdate }: Props) {
         }
 
         if (state.columns[columnIndex]?.name === state.sortOrder?.name) {
-            let position = sequenceOrder.indexOf(state.sortOrder?.direction)
+            let position = sequenceOrder.indexOf(
+                state.sortOrder?.direction ?? 'none'
+            )
 
             if (position !== -1) {
                 position++
 
                 if (position >= sequenceOrder.length) position = 0
 
-                newOrder = sequenceOrder[position]
+                newOrder = sequenceOrder[position] ?? 'none'
             }
         }
 
@@ -86,51 +88,51 @@ export default function TableHead({ selectRowUpdate }: Props) {
         }
 
         const orderLabel = getSortDirectionLabel(newSortOrder)
-        const announceText = `Table now sorted by ${state.columns[columnIndex].name} : ${orderLabel}`
 
-        let newState: DataTableState = {
-            ...state,
-            announceText,
-            activeColumn: columnIndex
+        let newPartialState: Partial<DataTableState<unknown>> = {
+            announceText: `Table now sorted by ${state.columns[columnIndex]?.name} : ${orderLabel}`,
+            activeColumn: columnIndex,
+            sortOrder: newSortOrder
         }
 
-        if (options.serverSide) {
-            newState = {
-                ...newState,
-                sortOrder: newSortOrder
-            }
-        } else {
+        if (!options.serverSide) {
             const sortedData = sortTable(
                 state.data,
                 columnIndex,
                 newOrder,
                 state.columns[columnIndex],
                 options,
-                newState
+                {
+                    ...state,
+                    ...newPartialState
+                }
             )
 
-            newState = {
-                ...newState,
+            newPartialState = {
+                ...newPartialState,
                 data: sortedData.data,
                 selectedRows: sortedData.selectedRows,
                 sortOrder: newSortOrder,
-                previousSelectedRow: null
+                previousSelectedRow: undefined
             }
 
-            newState.displayData = getDisplayData(
+            newPartialState.displayData = getDisplayData(
                 state.columns,
                 sortedData.data,
                 state.filterList,
                 state.searchText,
-                null,
+                undefined,
                 datatableRootProps,
-                newState,
+                {
+                    ...state,
+                    ...newPartialState
+                },
                 options,
                 setState
             )
         }
 
-        onAction?.(TableAction.SORT, newState)
+        onAction?.(TableAction.SORT, newPartialState)
         options.onColumnSortChange?.(newSortOrder.name, newSortOrder.direction)
     }
 
@@ -147,8 +149,7 @@ export default function TableHead({ selectRowUpdate }: Props) {
         tableHeadCellElements.current[pos] = el
     }
 
-    const numSelected =
-        (state.selectedRows && state.selectedRows.data.length) || 0
+    const numSelected = state.selectedRows.data.length ?? 0
     let isIndeterminate = numSelected > 0 && numSelected < state.count
     let isChecked = numSelected > 0 && numSelected >= state.count
 
@@ -161,8 +162,8 @@ export default function TableHead({ selectRowUpdate }: Props) {
         options.selectToolbarPlacement === 'above'
     ) {
         if (isChecked) {
-            for (let ii = 0; ii < state.data.length; ii++) {
-                if (!state.selectedRows.lookup[state.data[ii].dataIndex]) {
+            for (const item of state.displayData) {
+                if (!state.selectedRows.lookup[item.dataIndex]) {
                     isChecked = false
                     isIndeterminate = true
                     break
@@ -213,7 +214,7 @@ export default function TableHead({ selectRowUpdate }: Props) {
 
                 {orderedColumns.map(
                     ({ column, index, colPos }) =>
-                        column.display === 'true' &&
+                        column.display === true &&
                         (column.customHeadRender?.(
                             { index, ...column },
                             handleToggleColumn,
@@ -231,7 +232,8 @@ export default function TableHead({ selectRowUpdate }: Props) {
                                 colPosition={colPos}
                                 setHeadCellsRef={setHeadCellsRef}
                                 sortDirection={
-                                    column.name === state.sortOrder?.name
+                                    column.name === state.sortOrder?.name &&
+                                    state.sortOrder.direction !== 'none'
                                         ? state.sortOrder?.direction
                                         : undefined
                                 }

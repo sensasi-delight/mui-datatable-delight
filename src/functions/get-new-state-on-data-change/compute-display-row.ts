@@ -1,58 +1,46 @@
-import type {
-    DataTableOptions,
-    DataTableProps,
-    DataTableState
-} from '@src/index'
-import getTableMeta from './get-table-meta'
+import type { ReactNode } from 'react'
 import hasSearchText from './has-search-text'
 import updateDataCol from './update-data-col'
-import type DataTableMeta from '@src/types/table-meta'
+import type { FilterList } from '@src/types/state/filter-list'
+import type { DataTableState } from '@src/types/state'
+import type { DataTableOptions } from '@src/types/options'
+import type { DataTableProps } from '@src/data-table.props'
+import type { DisplayDataState } from '@src/types/state/display-data'
 
 /*
  * Build the table data used to display to the user (i.e., after filter/search applied)
  */
-export default function computeDisplayRow(
-    columns: DataTableState['columns'],
-    row: DataTableState['data'][0]['data'],
+export default function computeDisplayRow<T>(
+    columns: DataTableState<T>['columns'],
+    row: ReactNode[],
     rowIndex: number,
-    filterList: DataTableState['filterList'],
-    searchText: DataTableState['searchText'],
-    dataForTableMeta: DataTableMeta['tableData'] | DataTableProps['data'],
-    options: DataTableOptions,
-    props: DataTableProps,
-    currentTableData: DataTableState['data'],
-    state: DataTableState,
-    setState: (newState: DataTableState) => void
-): DataTableState['displayData'] | null {
+    filterList: FilterList,
+    searchText: string,
+    options: DataTableOptions<T>,
+    props: DataTableProps<T>,
+    state: DataTableState<T>,
+    setState: (newState: DataTableState<T>) => void
+): DisplayDataState<T>[number]['data'] | undefined {
     let isFiltered = false
     let isSearchFound = false
-    const displayRow: DataTableState['displayData'] = []
+
+    const displayRow: DisplayDataState<T>[number]['data'] = []
 
     for (let index = 0; index < row.length; index++) {
         let columnDisplay = row[index]
         let columnValue = row[index]
+
         const column = columns[index]
 
         if (column?.customBodyRenderLite) {
             displayRow.push(column.customBodyRenderLite)
         } else if (column?.customBodyRender) {
-            const tableMeta = getTableMeta(
-                rowIndex,
-                index,
-                row,
-                column,
-                dataForTableMeta,
-                {
-                    ...state,
-                    filterList
-                },
-                currentTableData
-            )
-
             const funcResult = column.customBodyRender(
                 columnValue,
-                tableMeta,
-                (value: unknown) => {
+                rowIndex,
+                index,
+                state,
+                value => {
                     setState(
                         updateDataCol(
                             rowIndex,
@@ -60,19 +48,24 @@ export default function computeDisplayRow(
                             value,
                             state,
                             options,
-                            props
+                            props,
+                            setState
                         )
                     )
                 }
             )
+
             columnDisplay = funcResult
 
-            columnValue =
-                typeof funcResult === 'string' || !funcResult
-                    ? funcResult
-                    : funcResult.props && funcResult.props.value
-                      ? funcResult.props.value
-                      : columnValue
+            /* drill down to get the value of a cell */
+            if (typeof funcResult === 'string' || !funcResult) {
+                columnValue = funcResult
+            } else if (
+                typeof funcResult === 'object' &&
+                'props' in funcResult
+            ) {
+                columnValue = funcResult.props.value ?? columnValue
+            }
 
             displayRow.push(columnDisplay)
         } else {
@@ -89,24 +82,25 @@ export default function computeDisplayRow(
         const filterType = column?.filterType ?? options.filterType
 
         if (filterVal?.length || filterType === 'custom') {
-            if (column?.filterOptions && column.filterOptions.logic) {
-                if (
-                    column.filterOptions.logic(
-                        columnValue,
-                        filterVal ?? [],
-                        row
-                    )
-                ) {
-                    isFiltered = true
-                }
+            if (
+                column?.filterOptions?.logic?.(
+                    // @ts-expect-error  WILL FIX THIS LATER
+                    columnValue,
+                    filterVal ?? [],
+                    row
+                )
+            ) {
+                isFiltered = true
             } else if (
                 filterType === 'textField' &&
+                // @ts-expect-error  WILL FIX THIS LATER
                 !hasSearchText(columnVal, filterVal, caseSensitive)
             ) {
                 isFiltered = true
             } else if (
                 filterType !== 'textField' &&
                 !Array.isArray(columnValue) &&
+                // @ts-expect-error  WILL FIX THIS LATER
                 (filterVal?.indexOf(columnValue) ?? 0) < 0
             ) {
                 isFiltered = true
@@ -115,15 +109,17 @@ export default function computeDisplayRow(
                 Array.isArray(columnValue)
             ) {
                 if (options.filterArrayFullMatch) {
-                    const isFullMatch = filterVal?.every(
-                        el => columnValue?.indexOf(el) >= 0
+                    const isFullMatch = filterVal?.every(el =>
+                        // @ts-expect-error  WILL FIX THIS LATER
+                        columnValue?.includes(el)
                     )
                     if (!isFullMatch) {
                         isFiltered = true
                     }
                 } else {
-                    const isAnyMatch = filterVal?.some(
-                        el => columnValue?.indexOf(el) >= 0
+                    const isAnyMatch = filterVal?.some(el =>
+                        // @ts-expect-error  WILL FIX THIS LATER
+                        columnValue?.includes(el)
                     )
 
                     if (!isAnyMatch) {
@@ -137,17 +133,19 @@ export default function computeDisplayRow(
             searchText &&
             column?.display !== 'excluded' &&
             hasSearchText(columnVal, searchText, caseSensitive) &&
-            column?.display !== 'false' &&
+            column?.display !== false &&
             column?.searchable
         ) {
             isSearchFound = true
         }
     }
 
-    const { customSearch } = props.options ?? {}
-
-    if (searchText && customSearch) {
-        const customSearchResult = customSearch(searchText, row, columns)
+    if (searchText && props.options?.customSearch) {
+        const customSearchResult = props.options.customSearch(
+            searchText,
+            row,
+            columns
+        )
         if (typeof customSearchResult !== 'boolean') {
             console.error('customSearch must return a boolean')
         } else {
@@ -156,7 +154,7 @@ export default function computeDisplayRow(
     }
 
     if (options.serverSide) {
-        if (customSearch) {
+        if (props.options?.customSearch) {
             console.warn(
                 'Server-side filtering is enabled, hence custom search will be ignored.'
             )
@@ -165,5 +163,5 @@ export default function computeDisplayRow(
         return displayRow
     }
 
-    return isFiltered || (searchText && !isSearchFound) ? null : displayRow
+    return isFiltered || (searchText && !isSearchFound) ? undefined : displayRow
 }

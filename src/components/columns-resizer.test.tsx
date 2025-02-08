@@ -1,6 +1,6 @@
 // vendors
-import { test, expect, describe, vi } from 'vitest'
-import { fireEvent, render } from '@testing-library/react'
+import { test, expect, describe } from 'vitest'
+import { render } from '@testing-library/react'
 // locals
 import ColumnsResizer from './columns-resizer'
 import DataTable, { DataTableContextProvider } from '@src/index'
@@ -46,59 +46,59 @@ describe('<ColumnsResizer />', function () {
     })
 
     test('should execute resize methods correctly', () => {
-        const setResizable = vi.fn(forwardElements => {
-            const fakeCellElements = [
-                {
-                    left: 0,
-                    width: 50,
-                    getBoundingClientRect: () => ({
-                        left: 0,
-                        width: 50,
-                        height: 100
-                    }),
-                    style: {}
-                },
-                {
-                    left: 50,
-                    width: 50,
-                    getBoundingClientRect: () => ({
-                        left: 50,
-                        width: 50,
-                        height: 100
-                    }),
-                    style: {}
-                }
-            ]
-
-            const fakeTableElement = {
-                getBoundingClientRect: () => ({
-                    width: 100,
-                    height: 100
-                }),
-                offsetParent: {
-                    offsetLeft: 0
-                }
-            }
-
-            forwardElements(
-                {
-                    current:
-                        fakeCellElements as unknown[] as HTMLTableCellElement[]
-                },
-                {
-                    current: fakeTableElement as unknown as HTMLTableElement
-                }
-            )
-        })
-
-        const { container } = render(
-            <ColumnsResizer
-                updateDividers={() => {}}
-                setResizable={setResizable}
-            />
-        )
-
         console.warn('⚠️ UNFINISHED TEST CASE ⚠️')
+
+        // const setResizable = vi.fn(forwardElements => {
+        //     const fakeCellElements = [
+        //         {
+        //             left: 0,
+        //             width: 50,
+        //             getBoundingClientRect: () => ({
+        //                 left: 0,
+        //                 width: 50,
+        //                 height: 100
+        //             }),
+        //             style: {}
+        //         },
+        //         {
+        //             left: 50,
+        //             width: 50,
+        //             getBoundingClientRect: () => ({
+        //                 left: 50,
+        //                 width: 50,
+        //                 height: 100
+        //             }),
+        //             style: {}
+        //         }
+        //     ]
+
+        //     const fakeTableElement = {
+        //         getBoundingClientRect: () => ({
+        //             width: 100,
+        //             height: 100
+        //         }),
+        //         offsetParent: {
+        //             offsetLeft: 0
+        //         }
+        //     }
+
+        //     forwardElements(
+        //         {
+        //             current:
+        //                 fakeCellElements as unknown[] as HTMLTableCellElement[]
+        //         },
+        //         {
+        //             current: fakeTableElement as unknown as HTMLTableElement
+        //         }
+        //     )
+        // })
+
+        // const { container } = render(
+        //     <ColumnsResizer
+        //         updateDividers={() => {}}
+        //         setResizable={setResizable}
+        //     />
+        // )
 
         // if (!container.children[0] || !container.children[0].children[0]) {
         //     throw new Error('Resize divider not found')

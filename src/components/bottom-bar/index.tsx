@@ -1,23 +1,23 @@
 'use client'
 
 // vendors
+import type { ReactNode } from 'react'
 import { tss } from 'tss-react/mui'
 // local sub-components
 import { DataTableFooterPagination } from './components/pagination'
 import { DataTableFooterJumpToPage } from './components/jump-to-page'
 // globals
-import useDataTableContext from '../../hooks/use-data-table-context'
-import { getPageValue } from '../../functions/_shared/get-page-value'
-import type { DataTableState } from '../../types/state'
+import useDataTableContext from '@src/hooks/use-data-table-context'
+import { getPageValue } from '@src/functions/_shared/get-page-value'
 // global enums
-import ClassName from '../../enums/class-name'
-import TableAction from '../../enums/table-action'
+import ClassName from '@src/enums/class-name'
+import TableAction from '@src/enums/table-action'
 
 /**
  * @todo  FIX FONT SIZES ARE DIFFERENT IN SUB-COMPONENTS
  * @todo  RENAME COMPONENT TO `<BottomToolbar />`
  */
-export default function BottomBar() {
+export default function BottomBar(): ReactNode {
     const { options, state, textLabels, onAction } = useDataTableContext()
     const { classes } = useStyles()
     const { customFooter, pagination = true, jumpToPage } = options
@@ -27,7 +27,7 @@ export default function BottomBar() {
         options.onChangePage?.(page)
     }
 
-    function changeRowsPerPage(rowsPerPage: DataTableState['rowsPerPage']) {
+    function changeRowsPerPage(rowsPerPage: number) {
         const rowCount = options.count ?? state.displayData.length
 
         const newState = {

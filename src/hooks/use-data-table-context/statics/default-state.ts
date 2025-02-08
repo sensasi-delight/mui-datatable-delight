@@ -1,6 +1,6 @@
-import type { DataTableState } from '../../../types/state'
+import type { DataTableState } from '@src/types/state'
 
-const DEFAULT_STATE: DataTableState = {
+const DEFAULT_STATE = {
     activeColumn: null,
     count: 0,
     columnOrder: [0],
@@ -14,7 +14,6 @@ const DEFAULT_STATE: DataTableState = {
     filterData: [],
     filterList: [],
     page: 0,
-    previousSelectedRow: null,
     rowsPerPage: 10,
     rowsPerPageOptions: [10, 20, 50, 100],
     rowsSelected: [],
@@ -24,7 +23,8 @@ const DEFAULT_STATE: DataTableState = {
         data: [],
         lookup: {}
     },
+    sortOrder: undefined,
     showResponsive: false
-}
+} satisfies DataTableState<unknown>
 
 export default DEFAULT_STATE

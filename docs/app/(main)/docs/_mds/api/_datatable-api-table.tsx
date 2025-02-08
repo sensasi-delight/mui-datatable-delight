@@ -1,7 +1,7 @@
 'use client'
 
 import Typography from '@mui/material/Typography'
-import DataTable, { type DataTableOptions, type DataTableProps } from '@src'
+import DataTable, { type DataTableProps } from '@src'
 
 export function DataTableApiTable() {
     const columns: DataTableProps['columns'] = [
@@ -75,7 +75,7 @@ export function DataTableApiTable() {
         }
     ]
 
-    const options: DataTableOptions = {
+    const options: DataTableProps['options'] = {
         selectableRows: 'none',
         sortOrder: {
             name: 'name',

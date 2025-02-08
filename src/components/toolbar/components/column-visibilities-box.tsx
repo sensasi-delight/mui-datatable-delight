@@ -1,38 +1,47 @@
 'use client'
 
 // vendors
+import { tss } from 'tss-react/mui'
 import Checkbox from '@mui/material/Checkbox'
 import FormControl from '@mui/material/FormControl'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import FormGroup from '@mui/material/FormGroup'
 import Typography from '@mui/material/Typography'
-import { tss } from 'tss-react/mui'
 // globals
 import useDataTableContext from '@src/hooks/use-data-table-context'
 // global enums
 import TableAction from '@src/enums/table-action'
 import ComponentClassName from '@src/enums/class-name'
 
-export default function ColumnVisibilitiesBox({}: ToolbarViewColProps) {
+export default function ColumnVisibilitiesBox() {
     const { components, onAction, options, state, textLabels } =
         useDataTableContext()
     const { classes } = useStyles()
 
     const handleColChange = (index: number) => {
-        const newColumns = [...state.columns]
+        const newColumns = state.columns.map(column =>
+            // shallow copy to trigger re-render
+            Object.assign({}, column)
+        )
 
-        newColumns[index].display =
-            newColumns[index].display === 'true' ? 'false' : 'true'
+        const changedColumn = newColumns[index]
+        if (!changedColumn) {
+            throw new Error('Column not found')
+        }
+
+        changedColumn.display = !changedColumn.display
+        newColumns[index] = changedColumn
 
         onAction?.(TableAction.VIEW_COLUMNS_CHANGE, {
             columns: newColumns
         })
 
-        const cb = options.onViewColumnsChange || options.onColumnViewChange
+        const cb =
+            options.onColumnVisibilityChange ?? options.onViewColumnsChange
 
         cb?.(
-            newColumns[index].name,
-            newColumns[index].display === 'true' ? 'add' : 'remove'
+            changedColumn.name,
+            changedColumn.display === true ? 'add' : 'remove'
         )
     }
 
@@ -64,14 +73,13 @@ export default function ColumnVisibilitiesBox({}: ToolbarViewColProps) {
                             control={
                                 <_Checkbox
                                     color="primary"
-                                    data-description="table-view-col"
                                     className={classes.checkbox}
                                     classes={{
                                         root: classes.checkboxRoot,
                                         checked: classes.checked
                                     }}
                                     onChange={() => handleColChange(index)}
-                                    checked={column.display === 'true'}
+                                    checked={column.display === true}
                                     value={column.name}
                                 />
                             }
@@ -117,7 +125,7 @@ const useStyles = tss
         }
     }))
 
-export interface ToolbarViewColProps {
-    /** Extend the style applied to components */
-    // classes?: PropTypes.object
-}
+// export interface ToolbarViewColProps {
+//     /** Extend the style applied to components */
+//     // classes?: PropTypes.object
+// }

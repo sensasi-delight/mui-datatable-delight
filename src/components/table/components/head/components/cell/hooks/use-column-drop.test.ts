@@ -1,8 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
 
-import { getColModel, handleHover, reorderColumns } from './use-column-drop'
-import type { DataTableState } from '@src/index'
 import type { DropTargetMonitor } from 'react-dnd'
+import { getColModel, handleHover, reorderColumns } from './use-column-drop'
 
 describe('useColumnDrop', function () {
     it('should reorder columns when reorderColumns is called', () => {
@@ -41,12 +40,12 @@ describe('useColumnDrop', function () {
         const columnOrder = [0, 1]
         const columns = [
             {
-                display: 'true'
+                display: true
             },
             {
-                display: 'true'
+                display: true
             }
-        ] as DataTableState['columns']
+        ]
 
         const newModel = getColModel(headCellRefs, columnOrder, columns)
 
@@ -75,12 +74,12 @@ describe('useColumnDrop', function () {
         const columnOrder = [0, 1]
         const columns = [
             {
-                display: 'true'
+                display: true
             },
             {
-                display: 'true'
+                display: true
             }
-        ] as DataTableState['columns']
+        ]
 
         const newModel = getColModel(headCellRefs, columnOrder, columns)
 
@@ -120,12 +119,12 @@ describe('useColumnDrop', function () {
 
         const columns = [
             {
-                display: 'true'
+                display: true
             },
             {
-                display: 'true'
+                display: true
             }
-        ] as DataTableState['columns']
+        ]
 
         const columnOrder = [0, 1]
 

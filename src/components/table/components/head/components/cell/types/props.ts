@@ -1,9 +1,9 @@
 import type { TableCellProps } from '@mui/material/TableCell'
 import type { TableSortLabelProps } from '@mui/material/TableSortLabel'
 import type { ReactNode } from 'react'
-import type { DataTableState } from '@src/types/state'
+import type { ColumnState } from '@src/types/state/column'
 
-export default interface Props {
+export default interface Props<T> {
     /** Current sort direction */
     sortDirection?: TableSortLabelProps['direction']
 
@@ -11,7 +11,7 @@ export default interface Props {
     toggleSort: (columnIndex: number) => void
 
     /** Optional to be used with `textLabels.body.columnHeaderTooltip` */
-    column: DataTableState['columns'][0]
+    column: ColumnState<T>
 
     index: number
 

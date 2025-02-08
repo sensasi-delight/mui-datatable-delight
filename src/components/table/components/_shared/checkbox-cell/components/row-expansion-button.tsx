@@ -1,6 +1,5 @@
 'use client'
 
-import type { MUIDataTableExpandButton } from 'mui-datatables'
 import IconButton from '@mui/material/IconButton'
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight'
 import RemoveIcon from '@mui/icons-material/Remove'
@@ -17,12 +16,19 @@ export default function RowExpansionButton({
     iconIndeterminateClass,
     isHeaderCell,
     onExpand
-}: MUIDataTableExpandButton) {
+}: {
+    areAllRowsExpanded: () => boolean
+    buttonClass: string
+    dataIndex?: number
+    expandableRowsHeader: boolean
+    expandedRows: unknown[]
+    iconClass: string
+    iconIndeterminateClass: string
+    isHeaderCell: boolean
+    onExpand?: (...args: unknown[]) => unknown
+}) {
     const isNotExpand =
-        isHeaderCell &&
-        areAllRowsExpanded &&
-        !areAllRowsExpanded() &&
-        expandedRows.data.length > 0
+        isHeaderCell && !areAllRowsExpanded() && expandedRows.data.length > 0
 
     return (
         <IconButton

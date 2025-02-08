@@ -1,16 +1,19 @@
+import type { ReactNode } from 'react'
 import type { TextFieldProps } from '@mui/material/TextField'
 import type { BooleanOrDisabled } from '../values/boolean-or-disabled'
+import type { ColumnState } from '../state/column'
 
-export default interface DataTableSearchOptions {
+export default interface DataTableSearchOptions<T> {
     /**
      * Override default search with custom function.
      *
-     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-search/index.tsx
+     * @see
+     * [Example](https://mui-datatable-delight.vercel.app/examples/customize-search)
      */
     customSearch?: (
         searchText: string,
-        currentRow: any[],
-        columns: any[]
+        currentRow: ReactNode[],
+        columns: ColumnState<T>[]
     ) => boolean
 
     /** Callback function that triggers when the search text value has changed. */
@@ -30,42 +33,46 @@ export default interface DataTableSearchOptions {
      *
      * @default true
      */
-    search?: BooleanOrDisabled
+    search: BooleanOrDisabled
 
     /**
      * Initially displays search bar.
+     *
      * @default false
      */
-    searchOpen?: boolean
+    searchOpen: boolean
 
     /**
      * Always displays search bar, and hides search icon in toolbar.
      *
      * @default false
      */
-    searchAlwaysOpen?: boolean
+    searchAlwaysOpen: boolean
 
     /**
      * The delay in milliseconds to wait before triggering the search.
      * For example, setting searchDelay: 300 means the search will only execute 300ms after the user stops typing.
      *
-     * @see https://mui-datatable-delight.vercel.app/features/debounce-search
+     * @see
+     * [Debounce Search Docs](https://mui-datatable-delight.vercel.app/docs/features/debounce-search)
      *
      * @default 0
      */
-    searchDelay?: number
+    searchDelay: number
 
     /**
      * Props applied to the search text box. You can set method callbacks like onBlur, onKeyUp, etc, this way.
      *
-     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-search/index.tsx
+     * @see
+     * [Example](https://mui-datatable-delight.vercel.app/examples/customize-search)
      */
     searchProps?: TextFieldProps
 
     /**
      * Search text placeholder.
      *
-     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-search/index.tsx
+     * @see
+     * [Example](https://mui-datatable-delight.vercel.app/examples/customize-search)
      */
     searchPlaceholder?: string
 

@@ -7,17 +7,12 @@ import { tss } from 'tss-react/mui'
 // global enums
 import ClassName from '../../enums/class-name'
 // types
-import type { Props as TableProps } from './types/props'
+import type { Props } from './types/props'
 // components
 import TableHead from './components/head'
 import TableBody from './components/body'
-import type { Props as HeadProps } from './components/head/types/props'
 
-export default function Table({
-    selectRowUpdate // TEMPORARY PASSING HEAD PROPS
-}: TableProps &
-    // TEMPORARY PASSING HEAD PROPS
-    HeadProps) {
+export default function Table({ selectRowUpdate }: Props) {
     const { classes, cx } = useStyles()
     const {
         components,
@@ -53,17 +48,9 @@ export default function Table({
 
             <_TableHead selectRowUpdate={selectRowUpdate} />
 
-            {/* @ts-expect-error VALUES ARE NOT PASSING PROPS ANYMORE - WILL REMOVE TYPES LATER */}
             <_TableBody selectRowUpdate={selectRowUpdate} />
 
-            {options.customTableBodyFooterRender?.({
-                data: state.displayData,
-                count: state.count,
-                columns: state.columns,
-                selectedRows: state.selectedRows,
-                // @ts-expect-error WILL FIX THIS LATER
-                selectableRows: options.selectableRows
-            })}
+            {options.customTableBodyFooterRender?.(state, options)}
         </MuiTable>
     )
 }

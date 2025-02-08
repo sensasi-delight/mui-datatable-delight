@@ -39,7 +39,6 @@ export default tseslint.config({
         ],
         'no-console': 'off',
         semi: ['error', 'never'],
-        'no-undef': 'error',
         'no-undef-init': 'error',
         'no-tabs': 'error',
         'react/self-closing-comp': 'error',
@@ -47,6 +46,7 @@ export default tseslint.config({
         'react/jsx-no-duplicate-props': 'warn',
         'react-hooks/rules-of-hooks': 'error',
         'react-hooks/exhaustive-deps': 'warn',
+        '@typescript-eslint/prefer-literal-enum-member': 'off',
         'jsx-a11y/no-autofocus': [
             2,
             {

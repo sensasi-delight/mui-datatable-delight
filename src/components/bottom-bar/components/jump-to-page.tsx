@@ -75,7 +75,7 @@ const useStyles = tss
             flexShrink: 0
         },
 
-        /*  Styles applied to the Select component root element */
+        /* Styles applied to the Select component root element */
         selectRoot: {
             marginRight: 32,
             marginLeft: 8

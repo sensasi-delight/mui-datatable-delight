@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
-import DataTable from '@src'
+import DataTable, { type DataTableProps } from '@src'
 import Chip from '@mui/material/Chip'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Switch from '@mui/material/Switch'
@@ -10,7 +10,7 @@ function Example() {
     // const allTags = ['leave-message', 'frequently-busy', 'nice', 'grumpy', 'in-person', 'preferred', 'second-choice'];
     const [filterArrayFullMatch, setFilterArrayFullMatch] = useState(true)
 
-    const columns = [
+    const columns: DataTableProps['columns'] = [
         {
             name: 'Name',
             options: {
@@ -53,10 +53,18 @@ function Example() {
                 filterType: 'multiselect',
                 sort: false,
                 customBodyRenderLite: dataIndex => {
-                    let value = data[dataIndex][5]
-                    return value.map((val, key) => {
-                        return <Chip label={val} key={key} />
-                    })
+                    const value = data[dataIndex]?.[5]
+
+                    if (
+                        typeof value === 'string' ||
+                        typeof value === 'number'
+                    ) {
+                        return <Chip label={value} key={value} />
+                    }
+
+                    return value?.map((val, key) => (
+                        <Chip label={val} key={key} />
+                    ))
                 }
             }
         }
@@ -305,7 +313,7 @@ function Example() {
         ]
     ]
 
-    const options = {
+    const options: DataTableProps['options'] = {
         filter: true,
         filterArrayFullMatch: filterArrayFullMatch,
         filterType: 'dropdown',

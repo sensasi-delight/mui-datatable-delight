@@ -1,8 +1,17 @@
 'use client'
 
 import React from 'react'
-import DataTable from '@src'
+import DataTable, { type DataTableProps } from '@src'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
+
+/** @todo Improve Theme example */
+const theme = createTheme({
+    palette: {
+        background: {
+            default: '#f5f5f5'
+        }
+    }
+})
 
 class Example extends React.Component {
     render() {
@@ -97,18 +106,13 @@ class Example extends React.Component {
             ['Mason Ray', 'Computer Scientist', 'San Francisco', 39, 142000]
         ]
 
-        const options = {
+        const options: DataTableProps['options'] = {
             filter: true,
             selectableRows: 'multiple',
             filterType: 'dropdown',
             responsive: 'vertical',
             rowsPerPage: 10
         }
-
-        const theme = createTheme({
-            palette: { type: 'dark' },
-            typography: { useNextVariants: true }
-        })
 
         return (
             <ThemeProvider theme={theme}>

@@ -6,7 +6,10 @@ import ComponentClassName from '@src/enums/class-name'
 
 describe('<SelectedRowsToolbar />', function () {
     function setup(props?: Partial<DataTableProps>) {
+        const selectRowUpdate = vi.fn()
+
         return {
+            selectRowUpdate,
             result: render(
                 <DataTableContextProvider
                     datatableProps={{
@@ -18,7 +21,7 @@ describe('<SelectedRowsToolbar />', function () {
                         ...props
                     }}
                 >
-                    <SelectedRowsToolbar />
+                    <SelectedRowsToolbar selectRowUpdate={selectRowUpdate} />
                 </DataTableContextProvider>
             )
         }
@@ -63,9 +66,7 @@ describe('<SelectedRowsToolbar />', function () {
     })
 
     test('should success calls `setSelectedRows`', () => {
-        console.warn('⚠️ UNFINISHED TEST CASE ⚠️')
-
-        setup({
+        const { selectRowUpdate } = setup({
             options: {
                 customToolbarSelect(_, __, setSelectedRows) {
                     setSelectedRows([0])
@@ -75,7 +76,7 @@ describe('<SelectedRowsToolbar />', function () {
             }
         })
 
-        // expect(spy).toBeCalledWith([0])
+        expect(selectRowUpdate).toBeCalledWith('custom', [0])
     })
 
     test('should throw TypeError if selectedRows is not an array of numbers', () => {
@@ -104,22 +105,6 @@ describe('<SelectedRowsToolbar />', function () {
                 }
             })
         ).toThrowError()
-    })
-
-    test('should call selectRowUpdate when customToolbarSelect passed and setSelectedRows was called', () => {
-        console.warn('⚠️ UNFINISHED TEST CASE ⚠️')
-
-        setup({
-            options: {
-                customToolbarSelect(_, __, setSelectedRows) {
-                    setSelectedRows([1])
-
-                    return <></>
-                }
-            }
-        })
-
-        // expect(onTableChange).toHaveBeenCalledOnce()
     })
 
     test('should throw an error when multiple rows are selected and selectableRows="single"', () => {

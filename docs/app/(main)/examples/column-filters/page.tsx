@@ -1,11 +1,11 @@
 'use client'
 
 import React from 'react'
-import DataTable from '@src'
+import DataTable, { type DataTableProps } from '@src'
 
 class Example extends React.Component {
     render() {
-        const columns = [
+        const columns: DataTableProps['columns'] = [
             {
                 name: 'Name',
                 options: {
@@ -36,8 +36,7 @@ class Example extends React.Component {
                 name: 'Age',
                 options: {
                     customBodyRenderLite: dataIndex => {
-                        let val = data[dataIndex][3]
-                        return val
+                        return data[dataIndex]?.[3]
                     },
                     filter: true,
                     customFilterListOptions: { render: v => `Age: ${v}` }
@@ -109,7 +108,7 @@ class Example extends React.Component {
             ['Mason Ray', 'Computer Scientist', 'San Francisco', 39, 142000]
         ]
 
-        const options = {
+        const options: DataTableProps['options'] = {
             filter: true,
             onFilterChange: (changedColumn, filterList) => {
                 console.log(changedColumn, filterList)

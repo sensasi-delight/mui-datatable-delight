@@ -97,7 +97,7 @@ export default function CheckboxCell({
         if (expandedRowsData.length > 0) {
             // collapse all
             for (let ii = expandedRowsData.length - 1; ii >= 0; ii--) {
-                let item = expandedRowsData[ii]
+                const item = expandedRowsData[ii]
                 if (
                     !isRowExpandable ||
                     isRowExpandable(item?.dataIndex, state.expandedRows)
@@ -108,14 +108,13 @@ export default function CheckboxCell({
         } else {
             // expand all
             for (let ii = 0; ii < state.data.length; ii++) {
-                let item = state.data[ii]
+                const item = state.data[ii]
                 if (
                     !isRowExpandable ||
-                    (isRowExpandable &&
-                        isRowExpandable(item?.dataIndex, state.expandedRows))
+                    isRowExpandable?.(item?.dataIndex, state.expandedRows)
                 ) {
                     if (state.expandedRows.lookup[item.index] !== true) {
-                        let newItem = {
+                        const newItem = {
                             index: ii,
                             dataIndex: item.index
                         }
@@ -221,7 +220,7 @@ export interface DataTableTableSelectCellProps {
 
     dataIndex: number
 
-    id: string
+    // id: string
 }
 
 const useStyles = tss.withName(ComponentClassName.TABLE__CHECKBOX_CELL).create({

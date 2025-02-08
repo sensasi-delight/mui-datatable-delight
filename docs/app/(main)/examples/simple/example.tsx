@@ -1,11 +1,11 @@
 'use client'
 
 // vendors
-import InputLabel from '@mui/material/InputLabel'
+import { useState } from 'react'
 import FormControl from '@mui/material/FormControl'
+import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import Select from '@mui/material/Select'
-import { useState } from 'react'
 // DataTable
 import DataTable, { type DataTableOptions, type DataTableProps } from '@src'
 
@@ -239,19 +239,17 @@ export function Example() {
                 title={'ACME Employee list'}
                 data={DATA}
                 columns={COLUMNS}
-                options={
-                    {
-                        ...STATIC_OPTIONS,
-                        search: searchBtn,
-                        download: downloadBtn,
-                        print: printBtn,
-                        viewColumns: viewColumnBtn,
-                        filter: filterBtn,
-                        responsive,
-                        tableBodyHeight,
-                        tableBodyMaxHeight
-                    } satisfies DataTableOptions
-                }
+                options={{
+                    ...STATIC_OPTIONS,
+                    search: searchBtn,
+                    download: downloadBtn,
+                    print: printBtn,
+                    viewColumns: viewColumnBtn,
+                    filter: filterBtn,
+                    responsive,
+                    tableBodyHeight,
+                    tableBodyMaxHeight
+                }}
             />
         </>
     )
@@ -263,7 +261,7 @@ const COLUMNS: DataTableProps['columns'] = [
     'Location'
 ]
 
-const STATIC_OPTIONS: DataTableOptions = {
+const STATIC_OPTIONS: DataTableProps['options'] = {
     filterType: 'checkbox',
     onTableChange: (action, state) => {
         console.dir({

@@ -1,9 +1,3 @@
-import type { DataTableState } from '@src/types/state'
+import type { Props as TableHeadProps } from '../../../types/props'
 
-export interface Props {
-    selectRowUpdate: (
-        type: string,
-        value: DataTableState['previousSelectedRow'],
-        shiftAdjacentRows: unknown[]
-    ) => void
-}
+export type Props = TableHeadProps

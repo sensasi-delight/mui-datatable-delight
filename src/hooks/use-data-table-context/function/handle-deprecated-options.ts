@@ -1,12 +1,12 @@
-import type { DataTableProps } from '../../../types'
-import { type DataTableOptions } from '../../../types/options'
-import { warnDeprecated, warnInfo } from '../../../functions'
-// global enums
-import RowsSelectedToolbarPlacement from '../../../enums/rows-selected-toolbar-placement'
+// globals
+import { type DataTableProps } from '@src/data-table.props'
+import { type DataTableOptions } from '@src/types/options'
+import { warnDeprecated, warnInfo } from '@src/functions'
+import RowsSelectedToolbarPlacement from '@src/enums/rows-selected-toolbar-placement'
 
-export function handleDeprecatedOptions(
-    props: DataTableProps,
-    options: DataTableOptions & DeprecatedOptions
+export function handleDeprecatedOptions<T>(
+    props: DataTableProps<T>,
+    options: DataTableOptions<T> & DeprecatedOptions
 ) {
     if (typeof options?.selectableRows === 'boolean') {
         warnDeprecated(
@@ -18,9 +18,9 @@ export function handleDeprecatedOptions(
 
     if (
         options?.responsive !== undefined &&
-        ['standard', 'vertical', 'verticalAlways', 'simple'].indexOf(
+        !['standard', 'vertical', 'verticalAlways', 'simple'].includes(
             options.responsive
-        ) === -1
+        )
     ) {
         if (
             [
@@ -30,7 +30,7 @@ export function handleDeprecatedOptions(
                 'stackedFullWidth',
                 'scrollFullHeightFullWidth',
                 'scroll'
-            ].indexOf(options.responsive) !== -1
+            ].includes(options.responsive)
         ) {
             warnDeprecated(
                 options.responsive +
@@ -83,8 +83,7 @@ export function handleDeprecatedOptions(
     props.columns.map(column => {
         if (
             typeof column === 'object' &&
-            column.options &&
-            column.options.customFilterListRender
+            column.options?.customFilterListRender
         ) {
             warnDeprecated(
                 'The `customFilterListRender` option has been deprecated. It is being replaced by `customFilterListOptions.render` (Specify customFilterListOptions: { render: Function } in column options.)'
@@ -101,9 +100,9 @@ export function handleDeprecatedOptions(
     // only give this warning message in newer browsers
     if (
         options?.selectToolbarPlacement &&
-        Object.values(RowsSelectedToolbarPlacement).indexOf(
+        !Object.values(RowsSelectedToolbarPlacement).includes(
             options.selectToolbarPlacement
-        ) === -1
+        )
     ) {
         warnInfo(
             'Invalid option value for `selectToolbarPlacement`. Please check the documentation: https://github.com/gregnb/mui-datatables#options'

@@ -1,6 +1,7 @@
 'use client'
 
 // vendors
+import { useRef, useState } from 'react'
 import { tss } from 'tss-react/mui'
 // materials
 import Grow from '@mui/material/Grow'
@@ -14,7 +15,6 @@ import useDataTableContext from '@src/hooks/use-data-table-context'
 // global enums
 import ClassName from '@src/enums/class-name'
 import TableAction from '@src/enums/table-action'
-import { useRef, useState } from 'react'
 
 export function DataTableToolbarSearch({ onHide }: { onHide: () => void }) {
     const {
@@ -34,6 +34,10 @@ export function DataTableToolbarSearch({ onHide }: { onHide: () => void }) {
     const [searchText, setSearchText] = useState(state.searchText)
 
     function handleSearch(newSearchText: string) {
+        if (!setState) {
+            throw new Error('setState is not defined')
+        }
+
         const displayData = options.serverSide
             ? state.displayData
             : getDisplayData(
@@ -41,7 +45,7 @@ export function DataTableToolbarSearch({ onHide }: { onHide: () => void }) {
                   state.data,
                   state.filterList,
                   newSearchText,
-                  null,
+                  undefined,
                   datatableRootProps,
                   state,
                   options,

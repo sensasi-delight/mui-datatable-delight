@@ -62,11 +62,7 @@ describe('<TableBodyCell />', function () {
          */
         const tableRows = result.getAllByRole('row')
 
-        if (
-            tableRows.length === 0 ||
-            !tableRows[1] ||
-            !tableRows[1].children[0]
-        ) {
+        if (tableRows.length === 0 || !tableRows[1]?.children[0]) {
             throw new Error('Cell not found')
         }
 
@@ -78,7 +74,7 @@ describe('<TableBodyCell />', function () {
         expect(colIndex).toBe(0)
         expect(cellData).toBe('Joe James')
 
-        if (!tableRows[4] || !tableRows[4].children[2]) {
+        if (!tableRows[4]?.children[2]) {
             throw new Error('Cell not found')
         }
 
@@ -90,7 +86,7 @@ describe('<TableBodyCell />', function () {
         expect(colIndex).toBe(2)
         expect(cellData).toBe('Dallas')
 
-        if (!tableRows[3] || !tableRows[3].children[1]) {
+        if (!tableRows[3]?.children[1]) {
             throw new Error('Cell not found')
         }
 

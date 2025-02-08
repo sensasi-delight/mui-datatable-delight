@@ -17,20 +17,21 @@ import Typography from '@mui/material/Typography'
 import { tss } from 'tss-react/mui'
 // locals
 import type { DataTableToolbarFilterProps } from '..'
-import { type DataTableState } from '../../../../../types/state'
-import useDataTableContext from '../../../../../hooks/use-data-table-context'
+import { type DataTableState } from '@src/types/state'
+import useDataTableContext from '@src/hooks/use-data-table-context'
 // global enums
-import FilterType from '../../../../../enums/filter-type'
+import FilterType from '@src/enums/filter-type'
+import type { Dispatch, SetStateAction } from 'react'
 
-export default function ToolbarDataFilterBoxFilters({
+export default function ToolbarDataFilterBoxFilters<T>({
     columns,
     parentProps,
     innerFilterList: filterList
 }: {
-    columns: DataTableState['columns']
+    columns: DataTableState<T>['columns']
     parentProps: DataTableToolbarFilterProps
     innerFilterList: string[][]
-    setFilterList: React.Dispatch<React.SetStateAction<string[][]>>
+    setFilterList: Dispatch<SetStateAction<string[][]>>
 }) {
     const { textLabels, options } = useDataTableContext()
     const { classes } = useStyles()
@@ -114,9 +115,9 @@ export default function ToolbarDataFilterBoxFilters({
                     key={index}
                     parentProps={parentProps}
                     handleCustomChange={(
-                        value: DataTableState['data'][0],
+                        value: DataTableState<T>['data'][0],
                         index: number,
-                        column: DataTableState['columns'][0]
+                        column: DataTableState<T>['columns'][0]
                     ) => {
                         if (options.confirmFilters !== true) {
                             filterUpdate?.(
@@ -203,7 +204,7 @@ const useStyles = tss
         }
     }))
 
-function DataTableToolbarFilterCheckbox({
+function DataTableToolbarFilterCheckbox<T>({
     index,
     column,
     filterData,
@@ -211,7 +212,7 @@ function DataTableToolbarFilterCheckbox({
     handleCheckboxChange
 }: {
     index: number
-    column: DataTableState['columns'][0]
+    column: DataTableState<T>['columns'][0]
     filterData: DataTableToolbarFilterProps['filterData']
     filterList: DataTableToolbarFilterProps['filterList']
     handleCheckboxChange: (value: string) => void
@@ -327,9 +328,9 @@ function DataTableToolbarFilterMultiselect({
                             <_Checkbox
                                 data-description="table-filter"
                                 color="primary"
-                                checked={
-                                    filterList[index].indexOf(filterValue) >= 0
-                                }
+                                checked={filterList[index]?.includes(
+                                    filterValue
+                                )}
                                 value={
                                     filterValue != null
                                         ? filterValue.toString()
@@ -350,20 +351,20 @@ function DataTableToolbarFilterMultiselect({
     )
 }
 
-function RenderTextField({
+function RenderTextField<T>({
     column,
     index,
     onChange,
     parentProps: { filterList }
 }: {
-    column: DataTableState['columns'][0]
+    column: DataTableState<T>['columns'][0]
     index: number
     onChange: TextFieldProps['onChange']
     parentProps: DataTableToolbarFilterProps
 }) {
     const { classes } = useStyles()
 
-    if (column.filterOptions && column.filterOptions.renderValue) {
+    if (column.filterOptions?.renderValue) {
         console.warn('Custom renderValue not supported for textField filters')
     }
 
@@ -391,26 +392,26 @@ function RenderTextField({
     )
 }
 
-function RenderCustomField({
+function RenderCustomField<T>({
     column,
     index,
     parentProps: { filterData, filterList },
     handleCustomChange
 }: {
-    column: DataTableState['columns'][0]
+    column: DataTableState<T>['columns'][0]
     index: number
     parentProps: DataTableToolbarFilterProps
     handleCustomChange: (
-        value: DataTableState['data'][0],
+        value: DataTableState<T>['data'][0],
         index: number,
-        column: DataTableState['columns'][0]
+        column: DataTableState<T>['columns'][0]
     ) => void
 }) {
     const { classes } = useStyles()
 
     const width = column.filterOptions?.fullWidth ? 12 : 6
 
-    const display = column.filterOptions && column.filterOptions.display
+    const display = column.filterOptions.display
 
     /**
      * CAN'T FIND ANY DECLARATIONS OF THIS, DISABLE FOR NOW

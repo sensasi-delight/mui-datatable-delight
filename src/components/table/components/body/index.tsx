@@ -2,7 +2,7 @@
 
 // vendors
 import { tss } from 'tss-react/mui'
-import React from 'react'
+import React, { type ReactNode } from 'react'
 // materials
 import type { TableRowProps } from '@mui/material/TableRow'
 import MuiTableBody from '@mui/material/TableBody'
@@ -11,54 +11,33 @@ import { TableBodyCell } from './components/cell'
 import { DataTableBodyRow } from './components/row'
 import CheckboxCell from '../_shared/checkbox-cell'
 // globals
-import { getPageValue } from '@src/functions/_shared/get-page-value'
 import type { DataTableState } from '@src/types/state'
-import {
-    type DataTableOptions,
-    type RowTypeIDK,
-    type SomeRowsIDK
-} from '@src/types/options'
-import useDataTableContext from '@src/hooks/use-data-table-context'
+import type { DataTableOptions } from '@src/types/options'
+import type { SelectRowUpdateType } from '@src/types/select-row-update'
+import type { SelectedRowDataState } from '@src/types/state/selected-row-data'
 import { buildMap } from '@src/functions'
+import { getPageValue } from '@src/functions/_shared/get-page-value'
+import useDataTableContext from '@src/hooks/use-data-table-context'
 // global enums
 import TableAction from '@src/enums/table-action'
 import ComponentClassName from '@src/enums/class-name'
+import type { ColumnState } from '@src/types/state/column'
+import type { DisplayDataState } from '@src/types/state/display-data'
 
 export default function TableBody({ selectRowUpdate }: DataTableBodyProps) {
     const { classes } = useStyles()
     const { options, state, textLabels } = useDataTableContext()
 
-    const {
-        displayData: data,
-        count,
-        columns,
-        page,
-        rowsPerPage,
-        selectedRows,
-        previousSelectedRow,
-        expandedRows,
-        columnOrder: columnOrderFromState,
-        filterList
-    } = state
+    const columnOrder = state.columnOrder ?? state.columns.map((_, i) => i)
+    const tableRows = buildRows(
+        state.count,
+        state.displayData,
+        options,
+        state.page,
+        state.rowsPerPage
+    )
 
-    const fakeParentProps = {
-        data,
-        count,
-        columns,
-        page,
-        rowsPerPage,
-        selectedRows,
-        previousSelectedRow,
-        expandedRows,
-        columnOrderFromState,
-        filterList,
-        selectRowUpdate
-    }
-
-    const columnOrder = columnOrderFromState ?? columns.map((_, id) => id)
-    const tableRows = buildRows(fakeParentProps, options)
-
-    const visibleColCnt = columns.filter(c => c.display === 'true').length
+    const visibleColCnt = state.columns.filter(({ display }) => display).length
 
     return (
         <MuiTableBody className={classes.root}>
@@ -69,8 +48,10 @@ export default function TableBody({ selectRowUpdate }: DataTableBodyProps) {
                         data={data}
                         key={rowIndex}
                         rowIndex={rowIndex}
-                        parentProps={fakeParentProps}
+                        selectedRows={state.selectedRows}
+                        columns={state.columns}
                         columnOrder={columnOrder}
+                        selectRowUpdate={selectRowUpdate}
                     />
                 ))}
 
@@ -84,6 +65,7 @@ export default function TableBody({ selectRowUpdate }: DataTableBodyProps) {
                                 ? visibleColCnt + 1
                                 : visibleColCnt
                         }
+                        dataIndex={-1}
                         colIndex={0}
                         rowIndex={0}
                         print
@@ -97,39 +79,8 @@ export default function TableBody({ selectRowUpdate }: DataTableBodyProps) {
 }
 
 interface DataTableBodyProps {
-    /** Data used to describe table */
-    data: DataTableState['data']
-
-    /** Total number of data rows */
-    count: number
-
-    /** Columns used to describe table */
-    columns: DataTableState['columns']
-
-    /** Data used to filter table against */
-    filterList: DataTableState['filterList']
-
-    /** Table rows expanded */
-    expandedRows: SomeRowsIDK
-
-    /** Table rows selected */
-    selectedRows: SomeRowsIDK
-
     /** Callback to trigger table row select */
-    selectRowUpdate: (
-        type: string,
-        value: RowTypeIDK,
-        shiftAdjacentRows: RowTypeIDK[]
-    ) => void
-
-    /** The most recent row to have been selected/unselected */
-    previousSelectedRow: DataTableState['previousSelectedRow']
-
-    columnOrder: number[] | undefined
-
-    page: DataTableState['page']
-
-    rowsPerPage: DataTableState['rowsPerPage']
+    selectRowUpdate: SelectRowUpdateType
 }
 
 const useStyles = tss
@@ -155,13 +106,15 @@ const useStyles = tss
         }
     }))
 
-function buildRows(
-    { data, page, rowsPerPage, count }: DataTableBodyProps,
-    options: DataTableOptions
-) {
-    if (options.serverSide) return data.length ? data : null
+function buildRows<Row>(
+    count: DataTableState<Row>['count'],
+    data: DisplayDataState<Row>,
+    options: DataTableOptions<Row>,
+    page: DataTableState<Row>['page'],
+    rowsPerPage: DataTableState<Row>['rowsPerPage']
+): DisplayDataState<Row> {
+    if (options.serverSide) return data.length ? data : []
 
-    const rows = []
     const highestPageInRange = getPageValue(count, rowsPerPage, page)
     const fromIndex =
         highestPageInRange === 0 ? 0 : highestPageInRange * rowsPerPage
@@ -173,39 +126,43 @@ function buildRows(
         )
     }
 
+    const rows = []
+
     for (
         let rowIndex = fromIndex;
         rowIndex < count && rowIndex < toIndex;
         rowIndex++
     ) {
-        if (data[rowIndex] !== undefined) rows.push(data[rowIndex])
+        const row = data[rowIndex]
+
+        if (row) {
+            rows.push(row)
+        }
     }
 
-    return rows.length ? rows : null
+    return rows.length ? rows : []
 }
 
-function isRowExpanded(
+function isRowExpanded<Row>(
     dataIndex: number,
-    { expandedRows }: DataTableBodyProps
+    expandedRows: DataTableState<Row>['expandedRows']
 ): boolean {
-    return (expandedRows.lookup && expandedRows.lookup[dataIndex]) ?? false
+    return expandedRows.lookup[dataIndex] ?? false
 }
 
-function getIsRowSelectable(
+function getIsRowSelectable<Row>(
     dataIndex: number,
-    selectedRows: DataTableBodyProps['selectedRows'],
-    { selectedRows: selectedRowsFromOptions }: DataTableBodyProps,
-    options: DataTableOptions
+    selectedRows: DataTableState<Row>['selectedRows'],
+    options: DataTableOptions<Row>
 ) {
-    selectedRows = selectedRows ?? selectedRowsFromOptions
-
     return options.isRowSelectable?.(dataIndex, selectedRows) ?? true
 }
 
-function getRowIndex(
+function getRowIndex<Row>(
     index: number,
-    { page, rowsPerPage }: DataTableBodyProps,
-    options: DataTableOptions
+    page: DataTableState<Row>['page'],
+    rowsPerPage: DataTableState<Row>['rowsPerPage'],
+    options: DataTableOptions<Row>
 ) {
     if (options.serverSide) {
         return index
@@ -216,14 +173,15 @@ function getRowIndex(
     return startIndex + index
 }
 
-function handleRowSelect(
-    data: RowTypeIDK,
+function handleRowSelect<Row>(
+    data: SelectedRowDataState,
     event: React.SyntheticEvent,
-    parentProps: DataTableBodyProps,
-    options: DataTableOptions
+    options: DataTableOptions<Row>,
+    previousSelectedRow: DataTableState<Row>['previousSelectedRow'],
+    selectRowsFromState: DataTableState<Row>['selectedRows'],
+    displayData: DisplayDataState<Row>,
+    selectRowUpdate: SelectRowUpdateType
 ) {
-    const { previousSelectedRow } = parentProps
-
     const isWithShiftKey =
         (event.nativeEvent as PointerEvent | KeyboardEvent).shiftKey ?? false
 
@@ -233,16 +191,20 @@ function handleRowSelect(
     if (
         isWithShiftKey &&
         previousSelectedRow &&
-        previousSelectedRow.index < parentProps.data.length
+        previousSelectedRow.index < displayData.length
     ) {
         // Create a copy of the selectedRows object. This will be used and modified
         // below when we see if we can add adjacent rows.
         const selectedRows = {
-            ...parentProps.selectedRows
+            ...selectRowsFromState
         }
 
         // Add the clicked on row to our copy of selectedRows (if it isn't already present).
-        const clickedDataIndex = parentProps.data[data.index]?.dataIndex
+        const clickedDataIndex = displayData[data.index]?.dataIndex
+
+        if (clickedDataIndex === undefined) {
+            throw new Error('clickedDataIndex is undefined')
+        }
 
         if (
             selectedRows.data.filter(d => d.dataIndex === clickedDataIndex)
@@ -258,13 +220,16 @@ function handleRowSelect(
         let curIndex = previousSelectedRow.index
 
         while (curIndex !== data.index) {
-            const dataIndex = parentProps.data[curIndex]?.dataIndex
+            const dataIndex = displayData[curIndex]?.dataIndex
+
+            if (dataIndex === undefined) {
+                throw new Error('dataIndex is undefined')
+            }
 
             if (
                 getIsRowSelectable(
                     dataIndex,
-                    selectedRows,
-                    parentProps,
+                    selectedRows ?? selectRowsFromState,
                     options
                 )
             ) {
@@ -289,27 +254,26 @@ function handleRowSelect(
         }
     }
 
-    parentProps.selectRowUpdate('cell', data, shiftAdjacentRows)
+    selectRowUpdate('cell', data, shiftAdjacentRows)
 }
 
-function RenderRow({
+function RenderRow<Row>({
     rowIndex,
     data: { data: row, dataIndex },
-    parentProps,
-    columnOrder
+    selectedRows,
+    columns,
+    columnOrder,
+    selectRowUpdate
 }: {
     rowIndex: number
-    data: {
-        data: string[]
-        dataIndex: number
-    }
-    parentProps: DataTableBodyProps
+    data: DisplayDataState<Row>[number]
+    selectedRows: DataTableState<Row>['selectedRows']
+    columns: ColumnState<Row>[]
     columnOrder: number[]
+    selectRowUpdate: SelectRowUpdateType
 }) {
     const { classes, cx } = useStyles()
     const { onAction, options, state } = useDataTableContext()
-
-    const { selectedRows, columns } = parentProps
 
     if (options.customRowRender) {
         return options.customRowRender(row, dataIndex, rowIndex)
@@ -317,15 +281,10 @@ function RenderRow({
 
     const isRowSelected: boolean =
         options.selectableRows !== 'none'
-            ? Boolean(selectedRows.lookup && selectedRows.lookup[dataIndex])
+            ? Boolean(selectedRows.lookup[dataIndex])
             : false
 
-    const isRowSelectable = getIsRowSelectable(
-        dataIndex,
-        selectedRows,
-        parentProps,
-        options
-    )
+    const isRowSelectable = getIsRowSelectable(dataIndex, selectedRows, options)
 
     const overriddenBodyProps: TableRowProps = options.setRowProps
         ? (options.setRowProps(row, dataIndex, rowIndex) ?? {})
@@ -340,32 +299,37 @@ function RenderRow({
         const { dataIndex } = row
         const { isRowExpandable } = options
 
-        let { expandedRows } = state
-        const expandedRowsData = [...expandedRows.data]
+        const expandedRowsData = [...state.expandedRows.data]
         let shouldCollapseExpandedRow = false
 
         let hasRemovedRow = false
-        let removedRow: string[] = []
+        let removedRow: DataTableState<Row>['expandedRows']['data'] = []
 
-        for (var cIndex = 0; cIndex < expandedRowsData.length; cIndex++) {
-            if (expandedRowsData[cIndex]?.dataIndex === dataIndex) {
+        for (const item of expandedRowsData) {
+            if (item?.dataIndex === dataIndex) {
                 shouldCollapseExpandedRow = true
                 break
             }
         }
 
+        const cIndex = expandedRowsData.findIndex(
+            item => item.dataIndex === dataIndex
+        )
+
         if (shouldCollapseExpandedRow) {
             if (
-                (isRowExpandable && isRowExpandable(dataIndex, expandedRows)) ||
+                isRowExpandable?.(dataIndex, state.expandedRows) ||
                 !isRowExpandable
             ) {
                 removedRow = expandedRowsData.splice(cIndex, 1)
                 hasRemovedRow = true
             }
         } else {
-            if (isRowExpandable && isRowExpandable(dataIndex, expandedRows))
+            if (isRowExpandable?.(dataIndex, state.expandedRows)) {
                 expandedRowsData.push(row)
-            else if (!isRowExpandable) expandedRowsData.push(row)
+            } else if (!isRowExpandable) {
+                expandedRowsData.push(row)
+            }
         }
 
         const newState = {
@@ -398,8 +362,12 @@ function RenderRow({
                         },
                         event,
                         options,
-                        parentProps,
-                        toggleExpandRow
+                        toggleExpandRow,
+                        state.selectedRows,
+                        state.expandedRows,
+                        state.previousSelectedRow,
+                        state.displayData,
+                        selectRowUpdate
                     )
                 }
                 className={cx(
@@ -422,19 +390,28 @@ function RenderRow({
                             {
                                 index: getRowIndex(
                                     rowIndex,
-                                    parentProps,
+                                    state.page,
+                                    state.rowsPerPage,
                                     options
                                 ),
                                 dataIndex
                             },
                             event,
-                            parentProps,
-                            options
+                            options,
+                            state.previousSelectedRow,
+                            state.selectedRows,
+                            state.displayData,
+                            selectRowUpdate
                         )
                     }
                     onExpand={() =>
                         toggleExpandRow({
-                            index: getRowIndex(rowIndex, parentProps, options),
+                            index: getRowIndex(
+                                rowIndex,
+                                state.page,
+                                state.rowsPerPage,
+                                options
+                            ),
                             dataIndex
                         })
                     }
@@ -445,18 +422,18 @@ function RenderRow({
                         !(
                             options.isRowExpandable?.(
                                 dataIndex,
-                                parentProps.expandedRows
+                                state.expandedRows
                             ) ?? true
                         ) && options.expandableRows
                     }
-                    isRowExpanded={isRowExpanded(dataIndex, parentProps)}
+                    isRowExpanded={isRowExpanded(dataIndex, state.expandedRows)}
                     isRowSelectable={isRowSelectable}
                     dataIndex={dataIndex}
                 />
 
                 {processedRow.map(
                     column =>
-                        columns[column.index]?.display === 'true' && (
+                        columns[column.index]?.display === true && (
                             <TableBodyCell
                                 {...(columns[column.index]?.setCellProps?.(
                                     column.value ?? '',
@@ -467,7 +444,7 @@ function RenderRow({
                                 rowIndex={rowIndex}
                                 colIndex={column.index}
                                 columnHeader={columns[column.index]?.label}
-                                print={columns[column.index]?.print}
+                                print={columns[column.index]?.print ?? true}
                                 key={column.index}
                             >
                                 {column.value}
@@ -476,7 +453,7 @@ function RenderRow({
                 )}
             </DataTableBodyRow>
 
-            {isRowExpanded(dataIndex, parentProps) &&
+            {isRowExpanded(dataIndex, state.expandedRows) &&
                 options.renderExpandableRow?.(row, {
                     rowIndex,
                     dataIndex
@@ -485,16 +462,20 @@ function RenderRow({
     )
 }
 
-function handleRowClick(
-    row: string[],
+function handleRowClick<Row>(
+    row: ReactNode[],
     data: {
         rowIndex: number
         dataIndex: number
     },
-    event: React.MouseEvent<HTMLTableRowElement, MouseEvent>,
-    options: DataTableOptions,
-    parentProps: DataTableBodyProps,
-    toggleExpandRow: (params: { index: number; dataIndex: number }) => void
+    event: React.MouseEvent<HTMLTableRowElement, globalThis.MouseEvent>,
+    options: DataTableOptions<Row>,
+    toggleExpandRow: (params: { index: number; dataIndex: number }) => void,
+    selectedRows: DataTableState<Row>['selectedRows'],
+    expandedRows: DataTableState<Row>['expandedRows'],
+    previousSelectedRow: DataTableState<Row>['previousSelectedRow'],
+    displayData: DataTableState<Row>['displayData'],
+    selectRowUpdate: SelectRowUpdateType
 ) {
     const clickedElement = event.target as HTMLElement
 
@@ -513,27 +494,29 @@ function handleRowClick(
     if (
         options.selectableRowsOnClick &&
         options.selectableRows !== 'none' &&
-        getIsRowSelectable(
-            data.dataIndex,
-            parentProps.selectedRows,
-            parentProps,
-            options
-        )
+        getIsRowSelectable(data.dataIndex, selectedRows, options)
     ) {
         const selectRow = {
             index: data.rowIndex,
             dataIndex: data.dataIndex
         }
 
-        handleRowSelect(selectRow, event, parentProps, options)
+        handleRowSelect(
+            selectRow,
+            event,
+            options,
+            previousSelectedRow,
+            selectedRows,
+            displayData,
+            selectRowUpdate
+        )
     }
 
     // Check if we should trigger row expand when row is clicked anywhere
     if (
         options.expandableRowsOnClick &&
         options.expandableRows &&
-        (options.isRowExpandable?.(data.dataIndex, parentProps.expandedRows) ??
-            true)
+        (options.isRowExpandable?.(data.dataIndex, expandedRows) ?? true)
     ) {
         toggleExpandRow({
             index: data.rowIndex,

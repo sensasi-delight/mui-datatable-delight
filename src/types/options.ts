@@ -1,56 +1,52 @@
+// vendors
+import type { ChipProps } from '@mui/material/Chip'
+import type { MouseEvent, ReactNode } from 'react'
 import type { TableProps } from '@mui/material/Table'
 import type { TableRowProps } from '@mui/material/TableRow'
-import type {
-    DisplayData,
-    MUIDataTableChip,
-    MUIDataTableColumn,
-    MUIDataTableDraggableColumns,
-    SelectableRows
-} from 'mui-datatables'
-import type { ReactNode } from 'react'
+// locals
+import type { BooleanOrDisabled } from './values/boolean-or-disabled'
+import type { SelectedRowDataState } from './state/selected-row-data'
+import type { DisplayDataState } from './state/display-data'
+import type { SelectableRowsType } from './options/selectable-rows'
+import type { ColumnState } from './state/column'
+import type { DataItemState } from './state/data-item'
+import type { DefaultRow } from './default-row'
 import type { DataTableState } from './state'
-import type { DataTableColumnObjectOptions } from './columns'
 import type { FilterTypeType } from './shared/filter-type-type'
 import { DEFAULT_TEXT_LABELS } from '../hooks/use-data-table-context/function/statics/default-text-labels'
 // enums
-import type FilterType from '../enums/filter-type'
 import type RowsSelectedToolbarPlacement from '../enums/rows-selected-toolbar-placement'
 import type TableAction from '../enums/table-action'
 import type DataTableSearchOptions from './options/search'
-import type { BooleanOrDisabled } from './values/boolean-or-disabled'
+
+// Imported for linking documentation
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import type { ColumnDefinitionOptions } from './props/column-definition/options'
 
 export interface DataTableSortOrderOption {
+    /**
+     * @todo  Type of name should be based on column name.
+     */
     name: string
     direction: 'asc' | 'desc' | 'none'
 }
 
-/**
- * @deprecated FOUND THIS TYPE BUT CAN'T DESCRIBED YET
- */
-export interface RowTypeIDK {
-    index: number
-    dataIndex: number
-}
-
-/**
- * @deprecated FOUND THIS TYPE BUT CAN'T DESCRIBED YET
- */
-export interface SomeRowsIDK {
-    data: RowTypeIDK[]
-    lookup: boolean[]
-}
-
-export interface DataTableOptions
-    extends DataTableCustomsOptions,
-        DataTableSearchOptions {
-    /** Enable/disable case sensitivity for search */
-    caseSensitive?: boolean
+export interface DataTableOptions<Row = DefaultRow>
+    extends DataTableCustomsOptions<Row>,
+        DataTableSearchOptions<Row> {
+    /**
+     * Enable/disable case sensitivity for search
+     *
+     * @default false
+     */
+    caseSensitive: boolean
 
     /**
-     * Works in conjunction with the customFilterDialogFooter options and make is so filters have to be confirmed before being applied to the table.
-     * When this option is true, the customFilterDialogFooter callback will receive an applyFilters function which, when called will apply the filter to the table.
+     * Works in conjunction with the `customFilterDialogFooter` options and make is so filters have to be confirmed before being applied to the table.
+     * When this option is `true`, the `customFilterDialogFooter` callback will receive an `applyFilters` function which, when called will apply the filter to the table.
      *
-     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/serverside-filters/index.tsx
+     * @see
+     * [Server-side Filters Example](https://mui-datatable-delight.vercel.app/examples/server-side-filters)
      */
     confirmFilters?: boolean
 
@@ -73,21 +69,22 @@ export interface DataTableOptions
      *
      * @default true
      */
-    download?: BooleanOrDisabled
+    download: BooleanOrDisabled
 
     /**
      * An object of options to change the output of the csv file.
      *
+     * @default downloadOptions.filename = 'tableDownload.csv'
      * @default downloadOptions.separator = ','
      */
-    downloadOptions?: Partial<{
+    downloadOptions: {
         filename: string
         separator: string
-        filterOptions: Partial<{
-            useDisplayedColumnsOnly: boolean
-            useDisplayedRowsOnly: boolean
-        }>
-    }>
+        filterOptions?: {
+            useDisplayedColumnsOnly?: boolean
+            useDisplayedRowsOnly?: boolean
+        }
+    }
 
     /**
      * An object of options describing how dragging columns should work.
@@ -98,13 +95,17 @@ export interface DataTableOptions
      * To disable the dragging of a particular column, see the "draggable" option in the columns options.
      * Dragging a column to a new position updates the columnOrder array and triggers the onColumnOrderChange callback.
      */
-    draggableColumns?: MUIDataTableDraggableColumns
+    draggableColumns: {
+        enabled: boolean
+        transitionTime: number
+    }
 
     /**
      * Shadow depth applied to the `<Paper />` component.
+     *
      * @default 4
      */
-    elevation?: number
+    elevation: number
 
     /**
      * If a non-empty string (ex: `"."`) is provided, it will use that value in the column's names to access nested data.
@@ -113,25 +114,29 @@ export interface DataTableOptions
      *
      * Any amount of nesting will work.
      *
-     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/data-as-objects/index.tsx
+     * @todo  remove this and default behavior is always read nested data
+     *
+     * @deprecated  remove this and default behavior is always read nested data
+     *
+     * @see https://mui-datatable-delight.vercel.app/examples/data-as-objects
      */
-    enableNestedDataAccess?: string
+    enableNestedDataAccess: string
 
     /**
      * Enable/disable expandable rows.
      *
-     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/expandable-rows/index.tsx
+     * @see https://mui-datatable-delight.vercel.app/examples/expandable-rows
      *
      * @default false
      */
-    expandableRows?: boolean
+    expandableRows: boolean
 
     /**
      * Show/hide the expand all/collapse all row header for expandable row.
      *
      * @default true
      */
-    expandableRowsHeader?: boolean
+    expandableRowsHeader: boolean
 
     /**
      * Enable/disable expand trigger when row is clicked.
@@ -139,7 +144,7 @@ export interface DataTableOptions
      *
      * @default false
      */
-    expandableRowsOnClick?: boolean
+    expandableRowsOnClick: boolean
 
     /**
      * Possible Values:
@@ -149,36 +154,37 @@ export interface DataTableOptions
      *
      * @default true
      */
-    filter?: BooleanOrDisabled
+    filter: BooleanOrDisabled
 
     /**
      * For array values, default checks if all the filter values are included in the array.
      * If false, checks if at least one of the filter values is in the array.
      *
-     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/array-value-columns/index.tsx
+     * @see https://mui-datatable-delight.vercel.app/examples/array-value-columns
      *
      * @default true
      */
-    filterArrayFullMatch?: boolean
+    filterArrayFullMatch: boolean
 
     /**
      * Choice of filtering view. Takes priority over global filterType option.
      *
      * Use 'custom' is you are supplying your own rendering via filterOptions.
      *
-     * @default  'dropdown'
+     * @default 'dropdown'
      *
      * @see  {@link FilterTypeType}
      */
-    filterType?: FilterTypeType
+    filterType: FilterTypeType
 
     /**
      * Enable/disable a fixed header for the table
      *
-     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/fixed-header/index.tsx
+     * @see https://mui-datatable-delight.vercel.app/examples/fixed-header
+     *
      * @default true
      */
-    fixedHeader?: boolean
+    fixedHeader: boolean
 
     /** @deprecated use `fixedHeader` for **X** axis and `fixedSelectColumn` for **Y** axis */
     fixedHeaderOptions?: {
@@ -189,38 +195,46 @@ export interface DataTableOptions
     }
 
     /**
-     * Enable/disable fined select column.
+     * Enable/disable fixed select column.
      *
-     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/fixed-header/index.tsx
+     * @see https://mui-datatable-delight.vercel.app/examples/fixed-header
+     *
      * @default true
      */
-    fixedSelectColumn?: boolean
+    fixedSelectColumn: boolean
 
     /**
      * Enable/disable expansion or collapse on certain expandable rows with custom function.
      * Returns `true` if not provided.
      */
-    isRowExpandable?: (dataIndex: number, expandedRows?: SomeRowsIDK) => boolean
+    isRowExpandable?: (
+        dataIndex: number,
+        expandedRows: DataTableState<Row>['expandedRows']
+    ) => boolean
 
     /** Enable/disable selection on certain rows with custom function. Returns true if not provided. */
-    isRowSelectable?: (dataIndex: number, selectedRows?: SomeRowsIDK) => boolean
+    isRowSelectable?: (
+        dataIndex: number,
+        selectedRows: DataTableState<Row>['selectedRows']
+    ) => boolean
 
     /**
      * When true, the option adds a dropdown to the table's footer that allows a user to navigate to a specific page.
      *
-     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/large-data-set/index.tsx
+     * @see https://mui-datatable-delight.vercel.app/examples/large-data-set
+     *
      * @default false
      */
-    jumpToPage?: boolean
+    jumpToPage: boolean
 
     /** Callback function that triggers when a cell is clicked. */
     onCellClick?: (
-        colData: any,
+        colData: unknown,
         cellMeta: {
             colIndex: number
             rowIndex: number
             dataIndex: number
-            event: React.MouseEvent
+            event: MouseEvent
         }
     ) => void
     onChangePage?: (currentPage: number) => void
@@ -235,16 +249,21 @@ export interface DataTableOptions
         newPosition: number
     ) => void
 
-    /** Callback function that triggers when a column has been sorted. */
+    /**
+     * Callback function that triggers when a column has been sorted.
+     */
     onColumnSortChange?: (
-        changedColumn: string,
+        /** Name of the column that was sorted */
+        columnName: string,
+
+        /** New sort order direction (`asc` or `desc`) */
         direction: DataTableSortOrderOption['direction']
     ) => void
 
-    /** @deprecated use `onViewColumnsChange` instead */
-    onColumnViewChange?:
-        | ((changedColumn: string, action: string) => void)
-        | undefined
+    /**
+     * @deprecated  Use {@link DataTableOptions.onColumnVisibilityChange | `onColumnVisibilityChange`} instead
+     */
+    onColumnViewChange?: never
 
     /**
      * A callback function that triggers when the user downloads the CSV file.
@@ -255,43 +274,48 @@ export interface DataTableOptions
      * @see [On Download example](https://mui-datatatable-delight.vercel.app/examples/on-download)
      */
     onDownload?: (
-        buildHead: (columns: DataTableState['columns']) => string,
-        buildBody: (data: DataTableState['data']) => string,
-        columns: DataTableState['columns'],
-        data: DataTableState['data']
+        buildHead: (columns: ColumnState<Row>[]) => string,
+        buildBody: (data: DataItemState[]) => string,
+        columns: ColumnState<Row>[],
+        data: DataItemState[]
     ) =>
-        | { data: DisplayData[]; columns: DataTableState['columns'] }
+        | {
+              data: DisplayDataState<Row>
+              columns: ColumnState<Row>[]
+          }
         | string
         | false
 
     /** Callback function that triggers when filters have changed. */
     onFilterChange?: (
-        changedColumn: string | MUIDataTableColumn | null,
-        filterList: DataTableState['filterList'],
-        type: FilterType | 'reset',
+        changedColumn: ColumnState<Row> | null,
+        filterList: DataTableState<Row>['filterList'],
+        type: FilterTypeType | 'reset',
         changedColumnIndex: number | null,
-        displayData: DataTableState['displayData']
+        displayData: DisplayDataState<Row>
     ) => void
 
     /**
      * Callback function that is triggered when a user clicks the "X" on a filter chip.
      *
-     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/serverside-filters/index.tsx
+     * @see
+     * [Server-side Filters Example](https://mui-datatable-delight.vercel.app/examples/server-side-filters)
      */
     onFilterChipClose?: (
         index: number,
         removedFilter: string | string[],
-        filterList: DataTableState['filterList']
+        filterList: DataTableState<Row>['filterList']
     ) => void
 
     /**
      * Callback function that is triggered when a user presses the "confirm" button on the filter popover.
      * This occurs only if you've set `confirmFilters` option to `true`.
      *
-     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/serverside-filters/index.tsx
+     * @see
+     * [Server-side Filters Example](https://mui-datatable-delight.vercel.app/examples/server-side-filters)
      */
 
-    onFilterConfirm?: (filterList: DataTableState['filterList']) => void
+    onFilterConfirm?: (filterList: DataTableState<Row>['filterList']) => void
 
     /** Callback function that triggers when the filter dialog closes. */
     onFilterDialogClose?: () => void
@@ -301,18 +325,18 @@ export interface DataTableOptions
 
     /** Callback function that triggers when a row is clicked. */
     onRowClick?: (
-        rowData: string[],
+        rowData: ReactNode[],
         rowMeta: { dataIndex: number; rowIndex: number },
-        event: React.MouseEvent<HTMLTableRowElement, MouseEvent>
+        event: React.MouseEvent<HTMLTableRowElement, globalThis.MouseEvent>
     ) => void
 
     /**
      * Callback function that triggers when row(s) are expanded/collapsed.
      */
     onRowExpansionChange?: (
-        currentRowsExpanded: any[],
-        allRowsExpanded: any[],
-        rowsExpanded?: any[]
+        currentRowsExpanded: unknown[],
+        allRowsExpanded: unknown[],
+        rowsExpanded?: unknown[]
     ) => void
 
     /**
@@ -321,18 +345,18 @@ export interface DataTableOptions
      */
     onRowsDelete?: (
         rowsDeleted: {
-            lookup: { [dataIndex: number]: boolean }
-            data: Array<{ index: number; dataIndex: number }>
+            data: SelectedRowDataState[]
+            lookup: Record<number, boolean>
         },
-        newTableData: any[]
+        newTableData: unknown[]
         // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
     ) => void | false
 
     /** Callback function that triggers when row(s) are selected/deselected. */
     onRowSelectionChange?: (
-        currentRowsSelected: any[],
-        allRowsSelected: any[],
-        rowsSelected?: any[]
+        currentRowsSelected: unknown[],
+        allRowsSelected: unknown[],
+        rowsSelected?: number[]
     ) => void
 
     /**
@@ -341,7 +365,10 @@ export interface DataTableOptions
      * @see {@link TableAction} enum.
      * @see {@link DataTableState} interface.
      */
-    onTableChange?: (action: TableAction, tableState: DataTableState) => void
+    onTableChange?: (
+        action: TableAction,
+        tableState: DataTableState<Row>
+    ) => void
 
     /**
      * Callback function that triggers when table state has been initialized.
@@ -349,12 +376,28 @@ export interface DataTableOptions
      * @see {@link TableAction} enum.
      * @see {@link DataTableState} interface.
      */
-    onTableInit?: (action: TableAction, tableState: DataTableState) => void
+    onTableInit?: (action: TableAction, tableState: DataTableState<Row>) => void
 
-    /** Callback function that triggers when a column view has been changed. Previously known as onColumnViewChange. */
+    /**
+     * @deprecated  Use {@link DataTableOptions.onColumnVisibilityChange | `onColumnVisibilityChange`} instead
+     */
     onViewColumnsChange?: (changedColumn: string, action: string) => void
 
-    /** User provided page for pagination */
+    /**
+     * Callback function that triggers when a column view has been changed.
+     *
+     * Previously known as {@link DataTableOptions.onColumnViewChange | `onColumnViewChange`} or {@link DataTableOptions.onViewColumnsChange | `onViewColumnsChange`}.
+     */
+    onColumnVisibilityChange?: (
+        /** Name of the column that was changed */
+        columnName: string,
+
+        action: 'add' | 'remove'
+    ) => void
+
+    /**
+     * User provided page for pagination
+     */
     page?: number
 
     /**
@@ -362,7 +405,7 @@ export interface DataTableOptions
      *
      * @default true
      */
-    pagination?: boolean
+    pagination: boolean
 
     /**
      * Possible Values:
@@ -372,15 +415,15 @@ export interface DataTableOptions
      *
      * @default true
      */
-    print?: BooleanOrDisabled
+    print: BooleanOrDisabled
 
     /**
      * Render Expandable rows.
      *
-     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/expandable-rows/index.tsx
+     * @see https://mui-datatable-delight.vercel.app/examples/expandable-rows
      */
     renderExpandableRow?: (
-        rowData: string[],
+        rowData: ReactNode[],
         rowMeta: { dataIndex: number; rowIndex: number }
     ) => ReactNode
 
@@ -391,7 +434,7 @@ export interface DataTableOptions
      *
      * @default false
      */
-    resizableColumns?: boolean
+    resizableColumns: boolean
 
     /**
      * Enable/disable responsive table view.
@@ -400,11 +443,11 @@ export interface DataTableOptions
      * - 'standard': Table will stay in the standard mode but make small changes to better fit the allocated space.
      * - 'simple': On very small devices the table rows will collapse into simple display.
      *
-     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/simple/index.tsx
+     * @see https://mui-datatable-delight.vercel.app/examples/simple
      *
      * @default 'vertical'
      */
-    responsive?:
+    responsive:
         | 'vertical'
         | 'standard'
         | 'simple'
@@ -421,40 +464,34 @@ export interface DataTableOptions
      *
      * @default true
      */
-    rowHover?: boolean
+    rowHover: boolean
 
     /** User provided expanded rows */
-    rowsExpanded?: any[]
+    rowsExpanded?: unknown[]
 
     /**
      * Number of rows allowed per page.
      *
      * @default 10
      */
-    rowsPerPage?: number
+    rowsPerPage: number
 
     /**
      * Options to provide in pagination for number of rows a user can select
      *
      * @default [10, 20, 50, 100]
      */
-    rowsPerPageOptions?: number[]
+    rowsPerPageOptions: number[]
 
     /** User provided array of number (dataIndexes) which indicated the selected row. */
-    rowsSelected?: any[]
+    rowsSelected?: number[]
 
     /**
      * Indicates if rows can be selected.
      *
-     * @default  'multiple'
+     * @default 'multiple'
      */
-    selectableRows?: 'multiple' | 'single' | 'none'
-
-    /**
-     * Show/hide the select all/deselect all checkbox header for selectable rows.
-     * @default true
-     */
-    selectableRowsHeader?: boolean
+    selectableRows: SelectableRowsType
 
     /**
      * Hides the checkboxes that appear when selectableRows is set to "multiple" or "single".
@@ -462,7 +499,7 @@ export interface DataTableOptions
      *
      * @default false
      */
-    selectableRowsHideCheckboxes?: boolean
+    selectableRowsHideCheckboxes: boolean
 
     /**
      * Enable/disable select toggle when row is clicked.
@@ -470,7 +507,14 @@ export interface DataTableOptions
      *
      * @default false
      */
-    selectableRowsOnClick?: boolean
+    selectableRowsOnClick: boolean
+
+    /**
+     * Show/hide the select all/deselect all checkbox header for selectable rows.
+     *
+     * @default true
+     */
+    selectableRowsHeader: boolean
 
     /**
      * Controls the visibility of the Select Toolbar.
@@ -481,36 +525,37 @@ export interface DataTableOptions
      * - 'none': Select Toolbar never appears
      * - 'replace': Select toolbar replaces default toolbar.
      *
-     * @default replace
+     * @default 'replace'
      *
      * @see  {@link RowsSelectedToolbarPlacement}
      */
-    selectToolbarPlacement?: RowsSelectedToolbarPlacement
+    selectToolbarPlacement: RowsSelectedToolbarPlacement
 
     /**
      * Enable remote data source
+     *
      * @default false
      */
-    serverSide?: boolean
+    serverSide: boolean
 
     /**
      * Is called for each filter chip and allows you to place custom props on a filter chip.
      *
-     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-filter/index.tsx
+     * @see https://mui-datatable-delight.vercel.app/examples/customize-filter
      */
     setFilterChipProps?: (
         colIndex: number,
         colName: string,
-        data: readonly any[][]
-    ) => MUIDataTableChip
+        data: readonly unknown[][]
+    ) => Pick<ChipProps, 'color' | 'variant' | 'className'>
 
     /**
      * Is called for each row and allows you to return custom props for this row based on its data.
      *
-     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-styling/index.tsx
+     * @see https://mui-datatable-delight.vercel.app/examples/customize-styling
      */
     setRowProps?: (
-        row: any[],
+        row: unknown[],
         dataIndex: number,
         rowIndex: number
     ) => TableRowProps
@@ -518,7 +563,7 @@ export interface DataTableOptions
     /**
      * Is called for the table and allows you to return custom props for the table based on its data.
      *
-     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-styling/index.tsx
+     * @see https://mui-datatable-delight.vercel.app/examples/customize-styling
      */
     setTableProps?: () => TableProps
 
@@ -527,14 +572,14 @@ export interface DataTableOptions
      *
      * @default true
      */
-    sort?: boolean
+    sort: boolean
 
     /**
      * Enable/disable alphanumeric sorting of filter lists.
      *
      * @default true
      */
-    sortFilterList?: boolean
+    sortFilterList: boolean
 
     /**
      * Sets the column to sort by and its sort direction.
@@ -551,10 +596,11 @@ export interface DataTableOptions
      * @example '500px'
      * @example '100%'
      * @example 'auto'
+     *
      * @default 'auto'
      */
+    tableBodyHeight: string
 
-    tableBodyHeight?: string
     /**
      * CSS string for the height of the table.
      * @example '500px'
@@ -575,9 +621,10 @@ export interface DataTableOptions
      * - true       = Button visible and clickable
      * - false      = Button not visible
      * - 'disabled' = Button is visible but not clickable
+     *
      * @default true
      */
-    viewColumns?: BooleanOrDisabled
+    viewColumns: BooleanOrDisabled
 
     /**
      * Local storage key used to store the table state.
@@ -589,32 +636,32 @@ export interface DataTableOptions
      *
      * @see  {@link onRowExpansionChange}
      */
-    onRowsExpand?: DataTableOptions['onRowExpansionChange']
+    onRowsExpand?: DataTableOptions<Row>['onRowExpansionChange']
 
     /**
      * @deprecated Use `onRowSelectionChange` instead.
      *
      * @see  {@link onRowSelectionChange}
      */
-    onRowsSelect?: DataTableOptions['onRowSelectionChange']
+    onRowsSelect?: DataTableOptions<Row>['onRowSelectionChange']
 
     /**
      * @deprecated  in favor of the {@link confirmFilters} option.
      */
-    serverSideFilterList?: DataTableState['filterList']
+    serverSideFilterList?: DataTableState<Row>['filterList']
 }
 
-interface DataTableCustomsOptions {
+interface DataTableCustomsOptions<Row> {
     /** Add a custom footer to the filter dialog. */
     customFilterDialogFooter?: (
-        filterList: DataTableState['filterList'],
-        applyNewFilters?: (...args: any[]) => any
+        filterList: DataTableState<Row>['filterList'],
+        applyNewFilters?: (...args: unknown[]) => unknown
     ) => ReactNode
 
     /**
      * Render a custom table footer.
      *
-     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-footer/index.tsx
+     * @see https://mui-datatable-delight.vercel.app/examples/customize-footer
      */
     customFooter?: (
         rowCount: number,
@@ -628,10 +675,10 @@ interface DataTableCustomsOptions {
     /**
      * Override default row rendering with custom function.
      *
-     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-rows/index.tsx
+     * @see https://mui-datatable-delight.vercel.app/examples/customize-rows
      */
     customRowRender?: (
-        data: any[],
+        data: unknown[],
         dataIndex: number,
         rowIndex: number
     ) => ReactNode
@@ -639,32 +686,34 @@ interface DataTableCustomsOptions {
     /**
      * Override default sorting with custom function.
      *
-     * If you just need to override the sorting for a particular column, see the {@link DataTableColumnObjectOptions.sortCompare} method in the Column options.
+     * If you just need to override the sorting for a particular column, see the {@link ColumnDefinitionOptions.sortCompare | `sortCompare`} method in the Column options.
      *
-     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-sorting/index.tsx
+     * @see https://mui-datatable-delight.vercel.app/examples/customize-sorting
      */
-    customSort?: (data: any[], colIndex: number, order: string) => any[]
+    customSort?: (
+        data: DataItemState[],
+        colIndex: number,
+        order: string,
+        state: DataTableState<Row>
+    ) => DataItemState[]
 
     /**
      * Render a footer under the table body but above the table's standard footer.
      * This is useful for creating footers for individual columns.
      *
-     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-footer/index.tsx
+     * @see https://mui-datatable-delight.vercel.app/examples/customize-footer
      */
-    customTableBodyFooterRender?: (options: {
-        data: any[]
-        selectableRows: SelectableRows
-        columns: any[]
-    }) => any
+    customTableBodyFooterRender?: (
+        state: DataTableState<Row>,
+        options: DataTableOptions<Row>
+    ) => ReactNode
 
     /**
      * Render a custom Toolbar.
      *
-     * @see https://github.com/sensasi-delight/mui-datatable-delight/blob/main/examples/customize-toolbar/CustomToolbar.tsx
+     * @see https://mui-datatable-delight.vercel.app/examples/customize-toolbar/CustomToolbar.tsx
      */
-    customToolbar?: (data: {
-        displayData: DataTableState['displayData']
-    }) => ReactNode
+    customToolbar?: (data: { displayData: DisplayDataState<Row> }) => ReactNode
 
     /**
      * Render a custom selected rows ToolBar.
@@ -673,10 +722,10 @@ interface DataTableCustomsOptions {
      */
     customSelectedRowsToolbar?: (
         selectedRows: {
-            data: Array<{ index: number; dataIndex: number }>
-            lookup: { [key: number]: boolean }
+            data: SelectedRowDataState[]
+            lookup: Record<number, boolean>
         },
-        displayData: DisplayData,
+        displayData: DisplayDataState<Row>,
         setSelectedRows: (rows: number[]) => void
     ) => ReactNode
 
@@ -690,97 +739,10 @@ interface DataTableCustomsOptions {
      */
     customToolbarSelect?: (
         selectedRows: {
-            data: Array<{ index: number; dataIndex: number }>
-            lookup: { [key: number]: boolean }
+            data: SelectedRowDataState[]
+            lookup: Record<number, boolean>
         },
-        displayData: DisplayData,
+        displayData: DisplayDataState<Row>,
         setSelectedRows: (rows: number[]) => void
     ) => ReactNode
 }
-
-//     /** Options used to describe table */
-//     options: PropTypes.shape({
-//         caseSensitive: PropTypes.bool,
-//         columnOrder: PropTypes.array,
-//         count: PropTypes.number,
-//         confirmFilters: PropTypes.bool,
-//         consoleWarnings: PropTypes.bool,
-//         draggableColumns: PropTypes.object,
-//         enableNestedDataAccess: PropTypes.string,
-//         expandableRows: PropTypes.bool,
-//         expandableRowsHeader: PropTypes.bool,
-//         expandableRowsOnClick: PropTypes.bool,
-//         disableToolbarSelect: PropTypes.bool,
-//         download: PropTypes.oneOf([
-//             true,
-//             false,
-//             'true',
-//             'false',
-//             'disabled'
-//         ]),
-//         downloadOptions: PropTypes.shape({
-//             filename: PropTypes.string,
-//             separator: PropTypes.string,
-//             filterOptions: PropTypes.shape({
-//                 useDisplayedColumnsOnly: PropTypes.bool,
-//                 useDisplayedRowsOnly: PropTypes.bool
-//             })
-//         }),
-//         filter: PropTypes.oneOf([true, false, 'true', 'false', 'disabled']),
-//         filterArrayFullMatch: PropTypes.bool,
-//         fixedHeader: PropTypes.bool,
-//         fixedSelectColumn: PropTypes.bool,
-//         getTextLabels: PropTypes.func,
-//         isRowExpandable: PropTypes.func,
-//         isRowSelectable: PropTypes.func,
-//         jumpToPage: PropTypes.bool,
-//         onFilterChange: PropTypes.func,
-//         onFilterChipClose: PropTypes.func,
-//         onFilterConfirm: PropTypes.func,
-//         onFilterDialogOpen: PropTypes.func,
-//         onFilterDialogClose: PropTypes.func,
-//         onRowClick: PropTypes.func,
-//         onRowExpansionChange: PropTypes.func,
-//         onRowSelectionChange: PropTypes.func,
-//         page: PropTypes.number,
-//         pagination: PropTypes.bool,
-//         print: PropTypes.oneOf([true, false, 'true', 'false', 'disabled']),
-//         selectableRows: PropTypes.oneOfType([
-//             PropTypes.bool,
-//             PropTypes.oneOf(['none', 'single', 'multiple'])
-//         ]),
-//         selectableRowsHeader: PropTypes.bool,
-//         selectableRowsHideCheckboxes: PropTypes.bool,
-//         selectableRowsOnClick: PropTypes.bool,
-//         serverSide: PropTypes.bool,
-//         tableBodyHeight: PropTypes.string,
-//         tableBodyMaxHeight: PropTypes.string,
-//         renderExpandableRow: PropTypes.func,
-//         resizableColumns: PropTypes.oneOfType([
-//             PropTypes.bool,
-//             PropTypes.object
-//         ]),
-//         responsive: PropTypes.oneOf([
-//             'standard',
-//             'vertical',
-//             'verticalAlways',
-//             'simple'
-//         ]),
-//         rowHover: PropTypes.bool,
-//         rowsExpanded: PropTypes.array,
-//         rowsPerPage: PropTypes.number,
-//         rowsPerPageOptions: PropTypes.array,
-//         rowsSelected: PropTypes.array,
-//         setFilterChipProps: PropTypes.func,
-//         setRowProps: PropTypes.func,
-//         setTableProps: PropTypes.func,
-//         sort: PropTypes.bool,
-//         storageKey: PropTypes.string,
-//         viewColumns: PropTypes.oneOf([
-//             true,
-//             false,
-//             'true',
-//             'false',
-//             'disabled'
-//         ])
-//     }),

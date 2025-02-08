@@ -1,81 +1,120 @@
 'use client'
 
-import { useState, type ReactNode, useEffect, useRef } from 'react'
-import DEFAULT_STATE from '../../statics/default-state'
-import { handleDeprecatedOptions } from '../../function/handle-deprecated-options'
-import DataTableContext from '../../context'
-import { DEFAULT_ICONS } from '../../statics/default-icons'
-import { processTextLabels } from '../../function/process-text-labels'
-import { DEFAULT_OPTIONS } from '../../statics/default-options'
+// vendors
+import {
+    type Context,
+    type ReactNode,
+    useState,
+    useEffect,
+    useRef
+} from 'react'
+import isEqual from 'react-fast-compare'
 // globals
-import type { DataTableProps } from '@src/types'
-import type { DataTableOptions, DataTableState } from '@src/index'
+import type { DataTableProps } from '@src/data-table.props'
+import type { DataTableState } from '@src/types/state'
+import type { DataTableOptions } from '@src/types/options'
 import { load, save, warnInfo } from '@src/functions'
 import getNewStateOnDataChange from '@src/functions/get-new-state-on-data-change'
 import TableAction from '@src/enums/table-action'
+// locals
+import type ContextValue from '../../types/context-value'
+import { DEFAULT_ICONS } from '../../statics/default-icons'
+import { DEFAULT_OPTIONS } from '../../statics/default-options'
+import { handleDeprecatedOptions } from '../../function/handle-deprecated-options'
+import { processTextLabels } from '../../function/process-text-labels'
+import DEFAULT_STATE from '../../statics/default-state'
+import DataTableContext from '../../context'
 
-export default function DataTableContextProvider({
+export default function DataTableContextProvider<DataRowItemType>({
     datatableProps,
     children
 }: {
-    datatableProps: DataTableProps
+    datatableProps: DataTableProps<DataRowItemType>
     children: ReactNode
 }): ReactNode {
     const draggableHeadCellRefs = useRef<HTMLTableCellElement[]>([])
+    const lastDatatableProps = useRef(datatableProps)
+    const options = useRef<DataTableOptions<DataRowItemType>>(
+        getConstructedOption(datatableProps?.options)
+    )
     const tableHeadCellElements = useRef<HTMLTableCellElement[]>([])
     const tableRef = useRef<HTMLTableElement>(null)
 
-    const lastDatatableProps = useRef<DataTableProps>(datatableProps)
-
-    const restoredState = datatableProps.options?.storageKey
-        ? load(datatableProps.options.storageKey)
-        : undefined
-
-    function getInitialState() {
-        const newState = getNewStateOnDataChange(
-            datatableProps,
-            1,
-            true,
-            datatableProps.options ?? {},
-            {
-                ...DEFAULT_STATE,
-                ...getStateFromDataTableOptionsProp(datatableProps.options),
-                ...restoredState
-            },
-            () => {}
-        )
-
-        datatableProps.options?.onTableInit?.(TableAction.INITIALIZED, newState)
-
-        return newState
-    }
-
-    const [state, setState] = useState<DataTableState>(getInitialState)
+    const [state, setState] = useState<DataTableState<DataRowItemType>>(() =>
+        getInitialState(datatableProps, options.current)
+    )
 
     useEffect(() => {
-        setState(prev => {
-            const isDataTablePropsChanged = (
-                Object.keys(datatableProps) as (keyof DataTableProps)[]
-            ).some(
-                key => lastDatatableProps.current[key] !== datatableProps[key]
-            )
-
-            if (!isDataTablePropsChanged) {
-                return prev
-            }
-
-            // store last datatableProps for comparison
+        if (
+            datatableProps.data !== lastDatatableProps.current.data ||
+            datatableProps.columns !== lastDatatableProps.current.columns ||
+            datatableProps.options !== lastDatatableProps.current.options
+        ) {
             lastDatatableProps.current = datatableProps
 
-            return getInitialState()
-        })
+            options.current = {
+                ...options.current,
+                ...datatableProps.options
+            }
+
+            let didDataUpdate =
+                datatableProps.data !== lastDatatableProps.current.data
+
+            if (datatableProps.data && lastDatatableProps.current.data) {
+                didDataUpdate =
+                    didDataUpdate &&
+                    datatableProps.data.length ===
+                        lastDatatableProps.current.data.length
+            }
+
+            setState(prev =>
+                getNewStateOnDataChange(
+                    datatableProps,
+                    1,
+                    didDataUpdate,
+                    options.current,
+                    prev,
+                    setState
+                )
+            )
+        }
     }, [datatableProps])
 
-    const options = getConstructedOption(datatableProps?.options)
+    const [forwardTableChange, setForwardTableChange] = useState<{
+        action: TableAction
+        state: DataTableState<DataRowItemType>
+    }>()
 
-    handleDeprecatedOptions(datatableProps, options)
+    /**
+     * Forward table change after the state has been committed to prevent
+     * it re-written inside the `onTableChange` callback before the state has been committed.
+     */
+    useEffect(() => {
+        if (forwardTableChange) {
+            lastDatatableProps.current.options?.onTableChange?.(
+                forwardTableChange.action,
+                forwardTableChange.state
+            )
+
+            if (lastDatatableProps.current.options?.storageKey) {
+                save(
+                    lastDatatableProps.current.options.storageKey,
+                    forwardTableChange.state
+                )
+            }
+
+            setForwardTableChange(undefined)
+        }
+    }, [forwardTableChange])
+
+    handleDeprecatedOptions(datatableProps, options.current)
+
+    const _DataTableContext = DataTableContext as Context<
+        ContextValue<DataRowItemType>
+    >
+
     return (
-        <DataTableContext.Provider
+        <_DataTableContext.Provider
             value={{
                 components: datatableProps.components ?? {},
                 draggableHeadCellRefs,
@@ -85,60 +124,57 @@ export default function DataTableContextProvider({
                 },
                 onAction(action, newPartialState) {
                     setState(prev => {
-                        // const isStateChange = (
-                        //     Object.keys(
-                        //         newPartialState
-                        //     ) as (keyof DataTableState)[]
-                        // ).some(key => prev[key] !== newPartialState[key])
+                        const changedKeys = Object.keys(
+                            newPartialState
+                        ) as (keyof typeof newPartialState)[]
 
-                        // if (!isStateChange) {
-                        //     return prev
-                        // }
+                        const isChanged = changedKeys.some(
+                            key => !isEqual(prev[key], newPartialState[key])
+                        )
+
+                        if (!isChanged) return prev
 
                         const newState = {
                             ...prev,
                             ...newPartialState
                         }
 
-                        datatableProps.options?.onTableChange?.(
+                        setForwardTableChange({
                             action,
-                            newState
-                        )
-
-                        if (datatableProps.options?.storageKey)
-                            save(datatableProps.options.storageKey, newState)
+                            state: newState
+                        })
 
                         return newState
                     })
                 },
-                options,
+                options: options.current,
                 props: datatableProps,
                 setState,
+                state,
                 tableHeadCellElements,
                 tableRef,
-                state,
                 textLabels: processTextLabels(datatableProps.textLabels)
             }}
         >
             {children}
-        </DataTableContext.Provider>
+        </_DataTableContext.Provider>
     )
 }
 
 /**
  * @todo RENAME THIS TO SOMETHING CLEARER
  */
-function getStateFromDataTableOptionsProp({
+function getStateFromDataTableOptionsProp<T>({
     rowsPerPage,
     page,
     rowsSelected,
     rowsPerPageOptions
-}: DataTableProps['options'] = {}) {
+}: DataTableProps<T>['options'] = {}): Partial<DataTableState<T>> {
     const optState: {
-        page?: DataTableState['page']
-        rowsPerPage?: DataTableState['rowsPerPage']
-        rowsPerPageOptions?: DataTableState['rowsPerPageOptions']
-        rowsSelected?: DataTableState['rowsSelected']
+        page?: DataTableState<T>['page']
+        rowsPerPage?: DataTableState<T>['rowsPerPage']
+        rowsPerPageOptions?: DataTableState<T>['rowsPerPageOptions']
+        rowsSelected?: DataTableState<T>['rowsSelected']
     } = {}
 
     if (rowsPerPage) {
@@ -157,7 +193,7 @@ function getStateFromDataTableOptionsProp({
         optState.rowsPerPageOptions = rowsPerPageOptions
     }
 
-    function validateOptions(options: DataTableOptions) {
+    function validateOptions<T>(options: Partial<DataTableOptions<T>>) {
         if (options.serverSide && options.onTableChange === undefined) {
             throw Error(
                 'onTableChange callback must be provided when using serverSide option'
@@ -187,15 +223,41 @@ function getStateFromDataTableOptionsProp({
     return optState
 }
 
-function getConstructedOption(
-    optionsFromProp: DataTableProps['options']
-): DataTableOptions {
+function getConstructedOption<T>(
+    optionsFromProp: DataTableProps<T>['options']
+): DataTableOptions<T> {
     return {
         ...DEFAULT_OPTIONS,
-        ...(optionsFromProp ?? {}),
+        ...optionsFromProp,
         downloadOptions: {
             ...DEFAULT_OPTIONS.downloadOptions,
             ...optionsFromProp?.downloadOptions
         }
     }
+}
+
+function getInitialState<T>(
+    datatableProps: DataTableProps<T>,
+    options: DataTableOptions<T>
+): DataTableState<T> {
+    const restoredState = datatableProps.options?.storageKey
+        ? load<T>(datatableProps.options.storageKey)
+        : undefined
+
+    const newState = getNewStateOnDataChange<T>(
+        datatableProps,
+        1,
+        true,
+        options,
+        {
+            ...DEFAULT_STATE,
+            ...getStateFromDataTableOptionsProp(datatableProps.options),
+            ...restoredState
+        },
+        undefined
+    )
+
+    options?.onTableInit?.(TableAction.INITIALIZED, newState)
+
+    return newState
 }

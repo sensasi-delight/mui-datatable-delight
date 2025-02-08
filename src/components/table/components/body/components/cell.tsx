@@ -1,12 +1,10 @@
 'use client'
 
 // vendors
-import { useCallback } from 'react'
+import { type ReactNode } from 'react'
 import TableCell, { type TableCellProps } from '@mui/material/TableCell'
 import { tss } from 'tss-react/mui'
-import type { MUIDataTableBodyCell } from 'mui-datatables'
 // globals
-import type { DataTableState } from '@src/types/state'
 import useDataTableContext from '@src/hooks/use-data-table-context'
 import ComponentClassName from '@src/enums/class-name'
 
@@ -19,36 +17,19 @@ export function TableBodyCell({
     className,
     print,
     ...otherProps
-}: Omit<MUIDataTableBodyCell & TableCellProps, 'options'> & {
-    print: DataTableState['columns'][0]['print']
-}) {
+}: {
+    children: ReactNode
+    classes?: object | undefined
+    className?: string | undefined
+    colIndex: number
+    columnHeader?: ReactNode
+    dataIndex: number
+    otherProps?: unknown
+    rowIndex: number
+    print: boolean
+} & TableCellProps) {
     const { options, textLabels } = useDataTableContext()
     const { classes, cx } = useStyles()
-
-    const handleClick = useCallback<Required<TableCellProps>['onClick']>(
-        event => {
-            if (
-                colIndex !== undefined &&
-                rowIndex !== undefined &&
-                dataIndex !== undefined
-            ) {
-                options?.onCellClick?.(children, {
-                    colIndex,
-                    rowIndex,
-                    dataIndex,
-                    event
-                })
-            } else {
-                console.error(`
-                    Required param is undefined:
-                    - colIndex: ${colIndex}
-                    - rowIndex: ${rowIndex}
-                    - dataIndex: ${dataIndex}
-                    `)
-            }
-        },
-        [options?.onCellClick, children, colIndex, rowIndex, dataIndex]
-    )
 
     const cells = [
         <div
@@ -114,7 +95,7 @@ export function TableBodyCell({
                 'scrollMaxHeight',
                 'scrollFullHeight',
                 'scrollFullHeightFullWidth'
-            ].indexOf(options.responsive) !== -1)
+            ].includes(options.responsive))
             ? cells.slice(1, 2)
             : cells
 
@@ -126,7 +107,14 @@ export function TableBodyCell({
 
     return (
         <TableCell
-            onClick={handleClick}
+            onClick={event => {
+                options?.onCellClick?.(children, {
+                    colIndex,
+                    rowIndex,
+                    dataIndex,
+                    event
+                })
+            }}
             data-column-index={colIndex}
             className={cx(
                 classes.root,

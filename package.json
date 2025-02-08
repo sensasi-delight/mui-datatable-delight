@@ -1,6 +1,6 @@
 {
     "name": "mui-datatable-delight",
-    "version": "0.0.0-alpha.2",
+    "version": "0.0.0-experimental.43",
     "description": "A responsive DataTable component built with MUI for React-based project.",
     "files": [
         "./dist"
@@ -51,12 +51,10 @@
         "@rollup/plugin-babel": "^6.0.4",
         "@rollup/plugin-commonjs": "^28.0.2",
         "@rollup/plugin-node-resolve": "^16.0.0",
-        "@rollup/plugin-terser": "^0.4.4",
         "@rollup/plugin-typescript": "^12.1.2",
         "@testing-library/dom": "^10.4.0",
         "@testing-library/react": "^16.1.0",
         "@types/mdx": "^2.0.13",
-        "@types/mui-datatables": "^4.3.12",
         "@types/prismjs": "^1.26.5",
         "@types/react": "^19.0.8",
         "@vitejs/plugin-react-swc": "^3.7.2",
@@ -99,6 +97,7 @@
         "@mui/material": "^5.9.3 || ^6.0.0",
         "react": "^17.0.2 || ^18.0.0 || ^19.0.0",
         "react-dom": "^17.0.2 || ^18.0.0 || ^19.0.0",
+        "react-fast-compare": "^3.2.2",
         "react-to-print": "^3.0.5",
         "redux": "^4.2.0",
         "tss-react": "^4.9.14"

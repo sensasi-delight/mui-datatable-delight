@@ -1,10 +1,4 @@
-import type {
-    MUIDataTableTextLabelsFilter,
-    MUIDataTableTextLabelsPagination,
-    MUIDataTableTextLabelsSelectedRows,
-    MUIDataTableTextLabelsToolbar,
-    MUIDataTableTextLabelsViewColumns
-} from 'mui-datatables'
+import type { ReactNode } from 'react'
 
 /*
  * Default text labels.
@@ -44,14 +38,37 @@ export const DEFAULT_TEXT_LABELS: TextLabelsType = {
     }
 }
 
-interface TextLabelsType {
+export interface TextLabelsType {
     body: {
-        noMatch: string | React.ReactNode
+        noMatch: string | ReactNode
         toolTip: string
     }
-    filter: MUIDataTableTextLabelsFilter
-    pagination: MUIDataTableTextLabelsPagination
-    selectedRows: MUIDataTableTextLabelsSelectedRows
-    toolbar: MUIDataTableTextLabelsToolbar
-    viewColumns: MUIDataTableTextLabelsViewColumns
+    filter: {
+        all: string
+        reset: string
+        title: string
+    }
+    pagination: {
+        displayRows: string
+        next: string
+        previous: string
+        rowsPerPage: string
+        jumpToPage: string
+    }
+    selectedRows: {
+        delete: string
+        deleteAria: string
+        text: string
+    }
+    toolbar: {
+        downloadCsv: string
+        filterTable: string
+        print: string
+        search: string
+        viewColumns: string
+    }
+    viewColumns: {
+        title: string
+        titleAria: string
+    }
 }
