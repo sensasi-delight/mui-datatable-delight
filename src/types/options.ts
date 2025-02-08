@@ -280,7 +280,7 @@ export interface DataTableOptions<Row = DefaultRow>
         data: DataItemState[]
     ) =>
         | {
-              data: DisplayDataState
+              data: DisplayDataState<Row>
               columns: ColumnState<Row>[]
           }
         | string
@@ -292,7 +292,7 @@ export interface DataTableOptions<Row = DefaultRow>
         filterList: DataTableState<Row>['filterList'],
         type: FilterTypeType | 'reset',
         changedColumnIndex: number | null,
-        displayData: DisplayDataState
+        displayData: DisplayDataState<Row>
     ) => void
 
     /**
@@ -713,7 +713,7 @@ interface DataTableCustomsOptions<Row> {
      *
      * @see https://mui-datatable-delight.vercel.app/examples/customize-toolbar/CustomToolbar.tsx
      */
-    customToolbar?: (data: { displayData: DisplayDataState }) => ReactNode
+    customToolbar?: (data: { displayData: DisplayDataState<Row> }) => ReactNode
 
     /**
      * Render a custom selected rows ToolBar.
@@ -725,7 +725,7 @@ interface DataTableCustomsOptions<Row> {
             data: SelectedRowDataState[]
             lookup: Record<number, boolean>
         },
-        displayData: DisplayDataState,
+        displayData: DisplayDataState<Row>,
         setSelectedRows: (rows: number[]) => void
     ) => ReactNode
 
@@ -742,7 +742,7 @@ interface DataTableCustomsOptions<Row> {
             data: SelectedRowDataState[]
             lookup: Record<number, boolean>
         },
-        displayData: DisplayDataState,
+        displayData: DisplayDataState<Row>,
         setSelectedRows: (rows: number[]) => void
     ) => ReactNode
 }

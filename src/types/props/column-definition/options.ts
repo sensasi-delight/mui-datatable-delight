@@ -52,6 +52,7 @@ export interface ColumnDefinitionOptions<T> {
 
     /**
      * Similar to and performing better than {@link ColumnDefinitionOptions.customBodyRender | `customBodyRender`}, however with the following caveats:
+     *
      * 1. The value returned from this function is not used for filtering, so the filter dialog will use the raw data from the data array.
      * 2. This method only gives you the dataIndex and rowIndex, leaving you to lookup the column value.
      *
@@ -59,7 +60,14 @@ export interface ColumnDefinitionOptions<T> {
      * [Example](https://mui-datatable-delight.vercel.app/examples/large-data-set)
      */
     customBodyRenderLite?: (
+        /**
+         * The index of the item in the data array.
+         */
         dataIndex: number,
+
+        /**
+         * The index of the row in the current page table.
+         */
         rowIndex: number
     ) => JSX.Element | ReactNode
 

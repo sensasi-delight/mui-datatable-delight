@@ -106,13 +106,13 @@ const useStyles = tss
         }
     }))
 
-function buildRows<T>(
-    count: DataTableState<T>['count'],
-    data: DisplayDataState,
-    options: DataTableOptions<T>,
-    page: DataTableState<T>['page'],
-    rowsPerPage: DataTableState<T>['rowsPerPage']
-): DisplayDataState {
+function buildRows<Row>(
+    count: DataTableState<Row>['count'],
+    data: DisplayDataState<Row>,
+    options: DataTableOptions<Row>,
+    page: DataTableState<Row>['page'],
+    rowsPerPage: DataTableState<Row>['rowsPerPage']
+): DisplayDataState<Row> {
     if (options.serverSide) return data.length ? data : []
 
     const highestPageInRange = getPageValue(count, rowsPerPage, page)
@@ -143,26 +143,26 @@ function buildRows<T>(
     return rows.length ? rows : []
 }
 
-function isRowExpanded<T>(
+function isRowExpanded<Row>(
     dataIndex: number,
-    expandedRows: DataTableState<T>['expandedRows']
+    expandedRows: DataTableState<Row>['expandedRows']
 ): boolean {
     return expandedRows.lookup[dataIndex] ?? false
 }
 
-function getIsRowSelectable<T>(
+function getIsRowSelectable<Row>(
     dataIndex: number,
-    selectedRows: DataTableState<T>['selectedRows'],
-    options: DataTableOptions<T>
+    selectedRows: DataTableState<Row>['selectedRows'],
+    options: DataTableOptions<Row>
 ) {
     return options.isRowSelectable?.(dataIndex, selectedRows) ?? true
 }
 
-function getRowIndex<T>(
+function getRowIndex<Row>(
     index: number,
-    page: DataTableState<T>['page'],
-    rowsPerPage: DataTableState<T>['rowsPerPage'],
-    options: DataTableOptions<T>
+    page: DataTableState<Row>['page'],
+    rowsPerPage: DataTableState<Row>['rowsPerPage'],
+    options: DataTableOptions<Row>
 ) {
     if (options.serverSide) {
         return index
@@ -173,13 +173,13 @@ function getRowIndex<T>(
     return startIndex + index
 }
 
-function handleRowSelect<T>(
+function handleRowSelect<Row>(
     data: SelectedRowDataState,
     event: React.SyntheticEvent,
-    options: DataTableOptions<T>,
-    previousSelectedRow: DataTableState<T>['previousSelectedRow'],
-    selectRowsFromState: DataTableState<T>['selectedRows'],
-    displayData: DisplayDataState,
+    options: DataTableOptions<Row>,
+    previousSelectedRow: DataTableState<Row>['previousSelectedRow'],
+    selectRowsFromState: DataTableState<Row>['selectedRows'],
+    displayData: DisplayDataState<Row>,
     selectRowUpdate: SelectRowUpdateType
 ) {
     const isWithShiftKey =
@@ -257,7 +257,7 @@ function handleRowSelect<T>(
     selectRowUpdate('cell', data, shiftAdjacentRows)
 }
 
-function RenderRow<T>({
+function RenderRow<Row>({
     rowIndex,
     data: { data: row, dataIndex },
     selectedRows,
@@ -266,9 +266,9 @@ function RenderRow<T>({
     selectRowUpdate
 }: {
     rowIndex: number
-    data: DisplayDataState[number]
-    selectedRows: DataTableState<T>['selectedRows']
-    columns: ColumnState<T>[]
+    data: DisplayDataState<Row>[number]
+    selectedRows: DataTableState<Row>['selectedRows']
+    columns: ColumnState<Row>[]
     columnOrder: number[]
     selectRowUpdate: SelectRowUpdateType
 }) {
@@ -303,7 +303,7 @@ function RenderRow<T>({
         let shouldCollapseExpandedRow = false
 
         let hasRemovedRow = false
-        let removedRow: DataTableState<T>['expandedRows']['data'] = []
+        let removedRow: DataTableState<Row>['expandedRows']['data'] = []
 
         for (const item of expandedRowsData) {
             if (item?.dataIndex === dataIndex) {
@@ -462,19 +462,19 @@ function RenderRow<T>({
     )
 }
 
-function handleRowClick<T>(
+function handleRowClick<Row>(
     row: ReactNode[],
     data: {
         rowIndex: number
         dataIndex: number
     },
     event: React.MouseEvent<HTMLTableRowElement, globalThis.MouseEvent>,
-    options: DataTableOptions<T>,
+    options: DataTableOptions<Row>,
     toggleExpandRow: (params: { index: number; dataIndex: number }) => void,
-    selectedRows: DataTableState<T>['selectedRows'],
-    expandedRows: DataTableState<T>['expandedRows'],
-    previousSelectedRow: DataTableState<T>['previousSelectedRow'],
-    displayData: DataTableState<T>['displayData'],
+    selectedRows: DataTableState<Row>['selectedRows'],
+    expandedRows: DataTableState<Row>['expandedRows'],
+    previousSelectedRow: DataTableState<Row>['previousSelectedRow'],
+    displayData: DataTableState<Row>['displayData'],
     selectRowUpdate: SelectRowUpdateType
 ) {
     const clickedElement = event.target as HTMLElement

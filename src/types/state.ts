@@ -11,14 +11,14 @@ interface ExpandedRows {
     lookup: Record<number, boolean>
 }
 
-export interface DataTableState<T> {
+export interface DataTableState<Row> {
     activeColumn: number | null
 
     announceText?: string
 
     columnOrder: number[]
 
-    columns: ColumnState<T>[]
+    columns: ColumnState<Row>[]
 
     curExpandedRows?: ExpandedRows['data']
 
@@ -26,7 +26,7 @@ export interface DataTableState<T> {
 
     data: DataItemState[]
 
-    displayData: DisplayDataState
+    displayData: DisplayDataState<Row>
 
     expandedRows: ExpandedRows
 
@@ -55,7 +55,7 @@ export interface DataTableState<T> {
      */
     searchText: string
 
-    searchProps: DataTableSearchOptions<T>['searchProps']
+    searchProps: DataTableSearchOptions<Row>['searchProps']
 
     /**
      * Current row selected or not
