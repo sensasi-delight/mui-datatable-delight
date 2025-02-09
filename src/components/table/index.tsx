@@ -16,7 +16,7 @@ import TableBody from './components/body'
 /**
  * Main table component
  *
- * @category  Components
+ * @category  Component
  */
 export default function Table({ selectRowUpdate }: Props): ReactNode {
     const { classes, cx } = useStyles()
