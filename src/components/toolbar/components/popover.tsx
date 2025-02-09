@@ -5,7 +5,8 @@ import {
     type ReactNode,
     useEffect,
     useRef,
-    useState
+    useState,
+    type ReactElement
 } from 'react'
 // materials
 import IconButton, { type IconButtonProps } from '@mui/material/IconButton'
@@ -16,6 +17,11 @@ import type { TransitionProps } from '@mui/material/transitions'
 import { tss } from 'tss-react/mui'
 import ComponentClassName from '@src/enums/class-name'
 
+/**
+ * A `Popover` component that is triggered by an `IconButton` with a tooltip.
+ *
+ * @category  Component
+ */
 export function ToolbarPopover({
     children,
     hide,
@@ -23,7 +29,7 @@ export function ToolbarPopover({
     onPopoverExited,
     slotProps,
     title
-}: ToolbarPopoverProps) {
+}: ToolbarPopoverProps): ReactElement {
     const { classes } = useStyles()
     const [isOpen, setIsOpen] = useState(false)
     const anchorEl = useRef<EventTarget & HTMLSpanElement>(null)

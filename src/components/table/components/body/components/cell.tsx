@@ -1,13 +1,18 @@
 'use client'
 
 // vendors
-import { type ReactNode } from 'react'
+import { type ReactElement, type ReactNode } from 'react'
 import TableCell, { type TableCellProps } from '@mui/material/TableCell'
 import { tss } from 'tss-react/mui'
 // globals
 import useDataTableContext from '@src/hooks/use-data-table-context'
 import ComponentClassName from '@src/enums/class-name'
 
+/**
+ * Table Body Cell.
+ *
+ * @category  Component
+ */
 export function TableBodyCell({
     children,
     colIndex,
@@ -27,7 +32,7 @@ export function TableBodyCell({
     otherProps?: unknown
     rowIndex: number
     print: boolean
-} & TableCellProps) {
+} & TableCellProps): ReactElement {
     const { options, textLabels } = useDataTableContext()
     const { classes, cx } = useStyles()
 

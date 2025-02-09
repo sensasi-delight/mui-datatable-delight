@@ -7,6 +7,8 @@ import TableAction from '@src/enums/table-action'
 
 /**
  * This hook handles the dragging and dropping effects that occur for columns.
+ *
+ * @category  Hook
  */
 export default function useColumnDrop(opts: OptsType) {
     const { draggableHeadCellRefs, onAction, options, state, tableRef } =
@@ -50,10 +52,12 @@ interface OptsType {
 /**
  * Given the head cell refs, column order, and columns, this function builds an array of column models.
  * A column model is an object with the following properties:
- *      - left: the distance from the left edge of the table container to the left edge of the column
- *      - width: the width of the column
- *      - columnIndex: the index of the column in the columns array
- *      - ref: a reference to the column's html element
+ *
+ *   - left: the distance from the left edge of the table container to the left edge of the column
+ *   - width: the width of the column
+ *   - columnIndex: the index of the column in the columns array
+ *   - ref: a reference to the column's html element
+ *
  * The column model is used to calculate the position of the drag preview.
  *
  * NOTE: EXPORTED ONLY FOR TESTING

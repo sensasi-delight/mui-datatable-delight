@@ -1,23 +1,29 @@
 'use client'
 
 // vendors
+import { tss } from 'tss-react/mui'
 import InputBase from '@mui/material/InputBase'
 import MenuItem from '@mui/material/MenuItem'
 import Select from '@mui/material/Select'
 import Typography from '@mui/material/Typography'
-import { tss } from 'tss-react/mui'
 // globals
-import useDataTableContext from '../../../hooks/use-data-table-context'
+import useDataTableContext from '@src/hooks/use-data-table-context'
 // global enums
-import ClassName from '../../../enums/class-name'
+import type { ReactElement } from 'react'
+import ClassName from '@src/enums/class-name'
 
+/**
+ * Component handling the jump to page feature.
+ *
+ * @category  Component
+ */
 export function DataTableFooterJumpToPage({
     rowsPerPage,
     changePage
 }: {
     rowsPerPage: number
     changePage: (pageNo: number) => void
-}) {
+}): ReactElement {
     const { state, textLabels } = useDataTableContext()
     const { classes, cx } = useStyles()
 

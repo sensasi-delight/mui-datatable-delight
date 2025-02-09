@@ -1,11 +1,18 @@
 'use client'
 
+// vendors
+import type { ReactNode } from 'react'
 import { tss } from 'tss-react/mui'
-import useDataTableContext from '../../hooks/use-data-table-context'
-// global enums
-import ClassName from '../../enums/class-name'
+// globals
+import useDataTableContext from '@src/hooks/use-data-table-context'
+import ClassName from '@src/enums/class-name'
 
-export default function AnnounceText() {
+/**
+ * Announce text
+ *
+ * @category  Component
+ */
+export default function AnnounceText(): ReactNode {
     const { classes } = useStyles()
     const { state } = useDataTableContext()
 

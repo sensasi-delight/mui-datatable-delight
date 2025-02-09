@@ -14,11 +14,13 @@ import type { FilterUpdateType } from '@src/types/filter-update'
 const CLASS_ID = 'datatable-delight--filter-list'
 
 /**
- * SHOW LIST OF VALUES OF FILTERS THAT APPLIED
+ * Display a list of currently applied filters.
+ *
+ * @category  Component
  */
 export default function FilteredValuesList<T>({
     filterUpdate
-}: TableFilterListProps<T>) {
+}: TableFilterListProps<T>): ReactNode {
     const { classes, cx } = useStyles()
     const { options, state } = useDataTableContext<T>()
     const { serverSide } = options

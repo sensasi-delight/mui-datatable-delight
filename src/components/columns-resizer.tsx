@@ -1,6 +1,11 @@
 'use client'
 
-import React, { type JSX, useEffect, useState, type RefObject } from 'react'
+import React, {
+    type RefObject,
+    type ReactNode,
+    useEffect,
+    useState
+} from 'react'
 import { tss } from 'tss-react/mui'
 // locals
 import useDataTableContext from '@src/hooks/use-data-table-context'
@@ -9,9 +14,11 @@ import ComponentClassName from '@src/enums/class-name'
 /**
  * Column resizer/slider component.
  *
+ * @category  Component
+ *
  * @see https://mui-datatable-delight.vercel.app/docs/features/resizable-columns
  */
-export default function ColumnsResizer(): JSX.Element {
+export default function ColumnsResizer(): ReactNode {
     const tssHook = useStyles()
     // const classes = classesFromProp ?? tssHook.classes
     const classes = tssHook.classes

@@ -2,7 +2,7 @@
 
 // vendors
 import { tss } from 'tss-react/mui'
-import { useState } from 'react'
+import { type ReactNode, useState } from 'react'
 // materials
 import IconButton from '@mui/material/IconButton'
 import Box from '@mui/material/Box'
@@ -15,23 +15,22 @@ import getDisplayData from '@src/functions/get-new-state-on-data-change/get-disp
 import ClassName from '@src/enums/class-name'
 import TableAction from '@src/enums/table-action'
 // sub-components
+import type { FilterUpdateType } from '@src/types/filter-update'
 import { DataTableToolbarSearch } from './components/search-text-field'
 import { ToolbarPopover } from './components/popover'
 import { ToolbarPrintButton } from './components/print-button'
 import { ToolbarDownloadButton } from './components/download-button'
 import ColumnVisibilitiesBox from './components/column-visibilities-box'
 import DataFilterBox from './components/data-filter-box'
-import type { FilterUpdateType } from '@src/types/filter-update'
 
 /**
- * DataTable Delight Toolbar
+ * Toolbar component.
  *
- * @todo rename this to `<Toolbar />
- * @todo use named export instead default
+ * @category  Component
  *
- * @see {@link http://mui-datatable-delight.vercel.app/examples/customize-toolbar|Customize Toolbar Example}.
+ * @see  {@link http://mui-datatable-delight.vercel.app/examples/customize-toolbar | Customize Toolbar Example}.
  */
-export default function Toolbar(props: ToolbarProps) {
+export default function Toolbar(props: ToolbarProps): ReactNode {
     const {
         components,
         icons,

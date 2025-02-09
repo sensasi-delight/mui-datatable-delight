@@ -1,7 +1,7 @@
 'use client'
 
 // vendors
-import { useRef, useState } from 'react'
+import { useRef, useState, type ReactElement } from 'react'
 import { tss } from 'tss-react/mui'
 // materials
 import Grow from '@mui/material/Grow'
@@ -16,7 +16,16 @@ import useDataTableContext from '@src/hooks/use-data-table-context'
 import ClassName from '@src/enums/class-name'
 import TableAction from '@src/enums/table-action'
 
-export function DataTableToolbarSearch({ onHide }: { onHide: () => void }) {
+/**
+ * A component to render a search bar in the DataTable toolbar.
+ *
+ * @category  Component
+ */
+export function DataTableToolbarSearch({
+    onHide
+}: {
+    onHide: () => void
+}): ReactElement {
     const {
         onAction,
         options,

@@ -24,7 +24,14 @@ import ComponentClassName from '@src/enums/class-name'
 import type { ColumnState } from '@src/types/state/column'
 import type { DisplayDataState } from '@src/types/state/display-data'
 
-export default function TableBody({ selectRowUpdate }: DataTableBodyProps) {
+/**
+ * Table body
+ *
+ * @category  Component
+ */
+export default function TableBody({
+    selectRowUpdate
+}: DataTableBodyProps): ReactNode {
     const { classes } = useStyles()
     const { options, state, textLabels } = useDataTableContext()
 

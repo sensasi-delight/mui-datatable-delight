@@ -2,7 +2,7 @@
 
 // materials
 import { tss } from 'tss-react/mui'
-import { useState } from 'react'
+import { useState, type ReactNode } from 'react'
 import Button from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 // globals
@@ -16,9 +16,20 @@ import ComponentClassName from '@src/enums/class-name'
 import ToolbarDataFilterBoxFilters from './components/filter-inputs'
 import type { FilterUpdateType } from '@src/types/filter-update'
 
+/**
+ * ToolbarDataFilterBox is a component that renders a filter dialog box for a data table,
+ * allowing users to apply filters to the table's data. It utilizes the context from the
+ * data table to access current state, options, and actions.
+ *
+ * The component maintains an internal filter list state that reflects the current filters applied.
+ * It also provides a reset functionality to clear all filters and optionally interfaces with
+ * server-side data management if specified in the options.
+ *
+ * @category  Component
+ */
 export default function ToolbarDataFilterBox<T>(
     props: DataTableToolbarFilterProps<T>
-) {
+): ReactNode {
     const {
         onAction,
         options,

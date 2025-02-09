@@ -1,6 +1,6 @@
 // vendors
 import type { ChipProps } from '@mui/material/Chip'
-import type { MouseEvent, ReactNode } from 'react'
+import type { MouseEvent, ReactElement, ReactNode } from 'react'
 import type { TableProps } from '@mui/material/Table'
 import type { TableRowProps } from '@mui/material/TableRow'
 // locals
@@ -670,7 +670,7 @@ interface DataTableCustomsOptions<Row> {
         changeRowsPerPage: (rowPerPage: number) => void,
         changePage: (newPage: number) => void,
         textLabels: typeof DEFAULT_TEXT_LABELS.pagination
-    ) => ReactNode
+    ) => ReactElement
 
     /**
      * Override default row rendering with custom function.

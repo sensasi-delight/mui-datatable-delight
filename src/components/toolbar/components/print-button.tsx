@@ -10,8 +10,17 @@ import Tooltip from '@mui/material/Tooltip'
 import { ICON_BUTTON_DEFAULT_SX } from './statics/icon-button-default-sx'
 import useDataTableContext from '@src/hooks/use-data-table-context'
 import ComponentClassName from '@src/enums/class-name'
+import type { ReactElement } from 'react'
 
-export function ToolbarPrintButton() {
+/**
+ * Renders a print button in the toolbar that triggers the print functionality.
+ * The button is disabled if the print option is set to 'disabled'.
+ * Utilizes the `useReactToPrint` hook to handle the print action.
+ * Displays a tooltip with the print label from the context's text labels.
+ *
+ * @category  Component
+ */
+export function ToolbarPrintButton(): ReactElement {
     const { classes } = useStyles()
     const {
         icons,

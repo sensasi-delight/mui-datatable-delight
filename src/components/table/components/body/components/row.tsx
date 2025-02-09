@@ -2,16 +2,22 @@
 
 import TableRow, { type TableRowProps } from '@mui/material/TableRow'
 import { tss } from 'tss-react/mui'
-import useDataTableContext from '../../../../../hooks/use-data-table-context'
-import ComponentClassName from '../../../../../enums/class-name'
+import useDataTableContext from '@src/hooks/use-data-table-context'
+import ComponentClassName from '@src/enums/class-name'
+import type { ReactElement } from 'react'
 
+/**
+ * Table row component.
+ *
+ * @category  Component
+ */
 export function DataTableBodyRow({
     rowSelected,
     onClick,
     isRowSelectable,
     children,
     className
-}: DataTableBodyRowProps) {
+}: DataTableBodyRowProps): ReactElement {
     const { classes, cx } = useStyles()
     const { options } = useDataTableContext()
 

@@ -1,18 +1,24 @@
 'use client'
 
+// vendors
+import type { ReactNode } from 'react'
+import { tss } from 'tss-react/mui'
 // materials
 import MuiTable from '@mui/material/Table'
-import useDataTableContext from '../../hooks/use-data-table-context'
-import { tss } from 'tss-react/mui'
-// global enums
-import ClassName from '../../enums/class-name'
-// types
+// globals
+import ClassName from '@src/enums/class-name'
+import useDataTableContext from '@src/hooks/use-data-table-context'
+//
 import type { Props } from './types/props'
-// components
 import TableHead from './components/head'
 import TableBody from './components/body'
 
-export default function Table({ selectRowUpdate }: Props) {
+/**
+ * Main table component
+ *
+ * @category  Components
+ */
+export default function Table({ selectRowUpdate }: Props): ReactNode {
     const { classes, cx } = useStyles()
     const {
         components,
