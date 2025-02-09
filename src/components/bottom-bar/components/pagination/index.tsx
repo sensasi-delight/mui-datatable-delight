@@ -1,8 +1,9 @@
 'use client'
 
 // vendors
-import { tss } from 'tss-react/mui'
+import type { ReactElement } from 'react'
 import type { DataTableFooterPaginationProps } from './types/props'
+import { tss } from 'tss-react/mui'
 import TablePagination, {
     type TablePaginationProps
 } from '@mui/material/TablePagination'
@@ -12,11 +13,16 @@ import useDataTableContext from '@src/hooks/use-data-table-context'
 // global enums
 import ClassName from '@src/enums/class-name'
 
+/**
+ * Bottom bar pagination.
+ *
+ * @category  Component
+ */
 export function DataTableFooterPagination({
     rowsPerPage,
     changeRowsPerPage,
     changePage
-}: DataTableFooterPaginationProps) {
+}: DataTableFooterPaginationProps): ReactElement {
     const { state, textLabels } = useDataTableContext()
     const { classes } = useStyles()
 

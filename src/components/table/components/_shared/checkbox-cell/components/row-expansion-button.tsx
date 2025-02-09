@@ -1,11 +1,16 @@
 'use client'
 
+import type { ReactNode } from 'react'
 import IconButton from '@mui/material/IconButton'
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight'
 import RemoveIcon from '@mui/icons-material/Remove'
 
 /**
+ * The row expansion button component.
+ *
  * @todo  IMPROVE PROP TYPES
+ *
+ * @category  Component
  */
 export default function RowExpansionButton({
     areAllRowsExpanded,
@@ -26,7 +31,7 @@ export default function RowExpansionButton({
     iconIndeterminateClass: string
     isHeaderCell: boolean
     onExpand?: (...args: unknown[]) => unknown
-}) {
+}): ReactNode {
     const isNotExpand =
         isHeaderCell && !areAllRowsExpanded() && expandedRows.data.length > 0
 

@@ -3,7 +3,7 @@
 // vendors
 import { tss } from 'tss-react/mui'
 import { useDrag } from 'react-dnd'
-import { useState } from 'react'
+import { useState, type ReactElement } from 'react'
 // materials
 import Button, { type ButtonProps } from '@mui/material/Button'
 import TableCell from '@mui/material/TableCell'
@@ -19,6 +19,11 @@ import ComponentClassName from '@src/enums/class-name'
 import type Props from './types/props'
 import useColumnDrop from './hooks/use-column-drop'
 
+/**
+ * The TableHeadCell component.
+ *
+ * @category  Component
+ */
 export function TableHeadCell<T>({
     cellHeaderProps = {},
     children,
@@ -28,7 +33,7 @@ export function TableHeadCell<T>({
     setHeadCellsRef,
     sortDirection,
     toggleSort
-}: Props<T>) {
+}: Props<T>): ReactElement {
     const { classes, cx } = useStyles()
     const { components, draggableHeadCellRefs, options, textLabels } =
         useDataTableContext()

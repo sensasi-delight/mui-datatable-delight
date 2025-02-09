@@ -6,7 +6,8 @@ import {
     type ReactNode,
     useState,
     useEffect,
-    useRef
+    useRef,
+    type ReactElement
 } from 'react'
 import isEqual from 'react-fast-compare'
 // globals
@@ -25,13 +26,19 @@ import { processTextLabels } from '../../function/process-text-labels'
 import DEFAULT_STATE from '../../statics/default-state'
 import DataTableContext from '../../context'
 
+/**
+ * The DataTableContextProvider component is responsible for providing the
+ * DataTableContext to the entire DataTable component tree.
+ *
+ * @category  Component
+ */
 export default function DataTableContextProvider<DataRowItemType>({
     datatableProps,
     children
 }: {
     datatableProps: DataTableProps<DataRowItemType>
     children: ReactNode
-}): ReactNode {
+}): ReactElement {
     const draggableHeadCellRefs = useRef<HTMLTableCellElement[]>([])
     const lastDatatableProps = useRef(datatableProps)
     const options = useRef<DataTableOptions<DataRowItemType>>(

@@ -21,18 +21,24 @@ import { type DataTableState } from '@src/types/state'
 import useDataTableContext from '@src/hooks/use-data-table-context'
 // global enums
 import FilterType from '@src/enums/filter-type'
-import type { Dispatch, SetStateAction } from 'react'
+import type { Dispatch, ReactElement, SetStateAction } from 'react'
+//
 
+/**
+ * A component that renders a list of filters in a form.
+ *
+ * @category  Component
+ */
 export default function ToolbarDataFilterBoxFilters<T>({
     columns,
     parentProps,
     innerFilterList: filterList
 }: {
     columns: DataTableState<T>['columns']
-    parentProps: DataTableToolbarFilterProps
+    parentProps: DataTableToolbarFilterProps<T>
     innerFilterList: string[][]
     setFilterList: Dispatch<SetStateAction<string[][]>>
-}) {
+}): ReactElement {
     const { textLabels, options } = useDataTableContext()
     const { classes } = useStyles()
     const { filterData, filterUpdate } = parentProps

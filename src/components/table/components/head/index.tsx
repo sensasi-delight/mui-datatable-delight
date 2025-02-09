@@ -1,5 +1,7 @@
 'use client'
 
+// vendors
+import type { ReactNode } from 'react'
 import { tss } from 'tss-react/mui'
 import { TableHeadCell } from './components/cell'
 import CheckboxCell from '../_shared/checkbox-cell'
@@ -21,7 +23,12 @@ import ComponentClassName from '@src/enums/class-name'
 import getDisplayData from '@src/functions/get-new-state-on-data-change/get-display-data'
 import sortTable from '@src/functions/sort-table'
 
-export default function TableHead({ selectRowUpdate }: Props) {
+/**
+ * Table Head
+ *
+ * @category  Component
+ */
+export default function TableHead({ selectRowUpdate }: Props): ReactNode {
     const { classes, cx } = useStyles()
     const {
         draggableHeadCellRefs,

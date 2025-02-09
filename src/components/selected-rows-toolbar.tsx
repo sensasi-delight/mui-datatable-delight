@@ -1,6 +1,7 @@
 'use client'
 
 // vendors
+import type { ReactNode } from 'react'
 import { tss } from 'tss-react/mui'
 // materials
 import IconButton from '@mui/material/IconButton'
@@ -8,19 +9,29 @@ import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
 import DeleteIcon from '@mui/icons-material/Delete'
 // globals
+import type { SelectRowUpdateType } from '@src/types/select-row-update'
 import { buildMap } from '../functions'
 import getNewStateOnDataChange from '@src/functions/get-new-state-on-data-change'
 // locals
-import { type DataTableOptions } from '../types/options'
+import type { DataTableOptions } from '../types/options'
 import useDataTableContext from '../hooks/use-data-table-context'
 // enums
 import ClassName from '../enums/class-name'
 import TableAction from '../enums/table-action'
-import type { SelectRowUpdateType } from '@src/types/select-row-update'
 
+/**
+ * The selected rows toolbar component.
+ *
+ * It renders the number of selected rows and either a custom component
+ * provided by the user or a default delete button. When the delete button
+ * is clicked, it will call the {@link options.onRowsDelete | `onRowsDelete`} function provided by the user
+ * or the `onAction` function with the {@link TableAction.ROW_DELETE | `TableAction.ROW_DELETE`} action.
+ *
+ * @category  Component
+ */
 export default function SelectedRowsToolbar({
     selectRowUpdate
-}: TableToolbarSelectProps) {
+}: TableToolbarSelectProps): ReactNode {
     const {
         components,
         onAction,

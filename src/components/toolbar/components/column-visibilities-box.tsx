@@ -1,6 +1,7 @@
 'use client'
 
 // vendors
+import type { ReactNode } from 'react'
 import { tss } from 'tss-react/mui'
 import Checkbox from '@mui/material/Checkbox'
 import FormControl from '@mui/material/FormControl'
@@ -13,7 +14,13 @@ import useDataTableContext from '@src/hooks/use-data-table-context'
 import TableAction from '@src/enums/table-action'
 import ComponentClassName from '@src/enums/class-name'
 
-export default function ColumnVisibilitiesBox() {
+/**
+ * A component that renders a form with checkboxes for each column with `viewColumns` set to true.
+ * The component is used in the {@link DataTableToolbar} component.
+ *
+ * @category  Component
+ */
+export default function ColumnVisibilitiesBox(): ReactNode {
     const { components, onAction, options, state, textLabels } =
         useDataTableContext()
     const { classes } = useStyles()

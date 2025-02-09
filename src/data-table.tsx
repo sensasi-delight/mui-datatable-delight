@@ -1,13 +1,13 @@
 'use client'
 
-// types
-import type { DataTableProps } from './data-table.props'
 // vendors
+import type { ReactNode } from 'react'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { tss } from 'tss-react/mui'
 import Paper, { type PaperProps } from '@mui/material/Paper'
 // locals
+import type { DataTableProps } from './data-table.props'
 import type { DataTableOptions } from './types/options'
 import type { DefaultRow } from './types/default-row'
 import type { FilterList } from './types/state/filter-list'
@@ -36,13 +36,15 @@ import TableAction from './enums/table-action'
 /**
  * A responsive DataTable component built with Material UI for React-based project.
  *
- * @see https://mui-datatable-delight.vercel.app
+ * @category  Component
+ *
+ * @see  https://mui-datatable-delight.vercel.app
  */
 export function DataTable<Row = DefaultRow>({
     className,
     ref,
     ...props
-}: DataTableProps<Row>) {
+}: DataTableProps<Row>): ReactNode {
     return (
         <DataTableContextProvider datatableProps={props}>
             <DataTable_ className={className} ref={ref} />
@@ -56,7 +58,7 @@ function DataTable_({
 }: {
     className?: string
     ref: PaperProps['ref']
-}) {
+}): ReactNode {
     const { classes, cx } = useStyles()
 
     const {
