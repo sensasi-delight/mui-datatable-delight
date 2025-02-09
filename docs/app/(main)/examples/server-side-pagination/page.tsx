@@ -75,11 +75,8 @@ export default function Example() {
                 }
             ]}
             options={{
-                serverSide: true,
                 count: count,
-                rowsPerPage: 5,
-                rowsPerPageOptions: [],
-                selectableRows: 'none',
+                jumpToPage: true,
 
                 /**
                  * a developer could react to change on an action basis or examine the state as a whole and do whatever they want
@@ -102,7 +99,12 @@ export default function Example() {
                             `action ${action} is not handled on server side in this example`
                         )
                     }
-                }
+                },
+
+                rowsPerPage: 5,
+                rowsPerPageOptions: [],
+                serverSide: true,
+                selectableRows: 'none'
             }}
         />
     )
