@@ -5,7 +5,7 @@ import type { ReactNode } from 'react'
 import { tss } from 'tss-react/mui'
 // local sub-components
 import { DataTableFooterPagination } from './components/pagination'
-import { DataTableFooterJumpToPage } from './components/jump-to-page'
+import JumpToPage from './components/jump-to-page'
 // globals
 import useDataTableContext from '@src/hooks/use-data-table-context'
 import { getPageValue } from '@src/functions/_shared/get-page-value'
@@ -60,12 +60,7 @@ export default function BottomBar(): ReactNode {
 
     return (
         <div className={classes.root}>
-            {jumpToPage && (
-                <DataTableFooterJumpToPage
-                    rowsPerPage={rowsPerPage}
-                    changePage={changePage}
-                />
-            )}
+            {jumpToPage && <JumpToPage changePage={changePage} />}
 
             {pagination && (
                 <DataTableFooterPagination
