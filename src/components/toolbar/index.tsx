@@ -4,8 +4,8 @@
 import { tss } from 'tss-react/mui'
 import { type ReactNode, useState } from 'react'
 // materials
-import IconButton from '@mui/material/IconButton'
 import Box from '@mui/material/Box'
+import IconButton from '@mui/material/IconButton'
 import Typography from '@mui/material/Typography'
 import Tooltip from '@mui/material/Tooltip'
 // globals
@@ -156,6 +156,17 @@ export default function Toolbar(props: ToolbarProps): ReactNode {
     const _ColumnVisibilityBox =
         components.ColumnVisibilitiesBox ?? ColumnVisibilitiesBox
     const _DataFilterBox = components.DataFilterBox ?? DataFilterBox
+
+    if (
+        !datatableRootProps?.title &&
+        !showSearch &&
+        !options.viewColumns &&
+        !options.filter &&
+        !options.download &&
+        !options.print
+    ) {
+        return <></>
+    }
 
     return (
         <Box className={classes.root} role="table toolbar">
