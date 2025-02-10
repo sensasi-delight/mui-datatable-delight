@@ -78,6 +78,8 @@ const useStyles = tss.withName(ClassName.BOTTOM_BAR).create(({ theme }) => ({
         display: 'flex',
         justifyContent: 'flex-end',
         alignItems: 'center',
+        paddingRight: '8px',
+        paddingLeft: '16px',
         [theme.breakpoints.down('sm')]: {
             flexDirection: 'column',
             marginTop: '1em',

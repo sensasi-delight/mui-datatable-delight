@@ -14,11 +14,11 @@ export const DEFAULT_TEXT_LABELS: TextLabelsType = {
         reset: 'RESET'
     },
     pagination: {
-        next: 'Next Page',
-        previous: 'Previous Page',
-        rowsPerPage: 'Rows per page:',
+        next: 'Next page',
+        previous: 'Previous page',
+        rowsPerPage: 'Rows per page',
         displayRows: 'of',
-        jumpToPage: 'Jump to Page:'
+        jumpToPage: 'Jump to page'
     },
     selectedRows: {
         text: 'row(s) selected',
