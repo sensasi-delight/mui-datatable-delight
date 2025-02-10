@@ -40,54 +40,53 @@ export function DataTableFooterPagination({
     }
 
     return (
-        <div className={classes.root}>
-            <TablePagination
-                component="div"
-                count={state.count}
-                labelDisplayedRows={({ from, to, count }) =>
-                    `${from}-${to} ${textLabels.pagination.displayRows} ${count}`
-                }
-                labelRowsPerPage={textLabels.pagination.rowsPerPage}
-                onPageChange={handlePageChange}
-                onRowsPerPageChange={handleRowChange}
-                page={getPageValue(state.count, rowsPerPage, state.page)}
-                rowsPerPage={rowsPerPage}
-                rowsPerPageOptions={state.rowsPerPageOptions}
-                slotProps={{
-                    actions: {
-                        previousButton: {
-                            id: 'pagination-back',
-                            'aria-label': textLabels.pagination.previous,
-                            title: textLabels.pagination.previous
-                        },
-
-                        nextButton: {
-                            id: 'pagination-next',
-                            'aria-label': textLabels.pagination.next,
-                            title: textLabels.pagination.next,
-                            className: classes.nextButton
-                        }
+        <TablePagination
+            component="div"
+            className={classes.root}
+            count={state.count}
+            labelDisplayedRows={({ from, to, count }) =>
+                `${from}-${to} ${textLabels.pagination.displayRows} ${count}`
+            }
+            labelRowsPerPage={textLabels.pagination.rowsPerPage}
+            onPageChange={handlePageChange}
+            onRowsPerPageChange={handleRowChange}
+            page={getPageValue(state.count, rowsPerPage, state.page)}
+            rowsPerPage={rowsPerPage}
+            rowsPerPageOptions={state.rowsPerPageOptions}
+            slotProps={{
+                actions: {
+                    previousButton: {
+                        id: 'pagination-back',
+                        'aria-label': textLabels.pagination.previous,
+                        title: textLabels.pagination.previous
                     },
 
-                    select: {
-                        id: 'pagination-input',
-                        SelectDisplayProps: {
-                            id: 'pagination-rows'
-                        },
-                        MenuProps: {
-                            id: 'pagination-menu',
-                            MenuListProps: {
-                                id: 'pagination-menu-list'
-                            }
-                        }
-                    },
-
-                    toolbar: {
-                        className: classes.toolbar
+                    nextButton: {
+                        id: 'pagination-next',
+                        'aria-label': textLabels.pagination.next,
+                        title: textLabels.pagination.next,
+                        className: classes.nextButton
                     }
-                }}
-            />
-        </div>
+                },
+
+                select: {
+                    id: 'pagination-input',
+                    SelectDisplayProps: {
+                        id: 'pagination-rows'
+                    },
+                    MenuProps: {
+                        id: 'pagination-menu',
+                        MenuListProps: {
+                            id: 'pagination-menu-list'
+                        }
+                    }
+                },
+
+                toolbar: {
+                    className: classes.toolbar
+                }
+            }}
+        />
     )
 }
 
@@ -98,15 +97,22 @@ const useStyles = tss
             maxWidth: '100%',
             overflowX: 'auto'
         },
+
         toolbar: {
             [theme.breakpoints.down('sm')]: {
                 marginTop: '-0.5em',
                 paddingLeft: theme.spacing(2)
             },
-            paddingRight: '0 !important'
+            paddingRight: '0 !important',
+
+            '& > p': {
+                color: 'var(--mui-palette-text-secondary) !important'
+            },
+
+            '& > *': {
+                fontSize: '0.8rem !important'
+            }
         },
 
-        nextButton: {
-            marginRight: theme.spacing(0.1)
-        }
+        nextButton: {}
     }))
