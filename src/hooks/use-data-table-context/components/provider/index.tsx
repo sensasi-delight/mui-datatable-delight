@@ -125,6 +125,14 @@ export default function DataTableContextProvider<DataRowItemType>({
             value={{
                 components: datatableProps.components ?? {},
                 draggableHeadCellRefs,
+
+                functions: {
+                    setHeadCellsRef: (index, columnIndex, el) => {
+                        draggableHeadCellRefs.current[index] = el
+                        tableHeadCellElements.current[columnIndex] = el
+                    }
+                },
+
                 icons: {
                     ...DEFAULT_ICONS,
                     ...datatableProps.icons

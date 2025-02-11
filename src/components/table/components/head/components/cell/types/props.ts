@@ -20,10 +20,4 @@ export default interface Props<T> {
     cellHeaderProps: TableCellProps
 
     colPosition: number
-
-    setHeadCellsRef: (
-        rowIndex: number,
-        colIndex: number,
-        ref: HTMLTableCellElement
-    ) => void
 }

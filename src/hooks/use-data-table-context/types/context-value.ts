@@ -14,6 +14,16 @@ import type { processTextLabels } from '../function/process-text-labels'
 export default interface ContextValue<DataRowItemType> {
     components: DataTableComponents
     draggableHeadCellRefs: RefObject<HTMLTableCellElement[]>
+    functions: {
+        /**
+         * Sets the ref for a head cell.
+         */
+        setHeadCellsRef?: (
+            index: number,
+            columnIndex: number,
+            element: HTMLTableCellElement
+        ) => void
+    }
     icons: typeof DEFAULT_ICONS
     onAction?: (
         action: TableAction,
