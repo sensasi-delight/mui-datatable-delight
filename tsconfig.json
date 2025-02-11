@@ -25,6 +25,7 @@
         "strict": true,
 
         "paths": {
+            "@src": ["./src"],
             "@src/*": ["./src/*"]
         }
     },

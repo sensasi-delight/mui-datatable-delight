@@ -1,18 +1,31 @@
 'use client'
 
 import React from 'react'
-import DataTable from '@src'
+import DataTable, { type DataTableOptions, type DataTableProps } from '@src'
 import CircularProgress from '@mui/material/CircularProgress'
 import Typography from '@mui/material/Typography'
 import Cities from '../_shared-components/cities'
 
-class Example extends React.Component {
-    state = {
-        page: 0,
-        count: 26,
-        data: [['Loading Data...']],
-        sortOrder: {},
-        loading: false
+class Example extends React.Component<
+    never,
+    {
+        page: number
+        count: number
+        data: (string | number)[][]
+        sortOrder: DataTableOptions['sortOrder']
+        loading: boolean
+    }
+> {
+    constructor(props: never) {
+        super(props)
+
+        this.state = {
+            page: 0,
+            count: 26,
+            data: [['Loading Data...']],
+            sortOrder: undefined,
+            loading: false
+        }
     }
 
     componentDidMount() {
@@ -27,7 +40,7 @@ class Example extends React.Component {
     }
 
     // mock async function
-    xhrRequest = url => {
+    xhrRequest = (url?: { page: number; order: string; column: string }) => {
         let page = 0
         let order = ''
         let column = ''
@@ -37,7 +50,7 @@ class Example extends React.Component {
             column = url.column
         }
 
-        return new Promise((resolve, reject) => {
+        return new Promise<(string | number)[][]>(resolve => {
             const srcData = [
                 [
                     'Gabby George',
@@ -183,11 +196,11 @@ class Example extends React.Component {
 
             // here we're faking the sorting that would happen on the server-side
 
-            var offset = page * 10
-            var data = []
+            const offset = page * 10
+            let data: (string | number)[][] = []
 
             if (order !== '') {
-                var sortCol = [
+                let sortCol = [
                     'Name',
                     'Title',
                     'Location',
@@ -197,9 +210,10 @@ class Example extends React.Component {
                 if (sortCol === -1) sortCol = 3
 
                 if (order === 'asc') {
-                    var tempData = srcData.sort((a, b) => {
-                        if (a[sortCol] < b[sortCol]) return -1
-                        if (a[sortCol] > b[sortCol]) return 1
+                    const tempData = srcData.sort((a, b) => {
+                        if ((a[sortCol] ?? 0) < (b[sortCol] ?? 0)) return -1
+                        if ((a[sortCol] ?? 0) > (b[sortCol] ?? 0)) return 1
+
                         return 0
                     })
 
@@ -208,9 +222,10 @@ class Example extends React.Component {
                             ? tempData.slice(offset, srcData.length)
                             : tempData.slice(offset, offset + 10)
                 } else {
-                    tempData = srcData.sort((a, b) => {
-                        if (a[sortCol] < b[sortCol]) return 1
-                        if (a[sortCol] > b[sortCol]) return -1
+                    const tempData = srcData.sort((a, b) => {
+                        if ((a[sortCol] ?? 0) < (b[sortCol] ?? 0)) return 1
+                        if ((a[sortCol] ?? 0) > (b[sortCol] ?? 0)) return -1
+
                         return 0
                     })
 
@@ -232,13 +247,15 @@ class Example extends React.Component {
         })
     }
 
-    sort = (column, order) => {
-        let temp = {}
-        temp.column = column
-        temp.order = order
-        temp.page = this.state.page
-
-        this.xhrRequest(temp).then(data => {
+    sort: Required<DataTableOptions>['onColumnSortChange'] = (
+        column,
+        order
+    ) => {
+        this.xhrRequest({
+            column,
+            order,
+            page: this.state.page
+        }).then(data => {
             this.setState({
                 data,
                 sortOrder: {
@@ -250,7 +267,7 @@ class Example extends React.Component {
     }
 
     render() {
-        const columns = [
+        const columns: DataTableProps['columns'] = [
             {
                 name: 'Name',
                 options: {
@@ -273,11 +290,17 @@ class Example extends React.Component {
                     customFilterListOptions: {
                         render: v => `Location: ${v}`
                     },
-                    customBodyRender: (value, tableMeta, updateValue) => {
+                    customBodyRender: (
+                        value,
+                        _,
+                        columnIndex,
+                        __,
+                        updateValue
+                    ) => {
                         return (
                             <Cities
-                                value={value || ''}
-                                index={tableMeta.columnIndex}
+                                value={value ?? ''}
+                                index={columnIndex}
                                 change={event => updateValue(event)}
                             />
                         )
@@ -293,27 +316,22 @@ class Example extends React.Component {
         ]
         const { page, count, data } = this.state
 
-        const options = {
+        const options: DataTableProps['options'] = {
             filter: true,
             filterType: 'dropdown',
             responsive: 'standard',
             serverSide: true,
             count: count,
             page: page,
-            onColumnSortChange: (changedColumn, direction) => {
-                let order = 'desc'
-                if (direction === 'asc') {
-                    order = 'asc'
-                }
-
-                this.sort(changedColumn, order)
-            },
+            onColumnSortChange: this.sort,
             onChangePage: page => {
                 this.setState({ page }, () => {
-                    this.sort(
-                        this.state.sortOrder.name,
-                        this.state.sortOrder.direction
-                    )
+                    if (this.state.sortOrder) {
+                        this.sort(
+                            this.state.sortOrder.name,
+                            this.state.sortOrder.direction
+                        )
+                    }
                 })
             }
         }
