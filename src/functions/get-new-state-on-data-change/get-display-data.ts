@@ -16,7 +16,6 @@ import type { DataTableOptions } from '@src/types/options'
  * @param data - The raw data of the data table.
  * @param filterList - The list of active filters applied to the data.
  * @param searchText - The text used to search the data.
- * @param tableMeta - Metadata about the table, including current table data.
  * @param props - The properties of the data table.
  * @param state - The current state of the data table.
  * @param options - Configuration options for the data table.
@@ -28,7 +27,6 @@ export default function getDisplayData<T>(
     data: DataTableState<T>['data'],
     filterList: DataTableState<T>['filterList'],
     searchText: DataTableState<T>['searchText'],
-    tableMeta: undefined,
     props: DataTableProps<T>,
     state: DataTableState<T>,
     options: DataTableOptions<T>,

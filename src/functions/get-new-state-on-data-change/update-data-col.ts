@@ -84,7 +84,6 @@ export default function updateDataCol<T>(
             prevState.data,
             prevState.filterList,
             prevState.searchText,
-            undefined,
             datatableProps,
             newState,
             options,

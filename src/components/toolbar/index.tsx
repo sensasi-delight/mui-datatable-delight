@@ -139,7 +139,6 @@ export default function Toolbar(props: ToolbarProps): ReactNode {
                       prevState.data,
                       prevState.filterList,
                       '',
-                      undefined,
                       datatableRootProps,
                       prevState,
                       options,

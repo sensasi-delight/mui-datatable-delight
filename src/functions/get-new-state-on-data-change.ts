@@ -11,7 +11,6 @@ import { warnDeprecated } from './warn-deprecated'
 import buildColumns from './build-columns'
 import sortTable from './sort-table'
 import getDisplayData from './get-new-state-on-data-change/get-display-data'
-import type DataTableMeta from '@src/types/table-meta'
 
 enum TABLE_LOAD {
     INITIAL = 1,
@@ -50,7 +49,6 @@ export default function getNewStateOnDataChange<T>(
 
     let sortIndex: number | null = null
     let sortDirection: DataTableSortOrderOption['direction'] = 'none'
-    let tableMeta: DataTableMeta<T> | undefined
 
     const data =
         status === TABLE_LOAD.INITIAL
@@ -311,7 +309,6 @@ export default function getNewStateOnDataChange<T>(
             tableData,
             filterList,
             searchText,
-            tableMeta,
             props,
             newState,
             options,

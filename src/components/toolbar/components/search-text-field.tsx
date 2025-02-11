@@ -54,7 +54,6 @@ export function DataTableToolbarSearch({
                   state.data,
                   state.filterList,
                   newSearchText,
-                  undefined,
                   datatableRootProps,
                   state,
                   options,
