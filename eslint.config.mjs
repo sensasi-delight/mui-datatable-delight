@@ -8,6 +8,7 @@ import js from '@eslint/js'
 import prettierConfig from 'eslint-config-prettier'
 import reactRefresh from 'eslint-plugin-react-refresh'
 import tseslint from 'typescript-eslint'
+import tssUnusedClasses from 'eslint-plugin-tss-unused-classes'
 
 export default tseslint.config({
     extends: [
@@ -29,7 +30,8 @@ export default tseslint.config({
         'jsx-a11y': eslintPluginJsxA11y,
         react: eslintPluginReact,
         'react-hooks': eslintPluginReactHooks,
-        'react-refresh': reactRefresh
+        'react-refresh': reactRefresh,
+        'tss-unused-classes': tssUnusedClasses
     },
     rules: {
         ...eslintPluginReactHooks.configs.recommended.rules,
@@ -52,7 +54,8 @@ export default tseslint.config({
             {
                 ignoreNonDOM: true
             }
-        ]
+        ],
+        'tss-unused-classes/unused-classes': 'warn'
     },
     settings: {
         react: {
