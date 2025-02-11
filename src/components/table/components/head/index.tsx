@@ -31,11 +31,9 @@ import sortTable from '@src/functions/sort-table'
 export default function TableHead({ selectRowUpdate }: Props): ReactNode {
     const { classes, cx } = useStyles()
     const {
-        draggableHeadCellRefs,
         onAction,
         options,
         props: datatableRootProps,
-        tableHeadCellElements,
         setState,
         state
     } = useDataTableContext()
@@ -147,15 +145,6 @@ export default function TableHead({ selectRowUpdate }: Props): ReactNode {
         selectRowUpdate('head', null)
     }
 
-    function setHeadCellsRef(
-        index: number,
-        pos: number,
-        el: HTMLTableCellElement
-    ) {
-        draggableHeadCellRefs.current[index] = el
-        tableHeadCellElements.current[pos] = el
-    }
-
     const numSelected = state.selectedRows.data.length ?? 0
     let isIndeterminate = numSelected > 0 && numSelected < state.count
     let isChecked = numSelected > 0 && numSelected >= state.count
@@ -211,7 +200,6 @@ export default function TableHead({ selectRowUpdate }: Props): ReactNode {
         >
             <TableRow className={classes.row}>
                 <CheckboxCell
-                    setHeadCellRef={setHeadCellsRef}
                     onChange={handleRowSelect}
                     indeterminate={isIndeterminate}
                     checked={isChecked}
@@ -237,7 +225,6 @@ export default function TableHead({ selectRowUpdate }: Props): ReactNode {
                                 key={index}
                                 index={index}
                                 colPosition={colPos}
-                                setHeadCellsRef={setHeadCellsRef}
                                 sortDirection={
                                     column.name === state.sortOrder?.name &&
                                     state.sortOrder.direction !== 'none'

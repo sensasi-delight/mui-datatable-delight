@@ -62,9 +62,13 @@ export default function ColumnsResizer(): ReactNode {
                 })
 
             setResizeCoords(newResizeCoords)
-            updateCellWidths(newResizeCoords, tableHeadCellElements, tableWidth)
+            updateCellWidths(
+                newResizeCoords,
+                tableHeadCellElements,
+                tableElementRect.width
+            )
         }
-    }, [tableRef, currentWindowWidth, tableHeadCellElements, tableWidth])
+    }, [tableRef, currentWindowWidth, tableHeadCellElements])
 
     useEffect(() => {
         function updateCurrentWidth() {
@@ -376,12 +380,12 @@ function updateCellWidths(
         left: number
     }[],
     tableHeadCellElements: RefObject<HTMLTableCellElement[]>,
-    tableWidth?: number
+    tableWidth: number
 ) {
     let lastLeft = 0
 
     resizeCoords.forEach((item, columnId) => {
-        const newWidthRaw = ((item.left - lastLeft) / (tableWidth ?? 100)) * 100
+        const newWidthRaw = ((item.left - lastLeft) / tableWidth) * 100
 
         /**
          * Using .toFixed(2) causes the columns to jitter when resized. On all browsers I (Patrojk) have tested,

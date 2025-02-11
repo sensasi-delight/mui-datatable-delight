@@ -18,12 +18,12 @@ export default function CheckboxCell({
     onExpand,
     isRowSelectable,
     hideExpandButton,
-    setHeadCellRef,
     dataIndex,
     onChange,
     ...otherProps
 }: DataTableTableSelectCellProps & IsHeaderCell) {
-    const { components, onAction, options, state } = useDataTableContext()
+    const { components, functions, onAction, options, state } =
+        useDataTableContext()
     const { classes, cx } = useStyles()
 
     if (
@@ -148,8 +148,10 @@ export default function CheckboxCell({
         <TableCell
             className={cellClasses}
             padding="checkbox"
-            ref={el => {
-                setHeadCellRef?.(0, 0, el)
+            ref={(el: HTMLTableCellElement) => {
+                if (isHeaderCell) {
+                    functions.setHeadCellsRef?.(0, 0, el)
+                }
             }}
             sx={{
                 borderBottom:

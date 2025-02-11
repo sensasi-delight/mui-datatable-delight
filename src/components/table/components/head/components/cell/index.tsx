@@ -30,13 +30,17 @@ export function TableHeadCell<T>({
     colPosition,
     column,
     index,
-    setHeadCellsRef,
     sortDirection,
     toggleSort
 }: Props<T>): ReactElement {
     const { classes, cx } = useStyles()
-    const { components, draggableHeadCellRefs, options, textLabels } =
-        useDataTableContext()
+    const {
+        components,
+        draggableHeadCellRefs,
+        functions,
+        options,
+        textLabels
+    } = useDataTableContext()
     const [sortTooltipOpen, setSortTooltipOpen] = useState(false)
     const [hintTooltipOpen, setHintTooltipOpen] = useState(false)
     const [dragging, setDragging] = useState(false)
@@ -127,12 +131,12 @@ export function TableHeadCell<T>({
         <TableCell
             ref={(ref: HTMLTableCellElement) => {
                 dropRef(ref)
-                setHeadCellsRef(index + 1, colPosition + 1, ref)
+                functions.setHeadCellsRef?.(index + 1, colPosition + 1, ref)
             }}
             className={cellClass}
             scope="col"
             sortDirection={sortDirection}
-            data-column-index={index}
+            data-column-index={index + 1}
             onMouseDown={closeTooltip}
             {...otherProps}
         >
