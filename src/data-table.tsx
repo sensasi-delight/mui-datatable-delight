@@ -104,7 +104,6 @@ function DataTable_({
                   prevState.data,
                   prevState.filterList,
                   prevState.searchText,
-                  undefined,
                   datatableRootProps,
                   newState,
                   options,

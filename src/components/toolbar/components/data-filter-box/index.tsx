@@ -67,7 +67,6 @@ export default function ToolbarDataFilterBox<T>(
                   prevState.data,
                   filterList,
                   prevState.searchText,
-                  undefined,
                   DataTableRootProps,
                   prevState,
                   options,

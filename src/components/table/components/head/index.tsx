@@ -126,7 +126,6 @@ export default function TableHead({ selectRowUpdate }: Props): ReactNode {
                 sortedData.data,
                 state.filterList,
                 state.searchText,
-                undefined,
                 datatableRootProps,
                 {
                     ...state,
