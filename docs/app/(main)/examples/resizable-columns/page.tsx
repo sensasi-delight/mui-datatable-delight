@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from 'react'
-import DataTable from '@src'
+import DataTable, { type DataTableOptions, type DataTableProps } from '@src'
 
 import FormControl from '@mui/material/FormControl'
 import TextField from '@mui/material/TextField'
@@ -9,9 +9,10 @@ import Switch from '@mui/material/Switch'
 import FormGroup from '@mui/material/FormGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
 
-function Example(props) {
+function Example() {
     const [marginLeft, setMarginLeft] = useState(10)
-    const [selectableRows, setSelectableRows] = useState('multiple')
+    const [selectableRows, setSelectableRows] =
+        useState<DataTableOptions['selectableRows']>('multiple')
 
     const [counter, setCounter] = useState(1)
     const incrCount = () => {
@@ -19,15 +20,13 @@ function Example(props) {
         setCounter(counter + 1)
     }
 
-    const columns = [
+    const columns: DataTableProps['columns'] = [
         {
             name: 'Counter',
             options: {
                 sort: false,
                 empty: true,
-                customBodyRender: value => (
-                    <button onClick={incrCount}>+</button>
-                )
+                customBodyRender: () => <button onClick={incrCount}>+</button>
             }
         },
         {
@@ -42,26 +41,30 @@ function Example(props) {
             options: {
                 hint: '?',
                 customBodyRender: val => {
-                    let parentStyle = {
-                        position: 'absolute',
-                        top: 0,
-                        right: 0,
-                        bottom: 0,
-                        left: 0,
-                        boxSizing: 'border-box',
-                        display: 'block',
-                        width: '100%'
-                    }
-                    let cellStyle = {
-                        boxSizing: 'border-box',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                        whiteSpace: 'nowrap'
-                    }
                     return (
                         <div style={{ position: 'relative', height: '20px' }}>
-                            <div style={parentStyle}>
-                                <div style={cellStyle}>{val}</div>
+                            <div
+                                style={{
+                                    position: 'absolute',
+                                    top: 0,
+                                    right: 0,
+                                    bottom: 0,
+                                    left: 0,
+                                    boxSizing: 'border-box',
+                                    display: 'block',
+                                    width: '100%'
+                                }}
+                            >
+                                <div
+                                    style={{
+                                        boxSizing: 'border-box',
+                                        overflow: 'hidden',
+                                        textOverflow: 'ellipsis',
+                                        whiteSpace: 'nowrap'
+                                    }}
+                                >
+                                    {val}
+                                </div>
                             </div>
                         </div>
                     )
@@ -83,13 +86,14 @@ function Example(props) {
         ['Aaren Rose', null, 'Toledo']
     ]
 
-    const options = {
+    const options: DataTableProps['options'] = {
         filter: true,
         filterType: 'dropdown',
         resizableColumns: true,
         selectableRows: selectableRows,
         draggableColumns: {
-            enabled: true
+            enabled: true,
+            transitionTime: 300
         }
     }
 
@@ -101,14 +105,14 @@ function Example(props) {
                         label="Left Margin"
                         type="number"
                         value={marginLeft}
-                        onChange={e => setMarginLeft(e.target.value)}
+                        onChange={e => setMarginLeft(parseInt(e.target.value))}
                     />
                 </FormControl>
                 <FormControlLabel
                     control={
                         <Switch
                             checked={selectableRows === 'multiple'}
-                            onChange={e =>
+                            onChange={event =>
                                 setSelectableRows(
                                     event.target.checked ? 'multiple' : 'none'
                                 )
@@ -120,6 +124,7 @@ function Example(props) {
                     label="Selectable Rows"
                 />
             </FormGroup>
+
             <div style={{ marginLeft: marginLeft + 'px' }}>
                 <DataTable
                     title={'ACME Employee list' + ' [' + counter + ']'}
@@ -127,6 +132,7 @@ function Example(props) {
                     columns={columns}
                     options={options}
                 />
+
                 <div>
                     <DataTable
                         title={'ACME Employee list'}
@@ -135,6 +141,7 @@ function Example(props) {
                         options={options}
                     />
                 </div>
+
                 <DataTable
                     title={'ACME Employee list'}
                     data={data}

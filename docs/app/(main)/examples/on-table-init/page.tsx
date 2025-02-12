@@ -1,32 +1,22 @@
 'use client'
 
 import React from 'react'
-import DataTable from '@src'
+import DataTable, { type DataTableProps, type DataTableState } from '@src'
 
-class Example extends React.Component {
-    constructor(props) {
+type RowType = (number | string)[]
+
+class Example extends React.Component<
+    unknown,
+    {
+        table: Partial<DataTableState<RowType>>
+    }
+> {
+    constructor(props: unknown) {
         super(props)
 
         this.state = {
             table: {}
         }
-        this.handleTableInit = this.handleTableInit.bind(this)
-        this.handleTableChange = this.handleTableChange.bind(this)
-    }
-
-    /** onTableInit gives access to initial MuiDataTable state
-     *  if the application needs access to internal state prior to
-     *  the user performing a table mutation (sort, filter, etc.)
-     *  that triggers onTableChange
-     */
-    handleTableInit = (action, tableState) => {
-        console.log('handleTableInit: ', tableState)
-        this.setState({ table: tableState })
-    }
-
-    handleTableChange = (action, tableState) => {
-        console.log('handleTableChange: ', tableState)
-        this.setState({ table: tableState })
     }
 
     columns = ['Name', 'Title', 'Location', 'Age', 'Salary']
@@ -76,15 +66,28 @@ class Example extends React.Component {
         ['Mason Ray', 'Computer Scientist', 'San Francisco', 39, 142000]
     ]
 
-    options = {
+    options: DataTableProps<RowType>['options'] = {
         filter: true,
         selectableRows: 'multiple',
         filterType: 'dropdown',
         responsive: 'standard',
         rowsPerPage: 10,
         download: false, // hide csv download option
-        onTableInit: this.handleTableInit,
-        onTableChange: this.handleTableChange
+
+        /** onTableInit gives access to initial MuiDataTable state
+         *  if the application needs access to internal state prior to
+         *  the user performing a table mutation (sort, filter, etc.)
+         *  that triggers onTableChange
+         */
+        onTableInit: (_, tableState) => {
+            console.log('handleTableInit: ', tableState)
+            this.setState({ table: tableState })
+        },
+
+        onTableChange: (_, tableState) => {
+            console.log('handleTableChange: ', tableState)
+            this.setState({ table: tableState })
+        }
     }
 
     render() {
