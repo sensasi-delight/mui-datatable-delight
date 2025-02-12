@@ -676,7 +676,7 @@ interface DataTableCustomsOptions<Row> {
      * @see https://mui-datatable-delight.vercel.app/examples/customize-rows
      */
     customRowRender?: (
-        data: unknown[],
+        data: Row,
         dataIndex: number,
         rowIndex: number
     ) => ReactNode

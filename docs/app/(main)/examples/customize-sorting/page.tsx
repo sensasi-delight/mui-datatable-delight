@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import DataTable from '@src'
+import DataTable, { type DataTableProps } from '@src'
 
 class Example extends React.Component {
     render() {
@@ -15,16 +15,29 @@ class Example extends React.Component {
             ['Aaren Rose', 8, '2018-07-06T21:59:20.000Z']
         ]
 
-        const options = {
+        const options: DataTableProps['options'] = {
             filter: true,
             filterType: 'dropdown',
             responsive: 'vertical',
-            customSort: (data, colIndex, order, meta) => {
+            customSort: (data, colIndex, order) => {
                 return data.sort((a, b) => {
+                    const aVal = a.data[colIndex] ?? 0
+
+                    const aWeight =
+                        typeof aVal === 'string'
+                            ? aVal.length
+                            : (a.data[colIndex] ?? 0)
+
+                    const bVal = b.data[colIndex] ?? 0
+
+                    const bWeight =
+                        typeof bVal === 'string'
+                            ? bVal.length
+                            : (b.data[colIndex] ?? 0)
+
                     return (
-                        (a.data[colIndex].length < b.data[colIndex].length
-                            ? -1
-                            : 1) * (order === 'desc' ? 1 : -1)
+                        (aWeight < bWeight ? -1 : 1) *
+                        (order === 'desc' ? 1 : -1)
                     )
                 })
             }

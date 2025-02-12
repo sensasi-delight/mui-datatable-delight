@@ -1,12 +1,15 @@
 // vendors
 import { tss } from 'tss-react/mui'
-import Typography from '@mui/material/Typography'
+// materials
 import Button from '@mui/material/Button'
 import FormControl from '@mui/material/FormControl'
-import FormGroup from '@mui/material/FormGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
+import FormGroup from '@mui/material/FormGroup'
+import Typography from '@mui/material/Typography'
+//
 import { useDataTableContext } from '@src'
 
+// @ts-expect-error  WILL FIX THIS LATER
 function TableViewCol({ onColumnUpdate, updateColumns }) {
     const {
         components,

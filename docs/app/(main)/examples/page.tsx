@@ -10,7 +10,7 @@ import Typography from '@mui/material/Typography'
 import { useState } from 'react'
 // locals
 import { Route } from './_route--enum'
-import { snakeCaseToKebab, snakeCaseToTitle } from '@/utils'
+import { snakeCaseToKebab, snakeCaseToTitle } from '@/docs/utils'
 
 const SORTED_EXAMPLES = Object.keys(Route)
     .filter(key => isNaN(parseInt(key)))

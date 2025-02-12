@@ -91,7 +91,12 @@ function Example() {
                         marginBottom: '10px',
                         marginRight: 10
                     }}
-                    onChange={e => setStp(e.target.value)}
+                    onChange={e =>
+                        setStp(
+                            e.target
+                                .value as DataTableOptions['selectToolbarPlacement']
+                        )
+                    }
                 >
                     <MenuItem value={'none'}>none</MenuItem>
                     <MenuItem value={'replace'}>replace</MenuItem>

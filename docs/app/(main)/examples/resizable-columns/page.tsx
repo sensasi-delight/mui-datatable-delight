@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import { useState } from 'react'
 import DataTable, { type DataTableOptions, type DataTableProps } from '@src'
 
 import FormControl from '@mui/material/FormControl'

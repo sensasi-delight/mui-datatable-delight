@@ -19,7 +19,7 @@ import MenuIcon from '@mui/icons-material/Menu'
 import OpenInNew from '@mui/icons-material/OpenInNew'
 
 import Menu from './menu'
-import { InlineCode } from '@/components'
+import { InlineCode } from '@/docs/components'
 
 export default function SideTopBar() {
     const pathname = usePathname()

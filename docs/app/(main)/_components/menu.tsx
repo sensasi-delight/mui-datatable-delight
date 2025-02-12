@@ -15,7 +15,7 @@ import OpenInNew from '@mui/icons-material/OpenInNew'
 // locals
 import { DRAWER_WIDTH } from '../_constants'
 import { Route as DocsRoute } from '../docs/_route--enum'
-import { snakeCaseToKebab, snakeCaseToTitle } from '@/utils'
+import { snakeCaseToKebab, snakeCaseToTitle } from '@/docs/utils'
 
 export default function Menu({
     isOpen

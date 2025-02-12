@@ -1,7 +1,7 @@
 'use client'
 
 import React, { Fragment } from 'react'
-import DataTable from '@src'
+import DataTable, { type DataTableProps } from '@src'
 
 class Example extends React.Component {
     state = {
@@ -9,7 +9,7 @@ class Example extends React.Component {
     }
 
     render() {
-        const columns = [
+        const columns: DataTableProps['columns'] = [
             {
                 name: 'Name',
                 options: {
@@ -126,25 +126,25 @@ class Example extends React.Component {
             ['Mason Ray', 'Computer Scientist', 'San Francisco', 39, '$142,000']
         ]
 
-        const options = {
+        const options: DataTableProps['options'] = {
             filter: true,
             filterType: 'dropdown',
             responsive: 'vertical',
             page: 0,
             searchText: this.state.searchText,
             searchProps: {
-                onBlur: e => {
+                onBlur: () => {
                     console.log('onBlur!')
                 },
-                onKeyUp: e => {
+                onKeyUp: () => {
                     console.log('onKeyUp!')
                 }
             },
             searchPlaceholder: 'Your Custom Search Placeholder',
-            customSearch: (searchQuery, currentRow, columns) => {
+            customSearch: (searchQuery, currentRow) => {
                 let isFound = false
                 currentRow.forEach(col => {
-                    if (col.toString().indexOf(searchQuery) >= 0) {
+                    if (col?.toString().includes(searchQuery)) {
                         isFound = true
                     }
                 })
