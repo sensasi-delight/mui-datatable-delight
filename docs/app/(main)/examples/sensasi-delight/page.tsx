@@ -2,15 +2,14 @@
 
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
-import Download from '@mui/icons-material/Download'
 import Refresh from '@mui/icons-material/Refresh'
-import DataTable, { type DataTableOptions } from '@src'
+import DataTable, { type DataTableProps } from '@src'
 
 /**
  * @deprecated FOR TEMPORARY DEVELOPMENT ONLY
  */
 export default function Page() {
-    const options: DataTableOptions = {
+    const options: DataTableProps['options'] = {
         rowHover: true,
         download: 'disabled',
         customToolbar: () => (
@@ -47,24 +46,6 @@ export default function Page() {
         onDownload: () => {
             return false
         },
-        textLabels: {
-            pagination: {
-                next: 'selanjutnya',
-                previous: 'sebelumnya',
-                rowsPerPage: 'data/halaman:',
-                jumpToPage: 'halaman:'
-            },
-            toolbar: {
-                search: 'Cari',
-                downloadCsv: 'Unduh',
-                print: 'Cetak',
-                viewColumns: 'Tampilkan kolom'
-            },
-            body: {
-                noMatch: 'Tidak ada data',
-                toolTip: 'Urutkan'
-            }
-        },
         count: 50
     }
 
@@ -96,9 +77,22 @@ export default function Page() {
             data={data}
             columns={['name', 'role']}
             options={options}
-            components={{
-                icons: {
-                    DownloadIcon: Download
+            textLabels={{
+                pagination: {
+                    next: 'selanjutnya',
+                    previous: 'sebelumnya',
+                    rowsPerPage: 'data/halaman:',
+                    jumpToPage: 'halaman:'
+                },
+                toolbar: {
+                    search: 'Cari',
+                    downloadCsv: 'Unduh',
+                    print: 'Cetak',
+                    viewColumns: 'Tampilkan kolom'
+                },
+                body: {
+                    noMatch: 'Tidak ada data',
+                    toolTip: 'Urutkan'
                 }
             }}
         />

@@ -1,7 +1,7 @@
 'use client'
 
 // vendors
-import React, { useState } from 'react'
+import { useState } from 'react'
 // materials
 import TextField from '@mui/material/TextField'
 // DataTable

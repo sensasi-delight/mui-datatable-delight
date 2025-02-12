@@ -12,7 +12,7 @@ class Example extends React.Component {
     render() {
         const columns = ['Name', 'Title', 'Location', 'Age', 'Salary']
 
-        let data = [
+        const data = [
             ['Gabby George', 'Business Analyst', 'Minneapolis', 30, 100000],
             ['Aiden Lloyd', 'Business Consultant', 'Dallas', 55, 200000],
             ['Jaden Collins', 'Attorney', 'Santa Ana', 27, 500000],
@@ -71,26 +71,23 @@ class Example extends React.Component {
 
         const options = {
             filter: true,
-            selectableRows: 'multiple',
-            filterType: 'dropdown',
-            responsive: 'vertical',
+            selectableRows: 'multiple' as const,
+            filterType: 'dropdown' as const,
+            responsive: 'vertical' as const,
             rowsPerPage: 10
-        }
-
-        const components = {
-            icons: {
-                SearchIcon,
-                PrintIcon,
-                DownloadIcon,
-                ViewColumnIcon,
-                FilterIcon
-            }
         }
 
         return (
             <DataTable
-                title={'ACME Employee list'}
-                {...{ data, columns, options, components }}
+                title="ACME Employee list"
+                icons={{
+                    SearchIcon,
+                    PrintIcon,
+                    DownloadIcon,
+                    ViewColumnIcon,
+                    FilterIcon
+                }}
+                {...{ data, columns, options }}
             />
         )
     }

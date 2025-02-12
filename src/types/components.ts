@@ -25,26 +25,26 @@ import DataFilterBox from '../components/toolbar/components/data-filter-box'
 import ColumnVisibilitiesBox from '../components/toolbar/components/column-visibilities-box'
 
 export interface DataTableComponents {
-    AnnounceText?: typeof AnnounceText
-    BottomBar?: typeof BottomBar
+    AnnounceText: typeof AnnounceText
+    BottomBar: typeof BottomBar
 
     /**
      * Global `<Checkbox />` component inside `<DataTable />`
      */
-    Checkbox?: typeof Checkbox
-    ColumnsResizer?: typeof ColumnsResizer
-    ColumnVisibilitiesBox?: typeof ColumnVisibilitiesBox
-    DataFilterBox?: typeof DataFilterBox
-    FilteredValuesList?: typeof FilteredValuesList
-    RowExpansionButton?: typeof RowExpansionButton
-    SelectedRowsToolbar?: typeof SelectedRowsToolbar
-    Table?: typeof Table
-    TableBody?: typeof TableBody
-    TableHead?: typeof TableHead
-    Toolbar?: typeof Toolbar
+    Checkbox: typeof Checkbox
+    ColumnsResizer: typeof ColumnsResizer
+    ColumnVisibilitiesBox: typeof ColumnVisibilitiesBox
+    DataFilterBox: typeof DataFilterBox
+    FilteredValuesList: typeof FilteredValuesList
+    RowExpansionButton: typeof RowExpansionButton
+    SelectedRowsToolbar: typeof SelectedRowsToolbar
+    Table: typeof Table
+    TableBody: typeof TableBody
+    TableHead: typeof TableHead
+    Toolbar: typeof Toolbar
 
     /**
      * Global `<Tooltip />` component inside `<DataTable />`
      */
-    Tooltip?: typeof Tooltip
+    Tooltip: typeof Tooltip
 }

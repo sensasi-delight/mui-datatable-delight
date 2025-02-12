@@ -1,5 +1,8 @@
 'use client'
 
+// vendors
+import React from 'react'
+// materials
 import FormGroup from '@mui/material/FormGroup'
 import FormLabel from '@mui/material/FormLabel'
 import FormControl from '@mui/material/FormControl'
@@ -10,7 +13,7 @@ import Select from '@mui/material/Select'
 import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import FormControlLabel from '@mui/material/FormControlLabel'
-import React from 'react'
+//
 import DataTable, { type DataTableProps } from '@src'
 
 class Example extends React.Component {
@@ -38,7 +41,8 @@ class Example extends React.Component {
                 options: {
                     filter: true,
                     customFilterListOptions: {
-                        render: v => v.toLowerCase()
+                        render: v =>
+                            typeof v === 'string' ? v.toLowerCase() : v
                     }
                 }
             },
@@ -50,18 +54,27 @@ class Example extends React.Component {
                     display: true,
                     filterType: 'custom',
                     customFilterListOptions: {
-                        render: v => v.map(l => l.toUpperCase()),
+                        render: v => {
+                            if (!Array.isArray(v)) {
+                                throw new Error('v is not an array')
+                            }
+
+                            return v.map(l => l.toUpperCase())
+                        },
                         update: (filterList, filterPos, index) => {
                             console.log('update')
                             console.log(filterList, filterPos, index)
-                            filterList[index].splice(filterPos, 1)
+
+                            filterList[index]?.splice(filterPos, 1)
+
                             return filterList
                         }
                     },
                     filterOptions: {
-                        logic: (location, filters, row) => {
+                        logic: (location, filters) => {
                             if (filters.length)
                                 return !filters.includes(location)
+
                             return false
                         },
                         display: (filterList, onChange, index, column) => {
@@ -82,10 +95,11 @@ class Example extends React.Component {
                                             selected.join(', ')
                                         }
                                         onChange={event => {
-                                            filterList[index] =
-                                                event.target.value
+                                            filterList[index] = event.target
+                                                .value as string[]
+
                                             onChange(
-                                                filterList[index],
+                                                filterList[index] ?? [],
                                                 index,
                                                 column
                                             )
@@ -95,11 +109,9 @@ class Example extends React.Component {
                                             <MenuItem key={item} value={item}>
                                                 <Checkbox
                                                     color="primary"
-                                                    checked={
-                                                        filterList[
-                                                            index
-                                                        ].indexOf(item) > -1
-                                                    }
+                                                    checked={filterList[
+                                                        index
+                                                    ]?.includes(item)}
                                                 />
                                                 <ListItemText primary={item} />
                                             </MenuItem>
@@ -119,10 +131,13 @@ class Example extends React.Component {
 
                     // if the below value is set, these values will be used every time the table is rendered.
                     // it's best to let the table internally manage the filterList
-                    //filterList: [25, 50],
-
+                    // filterList: [25, 50],
                     customFilterListOptions: {
                         render: v => {
+                            if (!Array.isArray(v)) {
+                                throw new Error('v is not an array')
+                            }
+
                             if (v[0] && v[1] && this.state.ageFilterChecked) {
                                 return [`Min Age: ${v[0]}`, `Max Age: ${v[1]}`]
                             } else if (
@@ -147,9 +162,9 @@ class Example extends React.Component {
                             )
 
                             if (filterPos === 0) {
-                                filterList[index].splice(filterPos, 1, '')
+                                filterList[index]?.splice(filterPos, 1, '')
                             } else if (filterPos === 1) {
-                                filterList[index].splice(filterPos, 1)
+                                filterList[index]?.splice(filterPos, 1)
                             } else if (filterPos === -1) {
                                 filterList[index] = []
                             }
@@ -175,12 +190,25 @@ class Example extends React.Component {
                                 <FormGroup row>
                                     <TextField
                                         label="min"
-                                        value={filterList[index][0] || ''}
+                                        value={filterList[index]?.[0] ?? ''}
                                         onChange={event => {
-                                            filterList[index][0] =
+                                            const currentColumnFilterList =
+                                                filterList[index]
+
+                                            if (
+                                                typeof currentColumnFilterList ===
+                                                'undefined'
+                                            ) {
+                                                throw new Error(
+                                                    'filterList[index] is undefined'
+                                                )
+                                            }
+
+                                            currentColumnFilterList[0] =
                                                 event.target.value
+
                                             onChange(
-                                                filterList[index],
+                                                currentColumnFilterList,
                                                 index,
                                                 column
                                             )
@@ -192,12 +220,25 @@ class Example extends React.Component {
                                     />
                                     <TextField
                                         label="max"
-                                        value={filterList[index][1] || ''}
+                                        value={filterList[index]?.[1] ?? ''}
                                         onChange={event => {
-                                            filterList[index][1] =
+                                            const currentColumnFilterList =
+                                                filterList[index]
+
+                                            if (
+                                                typeof currentColumnFilterList ===
+                                                'undefined'
+                                            ) {
+                                                throw new Error(
+                                                    'filterList[index] is undefined'
+                                                )
+                                            }
+
+                                            currentColumnFilterList[1] =
                                                 event.target.value
+
                                             onChange(
-                                                filterList[index],
+                                                currentColumnFilterList,
                                                 index,
                                                 column
                                             )
@@ -240,12 +281,12 @@ class Example extends React.Component {
                                 salary.replace(/[^\d]/g, '')
                             )
                             const show =
-                                (filterVal.indexOf('Lower wages') >= 0 &&
+                                (filterVal.includes('Lower wages') &&
                                     salaryFloat < 100000) ||
-                                (filterVal.indexOf('Average wages') >= 0 &&
+                                (filterVal.includes('Average wages') &&
                                     salaryFloat >= 100000 &&
                                     salaryFloat < 200000) ||
-                                (filterVal.indexOf('Higher wages') >= 0 &&
+                                (filterVal.includes('Higher wages') &&
                                     salaryFloat >= 200000)
 
                             return !show

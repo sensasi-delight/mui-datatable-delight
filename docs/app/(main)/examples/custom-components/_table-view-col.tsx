@@ -1,48 +1,52 @@
-import Checkbox from '@mui/material/Checkbox'
+// vendors
+import { tss } from 'tss-react/mui'
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
 import FormControl from '@mui/material/FormControl'
 import FormGroup from '@mui/material/FormGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
-import { tss } from 'tss-react/mui'
-import { ToolbarViewCol } from '../../../../../src/components/toolbar/components/column-visibilities-box'
+import { useDataTableContext } from '@src'
 
-function TableViewCol({
-    columns,
-    options,
-    components = {},
-    onColumnUpdate,
-    updateColumns
-}: Parameters<typeof ToolbarViewCol>[0]) {
+function TableViewCol({ onColumnUpdate, updateColumns }) {
+    const {
+        components,
+        state,
+        textLabels: allTextLabels
+    } = useDataTableContext()
     const { classes } = useStyles()
-    const textLabels = options.textLabels.viewColumns
-    const CheckboxComponent = components.Checkbox || Checkbox
+    const textLabels = allTextLabels.viewColumns
+    const CheckboxComponent = components.Checkbox
 
-    const handleColChange = index => {
+    const handleColChange = (index: number) => {
         onColumnUpdate(index)
     }
 
     const selectAll = () => {
-        var newColumns = columns.map(col => {
-            var newCol = Object.assign({}, col)
-            newCol.display = 'true'
+        const newColumns = state.columns.map(col => {
+            const newCol = Object.assign({}, col)
+
+            newCol.display = true
+
             return newCol
         })
+
         updateColumns(newColumns)
     }
 
     return (
         <FormControl
-            component={'fieldset'}
+            component="fieldset"
             className={classes.root}
             aria-label={textLabels.titleAria}
         >
             <Typography variant="caption" className={classes.title}>
                 {textLabels.title}
             </Typography>
+
             <FormGroup className={classes.formGroup}>
                 <Button onClick={selectAll}>Show All</Button>
-                {columns.map((column, index) => {
+
+                {state.columns.map((column, index) => {
                     return (
                         column.display !== 'excluded' &&
                         column.viewColumns !== false && (
@@ -61,7 +65,7 @@ function TableViewCol({
                                             checked: classes.checked
                                         }}
                                         onChange={() => handleColChange(index)}
-                                        checked={column.display === 'true'}
+                                        checked={column.display}
                                         value={column.name}
                                     />
                                 }

@@ -14,7 +14,7 @@ class Example extends React.Component {
                 name: 'Name',
                 options: {
                     filter: false,
-                    customBodyRender: (value, _, updateValue) => (
+                    customBodyRender: (value, _, __, ___, updateValue) => (
                         <TextField
                             value={value}
                             onChange={event => updateValue(event.target.value)}
@@ -32,10 +32,16 @@ class Example extends React.Component {
                 name: 'Location',
                 options: {
                     filter: true,
-                    customBodyRender: (value, tableMeta, updateValue) => (
+                    customBodyRender: (
+                        value,
+                        _,
+                        columnIndex,
+                        __,
+                        updateValue
+                    ) => (
                         <Cities
                             value={value?.toString() ?? ''}
-                            index={tableMeta.columnIndex}
+                            index={columnIndex}
                             change={event => updateValue(event)}
                         />
                     )
@@ -45,7 +51,7 @@ class Example extends React.Component {
                 name: 'Age',
                 options: {
                     filter: false,
-                    customBodyRender: (value, _, updateValue) => (
+                    customBodyRender: (value, _, __, ___, updateValue) => (
                         <TextField
                             name="age"
                             value={value ?? ''}
@@ -75,7 +81,7 @@ class Example extends React.Component {
                 name: 'Active',
                 options: {
                     filter: true,
-                    customBodyRender: (value, _, updateValue) => {
+                    customBodyRender: (value, _, __, ___, updateValue) => {
                         return (
                             <FormControlLabel
                                 label={value ? 'Yes' : 'No'}
@@ -85,15 +91,15 @@ class Example extends React.Component {
                                         color="primary"
                                         checked={Boolean(value)}
                                         value={value ? 'Yes' : 'No'}
+                                        onChange={event => {
+                                            updateValue(
+                                                event.target.value === 'Yes'
+                                                    ? false
+                                                    : true
+                                            )
+                                        }}
                                     />
                                 }
-                                onChange={event => {
-                                    updateValue(
-                                        event.target.value === 'Yes'
-                                            ? false
-                                            : true
-                                    )
-                                }}
                             />
                         )
                     }
