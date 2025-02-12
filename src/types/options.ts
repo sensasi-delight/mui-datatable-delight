@@ -15,7 +15,6 @@ import type { DataTableState } from './state'
 import type { FilterTypeType } from './shared/filter-type-type'
 import { DEFAULT_TEXT_LABELS } from '../hooks/use-data-table-context/function/statics/default-text-labels'
 // enums
-import type RowsSelectedToolbarPlacement from '../enums/rows-selected-toolbar-placement'
 import type TableAction from '../enums/table-action'
 import type DataTableSearchOptions from './options/search'
 
@@ -54,7 +53,8 @@ export interface DataTableOptions<Row = DefaultRow>
      * An array of numbers (column indices) indicating the order the columns should be displayed in.
      * Defaults to the order provided by the Columns prop.
      * This option is useful if you'd like certain columns to swap position.
-     * See draggableColumns option
+     *
+     * For drag-and-drop column reordering, see the {@link draggableColumns | `draggableColumns`} option below.
      */
     columnOrder?: number[]
 
@@ -526,10 +526,8 @@ export interface DataTableOptions<Row = DefaultRow>
      * - 'replace': Select toolbar replaces default toolbar.
      *
      * @default 'replace'
-     *
-     * @see  {@link RowsSelectedToolbarPlacement}
      */
-    selectToolbarPlacement: RowsSelectedToolbarPlacement
+    selectToolbarPlacement: 'above' | 'always' | 'none' | 'replace'
 
     /**
      * Enable remote data source

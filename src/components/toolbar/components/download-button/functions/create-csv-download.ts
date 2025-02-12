@@ -1,7 +1,7 @@
-import type { Primitive } from '@src/types/values/primitive'
-import type { DataTableProps } from '@src/data-table.props'
 import type { DataTableOptions } from '@src/types/options'
 import type { DataTableState } from '@src/types/state'
+import type { ColumnState } from '@src/types/state/column'
+import type { DataItemState } from '@src/types/state/data-item'
 
 /**
  * @todo Add datetime on default filename
@@ -38,9 +38,9 @@ export function createCsvDownload<T>(
     downloadCsv(csv, options?.downloadOptions?.filename)
 }
 
-const buildHead = (
-    columns: DataTableState['columns'],
-    options: DataTableProps['options']
+const buildHead = <T>(
+    columns: ColumnState<T>[],
+    options: DataTableOptions<T>
 ) =>
     columns
         .reduce(
@@ -57,9 +57,9 @@ const buildHead = (
         .slice(0, -1) + '\r\n'
 
 const buildBody = <T>(
-    data: DataTableState<T>['data'],
-    columns: DataTableState<T>['columns'],
-    options: DataTableProps<T>['options']
+    data: DataItemState[],
+    columns: ColumnState<T>[],
+    options: DataTableOptions<T>
 ) => {
     if (!data.length) return ''
 
@@ -69,7 +69,7 @@ const buildBody = <T>(
                 soFar +
                 '"' +
                 [...row.data]
-                    .filter((_, index) => columns[index].download)
+                    .filter((_, index) => columns[index]?.download)
                     .map(prepare)
                     .join(
                         '"' +
@@ -113,7 +113,9 @@ function getSeparator(separator = ',') {
     return separator
 }
 
-function prepare(data: Primitive): Primitive {
+function prepare(
+    data: DataItemState['data'][number]
+): DataItemState['data'][number] {
     if (typeof data === 'string') {
         // Places single quote before the appearance of dangerous characters if they
         // are the first in the data string.

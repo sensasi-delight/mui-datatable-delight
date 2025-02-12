@@ -1,11 +1,11 @@
 'use client'
 
 import React from 'react'
-import DataTable, { DataTableColumns, DataTableOptions } from '@src'
+import DataTable, { type DataTableProps } from '@src'
 
 class Example extends React.Component {
     render() {
-        const columns: DataTableColumns = [
+        const columns: DataTableProps['columns'] = [
             {
                 name: 'Name',
                 options: {
@@ -124,29 +124,6 @@ class Example extends React.Component {
             ['Mason Ray', 'Computer Scientist', 'San Francisco', 39, '$142,000']
         ]
 
-        // Data for building a custom head and body with the onDownload option
-        const headerNames = [
-            {
-                name: 'Given name',
-                download: true
-            },
-            {
-                name: 'Role',
-                download: true
-            },
-            {
-                name: 'City',
-                download: true
-            },
-            {
-                name: 'Years',
-                download: true
-            },
-            {
-                name: 'Dough',
-                download: true
-            }
-        ]
         const footerNames = [
             'Full Name',
             'Job',
@@ -155,18 +132,36 @@ class Example extends React.Component {
             'Allowance'
         ]
 
-        const options: DataTableOptions = {
+        const options: DataTableProps['options'] = {
             filter: true,
             filterType: 'dropdown',
             responsive: 'standard',
-            onDownload: (buildHead, buildBody, _, data) =>
-                buildHead(headerNames) +
-                buildBody(
-                    data.concat({
-                        index: data.length,
-                        data: footerNames
-                    })
+            onDownload: (buildHead, buildBody, columns, data) => {
+                // Data for building a custom head and body with the onDownload option
+                const headerNames = [
+                    'Given name',
+                    'Role',
+                    'City',
+                    'Years',
+                    'Dough'
+                ]
+
+                const newHeaderCols = columns.map((column, i) => ({
+                    ...column,
+                    label: headerNames[i] ?? '',
+                    download: true
+                }))
+
+                return (
+                    buildHead(newHeaderCols) +
+                    buildBody(
+                        data.concat({
+                            index: data.length,
+                            data: footerNames
+                        })
+                    )
                 )
+            }
         }
 
         return (

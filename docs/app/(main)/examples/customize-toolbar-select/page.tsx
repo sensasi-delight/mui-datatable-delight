@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import DataTable from '@src'
+import DataTable, { type DataTableOptions, type DataTableProps } from '@src'
 import CustomToolbarSelect from './_custom-toolbar-select'
 import InputLabel from '@mui/material/InputLabel'
 
@@ -10,11 +10,12 @@ import FormControl from '@mui/material/FormControl'
 import Select from '@mui/material/Select'
 
 function Example() {
-    const [stp, setStp] = useState('replace')
+    const [stp, setStp] =
+        useState<DataTableOptions['selectToolbarPlacement']>('replace')
 
     const columns = ['Name', 'Title', 'Location', 'Age', 'Salary']
 
-    let data = [
+    const data = [
         ['Gabby George', 'Business Analyst', 'Minneapolis', 30, 100000],
         ['Aiden Lloyd', 'Business Consultant', 'Dallas', 55, 200000],
         ['Jaden Collins', 'Attorney', 'Santa Ana', 27, 500000],
@@ -59,7 +60,7 @@ function Example() {
         ['Mason Ray', 'Computer Scientist', 'San Francisco', 39, 142000]
     ]
 
-    const options = {
+    const options: DataTableProps['options'] = {
         filter: true,
         selectableRows: 'multiple',
         filterType: 'dropdown',
