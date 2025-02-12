@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import DataTable from '@src'
+import DataTable, { type DataTableProps } from '@src'
 
 class Example extends React.Component {
     state = {
@@ -66,14 +66,15 @@ class Example extends React.Component {
         ]
     }
 
-    handleFilterNameChange = event => {
-        let string = prompt(
+    handleFilterNameChange = () => {
+        const string = prompt(
             'Write a semicolon-separated string to change filter names in the first column!'
         )
+
         if (string) this.setState({ filterOptions: string.split(';') })
     }
 
-    handleAddData = event => {
+    handleAddData = () => {
         const string = prompt(
             "Write a semicolon-separated string with values for 'Name', 'Title', 'Location', 'Age' and 'Salary' to add a new row of data!"
         )
@@ -81,7 +82,7 @@ class Example extends React.Component {
             this.setState({ data: [string.split(';'), ...this.state.data] })
     }
 
-    handleChangeDisplay = event => {
+    handleChangeDisplay = () => {
         const string = prompt(
             "Write a semicolon-separated string of display options for each of the 5 columns. Options are either 'true', 'false', or 'excluded'"
         )
@@ -91,13 +92,14 @@ class Example extends React.Component {
     render() {
         const { data, filterList, filterOptions } = this.state
 
-        const columns = [
+        const columns: DataTableProps['columns'] = [
             {
                 name: 'Name',
                 options: {
                     filter: true,
-                    display: this.state.display[0],
-                    filterList: filterList[0].length ? filterList[0] : null,
+                    filterList: filterList[0]?.length
+                        ? filterList[0]
+                        : undefined,
                     customFilterListOptions: { render: v => `Name: ${v}` },
                     filterOptions: {
                         names: filterOptions
@@ -107,9 +109,10 @@ class Example extends React.Component {
             {
                 name: 'Title',
                 options: {
-                    display: this.state.display[1],
                     filter: true,
-                    filterList: filterList[1].length ? filterList[1] : null,
+                    filterList: filterList[1]?.length
+                        ? filterList[1]
+                        : undefined,
                     customFilterListOptions: { render: v => `Title: ${v}` },
                     filterType: 'textField' // set filterType's at the column level
                 }
@@ -117,38 +120,41 @@ class Example extends React.Component {
             {
                 name: 'Location',
                 options: {
-                    display: this.state.display[2],
                     filter: true,
                     filterOptions: {
                         fullWidth: true
                     },
-                    filterList: filterList[2].length ? filterList[2] : null
+                    filterList: filterList[2]?.length
+                        ? filterList[2]
+                        : undefined
                 }
             },
             {
                 name: 'Age',
                 options: {
-                    display: this.state.display[3],
                     filter: true,
-                    filterList: filterList[3].length ? filterList[3] : null,
+                    filterList: filterList[3]?.length
+                        ? filterList[3]
+                        : undefined,
                     customFilterListOptions: { render: v => `Age: ${v}` }
                 }
             },
             {
                 name: 'Salary',
                 options: {
-                    display: this.state.display[4],
                     filter: true,
-                    filterList: filterList[4].length ? filterList[4] : null,
+                    filterList: filterList[4]?.length
+                        ? filterList[4]
+                        : undefined,
                     customFilterListOptions: { render: v => `Salary: ${v}` },
                     sort: false
                 }
             }
         ]
 
-        const options = {
+        const options: DataTableProps['options'] = {
             filter: true,
-            onFilterChange: (changedColumn, newFilterList) => {
+            onFilterChange: (_, newFilterList) => {
                 this.setState({ filterList: newFilterList })
             },
             selectableRows: 'multiple',
@@ -158,9 +164,9 @@ class Example extends React.Component {
         }
 
         return (
-            <React.Fragment>
+            <>
                 <DataTable
-                    title={'ACME Employee list'}
+                    title="ACME Employee list"
                     data={data}
                     columns={columns}
                     options={options}
@@ -187,7 +193,7 @@ class Example extends React.Component {
                 <button onClick={this.handleChangeDisplay}>
                     Change which columns are displayed!
                 </button>
-            </React.Fragment>
+            </>
         )
     }
 }

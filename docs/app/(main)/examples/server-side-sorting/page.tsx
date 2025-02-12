@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography'
 import Cities from '../_shared-components/cities'
 
 class Example extends React.Component<
-    never,
+    unknown,
     {
         page: number
         count: number
@@ -16,7 +16,7 @@ class Example extends React.Component<
         loading: boolean
     }
 > {
-    constructor(props: never) {
+    constructor(props: unknown) {
         super(props)
 
         this.state = {

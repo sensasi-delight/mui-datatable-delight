@@ -1,7 +1,7 @@
 'use client'
 
 // vendors
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 // materials
 import Avatar from '@mui/material/Avatar'
 import Box from '@mui/material/Box'

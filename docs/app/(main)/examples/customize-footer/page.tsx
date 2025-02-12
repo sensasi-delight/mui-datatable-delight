@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import DataTable from '@src'
+import DataTable, { type DataTableProps } from '@src'
 import { tss } from 'tss-react/mui'
 
 import { CustomFooter } from './_custom-footer'
@@ -17,9 +17,7 @@ function Example() {
     const [stickyFooter, setStickyFooter] = useState(true)
     const { classes, cx } = useStyles()
 
-    const columns = ['Name', 'Title', 'Location', 'Age', 'Salary']
-
-    let data = [
+    const data = [
         ['Gabby George', 'Business Analyst', 'Minneapolis', 30, 100000],
         ['Aiden Lloyd', 'Business Consultant', 'Dallas', 55, 200000],
         ['Jaden Collins', 'Attorney', 'Santa Ana', 27, 500000],
@@ -69,7 +67,15 @@ function Example() {
         [classes.stickyFooterCell]: stickyFooter
     })
 
-    const options = {
+    const columns: DataTableProps<(typeof data)[number]>['columns'] = [
+        'Name',
+        'Title',
+        'Location',
+        'Age',
+        'Salary'
+    ]
+
+    const options: DataTableProps<(typeof data)[number]>['options'] = {
         filter: true,
         filterType: 'dropdown',
         responsive: 'vertical',
@@ -95,28 +101,37 @@ function Example() {
                 />
             )
         },
-        customTableBodyFooterRender: function (opts) {
-            let avgAge =
-                opts.data.reduce((accu, item) => {
-                    return accu + item.data[3]
-                }, 0) / opts.data.length
+        customTableBodyFooterRender: function (state, options) {
+            const avgAge =
+                state.data.reduce((accumulator, item) => {
+                    const age = item.data[3]
 
-            let avgSalary =
-                opts.data.reduce((accu, item) => {
-                    return accu + item.data[4]
-                }, 0) / opts.data.length
+                    if (typeof age !== 'number') {
+                        throw new TypeError('Age must be a number')
+                    }
 
-            avgAge = Math.round(avgAge)
-            avgSalary = Math.round(avgSalary)
+                    return accumulator + age
+                }, 0) / state.data.length
+
+            const avgSalary =
+                state.data.reduce((accumulator, item) => {
+                    const salary = item.data[3]
+
+                    if (typeof salary !== 'number') {
+                        throw new TypeError('Salary must be a number')
+                    }
+
+                    return accumulator + salary
+                }, 0) / state.data.length
 
             return (
                 <TableFooter className={footerClasses}>
                     <TableRow>
-                        {opts.selectableRows !== 'none' ? (
+                        {options.selectableRows !== 'none' ? (
                             <TableCell className={footerClasses} />
                         ) : null}
-                        {opts.columns.map((col, index) => {
-                            if (col.display === 'true') {
+                        {state.columns.map((col, index) => {
+                            if (col.display) {
                                 if (col.name === 'Age') {
                                     return (
                                         <TableCell

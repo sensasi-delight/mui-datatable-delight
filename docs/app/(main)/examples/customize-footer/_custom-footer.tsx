@@ -1,21 +1,20 @@
-import React from 'react'
 import MuiTablePagination from '@mui/material/TablePagination'
+import type { TextLabelsType } from '@src'
 
-export function CustomFooter(props: unknown) {
-    const { count, textLabels, rowsPerPage, page } = props
+export function CustomFooter(props: {
+    changeRowsPerPage: (nRows: number) => void
+    changePage: (pageNo: number) => void
+    count: number
+    page: number
+    rowsPerPage: number
+    textLabels: TextLabelsType['pagination']
+}) {
+    const { count, page, rowsPerPage, textLabels } = props
 
     const footerStyle = {
         display: 'flex',
         justifyContent: 'flex-end',
         padding: '0px 24px 0px 24px'
-    }
-
-    const handleRowChange = event => {
-        props.changeRowsPerPage(event.target.value)
-    }
-
-    const handlePageChange = (_, page) => {
-        props.changePage(page)
     }
 
     return (
@@ -38,8 +37,12 @@ export function CustomFooter(props: unknown) {
                     'aria-label': textLabels.next
                 }}
                 rowsPerPageOptions={[10, 20, 100]}
-                onPageChange={handlePageChange}
-                onRowsPerPageChange={handleRowChange}
+                onPageChange={(_, page) => {
+                    props.changePage(page)
+                }}
+                onRowsPerPageChange={event => {
+                    props.changeRowsPerPage(parseInt(event.target.value))
+                }}
             />
         </div>
     )

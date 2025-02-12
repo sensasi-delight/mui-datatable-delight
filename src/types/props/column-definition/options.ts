@@ -250,7 +250,10 @@ export interface ColumnDefinitionOptions<T> {
     sortCompare:
         | ((
               order: DataTableSortOrderOption['direction']
-          ) => (obj1: { data: unknown }, obj2: { data: unknown }) => number)
+          ) => (
+              obj1: { data: T[keyof T] },
+              obj2: { data: T[keyof T] }
+          ) => number)
         | undefined
 
     /**

@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import DataTable from '@src'
+import DataTable, { type DataTableProps } from '@src'
 
 class Example extends React.Component {
     render() {
@@ -88,37 +88,37 @@ class Example extends React.Component {
             ['Mason Ray', 'Computer Scientist', 'San Francisco', 39, '$142,000']
         ]
 
-        const options = {
+        const options: DataTableProps['options'] = {
             filter: true,
             filterType: 'dropdown',
-            responsive: 'vertical',
-            textLabels: {
-                body: {
-                    noMatch: 'Sorry we could not find any records!'
-                },
-                pagination: {
-                    next: 'Following page',
-                    previous: 'Preceding page'
-                },
-                filter: {
-                    all: 'All Records',
-                    title: 'OUR FILTERS',
-                    reset: 'PERFORM RESET'
-                },
-                selectedRows: {
-                    text: 'rows has been deleted',
-                    delete: 'Delete Row',
-                    deleteAria: 'Deleted Selected Rows'
-                }
-            }
+            responsive: 'vertical'
         }
 
         return (
             <DataTable
-                title={'ACME Employee list'}
+                title="ACME Employee list"
                 data={data}
                 columns={columns}
                 options={options}
+                textLabels={{
+                    body: {
+                        noMatch: 'Sorry we could not find any records!'
+                    },
+                    pagination: {
+                        next: 'Following page',
+                        previous: 'Preceding page'
+                    },
+                    filter: {
+                        all: 'All Records',
+                        title: 'OUR FILTERS',
+                        reset: 'PERFORM RESET'
+                    },
+                    selectedRows: {
+                        text: 'rows has been deleted',
+                        delete: 'Delete Row',
+                        deleteAria: 'Deleted Selected Rows'
+                    }
+                }}
             />
         )
     }

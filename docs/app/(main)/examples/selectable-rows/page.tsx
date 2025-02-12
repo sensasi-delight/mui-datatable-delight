@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import DataTable from '@src'
+import DataTable, { type DataTableProps } from '@src'
 import Switch from '@mui/material/Switch'
 import FormGroup from '@mui/material/FormGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
@@ -45,15 +45,27 @@ const data = [
     ['Mason Ray', 'Computer Scientist', 'San Francisco', 39, 142000]
 ]
 
-class Example extends React.Component {
-    state = {
-        selectableRowsHideCheckboxes: false,
-        data: data
+class Example extends React.Component<
+    unknown,
+    {
+        data: typeof data
+        selectableRowsHideCheckboxes: boolean
+        rowsSelected: number[]
+    }
+> {
+    constructor(props: unknown) {
+        super(props)
+
+        this.state = {
+            data,
+            selectableRowsHideCheckboxes: false,
+            rowsSelected: []
+        }
     }
 
-    updateSelectableRowsHideCheckboxes = event => {
+    updateSelectableRowsHideCheckboxes = (isChecked: boolean) => {
         this.setState({
-            selectableRowsHideCheckboxes: event.target.checked
+            selectableRowsHideCheckboxes: isChecked
         })
     }
 
@@ -66,12 +78,12 @@ class Example extends React.Component {
             { name: 'Salary', options: { hint: 'USD / year' } }
         ]
 
-        const options = {
-            textLabels: {
-                body: {
-                    noMatch: ''
-                }
-            },
+        const options: DataTableProps<(typeof data)[number]>['options'] = {
+            // textLabels: {
+            //     body: {
+            //         noMatch: ''
+            //     }
+            // },
             filter: true,
             selectableRows: 'multiple',
             selectableRowsOnClick: true,
@@ -83,21 +95,17 @@ class Example extends React.Component {
             rowsSelected: this.state.rowsSelected,
             onRowSelectionChange: (rowsSelectedData, allRows, rowsSelected) => {
                 console.log(rowsSelectedData, allRows, rowsSelected)
-                this.setState({ rowsSelected: rowsSelected })
+                this.setState({ rowsSelected: rowsSelected ?? [] })
             },
             onRowsDelete: (rowsDeleted, newData) => {
                 console.log('rowsDeleted')
                 console.dir(rowsDeleted)
                 console.dir(newData)
-                if (
-                    rowsDeleted &&
-                    rowsDeleted.data &&
-                    rowsDeleted.data[0] &&
-                    rowsDeleted.data[0].dataIndex === 0
-                ) {
+                if (rowsDeleted?.data?.[0]?.dataIndex === 0) {
                     window.alert("Can't delete this!")
                     return false
                 }
+
                 this.setState({
                     data: newData,
                     rowsSelected: []
@@ -133,8 +141,9 @@ class Example extends React.Component {
                         .length === 0
                 )
                     return false
+
                 //prevents selection of row with title "Attorney"
-                return data[dataIndex][1] != 'Attorney'
+                return data[dataIndex]?.[1] != 'Attorney'
             },
             selectableRowsHeader: false
         }
@@ -152,8 +161,10 @@ class Example extends React.Component {
                                 checked={
                                     this.state.selectableRowsHideCheckboxes
                                 }
-                                onChange={
-                                    this.updateSelectableRowsHideCheckboxes
+                                onChange={event =>
+                                    this.updateSelectableRowsHideCheckboxes(
+                                        event.target.checked
+                                    )
                                 }
                                 value="selectableRowsHideCheckboxes"
                                 color="primary"

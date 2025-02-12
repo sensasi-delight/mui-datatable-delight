@@ -348,7 +348,7 @@ export interface DataTableOptions<Row = DefaultRow>
             data: SelectedRowDataState[]
             lookup: Record<number, boolean>
         },
-        newTableData: unknown[]
+        newTableData: Row[]
         // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
     ) => void | false
 
@@ -655,7 +655,7 @@ interface DataTableCustomsOptions<Row> {
     /** Add a custom footer to the filter dialog. */
     customFilterDialogFooter?: (
         filterList: DataTableState<Row>['filterList'],
-        applyNewFilters?: (...args: unknown[]) => unknown
+        applyNewFilters: (...args: unknown[]) => unknown
     ) => ReactNode
 
     /**

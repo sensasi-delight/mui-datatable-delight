@@ -2,6 +2,7 @@ export type { ColumnDefinitionObject } from './types/props/column-definition/obj
 export type { DataTableProps } from './data-table.props'
 export type { DataTableOptions } from './types/options'
 export type { DataTableState } from './types/state'
+export type { TextLabelsType } from './hooks/use-data-table-context/function/statics/default-text-labels'
 
 export { DataTable as default } from './data-table'
 

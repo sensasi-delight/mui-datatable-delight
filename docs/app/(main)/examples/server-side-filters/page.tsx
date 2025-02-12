@@ -3,7 +3,7 @@
 import Button from '@mui/material/Button'
 import CircularProgress from '@mui/material/CircularProgress'
 import React from 'react'
-import DataTable from '@src'
+import DataTable, { type DataTableProps } from '@src'
 
 const theData = [
     ['Gabby George', 'Business Analyst', 'Minneapolis', 30, '$100,000'],
@@ -57,29 +57,34 @@ class Example extends React.Component {
     }
 
     // mock async function
-    xhrRequest = (url, filterList) => {
-        return new Promise(resolve => {
+    xhrRequest = (_: string, filterList: string[][]) => {
+        return new Promise<{
+            data: typeof theData
+        }>(resolve => {
             window.setTimeout(() => {
                 const data = theData
 
                 if (
-                    filterList.reduce((accu, cur) => accu + cur.length, 0) === 0
+                    filterList.reduce(
+                        (accumulator, cur) => accumulator + cur.length,
+                        0
+                    ) === 0
                 ) {
                     resolve({ data })
                 } else {
-                    /*
-              This code simulates filtering that would occur on the back-end
-            */
-                    var filteredData = data.filter(row => {
-                        var ret = true
+                    /* This code simulates filtering that would occur on the back-end */
+                    const filteredData = data.filter(row => {
+                        let ret = true
 
-                        for (var ii = 0; ii <= 4; ii++) {
-                            if (filterList[ii] && filterList[ii].length) {
+                        for (let ii = 0; ii <= 4; ii++) {
+                            if (filterList[ii]?.length) {
                                 ret =
                                     ret &&
-                                    filterList[ii].filter(ff => {
-                                        return row[ii] == ff
-                                    }).length > 0
+                                    Boolean(
+                                        filterList[ii]?.filter(ff => {
+                                            return row[ii] == ff
+                                        }).length
+                                    )
                             }
                         }
                         return ret
@@ -91,17 +96,18 @@ class Example extends React.Component {
         })
     }
 
-    handleFilterSubmit = applyFilters => {
-        let filterList = applyFilters()
+    handleFilterSubmit = (applyFilters: (...args: unknown[]) => unknown) => {
+        const filterList = applyFilters()
 
         this.setState({ isLoading: true })
 
         // fake async request
-        this.xhrRequest(`/myApiServer?filters=${filterList}`, filterList).then(
-            res => {
-                this.setState({ isLoading: false, data: res.data })
-            }
-        )
+        this.xhrRequest(
+            `/myApiServer?filters=${filterList}`,
+            filterList as string[][]
+        ).then(res => {
+            this.setState({ isLoading: false, data: res.data })
+        })
     }
 
     render() {
@@ -139,7 +145,7 @@ class Example extends React.Component {
             }
         ]
 
-        const options = {
+        const options: DataTableProps['options'] = {
             filter: true, // show the filter icon in the toolbar (true by default)
             filterType: 'dropdown',
             responsive: 'standard',
@@ -152,7 +158,7 @@ class Example extends React.Component {
             confirmFilters: true,
 
             // Calling the applyNewFilters parameter applies the selected filters to the table
-            customFilterDialogFooter: (currentFilterList, applyNewFilters) => {
+            customFilterDialogFooter: (_, applyNewFilters) => {
                 return (
                     <div style={{ marginTop: '40px' }}>
                         <Button
@@ -179,9 +185,9 @@ class Example extends React.Component {
             onFilterDialogClose: () => {
                 console.log('filter dialog closed')
             },
-            onFilterChange: (column, filterList, type) => {
+            onFilterChange: (_, filterList, type) => {
                 if (type === 'chip') {
-                    var newFilters = () => filterList
+                    const newFilters = () => filterList
                     console.log('updating filters via chip')
                     this.handleFilterSubmit(newFilters)
                 }

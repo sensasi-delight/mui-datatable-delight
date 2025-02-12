@@ -1,32 +1,37 @@
 'use client'
 
 import React from 'react'
-import Chip from '@mui/material/Chip'
+// import Chip, { type ChipProps } from '@mui/material/Chip'
+// materials
+import { type CheckboxProps } from '@mui/material/Checkbox'
 import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
 import MuiTooltip, { type TooltipProps } from '@mui/material/Tooltip'
 import Fade from '@mui/material/Fade'
 import Checkbox from '@mui/material/Checkbox'
-import Radio, { type RadioProps } from '@mui/material/Radio'
+import Radio from '@mui/material/Radio'
 import TableViewCol from './_table-view-col'
 //
-import DataTable, { FilteredValuesList } from '@src'
+import DataTable, {
+    // FilteredValuesList,
+    type DataTableProps
+} from '@src'
 
-const CustomChip = props => {
-    const { label, onDelete, columnNames, className, index } = props
+// const CustomChip = (props: ChipProps) => {
+//     const { label, onDelete, columnNames, className, index } = props
 
-    return (
-        <Chip
-            className={className}
-            variant="outlined"
-            color={
-                columnNames[index].name === 'Company' ? 'secondary' : 'primary'
-            }
-            label={label}
-            onDelete={onDelete}
-        />
-    )
-}
+//     return (
+//         <Chip
+//             className={className}
+//             variant="outlined"
+//             color={
+//                 columnNames[index].name === 'Company' ? 'secondary' : 'primary'
+//             }
+//             label={label}
+//             onDelete={onDelete}
+//         />
+//     )
+// }
 
 const CustomTooltip = ({ title, children }: TooltipProps) => {
     return (
@@ -41,26 +46,24 @@ const CustomTooltip = ({ title, children }: TooltipProps) => {
     )
 }
 
-const CustomCheckbox = (props: RadioProps) => {
-    const newProps = Object.assign({}, props)
-
-    newProps.color =
+const CustomCheckbox = (props: CheckboxProps) => {
+    const color =
         props['data-description'] === 'row-select' ? 'secondary' : 'primary'
 
     return props['data-description'] === 'row-select' ? (
-        <Radio {...newProps} />
+        <Radio {...props} color={color} />
     ) : (
-        <Checkbox {...newProps} />
+        <Checkbox {...props} color={color} />
     )
 }
 
-const CustomFilterList = props => {
-    return <FilteredValuesList {...props} ItemComponent={CustomChip} />
-}
+// const CustomFilterList = props => {
+//     return <FilteredValuesList {...props} ItemComponent={CustomChip} />
+// }
 
 class Example extends React.Component {
     render() {
-        const columns = [
+        const columns: DataTableProps['columns'] = [
             { name: 'Name' },
             {
                 name: 'Company',
@@ -69,12 +72,10 @@ class Example extends React.Component {
                     filterType: 'custom',
                     filterList: ['Test Corp'],
                     customFilterListOptions: {
-                        render: v => {
-                            if (v.length !== 0) {
-                                return `Company: ${v[0]}`
-                            }
-                            return false
-                        },
+                        render: v =>
+                            typeof v === 'string' && v.length !== 0
+                                ? `Company: ${v[0]}`
+                                : false,
                         update: filterList => filterList
                     },
                     filterOptions: {
@@ -88,8 +89,25 @@ class Example extends React.Component {
                         display: (filterList, onChange, index, column) => (
                             <Select
                                 onChange={event => {
-                                    filterList[index][0] = event.target.value
-                                    onChange(filterList[index], index, column)
+                                    const currentColumnFilterList =
+                                        filterList[index]
+
+                                    if (
+                                        currentColumnFilterList === undefined ||
+                                        typeof currentColumnFilterList ===
+                                            'string'
+                                    ) {
+                                        throw new Error()
+                                    }
+
+                                    currentColumnFilterList[0] = event.target
+                                        .value as string
+
+                                    onChange(
+                                        currentColumnFilterList,
+                                        index,
+                                        column
+                                    )
                                 }}
                                 value={filterList[index]}
                             >
@@ -128,12 +146,12 @@ class Example extends React.Component {
             ['James Houston', 'Test Corp', 'Dallas', 'TX']
         ]
 
-        let options = {
+        const options: DataTableProps['options'] = {
             onFilterChipClose: (index, removedFilter, filterList) => {
                 console.log(index, removedFilter, filterList)
             },
-            selectableRows: 'single',
-            selectToolbarPlacement: 'none'
+            selectableRows: 'single'
+            // selectToolbarPlacement: 'none'
         }
 
         return (
@@ -143,10 +161,10 @@ class Example extends React.Component {
                 columns={columns}
                 options={options}
                 components={{
-                    FilteredValuesList: CustomFilterList,
+                    // FilteredValuesList: CustomFilterList,
                     Tooltip: CustomTooltip,
                     Checkbox: CustomCheckbox,
-                    TableViewCol: TableViewCol
+                    ColumnVisibilitiesBox: TableViewCol
                 }}
             />
         )
