@@ -4,6 +4,7 @@ import type { ReactNode } from 'react'
 import IconButton from '@mui/material/IconButton'
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight'
 import RemoveIcon from '@mui/icons-material/Remove'
+import { useDataTableContext } from '@src'
 
 /**
  * The row expansion button component.
@@ -15,8 +16,6 @@ import RemoveIcon from '@mui/icons-material/Remove'
 export default function RowExpansionButton({
     areAllRowsExpanded,
     buttonClass,
-    expandableRowsHeader,
-    expandedRows,
     iconClass,
     iconIndeterminateClass,
     isHeaderCell,
@@ -25,22 +24,24 @@ export default function RowExpansionButton({
     areAllRowsExpanded: () => boolean
     buttonClass: string
     dataIndex?: number
-    expandableRowsHeader: boolean
-    expandedRows: unknown[]
     iconClass: string
     iconIndeterminateClass: string
     isHeaderCell: boolean
     onExpand?: (...args: unknown[]) => unknown
 }): ReactNode {
+    const { options, state } = useDataTableContext()
+
     const isNotExpand =
-        isHeaderCell && !areAllRowsExpanded() && expandedRows.data.length > 0
+        isHeaderCell &&
+        !areAllRowsExpanded() &&
+        state.expandedRows.data.length > 0
 
     return (
         <IconButton
             id="expandable-button"
             onClick={onExpand}
             style={{ padding: 0 }}
-            disabled={expandableRowsHeader === false}
+            disabled={options.expandableRowsHeader === false}
             className={buttonClass}
         >
             {isNotExpand ? (

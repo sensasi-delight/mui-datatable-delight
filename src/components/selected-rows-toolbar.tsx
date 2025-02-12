@@ -14,6 +14,7 @@ import { buildMap } from '../functions'
 import getNewStateOnDataChange from '@src/functions/get-new-state-on-data-change'
 // locals
 import type { DataTableOptions } from '../types/options'
+import type { SelectedRowDataState } from '@src/types/state/selected-row-data'
 import useDataTableContext from '../hooks/use-data-table-context'
 // enums
 import ClassName from '../enums/class-name'
@@ -89,8 +90,7 @@ export default function SelectedRowsToolbar({
             {options.customToolbarSelect?.(
                 state.selectedRows,
                 state.displayData ?? [],
-                (rows: number[]) =>
-                    handleCustomSelectedRows(rows, options, selectRowUpdate)
+                rows => handleCustomSelectedRows(rows, options, selectRowUpdate)
             )}
 
             {!options.customToolbarSelect && (
@@ -138,7 +138,7 @@ export interface TableToolbarSelectProps {
 
 function handleCustomSelectedRows<T>(
     /** Array of rows indexes that are selected, e.g. [0, 2] will select first and third rows in table */
-    selectedRows: number[],
+    selectedRows: SelectedRowDataState[],
     options: DataTableOptions<T>,
     selectRowUpdate: TableToolbarSelectProps['selectRowUpdate']
 ) {

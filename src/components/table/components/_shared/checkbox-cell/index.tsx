@@ -173,8 +173,6 @@ export default function CheckboxCell({
                         areAllRowsExpanded={areAllRowsExpanded}
                         buttonClass={buttonClass}
                         dataIndex={dataIndex}
-                        expandedRows={state.expandedRows}
-                        expandableRowsHeader={options.expandableRowsHeader}
                         iconClass={iconClass}
                         iconIndeterminateClass={iconIndeterminateClass}
                         isHeaderCell={isHeaderCell}

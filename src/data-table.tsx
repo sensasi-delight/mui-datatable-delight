@@ -30,7 +30,7 @@ import Table from './components/table'
 import Toolbar from './components/toolbar'
 // enums
 import ClassName from './enums/class-name'
-import RowsSelectedToolbarPlacement from './enums/rows-selected-toolbar-placement'
+import SELECT_TOOLBAR_PLACEMENT from './statics/select-toolbar-placement'
 import TableAction from './enums/table-action'
 
 /**
@@ -169,8 +169,7 @@ function DataTable_({
 
             // if the select toolbar is disabled, the rules are a little different
             if (
-                options.selectToolbarPlacement ===
-                RowsSelectedToolbarPlacement.NONE
+                options.selectToolbarPlacement === SELECT_TOOLBAR_PLACEMENT.NONE
             ) {
                 if (selectedRowsLen > displayData.length) {
                     isDeselect = true
@@ -296,22 +295,18 @@ function DataTable_({
     }
 
     const isShowToolbarSelect =
-        options.selectToolbarPlacement ===
-            RowsSelectedToolbarPlacement.ALWAYS ||
+        options.selectToolbarPlacement === SELECT_TOOLBAR_PLACEMENT.ALWAYS ||
         (state.selectedRows.data.length > 0 &&
-            options.selectToolbarPlacement !==
-                RowsSelectedToolbarPlacement.NONE)
+            options.selectToolbarPlacement !== SELECT_TOOLBAR_PLACEMENT.NONE)
 
     const isShowToolbar =
         !isShowToolbarSelect &&
         hasToolbarItem(options) &&
-        options.selectToolbarPlacement &&
-        ![
-            RowsSelectedToolbarPlacement.ABOVE,
-            RowsSelectedToolbarPlacement.NONE
-        ].includes(options.selectToolbarPlacement)
+        options.selectToolbarPlacement !== SELECT_TOOLBAR_PLACEMENT.ABOVE &&
+        options.selectToolbarPlacement !== SELECT_TOOLBAR_PLACEMENT.NONE
 
     const paperClasses = cx(
+        classes.paper,
         ['scrollFullHeightFullWidth', 'stackedFullWidth'].some(
             responsive => options?.responsive === responsive
         )

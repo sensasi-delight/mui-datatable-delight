@@ -21,6 +21,7 @@ import type DataTableSearchOptions from './options/search'
 // Imported for linking documentation
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import type { ColumnDefinitionOptions } from './props/column-definition/options'
+import type SELECT_TOOLBAR_PLACEMENT from '@src/statics/select-toolbar-placement'
 
 export interface DataTableSortOrderOption {
     /**
@@ -527,7 +528,7 @@ export interface DataTableOptions<Row = DefaultRow>
      *
      * @default 'replace'
      */
-    selectToolbarPlacement: 'above' | 'always' | 'none' | 'replace'
+    selectToolbarPlacement: (typeof SELECT_TOOLBAR_PLACEMENT)[keyof typeof SELECT_TOOLBAR_PLACEMENT]
 
     /**
      * Enable remote data source
