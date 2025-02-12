@@ -1,11 +1,11 @@
 'use client'
 
-import React, { useState } from 'react'
-import DataTable from '@src'
+import { useState } from 'react'
+import DataTable, { type DataTableProps } from '@src'
 import { ThemeProvider } from '@mui/material/styles'
 import { tss } from 'tss-react/mui'
 import { createTheme } from '@mui/material/styles'
-import Switch from '@mui/material/Switch'
+import Switch, { type SwitchProps } from '@mui/material/Switch'
 import FormGroup from '@mui/material/FormGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
 
@@ -13,7 +13,7 @@ export default function Example() {
     const { classes, cx } = useStyles()
     const [denseTable, setDenseTable] = useState(false)
     const [vertical, setVertical] = useState(false)
-    const columns = [
+    const columns: DataTableProps['columns'] = [
         {
             name: 'Name',
             options: {
@@ -28,7 +28,7 @@ export default function Example() {
                         }
                     }
                 },
-                setCellHeaderProps: value => {
+                setCellHeaderProps: () => {
                     return {
                         className: cx({
                             [classes.NameCell]: true
@@ -44,7 +44,7 @@ export default function Example() {
             name: 'Title',
             options: {
                 filter: true,
-                setCellHeaderProps: value => ({
+                setCellHeaderProps: () => ({
                     style: { textDecoration: 'underline' }
                 })
             }
@@ -115,14 +115,14 @@ export default function Example() {
         ['Mason Ray', 'Computer Scientist', 'San Francisco', 39, 142000]
     ]
 
-    const options = {
+    const options: DataTableProps['options'] = {
         filter: true,
         filterType: 'dropdown',
         responsive: vertical ? 'vertical' : 'standard',
         fixedHeader: false,
         fixedSelectColumn: false,
         rowHover: false,
-        setRowProps: (row, dataIndex, rowIndex) => {
+        setRowProps: (row, _, rowIndex) => {
             return {
                 className: cx({
                     [classes.BusinessAnalystRow]: row[1] === 'Business Analyst',
@@ -142,6 +142,7 @@ export default function Example() {
     const getMuiTheme = () =>
         createTheme({
             components: {
+                // @ts-expect-error  WILL FIX THIS LATER
                 MUIDataTable: {
                     styleOverrides: {
                         root: {
@@ -185,11 +186,11 @@ export default function Example() {
             }
         })
 
-    const toggleDenseTable = event => {
+    const toggleDenseTable: SwitchProps['onChange'] = event => {
         setDenseTable(!!event.target.checked)
     }
 
-    const toggleResponsive = event => {
+    const toggleResponsive: SwitchProps['onChange'] = event => {
         setVertical(!!event.target.checked)
     }
 

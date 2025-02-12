@@ -1,7 +1,7 @@
 'use client'
 
-import React, { useState } from 'react'
-import DataTable from '@src'
+import { useState } from 'react'
+import DataTable, { type DataTableOptions, type DataTableProps } from '@src'
 import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
@@ -9,13 +9,15 @@ import Select from '@mui/material/Select'
 import TextField from '@mui/material/TextField'
 
 function Example() {
-    const [responsive, setResponsive] = useState('vertical')
+    const [responsive, setResponsive] =
+        useState<DataTableOptions['responsive']>('vertical')
     const [tableBodyHeight, setTableBodyHeight] = useState('400px')
     const [tableBodyMaxHeight, setTableBodyMaxHeight] = useState('')
     const [transitionTime, setTransitionTime] = useState(300)
-    const [selectableRows, setSelectableRows] = useState('none')
+    const [selectableRows, setSelectableRows] =
+        useState<DataTableOptions['selectableRows']>('none')
 
-    const columns = [
+    const columns: DataTableProps['columns'] = [
         {
             name: 'hidden',
             options: {
@@ -34,7 +36,7 @@ function Example() {
         'Phone'
     ]
 
-    const options = {
+    const options: DataTableProps['options'] = {
         filter: true,
         filterType: 'dropdown',
         responsive,
@@ -112,7 +114,11 @@ function Example() {
                         marginBottom: '10px',
                         marginRight: 10
                     }}
-                    onChange={e => setResponsive(e.target.value)}
+                    onChange={e =>
+                        setResponsive(
+                            e.target.value as DataTableOptions['responsive']
+                        )
+                    }
                 >
                     <MenuItem value={'vertical'}>vertical</MenuItem>
                     <MenuItem value={'standard'}>standard</MenuItem>
@@ -180,7 +186,11 @@ function Example() {
                         marginBottom: '10px',
                         marginRight: 10
                     }}
-                    onChange={e => setSelectableRows(e.target.value)}
+                    onChange={e =>
+                        setSelectableRows(
+                            e.target.value as DataTableOptions['selectableRows']
+                        )
+                    }
                 >
                     <MenuItem value={'none'}>none</MenuItem>
                     <MenuItem value={'single'}>single</MenuItem>
@@ -192,11 +202,11 @@ function Example() {
                     label="Transition Time"
                     type="number"
                     value={transitionTime}
-                    onChange={e => setTransitionTime(e.target.value)}
+                    onChange={e => setTransitionTime(parseInt(e.target.value))}
                 />
             </FormControl>
             <DataTable
-                title={'ACME Employee list'}
+                title="ACME Employee list"
                 data={data}
                 columns={columns}
                 options={options}

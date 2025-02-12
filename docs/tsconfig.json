@@ -1,26 +1,16 @@
 {
     "extends": "../tsconfig.json",
     "compilerOptions": {
-        "composite": true,
         "allowJs": true,
         "incremental": true,
         "jsx": "preserve",
-        "esModuleInterop": true,
-        "resolveJsonModule": true,
-
         "plugins": [
             {
                 "name": "next"
             }
         ],
-        "rootDir": "../",
-        "paths": {
-            "@src": ["../src"],
-            "@src/*": ["../src/*"],
-            "@dist": [".."],
-            "@dist/*": ["../dist/*"],
-            "@/*": ["./*"]
-        }
+        "resolveJsonModule": true,
+        "rootDir": "../"
     },
     "include": [
         "next-env.d.ts",

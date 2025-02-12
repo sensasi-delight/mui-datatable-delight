@@ -55,14 +55,25 @@ class Example extends React.Component {
                     sortDescFirst: true,
                     sortCompare: order => {
                         return (obj1, obj2) => {
+                            if (
+                                typeof obj1.data !== 'string' ||
+                                typeof obj2.data !== 'string'
+                            ) {
+                                throw new TypeError(
+                                    'Salary column is not string'
+                                )
+                            }
+
                             const val1 = parseInt(
                                 obj1.data.substr(1).replace(/,/g, ''),
                                 10
                             )
+
                             const val2 = parseInt(
-                                obj2.data.substr(1).replace(/,/g, ''),
+                                obj2.data?.substr(1).replace(/,/g, ''),
                                 10
                             )
+
                             return (val1 - val2) * (order === 'asc' ? 1 : -1)
                         }
                     }

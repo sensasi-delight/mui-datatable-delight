@@ -1,5 +1,5 @@
 import { type DataTableOptions } from '@src/types/options'
-import RowsSelectedToolbarPlacement from '@src/enums/rows-selected-toolbar-placement'
+import RowsSelectedToolbarPlacement from '@src/statics/select-toolbar-placement'
 
 export const DEFAULT_OPTIONS = {
     caseSensitive: false,

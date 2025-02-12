@@ -2,9 +2,14 @@
 
 import Button from '@mui/material/Button'
 import React from 'react'
-import DataTable, { DataTableOptions, DataTableProps } from '@src'
+import DataTable, { type DataTableProps } from '@src'
 
-class Example extends React.Component {
+class Example extends React.Component<
+    unknown,
+    {
+        downloadFile: boolean
+    }
+> {
     state = {
         downloadFile: true
     }
@@ -23,7 +28,8 @@ class Example extends React.Component {
                 name: 'Age',
                 options: {
                     customBodyRenderLite: dataIndex => {
-                        let value = data[dataIndex][3]
+                        const value = data[dataIndex]?.[3]
+
                         return (
                             <div>
                                 <span>{value}</span>
@@ -97,13 +103,14 @@ class Example extends React.Component {
             ['Mason Ray', 'Computer Scientist', 'San Francisco', 39, 142000]
         ]
 
-        const options: DataTableOptions = {
+        const options: DataTableProps['options'] = {
             filter: true,
             selectableRows: 'multiple',
             filterType: 'dropdown',
             responsive: 'vertical',
             draggableColumns: {
-                enabled: true
+                enabled: true,
+                transitionTime: 300
             },
             rowsPerPage: 10,
             downloadOptions: {

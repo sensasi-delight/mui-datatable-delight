@@ -1,18 +1,26 @@
 'use client'
 
-import React from 'react'
+// vendors
+import { tss } from 'tss-react/mui'
+// materials
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
+// icons-materials
+import BlockIcon from '@mui/icons-material/Block'
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows'
 import IndeterminateCheckBoxIcon from '@mui/icons-material/IndeterminateCheckBox'
-import BlockIcon from '@mui/icons-material/Block'
-import { tss } from 'tss-react/mui'
+//
+import type { DataTableState } from '@src'
 
-export default function CustomToolbarSelect(props: unknown) {
+export default function CustomToolbarSelect<T>(props: {
+    selectedRows: DataTableState<T>['selectedRows']
+    displayData: DataTableState<T>['displayData']
+    setSelectedRows: (rows: number[]) => void
+}) {
     const { classes } = useStyles()
 
     const handleClickInverseSelection = () => {
-        const nextSelectedRows = props.displayData.reduce(
+        const nextSelectedRows = props.displayData.reduce<number[]>(
             (nextSelectedRows, _, index) => {
                 if (
                     !props.selectedRows.data.find(

@@ -1,8 +1,8 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { Waypoint } from 'react-waypoint'
-import DataTable from '@src'
+import DataTable, { type DataTableProps } from '@src'
 // import { tss } from 'tss-react/mui'
 
 type DataItemType = (string | number)[]
@@ -12,15 +12,14 @@ export default function MessageManager() {
     const [filteredMessages, setFilteredMessages] = useState<DataItemType[]>([])
 
     useEffect(() => {
+        function getMessages() {
+            const messages = buildTestData(30, 0)
+
+            setFilteredMessages(messages)
+        }
+
         getMessages()
     }, [])
-
-    function getMessages() {
-        const THIRTYROWS = 30
-        const messages = buildTestData(THIRTYROWS, 0)
-
-        setFilteredMessages(messages)
-    }
 
     function buildTestData(count: number, startingIndex: number) {
         const data = [
@@ -36,10 +35,13 @@ export default function MessageManager() {
         const rows: DataItemType[] = []
 
         for (let i = 0; i < count; i += 1) {
-            const randomSelection =
-                data[Math.floor(Math.random() * data.length)]
-
             const id = i + 1 + startingIndex
+            const randomIndex = Math.floor(Math.random() * data.length)
+            const randomSelection = data[randomIndex]
+
+            if (!randomSelection) {
+                throw new Error('Random selection is undefined')
+            }
 
             rows.push([id, ...randomSelection])
         }
@@ -47,14 +49,14 @@ export default function MessageManager() {
         return rows
     }
 
-    const columns = [
+    const columns: DataTableProps['columns'] = [
         {
             name: 'Id',
             options: {
                 filter: false,
                 sort: false,
                 customBodyRenderLite: (dataIndex, rowIndex) => {
-                    const value = filteredMessages[dataIndex][0]
+                    const value = filteredMessages[dataIndex]?.[0]
 
                     if (rowIndex !== filteredMessages.length - 10) {
                         return value
@@ -128,7 +130,7 @@ export default function MessageManager() {
 //     }
 // }))
 
-const options = {
+const options: DataTableProps['options'] = {
     filter: false,
     fixedHeader: true,
     filterType: 'dropdown',

@@ -5,10 +5,9 @@
   https://github.com/Skn0tt/mui-datatables-responsive-demo
   https://mui-datatables-responsive-demo.skn0tt.now.sh
 */
-import React from 'react'
 import DataTable from '@src'
 
-function YourCustomRowComponent(props) {
+function YourCustomRowComponent(props: RowType) {
     const { name, cardNumber, cvc, expiry } = props
 
     return (
@@ -23,7 +22,14 @@ function YourCustomRowComponent(props) {
     )
 }
 
-const creditCards = [
+interface RowType {
+    name: string
+    cardNumber: string
+    cvc: string
+    expiry: string
+}
+
+const creditCards: RowType[] = [
     {
         name: 'Tom Tallis',
         cardNumber: '5500005555555559',
@@ -71,7 +77,7 @@ function Example() {
                 selectableRows: 'none',
                 responsive: 'standard',
                 customRowRender: data => {
-                    const [name, cardNumber, cvc, expiry] = data
+                    const { name, cardNumber, cvc, expiry } = data
 
                     return (
                         <tr key={cardNumber}>

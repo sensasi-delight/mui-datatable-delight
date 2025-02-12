@@ -2,7 +2,7 @@
 import { type DataTableProps } from '@src/data-table.props'
 import { type DataTableOptions } from '@src/types/options'
 import { warnDeprecated, warnInfo } from '@src/functions'
-import RowsSelectedToolbarPlacement from '@src/enums/rows-selected-toolbar-placement'
+import SELECT_TOOLBAR_PLACEMENT from '@src/statics/select-toolbar-placement'
 
 export function handleDeprecatedOptions<T>(
     props: DataTableProps<T>,
@@ -100,12 +100,12 @@ export function handleDeprecatedOptions<T>(
     // only give this warning message in newer browsers
     if (
         options?.selectToolbarPlacement &&
-        !Object.values(RowsSelectedToolbarPlacement).includes(
+        !Object.values(SELECT_TOOLBAR_PLACEMENT).includes(
             options.selectToolbarPlacement
         )
     ) {
         warnInfo(
-            'Invalid option value for `selectToolbarPlacement`. Please check the documentation: https://github.com/gregnb/mui-datatables#options'
+            'Invalid option value for `selectToolbarPlacement`. Please check the documentation: https://mui-datatable-delight.vercel.app/api-docs/interfaces/DataTableOptions.html#selecttoolbarplacement'
         )
     }
 }

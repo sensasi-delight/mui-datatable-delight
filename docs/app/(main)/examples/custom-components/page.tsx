@@ -48,9 +48,12 @@ const CustomTooltip = ({ title, children }: TooltipProps) => {
 
 const CustomCheckbox = (props: CheckboxProps) => {
     const color =
+        // @ts-expect-error  WILL FIX THIS LATER
         props['data-description'] === 'row-select' ? 'secondary' : 'primary'
 
+    // @ts-expect-error  WILL FIX THIS LATER
     return props['data-description'] === 'row-select' ? (
+        // @ts-expect-error  WILL FIX THIS LATER
         <Radio {...props} color={color} />
     ) : (
         <Checkbox {...props} color={color} />
@@ -164,6 +167,8 @@ class Example extends React.Component {
                     // FilteredValuesList: CustomFilterList,
                     Tooltip: CustomTooltip,
                     Checkbox: CustomCheckbox,
+
+                    // @ts-expect-error  WILL FIX THIS LATER
                     ColumnVisibilitiesBox: TableViewCol
                 }}
             />
