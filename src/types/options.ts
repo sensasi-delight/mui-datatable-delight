@@ -281,7 +281,7 @@ export interface DataTableOptions<Row = DefaultRow>
         data: DataItemState[]
     ) =>
         | {
-              data: DisplayDataState<Row>
+              data: DataItemState[]
               columns: ColumnState<Row>[]
           }
         | string

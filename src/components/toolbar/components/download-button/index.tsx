@@ -15,6 +15,7 @@ import type { DataItemState } from '@src/types/state/data-item'
 import { ICON_BUTTON_DEFAULT_SX } from '../statics/icon-button-default-sx'
 import { createCsvDownload } from './functions/create-csv-download'
 import type { ReactElement } from 'react'
+import type { DisplayDataState } from '@src/types/state/display-data'
 
 /**
  * A component that renders a button for downloading the data as a CSV file.
@@ -55,7 +56,16 @@ function handleCSVDownload<T>(
     options: DataTableOptions<T>
 ) {
     const columnOrderIndices = getColumnOrderIndices(columnOrder)
-    let columnsToDownload = columnOrderIndices.map(idx => columns[idx])
+
+    let columnsToDownload: ColumnState<T>[] = columnOrderIndices.map(idx => {
+        const column = columns[idx]
+        if (!column) {
+            throw new Error('Column not found')
+        }
+
+        return column
+    })
+
     let dataToDownload = getDataToDownload(data, columnOrderIndices)
 
     if (shouldUseDisplayedRowsOnly(options)) {
@@ -82,7 +92,10 @@ function getColumnOrderIndices(columnOrder: unknown[]): number[] {
     return Array.isArray(columnOrder) ? columnOrder.map((_, idx) => idx) : []
 }
 
-function getDataToDownload(data: unknown[], columnOrderIndices: number[]) {
+function getDataToDownload(
+    data: DataItemState[],
+    columnOrderIndices: number[]
+) {
     return data.map(row => ({
         index: row.index,
         data: columnOrderIndices.map(idx => row.data[idx])
@@ -95,14 +108,15 @@ function shouldUseDisplayedRowsOnly<T>(options: DataTableOptions<T>): boolean {
 
 function getFilteredDataToDownload<T>(
     displayData: DataTableState<T>['displayData'],
-    data: DataTableState<T>['data'],
+    data: DataItemState[],
     columnOrderIndices: number[]
-) {
+): DataItemState[] {
+    // @ts-expect-error  WILL FIX THIS LATER
     return displayData
-        .map(row => ({
-            index: row.index,
-            data: row.data.map((column, i) =>
-                getActualValue(column, row.dataIndex, i, data)
+        .map((row, i) => ({
+            index: i,
+            data: row.data.map((cell, ii) =>
+                getActualValue(cell, row.dataIndex, ii, data)
             )
         }))
         .map(row => ({
@@ -111,11 +125,11 @@ function getFilteredDataToDownload<T>(
         }))
 }
 
-function getActualValue(
-    column: unknown,
+function getActualValue<T>(
+    column: DisplayDataState<T>[number]['data'][number],
     dataIndex: number,
     colIndex: number,
-    data: unknown[]
+    data: DataItemState[]
 ) {
     if (isReactElement(column)) {
         return data.find(d => d.index === dataIndex)?.data[colIndex]
@@ -146,10 +160,18 @@ function filterDataByDisplayedColumns<T>(
     columns: ColumnState<T>[],
     columnOrderIndices: number[]
 ) {
-    return data.map(row => ({
-        ...row,
-        data: row.data.filter(
-            (_, i) => columns[columnOrderIndices[i]].display === true
-        )
-    }))
+    return data.map(row => {
+        return {
+            ...row,
+            data: row.data.filter((_, i) => {
+                const colIndex = columnOrderIndices[i]
+
+                if (typeof colIndex === 'undefined') {
+                    throw new Error('Column index not found')
+                }
+
+                return columns[colIndex]?.display === true
+            })
+        }
+    })
 }
