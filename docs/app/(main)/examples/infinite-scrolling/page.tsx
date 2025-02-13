@@ -134,11 +134,12 @@ const options: DataTableProps['options'] = {
     filter: false,
     fixedHeader: true,
     filterType: 'dropdown',
-    responsive: 'standard',
-    selectableRows: 'none',
-    pagination: false,
-    tableBodyHeight: '500px',
     onRowClick(rowNode) {
         console.log(rowNode)
-    }
+    },
+    pagination: false,
+    responsive: 'standard',
+    selectableRows: 'none',
+    serverSide: true,
+    tableBodyHeight: '500px'
 }
