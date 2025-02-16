@@ -52,7 +52,7 @@ export function DataTable<Row = DefaultRow>({
     )
 }
 
-function DataTable_({
+function DataTable_<T>({
     className,
     ref
 }: {
@@ -68,9 +68,9 @@ function DataTable_({
         props: datatableRootProps,
         setState,
         state
-    } = useDataTableContext()
+    } = useDataTableContext<T>()
 
-    const filterUpdate: FilterUpdateType = (
+    const filterUpdate: FilterUpdateType<T> = (
         index,
         value,
         column,

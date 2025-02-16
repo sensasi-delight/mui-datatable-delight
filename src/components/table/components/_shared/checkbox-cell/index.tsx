@@ -92,32 +92,40 @@ export default function CheckboxCell({
         const expandedRowsData = [...state.expandedRows.data]
 
         const { isRowExpandable } = options
-        const affectedRows: string[] = []
+        const affectedRows: {
+            index: number
+            dataIndex: number
+        }[] = []
 
         if (expandedRowsData.length > 0) {
             // collapse all
             for (let ii = expandedRowsData.length - 1; ii >= 0; ii--) {
                 const item = expandedRowsData[ii]
-                if (
-                    !isRowExpandable ||
-                    isRowExpandable(item?.dataIndex, state.expandedRows)
-                ) {
-                    affectedRows.push(expandedRowsData.splice(ii, 1))
+
+                if (!item) continue
+
+                if (isRowExpandable?.(item.dataIndex, state.expandedRows)) {
+                    const affectedRow = expandedRowsData.splice(ii, 1)[0]
+
+                    if (!affectedRow) continue
+
+                    affectedRows.push(affectedRow)
                 }
             }
         } else {
             // expand all
             for (let ii = 0; ii < state.data.length; ii++) {
                 const item = state.data[ii]
-                if (
-                    !isRowExpandable ||
-                    isRowExpandable?.(item?.dataIndex, state.expandedRows)
-                ) {
+
+                if (!item) continue
+
+                if (isRowExpandable?.(item.index, state.expandedRows)) {
                     if (state.expandedRows.lookup[item.index] !== true) {
                         const newItem = {
                             index: ii,
                             dataIndex: item.index
                         }
+
                         expandedRowsData.push(newItem)
                         affectedRows.push(newItem)
                     }
@@ -193,6 +201,7 @@ export default function CheckboxCell({
 type IsHeaderCell =
     | {
           isHeaderCell: true
+          indeterminate: boolean
           onExpand?: never
       }
     | {
@@ -216,9 +225,9 @@ export interface DataTableTableSelectCellProps {
     /** Select cell disabled on/off */
     isRowSelectable?: boolean
 
-    isRowExpanded: boolean
+    isRowExpanded?: boolean
 
-    dataIndex: number
+    dataIndex?: number
 
     // id: string
 }

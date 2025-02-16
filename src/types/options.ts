@@ -33,7 +33,8 @@ export interface DataTableSortOrderOption {
 
 export interface DataTableOptions<Row = DefaultRow>
     extends DataTableCustomsOptions<Row>,
-        DataTableSearchOptions<Row> {
+        DataTableSearchOptions<Row>,
+        DeprecatedOptions {
     /**
      * Enable/disable case sensitivity for search
      *
@@ -326,7 +327,7 @@ export interface DataTableOptions<Row = DefaultRow>
 
     /** Callback function that triggers when a row is clicked. */
     onRowClick?: (
-        rowData: ReactNode[],
+        rowData: DisplayDataState<Row>[number]['data'],
         rowMeta: { dataIndex: number; rowIndex: number },
         event: React.MouseEvent<HTMLTableRowElement, globalThis.MouseEvent>
     ) => void
@@ -424,7 +425,7 @@ export interface DataTableOptions<Row = DefaultRow>
      * @see https://mui-datatable-delight.vercel.app/examples/expandable-rows
      */
     renderExpandableRow?: (
-        rowData: ReactNode[],
+        rowData: DisplayDataState<Row>[number]['data'],
         rowMeta: { dataIndex: number; rowIndex: number }
     ) => ReactNode
 
@@ -677,7 +678,7 @@ interface DataTableCustomsOptions<Row> {
      * @see https://mui-datatable-delight.vercel.app/examples/customize-rows
      */
     customRowRender?: (
-        data: Row,
+        data: DisplayDataState<Row>[number]['data'],
         dataIndex: number,
         rowIndex: number
     ) => ReactNode
@@ -744,4 +745,9 @@ interface DataTableCustomsOptions<Row> {
         displayData: DisplayDataState<Row>,
         setSelectedRows: (rows: number[]) => void
     ) => ReactNode
+}
+
+interface DeprecatedOptions {
+    /** @deprecated use `selectToolbarPlacement` instead */
+    disableToolbarSelect?: boolean
 }

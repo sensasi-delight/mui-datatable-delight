@@ -77,7 +77,11 @@ function Example() {
                 selectableRows: 'none',
                 responsive: 'standard',
                 customRowRender: data => {
-                    const { name, cardNumber, cvc, expiry } = data
+                    const [name, cardNumber, cvc, expiry] = data as string[]
+
+                    if (!name || !cardNumber || !cvc || !expiry) {
+                        return null
+                    }
 
                     return (
                         <tr key={cardNumber}>

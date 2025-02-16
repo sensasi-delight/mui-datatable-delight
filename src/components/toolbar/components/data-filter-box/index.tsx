@@ -13,8 +13,8 @@ import FilterType from '@src/enums/filter-type'
 import TableAction from '@src/enums/table-action'
 import ComponentClassName from '@src/enums/class-name'
 // locals
-import ToolbarDataFilterBoxFilters from './components/filter-inputs'
 import type { FilterUpdateType } from '@src/types/filter-update'
+import ToolbarDataFilterBoxFilters from './components/filter-inputs'
 
 /**
  * ToolbarDataFilterBox is a component that renders a filter dialog box for a data table,
@@ -27,9 +27,17 @@ import type { FilterUpdateType } from '@src/types/filter-update'
  *
  * @category  Component
  */
-export default function ToolbarDataFilterBox<T>(
-    props: DataTableToolbarFilterProps<T>
-): ReactNode {
+export default function ToolbarDataFilterBox<T>({
+    filterUpdate,
+    handleClose
+}: {
+    /** Callback to trigger filter update */
+    filterUpdate: FilterUpdateType<T>
+
+    handleClose: () => void
+}): ReactNode {
+    const { classes, cx } = useStyles()
+
     const {
         onAction,
         options,
@@ -38,19 +46,8 @@ export default function ToolbarDataFilterBox<T>(
         state,
         textLabels
     } = useDataTableContext()
-    const { filterUpdate, handleClose } = props
 
-    const { columns, filterList: filterListFromProp, filterData } = state
-
-    const { classes, cx } = useStyles()
-    const [filterList, setFilterList] = useState(filterListFromProp)
-
-    const fakeProps = {
-        ...props,
-        columns,
-        filterList,
-        filterData
-    }
+    const [filterList, setFilterList] = useState(state.filterList)
 
     function handleFilterReset() {
         const prevState = state
@@ -101,7 +98,7 @@ export default function ToolbarDataFilterBox<T>(
                         aria-label={textLabels.filter.reset}
                         onClick={() => {
                             if (options.confirmFilters !== true) {
-                                setFilterList(columns.map(() => []))
+                                setFilterList(state.columns.map(() => []))
                                 handleFilterReset()
                             }
                         }}
@@ -114,15 +111,13 @@ export default function ToolbarDataFilterBox<T>(
             </div>
 
             <ToolbarDataFilterBoxFilters
-                columns={columns}
-                parentProps={fakeProps}
                 innerFilterList={filterList}
-                setFilterList={setFilterList}
+                filterUpdate={filterUpdate}
             />
 
             {options.customFilterDialogFooter?.(filterList, () => {
                 filterList.forEach((filters, index) => {
-                    const column = columns[index]
+                    const column = state.columns[index]
 
                     if (!column) {
                         throw new Error('Column not found')
@@ -205,10 +200,3 @@ export type CustomUpdateType = (
     filterPos: FilterListType,
     index: number
 ) => FilterListType
-
-export interface DataTableToolbarFilterProps<T> {
-    /** Callback to trigger filter update */
-    filterUpdate: FilterUpdateType<T>
-
-    handleClose: () => void
-}

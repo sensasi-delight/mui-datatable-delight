@@ -1,8 +1,13 @@
 import { describe, expect, it, vi } from 'vitest'
 import { createCsvDownload } from './create-csv-download'
-import type { DataTableOptions } from '@src/index'
+import type { DataTableOptions, DataTableState } from '@src/index'
 
 describe('createCsvDownload', () => {
+    const data = [
+        { data: ['anton', 'abraham'] },
+        { data: ['berta', 'buchel'] }
+    ] as DataTableState<unknown>['data']
+
     const columns = [
         {
             name: 'firstname',
@@ -12,8 +17,7 @@ describe('createCsvDownload', () => {
             name: 'lastname',
             download: true
         }
-    ]
-    const data = [{ data: ['anton', 'abraham'] }, { data: ['berta', 'buchel'] }]
+    ] as DataTableState<unknown>['columns']
 
     /**
      * CAN'T REWRITE THIS TEST FOR NOW
@@ -35,8 +39,9 @@ describe('createCsvDownload', () => {
     it('calls download function if download callback returns not `false`', () => {
         const downloadCsv = vi.fn()
 
-        const options: DataTableOptions = {
+        const options = {
             downloadOptions: {
+                filename: 'test.csv',
                 separator: ';'
             },
             onDownload: () => {
@@ -44,9 +49,9 @@ describe('createCsvDownload', () => {
 
                 return ''
             }
-        }
+        } as unknown as DataTableOptions<unknown>
 
-        createCsvDownload(columns, data, options)
+        createCsvDownload<unknown>(columns, data, options)
 
         expect(downloadCsv).toBeCalled()
     })

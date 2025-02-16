@@ -12,7 +12,7 @@ import type { DEFAULT_ICONS } from '../statics/default-icons'
 import type { processTextLabels } from '../function/process-text-labels'
 
 export default interface ContextValue<DataRowItemType> {
-    components: DataTableComponents
+    components: Partial<DataTableComponents>
     draggableHeadCellRefs: RefObject<HTMLTableCellElement[]>
     functions: {
         /**

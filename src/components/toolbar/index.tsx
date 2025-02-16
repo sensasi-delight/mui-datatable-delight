@@ -30,7 +30,7 @@ import DataFilterBox from './components/data-filter-box'
  *
  * @see  {@link http://mui-datatable-delight.vercel.app/examples/customize-toolbar | Customize Toolbar Example}.
  */
-export default function Toolbar(props: ToolbarProps): ReactNode {
+export default function Toolbar<T>(props: ToolbarProps<T>): ReactNode {
     const {
         components,
         icons,
@@ -276,8 +276,8 @@ export default function Toolbar(props: ToolbarProps): ReactNode {
     )
 }
 
-interface ToolbarProps {
-    filterUpdate: FilterUpdateType
+interface ToolbarProps<T> {
+    filterUpdate: FilterUpdateType<T>
 }
 
 const useStyles = tss.withName(ClassName.TOOLBAR).create(({ theme }) => ({

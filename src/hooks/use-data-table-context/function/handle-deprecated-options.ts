@@ -6,7 +6,7 @@ import SELECT_TOOLBAR_PLACEMENT from '@src/statics/select-toolbar-placement'
 
 export function handleDeprecatedOptions<T>(
     props: DataTableProps<T>,
-    options: DataTableOptions<T> & DeprecatedOptions
+    options: DataTableOptions<T>
 ) {
     if (typeof options?.selectableRows === 'boolean') {
         warnDeprecated(
@@ -108,9 +108,4 @@ export function handleDeprecatedOptions<T>(
             'Invalid option value for `selectToolbarPlacement`. Please check the documentation: https://mui-datatable-delight.vercel.app/api-docs/interfaces/DataTableOptions.html#selecttoolbarplacement'
         )
     }
-}
-
-interface DeprecatedOptions {
-    /** @deprecated use `selectToolbarPlacement` instead */
-    disableToolbarSelect?: boolean
 }

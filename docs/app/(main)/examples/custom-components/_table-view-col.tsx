@@ -2,23 +2,24 @@
 import { tss } from 'tss-react/mui'
 // materials
 import Button from '@mui/material/Button'
+import Checkbox from '@mui/material/Checkbox'
 import FormControl from '@mui/material/FormControl'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import FormGroup from '@mui/material/FormGroup'
 import Typography from '@mui/material/Typography'
 //
-import { useDataTableContext } from '@src'
+import { useDataTableContext, type DataTableState } from '@src'
 
-// @ts-expect-error  WILL FIX THIS LATER
-function TableViewCol({ onColumnUpdate, updateColumns }) {
-    const {
-        components,
-        state,
-        textLabels: allTextLabels
-    } = useDataTableContext()
+function TableViewCol<T>({
+    onColumnUpdate,
+    updateColumns
+}: {
+    onColumnUpdate: (index: number) => void
+    updateColumns: (columns: DataTableState<T>['columns']) => void
+}) {
+    const { state, textLabels: allTextLabels } = useDataTableContext<T>()
     const { classes } = useStyles()
     const textLabels = allTextLabels.viewColumns
-    const CheckboxComponent = components.Checkbox
 
     const handleColChange = (index: number) => {
         onColumnUpdate(index)
@@ -60,7 +61,7 @@ function TableViewCol({ onColumnUpdate, updateColumns }) {
                                     label: classes.label
                                 }}
                                 control={
-                                    <CheckboxComponent
+                                    <Checkbox
                                         color="primary"
                                         className={classes.checkbox}
                                         classes={{

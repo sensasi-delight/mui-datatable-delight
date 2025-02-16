@@ -110,7 +110,6 @@ export default function computeDisplayRow<T>(
             ) {
                 if (options.filterArrayFullMatch) {
                     const isFullMatch = filterVal?.every(el =>
-                        // @ts-expect-error  WILL FIX THIS LATER
                         columnValue?.includes(el)
                     )
                     if (!isFullMatch) {
@@ -118,7 +117,6 @@ export default function computeDisplayRow<T>(
                     }
                 } else {
                     const isAnyMatch = filterVal?.some(el =>
-                        // @ts-expect-error  WILL FIX THIS LATER
                         columnValue?.includes(el)
                     )
 

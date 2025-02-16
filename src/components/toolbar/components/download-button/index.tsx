@@ -111,7 +111,6 @@ function getFilteredDataToDownload<T>(
     data: DataItemState[],
     columnOrderIndices: number[]
 ): DataItemState[] {
-    // @ts-expect-error  WILL FIX THIS LATER
     return displayData
         .map((row, i) => ({
             index: i,

@@ -72,8 +72,14 @@ export default function TableHead({ selectRowUpdate }: Props): ReactNode {
             }
         }
 
+        const columnName = state.columns[columnIndex]?.name
+
+        if (!columnName) {
+            throw new Error('Column name not found')
+        }
+
         const newSortOrder: DataTableSortOrderOption = {
-            name: state.columns[columnIndex].name,
+            name: columnName,
             direction: newOrder
         }
 
@@ -121,6 +127,10 @@ export default function TableHead({ selectRowUpdate }: Props): ReactNode {
                 previousSelectedRow: undefined
             }
 
+            if (!setState) {
+                throw new Error('setState is not defined')
+            }
+
             newPartialState.displayData = getDisplayData(
                 state.columns,
                 sortedData.data,
@@ -141,7 +151,7 @@ export default function TableHead({ selectRowUpdate }: Props): ReactNode {
     }
 
     const handleRowSelect = () => {
-        selectRowUpdate('head', null)
+        selectRowUpdate('head', [])
     }
 
     const numSelected = state.selectedRows.data.length ?? 0
