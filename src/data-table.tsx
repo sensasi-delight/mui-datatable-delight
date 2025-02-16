@@ -207,6 +207,10 @@ function DataTable_({
                 newState.selectedRows.data.map(item => item.dataIndex)
             )
         } else if (type === 'cell') {
+            if (Array.isArray(value)) {
+                throw new Error('value must be a single row')
+            }
+
             const prevState = state
             const { dataIndex } = value ?? {}
             let selectedRows = [...prevState.selectedRows.data]
@@ -271,10 +275,10 @@ function DataTable_({
                 newState.selectedRows.data.map(item => item.dataIndex)
             )
         } else if (type === 'custom') {
-            const lookup = buildMap([value])
+            const lookup = buildMap(Array.isArray(value) ? value : [value])
 
             const selectedRows = {
-                data: [value],
+                data: Array.isArray(value) ? value : [value],
                 lookup
             }
 
