@@ -76,7 +76,12 @@ describe('<SelectedRowsToolbar />', function () {
             }
         })
 
-        expect(selectRowUpdate).toBeCalledWith('custom', [0])
+        expect(selectRowUpdate).toBeCalledWith('custom', [
+            {
+                dataIndex: 0,
+                index: 0
+            }
+        ])
     })
 
     test('should throw TypeError if selectedRows is not an array of numbers', () => {
