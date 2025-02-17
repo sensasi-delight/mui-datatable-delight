@@ -279,10 +279,21 @@ function RenderRow<Row>({
     selectRowUpdate: SelectRowUpdateType
 }) {
     const { classes, cx } = useStyles()
-    const { onAction, options, state } = useDataTableContext<Row>()
+    const {
+        onAction,
+        options,
+        state,
+        props: rootProps
+    } = useDataTableContext<Row>()
 
     if (options.customRowRender) {
-        return options.customRowRender(row, dataIndex, rowIndex)
+        const data = rootProps.data[dataIndex]
+
+        if (!data) {
+            throw new Error('data is undefined')
+        }
+
+        return options.customRowRender(data, dataIndex, rowIndex)
     }
 
     const isRowSelected: boolean =
