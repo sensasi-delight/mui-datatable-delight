@@ -51,7 +51,7 @@ describe('useColumnDrop', function () {
 
         expect(newModel.length).to.equal(3)
         expect(newModel[0]?.left).to.equal(10)
-        expect(newModel[0]?.ref.offsetParent).to.equal(offsetParent)
+        expect(newModel[0]?.ref.current?.offsetParent).to.equal(offsetParent)
         expect(newModel[1]?.columnIndex).to.equal(0)
     })
 
