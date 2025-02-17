@@ -1,11 +1,11 @@
-import type { ReactNode } from 'react'
+import type { ReactNode, RefObject } from 'react'
 import hasSearchText from './has-search-text'
-import updateDataCol from './update-data-col'
 import type { FilterList } from '@src/types/state/filter-list'
 import type { DataTableState } from '@src/types/state'
 import type { DataTableOptions } from '@src/types/options'
 import type { DataTableProps } from '@src/data-table.props'
 import type { DisplayDataState } from '@src/types/state/display-data'
+import type { HandleUpdateCellValue } from '@src/hooks/use-data-table-context/components/provider/types/handle-update-cell-value'
 
 /*
  * Build the table data used to display to the user (i.e., after filter/search applied)
@@ -19,7 +19,7 @@ export default function computeDisplayRow<T>(
     options: DataTableOptions<T>,
     props: DataTableProps<T>,
     state: DataTableState<T>,
-    setState: (newState: DataTableState<T>) => void
+    updateCellValue: RefObject<HandleUpdateCellValue | undefined>
 ): DisplayDataState<T>[number]['data'] | undefined {
     let isFiltered = false
     let isSearchFound = false
@@ -41,17 +41,7 @@ export default function computeDisplayRow<T>(
                 index,
                 state,
                 value => {
-                    setState(
-                        updateDataCol(
-                            rowIndex,
-                            index,
-                            value,
-                            state,
-                            options,
-                            props,
-                            setState
-                        )
-                    )
+                    updateCellValue.current?.(value, rowIndex, index)
                 }
             )
 

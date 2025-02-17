@@ -30,9 +30,9 @@ export function DataTableToolbarSearch({
         onAction,
         options,
         props: datatableRootProps,
-        setState,
         state,
-        textLabels
+        textLabels,
+        updateCellValueRef
     } = useDataTableContext()
     const { classes } = useStyles()
 
@@ -43,10 +43,6 @@ export function DataTableToolbarSearch({
     const [searchText, setSearchText] = useState(state.searchText)
 
     function handleSearch(newSearchText: string) {
-        if (!setState) {
-            throw new Error('setState is not defined')
-        }
-
         const displayData = options.serverSide
             ? state.displayData
             : getDisplayData(
@@ -57,7 +53,7 @@ export function DataTableToolbarSearch({
                   datatableRootProps,
                   state,
                   options,
-                  setState
+                  updateCellValueRef
               )
 
         onAction?.(TableAction.SEARCH, {

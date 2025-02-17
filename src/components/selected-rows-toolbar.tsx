@@ -38,8 +38,8 @@ export default function SelectedRowsToolbar({
         options,
         props,
         state,
-        setState,
-        textLabels: { selectedRows: selectedRowsTextLabels }
+        textLabels: { selectedRows: selectedRowsTextLabels },
+        updateCellValueRef
     } = useDataTableContext()
     const { classes } = useStyles()
 
@@ -68,7 +68,7 @@ export default function SelectedRowsToolbar({
                 true,
                 options,
                 state,
-                setState
+                updateCellValueRef
             )
         }
 

@@ -4,6 +4,7 @@
 import {
     type Context,
     type ReactNode,
+    type RefObject,
     useState,
     useEffect,
     useRef,
@@ -25,6 +26,9 @@ import { handleDeprecatedOptions } from '../../function/handle-deprecated-option
 import { processTextLabels } from '../../function/process-text-labels'
 import DEFAULT_STATE from '../../statics/default-state'
 import DataTableContext from '../../context'
+import getDisplayData from '@src/functions/get-new-state-on-data-change/get-display-data'
+import updateDataCol from '@src/functions/get-new-state-on-data-change/update-data-col'
+import type { HandleUpdateCellValue } from './types/handle-update-cell-value'
 
 /**
  * The DataTableContextProvider component is responsible for providing the
@@ -32,24 +36,57 @@ import DataTableContext from '../../context'
  *
  * @category  Component
  */
-export default function DataTableContextProvider<DataRowItemType>({
+export default function DataTableContextProvider<Row>({
     datatableProps,
     children
 }: {
-    datatableProps: DataTableProps<DataRowItemType>
+    datatableProps: DataTableProps<Row>
     children: ReactNode
 }): ReactElement {
     const draggableHeadCellRefs = useRef<HTMLTableCellElement[]>([])
     const lastDatatableProps = useRef(datatableProps)
-    const options = useRef<DataTableOptions<DataRowItemType>>(
+    const options = useRef<DataTableOptions<Row>>(
         getConstructedOption(datatableProps?.options)
     )
     const tableHeadCellElements = useRef<HTMLTableCellElement[]>([])
     const tableRef = useRef<HTMLTableElement>(null)
 
-    const [state, setState] = useState<DataTableState<DataRowItemType>>(() =>
-        getInitialState(datatableProps, options.current)
+    const updateCellValueRef = useRef<HandleUpdateCellValue>(undefined)
+
+    const [state, setState] = useState<DataTableState<Row>>(() =>
+        getInitialState(datatableProps, options.current, updateCellValueRef)
     )
+
+    useEffect(() => {
+        updateCellValueRef.current = (value, rowIndex, index) => {
+            setState(prev => {
+                const newState = {
+                    ...prev,
+                    ...updateDataCol<Row>(
+                        rowIndex,
+                        index,
+                        value as ReactNode,
+                        prev,
+                        options.current
+                    )
+                }
+
+                return {
+                    ...newState,
+                    displayData: getDisplayData<Row>(
+                        prev.columns,
+                        prev.data,
+                        prev.filterList,
+                        prev.searchText,
+                        lastDatatableProps.current,
+                        newState,
+                        options.current,
+                        updateCellValueRef
+                    )
+                }
+            })
+        }
+    }, [])
 
     useEffect(() => {
         if (
@@ -81,7 +118,7 @@ export default function DataTableContextProvider<DataRowItemType>({
                     didDataUpdate,
                     options.current,
                     prev,
-                    setState
+                    updateCellValueRef
                 )
             )
         }
@@ -89,7 +126,7 @@ export default function DataTableContextProvider<DataRowItemType>({
 
     const [forwardTableChange, setForwardTableChange] = useState<{
         action: TableAction
-        state: DataTableState<DataRowItemType>
+        state: DataTableState<Row>
     }>()
 
     /**
@@ -116,9 +153,7 @@ export default function DataTableContextProvider<DataRowItemType>({
 
     handleDeprecatedOptions(datatableProps, options.current)
 
-    const _DataTableContext = DataTableContext as Context<
-        ContextValue<DataRowItemType>
-    >
+    const _DataTableContext = DataTableContext as Context<ContextValue<Row>>
 
     return (
         <_DataTableContext.Provider
@@ -164,11 +199,11 @@ export default function DataTableContextProvider<DataRowItemType>({
                 },
                 options: options.current,
                 props: datatableProps,
-                setState,
                 state,
                 tableHeadCellElements,
                 tableRef,
-                textLabels: processTextLabels(datatableProps.textLabels)
+                textLabels: processTextLabels(datatableProps.textLabels),
+                updateCellValueRef
             }}
         >
             {children}
@@ -253,7 +288,8 @@ function getConstructedOption<T>(
 
 function getInitialState<T>(
     datatableProps: DataTableProps<T>,
-    options: DataTableOptions<T>
+    options: DataTableOptions<T>,
+    updateCellValueRef: RefObject<HandleUpdateCellValue | undefined>
 ): DataTableState<T> {
     const restoredState = datatableProps.options?.storageKey
         ? load<T>(datatableProps.options.storageKey)
@@ -269,7 +305,7 @@ function getInitialState<T>(
             ...getStateFromDataTableOptionsProp(datatableProps.options),
             ...restoredState
         },
-        undefined
+        updateCellValueRef
     )
 
     options?.onTableInit?.(TableAction.INITIALIZED, newState)

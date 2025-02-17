@@ -66,8 +66,8 @@ function DataTable_<T>({
         onAction,
         options,
         props: datatableRootProps,
-        setState,
-        state
+        state,
+        updateCellValueRef
     } = useDataTableContext<T>()
 
     const filterUpdate: FilterUpdateType<T> = (
@@ -93,10 +93,6 @@ function DataTable_<T>({
             page: 0
         }
 
-        if (!setState) {
-            throw new Error('setState is not defined')
-        }
-
         const displayData = options.serverSide
             ? prevState.displayData
             : getDisplayData(
@@ -107,7 +103,7 @@ function DataTable_<T>({
                   datatableRootProps,
                   newState,
                   options,
-                  setState
+                  updateCellValueRef
               )
 
         onAction?.(TableAction.FILTER_CHANGE, {

@@ -37,9 +37,9 @@ export default function Toolbar<T>(props: ToolbarProps<T>): ReactNode {
         options,
         onAction,
         props: datatableRootProps,
-        setState,
         state,
-        textLabels: { toolbar: toolbarTextLabels }
+        textLabels: { toolbar: toolbarTextLabels },
+        updateCellValueRef
     } = useDataTableContext()
     const { classes } = useStyles()
 
@@ -126,10 +126,6 @@ export default function Toolbar<T>(props: ToolbarProps<T>): ReactNode {
 
         const newSearchText = ''
 
-        if (!setState) {
-            throw new Error('setState is not defined')
-        }
-
         onAction?.(TableAction.SEARCH, {
             searchText: newSearchText,
             displayData: options.serverSide
@@ -142,7 +138,7 @@ export default function Toolbar<T>(props: ToolbarProps<T>): ReactNode {
                       datatableRootProps,
                       prevState,
                       options,
-                      setState
+                      updateCellValueRef
                   )
         })
 

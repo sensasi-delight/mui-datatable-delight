@@ -1,4 +1,4 @@
-import { isValidElement } from 'react'
+import { isValidElement, type RefObject } from 'react'
 import type { DataTableProps } from '@src/data-table.props'
 import type {
     DataTableOptions,
@@ -11,6 +11,7 @@ import { warnDeprecated } from './warn-deprecated'
 import buildColumns from './build-columns'
 import sortTable from './sort-table'
 import getDisplayData from './get-new-state-on-data-change/get-display-data'
+import type { HandleUpdateCellValue } from '@src/hooks/use-data-table-context/components/provider/types/handle-update-cell-value'
 
 enum TABLE_LOAD {
     INITIAL = 1,
@@ -38,7 +39,7 @@ export default function getNewStateOnDataChange<T>(
     dataUpdated: boolean,
     options: DataTableOptions<T>,
     state: DataTableState<T>,
-    setState: undefined | ((newState: DataTableState<T>) => void)
+    updateCellValueRef: RefObject<HandleUpdateCellValue | undefined>
 ): DataTableState<T> {
     const { columns, filterData, filterList, columnOrder } = buildColumns<T>(
         props.columns,
@@ -312,7 +313,7 @@ export default function getNewStateOnDataChange<T>(
             props,
             newState,
             options,
-            setState
+            updateCellValueRef
         )
     }
 }

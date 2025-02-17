@@ -42,19 +42,15 @@ export default function ToolbarDataFilterBox<T>({
         onAction,
         options,
         props: DataTableRootProps,
-        setState,
         state,
-        textLabels
+        textLabels,
+        updateCellValueRef
     } = useDataTableContext()
 
     const [filterList, setFilterList] = useState(state.filterList)
 
     function handleFilterReset() {
         const prevState = state
-
-        if (!setState) {
-            throw new Error('setState is not defined')
-        }
 
         const filterList = prevState.columns.map(() => [])
         const displayData = options.serverSide
@@ -67,7 +63,7 @@ export default function ToolbarDataFilterBox<T>({
                   DataTableRootProps,
                   prevState,
                   options,
-                  setState
+                  updateCellValueRef
               )
 
         onAction?.(TableAction.RESET_FILTERS, {

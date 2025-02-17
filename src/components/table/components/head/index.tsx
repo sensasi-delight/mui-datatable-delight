@@ -34,8 +34,8 @@ export default function TableHead({ selectRowUpdate }: Props): ReactNode {
         onAction,
         options,
         props: datatableRootProps,
-        setState,
-        state
+        state,
+        updateCellValueRef
     } = useDataTableContext()
 
     function handleToggleColumn(columnIndex: number) {
@@ -127,10 +127,6 @@ export default function TableHead({ selectRowUpdate }: Props): ReactNode {
                 previousSelectedRow: undefined
             }
 
-            if (!setState) {
-                throw new Error('setState is not defined')
-            }
-
             newPartialState.displayData = getDisplayData(
                 state.columns,
                 sortedData.data,
@@ -142,7 +138,7 @@ export default function TableHead({ selectRowUpdate }: Props): ReactNode {
                     ...newPartialState
                 },
                 options,
-                setState
+                updateCellValueRef
             )
         }
 
