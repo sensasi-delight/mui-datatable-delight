@@ -315,11 +315,13 @@ function DataTableToolbarFilterMultiselect<T>({
                     multiple
                     fullWidth
                     value={filterList[index] ?? []}
-                    renderValue={selected =>
-                        selected
-                            .map(value => renderItem(value) as string)
+                    renderValue={(selected: T[keyof T][]) => {
+                        const value: string = selected
+                            .map(value => renderItem(value))
                             .join(', ')
-                    }
+
+                        return value
+                    }}
                     name={column.name}
                     onChange={onSelectChange}
                     input={<Input name={column.name} id={column.name} />}
