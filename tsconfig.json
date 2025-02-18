@@ -4,11 +4,9 @@
         "esModuleInterop": true,
         "skipLibCheck": true,
         "target": "ES2022",
-        "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
         "verbatimModuleSyntax": true,
 
         /* Bundler mode */
-        "composite": true,
         "jsx": "react-jsx",
         "isolatedModules": true,
         "moduleResolution": "bundler",
@@ -17,11 +15,9 @@
         "noEmit": true,
 
         /* Linting */
-        "declarationMap": true,
         "lib": ["ES2022", "DOM", "DOM.Iterable"],
         "noFallthroughCasesInSwitch": true,
         "noUncheckedIndexedAccess": true,
-        // "noUncheckedSideEffectImports": true, // DISABLED DUE ERROR: Unknown compiler option noUncheckedSideEffectImports .
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "strict": true,

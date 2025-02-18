@@ -37,8 +37,7 @@ const PLUGINS = [
 
         compilerOptions: {
             composite: false,
-            declarationMap: false,
-            verbatimModuleSyntax: false
+            declarationMap: false
         }
     })
 ]
@@ -86,10 +85,7 @@ export default [
         },
         plugins: [
             dts({
-                tsconfig: './tsconfig.json',
-                compilerOptions: {
-                    noCheck: true // REMOVE THIS WHEN THIS PROJECT IS FULLY TYPE SAFE
-                }
+                tsconfig: './tsconfig.json'
             })
         ]
     }

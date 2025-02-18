@@ -5,21 +5,7 @@ const nextConfig: NextConfig = {
     pageExtensions: ['md', 'mdx', 'ts', 'tsx'],
     reactStrictMode: true,
 
-    output: 'export',
-
-    typescript: {
-        /**
-         * WILL REMOVE THIS AFTER ALL CODES ARE FULLY MIGRATE TO TYPESCRIPT
-         */
-        ignoreBuildErrors: true
-    },
-
-    eslint: {
-        /**
-         * WILL REMOVE THIS AFTER ALL CODES ARE FULLY MIGRATE TO TYPESCRIPT
-         */
-        ignoreDuringBuilds: true
-    }
+    output: 'export'
 }
 
 const withMDX = createMDX()

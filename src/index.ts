@@ -1,8 +1,39 @@
+export type { BooleanOrDisabled } from './types/values/boolean-or-disabled'
 export type { ColumnDefinitionObject } from './types/props/column-definition/object'
+export type {
+    CustomHeadRenderer,
+    ColumnDefinitionOptions,
+    DataTableStateColumnFilterOptions
+} from './types/props/column-definition/options'
 export type { DataTableProps } from './data-table.props'
-export type { DataTableOptions } from './types/options'
-export type { DataTableState } from './types/state'
+export type {
+    DataTableOptions,
+    DataTableSortOrderOption
+} from './types/options'
+export type { DataTableState, ExpandedRows } from './types/state'
+export type { DefaultRow } from './types/default-row'
+export type { FilterList } from './types/state/filter-list'
+export type { FilterTypeType } from './types/shared/filter-type-type'
 export type { TextLabelsType } from './hooks/use-data-table-context/function/statics/default-text-labels'
+
+export type { SelectableRowsType } from './types/options/selectable-rows'
+export type { ColumnDefinition } from './types/props/column-definition'
+export type { DataTableComponents } from './types/components'
+export type { DataTableIcons } from './types/icons'
+export type { ColumnState } from './types/state/column'
+export type { DataItemState } from './types/state/data-item'
+export type { DisplayDataState } from './types/state/display-data'
+export type { default as ContextValue } from './hooks/use-data-table-context/types/context-value'
+export type { SelectedRowDataState } from './types/state/selected-row-data'
+export type { TableFilterListProps } from './components/filtered-values-list'
+export type { TableToolbarSelectProps } from './components/selected-rows-toolbar'
+export type { Props as TableProps } from './components/table/types/props'
+export type { DataTableBodyProps } from './components/table/components/body'
+export type { ToolbarProps } from './components/toolbar'
+export type { default as TableAction } from './enums/table-action'
+export type { FilterUpdateType } from './types/filter-update'
+export type { HandleUpdateCellValue } from './hooks/use-data-table-context/components/provider/types/handle-update-cell-value'
+export type { SelectRowUpdateType } from './types/select-row-update'
 
 export { DataTable as default } from './data-table'
 
