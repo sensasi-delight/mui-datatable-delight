@@ -38,14 +38,8 @@ export default function ToolbarDataFilterBox<T>({
 }): ReactNode {
     const { classes, cx } = useStyles()
 
-    const {
-        onAction,
-        options,
-        props: DataTableRootProps,
-        state,
-        textLabels,
-        updateCellValueRef
-    } = useDataTableContext()
+    const { onAction, options, state, textLabels, updateCellValueRef } =
+        useDataTableContext()
 
     const [filterList, setFilterList] = useState(state.filterList)
 
@@ -60,7 +54,6 @@ export default function ToolbarDataFilterBox<T>({
                   prevState.data,
                   filterList,
                   prevState.searchText,
-                  DataTableRootProps,
                   prevState,
                   options,
                   updateCellValueRef

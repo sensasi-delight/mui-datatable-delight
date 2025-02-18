@@ -30,13 +30,8 @@ import sortTable from '@src/functions/sort-table'
  */
 export default function TableHead({ selectRowUpdate }: Props): ReactNode {
     const { classes, cx } = useStyles()
-    const {
-        onAction,
-        options,
-        props: datatableRootProps,
-        state,
-        updateCellValueRef
-    } = useDataTableContext()
+    const { onAction, options, state, updateCellValueRef } =
+        useDataTableContext()
 
     function handleToggleColumn(columnIndex: number) {
         let newOrder: DataTableSortOrderOption['direction'] = state.columns[
@@ -132,7 +127,6 @@ export default function TableHead({ selectRowUpdate }: Props): ReactNode {
                 sortedData.data,
                 state.filterList,
                 state.searchText,
-                datatableRootProps,
                 {
                     ...state,
                     ...newPartialState

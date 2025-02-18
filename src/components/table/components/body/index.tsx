@@ -84,7 +84,7 @@ export default function TableBody({
     )
 }
 
-interface DataTableBodyProps {
+export interface DataTableBodyProps {
     /** Callback to trigger table row select */
     selectRowUpdate: SelectRowUpdateType
 }

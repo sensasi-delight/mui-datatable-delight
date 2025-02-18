@@ -24,7 +24,7 @@ import TableAction from '../enums/table-action'
  *
  * It renders the number of selected rows and either a custom component
  * provided by the user or a default delete button. When the delete button
- * is clicked, it will call the {@link options.onRowsDelete | `onRowsDelete`} function provided by the user
+ * is clicked, it will call the {@link DataTableOptions.onRowsDelete | `onRowsDelete`} function provided by the user
  * or the `onAction` function with the {@link TableAction.ROW_DELETE | `TableAction.ROW_DELETE`} action.
  *
  * @category  Component
@@ -36,7 +36,6 @@ export default function SelectedRowsToolbar({
         components,
         onAction,
         options,
-        props,
         state,
         textLabels: { selectedRows: selectedRowsTextLabels },
         updateCellValueRef
@@ -60,10 +59,10 @@ export default function SelectedRowsToolbar({
         const newState = {
             ...getNewStateOnDataChange(
                 {
-                    columns: props?.columns ?? [],
-                    data: cleanRows,
+                    columns: state.columns,
                     options
                 },
+                cleanRows,
                 2, // 2 = MEAN UPDATE
                 true,
                 options,

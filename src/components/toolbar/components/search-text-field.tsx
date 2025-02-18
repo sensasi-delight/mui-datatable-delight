@@ -26,14 +26,8 @@ export function DataTableToolbarSearch({
 }: {
     onHide: () => void
 }): ReactElement {
-    const {
-        onAction,
-        options,
-        props: datatableRootProps,
-        state,
-        textLabels,
-        updateCellValueRef
-    } = useDataTableContext()
+    const { onAction, options, state, textLabels, updateCellValueRef } =
+        useDataTableContext()
     const { classes } = useStyles()
 
     const timeout = useRef<NodeJS.Timeout>(undefined)
@@ -50,7 +44,6 @@ export function DataTableToolbarSearch({
                   state.data,
                   state.filterList,
                   newSearchText,
-                  datatableRootProps,
                   state,
                   options,
                   updateCellValueRef

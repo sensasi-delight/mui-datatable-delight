@@ -29,7 +29,12 @@ class Example extends React.Component {
                     filter: true,
                     filterOptions: {
                         renderValue: v =>
-                            v ? v.replace(/^(\w).* (.*)$/, '$1. $2') : ''
+                            v
+                                ? (v as string).replace(
+                                      /^(\w).* (.*)$/,
+                                      '$1. $2'
+                                  )
+                                : ''
                     },
                     //display: 'excluded',
                     filterType: 'dropdown'

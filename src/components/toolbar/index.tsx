@@ -135,7 +135,6 @@ export default function Toolbar<T>(props: ToolbarProps<T>): ReactNode {
                       prevState.data,
                       prevState.filterList,
                       '',
-                      datatableRootProps,
                       prevState,
                       options,
                       updateCellValueRef
@@ -272,7 +271,7 @@ export default function Toolbar<T>(props: ToolbarProps<T>): ReactNode {
     )
 }
 
-interface ToolbarProps<T> {
+export interface ToolbarProps<T> {
     filterUpdate: FilterUpdateType<T>
 }
 

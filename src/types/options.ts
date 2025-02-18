@@ -24,10 +24,7 @@ import type { ColumnDefinitionOptions } from './props/column-definition/options'
 import type SELECT_TOOLBAR_PLACEMENT from '@src/statics/select-toolbar-placement'
 
 export interface DataTableSortOrderOption {
-    /**
-     * @todo  Type of name should be based on column name.
-     */
-    name: string
+    name: string // TODO: name should be based on column name on Row
     direction: 'asc' | 'desc' | 'none'
 }
 
@@ -116,9 +113,7 @@ export interface DataTableOptions<Row = DefaultRow>
      *
      * Any amount of nesting will work.
      *
-     * @todo  remove this and default behavior is always read nested data
-     *
-     * @deprecated  remove this and default behavior is always read nested data
+     * @deprecated  TODO: remove this and default behavior is always read nested data
      *
      * @see https://mui-datatable-delight.vercel.app/examples/data-as-objects
      */
@@ -469,7 +464,7 @@ export interface DataTableOptions<Row = DefaultRow>
     rowHover: boolean
 
     /** User provided expanded rows */
-    rowsExpanded?: unknown[]
+    rowsExpanded?: number[]
 
     /**
      * Number of rows allowed per page.

@@ -7,7 +7,7 @@ import type { ColumnState } from '../../state/column'
 import type { FilterList } from '../../state/filter-list'
 import type { DisplayDataState } from '@src/types/state/display-data'
 
-type MUIDataTableCustomHeadRenderer<T> = {
+export type CustomHeadRenderer<T> = {
     index: number
 } & ColumnState<T>
 
@@ -119,7 +119,7 @@ export interface ColumnDefinitionOptions<T> {
     /** Function that returns a string or React component. Used as display for column header. */
     customHeadRender?:
         | ((
-              columnMeta: MUIDataTableCustomHeadRenderer<T>,
+              columnMeta: CustomHeadRenderer<T>,
               handleToggleColumn: (columnIndex: number) => void,
               sortOrder?: DataTableSortOrderOption
           ) => string | ReactNode)
@@ -188,7 +188,7 @@ export interface ColumnDefinitionOptions<T> {
      * [Example](https://mui-datatable-delight.vercel.app/examples/customize-styling)
      */
     setCellHeaderProps?:
-        | ((columnMeta: MUIDataTableCustomHeadRenderer<T>) => object)
+        | ((columnMeta: CustomHeadRenderer<T>) => object)
         | undefined
 
     /**
@@ -320,7 +320,7 @@ export interface DataTableStateColumnFilterOptions<T> {
      *
      * @see {@link https://mui-datatable-delight.vercel.app/examples/customize-filter|Customize Filter Example}.
      */
-    renderValue?: ((value: string) => string) | undefined
+    renderValue?: ((value: T[keyof T]) => T[keyof T]) | undefined
 
     /** Will force a filter option to take up the grid's full width. */
     fullWidth?: boolean | undefined

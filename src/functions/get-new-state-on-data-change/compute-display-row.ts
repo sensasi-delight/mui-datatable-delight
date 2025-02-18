@@ -3,7 +3,6 @@ import hasSearchText from './has-search-text'
 import type { FilterList } from '@src/types/state/filter-list'
 import type { DataTableState } from '@src/types/state'
 import type { DataTableOptions } from '@src/types/options'
-import type { DataTableProps } from '@src/data-table.props'
 import type { DisplayDataState } from '@src/types/state/display-data'
 import type { HandleUpdateCellValue } from '@src/hooks/use-data-table-context/components/provider/types/handle-update-cell-value'
 
@@ -17,7 +16,6 @@ export default function computeDisplayRow<T>(
     filterList: FilterList,
     searchText: string,
     options: DataTableOptions<T>,
-    props: DataTableProps<T>,
     state: DataTableState<T>,
     updateCellValue: RefObject<HandleUpdateCellValue | undefined>
 ): DisplayDataState<T>[number]['data'] | undefined {
@@ -100,14 +98,18 @@ export default function computeDisplayRow<T>(
             ) {
                 if (options.filterArrayFullMatch) {
                     const isFullMatch = filterVal?.every(el =>
-                        columnValue?.includes(el)
+                        (columnValue as T[keyof T][])?.includes(
+                            el as T[keyof T]
+                        )
                     )
                     if (!isFullMatch) {
                         isFiltered = true
                     }
                 } else {
                     const isAnyMatch = filterVal?.some(el =>
-                        columnValue?.includes(el)
+                        (columnValue as T[keyof T][])?.includes(
+                            el as T[keyof T]
+                        )
                     )
 
                     if (!isAnyMatch) {
@@ -128,8 +130,8 @@ export default function computeDisplayRow<T>(
         }
     }
 
-    if (searchText && props.options?.customSearch) {
-        const customSearchResult = props.options.customSearch(
+    if (searchText && options?.customSearch) {
+        const customSearchResult = options.customSearch(
             searchText,
             row,
             columns
@@ -142,7 +144,7 @@ export default function computeDisplayRow<T>(
     }
 
     if (options.serverSide) {
-        if (props.options?.customSearch) {
+        if (options.customSearch) {
             console.warn(
                 'Server-side filtering is enabled, hence custom search will be ignored.'
             )

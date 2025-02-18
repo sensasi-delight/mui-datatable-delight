@@ -1,8 +1,9 @@
-import { describe, expect, it, vi } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import getNewStateOnDataChange from './get-new-state-on-data-change'
 import { DEFAULT_OPTIONS } from '../hooks/use-data-table-context/statics/default-options'
 import { type DataTableState } from '@src/types/state'
 import DEFAULT_STATE from '@src/hooks/use-data-table-context/statics/default-state'
+import type { DataTableOptions, DataTableProps } from '@src'
 
 describe('get-new-state-on-data-change', () => {
     const data = [
@@ -30,7 +31,7 @@ describe('get-new-state-on-data-change', () => {
         'Location'
     ]
 
-    const options = {
+    const options: DataTableOptions<(typeof data)[number]> = {
         ...DEFAULT_OPTIONS,
         search: true,
         download: true,
@@ -280,7 +281,7 @@ describe('get-new-state-on-data-change', () => {
     }
 
     it('should return new state', () => {
-        const props = {
+        const props: DataTableProps<(typeof data)[number]> = {
             data,
             columns,
             title: 'ACME Employee list',
@@ -289,44 +290,50 @@ describe('get-new-state-on-data-change', () => {
 
             // appended from legacy code
             className: 'tss-1x5mjc5-MUIDataTable-root',
-            classes: {
-                root: 'tss-1x5mjc5-MUIDataTable-root',
-                paper: 'tss-11quiee-MUIDataTable-paper',
-                paperResponsiveScrollFullHeightFullWidth:
-                    'tss-1nfo58d-MUIDataTable-paperResponsiveScrollFullHeightFullWidth',
-                tableRoot: 'tss-900muf-MUIDataTable-tableRoot',
-                responsiveBase: 'tss-1cdcmys-MUIDataTable-responsiveBase',
-                responsiveScroll: 'tss-131sses-MUIDataTable-responsiveScroll',
-                responsiveScrollMaxHeight:
-                    'tss-1acbflw-MUIDataTable-responsiveScrollMaxHeight',
-                responsiveScrollFullHeight:
-                    'tss-1dm1iyi-MUIDataTable-responsiveScrollFullHeight',
-                responsiveStacked: 'tss-r6c9w6-MUIDataTable-responsiveStacked',
-                responsiveStackedFullWidth:
-                    'tss-1rzqjie-MUIDataTable-responsiveStackedFullWidth',
-                caption: 'tss-1opebqo-MUIDataTable-caption',
-                liveAnnounce: 'tss-hwdp7s-MUIDataTable-liveAnnounce'
-            },
+            // classes: {
+            //     root: 'tss-1x5mjc5-MUIDataTable-root',
+            //     paper: 'tss-11quiee-MUIDataTable-paper',
+            //     paperResponsiveScrollFullHeightFullWidth:
+            //         'tss-1nfo58d-MUIDataTable-paperResponsiveScrollFullHeightFullWidth',
+            //     tableRoot: 'tss-900muf-MUIDataTable-tableRoot',
+            //     responsiveBase: 'tss-1cdcmys-MUIDataTable-responsiveBase',
+            //     responsiveScroll: 'tss-131sses-MUIDataTable-responsiveScroll',
+            //     responsiveScrollMaxHeight:
+            //         'tss-1acbflw-MUIDataTable-responsiveScrollMaxHeight',
+            //     responsiveScrollFullHeight:
+            //         'tss-1dm1iyi-MUIDataTable-responsiveScrollFullHeight',
+            //     responsiveStacked: 'tss-r6c9w6-MUIDataTable-responsiveStacked',
+            //     responsiveStackedFullWidth:
+            //         'tss-1rzqjie-MUIDataTable-responsiveStackedFullWidth',
+            //     caption: 'tss-1opebqo-MUIDataTable-caption',
+            //     liveAnnounce: 'tss-hwdp7s-MUIDataTable-liveAnnounce'
+            // },
             components: {
-                TableBody: {},
-                TableFilter: {},
-                TableResize: {},
-                TableToolbar: {},
-                TableToolbarSelect: {},
-                Tooltip: {
-                    propTypes: {}
-                },
-                icons: {}
+                // TableBody: {},
+                // TableFilter: {},
+                // TableResize: {},
+                // TableToolbar: {},
+                // TableToolbarSelect: {},
+                // Tooltip: {
+                //     propTypes: {}
+                // },
+                // icons: {}
             }
         }
 
         const newState = getNewStateOnDataChange(
-            props,
+            {
+                columns: props.columns,
+                options: props.options
+            },
+            data,
             1,
             true,
             options,
             DEFAULT_STATE,
-            vi.fn()
+            {
+                current: () => undefined
+            }
         )
 
         const {
@@ -366,26 +373,26 @@ describe('get-new-state-on-data-change', () => {
     })
 
     it('should return new state when props update', () => {
-        const props = {
+        const props: DataTableProps<(typeof data)[number]> = {
             className: 'tss-1x5mjc5-MUIDataTable-root',
-            classes: {
-                root: 'tss-1x5mjc5-MUIDataTable-root',
-                paper: 'tss-11quiee-MUIDataTable-paper',
-                paperResponsiveScrollFullHeightFullWidth:
-                    'tss-1nfo58d-MUIDataTable-paperResponsiveScrollFullHeightFullWidth',
-                tableRoot: 'tss-900muf-MUIDataTable-tableRoot',
-                responsiveBase: 'tss-1cdcmys-MUIDataTable-responsiveBase',
-                responsiveScroll: 'tss-131sses-MUIDataTable-responsiveScroll',
-                responsiveScrollMaxHeight:
-                    'tss-1acbflw-MUIDataTable-responsiveScrollMaxHeight',
-                responsiveScrollFullHeight:
-                    'tss-1dm1iyi-MUIDataTable-responsiveScrollFullHeight',
-                responsiveStacked: 'tss-r6c9w6-MUIDataTable-responsiveStacked',
-                responsiveStackedFullWidth:
-                    'tss-1rzqjie-MUIDataTable-responsiveStackedFullWidth',
-                caption: 'tss-1opebqo-MUIDataTable-caption',
-                liveAnnounce: 'tss-hwdp7s-MUIDataTable-liveAnnounce'
-            },
+            // classes: {
+            //     root: 'tss-1x5mjc5-MUIDataTable-root',
+            //     paper: 'tss-11quiee-MUIDataTable-paper',
+            //     paperResponsiveScrollFullHeightFullWidth:
+            //         'tss-1nfo58d-MUIDataTable-paperResponsiveScrollFullHeightFullWidth',
+            //     tableRoot: 'tss-900muf-MUIDataTable-tableRoot',
+            //     responsiveBase: 'tss-1cdcmys-MUIDataTable-responsiveBase',
+            //     responsiveScroll: 'tss-131sses-MUIDataTable-responsiveScroll',
+            //     responsiveScrollMaxHeight:
+            //         'tss-1acbflw-MUIDataTable-responsiveScrollMaxHeight',
+            //     responsiveScrollFullHeight:
+            //         'tss-1dm1iyi-MUIDataTable-responsiveScrollFullHeight',
+            //     responsiveStacked: 'tss-r6c9w6-MUIDataTable-responsiveStacked',
+            //     responsiveStackedFullWidth:
+            //         'tss-1rzqjie-MUIDataTable-responsiveStackedFullWidth',
+            //     caption: 'tss-1opebqo-MUIDataTable-caption',
+            //     liveAnnounce: 'tss-hwdp7s-MUIDataTable-liveAnnounce'
+            // },
             title: 'ACME Employee list',
             data: [
                 ['Gabby George', 'Business Analyst', 'Minneapolis'],
@@ -427,28 +434,34 @@ describe('get-new-state-on-data-change', () => {
                 responsive: 'vertical',
                 tableBodyHeight: '400px',
                 tableBodyMaxHeight: ''
-            },
-            components: {
-                TableBody: {},
-                TableFilter: {},
-                TableResize: {},
-                TableToolbar: {},
-                TableToolbarSelect: {},
-                Tooltip: {
-                    propTypes: {}
-                },
-                icons: {}
             }
+            // components: {
+            //     TableBody: {},
+            //     TableFilter: {},
+            //     TableResize: {},
+            //     TableToolbar: {},
+            //     TableToolbarSelect: {},
+            //     Tooltip: {
+            //         propTypes: {}
+            //     },
+            //     icons: {}
+            // }
         }
 
         const result = getNewStateOnDataChange(
-            props,
+            {
+                columns: props.columns,
+                options: props.options
+            },
+            props.data,
             1,
             true,
             options,
             DEFAULT_STATE,
-            () => {
-                console.log('setState')
+            {
+                current: () => {
+                    console.log('setState')
+                }
             }
         )
 
@@ -521,13 +534,19 @@ describe('get-new-state-on-data-change', () => {
         }
 
         const newState = getNewStateOnDataChange(
-            props,
+            {
+                columns: props.columns,
+                options: options
+            },
+            props.data,
             2,
             true,
             options,
             DEFAULT_STATE,
-            () => {
-                console.log('setState')
+            {
+                current: () => {
+                    console.log('setState')
+                }
             }
         )
 

@@ -43,32 +43,33 @@ import TableAction from './enums/table-action'
 export function DataTable<Row = DefaultRow>({
     className,
     ref,
+    paperProps,
     ...props
 }: DataTableProps<Row>): ReactNode {
     return (
         <DataTableContextProvider datatableProps={props}>
-            <DataTable_ className={className} ref={ref} />
+            <DataTable_
+                className={className}
+                ref={ref}
+                paperProps={paperProps}
+            />
         </DataTableContextProvider>
     )
 }
 
 function DataTable_<T>({
     className,
-    ref
+    ref,
+    paperProps
 }: {
     className?: string
     ref: PaperProps['ref']
+    paperProps?: PaperProps
 }): ReactNode {
     const { classes, cx } = useStyles()
 
-    const {
-        components,
-        onAction,
-        options,
-        props: datatableRootProps,
-        state,
-        updateCellValueRef
-    } = useDataTableContext<T>()
+    const { components, onAction, options, state, updateCellValueRef } =
+        useDataTableContext<T>()
 
     const filterUpdate: FilterUpdateType<T> = (
         index,
@@ -100,7 +101,6 @@ function DataTable_<T>({
                   prevState.data,
                   prevState.filterList,
                   prevState.searchText,
-                  datatableRootProps,
                   newState,
                   options,
                   updateCellValueRef
@@ -333,6 +333,7 @@ function DataTable_<T>({
             elevation={options?.elevation}
             ref={ref}
             className={paperClasses}
+            {...paperProps}
         >
             {isShowToolbarSelect && (
                 <_SelectedRowsToolbar selectRowUpdate={selectRowUpdate} />

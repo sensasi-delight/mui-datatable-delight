@@ -1,17 +1,20 @@
+// vendors
 import { isValidElement, type RefObject } from 'react'
+// globals
 import type { DataTableProps } from '@src/data-table.props'
 import type {
     DataTableOptions,
     DataTableSortOrderOption
 } from '@src/types/options'
 import type { DataTableState } from '@src/types/state'
+import type { HandleUpdateCellValue } from '@src/hooks/use-data-table-context/components/provider/types/handle-update-cell-value'
 import { getCollatorComparator } from './get-collator-comparator'
-import transformData from './transform-data'
 import { warnDeprecated } from './warn-deprecated'
 import buildColumns from './build-columns'
-import sortTable from './sort-table'
 import getDisplayData from './get-new-state-on-data-change/get-display-data'
-import type { HandleUpdateCellValue } from '@src/hooks/use-data-table-context/components/provider/types/handle-update-cell-value'
+import sortTable from './sort-table'
+import transformData from './transform-data'
+import type { DataItemState } from '@src/types/state/data-item'
 
 enum TABLE_LOAD {
     INITIAL = 1,
@@ -34,7 +37,11 @@ enum TABLE_LOAD {
  * @returns The updated state of the data table.
  */
 export default function getNewStateOnDataChange<T>(
-    props: DataTableProps<T>,
+    props: {
+        columns: DataTableProps<T>['columns']
+        options: DataTableProps<T>['options']
+    },
+    dataParam: T[] | DataItemState[],
     status: TABLE_LOAD,
     dataUpdated: boolean,
     options: DataTableOptions<T>,
@@ -53,8 +60,8 @@ export default function getNewStateOnDataChange<T>(
 
     const data =
         status === TABLE_LOAD.INITIAL
-            ? transformData(columns, props.data, options)
-            : props.data
+            ? transformData(columns, dataParam as T[], options)
+            : dataParam
 
     const rowsPerPage = options.rowsPerPage ?? state.rowsPerPage
     const page = options.page ?? state.page
@@ -64,22 +71,43 @@ export default function getNewStateOnDataChange<T>(
 
     columns.forEach((column, colIndex) => {
         for (let rowIndex = 0; rowIndex < data.length; rowIndex++) {
-            let value: unknown =
-                status === TABLE_LOAD.INITIAL
-                    ? data?.[rowIndex]?.[colIndex]
-                    : data[rowIndex]?.data[colIndex]
+            /**
+             * IF status === TABLE_LOAD.INITIAL rowDataOrStateData should be T
+             * IF status === TABLE_LOAD.UPDATE rowDataOrStateData should be DataItemState
+             */
+            const rowDataOrStateData = data[rowIndex]
+
+            if (!rowDataOrStateData) {
+                throw new Error('rowDataOrStateData is undefined')
+            }
+
+            let value: unknown
+
+            const isInit =
+                status === TABLE_LOAD.INITIAL &&
+                Array.isArray(rowDataOrStateData)
+
+            if (isInit) {
+                value = rowDataOrStateData[colIndex]
+            } else if (
+                typeof rowDataOrStateData === 'object' &&
+                'data' in rowDataOrStateData
+            ) {
+                value = rowDataOrStateData?.data[colIndex]
+            }
 
             if (typeof tableData[rowIndex] === 'undefined') {
-                tableData.push({
-                    index:
-                        status === TABLE_LOAD.INITIAL
-                            ? rowIndex
-                            : data[rowIndex]?.index,
-                    data:
-                        status === TABLE_LOAD.INITIAL
-                            ? data[rowIndex]
-                            : data[rowIndex]?.data
-                })
+                if (isInit) {
+                    tableData.push({
+                        index: rowIndex,
+                        data: rowDataOrStateData
+                    })
+                } else if (
+                    typeof rowDataOrStateData === 'object' &&
+                    'data' in rowDataOrStateData
+                ) {
+                    tableData.push(rowDataOrStateData)
+                }
             }
 
             if (column.filter !== false) {
@@ -88,11 +116,17 @@ export default function getNewStateOnDataChange<T>(
                         value,
                         rowIndex,
                         colIndex,
-                        state
+                        state,
+                        () => undefined
                     )
 
-                    if (isValidElement(funcResult) && funcResult.props.value) {
-                        value = funcResult.props.value
+                    if (
+                        isValidElement(funcResult) &&
+                        typeof funcResult.props === 'object' &&
+                        funcResult.props &&
+                        'value' in funcResult.props
+                    ) {
+                        value = funcResult.props?.value
                     } else if (typeof funcResult === 'string') {
                         value = funcResult
                     }
@@ -107,13 +141,14 @@ export default function getNewStateOnDataChange<T>(
                 }
 
                 if (
-                    !filterData[colIndex]?.includes(value as string) &&
+                    !filterData[colIndex]?.includes(value as T[keyof T]) &&
                     !Array.isArray(value)
                 ) {
-                    filterData[colIndex]?.push(value as string)
+                    filterData[colIndex]?.push(value as T[keyof T])
                 } else if (Array.isArray(value)) {
                     value.forEach(element => {
                         let elmVal: string
+
                         if (
                             (typeof element === 'object' && element !== null) ||
                             typeof element === 'function'
@@ -123,8 +158,12 @@ export default function getNewStateOnDataChange<T>(
                             elmVal = element
                         }
 
-                        if (!filterData[colIndex]?.includes(elmVal)) {
-                            filterData[colIndex]?.push(elmVal)
+                        if (
+                            !filterData[colIndex]?.includes(
+                                elmVal as T[keyof T]
+                            )
+                        ) {
+                            filterData[colIndex]?.push(elmVal as T[keyof T])
                         }
                     })
                 }
@@ -138,18 +177,27 @@ export default function getNewStateOnDataChange<T>(
                     'filterOptions must now be an object. see https://github.com/gregnb/mui-datatables/tree/master/examples/customize-filter example'
                 )
             } else if (Array.isArray(column.filterOptions.names)) {
-                filterData[colIndex] = column.filterOptions.names
+                filterData[colIndex] = column.filterOptions
+                    .names as T[keyof T][]
             }
         }
 
         if (column.filterList) {
             filterList[colIndex] = column.filterList
         } else if ((state.filterList[colIndex]?.length ?? 0) > 0) {
-            filterList[colIndex] = state.filterList[colIndex]
+            const tempFilterList = state.filterList[colIndex]
+
+            if (!tempFilterList) {
+                throw new Error('filterList must be an array')
+            }
+
+            filterList[colIndex] = tempFilterList
         }
 
         if (options.sortFilterList) {
             const comparator = getCollatorComparator()
+
+            // @ts-expect-error  WILL FIX THIS LATER
             filterData[colIndex]?.sort(comparator)
         }
 
@@ -205,23 +253,24 @@ export default function getNewStateOnDataChange<T>(
             options.rowsSelected.length === 1 &&
             options.selectableRows === 'single'
         ) {
-            let rowPos = options.rowsSelected[0]
+            const dataIndex = options.rowsSelected[0] ?? -1
+
+            let rowPos = dataIndex
 
             for (let cIndex = 0; cIndex < state.displayData.length; cIndex++) {
-                if (
-                    state.displayData[cIndex].dataIndex ===
-                    options.rowsSelected[0]
-                ) {
+                if (state.displayData[cIndex]?.dataIndex === dataIndex) {
                     rowPos = cIndex
+
                     break
                 }
             }
 
             selectedRowsData.data.push({
                 index: rowPos,
-                dataIndex: options.rowsSelected[0]
+                dataIndex
             })
-            selectedRowsData.lookup[options.rowsSelected[0]] = true
+
+            selectedRowsData.lookup[dataIndex] = true
         } else if (
             options.rowsSelected &&
             options.rowsSelected.length > 1 &&
@@ -248,7 +297,7 @@ export default function getNewStateOnDataChange<T>(
                     cIndex < state.displayData.length;
                     cIndex++
                 ) {
-                    if (state.displayData[cIndex].dataIndex === row) {
+                    if (state.displayData[cIndex]?.dataIndex === row) {
                         rowPos = cIndex
                         break
                     }
@@ -274,7 +323,7 @@ export default function getNewStateOnDataChange<T>(
             tableData,
             sortIndex,
             sortDirection,
-            columns[sortIndex]?.sortCompare,
+            columns[sortIndex],
             options,
             state
         )
@@ -310,7 +359,6 @@ export default function getNewStateOnDataChange<T>(
             tableData,
             filterList,
             searchText,
-            props,
             newState,
             options,
             updateCellValueRef

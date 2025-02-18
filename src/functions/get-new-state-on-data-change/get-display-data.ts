@@ -1,7 +1,6 @@
 import type { RefObject } from 'react'
 import type { DataTableState } from '@src/types/state'
 import computeDisplayRow from './compute-display-row'
-import type { DataTableProps } from '@src/data-table.props'
 import type { DataTableOptions } from '@src/types/options'
 import type { HandleUpdateCellValue } from '@src/hooks/use-data-table-context/components/provider/types/handle-update-cell-value'
 
@@ -29,7 +28,6 @@ export default function getDisplayData<T>(
     data: DataTableState<T>['data'],
     filterList: DataTableState<T>['filterList'],
     searchText: DataTableState<T>['searchText'],
-    props: DataTableProps<T>,
     state: DataTableState<T>,
     options: DataTableOptions<T>,
     updateCellValueRef: RefObject<HandleUpdateCellValue | undefined>
@@ -44,7 +42,6 @@ export default function getDisplayData<T>(
             filterList,
             searchText,
             options,
-            props,
             state,
             updateCellValueRef
         )

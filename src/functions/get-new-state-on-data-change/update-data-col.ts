@@ -51,8 +51,14 @@ export default function updateDataCol<T>(
         filterValue = funcResult.props.value
     }
 
-    const prevFilterIndex = filterData[index]?.indexOf(filterValue as string)
-    filterData[index]?.splice(prevFilterIndex ?? 0, 1, filterValue as string)
+    const prevFilterIndex = filterData[index]?.indexOf(
+        filterValue as T[keyof T]
+    )
+    filterData[index]?.splice(
+        prevFilterIndex ?? 0,
+        1,
+        filterValue as T[keyof T]
+    )
 
     const changedData = prevState.data[row]
 
@@ -68,6 +74,7 @@ export default function updateDataCol<T>(
     if (options.sortFilterList) {
         const comparator = getCollatorComparator()
 
+        // @ts-expect-error  WILL FIX LATER
         filterData[index]?.sort(comparator)
     }
 

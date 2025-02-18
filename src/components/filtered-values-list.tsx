@@ -192,7 +192,7 @@ export default function FilteredValuesList<T>({
     )
 }
 
-interface TableFilterListProps<T = unknown> {
+export interface TableFilterListProps<T = unknown> {
     filterUpdate: FilterUpdateType<T>
 }
 
