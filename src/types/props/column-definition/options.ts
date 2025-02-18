@@ -320,7 +320,7 @@ export interface DataTableStateColumnFilterOptions<T> {
      *
      * @see {@link https://mui-datatable-delight.vercel.app/examples/customize-filter|Customize Filter Example}.
      */
-    renderValue?: ((value: T[keyof T]) => T[keyof T]) | undefined
+    renderValue?: <V>(value: V) => V
 
     /** Will force a filter option to take up the grid's full width. */
     fullWidth?: boolean | undefined
