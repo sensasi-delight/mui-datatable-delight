@@ -14,9 +14,12 @@ import useDataTableContext from '@src/hooks/use-data-table-context'
 import TableAction from '@src/enums/table-action'
 import ComponentClassName from '@src/enums/class-name'
 
+// Intentionally import for Typedocs
+import Toolbar from '..' // eslint-disable-line
+
 /**
  * A component that renders a form with checkboxes for each column with `viewColumns` set to true.
- * The component is used in the {@link DataTableToolbar} component.
+ * The component is used in the {@link Toolbar | `<Toolbar />` }.
  *
  * @category  Component
  */

@@ -137,7 +137,7 @@ class Example extends React.Component {
                     empty: true,
                     filterType: 'checkbox',
                     filterOptions: {
-                        renderValue: val => (val ? val : '(Empty)')
+                        renderValue: val => val ?? '(Empty)'
                     }
                 }
             }

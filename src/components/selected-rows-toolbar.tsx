@@ -14,7 +14,6 @@ import { buildMap } from '../functions'
 import getNewStateOnDataChange from '@src/functions/get-new-state-on-data-change'
 // locals
 import type { DataTableOptions } from '../types/options'
-import type { SelectedRowDataState } from '@src/types/state/selected-row-data'
 import useDataTableContext from '../hooks/use-data-table-context'
 // enums
 import ClassName from '../enums/class-name'
@@ -25,7 +24,7 @@ import TableAction from '../enums/table-action'
  *
  * It renders the number of selected rows and either a custom component
  * provided by the user or a default delete button. When the delete button
- * is clicked, it will call the {@link options.onRowsDelete | `onRowsDelete`} function provided by the user
+ * is clicked, it will call the {@link DataTableOptions.onRowsDelete | `onRowsDelete`} function provided by the user
  * or the `onAction` function with the {@link TableAction.ROW_DELETE | `TableAction.ROW_DELETE`} action.
  *
  * @category  Component
@@ -37,10 +36,9 @@ export default function SelectedRowsToolbar({
         components,
         onAction,
         options,
-        props,
         state,
-        setState,
-        textLabels: { selectedRows: selectedRowsTextLabels }
+        textLabels: { selectedRows: selectedRowsTextLabels },
+        updateCellValueRef
     } = useDataTableContext()
     const { classes } = useStyles()
 
@@ -61,15 +59,15 @@ export default function SelectedRowsToolbar({
         const newState = {
             ...getNewStateOnDataChange(
                 {
-                    columns: props?.columns ?? [],
-                    data: cleanRows,
+                    columns: state.columns,
                     options
                 },
+                cleanRows,
                 2, // 2 = MEAN UPDATE
                 true,
                 options,
                 state,
-                setState
+                updateCellValueRef
             )
         }
 
@@ -138,7 +136,7 @@ export interface TableToolbarSelectProps {
 
 function handleCustomSelectedRows<T>(
     /** Array of rows indexes that are selected, e.g. [0, 2] will select first and third rows in table */
-    selectedRows: SelectedRowDataState[],
+    selectedRows: number[],
     options: DataTableOptions<T>,
     selectRowUpdate: TableToolbarSelectProps['selectRowUpdate']
 ) {
@@ -158,5 +156,10 @@ function handleCustomSelectedRows<T>(
         )
     }
 
-    selectRowUpdate('custom', selectedRows)
+    const _selectedRows = selectedRows.map(row => ({
+        index: row,
+        dataIndex: row
+    }))
+
+    selectRowUpdate('custom', _selectedRows)
 }

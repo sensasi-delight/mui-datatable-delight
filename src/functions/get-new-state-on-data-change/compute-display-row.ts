@@ -1,11 +1,10 @@
-import type { ReactNode } from 'react'
+import type { ReactNode, RefObject } from 'react'
 import hasSearchText from './has-search-text'
-import updateDataCol from './update-data-col'
 import type { FilterList } from '@src/types/state/filter-list'
 import type { DataTableState } from '@src/types/state'
 import type { DataTableOptions } from '@src/types/options'
-import type { DataTableProps } from '@src/data-table.props'
 import type { DisplayDataState } from '@src/types/state/display-data'
+import type { HandleUpdateCellValue } from '@src/hooks/use-data-table-context/components/provider/types/handle-update-cell-value'
 
 /*
  * Build the table data used to display to the user (i.e., after filter/search applied)
@@ -17,9 +16,8 @@ export default function computeDisplayRow<T>(
     filterList: FilterList,
     searchText: string,
     options: DataTableOptions<T>,
-    props: DataTableProps<T>,
     state: DataTableState<T>,
-    setState: (newState: DataTableState<T>) => void
+    updateCellValue: RefObject<HandleUpdateCellValue | undefined>
 ): DisplayDataState<T>[number]['data'] | undefined {
     let isFiltered = false
     let isSearchFound = false
@@ -41,17 +39,7 @@ export default function computeDisplayRow<T>(
                 index,
                 state,
                 value => {
-                    setState(
-                        updateDataCol(
-                            rowIndex,
-                            index,
-                            value,
-                            state,
-                            options,
-                            props,
-                            setState
-                        )
-                    )
+                    updateCellValue.current?.(value, rowIndex, index)
                 }
             )
 
@@ -110,16 +98,18 @@ export default function computeDisplayRow<T>(
             ) {
                 if (options.filterArrayFullMatch) {
                     const isFullMatch = filterVal?.every(el =>
-                        // @ts-expect-error  WILL FIX THIS LATER
-                        columnValue?.includes(el)
+                        (columnValue as T[keyof T][])?.includes(
+                            el as T[keyof T]
+                        )
                     )
                     if (!isFullMatch) {
                         isFiltered = true
                     }
                 } else {
                     const isAnyMatch = filterVal?.some(el =>
-                        // @ts-expect-error  WILL FIX THIS LATER
-                        columnValue?.includes(el)
+                        (columnValue as T[keyof T][])?.includes(
+                            el as T[keyof T]
+                        )
                     )
 
                     if (!isAnyMatch) {
@@ -140,8 +130,8 @@ export default function computeDisplayRow<T>(
         }
     }
 
-    if (searchText && props.options?.customSearch) {
-        const customSearchResult = props.options.customSearch(
+    if (searchText && options?.customSearch) {
+        const customSearchResult = options.customSearch(
             searchText,
             row,
             columns
@@ -154,7 +144,7 @@ export default function computeDisplayRow<T>(
     }
 
     if (options.serverSide) {
-        if (props.options?.customSearch) {
+        if (options.customSearch) {
             console.warn(
                 'Server-side filtering is enabled, hence custom search will be ignored.'
             )

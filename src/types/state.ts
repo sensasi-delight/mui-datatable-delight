@@ -6,7 +6,7 @@ import type { ColumnState } from './state/column'
 import type { SelectedRowDataState } from './state/selected-row-data'
 import type { DataItemState } from './state/data-item'
 
-interface ExpandedRows {
+export interface ExpandedRows {
     data: { index: number; dataIndex: number }[]
     lookup: Record<number, boolean>
 }
@@ -31,7 +31,7 @@ export interface DataTableState<Row> {
     expandedRows: ExpandedRows
 
     /** All data per column */
-    filterData: string[][]
+    filterData: Row[keyof Row][][]
 
     /** Filtered values per column */
     filterList: FilterList

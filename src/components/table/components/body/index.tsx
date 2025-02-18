@@ -76,16 +76,15 @@ export default function TableBody({
                         colIndex={0}
                         rowIndex={0}
                         print
-                    >
-                        {textLabels.body.noMatch}
-                    </TableBodyCell>
+                        value={textLabels.body.noMatch}
+                    />
                 </DataTableBodyRow>
             )}
         </MuiTableBody>
     )
 }
 
-interface DataTableBodyProps {
+export interface DataTableBodyProps {
     /** Callback to trigger table row select */
     selectRowUpdate: SelectRowUpdateType
 }
@@ -280,10 +279,21 @@ function RenderRow<Row>({
     selectRowUpdate: SelectRowUpdateType
 }) {
     const { classes, cx } = useStyles()
-    const { onAction, options, state } = useDataTableContext()
+    const {
+        onAction,
+        options,
+        state,
+        props: rootProps
+    } = useDataTableContext<Row>()
 
     if (options.customRowRender) {
-        return options.customRowRender(row, dataIndex, rowIndex)
+        const data = rootProps.data[dataIndex]
+
+        if (!data) {
+            throw new Error('data is undefined')
+        }
+
+        return options.customRowRender(data, dataIndex, rowIndex)
     }
 
     const isRowSelected: boolean =
@@ -297,7 +307,10 @@ function RenderRow<Row>({
         ? (options.setRowProps(row, dataIndex, rowIndex) ?? {})
         : {}
 
-    const processedRow = columnOrder.map(columnOrderItem => ({
+    const processedRow: {
+        index: number
+        value: DisplayDataState<Row>[number]['data'][number]
+    }[] = columnOrder.map(columnOrderItem => ({
         value: row[columnOrderItem],
         index: columnOrderItem
     }))
@@ -442,20 +455,19 @@ function RenderRow<Row>({
                     column =>
                         columns[column.index]?.display === true && (
                             <TableBodyCell
-                                {...(columns[column.index]?.setCellProps?.(
-                                    column.value ?? '',
-                                    dataIndex,
-                                    column.index
-                                ) ?? {})}
-                                dataIndex={dataIndex}
                                 rowIndex={rowIndex}
                                 colIndex={column.index}
                                 columnHeader={columns[column.index]?.label}
+                                value={column.value}
+                                dataIndex={dataIndex}
                                 print={columns[column.index]?.print ?? true}
                                 key={column.index}
-                            >
-                                {column.value}
-                            </TableBodyCell>
+                                {...(columns[column.index]?.setCellProps?.(
+                                    column.value,
+                                    dataIndex,
+                                    column.index
+                                ) ?? {})}
+                            />
                         )
                 )}
             </DataTableBodyRow>
@@ -470,7 +482,7 @@ function RenderRow<Row>({
 }
 
 function handleRowClick<Row>(
-    row: ReactNode[],
+    row: DisplayDataState<Row>[number]['data'],
     data: {
         rowIndex: number
         dataIndex: number

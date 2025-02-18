@@ -7,7 +7,7 @@ export default function transformData<T>(
     columns: ColumnState<T>[],
     data: DataTableProps<T>['data'],
     options: DataTableOptions<T>
-): Primitive[][] {
+): Record<number, T[keyof T]>[] {
     const { enableNestedDataAccess } = options
 
     /**

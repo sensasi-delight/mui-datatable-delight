@@ -43,34 +43,35 @@ import TableAction from './enums/table-action'
 export function DataTable<Row = DefaultRow>({
     className,
     ref,
+    paperProps,
     ...props
 }: DataTableProps<Row>): ReactNode {
     return (
         <DataTableContextProvider datatableProps={props}>
-            <DataTable_ className={className} ref={ref} />
+            <DataTable_
+                className={className}
+                ref={ref}
+                paperProps={paperProps}
+            />
         </DataTableContextProvider>
     )
 }
 
-function DataTable_({
+function DataTable_<T>({
     className,
-    ref
+    ref,
+    paperProps
 }: {
     className?: string
     ref: PaperProps['ref']
+    paperProps?: PaperProps
 }): ReactNode {
     const { classes, cx } = useStyles()
 
-    const {
-        components,
-        onAction,
-        options,
-        props: datatableRootProps,
-        setState,
-        state
-    } = useDataTableContext()
+    const { components, onAction, options, state, updateCellValueRef } =
+        useDataTableContext<T>()
 
-    const filterUpdate: FilterUpdateType = (
+    const filterUpdate: FilterUpdateType<T> = (
         index,
         value,
         column,
@@ -93,10 +94,6 @@ function DataTable_({
             page: 0
         }
 
-        if (!setState) {
-            throw new Error('setState is not defined')
-        }
-
         const displayData = options.serverSide
             ? prevState.displayData
             : getDisplayData(
@@ -104,10 +101,9 @@ function DataTable_({
                   prevState.data,
                   prevState.filterList,
                   prevState.searchText,
-                  datatableRootProps,
                   newState,
                   options,
-                  setState
+                  updateCellValueRef
               )
 
         onAction?.(TableAction.FILTER_CHANGE, {
@@ -207,6 +203,10 @@ function DataTable_({
                 newState.selectedRows.data.map(item => item.dataIndex)
             )
         } else if (type === 'cell') {
+            if (Array.isArray(value)) {
+                throw new Error('value must be a single row')
+            }
+
             const prevState = state
             const { dataIndex } = value ?? {}
             let selectedRows = [...prevState.selectedRows.data]
@@ -271,10 +271,10 @@ function DataTable_({
                 newState.selectedRows.data.map(item => item.dataIndex)
             )
         } else if (type === 'custom') {
-            const lookup = buildMap([value])
+            const lookup = buildMap(Array.isArray(value) ? value : [value])
 
             const selectedRows = {
-                data: [value],
+                data: Array.isArray(value) ? value : [value],
                 lookup
             }
 
@@ -333,6 +333,7 @@ function DataTable_({
             elevation={options?.elevation}
             ref={ref}
             className={paperClasses}
+            {...paperProps}
         >
             {isShowToolbarSelect && (
                 <_SelectedRowsToolbar selectRowUpdate={selectRowUpdate} />

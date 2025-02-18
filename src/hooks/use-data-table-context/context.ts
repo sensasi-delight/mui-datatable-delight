@@ -16,6 +16,7 @@ const DataTableContext = createContext<ContextValue<unknown>>({
 
     options: DEFAULT_OPTIONS,
     state: DEFAULT_STATE,
+
     textLabels: processTextLabels(undefined),
 
     props: {
@@ -33,6 +34,10 @@ const DataTableContext = createContext<ContextValue<unknown>>({
 
     tableRef: {
         current: null
+    },
+
+    updateCellValueRef: {
+        current: undefined
     }
 })
 

@@ -7,14 +7,15 @@ import { tss } from 'tss-react/mui'
 // globals
 import useDataTableContext from '@src/hooks/use-data-table-context'
 import ComponentClassName from '@src/enums/class-name'
+import type { ColumnState } from '@src/types/state/column'
 
 /**
  * Table Body Cell.
  *
  * @category  Component
  */
-export function TableBodyCell({
-    children,
+export function TableBodyCell<T>({
+    value,
     colIndex,
     columnHeader,
     dataIndex,
@@ -23,7 +24,7 @@ export function TableBodyCell({
     print,
     ...otherProps
 }: {
-    children: ReactNode
+    value: ReactNode | ColumnState<T>['customBodyRenderLite']
     classes?: object | undefined
     className?: string | undefined
     colIndex: number
@@ -33,7 +34,7 @@ export function TableBodyCell({
     rowIndex: number
     print: boolean
 } & TableCellProps): ReactElement {
-    const { options, textLabels } = useDataTableContext()
+    const { options, textLabels } = useDataTableContext<T>()
     const { classes, cx } = useStyles()
 
     const cells = [
@@ -86,14 +87,12 @@ export function TableBodyCell({
                 className
             )}
         >
-            {typeof children === 'function'
-                ? children(dataIndex, rowIndex)
-                : children}
+            {typeof value === 'function' ? value(dataIndex, rowIndex) : value}
         </div>
     ]
 
     const innerCells =
-        children === textLabels.body.noMatch ||
+        value === textLabels.body.noMatch ||
         (options?.responsive &&
             [
                 'standard',
@@ -113,7 +112,7 @@ export function TableBodyCell({
     return (
         <TableCell
             onClick={event => {
-                options?.onCellClick?.(children, {
+                options?.onCellClick?.(value, {
                     colIndex,
                     rowIndex,
                     dataIndex,

@@ -9,8 +9,6 @@ import { useDataTableContext } from '@src'
 /**
  * The row expansion button component.
  *
- * @todo  IMPROVE PROP TYPES
- *
  * @category  Component
  */
 export default function RowExpansionButton({

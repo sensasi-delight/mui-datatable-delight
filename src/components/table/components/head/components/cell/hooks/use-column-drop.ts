@@ -1,7 +1,9 @@
-import type { DataTableState } from '@src/types/state'
-import { type DropTargetMonitor, useDrop } from 'react-dnd'
+// vendors
 import { type RefObject, useRef } from 'react'
+import { type DropTargetMonitor, useDrop } from 'react-dnd'
 // globals
+import type { ColumnState } from '@src/types/state/column'
+import type { DataTableState } from '@src/types/state'
 import useDataTableContext from '@src/hooks/use-data-table-context'
 import TableAction from '@src/enums/table-action'
 
@@ -65,13 +67,15 @@ interface OptsType {
 export function getColModel<T>(
     headCellRefs: RefObject<HTMLTableCellElement[]>,
     columnOrder: DataTableState<T>['columnOrder'],
-    columns: DataTableState<T>['columns']
+    columns: {
+        display: ColumnState<T>['display']
+    }[]
 ) {
-    const colModel: {
+    const colModels: {
         left: number
         width: number
         columnIndex: number
-        ref: RefObject<HTMLTableCellElement>
+        ref: RefObject<HTMLTableCellElement | undefined>
     }[] = []
 
     function getFakeCell() {
@@ -93,15 +97,16 @@ export function getColModel<T>(
             }
         }
 
-        return leftMostCell as HTMLTableCellElement
+        return leftMostCell
     }
 
     // left most cell is the select cell, if it exists
-    const leftMostCell = headCellRefs.current[0] ?? getFakeCell()
+    const leftMostCell =
+        headCellRefs.current[0] ?? (getFakeCell() as HTMLTableCellElement)
 
-    let ii = 0,
-        parentOffsetLeft = 0,
-        offsetParent = leftMostCell.offsetParent
+    let ii = 0
+    let parentOffsetLeft = 0
+    let offsetParent = leftMostCell.offsetParent
 
     while (offsetParent) {
         parentOffsetLeft =
@@ -114,7 +119,7 @@ export function getColModel<T>(
         offsetParent =
             'offsetParent' in offsetParent
                 ? (offsetParent.offsetParent as Element)
-                : undefined
+                : null
 
         ii++
 
@@ -123,34 +128,40 @@ export function getColModel<T>(
 
     // if the select cell is present, make sure it is apart of the column model
     if (headCellRefs.current[0]) {
-        colModel[0] = {
+        colModels[0] = {
             left: parentOffsetLeft + leftMostCell.offsetLeft,
             width: leftMostCell.offsetWidth,
             columnIndex: -1,
-            ref: leftMostCell
+            ref: {
+                current: leftMostCell
+            }
         }
     }
 
     columnOrder.forEach(colId => {
         const col = headCellRefs.current[colId + 1]
-        const cmIndx = colModel.length - 1
+
+        const cmIndx = colModels.length - 1
 
         if (!(columns[colId] && columns[colId]?.display !== true)) {
-            const prevLeft =
-                cmIndx !== -1
-                    ? colModel[cmIndx].left + colModel[cmIndx].width
-                    : parentOffsetLeft + leftMostCell.offsetLeft
+            const colModel = colModels[cmIndx]
 
-            colModel.push({
+            const prevLeft = colModel
+                ? colModel.left + colModel.width
+                : parentOffsetLeft + leftMostCell.offsetLeft
+
+            colModels.push({
                 left: prevLeft,
-                width: col.offsetWidth,
+                width: col?.offsetWidth ?? 0,
                 columnIndex: colId,
-                ref: col
+                ref: {
+                    current: col
+                }
             })
         }
     })
 
-    return colModel
+    return colModels
 }
 
 /**
@@ -210,7 +221,9 @@ export function handleHover<T>(
         ) => void
     },
     columnOrder: DataTableState<T>['columnOrder'],
-    columns: DataTableState<T>['columns'],
+    columns: {
+        display: ColumnState<T>['display']
+    }[],
     tableRef: RefObject<HTMLTableElement | null>,
     headCellRefs: RefObject<HTMLTableCellElement[]>
 ) {
@@ -254,7 +267,7 @@ export function handleHover<T>(
 
     curColModel.forEach(item => {
         transitions[item.columnIndex] =
-            transitions[item.columnIndex] - item.left
+            (transitions[item.columnIndex] ?? 0) - item.left
     })
 
     const transitionedElements: HTMLElement[] = columnOrder.flatMap(

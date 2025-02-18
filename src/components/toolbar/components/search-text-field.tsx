@@ -26,14 +26,8 @@ export function DataTableToolbarSearch({
 }: {
     onHide: () => void
 }): ReactElement {
-    const {
-        onAction,
-        options,
-        props: datatableRootProps,
-        setState,
-        state,
-        textLabels
-    } = useDataTableContext()
+    const { onAction, options, state, textLabels, updateCellValueRef } =
+        useDataTableContext()
     const { classes } = useStyles()
 
     const timeout = useRef<NodeJS.Timeout>(undefined)
@@ -43,10 +37,6 @@ export function DataTableToolbarSearch({
     const [searchText, setSearchText] = useState(state.searchText)
 
     function handleSearch(newSearchText: string) {
-        if (!setState) {
-            throw new Error('setState is not defined')
-        }
-
         const displayData = options.serverSide
             ? state.displayData
             : getDisplayData(
@@ -54,10 +44,9 @@ export function DataTableToolbarSearch({
                   state.data,
                   state.filterList,
                   newSearchText,
-                  datatableRootProps,
                   state,
                   options,
-                  setState
+                  updateCellValueRef
               )
 
         onAction?.(TableAction.SEARCH, {

@@ -34,6 +34,7 @@ export default function sortTable<T>(
     data: DataItemState[]
     selectedRows: DataTableState<T>['selectedRows']
 } {
+    console.log(column)
     const isSortByCustomSortOption = options.customSort && !column?.sortCompare
 
     const dataSrc = isSortByCustomSortOption

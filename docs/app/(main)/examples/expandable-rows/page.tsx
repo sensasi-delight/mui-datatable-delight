@@ -124,7 +124,7 @@ class Example extends React.Component {
             ['Mason Ray', 'Computer Scientist', 'San Francisco', 39, '$142,000']
         ]
 
-        const options: DataTableProps['options'] = {
+        const options: DataTableProps<(typeof data)[number]>['options'] = {
             filter: true,
             filterType: 'dropdown',
             responsive: 'standard',
@@ -145,7 +145,8 @@ class Example extends React.Component {
             },
             rowsExpanded: [0, 1],
             renderExpandableRow: rowData => {
-                const colSpan = rowData.length + 1
+                const colSpan = rowData?.length + 1
+
                 return (
                     <TableRow>
                         <TableCell colSpan={colSpan}>

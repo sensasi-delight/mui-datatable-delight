@@ -1,7 +1,6 @@
 // vendors
 import type { ReactNode } from 'react'
 import type { PaperProps } from '@mui/material/Paper'
-import type { SxProps } from '@mui/system/styleFunctionSx'
 //
 import type { ColumnDefinition } from './types/props/column-definition'
 import type { DataTableOptions } from './types/options'
@@ -70,10 +69,7 @@ export interface DataTableProps<Row = DefaultRow> {
     ref?: PaperProps['ref']
 
     /**
-     * Override `<DataTable />` Style
-     *
-     * @experimental not implemented yet
-     * @todo WILL IMPLEMENT THIS LATER
+     * Override Material UI's `<Paper />` props that wrap the `<DataTable />`
      */
-    sx?: SxProps
+    paperProps?: Exclude<PaperProps, 'ref'>
 }

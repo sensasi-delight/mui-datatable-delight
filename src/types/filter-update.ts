@@ -2,7 +2,7 @@ import type { FilterTypeType } from './shared/filter-type-type'
 import type { ColumnState } from './state/column'
 import type { FilterList } from './state/filter-list'
 
-export type FilterUpdateType<T = unknown> = (
+export type FilterUpdateType<T> = (
     index: number,
     value: string | string[],
     column: ColumnState<T>,

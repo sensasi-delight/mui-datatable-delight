@@ -14,14 +14,15 @@ import Select, { type SelectProps } from '@mui/material/Select'
 import TextField, { type TextFieldProps } from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 // vendors
+import type { ReactElement } from 'react'
 import { tss } from 'tss-react/mui'
 // locals
-import type { DataTableToolbarFilterProps } from '..'
 import { type DataTableState } from '@src/types/state'
 import useDataTableContext from '@src/hooks/use-data-table-context'
 // global enums
 import FilterType from '@src/enums/filter-type'
-import type { Dispatch, ReactElement, SetStateAction } from 'react'
+import type { ColumnState } from '@src/types/state/column'
+import type { FilterUpdateType } from '@src/types/filter-update'
 //
 
 /**
@@ -30,20 +31,16 @@ import type { Dispatch, ReactElement, SetStateAction } from 'react'
  * @category  Component
  */
 export default function ToolbarDataFilterBoxFilters<T>({
-    columns,
-    parentProps,
+    filterUpdate,
     innerFilterList: filterList
 }: {
-    columns: DataTableState<T>['columns']
-    parentProps: DataTableToolbarFilterProps<T>
+    filterUpdate: FilterUpdateType<T>
     innerFilterList: string[][]
-    setFilterList: Dispatch<SetStateAction<string[][]>>
 }): ReactElement {
-    const { textLabels, options } = useDataTableContext()
+    const { textLabels, options, state } = useDataTableContext<T>()
     const { classes } = useStyles()
-    const { filterData, filterUpdate } = parentProps
 
-    const renderedColumns = columns.map((column, index) => {
+    const renderedColumns = state.columns.map((column, index) => {
         if (!column.filter) return
 
         const filterType = column.filterType ?? options.filterType
@@ -54,13 +51,13 @@ export default function ToolbarDataFilterBoxFilters<T>({
                     index={index}
                     column={column}
                     key={index}
-                    filterData={filterData}
+                    filterData={state.filterData}
                     filterList={filterList}
-                    handleCheckboxChange={(value: string) => {
+                    handleCheckboxChange={value => {
                         if (options.confirmFilters !== true) {
                             filterUpdate?.(
                                 index,
-                                value,
+                                value as string,
                                 column,
                                 FilterType.CHECKBOX
                             )
@@ -76,7 +73,7 @@ export default function ToolbarDataFilterBoxFilters<T>({
                     column={column}
                     index={index}
                     key={index}
-                    filterData={filterData}
+                    filterData={state.filterData}
                     filterList={filterList}
                     onSelectChange={event => {
                         if (options.confirmFilters !== true) {
@@ -95,7 +92,7 @@ export default function ToolbarDataFilterBoxFilters<T>({
         if (filterType === FilterType.TEXTFIELD) {
             return (
                 <RenderTextField
-                    parentProps={parentProps}
+                    filterList={filterList}
                     column={column}
                     index={index}
                     key={index}
@@ -117,14 +114,11 @@ export default function ToolbarDataFilterBoxFilters<T>({
             return (
                 <RenderCustomField
                     column={column}
+                    filterData={state.filterData}
+                    filterList={filterList}
                     index={index}
                     key={index}
-                    parentProps={parentProps}
-                    handleCustomChange={(
-                        value: DataTableState<T>['data'][0],
-                        index: number,
-                        column: DataTableState<T>['columns'][0]
-                    ) => {
+                    handleCustomChange={(value, index, column) => {
                         if (options.confirmFilters !== true) {
                             filterUpdate?.(
                                 index,
@@ -141,9 +135,10 @@ export default function ToolbarDataFilterBoxFilters<T>({
         return (
             <RenderSelect
                 column={column}
+                filterData={state.filterData}
+                filterList={filterList}
                 index={index}
                 key={index}
-                parentProps={parentProps}
                 onChange={event => {
                     const value =
                         event.target.value === textLabels.filter.all
@@ -218,10 +213,10 @@ function DataTableToolbarFilterCheckbox<T>({
     handleCheckboxChange
 }: {
     index: number
-    column: DataTableState<T>['columns'][0]
-    filterData: DataTableToolbarFilterProps['filterData']
-    filterList: DataTableToolbarFilterProps['filterList']
-    handleCheckboxChange: (value: string) => void
+    column: ColumnState<T>
+    filterData: DataTableState<T>['filterData']
+    filterList: DataTableState<T>['filterList']
+    handleCheckboxChange: (value: T[keyof T]) => void
 }) {
     const { components } = useDataTableContext()
     const { classes } = useStyles()
@@ -257,11 +252,9 @@ function DataTableToolbarFilterCheckbox<T>({
                                         onChange={() =>
                                             handleCheckboxChange(filterValue)
                                         }
-                                        checked={
-                                            filterList[index]?.indexOf(
-                                                filterValue
-                                            ) >= 0
-                                        }
+                                        checked={filterList[index]?.includes(
+                                            filterValue as string
+                                        )}
                                         classes={{
                                             root: classes.checkbox,
                                             checked: classes.checked
@@ -273,7 +266,7 @@ function DataTableToolbarFilterCheckbox<T>({
                                         }
                                     />
                                 }
-                                label={renderItem(filterValue)}
+                                label={renderItem(filterValue) as string}
                             />
                         </Grid>
                     ))}
@@ -283,18 +276,18 @@ function DataTableToolbarFilterCheckbox<T>({
     )
 }
 
-function DataTableToolbarFilterMultiselect({
+function DataTableToolbarFilterMultiselect<T>({
     column,
     index,
     filterList,
     onSelectChange,
     filterData
 }: {
-    column: DataTableState['columns'][0]
+    column: ColumnState<T>
     index: number
     filterList: string[][]
     onSelectChange: SelectProps<string[]>['onChange']
-    filterData: string[][]
+    filterData: DataTableState<T>['filterData']
 }) {
     const { components } = useDataTableContext()
     const { classes } = useStyles()
@@ -318,24 +311,29 @@ function DataTableToolbarFilterMultiselect({
             <FormControl key={index} variant="standard" fullWidth>
                 <InputLabel htmlFor={column.name}>{column.label}</InputLabel>
 
-                <Select<string[]>
+                <Select
                     multiple
                     fullWidth
                     value={filterList[index] ?? []}
                     renderValue={selected =>
-                        selected.map(renderItem).join(', ')
+                        selected
+                            .map(value => renderItem(value) as string)
+                            .join(', ')
                     }
                     name={column.name}
                     onChange={onSelectChange}
                     input={<Input name={column.name} id={column.name} />}
                 >
-                    {filterData[index].map((filterValue, filterIndex) => (
-                        <MenuItem value={filterValue} key={filterIndex + 1}>
+                    {filterData[index]?.map((filterValue, filterIndex) => (
+                        <MenuItem
+                            value={filterValue as string}
+                            key={filterIndex + 1}
+                        >
                             <_Checkbox
                                 data-description="table-filter"
                                 color="primary"
                                 checked={filterList[index]?.includes(
-                                    filterValue
+                                    filterValue as string
                                 )}
                                 value={
                                     filterValue != null
@@ -348,7 +346,9 @@ function DataTableToolbarFilterMultiselect({
                                     checked: classes.checked
                                 }}
                             />
-                            <ListItemText primary={renderItem(filterValue)} />
+                            <ListItemText
+                                primary={renderItem(filterValue) as string}
+                            />
                         </MenuItem>
                     ))}
                 </Select>
@@ -361,12 +361,12 @@ function RenderTextField<T>({
     column,
     index,
     onChange,
-    parentProps: { filterList }
+    filterList
 }: {
-    column: DataTableState<T>['columns'][0]
+    column: ColumnState<T>
     index: number
     onChange: TextFieldProps['onChange']
-    parentProps: DataTableToolbarFilterProps
+    filterList: DataTableState<T>['filterList']
 }) {
     const { classes } = useStyles()
 
@@ -400,24 +400,26 @@ function RenderTextField<T>({
 
 function RenderCustomField<T>({
     column,
+    filterData,
+    filterList,
     index,
-    parentProps: { filterData, filterList },
     handleCustomChange
 }: {
-    column: DataTableState<T>['columns'][0]
+    column: ColumnState<T>
+    filterData: DataTableState<T>['filterData']
+    filterList: DataTableState<T>['filterList']
     index: number
-    parentProps: DataTableToolbarFilterProps
     handleCustomChange: (
-        value: DataTableState<T>['data'][0],
+        value: string | string[],
         index: number,
-        column: DataTableState<T>['columns'][0]
+        column: ColumnState<T>
     ) => void
 }) {
     const { classes } = useStyles()
 
     const width = column.filterOptions?.fullWidth ? 12 : 6
 
-    const display = column.filterOptions.display
+    const display = column.filterOptions?.display
 
     /**
      * CAN'T FIND ANY DECLARATIONS OF THIS, DISABLE FOR NOW
@@ -462,15 +464,17 @@ function RenderCustomField<T>({
     )
 }
 
-function RenderSelect({
+function RenderSelect<T>({
     column,
+    filterData,
+    filterList,
     index,
-    parentProps: { filterData, filterList },
     onChange
 }: {
-    column: DataTableState['columns'][0]
+    column: ColumnState<T>
+    filterData: DataTableState<T>['filterData']
+    filterList: DataTableState<T>['filterList']
     index: number
-    parentProps: DataTableToolbarFilterProps
     onChange: SelectProps<string>['onChange']
 }) {
     const { textLabels } = useDataTableContext()
@@ -495,8 +499,8 @@ function RenderSelect({
                 <Select
                     fullWidth
                     value={
-                        filterList[index].length
-                            ? filterList[index].toString()
+                        filterList[index]?.length
+                            ? filterList[index]?.toString()
                             : textLabels.filter.all
                     }
                     name={column.name}
@@ -507,9 +511,12 @@ function RenderSelect({
                         {textLabels.filter.all}
                     </MenuItem>
 
-                    {filterData[index].map((filterValue, filterIndex) => (
-                        <MenuItem value={filterValue} key={filterIndex + 1}>
-                            {renderItem(filterValue)}
+                    {filterData[index]?.map((filterValue, filterIndex) => (
+                        <MenuItem
+                            value={filterValue as string}
+                            key={filterIndex + 1}
+                        >
+                            {renderItem(filterValue) as string}
                         </MenuItem>
                     ))}
                 </Select>

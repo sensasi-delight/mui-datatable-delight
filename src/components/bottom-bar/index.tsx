@@ -17,8 +17,6 @@ import TableAction from '@src/enums/table-action'
  * The bottom bar component.
  *
  * @category  Component
- *
- * @todo  FIX FONT SIZES ARE DIFFERENT IN SUB-COMPONENTS
  */
 export default function BottomBar(): ReactNode {
     const { options, state, textLabels, onAction } = useDataTableContext()

@@ -1,11 +1,13 @@
+import type { TableCellProps } from '@mui/material/TableCell'
 import type { DataTableSortOrderOption } from '../../options'
 import type { DataTableState } from '../../state'
 import type { JSX, ReactNode } from 'react'
 import type { FilterTypeType } from '../../shared/filter-type-type'
 import type { ColumnState } from '../../state/column'
 import type { FilterList } from '../../state/filter-list'
+import type { DisplayDataState } from '@src/types/state/display-data'
 
-type MUIDataTableCustomHeadRenderer<T> = {
+export type CustomHeadRenderer<T> = {
     index: number
 } & ColumnState<T>
 
@@ -117,9 +119,9 @@ export interface ColumnDefinitionOptions<T> {
     /** Function that returns a string or React component. Used as display for column header. */
     customHeadRender?:
         | ((
-              columnMeta: MUIDataTableCustomHeadRenderer<T>,
+              columnMeta: CustomHeadRenderer<T>,
               handleToggleColumn: (columnIndex: number) => void,
-              sortOrder: DataTableSortOrderOption
+              sortOrder?: DataTableSortOrderOption
           ) => string | ReactNode)
         | undefined
 
@@ -186,7 +188,7 @@ export interface ColumnDefinitionOptions<T> {
      * [Example](https://mui-datatable-delight.vercel.app/examples/customize-styling)
      */
     setCellHeaderProps?:
-        | ((columnMeta: MUIDataTableCustomHeadRenderer<T>) => object)
+        | ((columnMeta: CustomHeadRenderer<T>) => object)
         | undefined
 
     /**
@@ -195,13 +197,11 @@ export interface ColumnDefinitionOptions<T> {
      * @see
      * [Example](https://mui-datatable-delight.vercel.app/examples/customize-styling)
      */
-    setCellProps?:
-        | ((
-              cellValue: ReactNode,
-              rowIndex: number,
-              columnIndex: number
-          ) => object)
-        | undefined
+    setCellProps?: (
+        cellValue: DisplayDataState<T>[number]['data'][number],
+        rowIndex: number,
+        columnIndex: number
+    ) => TableCellProps
 
     /**
      * Enable/disable sorting on column.
@@ -247,14 +247,9 @@ export interface ColumnDefinitionOptions<T> {
      * @see
      * [Example](https://mui-datatable-delight.vercel.app/examples/column-sort)
      */
-    sortCompare:
-        | ((
-              order: DataTableSortOrderOption['direction']
-          ) => (
-              obj1: { data: T[keyof T] },
-              obj2: { data: T[keyof T] }
-          ) => number)
-        | undefined
+    sortCompare?: (
+        order: DataTableSortOrderOption['direction']
+    ) => (obj1: { data: unknown }, obj2: { data: unknown }) => number
 
     /**
      * Choice of filtering view. Takes priority over global filterType option.
@@ -302,12 +297,12 @@ export interface DataTableStateColumnFilterOptions<T> {
     display?: (
         filterList: DataTableState<T>['filterList'],
         onChange: (
-            val: string | string[],
+            value: string | string[],
             index: number,
-            column: DataTableState<T>['columns'][0]
+            column: ColumnState<T>
         ) => void,
         index: number,
-        column: DataTableState<T>['columns'][0],
+        column: ColumnState<T>,
         filterData: DataTableState<T>['filterData']
     ) => ReactNode
 
@@ -325,7 +320,7 @@ export interface DataTableStateColumnFilterOptions<T> {
      *
      * @see {@link https://mui-datatable-delight.vercel.app/examples/customize-filter|Customize Filter Example}.
      */
-    renderValue?: ((value: string) => string) | undefined
+    renderValue?: ((value: T[keyof T]) => T[keyof T]) | undefined
 
     /** Will force a filter option to take up the grid's full width. */
     fullWidth?: boolean | undefined
