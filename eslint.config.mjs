@@ -5,6 +5,8 @@ import eslintPluginReact from 'eslint-plugin-react'
 import eslintPluginReactHooks from 'eslint-plugin-react-hooks'
 import globals from 'globals'
 import js from '@eslint/js'
+import path from 'path'
+import pluginNext from '@next/eslint-plugin-next'
 import prettierConfig from 'eslint-config-prettier'
 import reactRefresh from 'eslint-plugin-react-refresh'
 import tseslint from 'typescript-eslint'
@@ -25,6 +27,7 @@ export default tseslint.config({
         }
     },
     plugins: {
+        '@next/next': pluginNext,
         filenames: eslintPluginFilenames,
         import: eslintPluginImport,
         'jsx-a11y': eslintPluginJsxA11y,
@@ -34,7 +37,10 @@ export default tseslint.config({
         'tss-unused-classes': tssUnusedClasses
     },
     rules: {
+        ...pluginNext.configs.recommended.rules,
+        ...pluginNext.configs['core-web-vitals'].rules,
         ...eslintPluginReactHooks.configs.recommended.rules,
+        '@next/next/no-html-link-for-pages': ['error', './docs'],
         'react-refresh/only-export-components': [
             'warn',
             { allowConstantExport: true }

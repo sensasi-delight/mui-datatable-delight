@@ -15,6 +15,7 @@ import getDisplayData from './get-new-state-on-data-change/get-display-data'
 import sortTable from './sort-table'
 import transformData from './transform-data'
 import type { DataItemState } from '@src/types/state/data-item'
+import type { Primitive } from '@src/types/values/primitive'
 
 enum TABLE_LOAD {
     INITIAL = 1,
@@ -141,10 +142,10 @@ export default function getNewStateOnDataChange<T>(
                 }
 
                 if (
-                    !filterData[colIndex]?.includes(value as T[keyof T]) &&
+                    !filterData[colIndex]?.includes(value as Primitive) &&
                     !Array.isArray(value)
                 ) {
-                    filterData[colIndex]?.push(value as T[keyof T])
+                    filterData[colIndex]?.push(value as Primitive)
                 } else if (Array.isArray(value)) {
                     value.forEach(element => {
                         let elmVal: string
@@ -158,12 +159,8 @@ export default function getNewStateOnDataChange<T>(
                             elmVal = element
                         }
 
-                        if (
-                            !filterData[colIndex]?.includes(
-                                elmVal as T[keyof T]
-                            )
-                        ) {
-                            filterData[colIndex]?.push(elmVal as T[keyof T])
+                        if (!filterData[colIndex]?.includes(elmVal)) {
+                            filterData[colIndex]?.push(elmVal)
                         }
                     })
                 }
@@ -177,8 +174,7 @@ export default function getNewStateOnDataChange<T>(
                     'filterOptions must now be an object. see https://github.com/gregnb/mui-datatables/tree/master/examples/customize-filter example'
                 )
             } else if (Array.isArray(column.filterOptions.names)) {
-                filterData[colIndex] = column.filterOptions
-                    .names as T[keyof T][]
+                filterData[colIndex] = column.filterOptions.names
             }
         }
 

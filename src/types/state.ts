@@ -5,6 +5,7 @@ import type { FilterList } from './state/filter-list'
 import type { ColumnState } from './state/column'
 import type { SelectedRowDataState } from './state/selected-row-data'
 import type { DataItemState } from './state/data-item'
+import type { Primitive } from './values/primitive'
 
 export interface ExpandedRows {
     data: { index: number; dataIndex: number }[]
@@ -31,7 +32,7 @@ export interface DataTableState<Row> {
     expandedRows: ExpandedRows
 
     /** All data per column */
-    filterData: Row[keyof Row][][]
+    filterData: Primitive[][]
 
     /** Filtered values per column */
     filterList: FilterList

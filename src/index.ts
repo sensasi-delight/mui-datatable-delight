@@ -15,7 +15,6 @@ export type { DefaultRow } from './types/default-row'
 export type { FilterList } from './types/state/filter-list'
 export type { FilterTypeType } from './types/shared/filter-type-type'
 export type { TextLabelsType } from './hooks/use-data-table-context/function/statics/default-text-labels'
-
 export type { SelectableRowsType } from './types/options/selectable-rows'
 export type { ColumnDefinition } from './types/props/column-definition'
 export type { DataTableComponents } from './types/components'
@@ -34,6 +33,7 @@ export type { default as TableAction } from './enums/table-action'
 export type { FilterUpdateType } from './types/filter-update'
 export type { HandleUpdateCellValue } from './hooks/use-data-table-context/components/provider/types/handle-update-cell-value'
 export type { SelectRowUpdateType } from './types/select-row-update'
+export type { Primitive } from './types/values/primitive'
 
 export { DataTable as default } from './data-table'
 
