@@ -14,7 +14,7 @@ import Select, { type SelectProps } from '@mui/material/Select'
 import TextField, { type TextFieldProps } from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 // vendors
-import type { ReactElement } from 'react'
+import type { ReactElement, ReactNode } from 'react'
 import { tss } from 'tss-react/mui'
 // locals
 import { type DataTableState } from '@src/types/state'
@@ -23,6 +23,7 @@ import useDataTableContext from '@src/hooks/use-data-table-context'
 import FilterType from '@src/enums/filter-type'
 import type { ColumnState } from '@src/types/state/column'
 import type { FilterUpdateType } from '@src/types/filter-update'
+import type { Primitive } from '@src/types/values/primitive'
 //
 
 /**
@@ -216,7 +217,7 @@ function DataTableToolbarFilterCheckbox<T>({
     column: ColumnState<T>
     filterData: DataTableState<T>['filterData']
     filterList: DataTableState<T>['filterList']
-    handleCheckboxChange: (value: T[keyof T]) => void
+    handleCheckboxChange: (value: Primitive) => void
 }) {
     const { components } = useDataTableContext()
     const { classes } = useStyles()
@@ -266,7 +267,7 @@ function DataTableToolbarFilterCheckbox<T>({
                                         }
                                     />
                                 }
-                                label={renderItem(filterValue) as string}
+                                label={renderItem(filterValue)}
                             />
                         </Grid>
                     ))}
@@ -292,7 +293,8 @@ function DataTableToolbarFilterMultiselect<T>({
     const { components } = useDataTableContext()
     const { classes } = useStyles()
 
-    const renderItem = column.filterOptions?.renderValue ?? (v => v)
+    const renderItem =
+        column.filterOptions?.renderValue ?? (v => v as ReactNode)
 
     const width = column.filterOptions?.fullWidth ? 12 : 6
 
@@ -311,7 +313,7 @@ function DataTableToolbarFilterMultiselect<T>({
             <FormControl key={index} variant="standard" fullWidth>
                 <InputLabel htmlFor={column.name}>{column.label}</InputLabel>
 
-                <Select<string[]>
+                <Select
                     multiple
                     fullWidth
                     value={filterList[index] ?? []}
@@ -514,7 +516,7 @@ function RenderSelect<T>({
                             value={filterValue as string}
                             key={filterIndex + 1}
                         >
-                            {renderItem(filterValue) as string}
+                            {renderItem(filterValue)}
                         </MenuItem>
                     ))}
                 </Select>

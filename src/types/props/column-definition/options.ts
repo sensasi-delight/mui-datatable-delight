@@ -6,6 +6,7 @@ import type { FilterTypeType } from '../../shared/filter-type-type'
 import type { ColumnState } from '../../state/column'
 import type { FilterList } from '../../state/filter-list'
 import type { DisplayDataState } from '@src/types/state/display-data'
+import type { Primitive } from '@src/types/values/primitive'
 
 export type CustomHeadRenderer<T> = {
     index: number
@@ -318,9 +319,9 @@ export interface DataTableStateColumnFilterOptions<T> {
      *
      * Use case: changing empty strings to `"(empty)"` in a dropdown.
      *
-     * @see {@link https://mui-datatable-delight.vercel.app/examples/customize-filter|Customize Filter Example}.
+     * @see {@link https://mui-datatable-delight.vercel.app/examples/customize-filter | Customize Filter Example}.
      */
-    renderValue?: <V>(value: V) => V
+    renderValue?: (value: Primitive) => ReactNode
 
     /** Will force a filter option to take up the grid's full width. */
     fullWidth?: boolean | undefined
