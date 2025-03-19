@@ -16,7 +16,8 @@ export function DataTableBodyRow({
     onClick,
     isRowSelectable,
     children,
-    className
+    className,
+    ...restProps
 }: DataTableBodyRowProps): ReactElement {
     const { classes, cx } = useStyles()
     const { options } = useDataTableContext()
@@ -45,6 +46,7 @@ export function DataTableBodyRow({
                 className
             )}
             selected={rowSelected}
+            {...restProps}
         >
             {children}
         </TableRow>
@@ -53,14 +55,8 @@ export function DataTableBodyRow({
 export interface DataTableBodyRowProps extends TableRowProps {
     isRowSelectable: boolean
 
-    /** Callback to execute when row is clicked */
-    onClick?: TableRowProps['onClick']
-
     /** Current row selected or not */
     rowSelected?: boolean
-
-    /** Extend the style applied to components */
-    // classes: PropTypes.object
 }
 
 const useStyles = tss
