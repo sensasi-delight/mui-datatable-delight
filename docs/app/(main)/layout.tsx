@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import Box from '@mui/material/Box'
-import Grid2 from '@mui/material/Grid2'
+import Grid from '@mui/material/Grid'
 import SideTopBar from './_components/side-top-bar'
 import { Breadcrumbs } from './_components/breadcrumbs'
 import ContentOutline from './_components/content-outline'
@@ -12,38 +12,18 @@ export default function Layout({ children }: { children: ReactNode }) {
         <Box display="flex">
             <SideTopBar />
 
-            <Grid2
-                container
-                sx={{
-                    py: {
-                        xs: 11,
-                        sm: 12
-                    },
-                    flexGrow: 1
-                }}
-            >
-                <Grid2
-                    size={{
-                        xs: 12,
-                        sm: 12,
-                        md: 12,
-                        lg: 9,
-                        xl: 9
-                    }}
-                    sx={{
-                        px: {
-                            xs: 4,
-                            sm: 7
-                        }
-                    }}
+            <Grid container sx={{ py: { xs: 11, sm: 12 }, flexGrow: 1 }}>
+                <Grid
+                    size={{ xs: 12, sm: 12, md: 12, lg: 9, xl: 9 }}
+                    sx={{ px: { xs: 4, sm: 7 } }}
                 >
                     <FloatingBar />
                     <Breadcrumbs />
 
                     <Box component="main">{children}</Box>
-                </Grid2>
+                </Grid>
 
-                <Grid2
+                <Grid
                     size={3}
                     sx={{
                         display: {
@@ -54,20 +34,14 @@ export default function Layout({ children }: { children: ReactNode }) {
                         }
                     }}
                 >
-                    <Box
-                        sx={{
-                            position: 'sticky',
-                            top: 12 * 8,
-                            pr: 4
-                        }}
-                    >
+                    <Box sx={{ position: 'sticky', top: 12 * 8, pr: 4 }}>
                         <Box mb={4}>
                             <EditPageButton />
                         </Box>
                         <ContentOutline />
                     </Box>
-                </Grid2>
-            </Grid2>
+                </Grid>
+            </Grid>
         </Box>
     )
 }

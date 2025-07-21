@@ -5,7 +5,7 @@ import Checkbox from '@mui/material/Checkbox'
 import FormControl from '@mui/material/FormControl'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import FormGroup from '@mui/material/FormGroup'
-import Grid from '@mui/material/Grid'
+import Grid from '@mui/material/GridLegacy'
 import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'
 import ListItemText from '@mui/material/ListItemText'
@@ -186,24 +186,17 @@ const useStyles = tss
             fontWeight: 500
         },
 
-        checkboxFormControl: {
-            margin: '0px'
-        },
+        checkboxFormControl: { margin: '0px' },
 
         checkboxFormControlLabel: {
             fontSize: '15px',
             marginLeft: '8px',
             color: theme.palette.text.primary
         },
-        checkboxIcon: {
-            width: '32px',
-            height: '32px'
-        },
+        checkboxIcon: { width: '32px', height: '32px' },
         checkbox: {},
         checked: {},
-        gridListTile: {
-            marginTop: '16px'
-        }
+        gridListTile: { marginTop: '16px' }
     }))
 
 function DataTableToolbarFilterCheckbox<T>({
