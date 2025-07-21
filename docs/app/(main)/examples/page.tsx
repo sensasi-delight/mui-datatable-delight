@@ -4,7 +4,7 @@ import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import CardActionArea from '@mui/material/CardActionArea'
 import CardContent from '@mui/material/CardContent'
-import Grid from '@mui/material/Grid'
+import Grid from '@mui/material/GridLegacy'
 import TextField, { type TextFieldProps } from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import { useState } from 'react'
@@ -36,13 +36,7 @@ export default function Page() {
                 onChange={({ target: { value } }) => setSearchVal(value)}
             />
 
-            <Grid
-                container
-                spacing={1}
-                sx={{
-                    mt: 4
-                }}
-            >
+            <Grid container spacing={1} sx={{ mt: 4 }}>
                 {examplesSortedKeys.map((enumKey, i) => (
                     <Grid key={i} item md={2}>
                         <Card>
