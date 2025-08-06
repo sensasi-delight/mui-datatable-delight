@@ -5,7 +5,7 @@ import Checkbox from '@mui/material/Checkbox'
 import FormControl from '@mui/material/FormControl'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import FormGroup from '@mui/material/FormGroup'
-import Grid from '@mui/material/GridLegacy'
+import Grid from '@mui/material/Grid'
 import Input from '@mui/material/Input'
 import InputLabel from '@mui/material/InputLabel'
 import ListItemText from '@mui/material/ListItemText'
@@ -195,8 +195,7 @@ const useStyles = tss
         },
         checkboxIcon: { width: '32px', height: '32px' },
         checkbox: {},
-        checked: {},
-        gridListTile: { marginTop: '16px' }
+        checked: {}
     }))
 
 function DataTableToolbarFilterCheckbox<T>({
@@ -219,9 +218,17 @@ function DataTableToolbarFilterCheckbox<T>({
     const _Checkbox = components.Checkbox ?? Checkbox
 
     return (
-        <Grid item xs={6}>
+        <Grid
+            size={{
+                xs: 6
+            }}
+        >
             <FormGroup>
-                <Grid item xs={12}>
+                <Grid
+                    size={{
+                        xs: 12
+                    }}
+                >
                     <Typography
                         variant="body2"
                         className={classes.checkboxListTitle}
@@ -231,7 +238,7 @@ function DataTableToolbarFilterCheckbox<T>({
                 </Grid>
                 <Grid container>
                     {filterData[index]?.map((filterValue, filterIndex) => (
-                        <Grid item key={filterIndex}>
+                        <Grid key={filterIndex}>
                             <FormControlLabel
                                 key={filterIndex}
                                 classes={{
@@ -295,12 +302,12 @@ function DataTableToolbarFilterMultiselect<T>({
 
     return (
         <Grid
-            item
             key={index}
-            xs={width}
-            classes={{
-                'grid-xs-12': classes.gridListTile,
-                'grid-xs-6': classes.gridListTile
+            size={{
+                xs: width
+            }}
+            sx={{
+                mt: '16px'
             }}
         >
             <FormControl key={index} variant="standard" fullWidth>
@@ -361,8 +368,6 @@ function RenderTextField<T>({
     onChange: TextFieldProps['onChange']
     filterList: DataTableState<T>['filterList']
 }) {
-    const { classes } = useStyles()
-
     if (column.filterOptions?.renderValue) {
         console.warn('Custom renderValue not supported for textField filters')
     }
@@ -371,11 +376,9 @@ function RenderTextField<T>({
 
     return (
         <Grid
-            item
-            xs={width}
-            classes={{
-                'grid-xs-12': classes.gridListTile,
-                'grid-xs-6': classes.gridListTile
+            size={{ xs: width }}
+            sx={{
+                mt: '16px'
             }}
         >
             <FormControl fullWidth>
@@ -408,8 +411,6 @@ function RenderCustomField<T>({
         column: ColumnState<T>
     ) => void
 }) {
-    const { classes } = useStyles()
-
     const width = column.filterOptions?.fullWidth ? 12 : 6
 
     const display = column.filterOptions?.display
@@ -436,12 +437,10 @@ function RenderCustomField<T>({
 
     return (
         <Grid
-            item
             key={index}
-            xs={width}
-            classes={{
-                'grid-xs-12': classes.gridListTile,
-                'grid-xs-6': classes.gridListTile
+            size={{ xs: width }}
+            sx={{
+                mt: '16px'
             }}
         >
             <FormControl key={index} fullWidth>
@@ -471,7 +470,6 @@ function RenderSelect<T>({
     onChange: SelectProps<string>['onChange']
 }) {
     const { textLabels } = useDataTableContext()
-    const { classes } = useStyles()
 
     const renderItem = column.filterOptions?.renderValue ?? (v => v)
 
@@ -479,12 +477,10 @@ function RenderSelect<T>({
 
     return (
         <Grid
-            item
             key={index}
-            xs={width}
-            classes={{
-                'grid-xs-12': classes.gridListTile,
-                'grid-xs-6': classes.gridListTile
+            size={{ xs: width }}
+            sx={{
+                mt: '16px'
             }}
         >
             <FormControl key={index} variant="standard" fullWidth>
