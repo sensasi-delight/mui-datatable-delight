@@ -58,6 +58,12 @@ export default [
             return id.includes('node_modules')
         },
         input: 'src/index.ts',
+
+        /**
+         * Why support multiple formats?
+         *
+         * @see https://github.com/sensasi-delight/mui-datatable-delight/issues/106
+         */
         output: [
             {
                 dir: 'dist/cjs',
