@@ -5,7 +5,6 @@ import eslintPluginReact from 'eslint-plugin-react'
 import eslintPluginReactHooks from 'eslint-plugin-react-hooks'
 import globals from 'globals'
 import js from '@eslint/js'
-import path from 'path'
 import pluginNext from '@next/eslint-plugin-next'
 import prettierConfig from 'eslint-config-prettier'
 import reactRefresh from 'eslint-plugin-react-refresh'
@@ -61,7 +60,17 @@ export default tseslint.config({
                 ignoreNonDOM: true
             }
         ],
-        'tss-unused-classes/unused-classes': 'warn'
+        'tss-unused-classes/unused-classes': 'warn',
+
+        /**
+         * @see https://mui.com/material-ui/guides/minimizing-bundle-size/
+         */
+        'no-restricted-imports': [
+            'error',
+            {
+                patterns: [{ regex: '^@mui/[^/]+$' }]
+            }
+        ]
     },
     settings: {
         react: {
