@@ -181,7 +181,8 @@ const useStyles = tss
             marginLeft: '7px',
             marginBottom: '8px',
             fontSize: '14px',
-            color: theme.palette.text.secondary,
+            // color: theme.palette.text.secondary,
+            color: 'GrayText',
             textAlign: 'left',
             fontWeight: 500
         },

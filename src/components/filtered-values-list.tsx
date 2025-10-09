@@ -204,6 +204,6 @@ const useStyles = tss.withName(ComponentClassName.FILTERED_VALUES_LIST).create({
         margin: '0px 16px 0px 16px'
     },
     chip: {
-        margin: '8px 8px 0px 0px'
+        margin: '8px 8px 16px 0px'
     }
 })

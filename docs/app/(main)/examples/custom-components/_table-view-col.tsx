@@ -94,7 +94,8 @@ const useStyles = tss.withName('MUIDataTableViewCol').create(({ theme }) => ({
         marginLeft: '-7px',
         marginRight: '24px',
         fontSize: '14px',
-        color: theme.palette.text.secondary,
+        // color: theme.palette.text.secondary,
+        color: 'GrayText',
         textAlign: 'left',
         fontWeight: 500
     },

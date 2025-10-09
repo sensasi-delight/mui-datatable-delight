@@ -92,7 +92,7 @@ export function DataTableToolbarSearch({
                 />
 
                 <IconButton
-                    className={classes.clearButton}
+                    size="small"
                     aria-label="Close search bar"
                     onClick={onHide}
                     style={{ visibility: clearIconVisibility }}
@@ -106,19 +106,15 @@ export function DataTableToolbarSearch({
 
 const useStyles = tss
     .withName(ClassName.TOOLBAR__SEARCH_TEXT_FIELD)
-    .create(({ theme }) => ({
-        clearButton: {
-            '&:hover': {
-                color: theme.palette.error.main
-            }
-        },
+    .create(() => ({
         root: {
             display: 'flex',
             flex: '1 0 auto',
             alignItems: 'center'
         },
         searchIcon: {
-            color: theme.palette.text.secondary,
+            // color: theme.palette.text.secondary,
+            color: 'GrayText',
             marginRight: '8px'
         },
         textField: {

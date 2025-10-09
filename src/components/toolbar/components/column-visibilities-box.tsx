@@ -104,36 +104,40 @@ export default function ColumnVisibilitiesBox(): ReactNode {
 
 const useStyles = tss
     .withName(ComponentClassName.TOOLBAR__COLUMN_VISIBILITIES_BOX)
-    .create(({ theme }) => ({
-        root: {
-            padding: '16px 24px 16px 24px',
-            fontFamily: 'Roboto'
-        },
-        title: {
-            marginLeft: '-7px',
-            marginRight: '24px',
-            fontSize: '14px',
-            color: theme.palette.text.secondary,
-            textAlign: 'left',
-            fontWeight: 500
-        },
-        formGroup: {
-            marginTop: '8px'
-        },
-        formControl: {},
-        checkbox: {
-            padding: '0px',
-            width: '32px',
-            height: '32px'
-        },
-        checkboxRoot: {},
-        checked: {},
-        label: {
-            fontSize: '15px',
-            marginLeft: '8px',
-            color: theme.palette.text.primary
-        }
-    }))
+    .create(() =>
+        // { theme }
+        ({
+            root: {
+                padding: '16px 24px 16px 24px',
+                fontFamily: 'Roboto'
+            },
+            title: {
+                marginLeft: '-7px',
+                marginRight: '24px',
+                fontSize: '14px',
+                // color: theme.palette.text.secondary,
+                color: 'GrayText',
+                textAlign: 'left',
+                fontWeight: 500
+            },
+            formGroup: {
+                marginTop: '8px'
+            },
+            formControl: {},
+            checkbox: {
+                padding: '0px',
+                width: '32px',
+                height: '32px'
+            },
+            checkboxRoot: {},
+            checked: {},
+            label: {
+                fontSize: '15px',
+                marginLeft: '8px'
+                // color: theme.palette.text.primary
+            }
+        })
+    )
 
 // export interface ToolbarViewColProps {
 //     /** Extend the style applied to components */
