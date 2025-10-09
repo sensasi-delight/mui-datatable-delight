@@ -130,6 +130,8 @@ export interface ColumnDefinitionOptions<T> {
      * Determines if the column can be dragged.
      * The draggableColumns.enabled option must also be true.
      * @default true
+     *
+     * @deprecated FEATURED ARE REMOVED
      */
     draggable?: boolean | undefined
 

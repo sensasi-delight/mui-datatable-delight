@@ -13,7 +13,7 @@
         "build:docs": "typedoc && next build docs",
         "dev": "next docs",
         "lint": "eslint src",
-        "prepublishOnly": "npm run build",
+        "prepublishOnly": "bun run build",
         "prettier": "prettier './**/*.{js,jsx,ts,tsx,mjs,cjs}' --write",
         "test": "vitest run --coverage",
         "test:watch": "vitest watch --silent=false"
@@ -71,10 +71,6 @@
         "next": "^15.5.4",
         "prettier": "^3.6.2",
         "prismjs": "^1.30.0",
-        "react-dnd": "^16.0.1",
-        "react-dnd-html5-backend": "^16.0.1",
-        "react-dnd-test-backend": "^16.0.1",
-        "react-dnd-test-utils": "^16.0.1",
         "react-waypoint": "^10.3.0",
         "rollup": "^4.52.4",
         "rollup-plugin-delete": "^2.2.0",
@@ -96,7 +92,6 @@
         "react-dom": "19.2.0",
         "react-fast-compare": "^3.2.2",
         "react-to-print": "^3.1.1",
-        "redux": "^4.2.1",
         "tss-react": "^4.9.19"
     }
 }

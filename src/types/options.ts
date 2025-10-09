@@ -93,6 +93,8 @@ export interface DataTableOptions<Row = DefaultRow>
      *
      * To disable the dragging of a particular column, see the "draggable" option in the columns options.
      * Dragging a column to a new position updates the columnOrder array and triggers the onColumnOrderChange callback.
+     *
+     * @deprecated FEATURE IS REMOVED
      */
     draggableColumns: {
         enabled: boolean
