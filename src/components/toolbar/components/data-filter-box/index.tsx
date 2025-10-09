@@ -130,9 +130,8 @@ export default function ToolbarDataFilterBox<T>({
 
 const useStyles = tss
     .withName(ComponentClassName.TOOLBAR__DATA_FILTER_BOX)
-    .create(({ theme }) => ({
+    .create(() => ({
         root: {
-            backgroundColor: theme.palette.background.default,
             padding: '24px 24px 36px 24px',
             fontFamily: 'Roboto'
         },
@@ -148,7 +147,6 @@ const useStyles = tss
         title: {
             display: 'inline-block',
             marginLeft: '7px',
-            color: theme.palette.text.primary,
             fontSize: '14px',
             fontWeight: 500
         },

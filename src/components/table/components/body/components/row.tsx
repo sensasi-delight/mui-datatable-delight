@@ -63,14 +63,8 @@ const useStyles = tss
     .withName(ComponentClassName.TABLE__BODY__ROW)
     .create(({ theme }) => ({
         root: {
-            // material v4
-            '&.Mui-selected': {
-                backgroundColor: theme.palette.action.selected
-            },
-
-            // material v3 workaround
             '&.mui-row-selected': {
-                backgroundColor: theme.palette.action.selected
+                backgroundColor: 'var(--mui-palette-action-selected)'
             }
         },
         hoverCursor: { cursor: 'pointer' },

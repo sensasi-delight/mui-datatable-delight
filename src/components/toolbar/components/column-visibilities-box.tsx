@@ -104,7 +104,7 @@ export default function ColumnVisibilitiesBox(): ReactNode {
 
 const useStyles = tss
     .withName(ComponentClassName.TOOLBAR__COLUMN_VISIBILITIES_BOX)
-    .create(({ theme }) => ({
+    .create(() => ({
         root: {
             padding: '16px 24px 16px 24px',
             fontFamily: 'Roboto'
@@ -113,7 +113,7 @@ const useStyles = tss
             marginLeft: '-7px',
             marginRight: '24px',
             fontSize: '14px',
-            color: theme.palette.text.secondary,
+            color: 'var(--mui-palette-text-secondary)',
             textAlign: 'left',
             fontWeight: 500
         },
@@ -131,7 +131,7 @@ const useStyles = tss
         label: {
             fontSize: '15px',
             marginLeft: '8px',
-            color: theme.palette.text.primary
+            color: 'var(--mui-palette-text-primary)'
         }
     }))
 
