@@ -175,13 +175,13 @@ export default function ToolbarDataFilterBoxFilters<T>({
 
 const useStyles = tss
     // .withName()
-    .create(({ theme }) => ({
+    .create(() => ({
         root: {},
         checkboxListTitle: {
             marginLeft: '7px',
             marginBottom: '8px',
             fontSize: '14px',
-            color: theme.palette.text.secondary,
+            color: 'var(--mui-palette-text-secondary)',
             textAlign: 'left',
             fontWeight: 500
         },
@@ -190,8 +190,7 @@ const useStyles = tss
 
         checkboxFormControlLabel: {
             fontSize: '15px',
-            marginLeft: '8px',
-            color: theme.palette.text.primary
+            marginLeft: '8px'
         },
         checkboxIcon: { width: '32px', height: '32px' },
         checkbox: {},

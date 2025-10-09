@@ -300,12 +300,12 @@ const useStyles = tss.withName(ClassName.TOOLBAR).create(({ theme }) => ({
 
     icon: {
         '&:hover': {
-            color: theme.palette.primary.main
+            color: 'var(--mui-palette-primary-main)'
         }
     },
 
     iconActive: {
-        color: theme.palette.primary.main
+        color: 'var(--mui-palette-primary-main)'
     },
 
     filterPaper: {
