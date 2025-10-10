@@ -9,5 +9,4 @@ export enum Route {
     FEATURES__DEBOUNCE_SEARCH = FEATURES + '/debounce-search',
     FEATURES__LOCALIZATION = FEATURES + '/localization',
     FEATURES__REMOTE_DATA = FEATURES + '/remote-data',
-    FEATURES__RESIZABLE_COLUMNS = FEATURES + '/resizable-columns'
 }
