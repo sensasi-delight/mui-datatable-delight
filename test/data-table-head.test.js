@@ -6,8 +6,6 @@ import TableHead from '../src/components/TableHead'
 import TableHeadCell from '../src/components/TableHeadCell'
 import Checkbox from '@mui/material/Checkbox'
 import Tooltip from '@mui/material/Tooltip'
-import { DndProvider } from 'react-dnd'
-import { HTML5Backend } from 'react-dnd-html5-backend'
 
 describe('<TableHead />', function () {
     let columns

@@ -108,10 +108,6 @@ class Example extends React.Component<
             selectableRows: 'multiple',
             filterType: 'dropdown',
             responsive: 'vertical',
-            draggableColumns: {
-                enabled: true,
-                transitionTime: 300
-            },
             rowsPerPage: 10,
             downloadOptions: {
                 filename: 'excel-format.csv',

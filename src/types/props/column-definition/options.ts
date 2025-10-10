@@ -127,13 +127,6 @@ export interface ColumnDefinitionOptions<T> {
         | undefined
 
     /**
-     * Determines if the column can be dragged.
-     * The draggableColumns.enabled option must also be true.
-     * @default true
-     */
-    draggable?: boolean | undefined
-
-    /**
      * Display the column.
      * Possible values:
      * - true: Column is visible and toggleable via the View Columns Popover
