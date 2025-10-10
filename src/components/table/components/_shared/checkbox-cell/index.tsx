@@ -22,8 +22,7 @@ export default function CheckboxCell({
     onChange,
     ...otherProps
 }: DataTableTableSelectCellProps & IsHeaderCell) {
-    const { components, functions, onAction, options, state } =
-        useDataTableContext()
+    const { components, onAction, options, state } = useDataTableContext()
     const { classes, cx } = useStyles()
 
     if (
@@ -156,11 +155,6 @@ export default function CheckboxCell({
         <TableCell
             className={cellClasses}
             padding="checkbox"
-            ref={(el: HTMLTableCellElement) => {
-                if (isHeaderCell) {
-                    functions.setHeadCellsRef?.(0, 0, el)
-                }
-            }}
             sx={{
                 borderBottom:
                     !isHeaderCell &&

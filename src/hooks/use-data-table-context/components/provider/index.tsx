@@ -35,12 +35,10 @@ export default function DataTableContextProvider<Row>({
     datatableProps: DataTableProps<Row>
     children: react.ReactNode
 }): react.ReactElement {
-    const draggableHeadCellRefs = react.useRef<HTMLTableCellElement[]>([])
     const lastDatatableProps = react.useRef(datatableProps)
     const options = react.useRef<DataTableOptions<Row>>(
         getConstructedOption(datatableProps?.options)
     )
-    const tableHeadCellElements = react.useRef<HTMLTableCellElement[]>([])
     const tableRef = react.useRef<HTMLTableElement>(null)
 
     const updateCellValueRef = react.useRef<HandleUpdateCellValue>(undefined)
@@ -156,14 +154,6 @@ export default function DataTableContextProvider<Row>({
         <_DataTableContext.Provider
             value={{
                 components: datatableProps.components ?? {},
-                draggableHeadCellRefs,
-
-                functions: {
-                    setHeadCellsRef: (index, columnIndex, el) => {
-                        draggableHeadCellRefs.current[index] = el
-                        tableHeadCellElements.current[columnIndex] = el
-                    }
-                },
 
                 icons: {
                     ...DEFAULT_ICONS,
@@ -197,7 +187,6 @@ export default function DataTableContextProvider<Row>({
                 options: options.current,
                 props: datatableProps,
                 state,
-                tableHeadCellElements,
                 tableRef,
                 textLabels: processTextLabels(datatableProps.textLabels),
                 updateCellValueRef

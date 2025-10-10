@@ -14,17 +14,6 @@ import type { HandleUpdateCellValue } from '../components/provider/types/handle-
 
 export default interface ContextValue<DataRowItemType> {
     components: Partial<DataTableComponents>
-    draggableHeadCellRefs: RefObject<HTMLTableCellElement[]>
-    functions: {
-        /**
-         * Sets the ref for a head cell.
-         */
-        setHeadCellsRef?: (
-            index: number,
-            columnIndex: number,
-            element: HTMLTableCellElement
-        ) => void
-    }
     icons: typeof DEFAULT_ICONS
     onAction?: (
         action: TableAction,
@@ -33,7 +22,6 @@ export default interface ContextValue<DataRowItemType> {
     options: DataTableOptions<DataRowItemType>
     props: DataTableProps<DataRowItemType>
     state: DataTableState<DataRowItemType>
-    tableHeadCellElements: RefObject<HTMLTableCellElement[]>
     tableRef: RefObject<HTMLTableElement | null>
     textLabels: ReturnType<typeof processTextLabels>
     updateCellValueRef: RefObject<HandleUpdateCellValue | undefined>

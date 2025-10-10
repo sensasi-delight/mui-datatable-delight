@@ -25,20 +25,13 @@ import type Props from './types/props'
 export function TableHeadCell<T>({
     cellHeaderProps = {},
     children,
-    colPosition,
     column,
     index,
     sortDirection,
     toggleSort
 }: Props<T>): ReactElement {
     const { classes, cx } = useStyles()
-    const {
-        components,
-        // draggableHeadCellRefs,
-        functions,
-        options,
-        textLabels
-    } = useDataTableContext()
+    const { components, options, textLabels } = useDataTableContext()
     const [sortTooltipOpen, setSortTooltipOpen] = useState(false)
     const [hintTooltipOpen, setHintTooltipOpen] = useState(false)
 
@@ -86,9 +79,6 @@ export function TableHeadCell<T>({
 
     return (
         <TableCell
-            ref={(ref: HTMLTableCellElement) => {
-                functions.setHeadCellsRef?.(index + 1, colPosition + 1, ref)
-            }}
             className={cellClass}
             scope="col"
             sortDirection={sortDirection}
