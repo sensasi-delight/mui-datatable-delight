@@ -4,7 +4,7 @@ import type { ReactNode } from 'react'
 import IconButton from '@mui/material/IconButton'
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight'
 import RemoveIcon from '@mui/icons-material/Remove'
-import { useDataTableContext } from '@src'
+import useDataTableContext from '@src/hooks/use-data-table-context'
 
 /**
  * The row expansion button component.
