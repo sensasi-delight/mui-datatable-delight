@@ -1,6 +1,5 @@
 {
     "compilerOptions": {
-        "baseUrl": "./",
         "esModuleInterop": true,
         "skipLibCheck": true,
         "target": "ES2022",
