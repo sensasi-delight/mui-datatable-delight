@@ -2,8 +2,6 @@
 
 // vendors
 import type { ReactNode } from 'react'
-import { DndProvider } from 'react-dnd'
-import { HTML5Backend } from 'react-dnd-html5-backend'
 import { tss } from 'tss-react/mui'
 import Paper, { type PaperProps } from '@mui/material/Paper'
 // locals
@@ -349,9 +347,7 @@ function DataTable_<T>({
             >
                 {options.resizableColumns && <_ColumnsResizer />}
 
-                <DndProvider backend={HTML5Backend}>
-                    <Table selectRowUpdate={selectRowUpdate} />
-                </DndProvider>
+                <Table selectRowUpdate={selectRowUpdate} />
             </div>
 
             <_BottomBar />

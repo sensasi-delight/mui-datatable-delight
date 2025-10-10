@@ -52,8 +52,6 @@ export interface DataTableOptions<Row = DefaultRow>
      * An array of numbers (column indices) indicating the order the columns should be displayed in.
      * Defaults to the order provided by the Columns prop.
      * This option is useful if you'd like certain columns to swap position.
-     *
-     * For drag-and-drop column reordering, see the {@link draggableColumns | `draggableColumns`} option below.
      */
     columnOrder?: number[]
 
@@ -83,20 +81,6 @@ export interface DataTableOptions<Row = DefaultRow>
             useDisplayedColumnsOnly?: boolean
             useDisplayedRowsOnly?: boolean
         }
-    }
-
-    /**
-     * An object of options describing how dragging columns should work.
-     * The options are:
-     * `enabled: boolean` - Indicates if draggable columns are enabled. Default is `false`
-     * `transitionTime: number` - The time in milliseconds it takes for columns to swap positions. Default is `300`.
-     *
-     * To disable the dragging of a particular column, see the "draggable" option in the columns options.
-     * Dragging a column to a new position updates the columnOrder array and triggers the onColumnOrderChange callback.
-     */
-    draggableColumns: {
-        enabled: boolean
-        transitionTime: number
     }
 
     /**

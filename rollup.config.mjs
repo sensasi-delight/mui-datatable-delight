@@ -45,18 +45,7 @@ const PLUGINS = [
 /** @type {import('rollup').RollupOptions[]} */
 export default [
     {
-        /**
-         * @todo REMOVE THIS TO DECREASE BUNDLE SIZE
-         * @todo ALSO DO NOT FORGET TO REMOVE `redux` THAT ONLY REQUIRED BY `react-dnd`
-         * @todo ALSO DO NOT FORGET TO REMOVE `src/` IN `main` AND `module` IN PACKAGE JSON
-         */
-        external: id => {
-            if (id.includes('dnd-core') || id.includes('react-dnd')) {
-                return false
-            }
-
-            return id.includes('node_modules')
-        },
+        external: /node_modules/,
         input: 'src/index.ts',
 
         /**

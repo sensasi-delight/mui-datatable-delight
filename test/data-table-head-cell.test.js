@@ -7,8 +7,6 @@ import TableHeadCell from '../src/components/TableHeadCell'
 import TableCell from '@mui/material/TableCell'
 import TableSortLabel from '@mui/material/TableSortLabel'
 import HelpIcon from '@mui/icons-material/Help'
-import { DndProvider } from 'react-dnd'
-import { HTML5Backend } from 'react-dnd-html5-backend'
 
 describe('<TableHeadCell />', function () {
     let classes

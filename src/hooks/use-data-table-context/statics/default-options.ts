@@ -8,10 +8,6 @@ export const DEFAULT_OPTIONS = {
         filename: 'tableDownload.csv',
         separator: ','
     },
-    draggableColumns: {
-        enabled: false,
-        transitionTime: 300
-    },
     elevation: 4,
     enableNestedDataAccess: '',
     expandableRows: false,

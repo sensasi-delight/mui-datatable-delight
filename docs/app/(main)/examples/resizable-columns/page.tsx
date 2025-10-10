@@ -91,10 +91,6 @@ function Example() {
         filterType: 'dropdown',
         resizableColumns: true,
         selectableRows: selectableRows,
-        draggableColumns: {
-            enabled: true,
-            transitionTime: 300
-        }
     }
 
     return (
