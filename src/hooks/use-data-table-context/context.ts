@@ -11,9 +11,6 @@ import DEFAULT_STATE from './statics/default-state'
 const DataTableContext = createContext<ContextValue<unknown>>({
     components: {},
     icons: DEFAULT_ICONS,
-
-    functions: {},
-
     options: DEFAULT_OPTIONS,
     state: DEFAULT_STATE,
 
@@ -22,14 +19,6 @@ const DataTableContext = createContext<ContextValue<unknown>>({
     props: {
         data: [],
         columns: []
-    },
-
-    draggableHeadCellRefs: {
-        current: []
-    },
-
-    tableHeadCellElements: {
-        current: []
     },
 
     tableRef: {
