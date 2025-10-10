@@ -89,7 +89,6 @@ function Example() {
     const options: DataTableProps['options'] = {
         filter: true,
         filterType: 'dropdown',
-        resizableColumns: true,
         selectableRows: selectableRows,
     }
 

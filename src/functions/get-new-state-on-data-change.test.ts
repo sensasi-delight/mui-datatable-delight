@@ -311,7 +311,6 @@ describe('get-new-state-on-data-change', () => {
             components: {
                 // TableBody: {},
                 // TableFilter: {},
-                // TableResize: {},
                 // TableToolbar: {},
                 // TableToolbarSelect: {},
                 // Tooltip: {
@@ -438,7 +437,6 @@ describe('get-new-state-on-data-change', () => {
             // components: {
             //     TableBody: {},
             //     TableFilter: {},
-            //     TableResize: {},
             //     TableToolbar: {},
             //     TableToolbarSelect: {},
             //     Tooltip: {

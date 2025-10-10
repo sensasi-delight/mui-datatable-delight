@@ -21,7 +21,6 @@ import useDataTableContext from './hooks/use-data-table-context'
 // components
 import AnnounceText from './components/announce-text'
 import BottomBar from './components/bottom-bar'
-import ColumnsResizer from './components/columns-resizer'
 import FilteredValuesList from './components/filtered-values-list'
 import SelectedRowsToolbar from './components/selected-rows-toolbar'
 import Table from './components/table'
@@ -323,7 +322,6 @@ function DataTable_<T>({
     const _Toolbar = components.Toolbar ?? Toolbar
     const _FilteredValuesList =
         components.FilteredValuesList ?? FilteredValuesList
-    const _ColumnsResizer = components.ColumnsResizer ?? ColumnsResizer
     const _BottomBar = components.BottomBar ?? BottomBar
 
     return (
@@ -345,8 +343,6 @@ function DataTable_<T>({
                 style={{ position: 'relative', ...tableHeightVal }}
                 className={responsiveClass}
             >
-                {options.resizableColumns && <_ColumnsResizer />}
-
                 <Table selectRowUpdate={selectRowUpdate} />
             </div>
 
