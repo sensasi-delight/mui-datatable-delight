@@ -75,7 +75,7 @@ export default [
         // Bundling Type Definitions
         input: 'src/index.ts',
         output: {
-            file: 'dist/types/index.d.ts',
+            file: 'dist/types.d.ts',
             format: 'es'
         },
         plugins: [
