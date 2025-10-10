@@ -1,21 +1,22 @@
 // vendors
-import { isValidElement, type RefObject } from 'react'
+
 // globals
 import type { DataTableProps } from '@src/data-table.props'
+import type { HandleUpdateCellValue } from '@src/hooks/use-data-table-context/components/provider/types/handle-update-cell-value'
 import type {
     DataTableOptions,
     DataTableSortOrderOption
 } from '@src/types/options'
 import type { DataTableState } from '@src/types/state'
-import type { HandleUpdateCellValue } from '@src/hooks/use-data-table-context/components/provider/types/handle-update-cell-value'
-import { getCollatorComparator } from './get-collator-comparator'
-import { warnDeprecated } from './warn-deprecated'
+import type { DataItemState } from '@src/types/state/data-item'
+import type { Primitive } from '@src/types/values/primitive'
+import { isValidElement, type RefObject } from 'react'
 import buildColumns from './build-columns'
+import { getCollatorComparator } from './get-collator-comparator'
 import getDisplayData from './get-new-state-on-data-change/get-display-data'
 import sortTable from './sort-table'
 import transformData from './transform-data'
-import type { DataItemState } from '@src/types/state/data-item'
-import type { Primitive } from '@src/types/values/primitive'
+import { warnDeprecated } from './warn-deprecated'
 
 enum TABLE_LOAD {
     INITIAL = 1,

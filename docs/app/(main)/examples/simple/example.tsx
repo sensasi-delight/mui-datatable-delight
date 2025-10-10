@@ -1,13 +1,13 @@
 'use client'
 
-// vendors
-import { useState } from 'react'
 import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import Select from '@mui/material/Select'
 // DataTable
 import DataTable, { type DataTableOptions, type DataTableProps } from '@src'
+// vendors
+import { useState } from 'react'
 
 export function Example() {
     const [responsive, setResponsive] =

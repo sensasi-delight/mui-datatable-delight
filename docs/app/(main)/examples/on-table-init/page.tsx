@@ -1,7 +1,7 @@
 'use client'
 
-import React from 'react'
 import DataTable, { type DataTableProps, type DataTableState } from '@src'
+import React from 'react'
 
 type RowType = (number | string)[]
 

@@ -1,9 +1,9 @@
 'use client'
 
-import { forwardRef } from 'react'
+import { blue } from '@mui/material/colors'
 import { createTheme } from '@mui/material/styles'
 import Link, { type LinkProps } from 'next/link'
-import { blue } from '@mui/material/colors'
+import { forwardRef } from 'react'
 
 const LinkBehavior = forwardRef<HTMLAnchorElement, LinkProps>(
     function LinkBehavior(props, ref) {

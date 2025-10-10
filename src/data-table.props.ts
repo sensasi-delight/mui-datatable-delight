@@ -1,13 +1,14 @@
 // vendors
-import type { ReactNode } from 'react'
+
 import type { PaperProps } from '@mui/material/Paper'
+import type { TextLabelsType } from '@src/hooks/use-data-table-context/function/statics/default-text-labels'
+import type { ReactNode } from 'react'
+import type { DataTableComponents } from './types/components'
+import type { DefaultRow } from './types/default-row'
+import type { DataTableIcons } from './types/icons'
+import type { DataTableOptions } from './types/options'
 //
 import type { ColumnDefinition } from './types/props/column-definition'
-import type { DataTableOptions } from './types/options'
-import type { DataTableComponents } from './types/components'
-import type { DataTableIcons } from './types/icons'
-import type { DefaultRow } from './types/default-row'
-import type { TextLabelsType } from '@src/hooks/use-data-table-context/function/statics/default-text-labels'
 
 export interface DataTableProps<Row = DefaultRow> {
     /**

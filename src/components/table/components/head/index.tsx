@@ -1,27 +1,27 @@
 'use client'
 
-// vendors
-import type { ReactNode } from 'react'
-import { tss } from 'tss-react/mui'
-import { TableHeadCell } from './components/cell'
-import CheckboxCell from '../_shared/checkbox-cell'
 // materials
 import MuiTableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
+import ComponentClassName from '@src/enums/class-name'
+// global enums
+import TableAction from '@src/enums/table-action'
+// global functions
+import getDisplayData from '@src/functions/get-new-state-on-data-change/get-display-data'
+import sortTable from '@src/functions/sort-table'
 // globals
 import useDataTableContext from '@src/hooks/use-data-table-context'
-import type { DataTableState } from '@src/types/state'
 import {
     type DataTableOptions,
     type DataTableSortOrderOption
 } from '@src/types/options'
+import type { DataTableState } from '@src/types/state'
+// vendors
+import type { ReactNode } from 'react'
+import { tss } from 'tss-react/mui'
+import CheckboxCell from '../_shared/checkbox-cell'
+import { TableHeadCell } from './components/cell'
 import type { Props } from './types/props'
-// global enums
-import TableAction from '@src/enums/table-action'
-import ComponentClassName from '@src/enums/class-name'
-// global functions
-import getDisplayData from '@src/functions/get-new-state-on-data-change/get-display-data'
-import sortTable from '@src/functions/sort-table'
 
 /**
  * Table Head

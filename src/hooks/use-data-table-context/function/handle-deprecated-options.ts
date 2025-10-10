@@ -1,8 +1,8 @@
 // globals
 import { type DataTableProps } from '@src/data-table.props'
-import { type DataTableOptions } from '@src/types/options'
 import { warnDeprecated, warnInfo } from '@src/functions'
 import SELECT_TOOLBAR_PLACEMENT from '@src/statics/select-toolbar-placement'
+import { type DataTableOptions } from '@src/types/options'
 
 export function handleDeprecatedOptions<T>(
     props: DataTableProps<T>,

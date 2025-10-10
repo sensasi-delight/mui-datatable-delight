@@ -1,11 +1,11 @@
-import type { ReactNode } from 'react'
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
-import SideTopBar from './_components/side-top-bar'
+import type { ReactNode } from 'react'
 import { Breadcrumbs } from './_components/breadcrumbs'
 import ContentOutline from './_components/content-outline'
 import EditPageButton from './_components/edit-page-button'
 import FloatingBar from './_components/floating-bar'
+import SideTopBar from './_components/side-top-bar'
 
 export default function Layout({ children }: { children: ReactNode }) {
     return (

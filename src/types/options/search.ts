@@ -1,7 +1,7 @@
-import type { ReactNode } from 'react'
 import type { TextFieldProps } from '@mui/material/TextField'
-import type { BooleanOrDisabled } from '../values/boolean-or-disabled'
+import type { ReactNode } from 'react'
 import type { ColumnState } from '../state/column'
+import type { BooleanOrDisabled } from '../values/boolean-or-disabled'
 
 export default interface DataTableSearchOptions<T> {
     /**

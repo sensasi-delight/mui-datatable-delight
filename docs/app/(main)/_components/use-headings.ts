@@ -1,8 +1,6 @@
-import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 export default function useHeadings() {
-    const pathname = usePathname()
     const [headings, setHeadings] = useState<Element[]>([])
 
     useEffect(() => {
@@ -13,7 +11,7 @@ export default function useHeadings() {
         })
 
         setHeadings(newHeadings)
-    }, [pathname])
+    }, [])
 
     return headings
 }

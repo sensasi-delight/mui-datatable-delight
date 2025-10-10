@@ -8,9 +8,9 @@ import Grid from '@mui/material/Grid'
 import TextField, { type TextFieldProps } from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import { useState } from 'react'
+import { snakeCaseToKebab, snakeCaseToTitle } from '@/docs/utils'
 // locals
 import { Route } from './_route--enum'
-import { snakeCaseToKebab, snakeCaseToTitle } from '@/docs/utils'
 
 const SORTED_EXAMPLES = Object.keys(Route)
     .filter(key => isNaN(parseInt(key)))

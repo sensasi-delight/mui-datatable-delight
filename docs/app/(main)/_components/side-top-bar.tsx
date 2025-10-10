@@ -1,34 +1,31 @@
 'use client'
 
-// vendors
-import { usePathname } from 'next/navigation'
-import { useEffect, useState } from 'react'
-// materials
-import AppBar from '@mui/material/AppBar'
-import Box from '@mui/material/Box'
-import IconButton from '@mui/material/IconButton'
-import Link from '@mui/material/Link'
-import Toolbar from '@mui/material/Toolbar'
-import Tooltip from '@mui/material/Tooltip'
-import Typography from '@mui/material/Typography'
-import { useColorScheme } from '@mui/material/styles'
 import DarkMode from '@mui/icons-material/DarkMode'
 import GitHub from '@mui/icons-material/GitHub'
 import LightMode from '@mui/icons-material/LightMode'
 import MenuIcon from '@mui/icons-material/Menu'
 import OpenInNew from '@mui/icons-material/OpenInNew'
-
-import Menu from './menu'
+// materials
+import AppBar from '@mui/material/AppBar'
+import Box from '@mui/material/Box'
+import IconButton from '@mui/material/IconButton'
+import Link from '@mui/material/Link'
+import { useColorScheme } from '@mui/material/styles'
+import Toolbar from '@mui/material/Toolbar'
+import Tooltip from '@mui/material/Tooltip'
+import Typography from '@mui/material/Typography'
+// vendors
+import { useEffect, useState } from 'react'
 import { InlineCode } from '@/docs/components'
+import Menu from './menu'
 
 export default function SideTopBar() {
-    const pathname = usePathname()
     const { mode, setMode } = useColorScheme()
     const [isMenuOpen, setIsMenuOpen] = useState(false)
 
     useEffect(() => {
         setIsMenuOpen(false)
-    }, [pathname])
+    }, [])
 
     return (
         <>

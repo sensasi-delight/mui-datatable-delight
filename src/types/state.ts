@@ -1,10 +1,10 @@
 import type { DataTableSortOrderOption } from './options'
-import type { DisplayDataState } from './state/display-data'
 import type DataTableSearchOptions from './options/search'
-import type { FilterList } from './state/filter-list'
 import type { ColumnState } from './state/column'
-import type { SelectedRowDataState } from './state/selected-row-data'
 import type { DataItemState } from './state/data-item'
+import type { DisplayDataState } from './state/display-data'
+import type { FilterList } from './state/filter-list'
+import type { SelectedRowDataState } from './state/selected-row-data'
 import type { Primitive } from './values/primitive'
 
 export interface ExpandedRows {

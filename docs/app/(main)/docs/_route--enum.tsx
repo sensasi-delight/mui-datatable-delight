@@ -8,5 +8,5 @@ export enum Route {
     FEATURES__CUSTOMIZE_STYLING = FEATURES + '/customize-styling',
     FEATURES__DEBOUNCE_SEARCH = FEATURES + '/debounce-search',
     FEATURES__LOCALIZATION = FEATURES + '/localization',
-    FEATURES__REMOTE_DATA = FEATURES + '/remote-data',
+    FEATURES__REMOTE_DATA = FEATURES + '/remote-data'
 }

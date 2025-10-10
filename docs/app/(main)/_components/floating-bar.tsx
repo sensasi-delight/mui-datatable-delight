@@ -1,6 +1,6 @@
 import Paper from '@mui/material/Paper'
-import EditPageButton from './edit-page-button'
 import ContentOutlineIconButton from './content-outline-icon-button'
+import EditPageButton from './edit-page-button'
 export default function FloatingBar() {
     return (
         <Paper

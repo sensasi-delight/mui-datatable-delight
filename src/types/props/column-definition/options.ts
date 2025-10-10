@@ -1,16 +1,16 @@
 import type { TableCellProps } from '@mui/material/TableCell'
-import type { DataTableSortOrderOption } from '../../options'
-import type { DataTableState } from '../../state'
-import type { JSX, ReactNode } from 'react'
-import type { FilterTypeType } from '../../shared/filter-type-type'
-import type { ColumnState } from '../../state/column'
-import type { FilterList } from '../../state/filter-list'
 import type { DisplayDataState } from '@src/types/state/display-data'
 import type { Primitive } from '@src/types/values/primitive'
+import type { JSX, ReactNode } from 'react'
+import type { DataTableSortOrderOption } from '../../options'
+import type { FilterTypeType } from '../../shared/filter-type-type'
+import type { DataTableState } from '../../state'
+import type { ColumnState } from '../../state/column'
+import type { FilterList } from '../../state/filter-list'
 
-export type CustomHeadRenderer<T> = {
+export interface CustomHeadRenderer<T> extends ColumnState<T> {
     index: number
-} & ColumnState<T>
+}
 
 export interface ColumnDefinitionOptions<T> {
     /**
@@ -25,10 +25,9 @@ export interface ColumnDefinitionOptions<T> {
     customBodyRender?: (
         /**
          * The value of the cell column
-         *
-         * `any` type is used because user can pass any value
          */
-        value: T[keyof T] | any, // eslint-disable-line @typescript-eslint/no-explicit-any
+        // biome-ignore lint/suspicious/noExplicitAny: will fix this later
+        value: T[keyof T] | any,
 
         /**
          * The index of the row
@@ -47,10 +46,8 @@ export interface ColumnDefinitionOptions<T> {
 
         /**
          * A function to update the value of the cell
-         *
-         * `any` type is used because user can pass any value
          */
-        updateValue: (value: any) => void // eslint-disable-line @typescript-eslint/no-explicit-any
+        updateValue: (value: unknown) => void
     ) => JSX.Element | ReactNode
 
     /**

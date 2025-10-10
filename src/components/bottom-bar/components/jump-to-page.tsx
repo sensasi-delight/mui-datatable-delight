@@ -1,17 +1,17 @@
 'use client'
 
-// vendors
-import { useState, type ReactElement } from 'react'
-import { tss } from 'tss-react/mui'
 // materials
 import InputAdornment from '@mui/material/InputAdornment'
 import InputBase from '@mui/material/InputBase'
 import MenuItem from '@mui/material/MenuItem'
 import Select from '@mui/material/Select'
-// globals
-import useDataTableContext from '@src/hooks/use-data-table-context'
 // global enums
 import ClassName from '@src/enums/class-name'
+// globals
+import useDataTableContext from '@src/hooks/use-data-table-context'
+// vendors
+import { type ReactElement, useState } from 'react'
+import { tss } from 'tss-react/mui'
 
 /**
  * Component handling the jump to page feature.

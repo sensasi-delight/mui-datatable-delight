@@ -1,17 +1,18 @@
 // vendors
-import { describe, expect, test, vi } from 'vitest'
+
+import Chip from '@mui/material/Chip'
+import type { DataTableProps } from '@src/data-table.props'
 import {
     fireEvent,
     render
     // RenderResult
 } from '@testing-library/react'
-import Chip from '@mui/material/Chip'
+import { describe, expect, test, vi } from 'vitest'
+import { DataTableContextProvider } from '../..'
+import ClassName from '../../enums/class-name'
+import { DEFAULT_TEXT_LABELS } from '../../hooks/use-data-table-context/function/statics/default-text-labels'
 // locals
 import Toolbar from '.'
-import type { DataTableProps } from '@src/data-table.props'
-import { DEFAULT_TEXT_LABELS } from '../../hooks/use-data-table-context/function/statics/default-text-labels'
-import ClassName from '../../enums/class-name'
-import { DataTableContextProvider } from '../..'
 
 describe('<Toolbar />', function () {
     function setup(override?: Partial<DataTableProps>) {

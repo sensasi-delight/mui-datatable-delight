@@ -1,17 +1,17 @@
 'use client'
 
-// vendors
-import type { ReactNode } from 'react'
-import { tss } from 'tss-react/mui'
-// local sub-components
-import { DataTableFooterPagination } from './components/pagination'
-import JumpToPage from './components/jump-to-page'
-// globals
-import useDataTableContext from '@src/hooks/use-data-table-context'
-import { getPageValue } from '@src/functions/_shared/get-page-value'
 // global enums
 import ClassName from '@src/enums/class-name'
 import TableAction from '@src/enums/table-action'
+import { getPageValue } from '@src/functions/_shared/get-page-value'
+// globals
+import useDataTableContext from '@src/hooks/use-data-table-context'
+// vendors
+import type { ReactNode } from 'react'
+import { tss } from 'tss-react/mui'
+import JumpToPage from './components/jump-to-page'
+// local sub-components
+import { DataTableFooterPagination } from './components/pagination'
 
 /**
  * The bottom bar component.

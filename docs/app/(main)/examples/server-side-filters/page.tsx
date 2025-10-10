@@ -2,8 +2,8 @@
 
 import Button from '@mui/material/Button'
 import CircularProgress from '@mui/material/CircularProgress'
-import React from 'react'
 import DataTable, { type DataTableProps } from '@src'
+import React from 'react'
 
 const theData = [
     ['Gabby George', 'Business Analyst', 'Minneapolis', 30, '$100,000'],

@@ -1,12 +1,12 @@
 'use client'
 
-import React from 'react'
-import DataTable from '@src'
-import SearchIcon from '@mui/icons-material/YoutubeSearchedFor'
-import PrintIcon from '@mui/icons-material/Receipt'
-import DownloadIcon from '@mui/icons-material/GetApp'
 import ViewColumnIcon from '@mui/icons-material/DynamicFeed'
+import DownloadIcon from '@mui/icons-material/GetApp'
 import FilterIcon from '@mui/icons-material/GroupWork'
+import PrintIcon from '@mui/icons-material/Receipt'
+import SearchIcon from '@mui/icons-material/YoutubeSearchedFor'
+import DataTable from '@src'
+import React from 'react'
 
 class Example extends React.Component {
     render() {

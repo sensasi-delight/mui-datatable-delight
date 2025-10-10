@@ -18,9 +18,9 @@ import TableBody from '../components/table/components/body'
 import TableHead from '../components/table/components/head'
 
 import Toolbar from '../components/toolbar'
+import ColumnVisibilitiesBox from '../components/toolbar/components/column-visibilities-box'
 // ########## <Toolbar /> sub-components ##########
 import DataFilterBox from '../components/toolbar/components/data-filter-box'
-import ColumnVisibilitiesBox from '../components/toolbar/components/column-visibilities-box'
 
 export interface DataTableComponents {
     AnnounceText: typeof AnnounceText

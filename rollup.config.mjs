@@ -1,10 +1,10 @@
 import babel from '@rollup/plugin-babel'
 import commonjs from '@rollup/plugin-commonjs'
+import nodeResolve from '@rollup/plugin-node-resolve'
+import typescript from '@rollup/plugin-typescript'
 import del from 'rollup-plugin-delete'
 import dts from 'rollup-plugin-dts'
-import nodeResolve from '@rollup/plugin-node-resolve'
 import preserveDirectives from 'rollup-preserve-directives'
-import typescript from '@rollup/plugin-typescript'
 
 /** @type {import('rollup').RollupOptions['plugins']} */
 const PLUGINS = [

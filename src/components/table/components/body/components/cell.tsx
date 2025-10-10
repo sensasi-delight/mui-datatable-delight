@@ -1,13 +1,13 @@
 'use client'
 
-// vendors
-import { type ReactElement, type ReactNode } from 'react'
 import TableCell, { type TableCellProps } from '@mui/material/TableCell'
-import { tss } from 'tss-react/mui'
+import ComponentClassName from '@src/enums/class-name'
 // globals
 import useDataTableContext from '@src/hooks/use-data-table-context'
-import ComponentClassName from '@src/enums/class-name'
 import type { ColumnState } from '@src/types/state/column'
+// vendors
+import { type ReactElement, type ReactNode } from 'react'
+import { tss } from 'tss-react/mui'
 
 /**
  * Table Body Cell.

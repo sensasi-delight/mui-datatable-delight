@@ -1,11 +1,11 @@
-import type { MDXComponents } from 'mdx/types'
+import LinkIcon from '@mui/icons-material/Link'
 import Alert from '@mui/material/Alert'
 import Link from '@mui/material/Link'
-import LinkIcon from '@mui/icons-material/Link'
 import Typography, { type TypographyProps } from '@mui/material/Typography'
-import { CodeSnippet, InlineCode } from './components'
-import { Mermaid } from './app/(main)/_components/mermaid'
+import type { MDXComponents } from 'mdx/types'
 import type { JSX } from 'react'
+import { Mermaid } from './app/(main)/_components/mermaid'
+import { CodeSnippet, InlineCode } from './components'
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
     return {

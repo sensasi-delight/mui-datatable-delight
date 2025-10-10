@@ -1,10 +1,10 @@
 'use client'
 
-import React from 'react'
-import DataTable, { type DataTableProps } from '@src'
-import Switch from '@mui/material/Switch'
-import FormGroup from '@mui/material/FormGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
+import FormGroup from '@mui/material/FormGroup'
+import Switch from '@mui/material/Switch'
+import DataTable, { type DataTableProps } from '@src'
+import React from 'react'
 
 const data = [
     ['Gabby George', 'Business Analyst', 'Minneapolis', 30, 100000],

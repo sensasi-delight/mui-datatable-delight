@@ -1,16 +1,15 @@
 'use client'
 
-import { useState } from 'react'
-import DataTable, { type DataTableProps } from '@src'
-import { tss } from 'tss-react/mui'
-
-import { CustomFooter } from './_custom-footer'
+import FormControlLabel from '@mui/material/FormControlLabel'
+import FormGroup from '@mui/material/FormGroup'
+import Switch from '@mui/material/Switch'
+import TableCell from '@mui/material/TableCell'
 import TableFooter from '@mui/material/TableFooter'
 import TableRow from '@mui/material/TableRow'
-import TableCell from '@mui/material/TableCell'
-import Switch from '@mui/material/Switch'
-import FormGroup from '@mui/material/FormGroup'
-import FormControlLabel from '@mui/material/FormControlLabel'
+import DataTable, { type DataTableProps } from '@src'
+import { useState } from 'react'
+import { tss } from 'tss-react/mui'
+import { CustomFooter } from './_custom-footer'
 
 function Example() {
     const [stickyFooter, setStickyFooter] = useState(true)

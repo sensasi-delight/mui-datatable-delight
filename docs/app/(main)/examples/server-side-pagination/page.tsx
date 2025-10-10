@@ -1,7 +1,5 @@
 'use client'
 
-// vendors
-import { useEffect, useState } from 'react'
 // materials
 import Avatar from '@mui/material/Avatar'
 import Box from '@mui/material/Box'
@@ -9,6 +7,8 @@ import CircularProgress from '@mui/material/CircularProgress'
 import Typography from '@mui/material/Typography'
 // DataTable
 import DataTable, { type DataTableOptions } from '@src'
+// vendors
+import { useEffect, useState } from 'react'
 
 export default function Example() {
     const [count, setCount] = useState(0)

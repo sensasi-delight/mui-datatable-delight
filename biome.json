@@ -4,15 +4,14 @@
     "files": {
         "ignoreUnknown": false,
         "includes": [
-            "**/*.ts",
-            "**/*.tsx",
-            "**/*.mts",
-            "**/*.cts",
+            "**",
             "!node_modules/**",
             "!dist/**",
             "!docs/.next/**",
+            "!docs/next-env.d.ts",
             "!docs/out/**",
-            "!docs/next-env.d.ts"
+            "!docs/public/api-docs/**",
+            "!test/**"
         ]
     },
     "formatter": {

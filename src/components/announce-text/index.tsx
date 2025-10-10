@@ -1,11 +1,11 @@
 'use client'
 
+import ClassName from '@src/enums/class-name'
+// globals
+import useDataTableContext from '@src/hooks/use-data-table-context'
 // vendors
 import type { ReactNode } from 'react'
 import { tss } from 'tss-react/mui'
-// globals
-import useDataTableContext from '@src/hooks/use-data-table-context'
-import ClassName from '@src/enums/class-name'
 
 /**
  * Announce text

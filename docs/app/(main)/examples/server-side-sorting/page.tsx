@@ -1,9 +1,9 @@
 'use client'
 
-import React from 'react'
-import DataTable, { type DataTableOptions, type DataTableProps } from '@src'
 import CircularProgress from '@mui/material/CircularProgress'
 import Typography from '@mui/material/Typography'
+import DataTable, { type DataTableOptions, type DataTableProps } from '@src'
+import React from 'react'
 import Cities from '../_shared-components/cities'
 
 class Example extends React.Component<

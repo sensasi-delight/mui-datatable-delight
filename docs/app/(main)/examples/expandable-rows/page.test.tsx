@@ -1,5 +1,5 @@
-import { test, expect } from 'vitest'
 import { render } from '@testing-library/react'
+import { expect, test } from 'vitest'
 import Page from './page'
 
 test('should render Page', () => {

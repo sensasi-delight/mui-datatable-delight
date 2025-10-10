@@ -1,23 +1,23 @@
 'use client'
 
-// vendors
-import type { ReactNode } from 'react'
-import { tss } from 'tss-react/mui'
+import DeleteIcon from '@mui/icons-material/Delete'
 // materials
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import Typography from '@mui/material/Typography'
-import DeleteIcon from '@mui/icons-material/Delete'
+import getNewStateOnDataChange from '@src/functions/get-new-state-on-data-change'
 // globals
 import type { SelectRowUpdateType } from '@src/types/select-row-update'
-import { buildMap } from '../functions'
-import getNewStateOnDataChange from '@src/functions/get-new-state-on-data-change'
-// locals
-import type { DataTableOptions } from '../types/options'
-import useDataTableContext from '../hooks/use-data-table-context'
+// vendors
+import type { ReactNode } from 'react'
+import { tss } from 'tss-react/mui'
 // enums
 import ClassName from '../enums/class-name'
 import TableAction from '../enums/table-action'
+import { buildMap } from '../functions'
+import useDataTableContext from '../hooks/use-data-table-context'
+// locals
+import type { DataTableOptions } from '../types/options'
 
 /**
  * The selected rows toolbar component.

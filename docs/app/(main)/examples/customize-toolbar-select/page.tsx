@@ -1,13 +1,12 @@
 'use client'
 
-import { useState } from 'react'
-import DataTable, { type DataTableOptions, type DataTableProps } from '@src'
-import CustomToolbarSelect from './_custom-toolbar-select'
-import InputLabel from '@mui/material/InputLabel'
-
-import MenuItem from '@mui/material/MenuItem'
 import FormControl from '@mui/material/FormControl'
+import InputLabel from '@mui/material/InputLabel'
+import MenuItem from '@mui/material/MenuItem'
 import Select from '@mui/material/Select'
+import DataTable, { type DataTableOptions, type DataTableProps } from '@src'
+import { useState } from 'react'
+import CustomToolbarSelect from './_custom-toolbar-select'
 
 function Example() {
     const [stp, setStp] =

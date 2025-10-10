@@ -1,27 +1,27 @@
 'use client'
 
-// vendors
-import { tss } from 'tss-react/mui'
-import { type ReactNode, useState } from 'react'
 // materials
 import Box from '@mui/material/Box'
 import IconButton from '@mui/material/IconButton'
-import Typography from '@mui/material/Typography'
 import Tooltip from '@mui/material/Tooltip'
-// globals
-import useDataTableContext from '@src/hooks/use-data-table-context'
-import getDisplayData from '@src/functions/get-new-state-on-data-change/get-display-data'
+import Typography from '@mui/material/Typography'
 // global enums
 import ClassName from '@src/enums/class-name'
 import TableAction from '@src/enums/table-action'
+import getDisplayData from '@src/functions/get-new-state-on-data-change/get-display-data'
+// globals
+import useDataTableContext from '@src/hooks/use-data-table-context'
 // sub-components
 import type { FilterUpdateType } from '@src/types/filter-update'
-import { DataTableToolbarSearch } from './components/search-text-field'
-import { ToolbarPopover } from './components/popover'
-import { ToolbarPrintButton } from './components/print-button'
-import { ToolbarDownloadButton } from './components/download-button'
+import { type ReactNode, useState } from 'react'
+// vendors
+import { tss } from 'tss-react/mui'
 import ColumnVisibilitiesBox from './components/column-visibilities-box'
 import DataFilterBox from './components/data-filter-box'
+import { ToolbarDownloadButton } from './components/download-button'
+import { ToolbarPopover } from './components/popover'
+import { ToolbarPrintButton } from './components/print-button'
+import { DataTableToolbarSearch } from './components/search-text-field'
 
 /**
  * Toolbar component.

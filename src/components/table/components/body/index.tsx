@@ -1,28 +1,28 @@
 'use client'
 
-// vendors
-import { tss } from 'tss-react/mui'
-import React, { type ReactNode } from 'react'
+import MuiTableBody from '@mui/material/TableBody'
 // materials
 import type { TableRowProps } from '@mui/material/TableRow'
-import MuiTableBody from '@mui/material/TableBody'
-// locals
-import { TableBodyCell } from './components/cell'
-import { DataTableBodyRow } from './components/row'
-import CheckboxCell from '../_shared/checkbox-cell'
-// globals
-import type { DataTableState } from '@src/types/state'
-import type { DataTableOptions } from '@src/types/options'
-import type { SelectRowUpdateType } from '@src/types/select-row-update'
-import type { SelectedRowDataState } from '@src/types/state/selected-row-data'
+import ComponentClassName from '@src/enums/class-name'
+// global enums
+import TableAction from '@src/enums/table-action'
 import { buildMap } from '@src/functions'
 import { getPageValue } from '@src/functions/_shared/get-page-value'
 import useDataTableContext from '@src/hooks/use-data-table-context'
-// global enums
-import TableAction from '@src/enums/table-action'
-import ComponentClassName from '@src/enums/class-name'
+import type { DataTableOptions } from '@src/types/options'
+import type { SelectRowUpdateType } from '@src/types/select-row-update'
+// globals
+import type { DataTableState } from '@src/types/state'
 import type { ColumnState } from '@src/types/state/column'
 import type { DisplayDataState } from '@src/types/state/display-data'
+import type { SelectedRowDataState } from '@src/types/state/selected-row-data'
+import React, { type ReactNode } from 'react'
+// vendors
+import { tss } from 'tss-react/mui'
+import CheckboxCell from '../_shared/checkbox-cell'
+// locals
+import { TableBodyCell } from './components/cell'
+import { DataTableBodyRow } from './components/row'
 
 /**
  * Table body

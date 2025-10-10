@@ -1,16 +1,16 @@
 'use client'
 
-// vendors
-import { tss } from 'tss-react/mui'
-import { useReactToPrint } from 'react-to-print'
 // materials
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
+import ComponentClassName from '@src/enums/class-name'
+import useDataTableContext from '@src/hooks/use-data-table-context'
+import type { ReactElement } from 'react'
+import { useReactToPrint } from 'react-to-print'
+// vendors
+import { tss } from 'tss-react/mui'
 // globals
 import { ICON_BUTTON_DEFAULT_SX } from './statics/icon-button-default-sx'
-import useDataTableContext from '@src/hooks/use-data-table-context'
-import ComponentClassName from '@src/enums/class-name'
-import type { ReactElement } from 'react'
 
 /**
  * Renders a print button in the toolbar that triggers the print functionality.
