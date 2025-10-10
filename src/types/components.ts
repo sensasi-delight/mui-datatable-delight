@@ -7,8 +7,6 @@ import AnnounceText from '../components/announce-text'
 
 import BottomBar from '../components/bottom-bar'
 
-import ColumnsResizer from '../components/columns-resizer'
-
 import FilteredValuesList from '../components/filtered-values-list'
 
 import SelectedRowsToolbar from '../components/selected-rows-toolbar'
@@ -32,7 +30,6 @@ export interface DataTableComponents {
      * Global `<Checkbox />` component inside `<DataTable />`
      */
     Checkbox: typeof Checkbox
-    ColumnsResizer: typeof ColumnsResizer
     ColumnVisibilitiesBox: typeof ColumnVisibilitiesBox
     DataFilterBox: typeof DataFilterBox
     FilteredValuesList: typeof FilteredValuesList

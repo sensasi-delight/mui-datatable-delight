@@ -13,7 +13,6 @@ import FormGroup from '@mui/material/FormGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
 
 function Example() {
-    const [resizableColumns, setResizableColumns] = useState(false)
     const [stickyFooter, setStickyFooter] = useState(true)
     const { classes, cx } = useStyles()
 
@@ -81,7 +80,6 @@ function Example() {
         responsive: 'vertical',
         tableBodyHeight: '500px',
         rowsPerPage: 10,
-        resizableColumns: resizableColumns,
         customFooter: (
             count,
             page,
@@ -170,19 +168,6 @@ function Example() {
     return (
         <>
             <FormGroup row>
-                <FormControlLabel
-                    control={
-                        <Switch
-                            checked={resizableColumns}
-                            onChange={e =>
-                                setResizableColumns(e.target.checked)
-                            }
-                            value="denseTable"
-                            color="primary"
-                        />
-                    }
-                    label="Resizable Columns"
-                />
                 <FormControlLabel
                     control={
                         <Switch

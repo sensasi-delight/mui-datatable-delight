@@ -2,7 +2,6 @@ enum ComponentClassName {
     ROOT = 'datatable-delight',
     ANNOUNCE_TEXT = ROOT + '__announce-text',
     BOTTOM_BAR = ROOT + '__bottom-bar',
-    COLUMN_RESIZER = ROOT + '__column-resizer',
     FILTERED_VALUES_LIST = ROOT + '__filtered-values-list',
     SELECTED_ROWS_TOOLBAR = ROOT + '__selected-rows-toolbar',
     TABLE = ROOT + '__table',

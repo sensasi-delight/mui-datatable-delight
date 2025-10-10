@@ -46,8 +46,6 @@ export { default as AnnounceText } from './components/announce-text'
 
 export { default as BottomBar } from './components/bottom-bar'
 
-export { default as ColumnsResizer } from './components/columns-resizer'
-
 export { default as FilteredValuesList } from './components/filtered-values-list'
 
 export { default as SelectedRowsToolbar } from './components/selected-rows-toolbar'

@@ -409,15 +409,6 @@ export interface DataTableOptions<Row = DefaultRow>
     ) => ReactNode
 
     /**
-     * Set to `true` to allow users to resize columns by dragging the edges.
-     *
-     * @see https://mui-datatable-delight.vercel.app/docs/features/resizable-columns
-     *
-     * @default false
-     */
-    resizableColumns: boolean
-
-    /**
      * Enable/disable responsive table view.
      * Options:
      * - 'vertical': In smaller view the table cells will collapse such that the heading is to the left of th cell value.

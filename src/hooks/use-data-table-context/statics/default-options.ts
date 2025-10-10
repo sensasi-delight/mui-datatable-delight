@@ -21,7 +21,6 @@ export const DEFAULT_OPTIONS = {
     jumpToPage: false,
     pagination: true,
     print: true,
-    resizableColumns: false,
     responsive: 'vertical',
     rowHover: true,
     rowsPerPage: 10,
