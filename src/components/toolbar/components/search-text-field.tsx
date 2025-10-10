@@ -30,7 +30,7 @@ export function DataTableToolbarSearch({
         useDataTableContext()
     const { classes } = useStyles()
 
-    const timeout = useRef<NodeJS.Timeout>(undefined)
+    const timeout = useRef<number>(undefined)
     const searchDelay = options?.searchDelay ?? 0
     const clearIconVisibility = options?.searchAlwaysOpen ? 'hidden' : 'visible'
 

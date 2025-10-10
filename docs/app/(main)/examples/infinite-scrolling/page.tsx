@@ -1,14 +1,13 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Waypoint } from 'react-waypoint'
+// import { Waypoint } from 'react-waypoint'
 import DataTable, { type DataTableProps } from '@src'
-// import { tss } from 'tss-react/mui'
+import Alert from '@mui/material/Alert'
 
 type DataItemType = (string | number)[]
 
 export default function MessageManager() {
-    // const { classes } = useStyles()
     const [filteredMessages, setFilteredMessages] = useState<DataItemType[]>([])
 
     useEffect(() => {
@@ -64,7 +63,7 @@ export default function MessageManager() {
 
                     return (
                         <>
-                            <Waypoint
+                            {/* <Waypoint
                                 onEnter={() => {
                                     console.log('WAYPOINT REACHED')
                                     const newData = buildTestData(
@@ -77,7 +76,7 @@ export default function MessageManager() {
                                         ...newData
                                     ])
                                 }}
-                            />
+                            /> */}
                             {value}*
                         </>
                     )
@@ -99,11 +98,18 @@ export default function MessageManager() {
     ]
 
     return (
-        <DataTable
-            data={filteredMessages}
-            columns={columns}
-            options={options}
-        />
+        <>
+            <Alert severity="warning">
+                <code>react-waypoint</code> is not supported `react@19.2.0`.
+                Skip this example for now.
+            </Alert>
+
+            <DataTable
+                data={filteredMessages}
+                columns={columns}
+                options={options}
+            />
+        </>
     )
 }
 
