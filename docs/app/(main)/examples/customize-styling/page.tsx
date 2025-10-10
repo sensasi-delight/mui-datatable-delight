@@ -1,13 +1,12 @@
 'use client'
 
-import { useState } from 'react'
-import DataTable, { type DataTableProps } from '@src'
-import { ThemeProvider } from '@mui/material/styles'
-import { tss } from 'tss-react/mui'
-import { createTheme } from '@mui/material/styles'
-import Switch, { type SwitchProps } from '@mui/material/Switch'
-import FormGroup from '@mui/material/FormGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
+import FormGroup from '@mui/material/FormGroup'
+import Switch, { type SwitchProps } from '@mui/material/Switch'
+import { createTheme, ThemeProvider } from '@mui/material/styles'
+import DataTable, { type DataTableProps } from '@src'
+import { useState } from 'react'
+import { tss } from 'tss-react/mui'
 
 export default function Example() {
     const { classes, cx } = useStyles()

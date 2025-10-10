@@ -1,15 +1,15 @@
 'use client'
 
+import Chip from '@mui/material/Chip'
+import ComponentClassName from '@src/enums/class-name'
+import type { FilterUpdateType } from '@src/types/filter-update'
 // vendors
 import type { ReactNode } from 'react'
 import { tss } from 'tss-react/mui'
-import Chip from '@mui/material/Chip'
+import useDataTableContext from '../hooks/use-data-table-context'
+import type { FilterTypeType } from '../types/shared/filter-type-type'
 // local types
 import type { DataTableState } from '../types/state'
-import type { FilterTypeType } from '../types/shared/filter-type-type'
-import useDataTableContext from '../hooks/use-data-table-context'
-import ComponentClassName from '@src/enums/class-name'
-import type { FilterUpdateType } from '@src/types/filter-update'
 
 const CLASS_ID = 'datatable-delight--filter-list'
 

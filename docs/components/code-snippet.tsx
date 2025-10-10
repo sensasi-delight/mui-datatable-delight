@@ -1,11 +1,10 @@
 import Box from '@mui/material/Box'
 import Paper from '@mui/material/Paper'
+// prisms
+import prism from 'prismjs'
 // internals
 import { AlwaysDarkThemeProvider } from './code-snippet.always-dark-theme-provider'
 import { CopyButton } from './code-snippet.copy-button'
-
-// prisms
-import prism from 'prismjs'
 import 'prismjs/components/prism-jsx'
 import 'prismjs/components/prism-bash'
 import 'prismjs/components/prism-typescript'

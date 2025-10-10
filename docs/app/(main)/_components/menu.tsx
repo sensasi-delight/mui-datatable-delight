@@ -1,21 +1,22 @@
 // vendors
-import { usePathname } from 'next/navigation'
+
+// icons-materials
+import OpenInNew from '@mui/icons-material/OpenInNew'
+import TagIcon from '@mui/icons-material/Tag'
 // materials
 import Box from '@mui/material/Box'
 import Dialog from '@mui/material/Dialog'
 import Drawer from '@mui/material/Drawer'
-import TagIcon from '@mui/icons-material/Tag'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemText from '@mui/material/ListItemText'
 import ListSubheader from '@mui/material/ListSubheader'
-// icons-materials
-import OpenInNew from '@mui/icons-material/OpenInNew'
+import { usePathname } from 'next/navigation'
+import { snakeCaseToKebab, snakeCaseToTitle } from '@/docs/utils'
 // locals
 import { DRAWER_WIDTH } from '../_constants'
 import { Route as DocsRoute } from '../docs/_route--enum'
-import { snakeCaseToKebab, snakeCaseToTitle } from '@/docs/utils'
 
 export default function Menu({
     isOpen

@@ -13,17 +13,17 @@ import MenuItem from '@mui/material/MenuItem'
 import Select, { type SelectProps } from '@mui/material/Select'
 import TextField, { type TextFieldProps } from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
+// global enums
+import FilterType from '@src/enums/filter-type'
+import useDataTableContext from '@src/hooks/use-data-table-context'
+import type { FilterUpdateType } from '@src/types/filter-update'
+// locals
+import { type DataTableState } from '@src/types/state'
+import type { ColumnState } from '@src/types/state/column'
+import type { Primitive } from '@src/types/values/primitive'
 // vendors
 import type { ReactElement, ReactNode } from 'react'
 import { tss } from 'tss-react/mui'
-// locals
-import { type DataTableState } from '@src/types/state'
-import useDataTableContext from '@src/hooks/use-data-table-context'
-// global enums
-import FilterType from '@src/enums/filter-type'
-import type { ColumnState } from '@src/types/state/column'
-import type { FilterUpdateType } from '@src/types/filter-update'
-import type { Primitive } from '@src/types/values/primitive'
 //
 
 /**

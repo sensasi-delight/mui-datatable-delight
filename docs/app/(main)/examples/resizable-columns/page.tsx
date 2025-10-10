@@ -1,13 +1,12 @@
 'use client'
 
-import { useState } from 'react'
-import DataTable, { type DataTableOptions, type DataTableProps } from '@src'
-
 import FormControl from '@mui/material/FormControl'
-import TextField from '@mui/material/TextField'
-import Switch from '@mui/material/Switch'
-import FormGroup from '@mui/material/FormGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
+import FormGroup from '@mui/material/FormGroup'
+import Switch from '@mui/material/Switch'
+import TextField from '@mui/material/TextField'
+import DataTable, { type DataTableOptions, type DataTableProps } from '@src'
+import { useState } from 'react'
 
 function Example() {
     const [marginLeft, setMarginLeft] = useState(10)
@@ -89,7 +88,7 @@ function Example() {
     const options: DataTableProps['options'] = {
         filter: true,
         filterType: 'dropdown',
-        selectableRows: selectableRows,
+        selectableRows: selectableRows
     }
 
     return (

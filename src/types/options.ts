@@ -1,27 +1,26 @@
 // vendors
 import type { ChipProps } from '@mui/material/Chip'
-import type { MouseEvent, ReactElement, ReactNode } from 'react'
 import type { TableProps } from '@mui/material/Table'
 import type { TableRowProps } from '@mui/material/TableRow'
-// locals
-import type { BooleanOrDisabled } from './values/boolean-or-disabled'
-import type { SelectedRowDataState } from './state/selected-row-data'
-import type { DisplayDataState } from './state/display-data'
-import type { SelectableRowsType } from './options/selectable-rows'
-import type { ColumnState } from './state/column'
-import type { DataItemState } from './state/data-item'
-import type { DefaultRow } from './default-row'
-import type { DataTableState } from './state'
-import type { FilterTypeType } from './shared/filter-type-type'
-import { DEFAULT_TEXT_LABELS } from '../hooks/use-data-table-context/function/statics/default-text-labels'
+import type SELECT_TOOLBAR_PLACEMENT from '@src/statics/select-toolbar-placement'
+import type { MouseEvent, ReactElement, ReactNode } from 'react'
 // enums
 import type TableAction from '../enums/table-action'
+import { DEFAULT_TEXT_LABELS } from '../hooks/use-data-table-context/function/statics/default-text-labels'
+import type { DefaultRow } from './default-row'
 import type DataTableSearchOptions from './options/search'
-
+import type { SelectableRowsType } from './options/selectable-rows'
 // Imported for linking documentation
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import type { ColumnDefinitionOptions } from './props/column-definition/options'
-import type SELECT_TOOLBAR_PLACEMENT from '@src/statics/select-toolbar-placement'
+import type { FilterTypeType } from './shared/filter-type-type'
+import type { DataTableState } from './state'
+import type { ColumnState } from './state/column'
+import type { DataItemState } from './state/data-item'
+import type { DisplayDataState } from './state/display-data'
+import type { SelectedRowDataState } from './state/selected-row-data'
+// locals
+import type { BooleanOrDisabled } from './values/boolean-or-disabled'
 
 export interface DataTableSortOrderOption {
     name: string // TODO: name should be based on column name on Row
@@ -330,7 +329,7 @@ export interface DataTableOptions<Row = DefaultRow>
             lookup: Record<number, boolean>
         },
         newTableData: Row[]
-        // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
+        // biome-ignore lint/suspicious/noConfusingVoidType: the return type is correct
     ) => void | false
 
     /** Callback function that triggers when row(s) are selected/deselected. */

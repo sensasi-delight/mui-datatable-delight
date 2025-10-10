@@ -27,5 +27,5 @@
             "@/*": ["./*"]
         }
     },
-    "exclude": ["node_modules", "dist", "docs/.next"]
+    "exclude": ["node_modules", "dist", "docs/.next", "docs/public/api-docs"]
 }

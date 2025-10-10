@@ -1,8 +1,6 @@
 'use client'
 
-// vendors
-import { tss } from 'tss-react/mui'
-import { useState, type ReactElement } from 'react'
+import HelpIcon from '@mui/icons-material/Help'
 // materials
 import Button, { type ButtonProps } from '@mui/material/Button'
 import TableCell from '@mui/material/TableCell'
@@ -10,10 +8,12 @@ import TableSortLabel, {
     type TableSortLabelProps
 } from '@mui/material/TableSortLabel'
 import Tooltip from '@mui/material/Tooltip'
-import HelpIcon from '@mui/icons-material/Help'
+import ComponentClassName from '@src/enums/class-name'
 // globals
 import useDataTableContext from '@src/hooks/use-data-table-context'
-import ComponentClassName from '@src/enums/class-name'
+import { type ReactElement, useState } from 'react'
+// vendors
+import { tss } from 'tss-react/mui'
 // locals
 import type Props from './types/props'
 

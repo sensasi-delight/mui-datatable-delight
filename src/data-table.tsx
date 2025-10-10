@@ -1,23 +1,9 @@
 'use client'
 
+import Paper, { type PaperProps } from '@mui/material/Paper'
 // vendors
 import type { ReactNode } from 'react'
 import { tss } from 'tss-react/mui'
-import Paper, { type PaperProps } from '@mui/material/Paper'
-// locals
-import type { DataTableProps } from './data-table.props'
-import type { DataTableOptions } from './types/options'
-import type { DefaultRow } from './types/default-row'
-import type { FilterList } from './types/state/filter-list'
-import type { FilterTypeType } from './types/shared/filter-type-type'
-import type { FilterUpdateType } from './types/filter-update'
-import type { SelectRowUpdateType } from './types/select-row-update'
-import type { SelectedRowDataState } from './types/state/selected-row-data'
-import { buildMap } from './functions'
-import getDisplayData from './functions/get-new-state-on-data-change/get-display-data'
-import DataTableContextProvider from './hooks/use-data-table-context/components/provider'
-// hooks
-import useDataTableContext from './hooks/use-data-table-context'
 // components
 import AnnounceText from './components/announce-text'
 import BottomBar from './components/bottom-bar'
@@ -25,10 +11,24 @@ import FilteredValuesList from './components/filtered-values-list'
 import SelectedRowsToolbar from './components/selected-rows-toolbar'
 import Table from './components/table'
 import Toolbar from './components/toolbar'
+// locals
+import type { DataTableProps } from './data-table.props'
 // enums
 import ClassName from './enums/class-name'
-import SELECT_TOOLBAR_PLACEMENT from './statics/select-toolbar-placement'
 import TableAction from './enums/table-action'
+import { buildMap } from './functions'
+import getDisplayData from './functions/get-new-state-on-data-change/get-display-data'
+// hooks
+import useDataTableContext from './hooks/use-data-table-context'
+import DataTableContextProvider from './hooks/use-data-table-context/components/provider'
+import SELECT_TOOLBAR_PLACEMENT from './statics/select-toolbar-placement'
+import type { DefaultRow } from './types/default-row'
+import type { FilterUpdateType } from './types/filter-update'
+import type { DataTableOptions } from './types/options'
+import type { SelectRowUpdateType } from './types/select-row-update'
+import type { FilterTypeType } from './types/shared/filter-type-type'
+import type { FilterList } from './types/state/filter-list'
+import type { SelectedRowDataState } from './types/state/selected-row-data'
 
 /**
  * A responsive DataTable component built with Material UI for React-based project.

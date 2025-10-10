@@ -1,8 +1,8 @@
-import { describe, expect, test, vi } from 'vitest'
-import { render } from '@testing-library/react'
-import { DataTableContextProvider, type DataTableProps } from '@src/index'
-import SelectedRowsToolbar from './selected-rows-toolbar'
 import ComponentClassName from '@src/enums/class-name'
+import { DataTableContextProvider, type DataTableProps } from '@src/index'
+import { render } from '@testing-library/react'
+import { describe, expect, test, vi } from 'vitest'
+import SelectedRowsToolbar from './selected-rows-toolbar'
 
 describe('<SelectedRowsToolbar />', function () {
     function setup(props?: Partial<DataTableProps>) {

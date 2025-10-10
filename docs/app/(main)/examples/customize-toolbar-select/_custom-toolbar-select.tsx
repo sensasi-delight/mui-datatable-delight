@@ -1,16 +1,16 @@
 'use client'
 
-// vendors
-import { tss } from 'tss-react/mui'
-// materials
-import IconButton from '@mui/material/IconButton'
-import Tooltip from '@mui/material/Tooltip'
 // icons-materials
 import BlockIcon from '@mui/icons-material/Block'
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows'
 import IndeterminateCheckBoxIcon from '@mui/icons-material/IndeterminateCheckBox'
+// materials
+import IconButton from '@mui/material/IconButton'
+import Tooltip from '@mui/material/Tooltip'
 //
 import type { DataTableState } from '@src'
+// vendors
+import { tss } from 'tss-react/mui'
 
 export default function CustomToolbarSelect<T>(props: {
     selectedRows: DataTableState<T>['selectedRows']

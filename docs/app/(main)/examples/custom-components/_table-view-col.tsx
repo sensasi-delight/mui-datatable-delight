@@ -1,5 +1,5 @@
 // vendors
-import { tss } from 'tss-react/mui'
+
 // materials
 import Button from '@mui/material/Button'
 import Checkbox from '@mui/material/Checkbox'
@@ -8,7 +8,8 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import FormGroup from '@mui/material/FormGroup'
 import Typography from '@mui/material/Typography'
 //
-import { useDataTableContext, type DataTableState } from '@src'
+import { type DataTableState, useDataTableContext } from '@src'
+import { tss } from 'tss-react/mui'
 
 function TableViewCol<T>({
     onColumnUpdate,

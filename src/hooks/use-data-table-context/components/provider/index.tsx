@@ -1,25 +1,25 @@
 'use client'
 
+// globals
+import type { DataTableProps } from '@src/data-table.props'
+import TableAction from '@src/enums/table-action'
+import { load, save, warnInfo } from '@src/functions'
+import getNewStateOnDataChange from '@src/functions/get-new-state-on-data-change'
+import getDisplayData from '@src/functions/get-new-state-on-data-change/get-display-data'
+import updateDataCol from '@src/functions/get-new-state-on-data-change/update-data-col'
+import type { DataTableOptions } from '@src/types/options'
+import type { DataTableState } from '@src/types/state'
 // vendors
 import react from 'react' // this is special import that not spread to prevent ts error on build
 import isEqual from 'react-fast-compare'
-// globals
-import type { DataTableProps } from '@src/data-table.props'
-import type { DataTableState } from '@src/types/state'
-import type { DataTableOptions } from '@src/types/options'
-import { load, save, warnInfo } from '@src/functions'
-import getNewStateOnDataChange from '@src/functions/get-new-state-on-data-change'
-import TableAction from '@src/enums/table-action'
-// locals
-import type ContextValue from '../../types/context-value'
-import { DEFAULT_ICONS } from '../../statics/default-icons'
-import { DEFAULT_OPTIONS } from '../../statics/default-options'
+import DataTableContext from '../../context'
 import { handleDeprecatedOptions } from '../../function/handle-deprecated-options'
 import { processTextLabels } from '../../function/process-text-labels'
+import { DEFAULT_ICONS } from '../../statics/default-icons'
+import { DEFAULT_OPTIONS } from '../../statics/default-options'
 import DEFAULT_STATE from '../../statics/default-state'
-import DataTableContext from '../../context'
-import getDisplayData from '@src/functions/get-new-state-on-data-change/get-display-data'
-import updateDataCol from '@src/functions/get-new-state-on-data-change/update-data-col'
+// locals
+import type ContextValue from '../../types/context-value'
 import type { HandleUpdateCellValue } from './types/handle-update-cell-value'
 
 /**

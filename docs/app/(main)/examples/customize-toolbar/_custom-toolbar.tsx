@@ -1,9 +1,9 @@
 'use client'
 
-import React from 'react'
+import AddIcon from '@mui/icons-material/Add'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
-import AddIcon from '@mui/icons-material/Add'
+import React from 'react'
 
 export default class CustomToolbar extends React.Component {
     handleClick = () => {

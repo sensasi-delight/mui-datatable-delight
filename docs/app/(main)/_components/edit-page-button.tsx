@@ -1,11 +1,11 @@
 'use client'
 
-import { usePathname } from 'next/navigation'
+import GitHub from '@mui/icons-material/GitHub'
+import OpenInNew from '@mui/icons-material/OpenInNew'
 import Button from '@mui/material/Button'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
-import GitHub from '@mui/icons-material/GitHub'
-import OpenInNew from '@mui/icons-material/OpenInNew'
+import { usePathname } from 'next/navigation'
 
 const BASE_URL =
     'https://github.com/sensasi-delight/mui-datatable-delight/edit/alpha'

@@ -1,16 +1,17 @@
 // vendors
-import type { RefObject } from 'react'
+
+import type { DataTableProps } from '@src/data-table.props'
+// enums
+import type TableAction from '@src/enums/table-action'
 // local types
 import type { DataTableComponents } from '@src/types/components'
 import type { DataTableOptions } from '@src/types/options'
 import type { DataTableState } from '@src/types/state'
-import type { DataTableProps } from '@src/data-table.props'
-// enums
-import type TableAction from '@src/enums/table-action'
+import type { RefObject } from 'react'
+import type { HandleUpdateCellValue } from '../components/provider/types/handle-update-cell-value'
+import type { processTextLabels } from '../function/process-text-labels'
 // statics
 import type { DEFAULT_ICONS } from '../statics/default-icons'
-import type { processTextLabels } from '../function/process-text-labels'
-import type { HandleUpdateCellValue } from '../components/provider/types/handle-update-cell-value'
 
 export default interface ContextValue<DataRowItemType> {
     components: Partial<DataTableComponents>

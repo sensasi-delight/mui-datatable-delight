@@ -1,17 +1,17 @@
 'use client'
 
-// vendors
-import type { ReactElement } from 'react'
-import type { DataTableFooterPaginationProps } from './types/props'
-import { tss } from 'tss-react/mui'
 import TablePagination, {
     type TablePaginationProps
 } from '@mui/material/TablePagination'
+// global enums
+import ClassName from '@src/enums/class-name'
 // functions
 import { getPageValue } from '@src/functions/_shared/get-page-value'
 import useDataTableContext from '@src/hooks/use-data-table-context'
-// global enums
-import ClassName from '@src/enums/class-name'
+// vendors
+import type { ReactElement } from 'react'
+import { tss } from 'tss-react/mui'
+import type { DataTableFooterPaginationProps } from './types/props'
 
 /**
  * Bottom bar pagination.

@@ -1,7 +1,7 @@
 'use client'
 
-import React from 'react'
 import DataTable, { type DataTableProps } from '@src'
+import React from 'react'
 import CustomToolbar from './_custom-toolbar'
 
 class Example extends React.Component {

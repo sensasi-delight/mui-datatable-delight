@@ -1,11 +1,11 @@
 'use client'
 
+import TableCell from '@mui/material/TableCell'
+import TableRow from '@mui/material/TableRow'
+// DataTable
+import DataTable, { type DataTableProps, RowExpansionButton } from '@src'
 // vendors
 import React from 'react'
-import TableRow from '@mui/material/TableRow'
-import TableCell from '@mui/material/TableCell'
-// DataTable
-import DataTable, { RowExpansionButton, type DataTableProps } from '@src'
 
 class Example extends React.Component {
     render() {

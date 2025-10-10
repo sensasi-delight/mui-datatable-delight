@@ -1,10 +1,10 @@
+import type { HandleUpdateCellValue } from '@src/hooks/use-data-table-context/components/provider/types/handle-update-cell-value'
+import type { DataTableOptions } from '@src/types/options'
+import type { DataTableState } from '@src/types/state'
+import type { DisplayDataState } from '@src/types/state/display-data'
+import type { FilterList } from '@src/types/state/filter-list'
 import type { ReactNode, RefObject } from 'react'
 import hasSearchText from './has-search-text'
-import type { FilterList } from '@src/types/state/filter-list'
-import type { DataTableState } from '@src/types/state'
-import type { DataTableOptions } from '@src/types/options'
-import type { DisplayDataState } from '@src/types/state/display-data'
-import type { HandleUpdateCellValue } from '@src/hooks/use-data-table-context/components/provider/types/handle-update-cell-value'
 
 /*
  * Build the table data used to display to the user (i.e., after filter/search applied)

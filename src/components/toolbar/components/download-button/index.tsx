@@ -1,21 +1,21 @@
 'use client'
 
-// materials
-import { tss } from 'tss-react/mui'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
+import ComponentClassName from '@src/enums/class-name'
+import useDataTableContext from '@src/hooks/use-data-table-context'
 // globals
 import type { DataTableOptions } from '@src/types/options'
 import type { DataTableState } from '@src/types/state'
-import useDataTableContext from '@src/hooks/use-data-table-context'
-import ComponentClassName from '@src/enums/class-name'
 // locals
 import type { ColumnState } from '@src/types/state/column'
 import type { DataItemState } from '@src/types/state/data-item'
+import type { DisplayDataState } from '@src/types/state/display-data'
+import type { ReactElement } from 'react'
+// materials
+import { tss } from 'tss-react/mui'
 import { ICON_BUTTON_DEFAULT_SX } from '../statics/icon-button-default-sx'
 import { createCsvDownload } from './functions/create-csv-download'
-import type { ReactElement } from 'react'
-import type { DisplayDataState } from '@src/types/state/display-data'
 
 /**
  * A component that renders a button for downloading the data as a CSV file.

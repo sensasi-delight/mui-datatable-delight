@@ -1,11 +1,10 @@
 'use client'
 
-import { useState } from 'react'
-import IconButton from '@mui/material/IconButton'
-import Tooltip from '@mui/material/Tooltip'
-import Menu from '@mui/material/Menu'
-
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted'
+import IconButton from '@mui/material/IconButton'
+import Menu from '@mui/material/Menu'
+import Tooltip from '@mui/material/Tooltip'
+import { useState } from 'react'
 import ContentOutlineItems from './content-outline-items'
 import useHeadings from './use-headings'
 

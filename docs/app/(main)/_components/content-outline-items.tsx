@@ -1,7 +1,7 @@
 'use client'
 
-import MenuItem from '@mui/material/MenuItem'
 import ListItemText from '@mui/material/ListItemText'
+import MenuItem from '@mui/material/MenuItem'
 import useHeadings from './use-headings'
 
 export default function ContentOutlineItems({

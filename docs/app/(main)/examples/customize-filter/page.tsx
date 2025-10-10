@@ -1,20 +1,20 @@
 'use client'
 
-// vendors
-import React from 'react'
+import Checkbox from '@mui/material/Checkbox'
+import FormControl from '@mui/material/FormControl'
+import FormControlLabel from '@mui/material/FormControlLabel'
 // materials
 import FormGroup from '@mui/material/FormGroup'
 import FormLabel from '@mui/material/FormLabel'
-import FormControl from '@mui/material/FormControl'
-import ListItemText from '@mui/material/ListItemText'
-import Checkbox from '@mui/material/Checkbox'
-import TextField from '@mui/material/TextField'
-import Select from '@mui/material/Select'
 import InputLabel from '@mui/material/InputLabel'
+import ListItemText from '@mui/material/ListItemText'
 import MenuItem from '@mui/material/MenuItem'
-import FormControlLabel from '@mui/material/FormControlLabel'
+import Select from '@mui/material/Select'
+import TextField from '@mui/material/TextField'
 //
 import DataTable, { type DataTableProps } from '@src'
+// vendors
+import React from 'react'
 
 class Example extends React.Component {
     state = {

@@ -1,8 +1,8 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
-import mermaid from 'mermaid'
 import Paper from '@mui/material/Paper'
+import mermaid from 'mermaid'
+import { useEffect, useRef } from 'react'
 
 export function Mermaid({ children }: { children: string }) {
     const mermaidRef = useRef<HTMLDivElement>(null)

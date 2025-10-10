@@ -1,8 +1,8 @@
 'use client'
 
 import Button from '@mui/material/Button'
-import React from 'react'
 import DataTable, { type DataTableProps } from '@src'
+import React from 'react'
 
 class Example extends React.Component<
     unknown,

@@ -12,7 +12,7 @@
         "dev": "next docs",
         "lint": "biome check",
         "lint:fix": "biome check --write",
-        "prepublishOnly": "npm run build",
+        "prepublishOnly": "bun run build",
         "prettier": "prettier './**/*.{js,jsx,ts,tsx,mjs,cjs}' --write",
         "test": "vitest run --coverage",
         "test:watch": "vitest watch --silent=false"

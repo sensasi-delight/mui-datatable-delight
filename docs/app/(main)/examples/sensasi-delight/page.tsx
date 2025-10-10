@@ -1,8 +1,8 @@
 'use client'
 
+import Refresh from '@mui/icons-material/Refresh'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
-import Refresh from '@mui/icons-material/Refresh'
 import DataTable, { type DataTableProps } from '@src'
 
 /**

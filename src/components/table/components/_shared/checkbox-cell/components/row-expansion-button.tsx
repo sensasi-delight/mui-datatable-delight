@@ -1,10 +1,10 @@
 'use client'
 
-import type { ReactNode } from 'react'
-import IconButton from '@mui/material/IconButton'
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight'
 import RemoveIcon from '@mui/icons-material/Remove'
+import IconButton from '@mui/material/IconButton'
 import useDataTableContext from '@src/hooks/use-data-table-context'
+import type { ReactNode } from 'react'
 
 /**
  * The row expansion button component.

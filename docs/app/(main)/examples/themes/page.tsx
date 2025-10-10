@@ -1,8 +1,8 @@
 'use client'
 
-import React from 'react'
-import DataTable, { type DataTableProps } from '@src'
 import { createTheme, ThemeProvider } from '@mui/material/styles'
+import DataTable, { type DataTableProps } from '@src'
+import React from 'react'
 
 /** @todo Improve Theme example */
 const theme = createTheme({

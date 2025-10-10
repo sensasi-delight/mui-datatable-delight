@@ -1,15 +1,16 @@
 // vendors
-import { test, expect, describe } from 'vitest'
+
 import OriginalPaginationFromMui from '@mui/material/TablePagination'
-import { render } from '@testing-library/react'
+import ComponentClassName from '@src/enums/class-name'
 // locals
 import {
     DataTableContextProvider,
     type DataTableOptions,
     type DataTableProps
 } from '@src/index'
+import { render } from '@testing-library/react'
+import { describe, expect, test } from 'vitest'
 import BottomBar from './'
-import ComponentClassName from '@src/enums/class-name'
 
 describe('<BottomBar />', function () {
     function setup(props?: Partial<DataTableProps>) {

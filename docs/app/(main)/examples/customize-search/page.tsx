@@ -1,7 +1,7 @@
 'use client'
 
-import React, { Fragment } from 'react'
 import DataTable, { type DataTableProps } from '@src'
+import React, { Fragment } from 'react'
 
 class Example extends React.Component {
     state = {

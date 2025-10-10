@@ -1,11 +1,11 @@
 'use client'
 
-// vendors
-import { useState } from 'react'
 // materials
 import TextField from '@mui/material/TextField'
 // DataTable
 import DataTable, { type DataTableProps } from '@src'
+// vendors
+import { useState } from 'react'
 
 export default function Example() {
     const [counter, setCounter] = useState(0)

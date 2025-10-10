@@ -1,9 +1,9 @@
-import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter'
-import InitColorSchemeScript from '@mui/material/InitColorSchemeScript'
 import CssBaseline from '@mui/material/CssBaseline'
-import type { ReactNode } from 'react'
-import { Roboto } from 'next/font/google'
+import InitColorSchemeScript from '@mui/material/InitColorSchemeScript'
 import { ThemeProvider } from '@mui/material/styles'
+import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter'
+import { Roboto } from 'next/font/google'
+import type { ReactNode } from 'react'
 import { THEME } from './_constants'
 
 const roboto = Roboto({

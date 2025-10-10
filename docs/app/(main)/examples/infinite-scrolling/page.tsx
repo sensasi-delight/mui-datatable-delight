@@ -1,9 +1,9 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import Alert from '@mui/material/Alert'
 // import { Waypoint } from 'react-waypoint'
 import DataTable, { type DataTableProps } from '@src'
-import Alert from '@mui/material/Alert'
+import { useEffect, useState } from 'react'
 
 type DataItemType = (string | number)[]
 
@@ -19,34 +19,6 @@ export default function MessageManager() {
 
         getMessages()
     }, [])
-
-    function buildTestData(count: number, startingIndex: number) {
-        const data = [
-            ['Template 1', 'Requester Jerry'],
-            ['Template 2', 'Test user 1'],
-            ['Order66', 'Test user 2'],
-            ['Live Message', 'Another Person'],
-            ['Future Message', 'John Doe'],
-            ['Expired Message', 'Jane Doe'],
-            ['Retired Message', 'Some Guy']
-        ]
-
-        const rows: DataItemType[] = []
-
-        for (let i = 0; i < count; i += 1) {
-            const id = i + 1 + startingIndex
-            const randomIndex = Math.floor(Math.random() * data.length)
-            const randomSelection = data[randomIndex]
-
-            if (!randomSelection) {
-                throw new Error('Random selection is undefined')
-            }
-
-            rows.push([id, ...randomSelection])
-        }
-
-        return rows
-    }
 
     const columns: DataTableProps['columns'] = [
         {
@@ -111,6 +83,34 @@ export default function MessageManager() {
             />
         </>
     )
+}
+
+function buildTestData(count: number, startingIndex: number) {
+    const data = [
+        ['Template 1', 'Requester Jerry'],
+        ['Template 2', 'Test user 1'],
+        ['Order66', 'Test user 2'],
+        ['Live Message', 'Another Person'],
+        ['Future Message', 'John Doe'],
+        ['Expired Message', 'Jane Doe'],
+        ['Retired Message', 'Some Guy']
+    ]
+
+    const rows: DataItemType[] = []
+
+    for (let i = 0; i < count; i += 1) {
+        const id = i + 1 + startingIndex
+        const randomIndex = Math.floor(Math.random() * data.length)
+        const randomSelection = data[randomIndex]
+
+        if (!randomSelection) {
+            throw new Error('Random selection is undefined')
+        }
+
+        rows.push([id, ...randomSelection])
+    }
+
+    return rows
 }
 
 // const useStyles = tss.crate(({ theme }) => ({

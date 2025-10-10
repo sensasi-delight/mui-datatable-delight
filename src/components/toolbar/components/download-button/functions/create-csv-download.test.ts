@@ -1,6 +1,6 @@
+import type { DataTableOptions, DataTableState } from '@src/index'
 import { describe, expect, it, vi } from 'vitest'
 import { createCsvDownload } from './create-csv-download'
-import type { DataTableOptions, DataTableState } from '@src/index'
 
 describe('createCsvDownload', () => {
     const data = [

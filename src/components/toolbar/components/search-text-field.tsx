@@ -1,20 +1,20 @@
 'use client'
 
-// vendors
-import { useRef, useState, type ReactElement } from 'react'
-import { tss } from 'tss-react/mui'
+import Clear from '@mui/icons-material/Clear'
+import Search from '@mui/icons-material/Search'
 // materials
 import Grow from '@mui/material/Grow'
 import IconButton from '@mui/material/IconButton'
 import TextField, { type TextFieldProps } from '@mui/material/TextField'
-import Clear from '@mui/icons-material/Clear'
-import Search from '@mui/icons-material/Search'
-// globals
-import getDisplayData from '@src/functions/get-new-state-on-data-change/get-display-data'
-import useDataTableContext from '@src/hooks/use-data-table-context'
 // global enums
 import ClassName from '@src/enums/class-name'
 import TableAction from '@src/enums/table-action'
+// globals
+import getDisplayData from '@src/functions/get-new-state-on-data-change/get-display-data'
+import useDataTableContext from '@src/hooks/use-data-table-context'
+// vendors
+import { type ReactElement, useRef, useState } from 'react'
+import { tss } from 'tss-react/mui'
 
 /**
  * A component to render a search bar in the DataTable toolbar.

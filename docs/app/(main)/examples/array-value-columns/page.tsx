@@ -1,10 +1,10 @@
 'use client'
 
-import { useState } from 'react'
-import DataTable, { type DataTableProps } from '@src'
 import Chip from '@mui/material/Chip'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Switch from '@mui/material/Switch'
+import DataTable, { type DataTableProps } from '@src'
+import { useState } from 'react'
 
 function Example() {
     // const allTags = ['leave-message', 'frequently-busy', 'nice', 'grumpy', 'in-person', 'preferred', 'second-choice'];
