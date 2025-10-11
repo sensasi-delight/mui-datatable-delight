@@ -148,11 +148,7 @@ export default function TableHead({ selectRowUpdate }: Props): ReactNode {
     let isIndeterminate = numSelected > 0 && numSelected < state.count
     let isChecked = numSelected > 0 && numSelected >= state.count
 
-    // When the disableToolbarSelect option is true, there can be
-    // selected items that aren't visible, so we need to be more
-    // precise when determining if the head checkbox should be checked.
     if (
-        options.disableToolbarSelect === true ||
         options.selectToolbarPlacement === 'none' ||
         options.selectToolbarPlacement === 'above'
     ) {

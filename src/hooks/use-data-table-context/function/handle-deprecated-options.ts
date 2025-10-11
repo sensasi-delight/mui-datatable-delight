@@ -91,12 +91,6 @@ export function handleDeprecatedOptions<T>(
         }
     })
 
-    if (options?.disableToolbarSelect === true) {
-        warnDeprecated(
-            'disableToolbarSelect has been deprecated but will still work in version 3.x. It is being replaced by "selectToolbarPlacement"="none". More info: https://github.com/gregnb/mui-datatables/tree/master/docs/v2_to_v3_guide.md'
-        )
-    }
-
     // only give this warning message in newer browsers
     if (
         options?.selectToolbarPlacement &&
