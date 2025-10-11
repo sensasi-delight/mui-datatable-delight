@@ -30,73 +30,74 @@ export default function SideTopBar() {
     return (
         <>
             <AppBar
-                position="fixed"
                 color="default"
-                variant="outlined"
+                position="fixed"
                 sx={theme => ({
-                    borderLeft: 0,
-                    borderRight: 0,
-                    borderTop: 0,
                     backdropFilter: 'blur(5px)',
                     backgroundColor:
                         'rgba(var(--mui-palette-background-defaultChannel) / 0.8) !important',
+                    borderLeft: 0,
+                    borderRight: 0,
+                    borderTop: 0,
                     transition: theme.transitions.create(['margin', 'width'], {
-                        easing: theme.transitions.easing.easeOut,
-                        duration: theme.transitions.duration.enteringScreen
+                        duration: theme.transitions.duration.enteringScreen,
+                        easing: theme.transitions.easing.easeOut
                     })
                 })}
+                variant="outlined"
             >
                 <Toolbar
                     sx={{
+                        justifyContent: 'space-between',
                         pl: {
-                            xs: 4,
+                            md: 3,
                             sm: 7,
-                            md: 3
+                            xs: 4
                         },
                         pr: {
-                            xs: 3,
+                            md: 3,
                             sm: 6,
-                            md: 3
-                        },
-                        justifyContent: 'space-between'
+                            xs: 3
+                        }
                     }}
                 >
-                    <Box display="flex" alignItems="center" gap={2}>
-                        <Link href="/" color="inherit" underline="hover">
+                    <Box alignItems="center" display="flex" gap={2}>
+                        <Link color="inherit" href="/" underline="hover">
                             <Typography fontWeight="bold">
                                 <Box
+                                    component="span"
                                     sx={{
                                         display: {
-                                            sx: 'block',
+                                            md: 'none',
                                             sm: 'block',
-                                            md: 'none'
+                                            sx: 'block'
                                         }
                                     }}
-                                    component="span"
                                 >
-                                    <InlineCode text="<DataTable/>" disableBg />
+                                    <InlineCode disableBg text="<DataTable/>" />
                                 </Box>
 
                                 <Box
+                                    component="span"
                                     sx={{
                                         display: {
-                                            xs: 'none',
+                                            md: 'block',
                                             sm: 'none',
-                                            md: 'block'
+                                            xs: 'none'
                                         }
                                     }}
-                                    component="span"
                                 >
                                     MUI{' '}
-                                    <InlineCode text="<DataTable/>" disableBg />{' '}
+                                    <InlineCode disableBg text="<DataTable/>" />{' '}
                                     Delight
                                 </Box>
                             </Typography>
                         </Link>
                     </Box>
 
-                    <Box display="flex" alignItems="center" gap={0.5}>
+                    <Box alignItems="center" display="flex" gap={0.5}>
                         <Tooltip
+                            arrow
                             title={
                                 <>
                                     GitHub{' '}
@@ -108,23 +109,22 @@ export default function SideTopBar() {
                                     />
                                 </>
                             }
-                            arrow
                         >
                             <IconButton
-                                component="a"
-                                target="_blank"
                                 color="inherit"
+                                component="a"
                                 href="https://github.com/sensasi-delight/mui-datatable-delight"
+                                target="_blank"
                             >
                                 <GitHub />
                             </IconButton>
                         </Tooltip>
 
                         <Tooltip
+                            arrow
                             title={
                                 (mode === 'light' ? 'Dark' : 'Light') + ' Mode'
                             }
-                            arrow
                         >
                             <IconButton
                                 color="inherit"
@@ -140,17 +140,17 @@ export default function SideTopBar() {
                             </IconButton>
                         </Tooltip>
 
-                        <Tooltip title="Menu" arrow>
+                        <Tooltip arrow title="Menu">
                             <IconButton
-                                onClick={() => setIsMenuOpen(prev => !prev)}
                                 color={isMenuOpen ? 'primary' : 'inherit'}
+                                onClick={() => setIsMenuOpen(prev => !prev)}
                                 sx={{
                                     bgcolor: isMenuOpen
                                         ? 'var(--IconButton-hoverBg)'
                                         : undefined,
                                     display: {
-                                        sm: undefined,
-                                        md: 'none'
+                                        md: 'none',
+                                        sm: undefined
                                     }
                                 }}
                             >

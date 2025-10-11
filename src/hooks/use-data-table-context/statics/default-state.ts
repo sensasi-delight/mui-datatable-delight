@@ -2,9 +2,9 @@ import type { DataTableState } from '@src/types/state'
 
 const DEFAULT_STATE = {
     activeColumn: null,
-    count: 0,
     columnOrder: [0],
     columns: [],
+    count: 0,
     data: [],
     displayData: [],
     expandedRows: {
@@ -17,14 +17,14 @@ const DEFAULT_STATE = {
     rowsPerPage: 10,
     rowsPerPageOptions: [10, 20, 50, 100],
     rowsSelected: [],
-    searchText: '',
     searchProps: {},
+    searchText: '',
     selectedRows: {
         data: [],
         lookup: {}
     },
-    sortOrder: undefined,
-    showResponsive: false
+    showResponsive: false,
+    sortOrder: undefined
 } satisfies DataTableState<unknown>
 
 export default DEFAULT_STATE

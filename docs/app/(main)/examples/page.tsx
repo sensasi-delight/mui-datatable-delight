@@ -32,8 +32,8 @@ export default function Page() {
         <>
             <SearchBar
                 nItems={Object.keys(examplesSortedKeys).length}
-                value={searchVal}
                 onChange={({ target: { value } }) => setSearchVal(value)}
+                value={searchVal}
             />
 
             <Grid container spacing={1} sx={{ mt: 4 }}>
@@ -50,8 +50,8 @@ export default function Page() {
                             >
                                 <CardContent>
                                     <Typography
-                                        variant="subtitle1"
                                         align="center"
+                                        variant="subtitle1"
                                     >
                                         {snakeCaseToTitle(enumKey)}
                                     </Typography>
@@ -76,18 +76,18 @@ function SearchBar({
 }) {
     return (
         <Box>
-            <Typography variant="h5" component="div">
+            <Typography component="div" variant="h5">
                 Choose an example
             </Typography>
 
-            <Typography variant="subtitle2" component="div" mb={1}>
+            <Typography component="div" mb={1} variant="subtitle2">
                 ({nItems}) examples
             </Typography>
 
             <TextField
+                onChange={onChange}
                 placeholder="Search Examples"
                 value={value}
-                onChange={onChange}
             />
         </Box>
     )

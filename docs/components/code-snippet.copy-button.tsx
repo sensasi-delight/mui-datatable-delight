@@ -29,14 +29,13 @@ export function CopyButton({ text }: { text: string }) {
         >
             <Fade in={!isCopied} {...STATIC_FADE_PROPS}>
                 <Tooltip
-                    title="Copy"
                     sx={{
-                        color: 'GrayText',
-
                         ':hover': {
                             color: 'inherit'
-                        }
+                        },
+                        color: 'GrayText'
                     }}
+                    title="Copy"
                 >
                     <IconButton
                         onClick={() => {
@@ -51,7 +50,6 @@ export function CopyButton({ text }: { text: string }) {
 
             <Fade in={isCopied} {...STATIC_FADE_PROPS}>
                 <Tooltip
-                    title="Copied"
                     slotProps={{
                         tooltip: {
                             sx: {
@@ -59,6 +57,7 @@ export function CopyButton({ text }: { text: string }) {
                             }
                         }
                     }}
+                    title="Copied"
                 >
                     <IconButton
                         color="success"
@@ -75,9 +74,9 @@ export function CopyButton({ text }: { text: string }) {
 }
 
 const STATIC_FADE_PROPS = {
-    unmountOnExit: true,
     exit: false,
     timeout: {
         enter: 600
-    }
+    },
+    unmountOnExit: true
 }

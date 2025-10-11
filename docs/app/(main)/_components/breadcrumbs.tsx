@@ -22,8 +22,8 @@ export function Breadcrumbs() {
         .slice(1) // remove 'docs'
 
     return (
-        <Box display="flex" alignItems="center" sx={{ overflowX: 'auto' }}>
-            <Tooltip title="Home" arrow placement="top">
+        <Box alignItems="center" display="flex" sx={{ overflowX: 'auto' }}>
+            <Tooltip arrow placement="top" title="Home">
                 <IconButton color="primary" href="/">
                     <Home />
                 </IconButton>
@@ -45,11 +45,11 @@ export function Breadcrumbs() {
                         />
 
                         <Button
-                            href={href}
                             disabled={i === pathsWithoutDocs.length - 1}
+                            href={href}
                             sx={{
-                                whiteSpace: 'nowrap',
-                                minWidth: 'unset'
+                                minWidth: 'unset',
+                                whiteSpace: 'nowrap'
                             }}
                         >
                             {path.replace('-', ' ')}

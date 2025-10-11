@@ -30,7 +30,7 @@ export function ToolbarDownloadButton(): ReactElement {
     } = useDataTableContext()
 
     return (
-        <Tooltip title={toolbarTextLabels.downloadCsv} disableFocusListener>
+        <Tooltip disableFocusListener title={toolbarTextLabels.downloadCsv}>
             <span>
                 <IconButton
                     className={classes.root}
@@ -97,8 +97,8 @@ function getDataToDownload(
     columnOrderIndices: number[]
 ) {
     return data.map(row => ({
-        index: row.index,
-        data: columnOrderIndices.map(idx => row.data[idx])
+        data: columnOrderIndices.map(idx => row.data[idx]),
+        index: row.index
     }))
 }
 
@@ -113,14 +113,14 @@ function getFilteredDataToDownload<T>(
 ): DataItemState[] {
     return displayData
         .map((row, i) => ({
-            index: i,
             data: row.data.map((cell, ii) =>
                 getActualValue(cell, row.dataIndex, ii, data)
-            )
+            ),
+            index: i
         }))
         .map(row => ({
-            index: row.index,
-            data: columnOrderIndices.map(idx => row.data[idx])
+            data: columnOrderIndices.map(idx => row.data[idx]),
+            index: row.index
         }))
 }
 

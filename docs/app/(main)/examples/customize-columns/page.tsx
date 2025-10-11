@@ -10,9 +10,9 @@ class Example extends React.Component {
                 name: 'Name',
                 options: {
                     filter: true,
+                    sortDescFirst: true,
                     //display: 'excluded',
-                    sortThirdClickReset: true,
-                    sortDescFirst: true
+                    sortThirdClickReset: true
                 }
             },
             {
@@ -26,8 +26,6 @@ class Example extends React.Component {
             {
                 name: 'Location',
                 options: {
-                    filter: false,
-                    sortThirdClickReset: true,
                     customHeadRender: (columnMeta, updateDirection) => (
                         <th
                             key={2}
@@ -36,7 +34,9 @@ class Example extends React.Component {
                         >
                             {columnMeta.name}
                         </th>
-                    )
+                    ),
+                    filter: false,
+                    sortThirdClickReset: true
                 }
             },
             {
@@ -51,8 +51,6 @@ class Example extends React.Component {
                 options: {
                     filter: true,
                     sort: true,
-                    sortThirdClickReset: true,
-                    sortDescFirst: true,
                     sortCompare: order => {
                         return (obj1, obj2) => {
                             if (
@@ -76,7 +74,9 @@ class Example extends React.Component {
 
                             return (val1 - val2) * (order === 'asc' ? 1 : -1)
                         }
-                    }
+                    },
+                    sortDescFirst: true,
+                    sortThirdClickReset: true
                 }
             }
         ]
@@ -167,17 +167,17 @@ class Example extends React.Component {
             filterType: 'dropdown',
             responsive: 'vertical',
             sortOrder: {
-                name: 'Title',
-                direction: 'asc'
+                direction: 'asc',
+                name: 'Title'
             }
         }
 
         return (
             <DataTable
-                title={'ACME Employee list'}
-                data={data}
                 columns={columns}
+                data={data}
                 options={options}
+                title={'ACME Employee list'}
             />
         )
     }

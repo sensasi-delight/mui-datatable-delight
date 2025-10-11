@@ -32,8 +32,8 @@ export default function BottomBar(): ReactNode {
         const rowCount = options.count ?? state.displayData.length
 
         const newState = {
-            rowsPerPage: rowsPerPage,
-            page: getPageValue(rowCount, rowsPerPage, state.page)
+            page: getPageValue(rowCount, rowsPerPage, state.page),
+            rowsPerPage: rowsPerPage
         }
 
         onAction?.(TableAction.CHANGE_ROWS_PER_PAGE, newState)
@@ -62,9 +62,9 @@ export default function BottomBar(): ReactNode {
 
             {pagination && (
                 <DataTableFooterPagination
-                    rowsPerPage={rowsPerPage}
-                    changeRowsPerPage={changeRowsPerPage}
                     changePage={changePage}
+                    changeRowsPerPage={changeRowsPerPage}
+                    rowsPerPage={rowsPerPage}
                 />
             )}
         </div>
@@ -73,15 +73,15 @@ export default function BottomBar(): ReactNode {
 
 const useStyles = tss.withName(ClassName.BOTTOM_BAR).create(({ theme }) => ({
     root: {
+        alignItems: 'center',
         display: 'flex',
         justifyContent: 'flex-end',
-        alignItems: 'center',
-        paddingRight: '8px',
         paddingLeft: '16px',
+        paddingRight: '8px',
         [theme.breakpoints.down('sm')]: {
+            alignItems: 'end',
             flexDirection: 'column',
-            marginTop: '1em',
-            alignItems: 'end'
+            marginTop: '1em'
         }
     }
 }))

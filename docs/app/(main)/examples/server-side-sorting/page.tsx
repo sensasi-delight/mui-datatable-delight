@@ -20,11 +20,11 @@ class Example extends React.Component<
         super(props)
 
         this.state = {
-            page: 0,
             count: 26,
             data: [['Loading Data...']],
-            sortOrder: undefined,
-            loading: false
+            loading: false,
+            page: 0,
+            sortOrder: undefined
         }
     }
 
@@ -259,8 +259,8 @@ class Example extends React.Component<
             this.setState({
                 data,
                 sortOrder: {
-                    name: column,
-                    direction: order
+                    direction: order,
+                    name: column
                 }
             })
         })
@@ -287,9 +287,6 @@ class Example extends React.Component<
             {
                 name: 'Location',
                 options: {
-                    customFilterListOptions: {
-                        render: v => `Location: ${v}`
-                    },
                     customBodyRender: (
                         value,
                         _,
@@ -299,11 +296,14 @@ class Example extends React.Component<
                     ) => {
                         return (
                             <Cities
-                                value={value ?? ''}
-                                index={columnIndex}
                                 change={event => updateValue(event)}
+                                index={columnIndex}
+                                value={value ?? ''}
                             />
                         )
+                    },
+                    customFilterListOptions: {
+                        render: v => `Location: ${v}`
                     }
                 }
             },
@@ -317,13 +317,9 @@ class Example extends React.Component<
         const { page, count, data } = this.state
 
         const options: DataTableProps['options'] = {
+            count: count,
             filter: true,
             filterType: 'dropdown',
-            responsive: 'standard',
-            serverSide: true,
-            count: count,
-            page: page,
-            onColumnSortChange: this.sort,
             onChangePage: page => {
                 this.setState({ page }, () => {
                     if (this.state.sortOrder) {
@@ -333,12 +329,19 @@ class Example extends React.Component<
                         )
                     }
                 })
-            }
+            },
+            onColumnSortChange: this.sort,
+            page: page,
+            responsive: 'standard',
+            serverSide: true
         }
 
         return (
             <div>
                 <DataTable
+                    columns={columns}
+                    data={data}
+                    options={options}
                     title={
                         <Typography variant="subtitle2">
                             ACME Employee list{' '}
@@ -354,9 +357,6 @@ class Example extends React.Component<
                             )}
                         </Typography>
                     }
-                    data={data}
-                    columns={columns}
-                    options={options}
                 />
             </div>
         )

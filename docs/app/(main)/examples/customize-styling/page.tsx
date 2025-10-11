@@ -17,16 +17,6 @@ export default function Example() {
             name: 'Name',
             options: {
                 filter: true,
-                setCellProps: value => {
-                    return {
-                        className: cx({
-                            [classes.NameCell]: value === 'Mel Brooks'
-                        }),
-                        style: {
-                            borderRight: '2px solid blue'
-                        }
-                    }
-                },
                 setCellHeaderProps: () => {
                     return {
                         className: cx({
@@ -34,6 +24,16 @@ export default function Example() {
                         }),
                         style: {
                             textDecoration: 'underline'
+                        }
+                    }
+                },
+                setCellProps: value => {
+                    return {
+                        className: cx({
+                            [classes.NameCell]: value === 'Mel Brooks'
+                        }),
+                        style: {
+                            borderRight: '2px solid blue'
                         }
                     }
                 }
@@ -117,9 +117,9 @@ export default function Example() {
     const options: DataTableProps['options'] = {
         filter: true,
         filterType: 'dropdown',
-        responsive: vertical ? 'vertical' : 'standard',
         fixedHeader: false,
         fixedSelectColumn: false,
+        responsive: vertical ? 'vertical' : 'standard',
         rowHover: false,
         setRowProps: (row, _, rowIndex) => {
             return {
@@ -144,25 +144,11 @@ export default function Example() {
                 // @ts-expect-error  WILL FIX THIS LATER
                 MUIDataTable: {
                     styleOverrides: {
-                        root: {
-                            backgroundColor: '#red'
-                        },
                         paper: {
                             boxShadow: 'none'
-                        }
-                    }
-                },
-                MuiToolbar: {
-                    styleOverrides: {
+                        },
                         root: {
-                            backgroundColor: '#f00'
-                        }
-                    }
-                },
-                MuiTableCell: {
-                    styleOverrides: {
-                        head: {
-                            backgroundColor: 'purple'
+                            backgroundColor: '#red'
                         }
                     }
                 },
@@ -173,12 +159,26 @@ export default function Example() {
                         }
                     }
                 },
+                MuiTableCell: {
+                    styleOverrides: {
+                        head: {
+                            backgroundColor: 'purple'
+                        }
+                    }
+                },
                 MuiTableFooter: {
                     styleOverrides: {
                         root: {
                             '& .MuiToolbar-root': {
                                 backgroundColor: 'white'
                             }
+                        }
+                    }
+                },
+                MuiToolbar: {
+                    styleOverrides: {
+                        root: {
+                            backgroundColor: '#f00'
                         }
                     }
                 }
@@ -200,9 +200,9 @@ export default function Example() {
                     control={
                         <Switch
                             checked={denseTable}
+                            color="primary"
                             onChange={toggleDenseTable}
                             value="denseTable"
-                            color="primary"
                         />
                     }
                     label="Dense Table"
@@ -211,19 +211,19 @@ export default function Example() {
                     control={
                         <Switch
                             checked={vertical}
+                            color="primary"
                             onChange={toggleResponsive}
                             value="vertical"
-                            color="primary"
                         />
                     }
                     label="Responsive Vertical Table"
                 />
             </FormGroup>
             <DataTable
-                title={'ACME Employee list'}
-                data={data}
                 columns={columns}
+                data={data}
                 options={options}
+                title={'ACME Employee list'}
             />
         </ThemeProvider>
     )

@@ -47,8 +47,8 @@ export function DataTable<Row = DefaultRow>({
         <DataTableContextProvider datatableProps={props}>
             <DataTable_
                 className={className}
-                ref={ref}
                 paperProps={paperProps}
+                ref={ref}
             />
         </DataTableContextProvider>
     )
@@ -147,8 +147,8 @@ function DataTable_<T>({
 
                     if (selected) {
                         arr.push({
-                            index: i,
-                            dataIndex: item.dataIndex
+                            dataIndex: item.dataIndex,
+                            index: i
                         })
                     }
 
@@ -182,11 +182,11 @@ function DataTable_<T>({
 
             const newState = {
                 curSelectedRows: newRows,
+                previousSelectedRow: undefined,
                 selectedRows: {
                     data: newRows,
                     lookup: selectedMap
-                },
-                previousSelectedRow: undefined
+                }
             }
 
             onAction?.(TableAction.ROW_SELECTION_CHANGE, newState)
@@ -250,11 +250,11 @@ function DataTable_<T>({
 
             const newState = {
                 ...prevState,
+                previousSelectedRow: value,
                 selectedRows: {
-                    lookup: buildMap(selectedRows),
-                    data: selectedRows
-                },
-                previousSelectedRow: value
+                    data: selectedRows,
+                    lookup: buildMap(selectedRows)
+                }
             }
 
             onAction?.(TableAction.ROW_SELECTION_CHANGE, newState)
@@ -276,8 +276,8 @@ function DataTable_<T>({
             }
 
             onAction?.(TableAction.ROW_SELECTION_CHANGE, {
-                selectedRows,
-                previousSelectedRow: undefined
+                previousSelectedRow: undefined,
+                selectedRows
             })
 
             const onRowSelectionChange =
@@ -326,9 +326,9 @@ function DataTable_<T>({
 
     return (
         <Paper
+            className={paperClasses}
             elevation={options?.elevation}
             ref={ref}
-            className={paperClasses}
             {...paperProps}
         >
             {isShowToolbarSelect && (
@@ -340,8 +340,8 @@ function DataTable_<T>({
             <_FilteredValuesList filterUpdate={filterUpdate} />
 
             <div
-                style={{ position: 'relative', ...tableHeightVal }}
                 className={responsiveClass}
+                style={{ position: 'relative', ...tableHeightVal }}
             >
                 <Table selectRowUpdate={selectRowUpdate} />
             </div>
@@ -473,25 +473,17 @@ function getTableHeightAndResponsiveClasses<T>(
     }
 
     const tableHeightVal = {
-        maxHeight: maxHeight,
-        height: options.tableBodyHeight
+        height: options.tableBodyHeight,
+        maxHeight: maxHeight
     }
 
     return {
-        tableHeightVal,
-        responsiveClass
+        responsiveClass,
+        tableHeightVal
     }
 }
 
 const useStyles = tss.withName(ClassName.ROOT).create(({ theme }) => ({
-    root: {
-        '& .datatables-no-print': {
-            '@media print': {
-                display: 'none'
-            }
-        }
-    },
-
     paper: {
         isolation: 'isolate'
     },
@@ -501,25 +493,25 @@ const useStyles = tss.withName(ClassName.ROOT).create(({ theme }) => ({
     },
 
     responsiveBase: {
-        overflow: 'auto',
         '@media print': {
             height: 'auto !important'
-        }
+        },
+        overflow: 'auto'
     },
 
     // deprecated, but continuing support through v3.x
     responsiveScroll: {
-        overflow: 'auto',
-        height: '100%'
-    },
-    // deprecated, but continuing support through v3.x
-    responsiveScrollMaxHeight: {
-        overflow: 'auto',
-        height: '100%'
+        height: '100%',
+        overflow: 'auto'
     },
     // deprecated, but continuing support through v3.x
     responsiveScrollFullHeight: {
         height: '100%'
+    },
+    // deprecated, but continuing support through v3.x
+    responsiveScrollMaxHeight: {
+        height: '100%',
+        overflow: 'auto'
     },
     // deprecated, but continuing support through v3.x
     responsiveStacked: {
@@ -529,5 +521,12 @@ const useStyles = tss.withName(ClassName.ROOT).create(({ theme }) => ({
         }
     },
     // deprecated, but continuing support through v3.x
-    responsiveStackedFullWidth: {}
+    responsiveStackedFullWidth: {},
+    root: {
+        '& .datatables-no-print': {
+            '@media print': {
+                display: 'none'
+            }
+        }
+    }
 }))

@@ -26,8 +26,8 @@ export default function FilteredValuesList<T>({
     const { serverSide } = options
 
     const columnNames = state.columns.map(column => ({
-        name: column.name,
-        filterType: column.filterType ?? options.filterType
+        filterType: column.filterType ?? options.filterType,
+        name: column.name
     }))
 
     const customFilterListUpdate = state.columns.map(column => {
@@ -93,8 +93,9 @@ export default function FilteredValuesList<T>({
 
         return (
             <Chip
-                label={customFilterItem}
+                className={classes.chip}
                 key={customFilterItemIndex}
+                label={customFilterItem}
                 onDelete={() =>
                     removeFilter(
                         index,
@@ -104,7 +105,6 @@ export default function FilteredValuesList<T>({
                         // customFilterListUpdate[index]
                     )
                 }
-                className={classes.chip}
                 // itemKey={customFilterItemIndex}
                 // index={index}
                 // data={item}
@@ -124,12 +124,12 @@ export default function FilteredValuesList<T>({
 
     const filterChip = (index: number, data: string, colIndex: number) => (
         <Chip
-            label={filterListRenderers[index]?.(data)}
+            className={classes.chip}
             key={colIndex}
+            label={filterListRenderers[index]?.(data)}
             onDelete={() =>
                 removeFilter(index, data, columnNames[index]?.name, 'chip')
             }
-            className={classes.chip}
             // itemKey={colIndex}
             // index={index}
             // data={data}
@@ -197,13 +197,13 @@ export interface TableFilterListProps<T = unknown> {
 }
 
 const useStyles = tss.withName(ComponentClassName.FILTERED_VALUES_LIST).create({
-    root: {
-        display: 'flex',
-        justifyContent: 'left',
-        flexWrap: 'wrap',
-        margin: '0px 16px 0px 16px'
-    },
     chip: {
         margin: '8px 8px 0px 0px'
+    },
+    root: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        justifyContent: 'left',
+        margin: '0px 16px 0px 16px'
     }
 })

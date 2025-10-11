@@ -14,8 +14,8 @@ function Example() {
         {
             name: 'Name',
             options: {
-                filter: true,
-                display: 'excluded'
+                display: 'excluded',
+                filter: true
             }
         },
         {
@@ -28,8 +28,8 @@ function Example() {
         {
             name: 'Location',
             options: {
-                print: false,
-                filter: false
+                filter: false,
+                print: false
             }
         },
         {
@@ -49,9 +49,6 @@ function Example() {
         {
             name: 'Tags',
             options: {
-                filter: true,
-                filterType: 'multiselect',
-                sort: false,
                 customBodyRenderLite: dataIndex => {
                     const value = data[dataIndex]?.[5]
 
@@ -59,13 +56,16 @@ function Example() {
                         typeof value === 'string' ||
                         typeof value === 'number'
                     ) {
-                        return <Chip label={value} key={value} />
+                        return <Chip key={value} label={value} />
                     }
 
                     return value?.map((val, key) => (
-                        <Chip label={val} key={key} />
+                        <Chip key={key} label={val} />
                     ))
-                }
+                },
+                filter: true,
+                filterType: 'multiselect',
+                sort: false
             }
         }
     ]
@@ -326,20 +326,20 @@ function Example() {
                 control={
                     <Switch
                         checked={filterArrayFullMatch}
+                        color="primary"
                         onChange={e =>
                             setFilterArrayFullMatch(e.target.checked)
                         }
                         value="filterArray"
-                        color="primary"
                     />
                 }
                 label="Fullmatch for Array filter"
             />
             <DataTable
-                title={'ACME Employee list'}
-                data={data}
                 columns={columns}
+                data={data}
                 options={options}
+                title={'ACME Employee list'}
             />
         </>
     )

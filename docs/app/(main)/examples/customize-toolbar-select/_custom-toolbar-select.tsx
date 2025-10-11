@@ -83,12 +83,12 @@ export default function CustomToolbarSelect<T>(props: {
 }
 
 const useStyles = tss.create({
+    icon: {},
     iconButton: {},
     iconContainer: {
         marginRight: '24px'
     },
     inverseIcon: {
         transform: 'rotate(90deg)'
-    },
-    icon: {}
+    }
 })

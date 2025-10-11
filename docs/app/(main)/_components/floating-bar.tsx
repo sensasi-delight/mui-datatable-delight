@@ -5,20 +5,20 @@ export default function FloatingBar() {
     return (
         <Paper
             sx={{
-                zIndex: 1,
-                borderRadius: 8,
-                px: 0.5,
                 bgcolor: 'background.paper',
-                float: 'right',
+                borderRadius: 8,
                 display: {
                     lg: 'none'
                 },
+                float: 'right',
                 position: 'sticky',
-                translate: '12px 0',
+                px: 0.5,
                 top: {
-                    xs: 10 * 8,
-                    sm: 12 * 8
-                }
+                    sm: 12 * 8,
+                    xs: 10 * 8
+                },
+                translate: '12px 0',
+                zIndex: 1
             }}
         >
             <EditPageButton iconOnly />

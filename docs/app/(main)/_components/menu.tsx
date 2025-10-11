@@ -28,33 +28,33 @@ export default function Menu({
         <>
             <Drawer
                 anchor="left"
-                variant="permanent"
                 elevation={0}
-                sx={{
-                    display: {
-                        xs: 'none',
-                        sm: 'none',
-                        md: 'block'
-                    },
-                    width: DRAWER_WIDTH,
-                    flexShrink: 0,
-                    zIndex: 0
-                }}
                 PaperProps={{
                     sx: theme => ({
-                        width: DRAWER_WIDTH,
+                        height: {
+                            sm: `calc(100% - ${theme.spacing(8)})`,
+                            xs: `calc(100% - ${theme.spacing(7)})`
+                        },
+                        mt: {
+                            sm: 8,
+                            xs: 7
+                        },
                         // boxSizing: 'border-box',
                         pb: 10,
-                        mt: {
-                            xs: 7,
-                            sm: 8
-                        },
-                        height: {
-                            xs: `calc(100% - ${theme.spacing(7)})`,
-                            sm: `calc(100% - ${theme.spacing(8)})`
-                        }
+                        width: DRAWER_WIDTH
                     })
                 }}
+                sx={{
+                    display: {
+                        md: 'block',
+                        sm: 'none',
+                        xs: 'none'
+                    },
+                    flexShrink: 0,
+                    width: DRAWER_WIDTH,
+                    zIndex: 0
+                }}
+                variant="permanent"
             >
                 <Nav />
             </Drawer>
@@ -68,9 +68,9 @@ export default function Menu({
                 }}
                 sx={{
                     display: {
-                        xs: 'block',
+                        md: 'none',
                         sm: 'block',
-                        md: 'none'
+                        xs: 'block'
                     },
                     mt: 8,
                     zIndex: 1
@@ -86,7 +86,7 @@ function Nav() {
     return (
         <List component="nav" disablePadding>
             {Object.values(Section).map((section, i) => (
-                <MenuSection sectionId={section} key={i} />
+                <MenuSection key={i} sectionId={section} />
             ))}
         </List>
     )
@@ -108,22 +108,19 @@ function CustomListItem({
         <ListItem disablePadding>
             <ListItemButton
                 href={href}
-                target={isNewTab ? '_blank' : undefined}
                 selected={isActive}
                 sx={{
-                    py: 0,
-                    lineHeight: 'unset',
                     backgroundColor: isActive
                         ? 'rgba(var(--mui-palette-primary-mainChannel) / var(--mui-palette-action-selectedOpacity))'
                         : undefined,
-                    color: isActive ? undefined : 'text.secondary'
+                    color: isActive ? undefined : 'text.secondary',
+                    lineHeight: 'unset',
+                    py: 0
                 }}
+                target={isNewTab ? '_blank' : undefined}
             >
                 <ListItemText
                     primary={text}
-                    sx={{
-                        ml: 5
-                    }}
                     slotProps={{
                         primary: {
                             sx: {
@@ -131,6 +128,9 @@ function CustomListItem({
                                 fontWeight: 500
                             }
                         }
+                    }}
+                    sx={{
+                        ml: 5
                     }}
                 />
 
@@ -147,17 +147,17 @@ function MenuSection({ sectionId }: { sectionId: Section }) {
         <>
             <ListSubheader
                 sx={{
-                    px: 3,
-                    fontWeight: 'bold',
-                    textTransform: 'uppercase',
-                    justifyContent: 'flex-start',
                     borderRadius: 'unset',
-                    pt: 2,
+                    fontWeight: 'bold',
+                    justifyContent: 'flex-start',
+                    lineHeight: 'unset',
                     pb: 1,
-                    lineHeight: 'unset'
+                    pt: 2,
+                    px: 3,
+                    textTransform: 'uppercase'
                 }}
             >
-                <Box display="flex" gap={1} alignItems="center">
+                <Box alignItems="center" display="flex" gap={1}>
                     <TagIcon color="primary" /> {snakeCaseToTitle(sectionId)}
                 </Box>
             </ListSubheader>
@@ -169,8 +169,8 @@ function MenuSection({ sectionId }: { sectionId: Section }) {
 
             {routes.slice(1).map((route, i) => (
                 <CustomListItem
-                    key={i}
                     href={'/docs/' + route.href}
+                    key={i}
                     text={route.title}
                 />
             ))}
@@ -180,8 +180,8 @@ function MenuSection({ sectionId }: { sectionId: Section }) {
                     <CustomListItem href="/examples" text="Examples" />
                     <CustomListItem
                         href="/api-docs/index.html"
-                        text="API Docs"
                         newTab
+                        text="API Docs"
                     />
                 </>
             )}

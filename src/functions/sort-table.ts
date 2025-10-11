@@ -60,8 +60,8 @@ export default function sortTable<T>(
     const sortedData =
         dataSrc?.map((row, sIndex) => ({
             data: row.data[col],
-            rowData: row.data,
             position: sIndex,
+            rowData: row.data,
             rowSelected: state.selectedRows.lookup[row.index] ? true : false
         })) ?? []
 
@@ -81,8 +81,8 @@ export default function sortTable<T>(
 
         if (row?.rowSelected) {
             selectedRows.push({
-                index: i,
-                dataIndex: dataItem.index
+                dataIndex: dataItem.index,
+                index: i
             })
         }
     })
@@ -90,8 +90,8 @@ export default function sortTable<T>(
     return {
         data: order === 'none' ? (noSortData ?? []) : tableData,
         selectedRows: {
-            lookup: buildMap(selectedRows),
-            data: selectedRows
+            data: selectedRows,
+            lookup: buildMap(selectedRows)
         }
     }
 }

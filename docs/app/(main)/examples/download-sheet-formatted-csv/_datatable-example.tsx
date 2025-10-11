@@ -104,18 +104,24 @@ class Example extends React.Component<
         ]
 
         const options: DataTableProps['options'] = {
-            filter: true,
-            selectableRows: 'multiple',
-            filterType: 'dropdown',
-            responsive: 'vertical',
-            rowsPerPage: 10,
             downloadOptions: {
                 filename: 'excel-format.csv',
-                separator: ';',
                 filterOptions: {
                     useDisplayedColumnsOnly: true,
                     useDisplayedRowsOnly: true
-                }
+                },
+                separator: ';'
+            },
+            filter: true,
+            filterType: 'dropdown',
+            onCellClick: (cellIndex, rowIndex) => {
+                console.log(cellIndex, rowIndex)
+            },
+            onChangePage: numberRows => {
+                console.log(numberRows)
+            },
+            onColumnSortChange: (column, direction) => {
+                console.log(column, direction)
             },
             onDownload: (buildHead, buildBody, columns, data) => {
                 if (this.state.downloadFile) {
@@ -123,6 +129,12 @@ class Example extends React.Component<
                 }
 
                 return false
+            },
+            onFilterChange: (column, filters) => {
+                console.log(column, filters)
+            },
+            onRowClick: (rowData, rowState) => {
+                console.log(rowData, rowState)
             },
             onRowSelectionChange: (
                 currentRowsSelected,
@@ -134,53 +146,41 @@ class Example extends React.Component<
             onRowsDelete: rowsDeleted => {
                 console.log(rowsDeleted, 'were deleted!')
             },
-            onChangePage: numberRows => {
-                console.log(numberRows)
-            },
             onSearchChange: searchText => {
                 console.log(searchText)
-            },
-            onColumnSortChange: (column, direction) => {
-                console.log(column, direction)
             },
             onViewColumnsChange: (column, action) => {
                 console.log(column, action)
             },
-            onFilterChange: (column, filters) => {
-                console.log(column, filters)
-            },
-            onCellClick: (cellIndex, rowIndex) => {
-                console.log(cellIndex, rowIndex)
-            },
-            onRowClick: (rowData, rowState) => {
-                console.log(rowData, rowState)
-            }
+            responsive: 'vertical',
+            rowsPerPage: 10,
+            selectableRows: 'multiple'
         }
 
         return (
             <React.Fragment>
                 <Button
-                    style={{
-                        right: '17rem',
-                        position: 'absolute',
-                        top: '1.5rem',
-                        background: 'gray',
-                        color: 'white',
-                        zIndex: 10
-                    }}
                     onClick={() =>
                         this.setState(prevState => ({
                             downloadFile: !prevState.downloadFile
                         }))
                     }
+                    style={{
+                        background: 'gray',
+                        color: 'white',
+                        position: 'absolute',
+                        right: '17rem',
+                        top: '1.5rem',
+                        zIndex: 10
+                    }}
                 >
                     {this.state.downloadFile ? 'Disable' : 'Enable'} Download
                 </Button>
                 <DataTable
-                    title={'ACME Employee list CSV'}
-                    data={data}
                     columns={columns}
+                    data={data}
                     options={options}
+                    title={'ACME Employee list CSV'}
                 />
             </React.Fragment>
         )

@@ -60,11 +60,11 @@ export default function ColumnVisibilitiesBox(): ReactNode {
 
     return (
         <FormControl
-            component="fieldset"
-            className={classes.root}
             aria-label={textLabels.viewColumns.titleAria}
+            className={classes.root}
+            component="fieldset"
         >
-            <Typography variant="caption" className={classes.title}>
+            <Typography className={classes.title} variant="caption">
                 {textLabels.viewColumns.title}
             </Typography>
 
@@ -76,24 +76,24 @@ export default function ColumnVisibilitiesBox(): ReactNode {
 
                     return (
                         <FormControlLabel
-                            key={index}
                             classes={{
-                                root: classes.formControl,
-                                label: classes.label
+                                label: classes.label,
+                                root: classes.formControl
                             }}
                             control={
                                 <_Checkbox
-                                    color="primary"
-                                    className={classes.checkbox}
-                                    classes={{
-                                        root: classes.checkboxRoot,
-                                        checked: classes.checked
-                                    }}
-                                    onChange={() => handleColChange(index)}
                                     checked={column.display === true}
+                                    classes={{
+                                        checked: classes.checked,
+                                        root: classes.checkboxRoot
+                                    }}
+                                    className={classes.checkbox}
+                                    color="primary"
+                                    onChange={() => handleColChange(index)}
                                     value={column.name}
                                 />
                             }
+                            key={index}
                             label={column.label}
                         />
                     )
@@ -106,33 +106,33 @@ export default function ColumnVisibilitiesBox(): ReactNode {
 const useStyles = tss
     .withName(ComponentClassName.TOOLBAR__COLUMN_VISIBILITIES_BOX)
     .create(() => ({
-        root: {
-            padding: '16px 24px 16px 24px',
-            fontFamily: 'Roboto'
-        },
-        title: {
-            marginLeft: '-7px',
-            marginRight: '24px',
-            fontSize: '14px',
-            color: 'var(--mui-palette-text-secondary)',
-            textAlign: 'left',
-            fontWeight: 500
-        },
-        formGroup: {
-            marginTop: '8px'
-        },
-        formControl: {},
         checkbox: {
+            height: '32px',
             padding: '0px',
-            width: '32px',
-            height: '32px'
+            width: '32px'
         },
         checkboxRoot: {},
         checked: {},
+        formControl: {},
+        formGroup: {
+            marginTop: '8px'
+        },
         label: {
+            color: 'var(--mui-palette-text-primary)',
             fontSize: '15px',
-            marginLeft: '8px',
-            color: 'var(--mui-palette-text-primary)'
+            marginLeft: '8px'
+        },
+        root: {
+            fontFamily: 'Roboto',
+            padding: '16px 24px 16px 24px'
+        },
+        title: {
+            color: 'var(--mui-palette-text-secondary)',
+            fontSize: '14px',
+            fontWeight: 500,
+            marginLeft: '-7px',
+            marginRight: '24px',
+            textAlign: 'left'
         }
     }))
 

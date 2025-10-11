@@ -7,10 +7,10 @@ import type { ReactNode } from 'react'
 import { THEME } from './_constants'
 
 const roboto = Roboto({
-    weight: ['300', '400', '500', '700'],
-    subsets: ['latin'],
     display: 'swap',
-    variable: '--font-roboto'
+    subsets: ['latin'],
+    variable: '--font-roboto',
+    weight: ['300', '400', '500', '700']
 })
 
 export default function RootLayout({ children }: { children: ReactNode }) {
@@ -23,29 +23,29 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                 </title>
 
                 <meta
-                    name="viewport"
                     content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+                    name="viewport"
                 />
 
                 <meta
-                    httpEquiv="Content-Type"
                     content="text/html; charset=utf-8"
+                    httpEquiv="Content-Type"
                 />
 
                 <meta
-                    name="description"
                     content="A responsive DataTable component built with Material UI for React-based project"
+                    name="description"
                 />
                 <meta
-                    name="keywords"
                     content={
                         'material-ui, data table, datatable, mui, mui data table, react table, react data table'
                     }
+                    name="keywords"
                 />
 
-                <meta name="robots" content="index,follow,noodp" />
+                <meta content="index,follow,noodp" name="robots" />
 
-                <meta name="googlebot" content="noarchive" />
+                <meta content="noarchive" name="googlebot" />
 
                 {/* <link
                     rel="stylesheet"
@@ -53,8 +53,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                 /> */}
 
                 <meta
-                    name="apple-mobile-web-app-title"
                     content="MUI DataTable Delight"
+                    name="apple-mobile-web-app-title"
                 />
             </head>
 

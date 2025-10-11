@@ -26,28 +26,28 @@ describe('<Toolbar />', function () {
         const COLUMNS = ['First Name', 'Company', 'City', 'State']
 
         const OPTIONS: DataTableProps['options'] = {
-            print: true,
             download: true,
-            search: true,
-            filter: true,
-            viewColumns: true,
             downloadOptions: {
-                separator: ',',
                 filename: 'tableDownload.csv',
                 filterOptions: {
-                    useDisplayedRowsOnly: true,
-                    useDisplayedColumnsOnly: true
-                }
-            }
+                    useDisplayedColumnsOnly: true,
+                    useDisplayedRowsOnly: true
+                },
+                separator: ','
+            },
+            filter: true,
+            print: true,
+            search: true,
+            viewColumns: true
         }
 
         const props = {
+            columns: COLUMNS,
+            data: DATA,
             options: {
                 ...OPTIONS,
                 ...override?.options
             },
-            columns: COLUMNS,
-            data: DATA,
             ...override
         }
 
@@ -593,10 +593,10 @@ describe('<Toolbar />', function () {
         }) => {
             return (
                 <Chip
-                    data-testid={testId}
-                    variant="outlined"
                     color="secondary"
+                    data-testid={testId}
                     label={label}
+                    variant="outlined"
                 />
             )
         }
@@ -606,8 +606,8 @@ describe('<Toolbar />', function () {
                 icons: {
                     [iconName]: () => (
                         <CustomChip
-                            testId={'custom-icon-' + iconName}
                             label="Custom"
+                            testId={'custom-icon-' + iconName}
                         />
                     )
                 }

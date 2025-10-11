@@ -13,8 +13,8 @@ class Example extends React.Component {
             {
                 name: 'Name',
                 options: {
-                    filter: true,
-                    display: 'excluded'
+                    display: 'excluded',
+                    filter: true
                 }
             },
             {
@@ -127,20 +127,6 @@ class Example extends React.Component {
         ]
 
         const options: DataTableProps['options'] = {
-            filter: true,
-            filterType: 'dropdown',
-            responsive: 'vertical',
-            page: 0,
-            searchText: this.state.searchText,
-            searchProps: {
-                onBlur: () => {
-                    console.log('onBlur!')
-                },
-                onKeyUp: () => {
-                    console.log('onKeyUp!')
-                }
-            },
-            searchPlaceholder: 'Your Custom Search Placeholder',
             customSearch: (searchQuery, currentRow) => {
                 let isFound = false
                 currentRow.forEach(col => {
@@ -149,7 +135,21 @@ class Example extends React.Component {
                     }
                 })
                 return isFound
-            }
+            },
+            filter: true,
+            filterType: 'dropdown',
+            page: 0,
+            responsive: 'vertical',
+            searchPlaceholder: 'Your Custom Search Placeholder',
+            searchProps: {
+                onBlur: () => {
+                    console.log('onBlur!')
+                },
+                onKeyUp: () => {
+                    console.log('onKeyUp!')
+                }
+            },
+            searchText: this.state.searchText
         }
 
         return (
@@ -158,10 +158,10 @@ class Example extends React.Component {
                     Reset Search
                 </button>
                 <DataTable
-                    title={'ACME Employee list'}
-                    data={data}
                     columns={columns}
+                    data={data}
                     options={options}
+                    title={'ACME Employee list'}
                 />
             </Fragment>
         )

@@ -32,13 +32,12 @@ const PLUGINS = [
 
     /** To build from tsx files */
     typescript({
-        tsconfig: './tsconfig.json',
-        outputToFilesystem: true,
-
         compilerOptions: {
             composite: false,
             declarationMap: false
-        }
+        },
+        outputToFilesystem: true,
+        tsconfig: './tsconfig.json'
     })
 ]
 
@@ -56,8 +55,8 @@ export default [
         output: [
             {
                 dir: 'dist/cjs',
-                format: 'cjs',
                 exports: 'named',
+                format: 'cjs',
                 interop: 'auto',
                 preserveModules: true,
                 sourcemap: true

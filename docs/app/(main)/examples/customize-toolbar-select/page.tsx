@@ -60,19 +60,19 @@ function Example() {
     ]
 
     const options: DataTableProps['options'] = {
+        customToolbarSelect: (selectedRows, displayData, setSelectedRows) => (
+            <CustomToolbarSelect
+                displayData={displayData}
+                selectedRows={selectedRows}
+                setSelectedRows={setSelectedRows}
+            />
+        ),
         filter: true,
-        selectableRows: 'multiple',
         filterType: 'dropdown',
         responsive: 'vertical',
         rowsPerPage: 10,
-        selectToolbarPlacement: stp,
-        customToolbarSelect: (selectedRows, displayData, setSelectedRows) => (
-            <CustomToolbarSelect
-                selectedRows={selectedRows}
-                displayData={displayData}
-                setSelectedRows={setSelectedRows}
-            />
-        )
+        selectableRows: 'multiple',
+        selectToolbarPlacement: stp
     }
 
     return (
@@ -82,20 +82,20 @@ function Example() {
                     Select Toolbar Placement
                 </InputLabel>
                 <Select
-                    labelId="demo-simple-select-label"
                     id="demo-simple-select"
-                    value={stp}
-                    style={{
-                        width: '200px',
-                        marginBottom: '10px',
-                        marginRight: 10
-                    }}
+                    labelId="demo-simple-select-label"
                     onChange={e =>
                         setStp(
                             e.target
                                 .value as DataTableOptions['selectToolbarPlacement']
                         )
                     }
+                    style={{
+                        marginBottom: '10px',
+                        marginRight: 10,
+                        width: '200px'
+                    }}
+                    value={stp}
                 >
                     <MenuItem value={'none'}>none</MenuItem>
                     <MenuItem value={'replace'}>replace</MenuItem>
@@ -103,10 +103,10 @@ function Example() {
                 </Select>
             </FormControl>
             <DataTable
-                title={'ACME Employee list'}
-                data={data}
                 columns={columns}
+                data={data}
                 options={options}
+                title={'ACME Employee list'}
             />
         </>
     )

@@ -12,10 +12,10 @@ export default function Layout({ children }: { children: ReactNode }) {
         <Box display="flex">
             <SideTopBar />
 
-            <Grid container sx={{ py: { xs: 11, sm: 12 }, flexGrow: 1 }}>
+            <Grid container sx={{ flexGrow: 1, py: { sm: 12, xs: 11 } }}>
                 <Grid
-                    size={{ xs: 12, sm: 12, md: 12, lg: 9, xl: 9 }}
-                    sx={{ px: { xs: 4, sm: 7 } }}
+                    size={{ lg: 9, md: 12, sm: 12, xl: 9, xs: 12 }}
+                    sx={{ px: { sm: 7, xs: 4 } }}
                 >
                     <FloatingBar />
                     <Breadcrumbs />
@@ -27,14 +27,14 @@ export default function Layout({ children }: { children: ReactNode }) {
                     size={3}
                     sx={{
                         display: {
-                            xs: 'none',
-                            sm: 'none',
+                            lg: 'block',
                             md: 'none',
-                            lg: 'block'
+                            sm: 'none',
+                            xs: 'none'
                         }
                     }}
                 >
-                    <Box sx={{ position: 'sticky', top: 12 * 8, pr: 4 }}>
+                    <Box sx={{ position: 'sticky', pr: 4, top: 12 * 8 }}>
                         <Box mb={4}>
                             <EditPageButton />
                         </Box>

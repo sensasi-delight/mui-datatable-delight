@@ -9,8 +9,8 @@ class Example extends React.Component {
             {
                 name: 'Name',
                 options: {
-                    filter: true,
-                    display: 'excluded'
+                    display: 'excluded',
+                    filter: true
                 }
             },
             {
@@ -23,8 +23,8 @@ class Example extends React.Component {
             {
                 name: 'Location',
                 options: {
-                    print: false,
-                    filter: false
+                    filter: false,
+                    print: false
                 }
             },
             {
@@ -132,10 +132,10 @@ class Example extends React.Component {
 
         return (
             <DataTable
-                title={'ACME Employee list'}
-                data={data}
                 columns={columns}
+                data={data}
                 options={options}
+                title={'ACME Employee list'}
             />
         )
     }

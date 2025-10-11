@@ -10,27 +10,27 @@ export const DEFAULT_TEXT_LABELS: TextLabelsType = {
     },
     filter: {
         all: 'All',
-        title: 'FILTERS',
-        reset: 'RESET'
+        reset: 'RESET',
+        title: 'FILTERS'
     },
     pagination: {
+        displayRows: 'of',
+        jumpToPage: 'Jump to page',
         next: 'Next page',
         previous: 'Previous page',
-        rowsPerPage: 'Rows per page',
-        displayRows: 'of',
-        jumpToPage: 'Jump to page'
+        rowsPerPage: 'Rows per page'
     },
     selectedRows: {
-        text: 'row(s) selected',
         delete: 'Delete',
-        deleteAria: 'Delete Selected Rows'
+        deleteAria: 'Delete Selected Rows',
+        text: 'row(s) selected'
     },
     toolbar: {
-        search: 'Search',
         downloadCsv: 'Download CSV',
+        filterTable: 'Filter Table',
         print: 'Print',
-        viewColumns: 'View Columns',
-        filterTable: 'Filter Table'
+        search: 'Search',
+        viewColumns: 'View Columns'
     },
     viewColumns: {
         title: 'Show Columns',

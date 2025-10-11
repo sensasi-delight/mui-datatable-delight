@@ -43,13 +43,13 @@ export function Example() {
                     Responsive Option
                 </InputLabel>
                 <Select
-                    labelId="demo-simple-select-label"
                     id="demo-simple-select"
-                    value={responsive}
-                    style={{ width: '200px', marginBottom: '10px' }}
+                    labelId="demo-simple-select-label"
                     onChange={({ target: { value } }) =>
                         setResponsive(value as typeof responsive)
                     }
+                    style={{ marginBottom: '10px', width: '200px' }}
+                    value={responsive}
                 >
                     <MenuItem value="vertical">vertical</MenuItem>
                     <MenuItem value="standard">standard</MenuItem>
@@ -66,16 +66,16 @@ export function Example() {
                     Table Body Height
                 </InputLabel>
                 <Select
-                    labelId="demo-simple-select-label"
                     id="demo-simple-select"
-                    value={tableBodyHeight}
-                    style={{
-                        width: '200px',
-                        marginBottom: '10px'
-                    }}
+                    labelId="demo-simple-select-label"
                     onChange={({ target: { value } }) =>
                         setTableBodyHeight(value as typeof tableBodyHeight)
                     }
+                    style={{
+                        marginBottom: '10px',
+                        width: '200px'
+                    }}
+                    value={tableBodyHeight}
                 >
                     <MenuItem value={''}>[blank]</MenuItem>
                     <MenuItem value={'400px'}>400px</MenuItem>
@@ -88,15 +88,15 @@ export function Example() {
                     Max Table Body Height
                 </InputLabel>
                 <Select
-                    labelId="demo-simple-select-label"
                     id="demo-simple-select"
-                    value={tableBodyMaxHeight}
-                    style={{ width: '200px', marginBottom: '10px' }}
+                    labelId="demo-simple-select-label"
                     onChange={({ target: { value } }) =>
                         setTableBodyMaxHeight(
                             value as typeof tableBodyMaxHeight
                         )
                     }
+                    style={{ marginBottom: '10px', width: '200px' }}
+                    value={tableBodyMaxHeight}
                 >
                     <MenuItem value={''}>[blank]</MenuItem>
                     <MenuItem value={'400px'}>400px</MenuItem>
@@ -109,15 +109,15 @@ export function Example() {
                     Search Button
                 </InputLabel>
                 <Select
-                    labelId="demo-simple-select-label"
                     id="demo-simple-select"
-                    value={searchBtn}
-                    style={{ width: '200px', marginBottom: '10px' }}
+                    labelId="demo-simple-select-label"
                     onChange={({ target: { value } }) =>
                         setSearchBtn(
                             value === 'disabled' ? value : value === 'true'
                         )
                     }
+                    style={{ marginBottom: '10px', width: '200px' }}
+                    value={searchBtn}
                 >
                     <MenuItem value="true">
                         <code>true</code>
@@ -135,15 +135,15 @@ export function Example() {
                     Download Button
                 </InputLabel>
                 <Select
-                    labelId="demo-simple-select-label"
                     id="demo-simple-select"
-                    value={downloadBtn}
-                    style={{ width: '200px', marginBottom: '10px' }}
+                    labelId="demo-simple-select-label"
                     onChange={({ target: { value } }) =>
                         setDownloadBtn(
                             value === 'disabled' ? value : value === 'true'
                         )
                     }
+                    style={{ marginBottom: '10px', width: '200px' }}
+                    value={downloadBtn}
                 >
                     <MenuItem value="true">
                         <code>true</code>
@@ -161,15 +161,15 @@ export function Example() {
                     Print Button
                 </InputLabel>
                 <Select
-                    labelId="demo-simple-select-label"
                     id="demo-simple-select"
-                    value={printBtn}
-                    style={{ width: '200px', marginBottom: '10px' }}
+                    labelId="demo-simple-select-label"
                     onChange={({ target: { value } }) =>
                         setPrintBtn(
                             value === 'disabled' ? value : value === 'true'
                         )
                     }
+                    style={{ marginBottom: '10px', width: '200px' }}
+                    value={printBtn}
                 >
                     <MenuItem value="true">
                         <code>true</code>
@@ -187,15 +187,15 @@ export function Example() {
                     View Column Button
                 </InputLabel>
                 <Select
-                    labelId="demo-simple-select-label"
                     id="demo-simple-select"
-                    value={viewColumnBtn}
-                    style={{ width: '200px', marginBottom: '10px' }}
+                    labelId="demo-simple-select-label"
                     onChange={({ target: { value } }) =>
                         setViewColumnBtn(
                             value === 'disabled' ? value : value === 'true'
                         )
                     }
+                    style={{ marginBottom: '10px', width: '200px' }}
+                    value={viewColumnBtn}
                 >
                     <MenuItem value="true">
                         <code>true</code>
@@ -213,15 +213,15 @@ export function Example() {
                     Filter Button
                 </InputLabel>
                 <Select
-                    labelId="demo-simple-select-label"
                     id="demo-simple-select"
-                    value={filterBtn}
-                    style={{ width: '200px', marginBottom: '10px' }}
+                    labelId="demo-simple-select-label"
                     onChange={({ target: { value } }) =>
                         setFilterBtn(
                             value === 'disabled' ? value : value === 'true'
                         )
                     }
+                    style={{ marginBottom: '10px', width: '200px' }}
+                    value={filterBtn}
                 >
                     <MenuItem value="true">
                         <code>true</code>
@@ -236,20 +236,20 @@ export function Example() {
             </FormControl>
 
             <DataTable
-                title={'ACME Employee list'}
-                data={DATA}
                 columns={COLUMNS}
+                data={DATA}
                 options={{
                     ...STATIC_OPTIONS,
-                    search: searchBtn,
                     download: downloadBtn,
-                    print: printBtn,
-                    viewColumns: viewColumnBtn,
                     filter: filterBtn,
+                    print: printBtn,
                     responsive,
+                    search: searchBtn,
                     tableBodyHeight,
-                    tableBodyMaxHeight
+                    tableBodyMaxHeight,
+                    viewColumns: viewColumnBtn
                 }}
+                title={'ACME Employee list'}
             />
         </>
     )

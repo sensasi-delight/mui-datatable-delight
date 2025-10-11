@@ -41,8 +41,8 @@ export function DataTableFooterPagination({
 
     return (
         <TablePagination
-            component="div"
             className={classes.root}
+            component="div"
             count={state.count}
             labelDisplayedRows={({ from, to, count }) =>
                 `${from}-${to} ${textLabels.pagination.displayRows} ${count}`
@@ -55,30 +55,29 @@ export function DataTableFooterPagination({
             rowsPerPageOptions={state.rowsPerPageOptions}
             slotProps={{
                 actions: {
-                    previousButton: {
-                        id: 'pagination-back',
-                        'aria-label': textLabels.pagination.previous,
-                        title: textLabels.pagination.previous
-                    },
-
                     nextButton: {
-                        id: 'pagination-next',
                         'aria-label': textLabels.pagination.next,
-                        title: textLabels.pagination.next,
-                        className: classes.nextButton
+                        className: classes.nextButton,
+                        id: 'pagination-next',
+                        title: textLabels.pagination.next
+                    },
+                    previousButton: {
+                        'aria-label': textLabels.pagination.previous,
+                        id: 'pagination-back',
+                        title: textLabels.pagination.previous
                     }
                 },
 
                 select: {
                     id: 'pagination-input',
-                    SelectDisplayProps: {
-                        id: 'pagination-rows'
-                    },
                     MenuProps: {
                         id: 'pagination-menu',
                         MenuListProps: {
                             id: 'pagination-menu-list'
                         }
+                    },
+                    SelectDisplayProps: {
+                        id: 'pagination-rows'
                     }
                 },
 
@@ -93,6 +92,7 @@ export function DataTableFooterPagination({
 const useStyles = tss
     .withName(ClassName.BOTTOM_BAR__PAGINATION)
     .create(({ theme }) => ({
+        nextButton: {},
         root: {
             maxWidth: '100%',
             overflowX: 'auto'
@@ -103,16 +103,14 @@ const useStyles = tss
                 marginTop: '-0.5em',
                 paddingLeft: theme.spacing(2)
             },
-            paddingRight: '0 !important',
+
+            '& > *': {
+                fontSize: '0.8rem !important'
+            },
 
             '& > p': {
                 color: 'var(--mui-palette-text-secondary) !important'
             },
-
-            '& > *': {
-                fontSize: '0.8rem !important'
-            }
-        },
-
-        nextButton: {}
+            paddingRight: '0 !important'
+        }
     }))

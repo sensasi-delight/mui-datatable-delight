@@ -16,9 +16,6 @@ class Example extends React.Component {
         ]
 
         const options: DataTableProps['options'] = {
-            filter: true,
-            filterType: 'dropdown',
-            responsive: 'vertical',
             customSort: (data, colIndex, order) => {
                 return data.sort((a, b) => {
                     const aVal = a.data[colIndex] ?? 0
@@ -40,15 +37,18 @@ class Example extends React.Component {
                         (order === 'desc' ? 1 : -1)
                     )
                 })
-            }
+            },
+            filter: true,
+            filterType: 'dropdown',
+            responsive: 'vertical'
         }
 
         return (
             <DataTable
-                title={'Survey Scores'}
-                data={data}
                 columns={columns}
+                data={data}
                 options={options}
+                title={'Survey Scores'}
             />
         )
     }

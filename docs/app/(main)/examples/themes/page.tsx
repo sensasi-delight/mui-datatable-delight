@@ -108,19 +108,19 @@ class Example extends React.Component {
 
         const options: DataTableProps['options'] = {
             filter: true,
-            selectableRows: 'multiple',
             filterType: 'dropdown',
             responsive: 'vertical',
-            rowsPerPage: 10
+            rowsPerPage: 10,
+            selectableRows: 'multiple'
         }
 
         return (
             <ThemeProvider theme={theme}>
                 <DataTable
-                    title={'ACME Employee list'}
-                    data={data}
                     columns={columns}
+                    data={data}
                     options={options}
+                    title={'ACME Employee list'}
                 />
             </ThemeProvider>
         )

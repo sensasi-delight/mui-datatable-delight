@@ -24,8 +24,6 @@ export function DataTableBodyRow({
 
     return (
         <TableRow
-            hover={options.rowHover}
-            onClick={onClick}
             className={cx(
                 classes.root,
                 {
@@ -45,6 +43,8 @@ export function DataTableBodyRow({
                 },
                 className
             )}
+            hover={options.rowHover}
+            onClick={onClick}
             selected={rowSelected}
             {...restProps}
         >
@@ -62,26 +62,26 @@ export interface DataTableBodyRowProps extends TableRowProps {
 const useStyles = tss
     .withName(ComponentClassName.TABLE__BODY__ROW)
     .create(({ theme }) => ({
+        hoverCursor: { cursor: 'pointer' },
+        responsiveSimple: {
+            [theme.breakpoints.down('sm')]: {
+                borderBottom: 'solid 2px rgba(0, 0, 0, 0.15)',
+                borderTop: 'solid 2px rgba(0, 0, 0, 0.15)',
+                margin: 0,
+                padding: 0
+            }
+        },
+        responsiveStacked: {
+            [theme.breakpoints.down('md')]: {
+                borderBottom: 'solid 2px rgba(0, 0, 0, 0.15)',
+                borderTop: 'solid 2px rgba(0, 0, 0, 0.15)',
+                margin: 0,
+                padding: 0
+            }
+        },
         root: {
             '&.mui-row-selected': {
                 backgroundColor: 'var(--mui-palette-action-selected)'
-            }
-        },
-        hoverCursor: { cursor: 'pointer' },
-        responsiveStacked: {
-            [theme.breakpoints.down('md')]: {
-                borderTop: 'solid 2px rgba(0, 0, 0, 0.15)',
-                borderBottom: 'solid 2px rgba(0, 0, 0, 0.15)',
-                padding: 0,
-                margin: 0
-            }
-        },
-        responsiveSimple: {
-            [theme.breakpoints.down('sm')]: {
-                borderTop: 'solid 2px rgba(0, 0, 0, 0.15)',
-                borderBottom: 'solid 2px rgba(0, 0, 0, 0.15)',
-                padding: 0,
-                margin: 0
             }
         }
     }))

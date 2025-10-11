@@ -10,8 +10,7 @@ import DataTable, { type DataTableProps } from '@src'
  */
 export default function Page() {
     const options: DataTableProps['options'] = {
-        rowHover: true,
-        download: 'disabled',
+        count: 50,
         customToolbar: () => (
             <Tooltip arrow title="Segarkan">
                 <span>
@@ -21,14 +20,10 @@ export default function Page() {
                 </span>
             </Tooltip>
         ),
-        onRowClick: () => console.log('aswd'),
+        download: 'disabled',
         filter: false,
-        // serverSide: true,
-        responsive: 'standard',
-        selectableRows: 'none',
-        print: false,
         jumpToPage: true,
-        rowsPerPageOptions: [15, 30, 50, 100],
+        onChangeRowsPerPage: console.log,
         // rowsPerPage: 15,
         // sortOrder: sortOrder,
         // onTableChange: handleTableChangeOrInit,
@@ -41,12 +36,17 @@ export default function Page() {
             // })
             console.log(changedColumn, direction)
         },
-        onChangeRowsPerPage: console.log,
-        onViewColumnsChange: console.log,
         onDownload: () => {
             return false
         },
-        count: 50
+        onRowClick: () => console.log('aswd'),
+        onViewColumnsChange: console.log,
+        print: false,
+        // serverSide: true,
+        responsive: 'standard',
+        rowHover: true,
+        rowsPerPageOptions: [15, 30, 50, 100],
+        selectableRows: 'none'
     }
 
     const data: {
@@ -73,28 +73,28 @@ export default function Page() {
 
     return (
         <DataTable
-            title="asd"
-            data={data}
             columns={['name', 'role']}
+            data={data}
             options={options}
             textLabels={{
-                pagination: {
-                    next: 'selanjutnya',
-                    previous: 'sebelumnya',
-                    rowsPerPage: 'data/halaman:',
-                    jumpToPage: 'halaman:'
-                },
-                toolbar: {
-                    search: 'Cari',
-                    downloadCsv: 'Unduh',
-                    print: 'Cetak',
-                    viewColumns: 'Tampilkan kolom'
-                },
                 body: {
                     noMatch: 'Tidak ada data',
                     toolTip: 'Urutkan'
+                },
+                pagination: {
+                    jumpToPage: 'halaman:',
+                    next: 'selanjutnya',
+                    previous: 'sebelumnya',
+                    rowsPerPage: 'data/halaman:'
+                },
+                toolbar: {
+                    downloadCsv: 'Unduh',
+                    print: 'Cetak',
+                    search: 'Cari',
+                    viewColumns: 'Tampilkan kolom'
                 }
             }}
+            title="asd"
         />
     )
 }

@@ -79,7 +79,7 @@ export default function SelectedRowsToolbar({
     return (
         <div className={classes.root}>
             <div>
-                <Typography variant="subtitle1" className={classes.title}>
+                <Typography className={classes.title} variant="subtitle1">
                     {state.selectedRows.data.length}{' '}
                     {selectedRowsTextLabels.text}
                 </Typography>
@@ -94,9 +94,9 @@ export default function SelectedRowsToolbar({
             {!options.customToolbarSelect && (
                 <_Tooltip title={selectedRowsTextLabels.delete}>
                     <IconButton
+                        aria-label={selectedRowsTextLabels.deleteAria}
                         className={classes.iconButton}
                         onClick={() => onRowsDelete()}
-                        aria-label={selectedRowsTextLabels.deleteAria}
                     >
                         <DeleteIcon className={classes.deleteIcon} />
                     </IconButton>
@@ -109,25 +109,25 @@ export default function SelectedRowsToolbar({
 const useStyles = tss
     .withName(ClassName.SELECTED_ROWS_TOOLBAR)
     .create(({ theme }) => ({
-        root: {
-            flex: '1 1 100%',
-            display: 'flex',
-            position: 'relative',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            paddingTop: theme.spacing(1),
-            paddingBottom: theme.spacing(1),
-            '@media print': {
-                display: 'none'
-            }
-        },
-        title: {
-            paddingLeft: '26px'
-        },
+        deleteIcon: {},
         iconButton: {
             marginRight: '24px'
         },
-        deleteIcon: {}
+        root: {
+            '@media print': {
+                display: 'none'
+            },
+            alignItems: 'center',
+            display: 'flex',
+            flex: '1 1 100%',
+            justifyContent: 'space-between',
+            paddingBottom: theme.spacing(1),
+            paddingTop: theme.spacing(1),
+            position: 'relative'
+        },
+        title: {
+            paddingLeft: '26px'
+        }
     }))
 
 export interface TableToolbarSelectProps {
@@ -157,8 +157,8 @@ function handleCustomSelectedRows<T>(
     }
 
     const _selectedRows = selectedRows.map(row => ({
-        index: row,
-        dataIndex: row
+        dataIndex: row,
+        index: row
     }))
 
     selectRowUpdate('custom', _selectedRows)

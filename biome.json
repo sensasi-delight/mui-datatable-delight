@@ -1,6 +1,16 @@
 {
     "$schema": "https://biomejs.dev/schemas/2.2.5/schema.json",
-    "vcs": { "enabled": false, "clientKind": "git", "useIgnoreFile": false },
+    "assist": {
+        "actions": {
+            "source": {
+                "organizeImports": "on",
+                "useSortedAttributes": "on",
+                "useSortedKeys": "on",
+                "useSortedProperties": "on"
+            }
+        },
+        "enabled": true
+    },
     "files": {
         "ignoreUnknown": false,
         "includes": [
@@ -15,22 +25,35 @@
         ]
     },
     "formatter": {
+        "attributePosition": "auto",
+        "bracketSameLine": false,
+        "bracketSpacing": true,
         "enabled": true,
+        "expand": "auto",
         "formatWithErrors": false,
         "indentStyle": "space",
         "indentWidth": 4,
         "lineEnding": "lf",
         "lineWidth": 80,
-        "attributePosition": "auto",
-        "bracketSameLine": false,
-        "bracketSpacing": true,
-        "expand": "auto",
         "useEditorconfig": true
+    },
+    "html": { "formatter": { "selfCloseVoidElements": "always" } },
+    "javascript": {
+        "formatter": {
+            "arrowParentheses": "asNeeded",
+            "attributePosition": "auto",
+            "bracketSameLine": false,
+            "bracketSpacing": true,
+            "jsxQuoteStyle": "double",
+            "quoteProperties": "asNeeded",
+            "quoteStyle": "single",
+            "semicolons": "asNeeded",
+            "trailingCommas": "none"
+        }
     },
     "linter": {
         "enabled": true,
         "rules": {
-            "recommended": false,
             "a11y": { "noAutofocus": "error" },
             "complexity": {
                 "noAdjacentSpacesInRegex": "error",
@@ -72,11 +95,21 @@
                 "useValidTypeof": "error",
                 "useYield": "error"
             },
+            "recommended": false,
             "style": {
                 "noCommonJs": "error",
                 "noInferrableTypes": "error",
                 "noNamespace": "error",
                 "noNonNullAssertion": "error",
+                "noRestrictedImports": {
+                    "level": "error",
+                    "options": {
+                        "paths": {
+                            "@mui/icons-material": "No Barrel Import. Use `import [Icon] from '@mui/icons-material/[Icon]'` instead.",
+                            "@mui/material": "No Barrel Import. Use `import [Component] from '@mui/material/[Component]'` instead."
+                        }
+                    }
+                },
                 "useArrayLiterals": "error",
                 "useAsConstAssertion": "error",
                 "useBlockStatements": "off",
@@ -84,16 +117,7 @@
                 "useForOf": "error",
                 "useLiteralEnumMembers": "error",
                 "useShorthandFunctionType": "error",
-                "useUnifiedTypeSignatures": "error",
-                "noRestrictedImports": {
-                    "level": "error",
-                    "options": {
-                        "paths": {
-                            "@mui/material": "No Barrel Import. Use `import [Component] from '@mui/material/[Component]'` instead.",
-                            "@mui/icons-material": "No Barrel Import. Use `import [Icon] from '@mui/icons-material/[Icon]'` instead."
-                        }
-                    }
-                }
+                "useUnifiedTypeSignatures": "error"
             },
             "suspicious": {
                 "noAsyncPromiseExecutor": "error",
@@ -135,20 +159,6 @@
             }
         }
     },
-    "javascript": {
-        "formatter": {
-            "jsxQuoteStyle": "double",
-            "quoteProperties": "asNeeded",
-            "trailingCommas": "none",
-            "semicolons": "asNeeded",
-            "arrowParentheses": "asNeeded",
-            "bracketSameLine": false,
-            "quoteStyle": "single",
-            "attributePosition": "auto",
-            "bracketSpacing": true
-        }
-    },
-    "html": { "formatter": { "selfCloseVoidElements": "always" } },
     "overrides": [
         {
             "linter": {
@@ -213,8 +223,5 @@
             }
         }
     ],
-    "assist": {
-        "enabled": true,
-        "actions": { "source": { "organizeImports": "on" } }
-    }
+    "vcs": { "clientKind": "git", "enabled": false, "useIgnoreFile": false }
 }

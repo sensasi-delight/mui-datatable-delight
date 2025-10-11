@@ -101,8 +101,8 @@ export default function getNewStateOnDataChange<T>(
             if (typeof tableData[rowIndex] === 'undefined') {
                 if (isInit) {
                     tableData.push({
-                        index: rowIndex,
-                        data: rowDataOrStateData
+                        data: rowDataOrStateData,
+                        index: rowIndex
                     })
                 } else if (
                     typeof rowDataOrStateData === 'object' &&
@@ -240,8 +240,8 @@ export default function getNewStateOnDataChange<T>(
                     }
 
                     selectedRowsData.data.push({
-                        index: rowPos,
-                        dataIndex: row
+                        dataIndex: row,
+                        index: rowPos
                     })
                     selectedRowsData.lookup[row] = true
                 })
@@ -263,8 +263,8 @@ export default function getNewStateOnDataChange<T>(
             }
 
             selectedRowsData.data.push({
-                index: rowPos,
-                dataIndex
+                dataIndex,
+                index: rowPos
             })
 
             selectedRowsData.lookup[dataIndex] = true
@@ -301,8 +301,8 @@ export default function getNewStateOnDataChange<T>(
                 }
 
                 expandedRowsData.data.push({
-                    index: rowPos,
-                    dataIndex: row
+                    dataIndex: row,
+                    index: rowPos
                 })
                 expandedRowsData.lookup[row] = true
             })
@@ -335,11 +335,11 @@ export default function getNewStateOnDataChange<T>(
 
     const newState: DataTableState<T> = {
         ...state,
-        count: options.count ?? tableData.length,
         columnOrder,
         columns,
-        expandedRows: expandedRowsData,
+        count: options.count ?? tableData.length,
         data: tableData,
+        expandedRows: expandedRowsData,
         filterData,
         filterList,
         page,

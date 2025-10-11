@@ -52,12 +52,12 @@ export default function TableBody({
                 tableRows.length > 0 &&
                 tableRows.map((data, rowIndex) => (
                     <RenderRow
+                        columnOrder={columnOrder}
+                        columns={state.columns}
                         data={data}
                         key={rowIndex}
                         rowIndex={rowIndex}
                         selectedRows={state.selectedRows}
-                        columns={state.columns}
-                        columnOrder={columnOrder}
                         selectRowUpdate={selectRowUpdate}
                     />
                 ))}
@@ -66,6 +66,7 @@ export default function TableBody({
                 <DataTableBodyRow isRowSelectable={false}>
                     <TableBodyCell
                         className={classes.emptyTitle}
+                        colIndex={0}
                         colSpan={
                             options.selectableRows !== 'none' ||
                             options.expandableRows
@@ -73,9 +74,8 @@ export default function TableBody({
                                 : visibleColCnt
                         }
                         dataIndex={-1}
-                        colIndex={0}
-                        rowIndex={0}
                         print
+                        rowIndex={0}
                         value={textLabels.body.noMatch}
                     />
                 </DataTableBodyRow>
@@ -92,9 +92,15 @@ export interface DataTableBodyProps {
 const useStyles = tss
     .withName(ComponentClassName.TABLE__BODY)
     .create(({ theme }) => ({
-        root: {},
         emptyTitle: {
             textAlign: 'center'
+        },
+        lastSimpleCell: {
+            [theme.breakpoints.down('sm')]: {
+                '& td:last-child': {
+                    borderBottom: 'none'
+                }
+            }
         },
         lastStackedCell: {
             [theme.breakpoints.down('md')]: {
@@ -103,13 +109,7 @@ const useStyles = tss
                 }
             }
         },
-        lastSimpleCell: {
-            [theme.breakpoints.down('sm')]: {
-                '& td:last-child': {
-                    borderBottom: 'none'
-                }
-            }
-        }
+        root: {}
     }))
 
 function buildRows<Row>(
@@ -217,8 +217,8 @@ function handleRowSelect<Row>(
                 .length === 0
         ) {
             selectedRows.data.push({
-                index: data.index,
-                dataIndex: clickedDataIndex
+                dataIndex: clickedDataIndex,
+                index: data.index
             })
             selectedRows.lookup[clickedDataIndex] = true
         }
@@ -240,8 +240,8 @@ function handleRowSelect<Row>(
                 )
             ) {
                 const lookup = {
-                    index: curIndex,
-                    dataIndex: dataIndex
+                    dataIndex: dataIndex,
+                    index: curIndex
                 }
 
                 // Add adjacent row to temp selectedRow object if it isn't present.
@@ -311,8 +311,8 @@ function RenderRow<Row>({
         index: number
         value: DisplayDataState<Row>[number]['data'][number]
     }[] = columnOrder.map(columnOrderItem => ({
-        value: row[columnOrderItem],
-        index: columnOrderItem
+        index: columnOrderItem,
+        value: row[columnOrderItem]
     }))
 
     function toggleExpandRow(row: { index: number; dataIndex: number }) {
@@ -355,8 +355,8 @@ function RenderRow<Row>({
         const newState = {
             curExpandedRows: hasRemovedRow ? removedRow : [row],
             expandedRows: {
-                lookup: buildMap(expandedRowsData),
-                data: expandedRowsData
+                data: expandedRowsData,
+                lookup: buildMap(expandedRowsData)
             }
         }
 
@@ -371,25 +371,6 @@ function RenderRow<Row>({
     return (
         <>
             <DataTableBodyRow
-                rowSelected={isRowSelected}
-                isRowSelectable={isRowSelectable}
-                onClick={event =>
-                    handleRowClick(
-                        row,
-                        {
-                            rowIndex,
-                            dataIndex: dataIndex
-                        },
-                        event,
-                        options,
-                        toggleExpandRow,
-                        state.selectedRows,
-                        state.expandedRows,
-                        state.previousSelectedRow,
-                        state.displayData,
-                        selectRowUpdate
-                    )
-                }
                 className={cx(
                     {
                         [classes.lastStackedCell]:
@@ -401,20 +382,53 @@ function RenderRow<Row>({
                     },
                     overriddenBodyProps?.className
                 )}
+                isRowSelectable={isRowSelectable}
+                onClick={event =>
+                    handleRowClick(
+                        row,
+                        {
+                            dataIndex: dataIndex,
+                            rowIndex
+                        },
+                        event,
+                        options,
+                        toggleExpandRow,
+                        state.selectedRows,
+                        state.expandedRows,
+                        state.previousSelectedRow,
+                        state.displayData,
+                        selectRowUpdate
+                    )
+                }
+                rowSelected={isRowSelected}
                 {...overriddenBodyProps}
             >
                 <CheckboxCell
+                    checked={isRowSelected}
+                    dataIndex={dataIndex}
+                    hideExpandButton={
+                        !(
+                            options.isRowExpandable?.(
+                                dataIndex,
+                                state.expandedRows
+                            ) ?? true
+                        ) && options.expandableRows
+                    }
                     isHeaderCell={false}
+                    // When rows are expandable, but this particular row isn't expandable, set this to true.
+                    // This will add a new class to the toggle button, `ComponentClassName.TABLE__CHECKBOX_CELL`-expandDisabled.
+                    isRowExpanded={isRowExpanded(dataIndex, state.expandedRows)}
+                    isRowSelectable={isRowSelectable}
                     onChange={event =>
                         handleRowSelect(
                             {
+                                dataIndex,
                                 index: getRowIndex(
                                     rowIndex,
                                     state.page,
                                     state.rowsPerPage,
                                     options
-                                ),
-                                dataIndex
+                                )
                             },
                             event,
                             options,
@@ -426,42 +440,28 @@ function RenderRow<Row>({
                     }
                     onExpand={() =>
                         toggleExpandRow({
+                            dataIndex,
                             index: getRowIndex(
                                 rowIndex,
                                 state.page,
                                 state.rowsPerPage,
                                 options
-                            ),
-                            dataIndex
+                            )
                         })
                     }
-                    checked={isRowSelected}
-                    // When rows are expandable, but this particular row isn't expandable, set this to true.
-                    // This will add a new class to the toggle button, `ComponentClassName.TABLE__CHECKBOX_CELL`-expandDisabled.
-                    hideExpandButton={
-                        !(
-                            options.isRowExpandable?.(
-                                dataIndex,
-                                state.expandedRows
-                            ) ?? true
-                        ) && options.expandableRows
-                    }
-                    isRowExpanded={isRowExpanded(dataIndex, state.expandedRows)}
-                    isRowSelectable={isRowSelectable}
-                    dataIndex={dataIndex}
                 />
 
                 {processedRow.map(
                     column =>
                         columns[column.index]?.display === true && (
                             <TableBodyCell
-                                rowIndex={rowIndex}
                                 colIndex={column.index}
                                 columnHeader={columns[column.index]?.label}
-                                value={column.value}
                                 dataIndex={dataIndex}
-                                print={columns[column.index]?.print ?? true}
                                 key={column.index}
+                                print={columns[column.index]?.print ?? true}
+                                rowIndex={rowIndex}
+                                value={column.value}
                                 {...(columns[column.index]?.setCellProps?.(
                                     column.value,
                                     dataIndex,
@@ -474,8 +474,8 @@ function RenderRow<Row>({
 
             {isRowExpanded(dataIndex, state.expandedRows) &&
                 options.renderExpandableRow?.(row, {
-                    rowIndex,
-                    dataIndex
+                    dataIndex,
+                    rowIndex
                 })}
         </>
     )
@@ -516,8 +516,8 @@ function handleRowClick<Row>(
         getIsRowSelectable(data.dataIndex, selectedRows, options)
     ) {
         const selectRow = {
-            index: data.rowIndex,
-            dataIndex: data.dataIndex
+            dataIndex: data.dataIndex,
+            index: data.rowIndex
         }
 
         handleRowSelect(
@@ -538,8 +538,8 @@ function handleRowClick<Row>(
         (options.isRowExpandable?.(data.dataIndex, expandedRows) ?? true)
     ) {
         toggleExpandRow({
-            index: data.rowIndex,
-            dataIndex: data.dataIndex
+            dataIndex: data.dataIndex,
+            index: data.rowIndex
         })
     }
 

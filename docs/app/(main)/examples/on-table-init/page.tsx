@@ -67,12 +67,14 @@ class Example extends React.Component<
     ]
 
     options: DataTableProps<RowType>['options'] = {
-        filter: true,
-        selectableRows: 'multiple',
-        filterType: 'dropdown',
-        responsive: 'standard',
-        rowsPerPage: 10,
         download: false, // hide csv download option
+        filter: true,
+        filterType: 'dropdown',
+
+        onTableChange: (_, tableState) => {
+            console.log('handleTableChange: ', tableState)
+            this.setState({ table: tableState })
+        },
 
         /** onTableInit gives access to initial MuiDataTable state
          *  if the application needs access to internal state prior to
@@ -83,20 +85,18 @@ class Example extends React.Component<
             console.log('handleTableInit: ', tableState)
             this.setState({ table: tableState })
         },
-
-        onTableChange: (_, tableState) => {
-            console.log('handleTableChange: ', tableState)
-            this.setState({ table: tableState })
-        }
+        responsive: 'standard',
+        rowsPerPage: 10,
+        selectableRows: 'multiple'
     }
 
     render() {
         return (
             <DataTable
-                title={'ACME Employee list'}
-                data={this.data}
                 columns={this.columns}
+                data={this.data}
                 options={this.options}
+                title={'ACME Employee list'}
             />
         )
     }

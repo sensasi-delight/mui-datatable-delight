@@ -16,8 +16,8 @@ describe('<TableBodyCell />', function () {
         },
         'Company',
         {
-            name: 'City',
             label: 'City Label',
+            name: 'City',
             options: { filterType: 'textField' }
         },
         {
@@ -30,8 +30,8 @@ describe('<TableBodyCell />', function () {
     function setup(props?: Partial<DataTableProps>) {
         return render(
             <DataTable
-                data={data}
                 columns={columns}
+                data={data}
                 {...props}
                 options={{
                     selectableRows: 'none',

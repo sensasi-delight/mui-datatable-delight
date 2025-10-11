@@ -12,23 +12,33 @@ const LinkBehavior = forwardRef<HTMLAnchorElement, LinkProps>(
 )
 
 export const THEME = createTheme({
-    cssVariables: {
-        colorSchemeSelector: 'class'
-    },
     colorSchemes: {
         dark: {
             palette: {
-                primary: {
-                    main: blue[500]
-                },
                 AppBar: {
                     darkBg: blue[900]
+                },
+                primary: {
+                    main: blue[500]
                 }
             }
         }
     },
-    typography: {
-        fontFamily: 'var(--font-roboto)'
+
+    components: {
+        MuiButtonBase: {
+            defaultProps: {
+                LinkComponent: LinkBehavior
+            }
+        },
+        MuiLink: {
+            defaultProps: {
+                component: LinkBehavior
+            }
+        }
+    },
+    cssVariables: {
+        colorSchemeSelector: 'class'
     },
     palette: {
         background: {
@@ -39,17 +49,7 @@ export const THEME = createTheme({
             main: blue[800]
         }
     },
-
-    components: {
-        MuiLink: {
-            defaultProps: {
-                component: LinkBehavior
-            }
-        },
-        MuiButtonBase: {
-            defaultProps: {
-                LinkComponent: LinkBehavior
-            }
-        }
+    typography: {
+        fontFamily: 'var(--font-roboto)'
     }
 })

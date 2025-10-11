@@ -49,11 +49,11 @@ export function TableHeadCell<T>({
     }
 
     const sortLabelProps: TableSortLabelProps = {
-        classes: { root: classes.sortLabelRoot },
-        tabIndex: -1,
         active: sortActive,
+        classes: { root: classes.sortLabelRoot },
+        direction: sortDirection,
         hideSortIcon: true,
-        direction: sortDirection
+        tabIndex: -1
     }
 
     const cellClass = cx(className, classes.root, {
@@ -80,29 +80,29 @@ export function TableHeadCell<T>({
     return (
         <TableCell
             className={cellClass}
-            scope="col"
-            sortDirection={sortDirection}
             data-column-index={index + 1}
             onMouseDown={closeTooltip}
+            scope="col"
+            sortDirection={sortDirection}
             {...otherProps}
         >
             {options.sort && column.sort ? (
                 <span className={classes.contentWrapper}>
                     <_Tooltip
-                        title={tooltipTitle}
-                        placement="bottom"
-                        open={sortTooltipOpen}
-                        onClose={() => setSortTooltipOpen(false)}
                         classes={{
-                            tooltip: classes.tooltip,
-                            popper: classes.myPopper
+                            popper: classes.myPopper,
+                            tooltip: classes.tooltip
                         }}
+                        onClose={() => setSortTooltipOpen(false)}
+                        open={sortTooltipOpen}
+                        placement="bottom"
+                        title={tooltipTitle}
                     >
                         <Button
-                            color="inherit"
-                            onKeyUp={handleKeyboardSortInput}
-                            onClick={handleSortClick}
                             className={classes.toolButton}
+                            color="inherit"
+                            onClick={handleSortClick}
+                            onKeyUp={handleKeyboardSortInput}
                         >
                             <div className={classes.sortAction}>
                                 <div
@@ -138,16 +138,16 @@ export function TableHeadCell<T>({
                     {children}
                     {column.hint && (
                         <_Tooltip
-                            title={column.hint}
-                            placement="bottom-end"
-                            open={hintTooltipOpen}
-                            onOpen={() => showHintTooltip()}
-                            onClose={() => setHintTooltipOpen(false)}
                             classes={{
-                                tooltip: classes.tooltip,
-                                popper: classes.myPopper
+                                popper: classes.myPopper,
+                                tooltip: classes.tooltip
                             }}
                             enterDelay={300}
+                            onClose={() => setHintTooltipOpen(false)}
+                            onOpen={() => showHintTooltip()}
+                            open={hintTooltipOpen}
+                            placement="bottom-end"
+                            title={column.hint}
                         >
                             <HelpIcon
                                 className={classes.hintIconAlone}
@@ -162,51 +162,51 @@ export function TableHeadCell<T>({
 }
 
 const useStyles = tss.withName(ComponentClassName.TABLE__HEAD__CELL).create({
-    root: {
-        backgroundColor: 'var(--mui-palette-background-paper)'
+    contentWrapper: {
+        alignItems: 'center',
+        display: 'flex'
+    },
+    data: {
+        display: 'inline-block'
     },
     fixedHeader: {
         position: 'sticky',
         top: '0px'
     },
-    tooltip: {
-        cursor: 'pointer'
+    hintIconAlone: {
+        marginLeft: '3px',
+        marginTop: '-3px'
+    },
+    hintIconWithSortIcon: {
+        marginTop: '-3px'
     },
     myPopper: {
         '&[data-x-out-of-boundaries]': {
             display: 'none'
         }
     },
-    data: {
-        display: 'inline-block'
+    root: {
+        backgroundColor: 'var(--mui-palette-background-paper)'
     },
     sortAction: {
-        display: 'flex',
-        cursor: 'pointer'
-    },
-    sortLabelRoot: {
-        height: '20px'
+        cursor: 'pointer',
+        display: 'flex'
     },
     sortActive: {
         color: 'var(--mui-palette-text-primary)'
     },
+    sortLabelRoot: {
+        height: '20px'
+    },
     toolButton: {
-        textTransform: 'none',
         marginLeft: '-8px',
-        minWidth: 0,
         marginRight: '8px',
+        minWidth: 0,
         paddingLeft: '8px',
-        paddingRight: '8px'
+        paddingRight: '8px',
+        textTransform: 'none'
     },
-    contentWrapper: {
-        display: 'flex',
-        alignItems: 'center'
-    },
-    hintIconAlone: {
-        marginTop: '-3px',
-        marginLeft: '3px'
-    },
-    hintIconWithSortIcon: {
-        marginTop: '-3px'
+    tooltip: {
+        cursor: 'pointer'
     }
 })

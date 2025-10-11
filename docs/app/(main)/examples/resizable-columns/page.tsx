@@ -23,9 +23,9 @@ function Example() {
         {
             name: 'Counter',
             options: {
-                sort: false,
+                customBodyRender: () => <button onClick={incrCount}>+</button>,
                 empty: true,
-                customBodyRender: () => <button onClick={incrCount}>+</button>
+                sort: false
             }
         },
         {
@@ -38,19 +38,18 @@ function Example() {
         {
             name: 'Business Title',
             options: {
-                hint: '?',
                 customBodyRender: val => {
                     return (
-                        <div style={{ position: 'relative', height: '20px' }}>
+                        <div style={{ height: '20px', position: 'relative' }}>
                             <div
                                 style={{
-                                    position: 'absolute',
-                                    top: 0,
-                                    right: 0,
                                     bottom: 0,
-                                    left: 0,
                                     boxSizing: 'border-box',
                                     display: 'block',
+                                    left: 0,
+                                    position: 'absolute',
+                                    right: 0,
+                                    top: 0,
                                     width: '100%'
                                 }}
                             >
@@ -67,7 +66,8 @@ function Example() {
                             </div>
                         </div>
                     )
-                }
+                },
+                hint: '?'
             }
         },
         'Location'
@@ -97,22 +97,22 @@ function Example() {
                 <FormControl>
                     <TextField
                         label="Left Margin"
+                        onChange={e => setMarginLeft(parseInt(e.target.value))}
                         type="number"
                         value={marginLeft}
-                        onChange={e => setMarginLeft(parseInt(e.target.value))}
                     />
                 </FormControl>
                 <FormControlLabel
                     control={
                         <Switch
                             checked={selectableRows === 'multiple'}
+                            color="primary"
                             onChange={event =>
                                 setSelectableRows(
                                     event.target.checked ? 'multiple' : 'none'
                                 )
                             }
                             value="true"
-                            color="primary"
                         />
                     }
                     label="Selectable Rows"
@@ -121,26 +121,26 @@ function Example() {
 
             <div style={{ marginLeft: marginLeft + 'px' }}>
                 <DataTable
-                    title={'ACME Employee list' + ' [' + counter + ']'}
-                    data={data}
                     columns={columns}
+                    data={data}
                     options={options}
+                    title={'ACME Employee list' + ' [' + counter + ']'}
                 />
 
                 <div>
                     <DataTable
-                        title={'ACME Employee list'}
-                        data={data}
                         columns={columns}
+                        data={data}
                         options={options}
+                        title={'ACME Employee list'}
                     />
                 </div>
 
                 <DataTable
-                    title={'ACME Employee list'}
-                    data={data}
                     columns={columns}
+                    data={data}
                     options={options}
+                    title={'ACME Employee list'}
                 />
             </div>
         </>

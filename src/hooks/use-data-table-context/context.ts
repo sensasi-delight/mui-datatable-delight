@@ -12,18 +12,18 @@ const DataTableContext = createContext<ContextValue<unknown>>({
     components: {},
     icons: DEFAULT_ICONS,
     options: DEFAULT_OPTIONS,
-    state: DEFAULT_STATE,
-
-    textLabels: processTextLabels(undefined),
 
     props: {
-        data: [],
-        columns: []
+        columns: [],
+        data: []
     },
+    state: DEFAULT_STATE,
 
     tableRef: {
         current: null
     },
+
+    textLabels: processTextLabels(undefined),
 
     updateCellValueRef: {
         current: undefined

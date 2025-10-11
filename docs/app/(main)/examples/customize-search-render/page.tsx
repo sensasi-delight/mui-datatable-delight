@@ -68,10 +68,10 @@ class Example extends React.Component {
 
         const options: DataTableProps['options'] = {
             filter: true,
-            selectableRows: 'multiple',
             filterType: 'dropdown',
             responsive: 'vertical',
-            rowsPerPage: 10
+            rowsPerPage: 10,
+            selectableRows: 'multiple'
             // customSearchRender: (
             //     searchText,
             //     handleSearch,
@@ -89,10 +89,10 @@ class Example extends React.Component {
 
         return (
             <DataTable
-                title={'ACME Employee list'}
-                data={data}
                 columns={columns}
+                data={data}
                 options={options}
+                title={'ACME Employee list'}
             />
         )
     }

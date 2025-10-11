@@ -52,8 +52,8 @@ const theData = [
 
 class Example extends React.Component {
     state = {
-        isLoading: false,
-        data: theData
+        data: theData,
+        isLoading: false
     }
 
     // mock async function
@@ -106,7 +106,7 @@ class Example extends React.Component {
             `/myApiServer?filters=${filterList}`,
             filterList as string[][]
         ).then(res => {
-            this.setState({ isLoading: false, data: res.data })
+            this.setState({ data: res.data, isLoading: false })
         })
     }
 
@@ -146,13 +146,6 @@ class Example extends React.Component {
         ]
 
         const options: DataTableProps['options'] = {
-            filter: true, // show the filter icon in the toolbar (true by default)
-            filterType: 'dropdown',
-            responsive: 'standard',
-            serverSide: true,
-            rowsPerPage: 50,
-            rowsPerPageOptions: [50],
-
             // makes it so filters have to be "confirmed" before being applied to the
             // table's internal filterList
             confirmFilters: true,
@@ -162,15 +155,24 @@ class Example extends React.Component {
                 return (
                     <div style={{ marginTop: '40px' }}>
                         <Button
-                            variant="contained"
                             onClick={() =>
                                 this.handleFilterSubmit(applyNewFilters)
                             }
+                            variant="contained"
                         >
                             Apply Filters
                         </Button>
                     </div>
                 )
+            },
+            filter: true, // show the filter icon in the toolbar (true by default)
+            filterType: 'dropdown',
+            onFilterChange: (_, filterList, type) => {
+                if (type === 'chip') {
+                    const newFilters = () => filterList
+                    console.log('updating filters via chip')
+                    this.handleFilterSubmit(newFilters)
+                }
             },
 
             // callback that gets executed when filters are confirmed
@@ -178,20 +180,17 @@ class Example extends React.Component {
                 console.log('onFilterConfirm')
                 console.dir(filterList)
             },
+            onFilterDialogClose: () => {
+                console.log('filter dialog closed')
+            },
 
             onFilterDialogOpen: () => {
                 console.log('filter dialog opened')
             },
-            onFilterDialogClose: () => {
-                console.log('filter dialog closed')
-            },
-            onFilterChange: (_, filterList, type) => {
-                if (type === 'chip') {
-                    const newFilters = () => filterList
-                    console.log('updating filters via chip')
-                    this.handleFilterSubmit(newFilters)
-                }
-            }
+            responsive: 'standard',
+            rowsPerPage: 50,
+            rowsPerPageOptions: [50],
+            serverSide: true
         }
 
         return (
@@ -199,19 +198,19 @@ class Example extends React.Component {
                 {this.state.isLoading && (
                     <div
                         style={{
+                            left: '50%',
                             position: 'absolute',
-                            top: '50%',
-                            left: '50%'
+                            top: '50%'
                         }}
                     >
                         <CircularProgress />
                     </div>
                 )}
                 <DataTable
-                    title={'ACME Employee list'}
-                    data={this.state.data}
                     columns={columns}
+                    data={this.state.data}
                     options={options}
+                    title={'ACME Employee list'}
                 />
             </React.Fragment>
         )

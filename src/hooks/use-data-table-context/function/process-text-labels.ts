@@ -24,6 +24,11 @@ export function processTextLabels(
             noMatch: B?.body?.noMatch ?? A.body.noMatch,
             toolTip: B?.body?.toolTip ?? A.body.toolTip
         },
+        filter: {
+            all: B?.filter?.all ?? A.filter.all,
+            reset: B?.filter?.reset ?? A.filter.reset,
+            title: B?.filter?.title ?? A.filter.title
+        },
         pagination: {
             displayRows: B?.pagination?.displayRows ?? A.pagination.displayRows,
             jumpToPage: B?.pagination?.jumpToPage ?? A.pagination.jumpToPage,
@@ -31,26 +36,22 @@ export function processTextLabels(
             previous: B?.pagination?.previous ?? A.pagination.previous,
             rowsPerPage: B?.pagination?.rowsPerPage ?? A.pagination.rowsPerPage
         },
-        toolbar: {
-            search: B?.toolbar?.search ?? A.toolbar.search,
-            downloadCsv: B?.toolbar?.downloadCsv ?? A.toolbar.downloadCsv,
-            print: B?.toolbar?.print ?? A.toolbar.print,
-            viewColumns: B?.toolbar?.viewColumns ?? A.toolbar.viewColumns,
-            filterTable: B?.toolbar?.filterTable ?? A.toolbar.filterTable
+        selectedRows: {
+            delete: B?.selectedRows?.delete ?? A.selectedRows.delete,
+            deleteAria:
+                B?.selectedRows?.deleteAria ?? A.selectedRows.deleteAria,
+            text: B?.selectedRows?.text ?? A.selectedRows.text
         },
-        filter: {
-            all: B?.filter?.all ?? A.filter.all,
-            title: B?.filter?.title ?? A.filter.title,
-            reset: B?.filter?.reset ?? A.filter.reset
+        toolbar: {
+            downloadCsv: B?.toolbar?.downloadCsv ?? A.toolbar.downloadCsv,
+            filterTable: B?.toolbar?.filterTable ?? A.toolbar.filterTable,
+            print: B?.toolbar?.print ?? A.toolbar.print,
+            search: B?.toolbar?.search ?? A.toolbar.search,
+            viewColumns: B?.toolbar?.viewColumns ?? A.toolbar.viewColumns
         },
         viewColumns: {
             title: B?.viewColumns?.title ?? A.viewColumns.title,
             titleAria: B?.viewColumns?.titleAria ?? A.viewColumns.titleAria
-        },
-        selectedRows: {
-            text: B?.selectedRows?.text ?? A.selectedRows.text,
-            delete: B?.selectedRows?.delete ?? A.selectedRows.delete,
-            deleteAria: B?.selectedRows?.deleteAria ?? A.selectedRows.deleteAria
         }
     }
 }

@@ -58,8 +58,8 @@ class Example extends React.Component {
                 name: 'Phone Number',
                 options: {
                     filter: true,
-                    sort: false,
-                    setCellProps: () => ({ style: { whiteSpace: 'nowrap' } })
+                    setCellProps: () => ({ style: { whiteSpace: 'nowrap' } }),
+                    sort: false
                 }
             }
         ]
@@ -370,18 +370,18 @@ class Example extends React.Component {
         const options: DataTableProps['options'] = {
             filter: true,
             filterType: 'dropdown',
-            responsive: 'standard',
             fixedHeader: true,
             fixedSelectColumn: true,
+            responsive: 'standard',
             tableBodyHeight: '400px'
         }
 
         return (
             <DataTable
-                title={'ACME Employee list'}
-                data={data}
                 columns={columns}
+                data={data}
                 options={options}
+                title={'ACME Employee list'}
             />
         )
     }

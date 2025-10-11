@@ -36,11 +36,11 @@ export default function RowExpansionButton({
 
     return (
         <IconButton
+            className={buttonClass}
+            disabled={options.expandableRowsHeader === false}
             id="expandable-button"
             onClick={onExpand}
             style={{ padding: 0 }}
-            disabled={options.expandableRowsHeader === false}
-            className={buttonClass}
         >
             {isNotExpand ? (
                 <RemoveIcon className={iconIndeterminateClass} />

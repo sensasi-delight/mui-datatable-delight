@@ -13,13 +13,13 @@ class Example extends React.Component {
             {
                 name: 'Name',
                 options: {
-                    filter: false,
                     customBodyRender: (value, _, __, ___, updateValue) => (
                         <TextField
-                            value={value}
                             onChange={event => updateValue(event.target.value)}
+                            value={value}
                         />
-                    )
+                    ),
+                    filter: false
                 }
             },
             {
@@ -31,7 +31,6 @@ class Example extends React.Component {
             {
                 name: 'Location',
                 options: {
-                    filter: true,
                     customBodyRender: (
                         value,
                         _,
@@ -40,57 +39,54 @@ class Example extends React.Component {
                         updateValue
                     ) => (
                         <Cities
-                            value={value?.toString() ?? ''}
-                            index={columnIndex}
                             change={event => updateValue(event)}
+                            index={columnIndex}
+                            value={value?.toString() ?? ''}
                         />
-                    )
+                    ),
+                    filter: true
                 }
             },
             {
                 name: 'Age',
                 options: {
-                    filter: false,
                     customBodyRender: (value, _, __, ___, updateValue) => (
                         <TextField
                             name="age"
-                            value={value ?? ''}
-                            type="number"
                             onChange={event => updateValue(event.target.value)}
+                            type="number"
+                            value={value ?? ''}
                         />
-                    )
+                    ),
+                    filter: false
                 }
             },
             {
                 name: 'Salary',
                 options: {
-                    filter: true,
                     customBodyRender: value => {
                         const nf = new Intl.NumberFormat('en-US', {
-                            style: 'currency',
                             currency: 'USD',
+                            maximumFractionDigits: 2,
                             minimumFractionDigits: 2,
-                            maximumFractionDigits: 2
+                            style: 'currency'
                         })
 
                         return nf.format(value)
-                    }
+                    },
+                    filter: true
                 }
             },
             {
                 name: 'Active',
                 options: {
-                    filter: true,
                     customBodyRender: (value, _, __, ___, updateValue) => {
                         return (
                             <FormControlLabel
-                                label={value ? 'Yes' : 'No'}
-                                value={value ? 'Yes' : 'No'}
                                 control={
                                     <Switch
-                                        color="primary"
                                         checked={Boolean(value)}
-                                        value={value ? 'Yes' : 'No'}
+                                        color="primary"
                                         onChange={event => {
                                             updateValue(
                                                 event.target.value === 'Yes'
@@ -98,11 +94,15 @@ class Example extends React.Component {
                                                     : true
                                             )
                                         }}
+                                        value={value ? 'Yes' : 'No'}
                                     />
                                 }
+                                label={value ? 'Yes' : 'No'}
+                                value={value ? 'Yes' : 'No'}
                             />
                         )
-                    }
+                    },
+                    filter: true
                 }
             }
         ]
@@ -231,10 +231,10 @@ class Example extends React.Component {
 
         return (
             <DataTable
-                title={'ACME Employee list'}
-                data={data}
                 columns={columns}
+                data={data}
                 options={options}
+                title={'ACME Employee list'}
             />
         )
     }

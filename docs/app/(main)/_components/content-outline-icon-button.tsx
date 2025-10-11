@@ -24,19 +24,19 @@ export default function ContentOutlineIconButton() {
 
     return (
         <>
-            <Tooltip title="Outline" arrow>
+            <Tooltip arrow title="Outline">
                 <IconButton
-                    color="primary"
                     aria-controls={open ? 'basic-menu' : undefined}
-                    aria-haspopup="true"
                     aria-expanded={open ? 'true' : undefined}
+                    aria-haspopup="true"
+                    color="primary"
                     onClick={handleClick}
                 >
                     <FormatListBulletedIcon />
                 </IconButton>
             </Tooltip>
 
-            <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
+            <Menu anchorEl={anchorEl} onClose={handleClose} open={open}>
                 <ContentOutlineItems handleClose={handleClose} />
             </Menu>
         </>

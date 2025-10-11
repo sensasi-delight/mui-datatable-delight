@@ -34,11 +34,11 @@ export function ToolbarPrintButton(): ReactElement {
     })
 
     return (
-        <Tooltip title={toolbarTextLabels.print} disableFocusListener>
+        <Tooltip disableFocusListener title={toolbarTextLabels.print}>
             <span>
                 <IconButton
-                    className={classes.root}
                     aria-label={toolbarTextLabels.print}
+                    className={classes.root}
                     disabled={options.print === 'disabled'}
                     onClick={() => handlePrint()}
                     sx={ICON_BUTTON_DEFAULT_SX}

@@ -80,8 +80,8 @@ describe('<BottomBar />', function () {
             textLabels
         ) => (
             <OriginalPaginationFromMui
-                count={rowCount}
                 component="div"
+                count={rowCount}
                 labelRowsPerPage={textLabels.rowsPerPage}
                 onPageChange={(_, page) => changePage(page)}
                 onRowsPerPageChange={event =>

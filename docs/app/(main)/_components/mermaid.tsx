@@ -19,11 +19,11 @@ export function Mermaid({ children }: { children: string }) {
         <Paper
             ref={mermaidRef}
             sx={{
-                p: 4,
-                mt: 3,
-                mb: 4,
                 maxHeight: 500,
-                overflow: 'auto'
+                mb: 4,
+                mt: 3,
+                overflow: 'auto',
+                p: 4
             }}
         >
             {children}

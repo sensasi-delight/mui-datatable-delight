@@ -13,9 +13,9 @@ export default function ContentOutlineItems({
 
     return headings.map(heading => (
         <MenuItem
-            key={heading.id}
-            href={`#${heading.id}`}
             component="a"
+            href={`#${heading.id}`}
+            key={heading.id}
             onClick={handleClose}
         >
             <ListItemText inset={heading.tagName === 'H3'}>

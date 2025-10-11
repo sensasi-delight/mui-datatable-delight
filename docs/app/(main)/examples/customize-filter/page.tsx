@@ -44,20 +44,17 @@ class Example extends React.Component {
                 label: 'Modified Title Label',
                 name: 'Title',
                 options: {
-                    filter: true,
                     customFilterListOptions: {
                         render: v =>
                             typeof v === 'string' ? v.toLowerCase() : v
-                    }
+                    },
+                    filter: true
                 }
             },
             {
                 label: 'Location',
                 name: 'Location',
                 options: {
-                    filter: true,
-                    display: true,
-                    filterType: 'custom',
                     customFilterListOptions: {
                         render: v => {
                             if (!Array.isArray(v)) {
@@ -75,13 +72,9 @@ class Example extends React.Component {
                             return filterList
                         }
                     },
+                    display: true,
+                    filter: true,
                     filterOptions: {
-                        logic: (location, filters) => {
-                            if (filters.length)
-                                return !filters.includes(location)
-
-                            return false
-                        },
                         display: (filterList, onChange, index, column) => {
                             const optionValues = [
                                 'Minneapolis',
@@ -95,10 +88,6 @@ class Example extends React.Component {
                                     </InputLabel>
                                     <Select
                                         multiple
-                                        value={filterList[index]}
-                                        renderValue={selected =>
-                                            selected.join(', ')
-                                        }
                                         onChange={event => {
                                             filterList[index] = event.target
                                                 .value as string[]
@@ -109,14 +98,18 @@ class Example extends React.Component {
                                                 column
                                             )
                                         }}
+                                        renderValue={selected =>
+                                            selected.join(', ')
+                                        }
+                                        value={filterList[index]}
                                     >
                                         {optionValues.map(item => (
                                             <MenuItem key={item} value={item}>
                                                 <Checkbox
-                                                    color="primary"
                                                     checked={filterList[
                                                         index
                                                     ]?.includes(item)}
+                                                    color="primary"
                                                 />
                                                 <ListItemText primary={item} />
                                             </MenuItem>
@@ -124,16 +117,20 @@ class Example extends React.Component {
                                     </Select>
                                 </FormControl>
                             )
+                        },
+                        logic: (location, filters) => {
+                            if (filters.length)
+                                return !filters.includes(location)
+
+                            return false
                         }
-                    }
+                    },
+                    filterType: 'custom'
                 }
             },
             {
                 name: 'Age',
                 options: {
-                    filter: true,
-                    filterType: 'custom',
-
                     // if the below value is set, these values will be used every time the table is rendered.
                     // it's best to let the table internally manage the filterList
                     // filterList: [25, 50],
@@ -177,25 +174,14 @@ class Example extends React.Component {
                             return filterList
                         }
                     },
+                    filter: true,
                     filterOptions: {
-                        names: [],
-                        logic(age, filters) {
-                            if (filters[0] && filters[1]) {
-                                return age < filters[0] || age > filters[1]
-                            } else if (filters[0]) {
-                                return age < filters[0]
-                            } else if (filters[1]) {
-                                return age > filters[1]
-                            }
-                            return false
-                        },
                         display: (filterList, onChange, index, column) => (
                             <div>
                                 <FormLabel>Age</FormLabel>
                                 <FormGroup row>
                                     <TextField
                                         label="min"
-                                        value={filterList[index]?.[0] ?? ''}
                                         onChange={event => {
                                             const currentColumnFilterList =
                                                 filterList[index]
@@ -219,13 +205,13 @@ class Example extends React.Component {
                                             )
                                         }}
                                         style={{
-                                            width: '45%',
-                                            marginRight: '5%'
+                                            marginRight: '5%',
+                                            width: '45%'
                                         }}
+                                        value={filterList[index]?.[0] ?? ''}
                                     />
                                     <TextField
                                         label="max"
-                                        value={filterList[index]?.[1] ?? ''}
                                         onChange={event => {
                                             const currentColumnFilterList =
                                                 filterList[index]
@@ -249,6 +235,7 @@ class Example extends React.Component {
                                             )
                                         }}
                                         style={{ width: '45%' }}
+                                        value={filterList[index]?.[1] ?? ''}
                                     />
                                     <FormControlLabel
                                         control={
@@ -269,8 +256,20 @@ class Example extends React.Component {
                                     />
                                 </FormGroup>
                             </div>
-                        )
+                        ),
+                        logic(age, filters) {
+                            if (filters[0] && filters[1]) {
+                                return age < filters[0] || age > filters[1]
+                            } else if (filters[0]) {
+                                return age < filters[0]
+                            } else if (filters[1]) {
+                                return age > filters[1]
+                            }
+                            return false
+                        },
+                        names: []
                     },
+                    filterType: 'custom',
                     print: false
                 }
             },
@@ -278,9 +277,7 @@ class Example extends React.Component {
                 name: 'Salary',
                 options: {
                     filter: true,
-                    filterType: 'checkbox',
                     filterOptions: {
-                        names: ['Lower wages', 'Average wages', 'Higher wages'],
                         logic(salary, filterVal) {
                             const salaryFloat = parseFloat(
                                 salary.replace(/[^\d]/g, '')
@@ -295,8 +292,10 @@ class Example extends React.Component {
                                     salaryFloat >= 200000)
 
                             return !show
-                        }
+                        },
+                        names: ['Lower wages', 'Average wages', 'Higher wages']
                     },
+                    filterType: 'checkbox',
                     sort: false
                 }
             }
@@ -391,19 +390,19 @@ class Example extends React.Component {
                 console.log(colIndex, colName, data)
 
                 return {
+                    className: 'testClass123',
                     color: 'primary',
-                    variant: 'outlined',
-                    className: 'testClass123'
+                    variant: 'outlined'
                 }
             }
         }
 
         return (
             <DataTable
-                title={'ACME Employee list - customizeFilter'}
-                data={data}
                 columns={columns}
+                data={data}
                 options={options}
+                title={'ACME Employee list - customizeFilter'}
             />
         )
     }

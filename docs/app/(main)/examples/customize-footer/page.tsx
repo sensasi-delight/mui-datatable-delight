@@ -74,11 +74,6 @@ function Example() {
     ]
 
     const options: DataTableProps<(typeof data)[number]>['options'] = {
-        filter: true,
-        filterType: 'dropdown',
-        responsive: 'vertical',
-        tableBodyHeight: '500px',
-        rowsPerPage: 10,
         customFooter: (
             count,
             page,
@@ -89,11 +84,11 @@ function Example() {
         ) => {
             return (
                 <CustomFooter
+                    changePage={changePage}
+                    changeRowsPerPage={changeRowsPerPage}
                     count={count}
                     page={page}
                     rowsPerPage={rowsPerPage}
-                    changeRowsPerPage={changeRowsPerPage}
-                    changePage={changePage}
                     textLabels={textLabels}
                 />
             )
@@ -132,8 +127,8 @@ function Example() {
                                 if (col.name === 'Age') {
                                     return (
                                         <TableCell
-                                            key={index}
                                             className={footerClasses}
+                                            key={index}
                                         >
                                             Avg: {avgAge}
                                         </TableCell>
@@ -141,8 +136,8 @@ function Example() {
                                 } else if (col.name === 'Salary') {
                                     return (
                                         <TableCell
-                                            key={index}
                                             className={footerClasses}
+                                            key={index}
                                         >
                                             Avg: {avgSalary}
                                         </TableCell>
@@ -150,8 +145,8 @@ function Example() {
                                 } else {
                                     return (
                                         <TableCell
-                                            key={index}
                                             className={footerClasses}
+                                            key={index}
                                         />
                                     )
                                 }
@@ -161,7 +156,12 @@ function Example() {
                     </TableRow>
                 </TableFooter>
             )
-        }
+        },
+        filter: true,
+        filterType: 'dropdown',
+        responsive: 'vertical',
+        rowsPerPage: 10,
+        tableBodyHeight: '500px'
     }
 
     return (
@@ -171,19 +171,19 @@ function Example() {
                     control={
                         <Switch
                             checked={stickyFooter}
+                            color="primary"
                             onChange={e => setStickyFooter(e.target.checked)}
                             value="stacked"
-                            color="primary"
                         />
                     }
                     label="Sticky Footer"
                 />
             </FormGroup>
             <DataTable
-                title={'ACME Employee list'}
-                data={data}
                 columns={columns}
+                data={data}
                 options={options}
+                title={'ACME Employee list'}
             />
         </>
     )
@@ -195,8 +195,8 @@ const useStyles = tss.create(({ theme }) => ({
         borderBottom: 'none'
     },
     stickyFooterCell: {
-        position: 'sticky',
         bottom: 0,
+        position: 'sticky',
         zIndex: 100
     }
 }))
