@@ -1,33 +1,20 @@
 {
-    "name": "mui-datatable-delight",
-    "version": "2.0.0-experimental.15",
-    "description": "A responsive DataTable component built with MUI for React-based project.",
-    "files": ["./dist"],
-    "types": "./dist/types.d.ts",
-    "main": "./dist/cjs/index.js",
-    "module": "./dist/esm/index.js",
-    "scripts": {
-        "build": "rollup -c",
-        "build:docs": "typedoc && next build docs",
-        "dev": "next docs",
-        "lint": "biome check",
-        "lint:fix": "biome check --write",
-        "prepublishOnly": "bun run build",
-        "prettier": "prettier './**/*.{js,jsx,ts,tsx,mjs,cjs}' --write",
-        "test": "vitest run --coverage",
-        "test:watch": "vitest watch --silent=false"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/sensasi-delight/mui-datatable-delight.git"
-    },
-    "keywords": ["data table", "mui", "material ui", "react"],
     "author": "gregnb <gregnb@gmail.com>",
-    "license": "MIT",
     "bugs": {
         "url": "https://github.com/sensasi-delight/mui-datatable-delight/issues"
     },
-    "homepage": "https://mui-datatable-delight.vercel.app",
+    "dependencies": {
+        "@emotion/react": "^11.14.0",
+        "@emotion/styled": "^11.14.1",
+        "@mui/icons-material": "^7.3.4",
+        "@mui/material": "^7.3.4",
+        "react": "^19.2.0",
+        "react-dom": "^19.2.0",
+        "react-fast-compare": "^3.2.2",
+        "react-to-print": "^3.1.1",
+        "tss-react": "^4.9.19"
+    },
+    "description": "A responsive DataTable component built with MUI for React-based project.",
     "devDependencies": {
         "@babel/preset-react": "^7.27.1",
         "@babel/preset-typescript": "^7.27.1",
@@ -65,15 +52,28 @@
         "vite-tsconfig-paths": "^5.1.4",
         "vitest": "^3.2.4"
     },
-    "dependencies": {
-        "@emotion/react": "^11.14.0",
-        "@emotion/styled": "^11.14.1",
-        "@mui/icons-material": "^7.3.4",
-        "@mui/material": "^7.3.4",
-        "react": "^19.2.0",
-        "react-dom": "^19.2.0",
-        "react-fast-compare": "^3.2.2",
-        "react-to-print": "^3.1.1",
-        "tss-react": "^4.9.19"
-    }
+    "files": ["./dist"],
+    "homepage": "https://mui-datatable-delight.vercel.app",
+    "keywords": ["data table", "mui", "material ui", "react"],
+    "license": "MIT",
+    "main": "./dist/cjs/index.js",
+    "module": "./dist/esm/index.js",
+    "name": "mui-datatable-delight",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/sensasi-delight/mui-datatable-delight.git"
+    },
+    "scripts": {
+        "build": "rollup -c",
+        "build:docs": "typedoc && next build docs",
+        "dev": "next docs",
+        "lint": "biome check",
+        "lint:fix": "biome check --write",
+        "prepublishOnly": "bun run build",
+        "prettier": "prettier './**/*.{js,jsx,ts,tsx,mjs,cjs}' --write",
+        "test": "vitest run --coverage",
+        "test:watch": "vitest watch --silent=false"
+    },
+    "types": "./dist/types.d.ts",
+    "version": "2.0.0-experimental.15"
 }

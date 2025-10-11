@@ -1,28 +1,28 @@
 {
-    "extends": "../tsconfig.json",
     "compilerOptions": {
         "allowJs": true,
         "incremental": true,
         "jsx": "preserve",
+
+        "paths": {
+            "@/*": ["../*"],
+            "@src": ["../src"],
+            "@src/*": ["../src/*"]
+        },
         "plugins": [
             {
                 "name": "next"
             }
         ],
-        "resolveJsonModule": true,
-
-        "paths": {
-            "@src": ["../src"],
-            "@src/*": ["../src/*"],
-            "@/*": ["../*"]
-        }
+        "resolveJsonModule": true
     },
+    "exclude": ["node_modules"],
+    "extends": "../tsconfig.json",
     "include": [
         "next-env.d.ts",
         ".next/types/**/*.ts",
         "**/*.ts",
         "**/*.tsx",
         "../src"
-    ],
-    "exclude": ["node_modules"]
+    ]
 }

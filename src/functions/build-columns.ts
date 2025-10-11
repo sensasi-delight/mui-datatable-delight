@@ -31,17 +31,17 @@ export default function buildColumns<T>(
         const isColumnString = typeof column === 'string'
 
         const columnOptions = {
-            name: isColumnString ? column : column.name,
-            label: isColumnString ? column : (column.label ?? column.name),
             download: true,
             empty: false,
             filter: true,
+            label: isColumnString ? column : (column.label ?? column.name),
+            name: isColumnString ? column : column.name,
             print: true,
             searchable: true,
             sort: true,
             sortCompare: undefined,
-            sortThirdClickReset: false,
             sortDescFirst: false,
+            sortThirdClickReset: false,
             viewColumns: true
         }
 
@@ -102,5 +102,5 @@ export default function buildColumns<T>(
         columnOrder = prevColumnOrder
     }
 
-    return { columns: columnData, filterData, filterList, columnOrder }
+    return { columnOrder, columns: columnData, filterData, filterList }
 }

@@ -49,9 +49,7 @@ export default function ToolbarDataFilterBoxFilters<T>({
         if (filterType === FilterType.CHECKBOX) {
             return (
                 <DataTableToolbarFilterCheckbox
-                    index={index}
                     column={column}
-                    key={index}
                     filterData={state.filterData}
                     filterList={filterList}
                     handleCheckboxChange={value => {
@@ -64,6 +62,8 @@ export default function ToolbarDataFilterBoxFilters<T>({
                             )
                         }
                     }}
+                    index={index}
+                    key={index}
                 />
             )
         }
@@ -72,10 +72,10 @@ export default function ToolbarDataFilterBoxFilters<T>({
             return (
                 <DataTableToolbarFilterMultiselect
                     column={column}
-                    index={index}
-                    key={index}
                     filterData={state.filterData}
                     filterList={filterList}
+                    index={index}
+                    key={index}
                     onSelectChange={event => {
                         if (options.confirmFilters !== true) {
                             filterUpdate?.(
@@ -93,8 +93,8 @@ export default function ToolbarDataFilterBoxFilters<T>({
         if (filterType === FilterType.TEXTFIELD) {
             return (
                 <RenderTextField
-                    filterList={filterList}
                     column={column}
+                    filterList={filterList}
                     index={index}
                     key={index}
                     onChange={event => {
@@ -117,8 +117,6 @@ export default function ToolbarDataFilterBoxFilters<T>({
                     column={column}
                     filterData={state.filterData}
                     filterList={filterList}
-                    index={index}
-                    key={index}
                     handleCustomChange={(value, index, column) => {
                         if (options.confirmFilters !== true) {
                             filterUpdate?.(
@@ -129,6 +127,8 @@ export default function ToolbarDataFilterBoxFilters<T>({
                             )
                         }
                     }}
+                    index={index}
+                    key={index}
                 />
             )
         }
@@ -161,12 +161,12 @@ export default function ToolbarDataFilterBoxFilters<T>({
 
     return (
         <Grid
+            alignItems="center"
+            className={classes.root}
             container
             direction="row"
             justifyContent="flex-start"
-            alignItems="center"
             spacing={4}
-            className={classes.root}
         >
             {renderedColumns}
         </Grid>
@@ -176,15 +176,7 @@ export default function ToolbarDataFilterBoxFilters<T>({
 const useStyles = tss
     // .withName()
     .create(() => ({
-        root: {},
-        checkboxListTitle: {
-            marginLeft: '7px',
-            marginBottom: '8px',
-            fontSize: '14px',
-            color: 'var(--mui-palette-text-secondary)',
-            textAlign: 'left',
-            fontWeight: 500
-        },
+        checkbox: {},
 
         checkboxFormControl: { margin: '0px' },
 
@@ -192,9 +184,17 @@ const useStyles = tss
             fontSize: '15px',
             marginLeft: '8px'
         },
-        checkboxIcon: { width: '32px', height: '32px' },
-        checkbox: {},
-        checked: {}
+        checkboxIcon: { height: '32px', width: '32px' },
+        checkboxListTitle: {
+            color: 'var(--mui-palette-text-secondary)',
+            fontSize: '14px',
+            fontWeight: 500,
+            marginBottom: '8px',
+            marginLeft: '7px',
+            textAlign: 'left'
+        },
+        checked: {},
+        root: {}
     }))
 
 function DataTableToolbarFilterCheckbox<T>({
@@ -229,8 +229,8 @@ function DataTableToolbarFilterCheckbox<T>({
                     }}
                 >
                     <Typography
-                        variant="body2"
                         className={classes.checkboxListTitle}
+                        variant="body2"
                     >
                         {column.label}
                     </Typography>
@@ -239,26 +239,25 @@ function DataTableToolbarFilterCheckbox<T>({
                     {filterData[index]?.map((filterValue, filterIndex) => (
                         <Grid key={filterIndex}>
                             <FormControlLabel
-                                key={filterIndex}
                                 classes={{
-                                    root: classes.checkboxFormControl,
-                                    label: classes.checkboxFormControlLabel
+                                    label: classes.checkboxFormControlLabel,
+                                    root: classes.checkboxFormControl
                                 }}
                                 control={
                                     <_Checkbox
-                                        data-description="table-filter"
-                                        color="primary"
-                                        className={classes.checkboxIcon}
-                                        onChange={() =>
-                                            handleCheckboxChange(filterValue)
-                                        }
                                         checked={filterList[index]?.includes(
                                             filterValue as string
                                         )}
                                         classes={{
-                                            root: classes.checkbox,
-                                            checked: classes.checked
+                                            checked: classes.checked,
+                                            root: classes.checkbox
                                         }}
+                                        className={classes.checkboxIcon}
+                                        color="primary"
+                                        data-description="table-filter"
+                                        onChange={() =>
+                                            handleCheckboxChange(filterValue)
+                                        }
                                         value={
                                             filterValue != null
                                                 ? filterValue.toString()
@@ -266,6 +265,7 @@ function DataTableToolbarFilterCheckbox<T>({
                                         }
                                     />
                                 }
+                                key={filterIndex}
                                 label={renderItem(filterValue)}
                             />
                         </Grid>
@@ -309,41 +309,41 @@ function DataTableToolbarFilterMultiselect<T>({
                 mt: '16px'
             }}
         >
-            <FormControl key={index} variant="standard" fullWidth>
+            <FormControl fullWidth key={index} variant="standard">
                 <InputLabel htmlFor={column.name}>{column.label}</InputLabel>
 
                 <Select
-                    multiple
                     fullWidth
-                    value={filterList[index] ?? []}
+                    input={<Input id={column.name} name={column.name} />}
+                    multiple
+                    name={column.name}
+                    onChange={onSelectChange}
                     renderValue={selected =>
                         selected.map(renderItem).join(', ')
                     }
-                    name={column.name}
-                    onChange={onSelectChange}
-                    input={<Input name={column.name} id={column.name} />}
+                    value={filterList[index] ?? []}
                 >
                     {filterData[index]?.map((filterValue, filterIndex) => (
                         <MenuItem
-                            value={filterValue as string}
                             key={filterIndex + 1}
+                            value={filterValue as string}
                         >
                             <_Checkbox
-                                data-description="table-filter"
-                                color="primary"
                                 checked={filterList[index]?.includes(
                                     filterValue as string
                                 )}
+                                classes={{
+                                    checked: classes.checked,
+                                    root: classes.checkbox
+                                }}
+                                className={classes.checkboxIcon}
+                                color="primary"
+                                data-description="table-filter"
                                 value={
                                     filterValue != null
                                         ? filterValue.toString()
                                         : ''
                                 }
-                                className={classes.checkboxIcon}
-                                classes={{
-                                    root: classes.checkbox,
-                                    checked: classes.checked
-                                }}
                             />
                             <ListItemText
                                 primary={renderItem(filterValue) as string}
@@ -383,10 +383,10 @@ function RenderTextField<T>({
             <FormControl fullWidth>
                 <TextField
                     fullWidth
-                    variant="standard"
                     label={column.label}
-                    value={filterList[index]?.toString() ?? ''}
                     onChange={onChange}
+                    value={filterList[index]?.toString() ?? ''}
+                    variant="standard"
                 />
             </FormControl>
         </Grid>
@@ -442,7 +442,7 @@ function RenderCustomField<T>({
                 mt: '16px'
             }}
         >
-            <FormControl key={index} fullWidth>
+            <FormControl fullWidth key={index}>
                 {display(
                     filterList,
                     handleCustomChange,
@@ -482,27 +482,27 @@ function RenderSelect<T>({
                 mt: '16px'
             }}
         >
-            <FormControl key={index} variant="standard" fullWidth>
+            <FormControl fullWidth key={index} variant="standard">
                 <InputLabel htmlFor={column.name}>{column.label}</InputLabel>
                 <Select
                     fullWidth
+                    input={<Input id={column.name} name={column.name} />}
+                    name={column.name}
+                    onChange={onChange}
                     value={
                         filterList[index]?.length
                             ? filterList[index]?.toString()
                             : textLabels.filter.all
                     }
-                    name={column.name}
-                    onChange={onChange}
-                    input={<Input name={column.name} id={column.name} />}
                 >
-                    <MenuItem value={textLabels.filter.all} key={0}>
+                    <MenuItem key={0} value={textLabels.filter.all}>
                         {textLabels.filter.all}
                     </MenuItem>
 
                     {filterData[index]?.map((filterValue, filterIndex) => (
                         <MenuItem
-                            value={filterValue as string}
                             key={filterIndex + 1}
+                            value={filterValue as string}
                         >
                             {renderItem(filterValue)}
                         </MenuItem>

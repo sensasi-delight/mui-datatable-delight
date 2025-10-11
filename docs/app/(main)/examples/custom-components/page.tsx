@@ -35,10 +35,10 @@ import TableViewCol from './_table-view-col'
 const CustomTooltip = ({ title, children }: TooltipProps) => {
     return (
         <MuiTooltip
-            title={title}
+            leaveDelay={250}
             TransitionComponent={Fade}
             TransitionProps={{ timeout: 250 }}
-            leaveDelay={250}
+            title={title}
         >
             {children}
         </MuiTooltip>
@@ -70,9 +70,6 @@ class Example extends React.Component {
             {
                 name: 'Company',
                 options: {
-                    filter: true,
-                    filterType: 'custom',
-                    filterList: ['Test Corp'],
                     customFilterListOptions: {
                         render: v =>
                             typeof v === 'string' && v.length !== 0
@@ -80,14 +77,9 @@ class Example extends React.Component {
                                 : false,
                         update: filterList => filterList
                     },
+                    filter: true,
+                    filterList: ['Test Corp'],
                     filterOptions: {
-                        names: [],
-                        logic(status, filter) {
-                            if (filter.length > 0) {
-                                return status !== filter[0]
-                            }
-                            return false
-                        },
                         display: (filterList, onChange, index, column) => (
                             <Select
                                 onChange={event => {
@@ -120,13 +112,21 @@ class Example extends React.Component {
                                     {'Other Corp'}
                                 </MenuItem>
                             </Select>
-                        )
-                    }
+                        ),
+                        logic(status, filter) {
+                            if (filter.length > 0) {
+                                return status !== filter[0]
+                            }
+                            return false
+                        },
+                        names: []
+                    },
+                    filterType: 'custom'
                 }
             },
             {
-                name: 'City',
                 label: 'City Label',
+                name: 'City',
                 options: { filterList: ['Dallas'] }
             },
             { name: 'State' },
@@ -134,10 +134,10 @@ class Example extends React.Component {
                 name: 'Empty',
                 options: {
                     empty: true,
-                    filterType: 'checkbox',
                     filterOptions: {
                         renderValue: val => val ?? '(Empty)'
-                    }
+                    },
+                    filterType: 'checkbox'
                 }
             }
         ]
@@ -158,18 +158,18 @@ class Example extends React.Component {
 
         return (
             <DataTable
-                title={'ACME Employee list'}
-                data={data}
                 columns={columns}
-                options={options}
                 components={{
-                    // FilteredValuesList: CustomFilterList,
-                    Tooltip: CustomTooltip,
                     Checkbox: CustomCheckbox,
 
                     // @ts-expect-error  WILL FIX THIS LATER
-                    ColumnVisibilitiesBox: TableViewCol
+                    ColumnVisibilitiesBox: TableViewCol,
+                    // FilteredValuesList: CustomFilterList,
+                    Tooltip: CustomTooltip
                 }}
+                data={data}
+                options={options}
+                title={'ACME Employee list'}
             />
         )
     }

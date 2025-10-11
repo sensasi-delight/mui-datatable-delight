@@ -46,14 +46,14 @@ export default function CustomSearchRender(props: {
                 // ref={el => (rootRef = el)} // CAN'T FOUND THE `rootRef` VAR
             >
                 <TextField
-                    placeholder={'Custom TableSearch without search icon'}
                     className={classes.searchText}
+                    fullWidth={true}
                     InputProps={{
                         'aria-label': textLabels.toolbar.search
                     }}
-                    value={searchText ?? ''}
                     onChange={handleTextChange}
-                    fullWidth={true}
+                    placeholder={'Custom TableSearch without search icon'}
+                    value={searchText ?? ''}
                     // inputRef={el => (searchField = el)} // CAN'T FOUND THE `searchField` VAR
                 />
                 <IconButton className={classes.clearIcon} onClick={onHide}>
@@ -65,16 +65,16 @@ export default function CustomSearchRender(props: {
 }
 
 const useStyles = tss.create(({ theme }) => ({
+    clearIcon: {
+        '&:hover': {
+            color: theme.palette.error.main
+        }
+    },
     main: {
         display: 'flex',
         flex: '1 0 auto'
     },
     searchText: {
         flex: '0.8 0'
-    },
-    clearIcon: {
-        '&:hover': {
-            color: theme.palette.error.main
-        }
     }
 }))

@@ -14,9 +14,9 @@ function Cities({
     return (
         <FormControl>
             <Select
-                value={value}
                 onChange={event => change(event.target.value, index)}
                 style={{ fontSize: 'inherit' }}
+                value={value}
             >
                 {cities.map((city, index) => (
                     <MenuItem key={index} value={city}>

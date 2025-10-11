@@ -9,8 +9,8 @@ class Example extends React.Component {
             {
                 name: 'Name',
                 options: {
-                    filter: true,
-                    display: 'excluded'
+                    display: 'excluded',
+                    filter: true
                 }
             },
             {
@@ -23,8 +23,8 @@ class Example extends React.Component {
             {
                 name: 'Location',
                 options: {
-                    print: false,
-                    filter: false
+                    filter: false,
+                    print: false
                 }
             },
             {
@@ -135,7 +135,6 @@ class Example extends React.Component {
         const options: DataTableProps['options'] = {
             filter: true,
             filterType: 'dropdown',
-            responsive: 'standard',
             onDownload: (buildHead, buildBody, columns, data) => {
                 // Data for building a custom head and body with the onDownload option
                 const headerNames = [
@@ -148,28 +147,29 @@ class Example extends React.Component {
 
                 const newHeaderCols = columns.map((column, i) => ({
                     ...column,
-                    label: headerNames[i] ?? '',
-                    download: true
+                    download: true,
+                    label: headerNames[i] ?? ''
                 }))
 
                 return (
                     buildHead(newHeaderCols) +
                     buildBody(
                         data.concat({
-                            index: data.length,
-                            data: footerNames
+                            data: footerNames,
+                            index: data.length
                         })
                     )
                 )
-            }
+            },
+            responsive: 'standard'
         }
 
         return (
             <DataTable
-                title={'ACME Employee list'}
-                data={data}
                 columns={columns}
+                data={data}
                 options={options}
+                title={'ACME Employee list'}
             />
         )
     }

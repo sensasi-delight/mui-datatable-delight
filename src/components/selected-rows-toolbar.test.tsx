@@ -9,21 +9,21 @@ describe('<SelectedRowsToolbar />', function () {
         const selectRowUpdate = vi.fn()
 
         return {
-            selectRowUpdate,
             result: render(
                 <DataTableContextProvider
                     datatableProps={{
+                        columns: ['c1', 'c2', 'c3'],
                         data: [
                             [1, 2, 3],
                             [4, 5, 6]
                         ],
-                        columns: ['c1', 'c2', 'c3'],
                         ...props
                     }}
                 >
                     <SelectedRowsToolbar selectRowUpdate={selectRowUpdate} />
                 </DataTableContextProvider>
-            )
+            ),
+            selectRowUpdate
         }
     }
 
@@ -116,12 +116,12 @@ describe('<SelectedRowsToolbar />', function () {
         expect(() =>
             setup({
                 options: {
-                    selectableRows: 'single',
                     customToolbarSelect: (_, __, setSelectedRows) => {
                         setSelectedRows([1, 2])
 
                         return <></>
-                    }
+                    },
+                    selectableRows: 'single'
                 }
             })
         ).toThrowError()

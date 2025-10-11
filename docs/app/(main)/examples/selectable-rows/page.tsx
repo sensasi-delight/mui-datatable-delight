@@ -58,8 +58,8 @@ class Example extends React.Component<
 
         this.state = {
             data,
-            selectableRowsHideCheckboxes: false,
-            rowsSelected: []
+            rowsSelected: [],
+            selectableRowsHideCheckboxes: false
         }
     }
 
@@ -85,14 +85,34 @@ class Example extends React.Component<
             //     }
             // },
             filter: true,
-            selectableRows: 'multiple',
-            selectableRowsOnClick: true,
-            selectableRowsHideCheckboxes:
-                this.state.selectableRowsHideCheckboxes,
             filterType: 'dropdown',
-            responsive: 'vertical',
-            rowsPerPage: 10,
-            rowsSelected: this.state.rowsSelected,
+            isRowSelectable: (dataIndex, selectedRows) => {
+                //prevents selection of any additional row after the third
+                if (
+                    selectedRows.data.length > 2 &&
+                    selectedRows.data.filter(d => d.dataIndex === dataIndex)
+                        .length === 0
+                )
+                    return false
+
+                //prevents selection of row with title "Attorney"
+                return data[dataIndex]?.[1] != 'Attorney'
+            },
+            onCellClick: (cellData, cellMeta) => {
+                console.log(cellData, cellMeta)
+            },
+            onChangePage: numberRows => {
+                console.log(numberRows)
+            },
+            onColumnSortChange: (column, direction) => {
+                console.log(column, direction)
+            },
+            onFilterChange: (column, filters) => {
+                console.log(column, filters)
+            },
+            onRowClick: (rowData, rowState) => {
+                console.log(rowData, rowState)
+            },
             onRowSelectionChange: (rowsSelectedData, allRows, rowsSelected) => {
                 console.log(rowsSelectedData, allRows, rowsSelected)
                 this.setState({ rowsSelected: rowsSelected ?? [] })
@@ -112,40 +132,20 @@ class Example extends React.Component<
                 })
                 console.log(rowsDeleted, 'were deleted!')
             },
-            onChangePage: numberRows => {
-                console.log(numberRows)
-            },
             onSearchChange: searchText => {
                 console.log(searchText)
-            },
-            onColumnSortChange: (column, direction) => {
-                console.log(column, direction)
             },
             onViewColumnsChange: (column, action) => {
                 console.log(column, action)
             },
-            onFilterChange: (column, filters) => {
-                console.log(column, filters)
-            },
-            onCellClick: (cellData, cellMeta) => {
-                console.log(cellData, cellMeta)
-            },
-            onRowClick: (rowData, rowState) => {
-                console.log(rowData, rowState)
-            },
-            isRowSelectable: (dataIndex, selectedRows) => {
-                //prevents selection of any additional row after the third
-                if (
-                    selectedRows.data.length > 2 &&
-                    selectedRows.data.filter(d => d.dataIndex === dataIndex)
-                        .length === 0
-                )
-                    return false
-
-                //prevents selection of row with title "Attorney"
-                return data[dataIndex]?.[1] != 'Attorney'
-            },
-            selectableRowsHeader: false
+            responsive: 'vertical',
+            rowsPerPage: 10,
+            rowsSelected: this.state.rowsSelected,
+            selectableRows: 'multiple',
+            selectableRowsHeader: false,
+            selectableRowsHideCheckboxes:
+                this.state.selectableRowsHideCheckboxes,
+            selectableRowsOnClick: true
         }
 
         return (
@@ -161,23 +161,23 @@ class Example extends React.Component<
                                 checked={
                                     this.state.selectableRowsHideCheckboxes
                                 }
+                                color="primary"
                                 onChange={event =>
                                     this.updateSelectableRowsHideCheckboxes(
                                         event.target.checked
                                     )
                                 }
                                 value="selectableRowsHideCheckboxes"
-                                color="primary"
                             />
                         }
                         label="Hide Checkboxes"
                     />
                 </FormGroup>
                 <DataTable
-                    title={'ACME Employee list'}
-                    data={this.state.data}
                     columns={columns}
+                    data={this.state.data}
                     options={options}
+                    title={'ACME Employee list'}
                 />
             </>
         )

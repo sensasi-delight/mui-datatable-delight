@@ -27,26 +27,10 @@ export default function Example() {
 
     return (
         <DataTable
-            title={
-                <Typography variant="h6">
-                    ACME Employee list
-                    {isLoading && (
-                        <CircularProgress
-                            size={24}
-                            style={{
-                                marginLeft: 15,
-                                position: 'relative',
-                                top: 4
-                            }}
-                        />
-                    )}
-                </Typography>
-            }
-            data={data}
             columns={[
                 {
-                    name: 'fullName',
                     label: 'Full Name',
+                    name: 'fullName',
                     options: {
                         customBodyRender: value => {
                             // Here you can render a more complex display.
@@ -57,8 +41,8 @@ export default function Example() {
                             // console.log('customBodyRender')
                             // console.dir(tableMeta)
                             return (
-                                <Box display="flex" gap={2} alignItems="center">
-                                    <Avatar sx={{ width: 24, height: 24 }} />
+                                <Box alignItems="center" display="flex" gap={2}>
+                                    <Avatar sx={{ height: 24, width: 24 }} />
                                     {value}
                                 </Box>
                             )
@@ -66,14 +50,15 @@ export default function Example() {
                     }
                 },
                 {
-                    name: 'title',
-                    label: 'Title'
+                    label: 'Title',
+                    name: 'title'
                 },
                 {
-                    name: 'location',
-                    label: 'Location'
+                    label: 'Location',
+                    name: 'location'
                 }
             ]}
+            data={data}
             options={{
                 count: count,
                 jumpToPage: true,
@@ -103,9 +88,24 @@ export default function Example() {
 
                 rowsPerPage: 5,
                 rowsPerPageOptions: [],
-                serverSide: true,
-                selectableRows: 'none'
+                selectableRows: 'none',
+                serverSide: true
             }}
+            title={
+                <Typography variant="h6">
+                    ACME Employee list
+                    {isLoading && (
+                        <CircularProgress
+                            size={24}
+                            style={{
+                                marginLeft: 15,
+                                position: 'relative',
+                                top: 4
+                            }}
+                        />
+                    )}
+                </Typography>
+            }
         />
     )
 }
@@ -114,102 +114,102 @@ function getAllData() {
     return [
         {
             fullName: 'Gabby George',
-            title: 'Business Analyst',
-            location: 'Minneapolis'
+            location: 'Minneapolis',
+            title: 'Business Analyst'
         },
         {
             fullName: 'Aiden Lloyd',
-            title: 'Business Consultant',
-            location: 'Dallas'
+            location: 'Dallas',
+            title: 'Business Consultant'
         },
         {
             fullName: 'Jaden Collins',
-            title: 'Attorney',
-            location: 'Santa Ana'
+            location: 'Santa Ana',
+            title: 'Attorney'
         },
         {
             fullName: 'Franky Rees',
-            title: 'Business Analyst',
-            location: 'St. Petersburg'
+            location: 'St. Petersburg',
+            title: 'Business Analyst'
         },
         {
             fullName: 'Aaren Rose',
-            title: 'Business Analyst',
-            location: 'Toledo'
+            location: 'Toledo',
+            title: 'Business Analyst'
         },
 
         {
             fullName: 'John George',
-            title: 'Business Analyst',
-            location: 'Washington DC'
+            location: 'Washington DC',
+            title: 'Business Analyst'
         },
         {
             fullName: 'Pat Lloyd',
-            title: 'Computer Programmer',
-            location: 'Baltimore'
+            location: 'Baltimore',
+            title: 'Computer Programmer'
         },
         {
             fullName: 'Joe Joe Collins',
-            title: 'Attorney',
-            location: 'Las Cruces'
+            location: 'Las Cruces',
+            title: 'Attorney'
         },
         {
             fullName: 'Franky Hershy',
-            title: 'Paper Boy',
-            location: 'El Paso'
+            location: 'El Paso',
+            title: 'Paper Boy'
         },
         {
             fullName: 'Aaren Smalls',
-            title: 'Business Analyst',
-            location: 'Tokyo'
+            location: 'Tokyo',
+            title: 'Business Analyst'
         },
 
         {
             fullName: 'Boogie G',
-            title: 'Police Officer',
-            location: 'Unknown'
+            location: 'Unknown',
+            title: 'Police Officer'
         },
         {
             fullName: 'James Roulf',
-            title: 'Business Consultant',
-            location: 'Video Game Land'
+            location: 'Video Game Land',
+            title: 'Business Consultant'
         },
         {
             fullName: 'Mike Moocow',
-            title: 'Burger King Employee',
-            location: 'New York'
+            location: 'New York',
+            title: 'Burger King Employee'
         },
         {
             fullName: 'Mimi Gerock',
-            title: 'Business Analyst',
-            location: 'McCloud'
+            location: 'McCloud',
+            title: 'Business Analyst'
         },
         {
             fullName: 'Jason Evans',
-            title: 'Business Analyst',
-            location: 'Mt Shasta'
+            location: 'Mt Shasta',
+            title: 'Business Analyst'
         },
 
         {
             fullName: 'Simple Sam',
-            title: 'Business Analyst',
-            location: 'Mt Shasta'
+            location: 'Mt Shasta',
+            title: 'Business Analyst'
         },
         {
             fullName: 'Marky Mark',
-            title: 'Business Consultant',
-            location: 'Las Cruces'
+            location: 'Las Cruces',
+            title: 'Business Consultant'
         },
-        { fullName: 'Jaden Jam', title: 'Attorney', location: 'El Paso' },
+        { fullName: 'Jaden Jam', location: 'El Paso', title: 'Attorney' },
         {
             fullName: 'Holly Jo',
-            title: 'Business Analyst',
-            location: 'St. Petersburg'
+            location: 'St. Petersburg',
+            title: 'Business Analyst'
         },
         {
             fullName: 'Suzie Q',
-            title: 'Business Analyst',
-            location: 'New York'
+            location: 'New York',
+            title: 'Business Analyst'
         }
     ]
 }

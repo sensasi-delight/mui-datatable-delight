@@ -191,9 +191,6 @@ class Example extends React.Component<
             {
                 name: 'Delete',
                 options: {
-                    filter: false,
-                    sort: false,
-                    empty: true,
                     customBodyRenderLite: () => {
                         return (
                             <button
@@ -206,15 +203,15 @@ class Example extends React.Component<
                                 Delete
                             </button>
                         )
-                    }
+                    },
+                    empty: true,
+                    filter: false,
+                    sort: false
                 }
             },
             {
                 name: 'Edit',
                 options: {
-                    filter: false,
-                    sort: false,
-                    empty: true,
                     customBodyRenderLite: (dataIndex, rowIndex) => {
                         return (
                             <button
@@ -227,7 +224,10 @@ class Example extends React.Component<
                                 Edit
                             </button>
                         )
-                    }
+                    },
+                    empty: true,
+                    filter: false,
+                    sort: false
                 }
             },
             {
@@ -265,9 +265,6 @@ class Example extends React.Component<
             {
                 name: 'Add',
                 options: {
-                    filter: false,
-                    sort: false,
-                    empty: true,
                     customBodyRenderLite: () => {
                         return (
                             <button
@@ -286,7 +283,10 @@ class Example extends React.Component<
                                 Add
                             </button>
                         )
-                    }
+                    },
+                    empty: true,
+                    filter: false,
+                    sort: false
                 }
             }
         ]
@@ -294,7 +294,10 @@ class Example extends React.Component<
         const options: DataTableProps['options'] = {
             filter: true,
             filterType: 'dropdown',
-            responsive: 'vertical',
+            onChangePage: currentPage =>
+                console.log('currentPage: ', currentPage),
+            onChangeRowsPerPage: numberOfRows =>
+                console.log('numberOfRows: ', numberOfRows),
             onColumnSortChange: (changedColumn, direction) =>
                 console.log(
                     'changedColumn: ',
@@ -302,18 +305,15 @@ class Example extends React.Component<
                     'direction: ',
                     direction
                 ),
-            onChangeRowsPerPage: numberOfRows =>
-                console.log('numberOfRows: ', numberOfRows),
-            onChangePage: currentPage =>
-                console.log('currentPage: ', currentPage)
+            responsive: 'vertical'
         }
 
         return (
             <DataTable
-                title="ACME Employee list"
-                data={this.state.data}
                 columns={columns}
+                data={this.state.data}
                 options={options}
+                title="ACME Employee list"
             />
         )
     }

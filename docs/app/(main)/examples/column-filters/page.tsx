@@ -9,9 +9,9 @@ class Example extends React.Component {
             {
                 name: 'Name',
                 options: {
+                    customFilterListOptions: { render: v => `Name: ${v}` },
                     filter: true,
                     filterList: ['Franky Miles'],
-                    customFilterListOptions: { render: v => `Name: ${v}` },
                     filterOptions: {
                         names: ['a', 'b', 'c', 'Business Analyst']
                     }
@@ -20,9 +20,9 @@ class Example extends React.Component {
             {
                 name: 'Title',
                 options: {
+                    customFilterListOptions: { render: v => `Title: ${v}` },
                     filter: true,
                     filterList: ['Business Analyst'],
-                    customFilterListOptions: { render: v => `Title: ${v}` },
                     filterType: 'textField' // set filterType's at the column level
                 }
             },
@@ -38,15 +38,15 @@ class Example extends React.Component {
                     customBodyRenderLite: dataIndex => {
                         return data[dataIndex]?.[3]
                     },
-                    filter: true,
-                    customFilterListOptions: { render: v => `Age: ${v}` }
+                    customFilterListOptions: { render: v => `Age: ${v}` },
+                    filter: true
                 }
             },
             {
                 name: 'Salary',
                 options: {
-                    filter: true,
                     customFilterListOptions: { render: v => `Salary: ${v}` },
+                    filter: true,
                     sort: false
                 }
             }
@@ -110,21 +110,21 @@ class Example extends React.Component {
 
         const options: DataTableProps['options'] = {
             filter: true,
+            filterType: 'dropdown',
             onFilterChange: (changedColumn, filterList) => {
                 console.log(changedColumn, filterList)
             },
-            selectableRows: 'multiple',
-            filterType: 'dropdown',
             responsive: 'vertical',
-            rowsPerPage: 10
+            rowsPerPage: 10,
+            selectableRows: 'multiple'
         }
 
         return (
             <DataTable
-                title={'ACME Employee list'}
-                data={data}
                 columns={columns}
+                data={data}
                 options={options}
+                title={'ACME Employee list'}
             />
         )
     }

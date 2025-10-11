@@ -1,31 +1,27 @@
 {
     "compilerOptions": {
         "esModuleInterop": true,
-        "skipLibCheck": true,
-        "target": "ES2022",
-        "verbatimModuleSyntax": true,
-
-        /* Bundler mode */
-        "jsx": "react-jsx",
         "isolatedModules": true,
-        "moduleResolution": "bundler",
+        "jsx": "react-jsx",
+        "lib": ["ES2022", "DOM", "DOM.Iterable"],
         "module": "ESNext",
         "moduleDetection": "force",
+        "moduleResolution": "bundler",
         "noEmit": true,
-
-        /* Linting */
-        "lib": ["ES2022", "DOM", "DOM.Iterable"],
         "noFallthroughCasesInSwitch": true,
         "noUncheckedIndexedAccess": true,
         "noUnusedLocals": true,
         "noUnusedParameters": true,
-        "strict": true,
 
         "paths": {
+            "@/*": ["./*"],
             "@src": ["./src"],
-            "@src/*": ["./src/*"],
-            "@/*": ["./*"]
-        }
+            "@src/*": ["./src/*"]
+        },
+        "skipLibCheck": true,
+        "strict": true,
+        "target": "ES2022",
+        "verbatimModuleSyntax": true
     },
     "exclude": [
         "node_modules",

@@ -31,51 +31,48 @@ interface RowType {
 
 const creditCards: RowType[] = [
     {
-        name: 'Tom Tallis',
         cardNumber: '5500005555555559',
         cvc: '582',
-        expiry: '02/24'
+        expiry: '02/24',
+        name: 'Tom Tallis'
     },
     {
-        name: 'Rich Harris',
         cardNumber: '4444444444444448',
         cvc: '172',
-        expiry: '03/22'
+        expiry: '03/22',
+        name: 'Rich Harris'
     },
     {
-        name: 'Moby Dixon',
         cardNumber: '3566003566003566',
         cvc: '230',
-        expiry: '12/25'
+        expiry: '12/25',
+        name: 'Moby Dixon'
     }
 ]
 
 function Example() {
     return (
         <DataTable
-            title="Cards"
-            data={creditCards}
             columns={[
                 {
-                    name: 'name',
-                    label: 'Name'
+                    label: 'Name',
+                    name: 'name'
                 },
                 {
-                    name: 'cardNumber',
-                    label: 'Card Number'
+                    label: 'Card Number',
+                    name: 'cardNumber'
                 },
                 {
-                    name: 'cvc',
-                    label: 'CVC'
+                    label: 'CVC',
+                    name: 'cvc'
                 },
                 {
-                    name: 'expiry',
-                    label: 'Expiry'
+                    label: 'Expiry',
+                    name: 'expiry'
                 }
             ]}
+            data={creditCards}
             options={{
-                selectableRows: 'none',
-                responsive: 'standard',
                 customRowRender: data => {
                     const { name, cardNumber, cvc, expiry } = data
 
@@ -83,16 +80,19 @@ function Example() {
                         <tr key={cardNumber}>
                             <td colSpan={4} style={{ paddingTop: '10px' }}>
                                 <YourCustomRowComponent
-                                    name={name}
                                     cardNumber={cardNumber}
                                     cvc={cvc}
                                     expiry={expiry}
+                                    name={name}
                                 />
                             </td>
                         </tr>
                     )
-                }
+                },
+                responsive: 'standard',
+                selectableRows: 'none'
             }}
+            title="Cards"
         />
     )
 }

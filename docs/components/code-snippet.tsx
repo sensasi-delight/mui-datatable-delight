@@ -28,17 +28,17 @@ export function CodeSnippet({
 
     return (
         <AlwaysDarkThemeProvider>
-            <Paper elevation={4} sx={{ position: 'relative', my: 3 }}>
+            <Paper elevation={4} sx={{ my: 3, position: 'relative' }}>
                 <Box
                     component="pre"
                     sx={{
-                        maxWidth: '100%',
-                        overflow: 'auto',
                         fontSize: '0.95rem',
-                        p: 2.5,
-                        pt: 2,
+                        maxWidth: '100%',
+                        mb: 5,
                         mt: 3,
-                        mb: 5
+                        overflow: 'auto',
+                        p: 2.5,
+                        pt: 2
                     }}
                 >
                     <code

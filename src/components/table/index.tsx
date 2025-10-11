@@ -36,16 +36,16 @@ export default function Table({ selectRowUpdate }: Props): ReactNode {
     return (
         <MuiTable
             ref={tableRef}
-            tabIndex={0}
             role="grid"
+            tabIndex={0}
             {...tablePropsFromOption}
             className={cx(classes.root, tablePropsFromOption.className)}
         >
             {datatableRootProps?.title && (
                 <caption
                     style={{
-                        position: 'absolute',
-                        left: '-3000px'
+                        left: '-3000px',
+                        position: 'absolute'
                     }}
                 >
                     {datatableRootProps.title}

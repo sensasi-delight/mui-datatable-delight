@@ -74,8 +74,8 @@ export default function TableHead({ selectRowUpdate }: Props): ReactNode {
         }
 
         const newSortOrder: DataTableSortOrderOption = {
-            name: columnName,
-            direction: newOrder
+            direction: newOrder,
+            name: columnName
         }
 
         function getSortDirectionLabel(
@@ -96,8 +96,8 @@ export default function TableHead({ selectRowUpdate }: Props): ReactNode {
         const orderLabel = getSortDirectionLabel(newSortOrder)
 
         let newPartialState: Partial<DataTableState<unknown>> = {
-            announceText: `Table now sorted by ${state.columns[columnIndex]?.name} : ${orderLabel}`,
             activeColumn: columnIndex,
+            announceText: `Table now sorted by ${state.columns[columnIndex]?.name} : ${orderLabel}`,
             sortOrder: newSortOrder
         }
 
@@ -117,9 +117,9 @@ export default function TableHead({ selectRowUpdate }: Props): ReactNode {
             newPartialState = {
                 ...newPartialState,
                 data: sortedData.data,
+                previousSelectedRow: undefined,
                 selectedRows: sortedData.selectedRows,
-                sortOrder: newSortOrder,
-                previousSelectedRow: undefined
+                sortOrder: newSortOrder
             }
 
             newPartialState.displayData = getDisplayData(
@@ -179,9 +179,9 @@ export default function TableHead({ selectRowUpdate }: Props): ReactNode {
         }
 
         return {
+            colPos: idx,
             column,
-            index: colIndex,
-            colPos: idx
+            index: colIndex
         }
     })
 
@@ -199,11 +199,11 @@ export default function TableHead({ selectRowUpdate }: Props): ReactNode {
         >
             <TableRow className={classes.row}>
                 <CheckboxCell
-                    onChange={handleRowSelect}
-                    indeterminate={isIndeterminate}
                     checked={isChecked}
+                    indeterminate={isIndeterminate}
                     isHeaderCell
                     isRowSelectable
+                    onChange={handleRowSelect}
                 />
 
                 {orderedColumns.map(
@@ -221,9 +221,10 @@ export default function TableHead({ selectRowUpdate }: Props): ReactNode {
                                         ...column
                                     }) ?? {}
                                 }
-                                key={index}
-                                index={index}
                                 colPosition={colPos}
+                                column={column}
+                                index={index}
+                                key={index}
                                 sortDirection={
                                     column.name === state.sortOrder?.name &&
                                     state.sortOrder.direction !== 'none'
@@ -231,11 +232,10 @@ export default function TableHead({ selectRowUpdate }: Props): ReactNode {
                                         : undefined
                                 }
                                 toggleSort={handleToggleColumn}
-                                column={column}
                             >
                                 {column.customHeadLabelRender?.({
-                                    index,
                                     colPos,
+                                    index,
                                     ...column
                                 }) ?? column.label}
                             </TableHeadCell>
@@ -249,8 +249,11 @@ export default function TableHead({ selectRowUpdate }: Props): ReactNode {
 const useStyles = tss
     .withName(ComponentClassName.TABLE__HEAD)
     .create(({ theme }) => ({
-        root: {},
-        row: {},
+        responsiveSimple: {
+            [theme.breakpoints.down('sm')]: {
+                display: 'none'
+            }
+        },
         responsiveStacked: {
             [theme.breakpoints.down('md')]: {
                 display: 'none'
@@ -259,9 +262,6 @@ const useStyles = tss
         responsiveStackedAlways: {
             display: 'none'
         },
-        responsiveSimple: {
-            [theme.breakpoints.down('sm')]: {
-                display: 'none'
-            }
-        }
+        root: {},
+        row: {}
     }))

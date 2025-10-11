@@ -12,13 +12,13 @@ export default function Example() {
     ]
 
     const options: DataTableProps['options'] = {
-        filter: false,
-        search: false,
-        print: false,
         download: false,
-        viewColumns: false,
-        responsive: 'vertical'
+        filter: false,
+        print: false,
+        responsive: 'vertical',
+        search: false,
+        viewColumns: false
     }
 
-    return <DataTable data={data} columns={columns} options={options} />
+    return <DataTable columns={columns} data={data} options={options} />
 }

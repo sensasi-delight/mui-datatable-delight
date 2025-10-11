@@ -26,12 +26,12 @@ export default function EditPageButton({ iconOnly }: { iconOnly?: boolean }) {
     if (iconOnly) {
         return (
             <Tooltip
+                arrow
                 title={
                     <>
                         Edit this page <OpenInNew fontSize="inherit" />
                     </>
                 }
-                arrow
             >
                 <IconButton
                     color="primary"
@@ -48,8 +48,8 @@ export default function EditPageButton({ iconOnly }: { iconOnly?: boolean }) {
 
     return (
         <Button
-            startIcon={<GitHub />}
             href={(isExamplePages ? EXAMPLES_PATH : DOCS_PATH) + mdxPath}
+            startIcon={<GitHub />}
             target="_blank"
         >
             Edit this page

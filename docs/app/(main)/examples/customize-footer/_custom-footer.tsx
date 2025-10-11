@@ -22,27 +22,27 @@ export function CustomFooter(props: {
             <button>Custom Option</button>
 
             <MuiTablePagination
-                component="div"
-                count={count}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                labelRowsPerPage={textLabels.rowsPerPage}
-                labelDisplayedRows={({ from, to, count }) =>
-                    `${from}-${to} ${textLabels.displayRows} ${count}`
-                }
                 backIconButtonProps={{
                     'aria-label': textLabels.previous
                 }}
+                component="div"
+                count={count}
+                labelDisplayedRows={({ from, to, count }) =>
+                    `${from}-${to} ${textLabels.displayRows} ${count}`
+                }
+                labelRowsPerPage={textLabels.rowsPerPage}
                 nextIconButtonProps={{
                     'aria-label': textLabels.next
                 }}
-                rowsPerPageOptions={[10, 20, 100]}
                 onPageChange={(_, page) => {
                     props.changePage(page)
                 }}
                 onRowsPerPageChange={event => {
                     props.changeRowsPerPage(parseInt(event.target.value))
                 }}
+                page={page}
+                rowsPerPage={rowsPerPage}
+                rowsPerPageOptions={[10, 20, 100]}
             />
         </div>
     )

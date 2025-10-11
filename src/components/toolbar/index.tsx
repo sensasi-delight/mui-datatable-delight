@@ -127,7 +127,6 @@ export default function Toolbar<T>(props: ToolbarProps<T>): ReactNode {
         const newSearchText = ''
 
         onAction?.(TableAction.SEARCH, {
-            searchText: newSearchText,
             displayData: options.serverSide
                 ? prevState.displayData
                 : getDisplayData(
@@ -138,7 +137,8 @@ export default function Toolbar<T>(props: ToolbarProps<T>): ReactNode {
                       prevState,
                       options,
                       updateCellValueRef
-                  )
+                  ),
+            searchText: newSearchText
         })
 
         options.onSearchChange?.(newSearchText)
@@ -174,7 +174,7 @@ export default function Toolbar<T>(props: ToolbarProps<T>): ReactNode {
                         }}
                     >
                         {typeof datatableRootProps.title === 'string' && (
-                            <Typography variant="h6" component="div">
+                            <Typography component="div" variant="h6">
                                 {datatableRootProps.title}
                             </Typography>
                         )}
@@ -191,8 +191,8 @@ export default function Toolbar<T>(props: ToolbarProps<T>): ReactNode {
                     options.searchAlwaysOpen === true
                 ) && (
                     <_Tooltip
-                        title={toolbarTextLabels.search}
                         disableFocusListener
+                        title={toolbarTextLabels.search}
                     >
                         <span>
                             <IconButton
@@ -279,23 +279,11 @@ const useStyles = tss.withName(ClassName.TOOLBAR).create(({ theme }) => ({
     actions: {
         display: 'flex'
     },
-    root: {
-        display: 'flex',
-        alignItems: 'center',
-        overflowX: 'auto',
-        paddingTop: '12px',
-        paddingBottom: '12px',
-        paddingLeft: '24px',
-        paddingRight: '16px',
 
-        '@media print': {
-            display: 'none !important'
+    filterPaper: {
+        [theme.breakpoints.up('sm')]: {
+            maxWidth: '50%'
         }
-    },
-
-    left: {
-        flex: '1 1 auto',
-        minWidth: '16em'
     },
 
     icon: {
@@ -308,9 +296,20 @@ const useStyles = tss.withName(ClassName.TOOLBAR).create(({ theme }) => ({
         color: 'var(--mui-palette-primary-main)'
     },
 
-    filterPaper: {
-        [theme.breakpoints.up('sm')]: {
-            maxWidth: '50%'
-        }
+    left: {
+        flex: '1 1 auto',
+        minWidth: '16em'
+    },
+    root: {
+        '@media print': {
+            display: 'none !important'
+        },
+        alignItems: 'center',
+        display: 'flex',
+        overflowX: 'auto',
+        paddingBottom: '12px',
+        paddingLeft: '24px',
+        paddingRight: '16px',
+        paddingTop: '12px'
     }
 }))

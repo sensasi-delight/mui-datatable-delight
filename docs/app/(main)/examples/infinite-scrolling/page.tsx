@@ -24,8 +24,6 @@ export default function MessageManager() {
         {
             name: 'Id',
             options: {
-                filter: false,
-                sort: false,
                 customBodyRenderLite: (dataIndex, rowIndex) => {
                     const value = filteredMessages[dataIndex]?.[0]
 
@@ -52,7 +50,9 @@ export default function MessageManager() {
                             {value}*
                         </>
                     )
-                }
+                },
+                filter: false,
+                sort: false
             }
         },
         {
@@ -77,8 +77,8 @@ export default function MessageManager() {
             </Alert>
 
             <DataTable
-                data={filteredMessages}
                 columns={columns}
+                data={filteredMessages}
                 options={options}
             />
         </>
@@ -138,8 +138,8 @@ function buildTestData(count: number, startingIndex: number) {
 
 const options: DataTableProps['options'] = {
     filter: false,
-    fixedHeader: true,
     filterType: 'dropdown',
+    fixedHeader: true,
     onRowClick(rowNode) {
         console.log(rowNode)
     },

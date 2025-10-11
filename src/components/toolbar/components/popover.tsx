@@ -54,7 +54,7 @@ export function ToolbarPopover({
 
     return (
         <>
-            <VendorTooltip title={title} disableFocusListener>
+            <VendorTooltip disableFocusListener title={title}>
                 <span>
                     <IconButton
                         {...iconButtonProps}
@@ -64,21 +64,21 @@ export function ToolbarPopover({
             </VendorTooltip>
 
             <MuiPopover
-                className={classes.root}
-                elevation={2}
-                open={isOpen}
-                TransitionProps={{ onExited: onPopoverExited }}
-                onClose={handleRequestClose}
                 anchorEl={anchorEl.current}
                 anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'center'
+                    horizontal: 'center',
+                    vertical: 'bottom'
                 }}
-                transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'center'
-                }}
+                className={classes.root}
+                elevation={2}
+                onClose={handleRequestClose}
+                open={isOpen}
                 slotProps={slotProps}
+                TransitionProps={{ onExited: onPopoverExited }}
+                transformOrigin={{
+                    horizontal: 'center',
+                    vertical: 'top'
+                }}
             >
                 <IconButton
                     aria-label="Close"

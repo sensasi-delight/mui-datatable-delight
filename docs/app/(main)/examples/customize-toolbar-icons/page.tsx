@@ -71,23 +71,23 @@ class Example extends React.Component {
 
         const options = {
             filter: true,
-            selectableRows: 'multiple' as const,
             filterType: 'dropdown' as const,
             responsive: 'vertical' as const,
-            rowsPerPage: 10
+            rowsPerPage: 10,
+            selectableRows: 'multiple' as const
         }
 
         return (
             <DataTable
-                title="ACME Employee list"
                 icons={{
-                    SearchIcon,
-                    PrintIcon,
                     DownloadIcon,
-                    ViewColumnIcon,
-                    FilterIcon
+                    FilterIcon,
+                    PrintIcon,
+                    SearchIcon,
+                    ViewColumnIcon
                 }}
-                {...{ data, columns, options }}
+                title="ACME Employee list"
+                {...{ columns, data, options }}
             />
         )
     }

@@ -50,9 +50,9 @@ export function DataTableToolbarSearch({
               )
 
         onAction?.(TableAction.SEARCH, {
-            searchText: newSearchText,
+            displayData,
             page: 0,
-            displayData
+            searchText: newSearchText
         })
 
         options.onSearchChange?.(newSearchText)
@@ -83,8 +83,8 @@ export function DataTableToolbarSearch({
                     autoFocus={true}
                     className={classes.textField}
                     fullWidth={true}
-                    onKeyDown={handleKeyDown}
                     onChange={onSearch}
+                    onKeyDown={handleKeyDown}
                     placeholder={options?.searchPlaceholder}
                     value={searchText}
                     variant="standard"
@@ -92,10 +92,10 @@ export function DataTableToolbarSearch({
                 />
 
                 <IconButton
-                    size="small"
-                    className={classes.clearButton}
                     aria-label="Close search bar"
+                    className={classes.clearButton}
                     onClick={onHide}
+                    size="small"
                     style={{ visibility: clearIconVisibility }}
                 >
                     <Clear />
@@ -114,9 +114,9 @@ const useStyles = tss
             }
         },
         root: {
+            alignItems: 'center',
             display: 'flex',
-            flex: '1 0 auto',
-            alignItems: 'center'
+            flex: '1 0 auto'
         },
         searchIcon: {
             color: 'var(--mui-palette-text-secondary)',

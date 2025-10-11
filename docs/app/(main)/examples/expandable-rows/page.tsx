@@ -125,12 +125,11 @@ class Example extends React.Component {
         ]
 
         const options: DataTableProps<(typeof data)[number]>['options'] = {
-            filter: true,
-            filterType: 'dropdown',
-            responsive: 'standard',
             expandableRows: true,
             expandableRowsHeader: true,
             expandableRowsOnClick: true,
+            filter: true,
+            filterType: 'dropdown',
             isRowExpandable: (dataIndex, expandedRows) => {
                 if (dataIndex === 3 || dataIndex === 4) return false
 
@@ -143,7 +142,8 @@ class Example extends React.Component {
                     return false
                 return true
             },
-            rowsExpanded: [0, 1],
+            onRowExpansionChange: (curExpanded, allExpanded, rowsExpanded) =>
+                console.log(curExpanded, allExpanded, rowsExpanded),
             renderExpandableRow: rowData => {
                 const colSpan = rowData?.length + 1
 
@@ -156,16 +156,13 @@ class Example extends React.Component {
                     </TableRow>
                 )
             },
-            onRowExpansionChange: (curExpanded, allExpanded, rowsExpanded) =>
-                console.log(curExpanded, allExpanded, rowsExpanded)
+            responsive: 'standard',
+            rowsExpanded: [0, 1]
         }
 
         return (
             <DataTable
-                title="ACME Employee list"
-                data={data}
                 columns={columns}
-                options={options}
                 components={{
                     RowExpansionButton(props) {
                         if (props.dataIndex === 3 || props.dataIndex === 4)
@@ -174,6 +171,9 @@ class Example extends React.Component {
                         return <RowExpansionButton {...props} />
                     }
                 }}
+                data={data}
+                options={options}
+                title="ACME Employee list"
             />
         )
     }

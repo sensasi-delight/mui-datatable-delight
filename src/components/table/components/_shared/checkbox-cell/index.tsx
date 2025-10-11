@@ -70,15 +70,15 @@ export default function CheckboxCell({
         return (
             <_Checkbox
                 classes={{
-                    root: classes.checkboxRoot,
                     checked: classes.checked,
-                    disabled: classes.disabled
+                    disabled: classes.disabled,
+                    root: classes.checkboxRoot
                 }}
+                color="primary"
                 data-description={
                     isHeaderCell ? 'row-select-header' : 'row-select'
                 }
                 data-index={dataIndex ?? null}
-                color="primary"
                 disabled={!isRowSelectable}
                 onChange={onChange}
                 {...otherProps}
@@ -121,8 +121,8 @@ export default function CheckboxCell({
                 if (isRowExpandable?.(item.index, state.expandedRows)) {
                     if (state.expandedRows.lookup[item.index] !== true) {
                         const newItem = {
-                            index: ii,
-                            dataIndex: item.index
+                            dataIndex: item.index,
+                            index: ii
                         }
 
                         expandedRowsData.push(newItem)
@@ -134,8 +134,8 @@ export default function CheckboxCell({
 
         const newState = {
             expandedRows: {
-                lookup: buildMap(expandedRowsData),
-                data: expandedRowsData
+                data: expandedRowsData,
+                lookup: buildMap(expandedRowsData)
             }
         }
 
@@ -162,14 +162,14 @@ export default function CheckboxCell({
                         options?.responsive === 'stacked' ||
                         options?.responsive === 'stackedFullWidth')
                         ? {
-                              xs: 'none',
+                              md: '1px solid var(--mui-palette-TableCell-border)',
                               sm: 'none',
-                              md: '1px solid var(--mui-palette-TableCell-border)'
+                              xs: 'none'
                           }
                         : undefined
             }}
         >
-            <div style={{ display: 'flex', alignItems: 'center' }}>
+            <div style={{ alignItems: 'center', display: 'flex' }}>
                 {options.expandableRows && (
                     <_RowExpansionButton
                         areAllRowsExpanded={areAllRowsExpanded}
@@ -227,35 +227,35 @@ export interface DataTableTableSelectCellProps {
 }
 
 const useStyles = tss.withName(ComponentClassName.TABLE__CHECKBOX_CELL).create({
-    root: {
-        '@media print': {
-            display: 'none'
-        }
+    checkboxRoot: {},
+    checked: {},
+    disabled: {},
+    expandDisabled: {},
+    expanded: {
+        transform: 'rotate(90deg)'
     },
     fixedHeader: {
         position: 'sticky',
         top: '0px'
     },
     fixedLeft: {
-        position: 'sticky',
-        left: '0px'
-    },
-    icon: {
-        cursor: 'pointer',
-        transition: 'transform 0.25s'
-    },
-    expanded: {
-        transform: 'rotate(90deg)'
-    },
-    hide: {
-        visibility: 'hidden'
+        left: '0px',
+        position: 'sticky'
     },
     headerCell: {
         backgroundColor: 'var(--mui-palette-background-paper)',
         zIndex: 1
     },
-    expandDisabled: {},
-    checkboxRoot: {},
-    checked: {},
-    disabled: {}
+    hide: {
+        visibility: 'hidden'
+    },
+    icon: {
+        cursor: 'pointer',
+        transition: 'transform 0.25s'
+    },
+    root: {
+        '@media print': {
+            display: 'none'
+        }
+    }
 })

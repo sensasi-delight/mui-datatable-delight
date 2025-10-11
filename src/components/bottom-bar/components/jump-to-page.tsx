@@ -41,31 +41,31 @@ export default function JumpToPage({
 
     return (
         <Select
+            classes={{ icon: classes.selectIcon, select: classes.select }}
             className={classes.root}
-            classes={{ select: classes.select, icon: classes.selectIcon }}
             input={
                 <InputBase className={cx(classes.input, classes.selectRoot)} />
             }
+            onChange={({ target: { value } }) => {
+                changePage(parseInt(value.toString(), 10))
+            }}
+            onClose={handleClose}
+            onOpen={handleOpen}
+            open={open}
             startAdornment={
                 <InputAdornment
-                    position="start"
                     onClick={handleOpen}
+                    position="start"
                     sx={{
-                        cursor: 'pointer',
-                        '& > *': { fontSize: '0.8rem !important' }
+                        '& > *': { fontSize: '0.8rem !important' },
+                        cursor: 'pointer'
                     }}
                 >
                     {textLabels.pagination.jumpToPage}
                 </InputAdornment>
             }
-            onChange={({ target: { value } }) => {
-                changePage(parseInt(value.toString(), 10))
-            }}
             style={{ marginRight: 0 }}
             value={page}
-            open={open}
-            onClose={handleClose}
-            onOpen={handleOpen}
         >
             {pages.map(pageVal => (
                 <MenuItem key={pageVal} value={pageVal}>
@@ -77,19 +77,19 @@ export default function JumpToPage({
 }
 
 const useStyles = tss.withName(ClassName.BOTTOM_BAR__JUMP_TO_PAGE).create({
+    /* Styles applied to InputBase component */
+    input: {
+        flexShrink: 0,
+        fontSize: '0.8em !important',
+        minWidth: '4em'
+    },
     root: {},
 
-    /* Styles applied to the Select component root element */
-    selectRoot: {
-        marginRight: 32,
-        marginLeft: 8
-    },
-
     select: {
-        paddingTop: 6,
         paddingBottom: 7,
         paddingLeft: 8,
         paddingRight: 24,
+        paddingTop: 6,
         textAlign: 'right',
         textAlignLast: 'right'
     },
@@ -97,11 +97,10 @@ const useStyles = tss.withName(ClassName.BOTTOM_BAR__JUMP_TO_PAGE).create({
     /* Styles applied to Select component icon class */
     selectIcon: {},
 
-    /* Styles applied to InputBase component */
-    input: {
-        minWidth: '4em',
-        flexShrink: 0,
-        fontSize: '0.8em !important'
+    /* Styles applied to the Select component root element */
+    selectRoot: {
+        marginLeft: 8,
+        marginRight: 32
     }
 })
 

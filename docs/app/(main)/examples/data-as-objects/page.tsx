@@ -17,9 +17,9 @@ export default function Example() {
             </button>
 
             <DataTable
-                title="ACME Employee list"
-                data={DATA}
                 columns={COLUMNS}
+                data={DATA}
+                title="ACME Employee list"
             />
         </>
     )
@@ -39,51 +39,51 @@ interface DataItemType {
 
 const DATA: DataItemType[] = [
     {
-        name: 'Gabby George',
-        title: 'Business Analyst',
-        location: 'Minneapolis',
         age: 30,
+        location: 'Minneapolis',
+        name: 'Gabby George',
+        phone: { cell: '123-4567', home: '867-5309' },
         salary: '$100,000',
-        phone: { home: '867-5309', cell: '123-4567' }
+        title: 'Business Analyst'
     },
     {
-        name: 'Aiden Lloyd',
-        title: 'Business Consultant',
-        location: 'Dallas',
         age: 55,
+        location: 'Dallas',
+        name: 'Aiden Lloyd',
+        phone: { cell: '123-4568', home: '867-5310' },
         salary: '$200,000',
-        phone: { home: '867-5310', cell: '123-4568' }
+        title: 'Business Consultant'
     },
     {
-        name: 'Jaden Collins',
-        title: 'Attorney',
-        location: 'Santa Ana',
         age: 27,
+        location: 'Santa Ana',
+        name: 'Jaden Collins',
+        phone: { cell: '123-4569', home: '867-5311' },
         salary: '$500,000',
-        phone: { home: '867-5311', cell: '123-4569' }
+        title: 'Attorney'
     },
     {
-        name: 'Franky Rees',
-        title: 'Business Analyst',
-        location: 'St. Petersburg',
         age: 22,
+        location: 'St. Petersburg',
+        name: 'Franky Rees',
+        phone: { cell: '123-4569', home: '867-5312' },
         salary: '$50,000',
-        phone: { home: '867-5312', cell: '123-4569' }
+        title: 'Business Analyst'
     }
 ]
 
 const COLUMNS: DataTableProps<DataItemType>['columns'] = [
     {
-        name: 'name',
         label: 'Name',
+        name: 'name',
         options: {
-            filter: true,
-            display: 'excluded'
+            display: 'excluded',
+            filter: true
         }
     },
     {
-        name: 'title',
         label: 'Modified Title Label',
+        name: 'title',
         options: {
             customBodyRender: value => {
                 return <span>{value}</span>
@@ -91,42 +91,42 @@ const COLUMNS: DataTableProps<DataItemType>['columns'] = [
         }
     },
     {
-        name: 'location',
         label: 'Location',
+        name: 'location',
         options: {
-            filter: false,
             customBodyRender: (value, _, __, ___, updateValue) => {
                 return (
                     <TextField
+                        onChange={event => updateValue(event.target.value)}
                         size="small"
                         value={value}
-                        onChange={event => updateValue(event.target.value)}
                     />
                 )
-            }
+            },
+            filter: false
         }
     },
     {
-        name: 'age',
-        label: 'Age'
+        label: 'Age',
+        name: 'age'
     },
     {
-        name: 'salary',
         label: 'Salary',
+        name: 'salary',
         options: {
             sort: false
         }
     },
     {
-        name: 'phone.home',
-        label: 'Home Phone'
+        label: 'Home Phone',
+        name: 'phone.home'
     },
     {
-        name: 'phone.cell',
-        label: 'Cell Phone #'
+        label: 'Cell Phone #',
+        name: 'phone.cell'
     },
     {
-        name: 'phone2.home',
-        label: 'Not An Attribute'
+        label: 'Not An Attribute',
+        name: 'phone2.home'
     }
 ]

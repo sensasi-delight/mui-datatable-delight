@@ -6,9 +6,8 @@ import DataTable, { type DataTableProps } from '@src'
 export default function Example() {
     return (
         <DataTable
-            title={'ACME Employee list'}
-            data={data}
             columns={columns}
+            data={data}
             options={{
                 filter: true,
                 filterType: 'dropdown',
@@ -16,6 +15,7 @@ export default function Example() {
                 rowsPerPage: 50,
                 rowsPerPageOptions: [50]
             }}
+            title={'ACME Employee list'}
         />
     )
 }
@@ -61,6 +61,9 @@ const columns: DataTableProps<(typeof data)[number]>['columns'] = [
     {
         name: 'Hobbies',
         options: {
+            customBodyRender: (hobbies: string[]) =>
+                hobbies.map(hobby => <Chip key={hobby} label={hobby} />),
+            hint: 'Sort by amount of hobbies',
             sortCompare:
                 order =>
                 ({ data: hobbyList1 }, { data: hobbyList2 }) => {
@@ -75,10 +78,7 @@ const columns: DataTableProps<(typeof data)[number]>['columns'] = [
                         (hobbyList1.length - hobbyList2.length) *
                         (order === 'asc' ? 1 : -1)
                     )
-                },
-            hint: 'Sort by amount of hobbies',
-            customBodyRender: (hobbies: string[]) =>
-                hobbies.map(hobby => <Chip key={hobby} label={hobby} />)
+                }
         }
     }
 ]

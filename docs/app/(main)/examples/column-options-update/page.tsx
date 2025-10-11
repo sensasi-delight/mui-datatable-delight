@@ -5,9 +5,6 @@ import React from 'react'
 
 class Example extends React.Component {
     state = {
-        filterList: [['Franky Miles'], ['Business Analyst'], [], [], []],
-        filterOptions: ['Franky Miles', 'this', 'test', 'is', 'working'],
-        display: ['true', 'true', 'true', 'true', 'true'],
         data: [
             ['Gabby George', 'Business Analyst', 'Minneapolis', 30, 100000],
             ['Business Analyst', 'Business Consultant', 'Dallas', 55, 200000],
@@ -63,7 +60,10 @@ class Example extends React.Component {
                 45000
             ],
             ['Mason Ray', 'Computer Scientist', 'San Francisco', 39, 142000]
-        ]
+        ],
+        display: ['true', 'true', 'true', 'true', 'true'],
+        filterList: [['Franky Miles'], ['Business Analyst'], [], [], []],
+        filterOptions: ['Franky Miles', 'this', 'test', 'is', 'working']
     }
 
     handleFilterNameChange = () => {
@@ -96,11 +96,11 @@ class Example extends React.Component {
             {
                 name: 'Name',
                 options: {
+                    customFilterListOptions: { render: v => `Name: ${v}` },
                     filter: true,
                     filterList: filterList[0]?.length
                         ? filterList[0]
                         : undefined,
-                    customFilterListOptions: { render: v => `Name: ${v}` },
                     filterOptions: {
                         names: filterOptions
                     }
@@ -109,11 +109,11 @@ class Example extends React.Component {
             {
                 name: 'Title',
                 options: {
+                    customFilterListOptions: { render: v => `Title: ${v}` },
                     filter: true,
                     filterList: filterList[1]?.length
                         ? filterList[1]
                         : undefined,
-                    customFilterListOptions: { render: v => `Title: ${v}` },
                     filterType: 'textField' // set filterType's at the column level
                 }
             },
@@ -121,32 +121,32 @@ class Example extends React.Component {
                 name: 'Location',
                 options: {
                     filter: true,
-                    filterOptions: {
-                        fullWidth: true
-                    },
                     filterList: filterList[2]?.length
                         ? filterList[2]
-                        : undefined
+                        : undefined,
+                    filterOptions: {
+                        fullWidth: true
+                    }
                 }
             },
             {
                 name: 'Age',
                 options: {
+                    customFilterListOptions: { render: v => `Age: ${v}` },
                     filter: true,
                     filterList: filterList[3]?.length
                         ? filterList[3]
-                        : undefined,
-                    customFilterListOptions: { render: v => `Age: ${v}` }
+                        : undefined
                 }
             },
             {
                 name: 'Salary',
                 options: {
+                    customFilterListOptions: { render: v => `Salary: ${v}` },
                     filter: true,
                     filterList: filterList[4]?.length
                         ? filterList[4]
                         : undefined,
-                    customFilterListOptions: { render: v => `Salary: ${v}` },
                     sort: false
                 }
             }
@@ -154,22 +154,22 @@ class Example extends React.Component {
 
         const options: DataTableProps['options'] = {
             filter: true,
+            filterType: 'dropdown',
             onFilterChange: (_, newFilterList) => {
                 this.setState({ filterList: newFilterList })
             },
-            selectableRows: 'multiple',
-            filterType: 'dropdown',
             responsive: 'vertical',
-            rowsPerPage: 10
+            rowsPerPage: 10,
+            selectableRows: 'multiple'
         }
 
         return (
             <>
                 <DataTable
-                    title="ACME Employee list"
-                    data={data}
                     columns={columns}
+                    data={data}
                     options={options}
+                    title="ACME Employee list"
                 />
                 <button
                     onClick={() =>

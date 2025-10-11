@@ -66,22 +66,22 @@ class Example extends React.Component {
         ]
 
         const options: DataTableProps['options'] = {
+            customToolbar: () => {
+                return <CustomToolbar />
+            },
             filter: true,
-            selectableRows: 'multiple',
             filterType: 'dropdown',
             responsive: 'vertical',
             rowsPerPage: 10,
-            customToolbar: () => {
-                return <CustomToolbar />
-            }
+            selectableRows: 'multiple'
         }
 
         return (
             <DataTable
-                title={'ACME Employee list'}
-                data={data}
                 columns={columns}
+                data={data}
                 options={options}
+                title={'ACME Employee list'}
             />
         )
     }

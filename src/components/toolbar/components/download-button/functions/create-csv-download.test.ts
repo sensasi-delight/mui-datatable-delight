@@ -10,12 +10,12 @@ describe('createCsvDownload', () => {
 
     const columns = [
         {
-            name: 'firstname',
-            download: true
+            download: true,
+            name: 'firstname'
         },
         {
-            name: 'lastname',
-            download: true
+            download: true,
+            name: 'lastname'
         }
     ] as DataTableState<unknown>['columns']
 

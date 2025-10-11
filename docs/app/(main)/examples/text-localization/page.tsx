@@ -96,29 +96,29 @@ class Example extends React.Component {
 
         return (
             <DataTable
-                title="ACME Employee list"
-                data={data}
                 columns={columns}
+                data={data}
                 options={options}
                 textLabels={{
                     body: {
                         noMatch: 'Sorry we could not find any records!'
                     },
+                    filter: {
+                        all: 'All Records',
+                        reset: 'PERFORM RESET',
+                        title: 'OUR FILTERS'
+                    },
                     pagination: {
                         next: 'Following page',
                         previous: 'Preceding page'
                     },
-                    filter: {
-                        all: 'All Records',
-                        title: 'OUR FILTERS',
-                        reset: 'PERFORM RESET'
-                    },
                     selectedRows: {
-                        text: 'rows has been deleted',
                         delete: 'Delete Row',
-                        deleteAria: 'Deleted Selected Rows'
+                        deleteAria: 'Deleted Selected Rows',
+                        text: 'rows has been deleted'
                     }
                 }}
+                title="ACME Employee list"
             />
         )
     }

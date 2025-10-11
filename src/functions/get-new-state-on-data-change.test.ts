@@ -33,15 +33,15 @@ describe('get-new-state-on-data-change', () => {
 
     const options: DataTableOptions<(typeof data)[number]> = {
         ...DEFAULT_OPTIONS,
-        search: true,
         download: true,
-        print: true,
-        viewColumns: true,
         filter: true,
         filterType: 'dropdown',
+        print: true,
         responsive: 'vertical',
+        search: true,
         tableBodyHeight: '400px',
-        tableBodyMaxHeight: ''
+        tableBodyMaxHeight: '',
+        viewColumns: true
         // onTableChange: (action, state) => {
         //     console.log(action)
         //     console.dir(state)
@@ -50,124 +50,125 @@ describe('get-new-state-on-data-change', () => {
 
     const expectedColumns = [
         {
-            name: 'Name',
-            label: 'Name',
             display: true,
+            download: true,
             empty: false,
             filter: true,
-            sort: true,
-            print: true,
-            searchable: true,
-            download: true,
-            viewColumns: true,
-            sortCompare: undefined, // new value
-            // sortCompare: null, // legacy value
-            sortThirdClickReset: false,
-            sortDescFirst: false,
             filterOptions: {
                 fullWidth: true
-            }
+            },
+            label: 'Name',
+            name: 'Name',
+            print: true,
+            searchable: true,
+            sort: true,
+            sortCompare: undefined, // new value
+            sortDescFirst: false,
+            // sortCompare: null, // legacy value
+            sortThirdClickReset: false,
+            viewColumns: true
         },
         {
             display: true,
+            download: true,
             empty: false,
             filter: true,
-            sort: true,
-            print: true,
-            searchable: true,
-            download: true,
-            viewColumns: true,
-            sortCompare: undefined, // new value
-            // sortCompare: null, // legacy value
-            sortThirdClickReset: false,
-            sortDescFirst: false,
+            label: 'Title',
             name: 'Title',
-            label: 'Title'
+            print: true,
+            searchable: true,
+            sort: true,
+            sortCompare: undefined, // new value
+            sortDescFirst: false,
+            // sortCompare: null, // legacy value
+            sortThirdClickReset: false,
+            viewColumns: true
         },
         {
             display: true,
+            download: true,
             empty: false,
             filter: true,
-            sort: true,
+            label: 'Location',
+            name: 'Location',
             print: true,
             searchable: true,
-            download: true,
-            viewColumns: true,
+            sort: true,
             sortCompare: undefined, // new value
+            sortDescFirst: false,
             // sortCompare: null, // legacy value
             sortThirdClickReset: false,
-            sortDescFirst: false,
-            name: 'Location',
-            label: 'Location'
+            viewColumns: true
         }
     ]
 
     const expectedData = [
         {
-            index: 0,
-            data: ['Gabby George', 'Business Analyst', 'Minneapolis']
+            data: ['Gabby George', 'Business Analyst', 'Minneapolis'],
+            index: 0
         },
         {
-            index: 1,
             data: [
                 'Aiden Lloyd',
                 "Business Consultant for an International Company and CEO of Tony's Burger Palace",
                 'Dallas'
-            ]
+            ],
+            index: 1
         },
         {
-            index: 2,
-            data: ['Jaden Collins', 'Attorney', 'Santa Ana']
+            data: ['Jaden Collins', 'Attorney', 'Santa Ana'],
+            index: 2
         },
         {
-            index: 3,
-            data: ['Franky Rees', 'Business Analyst', 'St. Petersburg']
+            data: ['Franky Rees', 'Business Analyst', 'St. Petersburg'],
+            index: 3
         },
         {
-            index: 4,
-            data: ['Aaren Rose', null, 'Toledo']
+            data: ['Aaren Rose', null, 'Toledo'],
+            index: 4
         },
         {
-            index: 5,
-            data: ['Johnny Jones', 'Business Analyst', 'St. Petersburg']
+            data: ['Johnny Jones', 'Business Analyst', 'St. Petersburg'],
+            index: 5
         },
         {
-            index: 6,
-            data: ['Jimmy Johns', 'Business Analyst', 'Baltimore']
+            data: ['Jimmy Johns', 'Business Analyst', 'Baltimore'],
+            index: 6
         },
         {
-            index: 7,
-            data: ['Jack Jackson', 'Business Analyst', 'El Paso']
+            data: ['Jack Jackson', 'Business Analyst', 'El Paso'],
+            index: 7
         },
         {
-            index: 8,
-            data: ['Joe Jones', 'Computer Programmer', 'El Paso']
+            data: ['Joe Jones', 'Computer Programmer', 'El Paso'],
+            index: 8
         },
         {
-            index: 9,
-            data: ['Jacky Jackson', 'Business Consultant', 'Baltimore']
+            data: ['Jacky Jackson', 'Business Consultant', 'Baltimore'],
+            index: 9
         },
         {
-            index: 10,
-            data: ['Jo Jo', 'Software Developer', 'Washington DC']
+            data: ['Jo Jo', 'Software Developer', 'Washington DC'],
+            index: 10
         },
         {
-            index: 11,
-            data: ['Donna Marie', 'Business Manager', 'Annapolis']
+            data: ['Donna Marie', 'Business Manager', 'Annapolis'],
+            index: 11
         }
     ]
 
     const expected: DataTableState<(typeof data)[0]> = {
         ...DEFAULT_STATE,
+        // sortOrder: {}, // legacy value
+
+        // rowsPerPageOptions: [10, 15, 100], // legacy value
+
+        columnOrder: [0, 1, 2],
+        columns: expectedColumns,
         // activeColumn: null, // new value = undefined prop
         // announceText: null, // new value = undefined prop
 
         count: 12, // new value
-        columns: expectedColumns,
-        expandedRows: {
-            data: [],
-            lookup: {}
-        },
         data: expectedData,
         displayData: [
             {
@@ -223,6 +224,10 @@ describe('get-new-state-on-data-change', () => {
                 dataIndex: 11
             }
         ],
+        expandedRows: {
+            data: [],
+            lookup: {}
+        },
         filterData: [
             [
                 'Aaren Rose',
@@ -272,24 +277,14 @@ describe('get-new-state-on-data-change', () => {
             lookup: {}
         },
         // showResponsive: false, // legacy value
-        sortOrder: undefined, // new value
-        // sortOrder: {}, // legacy value
-
-        // rowsPerPageOptions: [10, 15, 100], // legacy value
-
-        columnOrder: [0, 1, 2]
+        sortOrder: undefined // new value
     }
 
     it('should return new state', () => {
         const props: DataTableProps<(typeof data)[number]> = {
-            data,
-            columns,
-            title: 'ACME Employee list',
-
-            options,
-
             // appended from legacy code
             className: 'tss-1x5mjc5-MUIDataTable-root',
+            columns,
             // classes: {
             //     root: 'tss-1x5mjc5-MUIDataTable-root',
             //     paper: 'tss-11quiee-MUIDataTable-paper',
@@ -317,7 +312,11 @@ describe('get-new-state-on-data-change', () => {
                 //     propTypes: {}
                 // },
                 // icons: {}
-            }
+            },
+            data,
+
+            options,
+            title: 'ACME Employee list'
         }
 
         const newState = getNewStateOnDataChange(
@@ -374,25 +373,18 @@ describe('get-new-state-on-data-change', () => {
     it('should return new state when props update', () => {
         const props: DataTableProps<(typeof data)[number]> = {
             className: 'tss-1x5mjc5-MUIDataTable-root',
-            // classes: {
-            //     root: 'tss-1x5mjc5-MUIDataTable-root',
-            //     paper: 'tss-11quiee-MUIDataTable-paper',
-            //     paperResponsiveScrollFullHeightFullWidth:
-            //         'tss-1nfo58d-MUIDataTable-paperResponsiveScrollFullHeightFullWidth',
-            //     tableRoot: 'tss-900muf-MUIDataTable-tableRoot',
-            //     responsiveBase: 'tss-1cdcmys-MUIDataTable-responsiveBase',
-            //     responsiveScroll: 'tss-131sses-MUIDataTable-responsiveScroll',
-            //     responsiveScrollMaxHeight:
-            //         'tss-1acbflw-MUIDataTable-responsiveScrollMaxHeight',
-            //     responsiveScrollFullHeight:
-            //         'tss-1dm1iyi-MUIDataTable-responsiveScrollFullHeight',
-            //     responsiveStacked: 'tss-r6c9w6-MUIDataTable-responsiveStacked',
-            //     responsiveStackedFullWidth:
-            //         'tss-1rzqjie-MUIDataTable-responsiveStackedFullWidth',
-            //     caption: 'tss-1opebqo-MUIDataTable-caption',
-            //     liveAnnounce: 'tss-hwdp7s-MUIDataTable-liveAnnounce'
-            // },
-            title: 'ACME Employee list',
+            columns: [
+                {
+                    name: 'Name',
+                    options: {
+                        filterOptions: {
+                            fullWidth: true
+                        }
+                    }
+                },
+                'Title',
+                'Location'
+            ],
             data: [
                 ['Gabby George', 'Business Analyst', 'Minneapolis'],
                 [
@@ -411,29 +403,36 @@ describe('get-new-state-on-data-change', () => {
                 ['Jo Jo', 'Software Developer', 'Washington DC'],
                 ['Donna Marie', 'Business Manager', 'Annapolis']
             ],
-            columns: [
-                {
-                    name: 'Name',
-                    options: {
-                        filterOptions: {
-                            fullWidth: true
-                        }
-                    }
-                },
-                'Title',
-                'Location'
-            ],
             options: {
-                search: true,
                 download: true,
-                print: true,
-                viewColumns: true,
                 filter: false,
                 filterType: 'dropdown',
+                print: true,
                 responsive: 'vertical',
+                search: true,
                 tableBodyHeight: '400px',
-                tableBodyMaxHeight: ''
-            }
+                tableBodyMaxHeight: '',
+                viewColumns: true
+            },
+            // classes: {
+            //     root: 'tss-1x5mjc5-MUIDataTable-root',
+            //     paper: 'tss-11quiee-MUIDataTable-paper',
+            //     paperResponsiveScrollFullHeightFullWidth:
+            //         'tss-1nfo58d-MUIDataTable-paperResponsiveScrollFullHeightFullWidth',
+            //     tableRoot: 'tss-900muf-MUIDataTable-tableRoot',
+            //     responsiveBase: 'tss-1cdcmys-MUIDataTable-responsiveBase',
+            //     responsiveScroll: 'tss-131sses-MUIDataTable-responsiveScroll',
+            //     responsiveScrollMaxHeight:
+            //         'tss-1acbflw-MUIDataTable-responsiveScrollMaxHeight',
+            //     responsiveScrollFullHeight:
+            //         'tss-1dm1iyi-MUIDataTable-responsiveScrollFullHeight',
+            //     responsiveStacked: 'tss-r6c9w6-MUIDataTable-responsiveStacked',
+            //     responsiveStackedFullWidth:
+            //         'tss-1rzqjie-MUIDataTable-responsiveStackedFullWidth',
+            //     caption: 'tss-1opebqo-MUIDataTable-caption',
+            //     liveAnnounce: 'tss-hwdp7s-MUIDataTable-liveAnnounce'
+            // },
+            title: 'ACME Employee list'
             // components: {
             //     TableBody: {},
             //     TableFilter: {},
@@ -482,48 +481,52 @@ describe('get-new-state-on-data-change', () => {
             ],
             data: [
                 {
-                    index: 0,
-                    data: ['Gabby George', 'Business Analyst', 'Minneapolis']
+                    data: ['Gabby George', 'Business Analyst', 'Minneapolis'],
+                    index: 0
                 },
                 {
-                    index: 2,
-                    data: ['Jaden Collins', 'Attorney', 'Santa Ana']
+                    data: ['Jaden Collins', 'Attorney', 'Santa Ana'],
+                    index: 2
                 },
                 {
-                    index: 3,
-                    data: ['Franky Rees', 'Business Analyst', 'St. Petersburg']
+                    data: ['Franky Rees', 'Business Analyst', 'St. Petersburg'],
+                    index: 3
                 },
                 {
-                    index: 4,
-                    data: ['Aaren Rose', null, 'Toledo']
+                    data: ['Aaren Rose', null, 'Toledo'],
+                    index: 4
                 },
                 {
-                    index: 5,
-                    data: ['Johnny Jones', 'Business Analyst', 'St. Petersburg']
+                    data: [
+                        'Johnny Jones',
+                        'Business Analyst',
+                        'St. Petersburg'
+                    ],
+                    index: 5
                 },
                 {
-                    index: 6,
-                    data: ['Jimmy Johns', 'Business Analyst', 'Baltimore']
+                    data: ['Jimmy Johns', 'Business Analyst', 'Baltimore'],
+                    index: 6
                 },
                 {
-                    index: 7,
-                    data: ['Jack Jackson', 'Business Analyst', 'El Paso']
+                    data: ['Jack Jackson', 'Business Analyst', 'El Paso'],
+                    index: 7
                 },
                 {
-                    index: 8,
-                    data: ['Joe Jones', 'Computer Programmer', 'El Paso']
+                    data: ['Joe Jones', 'Computer Programmer', 'El Paso'],
+                    index: 8
                 },
                 {
-                    index: 9,
-                    data: ['Jacky Jackson', 'Business Consultant', 'Baltimore']
+                    data: ['Jacky Jackson', 'Business Consultant', 'Baltimore'],
+                    index: 9
                 },
                 {
-                    index: 10,
-                    data: ['Jo Jo', 'Software Developer', 'Washington DC']
+                    data: ['Jo Jo', 'Software Developer', 'Washington DC'],
+                    index: 10
                 },
                 {
-                    index: 11,
-                    data: ['Donna Marie', 'Business Manager', 'Annapolis']
+                    data: ['Donna Marie', 'Business Manager', 'Annapolis'],
+                    index: 11
                 }
             ],
             options: {

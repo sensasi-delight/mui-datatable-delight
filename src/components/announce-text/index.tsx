@@ -19,7 +19,7 @@ export default function AnnounceText(): ReactNode {
     if (!state.announceText) return null
 
     return (
-        <div className={classes.root} aria-live="polite">
+        <div aria-live="polite" className={classes.root}>
             {state.announceText}
         </div>
     )

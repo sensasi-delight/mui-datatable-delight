@@ -15,7 +15,7 @@ export default function ContentOutline() {
         <>
             <Typography>Contents</Typography>
 
-            <MenuList dense component="div">
+            <MenuList component="div" dense>
                 <ContentOutlineItems />
             </MenuList>
         </>

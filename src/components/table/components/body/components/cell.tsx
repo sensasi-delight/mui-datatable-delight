@@ -39,7 +39,6 @@ export function TableBodyCell<T>({
 
     const cells = [
         <div
-            key={1}
             className={cx(
                 {
                     lastColumn: colIndex === 2,
@@ -62,11 +61,11 @@ export function TableBodyCell<T>({
                 },
                 className
             )}
+            key={1}
         >
             {columnHeader}
         </div>,
         <div
-            key={2}
             className={cx(
                 {
                     [classes.root]: true,
@@ -86,6 +85,7 @@ export function TableBodyCell<T>({
                 },
                 className
             )}
+            key={2}
         >
             {typeof value === 'function' ? value(dataIndex, rowIndex) : value}
         </div>
@@ -111,15 +111,6 @@ export function TableBodyCell<T>({
 
     return (
         <TableCell
-            onClick={event => {
-                options?.onCellClick?.(value, {
-                    colIndex,
-                    rowIndex,
-                    dataIndex,
-                    event
-                })
-            }}
-            data-column-index={colIndex}
             className={cx(
                 classes.root,
                 {
@@ -135,6 +126,15 @@ export function TableBodyCell<T>({
                 },
                 className
             )}
+            data-column-index={colIndex}
+            onClick={event => {
+                options?.onCellClick?.(value, {
+                    colIndex,
+                    dataIndex,
+                    event,
+                    rowIndex
+                })
+            }}
             {...otherProps}
         >
             {innerCells}
@@ -145,88 +145,88 @@ export function TableBodyCell<T>({
 const useStyles = tss
     .withName(ComponentClassName.TABLE__BODY__CELL)
     .create(({ theme }) => ({
-        root: {},
         cellHide: {
             display: 'none'
         },
-        simpleHeader: {
-            [theme.breakpoints.down('sm')]: {
-                display: 'inline-block',
-                fontWeight: 'bold',
-                width: '100%',
-                boxSizing: 'border-box'
+        cellStackedSmall: {
+            [theme.breakpoints.down('md')]: {
+                boxSizing: 'border-box',
+                width: '50%'
             }
         },
+        responsiveStackedSmall: {
+            [theme.breakpoints.down('md')]: {
+                boxSizing: 'border-box',
+                width: '50%'
+            }
+        },
+        responsiveStackedSmallParent: {
+            [theme.breakpoints.down('md')]: {
+                boxSizing: 'border-box',
+                width: '100%'
+            }
+        },
+        root: {},
         simpleCell: {
             [theme.breakpoints.down('sm')]: {
+                boxSizing: 'border-box',
                 display: 'inline-block',
-                width: '100%',
-                boxSizing: 'border-box'
+                width: '100%'
             }
         },
-        stackedHeader: {
-            verticalAlign: 'top'
+        simpleHeader: {
+            [theme.breakpoints.down('sm')]: {
+                boxSizing: 'border-box',
+                display: 'inline-block',
+                fontWeight: 'bold',
+                width: '100%'
+            }
         },
         stackedCommon: {
             [theme.breakpoints.down('md')]: {
-                display: 'inline-block',
-                fontSize: '16px',
-                height: 'auto',
-                width: 'calc(50%)',
-                boxSizing: 'border-box',
                 '&:last-child': {
                     borderBottom: 'none'
                 },
                 '&:nth-last-of-type(2)': {
                     borderBottom: 'none'
-                }
+                },
+                boxSizing: 'border-box',
+                display: 'inline-block',
+                fontSize: '16px',
+                height: 'auto',
+                width: 'calc(50%)'
             }
         },
         stackedCommonAlways: {
-            display: 'inline-block',
-            fontSize: '16px',
-            height: 'auto',
-            width: 'calc(50%)',
-            boxSizing: 'border-box',
             '&:last-child': {
                 borderBottom: 'none'
             },
             '&:nth-last-of-type(2)': {
                 borderBottom: 'none'
-            }
-        },
-        stackedParent: {
-            [theme.breakpoints.down('md')]: {
-                display: 'inline-block',
-                fontSize: '16px',
-                height: 'auto',
-                width: 'calc(100%)',
-                boxSizing: 'border-box'
-            }
-        },
-        stackedParentAlways: {
+            },
+            boxSizing: 'border-box',
             display: 'inline-block',
             fontSize: '16px',
             height: 'auto',
-            width: 'calc(100%)',
-            boxSizing: 'border-box'
+            width: 'calc(50%)'
         },
-        cellStackedSmall: {
+        stackedHeader: {
+            verticalAlign: 'top'
+        },
+        stackedParent: {
             [theme.breakpoints.down('md')]: {
-                width: '50%',
-                boxSizing: 'border-box'
+                boxSizing: 'border-box',
+                display: 'inline-block',
+                fontSize: '16px',
+                height: 'auto',
+                width: 'calc(100%)'
             }
         },
-        responsiveStackedSmall: {
-            [theme.breakpoints.down('md')]: {
-                width: '50%',
-                boxSizing: 'border-box'
-            }
-        },
-        responsiveStackedSmallParent: {
-            [theme.breakpoints.down('md')]: {
-                width: '100%',
-                boxSizing: 'border-box'
-            }
+        stackedParentAlways: {
+            boxSizing: 'border-box',
+            display: 'inline-block',
+            fontSize: '16px',
+            height: 'auto',
+            width: 'calc(100%)'
         }
     }))

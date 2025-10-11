@@ -15,52 +15,52 @@ export function DataTableExample() {
 
     const columns: DataTableProps<Row>['columns'] = [
         {
-            name: 'name',
             label: 'Name',
+            name: 'name',
             options: {
                 filter: true
             }
         },
         {
-            name: 'title',
             label: 'Modified Title Label',
+            name: 'title',
             options: {
                 filter: true
             }
         },
         {
-            name: 'location',
             label: 'Location',
+            name: 'location',
             options: {
                 filter: false
             }
         },
         {
-            name: 'age',
             label: 'Age',
+            name: 'age',
             options: {
                 filter: true
             }
         },
         {
-            name: 'salary',
             label: 'Salary',
+            name: 'salary',
             options: {
                 filter: true,
                 sort: false
             }
         },
         {
-            name: 'phone',
             label: 'Phone',
+            name: 'phone',
             options: {
                 filter: true,
                 sort: false
             }
         },
         {
-            name: 'email',
             label: 'E-mail',
+            name: 'email',
             options: {
                 filter: true,
                 sort: false
@@ -69,15 +69,6 @@ export function DataTableExample() {
     ]
 
     const options: DataTableProps<Row>['options'] = {
-        rowsPerPage: 100,
-        rowsPerPageOptions: [10, 100, 250, 500, 1000],
-        filter: true,
-        filterType: 'dropdown',
-        responsive: 'vertical',
-        tableBodyHeight: '500px',
-        searchDelay: 500,
-        jumpToPage: true,
-
         // These next two options allow you to make it so filters need to be confirmed.
         confirmFilters: true,
 
@@ -85,20 +76,28 @@ export function DataTableExample() {
         customFilterDialogFooter: (_, applyNewFilters) => {
             return (
                 <div style={{ marginTop: '40px' }}>
-                    <Button variant="contained" onClick={applyNewFilters}>
+                    <Button onClick={applyNewFilters} variant="contained">
                         Apply Filters
                     </Button>
                 </div>
             )
-        }
+        },
+        filter: true,
+        filterType: 'dropdown',
+        jumpToPage: true,
+        responsive: 'vertical',
+        rowsPerPage: 100,
+        rowsPerPageOptions: [10, 100, 250, 500, 1000],
+        searchDelay: 500,
+        tableBodyHeight: '500px'
     }
 
     return (
         <DataTable
-            title={'ACME Employee list'}
-            data={data}
             columns={columns}
+            data={data}
             options={options}
+            title={'ACME Employee list'}
         />
     )
 }
@@ -122,12 +121,12 @@ function getGenerateData(): Row[] {
             LAST_NAMES[getRandomNumber(LAST_NAMES.length)]
 
         data.push({
-            name: name,
-            title: TITLES[getRandomNumber(TITLES.length)] ?? '',
+            email: name.replace(/ /g, '_').toLowerCase() + '@example.com',
             location: LOCATIONS[getRandomNumber(LOCATIONS.length)] ?? '',
-            salary: SALARIES[getRandomNumber(SALARIES.length)] ?? '',
+            name: name,
             phone: '555-5555',
-            email: name.replace(/ /g, '_').toLowerCase() + '@example.com'
+            salary: SALARIES[getRandomNumber(SALARIES.length)] ?? '',
+            title: TITLES[getRandomNumber(TITLES.length)] ?? ''
         })
     }
 

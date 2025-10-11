@@ -9,6 +9,47 @@ import { CodeSnippet, InlineCode } from './components'
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
     return {
+        a: props => <Link {...props} />,
+
+        blockquote: ({ children }) => (
+            <Alert
+                color="info"
+                component="blockquote"
+                elevation={1}
+                icon={false}
+                sx={{
+                    '& p': {
+                        m: 0
+                    },
+                    borderLeft: 6,
+                    boxShadow: 'none',
+                    m: 0
+                }}
+            >
+                {children}
+            </Alert>
+        ),
+        code: ({ children }) => <InlineCode text={children} />,
+        h1: ({ children }) => (
+            <Typography component="h1" mb={4} mt={3} variant="h3">
+                {children}
+            </Typography>
+        ),
+        h2: ({ children }) => (
+            <HeadingLink component="h2" variant="h4">
+                {children}
+            </HeadingLink>
+        ),
+        h3: ({ children }) => (
+            <HeadingLink component="h3" variant="h5">
+                {children}
+            </HeadingLink>
+        ),
+        p: ({ children }) => (
+            <Typography lineHeight={2} my={3}>
+                {children}
+            </Typography>
+        ),
         pre: props => {
             const lang = props.children.props.className.replace('language-', '')
 
@@ -22,47 +63,6 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
                 />
             )
         },
-        code: ({ children }) => <InlineCode text={children} />,
-        h1: ({ children }) => (
-            <Typography variant="h3" component="h1" mt={3} mb={4}>
-                {children}
-            </Typography>
-        ),
-        h2: ({ children }) => (
-            <HeadingLink variant="h4" component="h2">
-                {children}
-            </HeadingLink>
-        ),
-        h3: ({ children }) => (
-            <HeadingLink variant="h5" component="h3">
-                {children}
-            </HeadingLink>
-        ),
-
-        blockquote: ({ children }) => (
-            <Alert
-                component="blockquote"
-                elevation={1}
-                color="info"
-                icon={false}
-                sx={{
-                    m: 0,
-                    '& p': {
-                        m: 0
-                    },
-                    borderLeft: 6,
-                    boxShadow: 'none'
-                }}
-            >
-                {children}
-            </Alert>
-        ),
-        a: props => <Link {...props} />,
-        p: ({ children }) => (
-            <Typography lineHeight={2} my={3}>
-                {children}
-            </Typography>
-        ),
         ...components
     }
 }
@@ -80,39 +80,38 @@ function HeadingLink({
 
     return (
         <Link
-            href={`#${text}`}
-            display="flex"
             alignItems="baseline"
+            display="flex"
             gap={1}
+            href={`#${text}`}
             sx={{
-                textDecoration: 'none',
-                color: 'inherit',
-                pt: 1,
-                my: 3,
-                wordBreak: 'break-all',
-
                 ':hover': {
                     '& svg': {
                         display: 'block'
                     }
-                }
+                },
+                color: 'inherit',
+                my: 3,
+                pt: 1,
+                textDecoration: 'none',
+                wordBreak: 'break-all'
             }}
         >
             <Typography
-                id={text}
-                variant={variant}
                 component={component}
+                id={text}
                 sx={{
                     scrollMarginTop: '96px'
                 }}
+                variant={variant}
             >
                 {children}
             </Typography>
 
             <LinkIcon
                 sx={{
-                    display: 'none',
                     color: 'primary.main',
+                    display: 'none',
                     transform: 'translateY(4px)'
                 }}
             />
