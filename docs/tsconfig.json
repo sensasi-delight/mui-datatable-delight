@@ -10,7 +10,12 @@
             }
         ],
         "resolveJsonModule": true,
-        "rootDir": "../"
+
+        "paths": {
+            "@src": ["../src"],
+            "@src/*": ["../src/*"],
+            "@/*": ["../*"]
+        }
     },
     "include": [
         "next-env.d.ts",

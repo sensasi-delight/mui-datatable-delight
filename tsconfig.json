@@ -27,5 +27,13 @@
             "@/*": ["./*"]
         }
     },
-    "exclude": ["node_modules", "dist", "docs/.next", "docs/public/api-docs"]
+    "exclude": [
+        "node_modules",
+        "dist",
+        "docs/.next",
+        "docs/next-env.d.ts",
+        "docs/out",
+        "docs/public/api-docs",
+        "test"
+    ]
 }
