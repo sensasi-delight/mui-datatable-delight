@@ -67,7 +67,7 @@
         "build": "rollup -c",
         "build:docs": "typedoc && next build docs",
         "dev": "next docs",
-        "lint": "biome check",
+        "lint": "biome check && tsc --noEmit",
         "lint:fix": "biome check --write",
         "prepublishOnly": "bun run build",
         "prettier": "prettier './**/*.{js,jsx,ts,tsx,mjs,cjs}' --write",
