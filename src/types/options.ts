@@ -29,8 +29,7 @@ export interface DataTableSortOrderOption {
 
 export interface DataTableOptions<Row = DefaultRow>
     extends DataTableCustomsOptions<Row>,
-        DataTableSearchOptions<Row>,
-        DeprecatedOptions {
+        DataTableSearchOptions<Row> {
     /**
      * Enable/disable case sensitivity for search
      *
@@ -725,9 +724,4 @@ interface DataTableCustomsOptions<Row> {
         displayData: DisplayDataState<Row>,
         setSelectedRows: (rows: number[]) => void
     ) => ReactNode
-}
-
-interface DeprecatedOptions {
-    /** @deprecated use `selectToolbarPlacement` instead */
-    disableToolbarSelect?: boolean
 }
