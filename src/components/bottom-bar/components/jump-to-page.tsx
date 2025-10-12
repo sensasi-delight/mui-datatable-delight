@@ -11,7 +11,6 @@ import ClassName from '@src/enums/class-name'
 import useDataTableContext from '@src/hooks/use-data-table-context'
 // vendors
 import { type ReactElement, useState } from 'react'
-import { tss } from 'tss-react/mui'
 
 /**
  * Component handling the jump to page feature.
@@ -24,7 +23,6 @@ export default function JumpToPage({
     changePage: (pageNo: number) => void
 }): ReactElement {
     const { state, textLabels } = useDataTableContext()
-    const { classes, cx } = useStyles()
 
     const pages = getPageOptions(state.count, state.rowsPerPage)
     const page = pages.length < state.page ? pages.length - 1 : state.page
@@ -41,10 +39,17 @@ export default function JumpToPage({
 
     return (
         <Select
-            classes={{ icon: classes.selectIcon, select: classes.select }}
-            className={classes.root}
+            className={ClassName.BOTTOM_BAR__JUMP_TO_PAGE}
             input={
-                <InputBase className={cx(classes.input, classes.selectRoot)} />
+                <InputBase
+                    sx={{
+                        flexShrink: 0,
+                        fontSize: '0.8em !important',
+                        marginLeft: 8,
+                        marginRight: 32,
+                        minWidth: '4em'
+                    }}
+                />
             }
             onChange={({ target: { value } }) => {
                 changePage(parseInt(value.toString(), 10))
@@ -65,6 +70,14 @@ export default function JumpToPage({
                 </InputAdornment>
             }
             style={{ marginRight: 0 }}
+            sx={{
+                paddingBottom: 7,
+                paddingLeft: 8,
+                paddingRight: 24,
+                paddingTop: 6,
+                textAlign: 'right',
+                textAlignLast: 'right'
+            }}
             value={page}
         >
             {pages.map(pageVal => (
@@ -75,34 +88,6 @@ export default function JumpToPage({
         </Select>
     )
 }
-
-const useStyles = tss.withName(ClassName.BOTTOM_BAR__JUMP_TO_PAGE).create({
-    /* Styles applied to InputBase component */
-    input: {
-        flexShrink: 0,
-        fontSize: '0.8em !important',
-        minWidth: '4em'
-    },
-    root: {},
-
-    select: {
-        paddingBottom: 7,
-        paddingLeft: 8,
-        paddingRight: 24,
-        paddingTop: 6,
-        textAlign: 'right',
-        textAlignLast: 'right'
-    },
-
-    /* Styles applied to Select component icon class */
-    selectIcon: {},
-
-    /* Styles applied to the Select component root element */
-    selectRoot: {
-        marginLeft: 8,
-        marginRight: 32
-    }
-})
 
 function getPageOptions(count: number, rowsPerPage: number): number[] {
     const nPages = Math.max(Math.ceil(count / rowsPerPage), 1)

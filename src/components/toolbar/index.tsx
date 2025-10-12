@@ -15,7 +15,6 @@ import useDataTableContext from '@src/hooks/use-data-table-context'
 import type { FilterUpdateType } from '@src/types/filter-update'
 import { type ReactNode, useState } from 'react'
 // vendors
-import { tss } from 'tss-react/mui'
 import ColumnVisibilitiesBox from './components/column-visibilities-box'
 import DataFilterBox from './components/data-filter-box'
 import { ToolbarDownloadButton } from './components/download-button'
@@ -41,7 +40,6 @@ export default function Toolbar<T>(props: ToolbarProps<T>): ReactNode {
         textLabels: { toolbar: toolbarTextLabels },
         updateCellValueRef
     } = useDataTableContext()
-    const { classes } = useStyles()
 
     const [showSearch, setShowSearch] = useState(
         Boolean(state.searchText ?? options.searchText) ||
@@ -77,7 +75,7 @@ export default function Toolbar<T>(props: ToolbarProps<T>): ReactNode {
         setShowSearch(false)
     }
 
-    function getIconClasses(
+    function getIconSx(
         iconName: 'search' | 'filter' | 'viewColumns' | undefined
     ) {
         const isActive =
@@ -85,7 +83,15 @@ export default function Toolbar<T>(props: ToolbarProps<T>): ReactNode {
                 ? Boolean(showSearch || state.searchText)
                 : activeIcon === iconName
 
-        return isActive ? classes.iconActive : classes.icon
+        return isActive
+            ? {
+                  color: 'var(--mui-palette-primary-main)'
+              }
+            : {
+                  '&:hover': {
+                      color: 'var(--mui-palette-primary-main)'
+                  }
+              }
     }
 
     function handleSearchIconClick() {
@@ -163,8 +169,28 @@ export default function Toolbar<T>(props: ToolbarProps<T>): ReactNode {
     }
 
     return (
-        <Box className={classes.root} role="table toolbar">
-            <div className={classes.left}>
+        <Box
+            className={ClassName.TOOLBAR}
+            role="table toolbar"
+            sx={{
+                '@media print': {
+                    display: 'none !important'
+                },
+                alignItems: 'center',
+                display: 'flex',
+                overflowX: 'auto',
+                paddingBottom: '12px',
+                paddingLeft: '24px',
+                paddingRight: '16px',
+                paddingTop: '12px'
+            }}
+        >
+            <div
+                style={{
+                    flex: '1 1 auto',
+                    minWidth: '16em'
+                }}
+            >
                 {showSearch && <DataTableToolbarSearch onHide={hideSearch} />}
 
                 {datatableRootProps?.title && (
@@ -185,7 +211,11 @@ export default function Toolbar<T>(props: ToolbarProps<T>): ReactNode {
                 )}
             </div>
 
-            <div className={classes.actions}>
+            <div
+                style={{
+                    display: 'flex'
+                }}
+            >
                 {!(
                     options.search === false ||
                     options.searchAlwaysOpen === true
@@ -196,11 +226,9 @@ export default function Toolbar<T>(props: ToolbarProps<T>): ReactNode {
                     >
                         <span>
                             <IconButton
-                                classes={{
-                                    root: getIconClasses('search')
-                                }}
                                 disabled={options.search === 'disabled'}
                                 onClick={handleSearchIconClick}
+                                sx={getIconSx('search')}
                             >
                                 <icons.SearchIcon />
                             </IconButton>
@@ -217,11 +245,9 @@ export default function Toolbar<T>(props: ToolbarProps<T>): ReactNode {
                         hide={options.viewColumns === 'disabled'}
                         iconButtonProps={{
                             children: <icons.ViewColumnIcon />,
-                            classes: {
-                                root: getIconClasses('viewColumns')
-                            },
                             disabled: options.viewColumns === 'disabled',
-                            onClick: () => setActiveIcon('viewColumns')
+                            onClick: () => setActiveIcon('viewColumns'),
+                            sx: getIconSx('viewColumns')
                         }}
                         onPopoverExited={() => setActiveIcon(undefined)}
                         title={toolbarTextLabels.viewColumns}
@@ -237,11 +263,9 @@ export default function Toolbar<T>(props: ToolbarProps<T>): ReactNode {
                         }
                         iconButtonProps={{
                             children: <icons.FilterIcon />,
-                            classes: {
-                                root: getIconClasses('filter')
-                            },
                             disabled: options.filter === 'disabled',
-                            onClick: () => setActiveIcon('filter')
+                            onClick: () => setActiveIcon('filter'),
+                            sx: getIconSx('filter')
                         }}
                         onPopoverExited={() => {
                             setIsDialogFilterOpen(false)
@@ -249,7 +273,11 @@ export default function Toolbar<T>(props: ToolbarProps<T>): ReactNode {
                         }}
                         slotProps={{
                             paper: {
-                                className: classes.filterPaper
+                                sx: theme => ({
+                                    [theme.breakpoints.up('sm')]: {
+                                        maxWidth: '50%'
+                                    }
+                                })
                             }
                         }}
                         title={toolbarTextLabels.filterTable}
@@ -274,42 +302,3 @@ export default function Toolbar<T>(props: ToolbarProps<T>): ReactNode {
 export interface ToolbarProps<T> {
     filterUpdate: FilterUpdateType<T>
 }
-
-const useStyles = tss.withName(ClassName.TOOLBAR).create(({ theme }) => ({
-    actions: {
-        display: 'flex'
-    },
-
-    filterPaper: {
-        [theme.breakpoints.up('sm')]: {
-            maxWidth: '50%'
-        }
-    },
-
-    icon: {
-        '&:hover': {
-            color: 'var(--mui-palette-primary-main)'
-        }
-    },
-
-    iconActive: {
-        color: 'var(--mui-palette-primary-main)'
-    },
-
-    left: {
-        flex: '1 1 auto',
-        minWidth: '16em'
-    },
-    root: {
-        '@media print': {
-            display: 'none !important'
-        },
-        alignItems: 'center',
-        display: 'flex',
-        overflowX: 'auto',
-        paddingBottom: '12px',
-        paddingLeft: '24px',
-        paddingRight: '16px',
-        paddingTop: '12px'
-    }
-}))

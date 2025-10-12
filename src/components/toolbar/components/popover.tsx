@@ -15,7 +15,6 @@ import {
     useRef,
     useState
 } from 'react'
-import { tss } from 'tss-react/mui'
 
 /**
  * A `Popover` component that is triggered by an `IconButton` with a tooltip.
@@ -30,7 +29,6 @@ export function ToolbarPopover({
     slotProps,
     title
 }: ToolbarPopoverProps): ReactElement {
-    const { classes } = useStyles()
     const [isOpen, setIsOpen] = useState(false)
     const anchorEl = useRef<EventTarget & HTMLSpanElement>(null)
 
@@ -69,7 +67,7 @@ export function ToolbarPopover({
                     horizontal: 'center',
                     vertical: 'bottom'
                 }}
-                className={classes.root}
+                className={ComponentClassName.TOOLBAR__POPOVER}
                 elevation={2}
                 onClose={handleRequestClose}
                 open={isOpen}
@@ -107,7 +105,3 @@ interface ToolbarPopoverProps {
     slotProps?: PopoverProps['slotProps']
     title: string
 }
-
-const useStyles = tss.withName(ComponentClassName.TOOLBAR__POPOVER).create({
-    root: {}
-})

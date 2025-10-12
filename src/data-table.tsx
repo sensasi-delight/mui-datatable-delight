@@ -304,6 +304,11 @@ function DataTable_<T>({
             elevation={options?.elevation}
             ref={ref}
             sx={{
+                '& .datatables-noprint': {
+                    '@media print': {
+                        display: 'none'
+                    }
+                },
                 isolation: 'isolate'
             }}
             {...paperProps}

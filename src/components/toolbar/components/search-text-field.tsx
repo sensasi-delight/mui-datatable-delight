@@ -14,7 +14,6 @@ import getDisplayData from '@src/functions/get-new-state-on-data-change/get-disp
 import useDataTableContext from '@src/hooks/use-data-table-context'
 // vendors
 import { type ReactElement, useRef, useState } from 'react'
-import { tss } from 'tss-react/mui'
 
 /**
  * A component to render a search bar in the DataTable toolbar.
@@ -28,7 +27,6 @@ export function DataTableToolbarSearch({
 }): ReactElement {
     const { onAction, options, state, textLabels, updateCellValueRef } =
         useDataTableContext()
-    const { classes } = useStyles()
 
     const timeout = useRef<ReturnType<typeof setTimeout>>(undefined)
     const searchDelay = options?.searchDelay ?? 0
@@ -75,17 +73,31 @@ export function DataTableToolbarSearch({
 
     return (
         <Grow appear in={true} timeout={300}>
-            <div className={classes.root}>
-                <Search className={classes.searchIcon} />
+            <div
+                className={ClassName.TOOLBAR__SEARCH_TEXT_FIELD}
+                style={{
+                    alignItems: 'center',
+                    display: 'flex',
+                    flex: '1 0 auto'
+                }}
+            >
+                <Search
+                    sx={{
+                        color: 'var(--mui-palette-text-secondary)',
+                        marginRight: '8px'
+                    }}
+                />
 
                 <TextField
                     aria-label={textLabels.toolbar.search}
                     autoFocus={true}
-                    className={classes.textField}
                     fullWidth={true}
                     onChange={onSearch}
                     onKeyDown={handleKeyDown}
                     placeholder={options?.searchPlaceholder}
+                    sx={{
+                        flex: '0.8 0'
+                    }}
                     value={searchText}
                     variant="standard"
                     {...(options?.searchProps ?? {})}
@@ -93,10 +105,14 @@ export function DataTableToolbarSearch({
 
                 <IconButton
                     aria-label="Close search bar"
-                    className={classes.clearButton}
                     onClick={onHide}
                     size="small"
-                    style={{ visibility: clearIconVisibility }}
+                    sx={{
+                        '&:hover': {
+                            color: 'var(--mui-palette-error-main)'
+                        },
+                        visibility: clearIconVisibility
+                    }}
                 >
                     <Clear />
                 </IconButton>
@@ -104,25 +120,3 @@ export function DataTableToolbarSearch({
         </Grow>
     )
 }
-
-const useStyles = tss
-    .withName(ClassName.TOOLBAR__SEARCH_TEXT_FIELD)
-    .create(() => ({
-        clearButton: {
-            '&:hover': {
-                color: 'var(--mui-palette-error-main)'
-            }
-        },
-        root: {
-            alignItems: 'center',
-            display: 'flex',
-            flex: '1 0 auto'
-        },
-        searchIcon: {
-            color: 'var(--mui-palette-text-secondary)',
-            marginRight: '8px'
-        },
-        textField: {
-            flex: '0.8 0'
-        }
-    }))

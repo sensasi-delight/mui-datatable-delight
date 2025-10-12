@@ -4,7 +4,6 @@ import TableRow, { type TableRowProps } from '@mui/material/TableRow'
 import ComponentClassName from '@src/enums/class-name'
 import useDataTableContext from '@src/hooks/use-data-table-context'
 import type { ReactElement } from 'react'
-import { tss } from 'tss-react/mui'
 
 /**
  * Table row component.
@@ -19,31 +18,35 @@ export function DataTableBodyRow({
     className,
     ...restProps
 }: DataTableBodyRowProps): ReactElement {
-    const { classes, cx } = useStyles()
     const { options } = useDataTableContext()
+
+    const isHoverCursor =
+        (options.selectableRowsOnClick && isRowSelectable) ??
+        options.expandableRowsOnClick
+
+    const breakpointSx =
+        options.responsive === 'simple' || options.responsive === 'vertical'
+            ? {
+                  borderBottom: 'solid 2px rgba(0, 0, 0, 0.15)',
+                  borderTop: 'solid 2px rgba(0, 0, 0, 0.15)',
+                  margin: 0,
+                  padding: 0
+              }
+            : {}
 
     return (
         <TableRow
-            className={cx(
-                classes.root,
-                {
-                    /**
-                     * @todo CHECK THIS `.hover` class ON OLDER CODE
-                     */
-                    // [classes.hover]: options.rowHover,
-                    [classes.hoverCursor]:
-                        (options.selectableRowsOnClick && isRowSelectable) ??
-                        options.expandableRowsOnClick,
-                    [classes.responsiveSimple]: options.responsive === 'simple',
-                    [classes.responsiveStacked]:
-                        options.responsive === 'vertical',
-                    'mui-row-selected': rowSelected
-                },
-                className
-            )}
+            className={ComponentClassName.TABLE__BODY__ROW}
             hover={options.rowHover}
             onClick={onClick}
             selected={rowSelected}
+            sx={theme => ({
+                backgroundColor: rowSelected
+                    ? 'var(--mui-palette-action-selected)'
+                    : undefined,
+                cursor: isHoverCursor ? 'pointer' : undefined,
+                [theme.breakpoints.down('sm')]: breakpointSx
+            })}
             {...restProps}
         >
             {children}
@@ -56,30 +59,3 @@ export interface DataTableBodyRowProps extends TableRowProps {
     /** Current row selected or not */
     rowSelected?: boolean
 }
-
-const useStyles = tss
-    .withName(ComponentClassName.TABLE__BODY__ROW)
-    .create(({ theme }) => ({
-        hoverCursor: { cursor: 'pointer' },
-        responsiveSimple: {
-            [theme.breakpoints.down('sm')]: {
-                borderBottom: 'solid 2px rgba(0, 0, 0, 0.15)',
-                borderTop: 'solid 2px rgba(0, 0, 0, 0.15)',
-                margin: 0,
-                padding: 0
-            }
-        },
-        responsiveStacked: {
-            [theme.breakpoints.down('md')]: {
-                borderBottom: 'solid 2px rgba(0, 0, 0, 0.15)',
-                borderTop: 'solid 2px rgba(0, 0, 0, 0.15)',
-                margin: 0,
-                padding: 0
-            }
-        },
-        root: {
-            '&.mui-row-selected': {
-                backgroundColor: 'var(--mui-palette-action-selected)'
-            }
-        }
-    }))

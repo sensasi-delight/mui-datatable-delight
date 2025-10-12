@@ -3,17 +3,16 @@
 import FormControlLabel from '@mui/material/FormControlLabel'
 import FormGroup from '@mui/material/FormGroup'
 import Switch from '@mui/material/Switch'
+import type { SxProps } from '@mui/material/styles'
 import TableCell from '@mui/material/TableCell'
 import TableFooter from '@mui/material/TableFooter'
 import TableRow from '@mui/material/TableRow'
 import DataTable, { type DataTableProps } from '@src'
 import { useState } from 'react'
-import { tss } from 'tss-react/mui'
 import { CustomFooter } from './_custom-footer'
 
 function Example() {
     const [stickyFooter, setStickyFooter] = useState(true)
-    const { classes, cx } = useStyles()
 
     const data = [
         ['Gabby George', 'Business Analyst', 'Minneapolis', 30, 100000],
@@ -60,10 +59,17 @@ function Example() {
         ['Mason Ray', 'Computer Scientist', 'San Francisco', 39, 142000]
     ]
 
-    const footerClasses = cx({
-        [classes.footerCell]: true,
-        [classes.stickyFooterCell]: stickyFooter
-    })
+    const footerSx: SxProps = {
+        backgroundColor: 'var(--mui-palette-background-paper)',
+        borderBottom: 'none',
+        ...(stickyFooter
+            ? {
+                  bottom: 0,
+                  position: 'sticky',
+                  zIndex: 100
+              }
+            : {})
+    }
 
     const columns: DataTableProps<(typeof data)[number]>['columns'] = [
         'Name',
@@ -117,37 +123,28 @@ function Example() {
                 }, 0) / state.data.length
 
             return (
-                <TableFooter className={footerClasses}>
+                <TableFooter sx={footerSx}>
                     <TableRow>
                         {options.selectableRows !== 'none' ? (
-                            <TableCell className={footerClasses} />
+                            <TableCell sx={footerSx} />
                         ) : null}
                         {state.columns.map((col, index) => {
                             if (col.display) {
                                 if (col.name === 'Age') {
                                     return (
-                                        <TableCell
-                                            className={footerClasses}
-                                            key={index}
-                                        >
+                                        <TableCell key={index} sx={footerSx}>
                                             Avg: {avgAge}
                                         </TableCell>
                                     )
                                 } else if (col.name === 'Salary') {
                                     return (
-                                        <TableCell
-                                            className={footerClasses}
-                                            key={index}
-                                        >
+                                        <TableCell key={index} sx={footerSx}>
                                             Avg: {avgSalary}
                                         </TableCell>
                                     )
                                 } else {
                                     return (
-                                        <TableCell
-                                            className={footerClasses}
-                                            key={index}
-                                        />
+                                        <TableCell key={index} sx={footerSx} />
                                     )
                                 }
                             }
@@ -188,17 +185,5 @@ function Example() {
         </>
     )
 }
-
-const useStyles = tss.create(({ theme }) => ({
-    footerCell: {
-        backgroundColor: theme.palette.background.paper,
-        borderBottom: 'none'
-    },
-    stickyFooterCell: {
-        bottom: 0,
-        position: 'sticky',
-        zIndex: 100
-    }
-}))
 
 export default Example

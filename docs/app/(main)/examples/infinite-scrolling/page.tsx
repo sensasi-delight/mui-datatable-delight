@@ -113,29 +113,6 @@ function buildTestData(count: number, startingIndex: number) {
     return rows
 }
 
-// const useStyles = tss.crate(({ theme }) => ({
-//     root: {
-//         width: '100%',
-//         overflowX: 'auto',
-//         height: 300,
-//         flexGrow: 1
-//     },
-//     head: {
-//         backgroundColor: theme.palette.primary.main,
-//         color: '#fff',
-//         position: 'sticky',
-//         fontSize: '.6rem',
-//         top: 0
-//     },
-//     table: {
-//         minWidth: 700,
-//         height: 200
-//     },
-//     tableCell: {
-//         fontSize: '.6rem'
-//     }
-// }))
-
 const options: DataTableProps['options'] = {
     filter: false,
     filterType: 'dropdown',

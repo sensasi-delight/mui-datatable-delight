@@ -18,7 +18,6 @@ import type { DisplayDataState } from '@src/types/state/display-data'
 import type { SelectedRowDataState } from '@src/types/state/selected-row-data'
 import React, { type ReactNode } from 'react'
 // vendors
-import { tss } from 'tss-react/mui'
 import CheckboxCell from '../_shared/checkbox-cell'
 // locals
 import { TableBodyCell } from './components/cell'
@@ -32,7 +31,6 @@ import { DataTableBodyRow } from './components/row'
 export default function TableBody({
     selectRowUpdate
 }: DataTableBodyProps): ReactNode {
-    const { classes } = useStyles()
     const { options, state, textLabels } = useDataTableContext()
 
     const columnOrder = state.columnOrder ?? state.columns.map((_, i) => i)
@@ -47,7 +45,7 @@ export default function TableBody({
     const visibleColCnt = state.columns.filter(({ display }) => display).length
 
     return (
-        <MuiTableBody className={classes.root}>
+        <MuiTableBody className={ComponentClassName.TABLE__BODY}>
             {tableRows &&
                 tableRows.length > 0 &&
                 tableRows.map((data, rowIndex) => (
@@ -65,7 +63,6 @@ export default function TableBody({
             {(!tableRows || tableRows.length === 0) && (
                 <DataTableBodyRow isRowSelectable={false}>
                     <TableBodyCell
-                        className={classes.emptyTitle}
                         colIndex={0}
                         colSpan={
                             options.selectableRows !== 'none' ||
@@ -76,6 +73,9 @@ export default function TableBody({
                         dataIndex={-1}
                         print
                         rowIndex={0}
+                        sx={{
+                            textAlign: 'center'
+                        }}
                         value={textLabels.body.noMatch}
                     />
                 </DataTableBodyRow>
@@ -88,29 +88,6 @@ export interface DataTableBodyProps {
     /** Callback to trigger table row select */
     selectRowUpdate: SelectRowUpdateType
 }
-
-const useStyles = tss
-    .withName(ComponentClassName.TABLE__BODY)
-    .create(({ theme }) => ({
-        emptyTitle: {
-            textAlign: 'center'
-        },
-        lastSimpleCell: {
-            [theme.breakpoints.down('sm')]: {
-                '& td:last-child': {
-                    borderBottom: 'none'
-                }
-            }
-        },
-        lastStackedCell: {
-            [theme.breakpoints.down('md')]: {
-                '& td:last-child': {
-                    borderBottom: 'none'
-                }
-            }
-        },
-        root: {}
-    }))
 
 function buildRows<Row>(
     count: DataTableState<Row>['count'],
@@ -278,7 +255,6 @@ function RenderRow<Row>({
     columnOrder: number[]
     selectRowUpdate: SelectRowUpdateType
 }) {
-    const { classes, cx } = useStyles()
     const {
         onAction,
         options,
@@ -371,15 +347,7 @@ function RenderRow<Row>({
     return (
         <>
             <DataTableBodyRow
-                className={cx(
-                    {
-                        [classes.lastStackedCell]:
-                            options.responsive === 'vertical',
-                        [classes.lastSimpleCell]:
-                            options.responsive === 'simple'
-                    },
-                    overriddenBodyProps?.className
-                )}
+                className={overriddenBodyProps?.className}
                 isRowSelectable={isRowSelectable}
                 onClick={event =>
                     handleRowClick(
@@ -399,6 +367,17 @@ function RenderRow<Row>({
                     )
                 }
                 rowSelected={isRowSelected}
+                sx={theme => ({
+                    [theme.breakpoints.down('sm')]:
+                        options.responsive === 'simple' ||
+                        options.responsive === 'vertical'
+                            ? {
+                                  '& td:last-child': {
+                                      borderBottom: 'none'
+                                  }
+                              }
+                            : undefined
+                })}
                 {...overriddenBodyProps}
             >
                 <CheckboxCell

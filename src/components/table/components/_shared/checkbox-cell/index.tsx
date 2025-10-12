@@ -1,6 +1,7 @@
 'use client'
 
 import Checkbox, { type CheckboxProps } from '@mui/material/Checkbox'
+import type { SxProps } from '@mui/material/styles'
 import TableCell from '@mui/material/TableCell'
 import ComponentClassName from '@src/enums/class-name'
 // global enums
@@ -8,7 +9,7 @@ import TableAction from '@src/enums/table-action'
 import { buildMap } from '@src/functions'
 // globals
 import useDataTableContext from '@src/hooks/use-data-table-context'
-import { tss } from 'tss-react/mui'
+import type { DataTableOptions } from '@/src/types/options'
 // local components
 import RowExpansionButton from './components/row-expansion-button'
 
@@ -23,7 +24,6 @@ export default function CheckboxCell({
     ...otherProps
 }: DataTableTableSelectCellProps & IsHeaderCell) {
     const { components, onAction, options, state } = useDataTableContext()
-    const { classes, cx } = useStyles()
 
     if (
         options.expandableRows === false &&
@@ -36,25 +36,6 @@ export default function CheckboxCell({
     function areAllRowsExpanded() {
         return state.expandedRows.data.length === state.data.length
     }
-
-    const cellClasses = cx(classes.root, {
-        [classes.fixedHeader]: options.fixedHeader && isHeaderCell,
-        [classes.fixedLeft]: options.fixedSelectColumn,
-        [classes.headerCell]: isHeaderCell
-    })
-
-    const buttonClass = cx({
-        [classes.expandDisabled]: hideExpandButton
-    })
-
-    const iconClass = cx(classes.icon, {
-        [classes.hide]: isHeaderCell && !options.expandableRowsHeader,
-        [classes.expanded]:
-            isRowExpanded || (isHeaderCell && areAllRowsExpanded())
-    })
-    const iconIndeterminateClass = cx(classes.icon, {
-        [classes.hide]: isHeaderCell && !options.expandableRowsHeader
-    })
 
     const _Checkbox = components.Checkbox ?? Checkbox
 
@@ -69,11 +50,6 @@ export default function CheckboxCell({
         }
         return (
             <_Checkbox
-                classes={{
-                    checked: classes.checked,
-                    disabled: classes.disabled,
-                    root: classes.checkboxRoot
-                }}
                 color="primary"
                 data-description={
                     isHeaderCell ? 'row-select-header' : 'row-select'
@@ -153,28 +129,17 @@ export default function CheckboxCell({
 
     return (
         <TableCell
-            className={cellClasses}
+            className={ComponentClassName.TABLE__CHECKBOX_CELL}
             padding="checkbox"
-            sx={{
-                borderBottom:
-                    !isHeaderCell && options?.responsive === 'vertical'
-                        ? {
-                              md: '1px solid var(--mui-palette-TableCell-border)',
-                              sm: 'none',
-                              xs: 'none'
-                          }
-                        : undefined
-            }}
+            sx={constructCellSx(options, isHeaderCell)}
         >
             <div style={{ alignItems: 'center', display: 'flex' }}>
                 {options.expandableRows && (
                     <_RowExpansionButton
                         areAllRowsExpanded={areAllRowsExpanded}
-                        buttonClass={buttonClass}
                         dataIndex={dataIndex}
-                        iconClass={iconClass}
-                        iconIndeterminateClass={iconIndeterminateClass}
                         isHeaderCell={isHeaderCell}
+                        isRowExpanded={isRowExpanded}
                         onExpand={
                             isHeaderCell ? toggleAllExpandableRows : onExpand
                         }
@@ -223,36 +188,50 @@ export interface DataTableTableSelectCellProps {
     // id: string
 }
 
-const useStyles = tss.withName(ComponentClassName.TABLE__CHECKBOX_CELL).create({
-    checkboxRoot: {},
-    checked: {},
-    disabled: {},
-    expandDisabled: {},
-    expanded: {
-        transform: 'rotate(90deg)'
-    },
-    fixedHeader: {
-        position: 'sticky',
-        top: '0px'
-    },
-    fixedLeft: {
-        left: '0px',
-        position: 'sticky'
-    },
-    headerCell: {
-        backgroundColor: 'var(--mui-palette-background-paper)',
-        zIndex: 1
-    },
-    hide: {
-        visibility: 'hidden'
-    },
-    icon: {
-        cursor: 'pointer',
-        transition: 'transform 0.25s'
-    },
-    root: {
+function constructCellSx(
+    {
+        fixedHeader,
+        fixedSelectColumn,
+        responsive
+    }: Pick<
+        DataTableOptions,
+        'fixedHeader' | 'fixedSelectColumn' | 'responsive'
+    >,
+    isHeaderCell: boolean
+): SxProps {
+    return {
+        ...(fixedHeader && isHeaderCell
+            ? {
+                  position: 'sticky',
+                  top: '0px'
+              }
+            : {}),
+
+        ...(fixedSelectColumn
+            ? {
+                  left: '0px',
+                  position: 'sticky'
+              }
+            : {}),
+
+        ...(isHeaderCell
+            ? {
+                  backgroundColor: 'var(--mui-palette-background-paper)',
+                  zIndex: 1
+              }
+            : {}),
+
         '@media print': {
             display: 'none'
-        }
+        },
+
+        borderBottom:
+            !isHeaderCell && responsive === 'vertical'
+                ? {
+                      md: '1px solid var(--mui-palette-TableCell-border)',
+                      sm: 'none',
+                      xs: 'none'
+                  }
+                : undefined
     }
-})
+}

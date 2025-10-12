@@ -12,7 +12,6 @@ import TableAction from '@src/enums/table-action'
 import useDataTableContext from '@src/hooks/use-data-table-context'
 // vendors
 import type { ReactNode } from 'react'
-import { tss } from 'tss-react/mui'
 
 /**
  * @import Toolbar from ".."
@@ -27,7 +26,6 @@ import { tss } from 'tss-react/mui'
 export default function ColumnVisibilitiesBox(): ReactNode {
     const { components, onAction, options, state, textLabels } =
         useDataTableContext()
-    const { classes } = useStyles()
 
     const handleColChange = (index: number) => {
         const newColumns = state.columns.map(column =>
@@ -58,14 +56,32 @@ export default function ColumnVisibilitiesBox(): ReactNode {
     return (
         <FormControl
             aria-label={textLabels.viewColumns.titleAria}
-            className={classes.root}
+            className={ComponentClassName.TOOLBAR__COLUMN_VISIBILITIES_BOX}
             component="fieldset"
+            style={{
+                fontFamily: 'Roboto',
+                padding: '16px 24px 16px 24px'
+            }}
         >
-            <Typography className={classes.title} variant="caption">
+            <Typography
+                style={{
+                    color: 'var(--mui-palette-text-secondary)',
+                    fontSize: '14px',
+                    fontWeight: 500,
+                    marginLeft: '-7px',
+                    marginRight: '24px',
+                    textAlign: 'left'
+                }}
+                variant="caption"
+            >
                 {textLabels.viewColumns.title}
             </Typography>
 
-            <FormGroup className={classes.formGroup}>
+            <FormGroup
+                sx={{
+                    marginTop: '8px'
+                }}
+            >
                 {state.columns.map((column, index) => {
                     if (column.display === 'excluded' || !column.viewColumns) {
                         return
@@ -73,25 +89,30 @@ export default function ColumnVisibilitiesBox(): ReactNode {
 
                     return (
                         <FormControlLabel
-                            classes={{
-                                label: classes.label,
-                                root: classes.formControl
-                            }}
                             control={
                                 <_Checkbox
                                     checked={column.display === true}
-                                    classes={{
-                                        checked: classes.checked,
-                                        root: classes.checkboxRoot
-                                    }}
-                                    className={classes.checkbox}
                                     color="primary"
                                     onChange={() => handleColChange(index)}
+                                    sx={{
+                                        height: '32px',
+                                        padding: '0px',
+                                        width: '32px'
+                                    }}
                                     value={column.name}
                                 />
                             }
                             key={index}
                             label={column.label}
+                            slotProps={{
+                                typography: {
+                                    sx: {
+                                        color: 'var(--mui-palette-text-primary)',
+                                        fontSize: '15px',
+                                        marginLeft: '8px'
+                                    }
+                                }
+                            }}
                         />
                     )
                 })}
@@ -99,39 +120,6 @@ export default function ColumnVisibilitiesBox(): ReactNode {
         </FormControl>
     )
 }
-
-const useStyles = tss
-    .withName(ComponentClassName.TOOLBAR__COLUMN_VISIBILITIES_BOX)
-    .create(() => ({
-        checkbox: {
-            height: '32px',
-            padding: '0px',
-            width: '32px'
-        },
-        checkboxRoot: {},
-        checked: {},
-        formControl: {},
-        formGroup: {
-            marginTop: '8px'
-        },
-        label: {
-            color: 'var(--mui-palette-text-primary)',
-            fontSize: '15px',
-            marginLeft: '8px'
-        },
-        root: {
-            fontFamily: 'Roboto',
-            padding: '16px 24px 16px 24px'
-        },
-        title: {
-            color: 'var(--mui-palette-text-secondary)',
-            fontSize: '14px',
-            fontWeight: 500,
-            marginLeft: '-7px',
-            marginRight: '24px',
-            textAlign: 'left'
-        }
-    }))
 
 // export interface ToolbarViewColProps {
 //     /** Extend the style applied to components */

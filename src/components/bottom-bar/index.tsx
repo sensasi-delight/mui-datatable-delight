@@ -1,16 +1,12 @@
 'use client'
 
-// global enums
+import Box from '@mui/material/Box'
 import ClassName from '@src/enums/class-name'
 import TableAction from '@src/enums/table-action'
 import { getPageValue } from '@src/functions/_shared/get-page-value'
-// globals
 import useDataTableContext from '@src/hooks/use-data-table-context'
-// vendors
 import type { ReactNode } from 'react'
-import { tss } from 'tss-react/mui'
 import JumpToPage from './components/jump-to-page'
-// local sub-components
 import { DataTableFooterPagination } from './components/pagination'
 
 /**
@@ -20,7 +16,6 @@ import { DataTableFooterPagination } from './components/pagination'
  */
 export default function BottomBar(): ReactNode {
     const { options, state, textLabels, onAction } = useDataTableContext()
-    const { classes } = useStyles()
     const { customFooter, pagination = true, jumpToPage } = options
 
     function changePage(page: number) {
@@ -57,7 +52,21 @@ export default function BottomBar(): ReactNode {
     if (!jumpToPage && !pagination) return <></>
 
     return (
-        <div className={classes.root}>
+        <Box
+            className={ClassName.BOTTOM_BAR}
+            sx={theme => ({
+                alignItems: 'center',
+                display: 'flex',
+                justifyContent: 'flex-end',
+                paddingLeft: '16px',
+                paddingRight: '8px',
+                [theme.breakpoints.down('sm')]: {
+                    alignItems: 'end',
+                    flexDirection: 'column',
+                    marginTop: '1em'
+                }
+            })}
+        >
             {jumpToPage && <JumpToPage changePage={changePage} />}
 
             {pagination && (
@@ -67,21 +76,6 @@ export default function BottomBar(): ReactNode {
                     rowsPerPage={rowsPerPage}
                 />
             )}
-        </div>
+        </Box>
     )
 }
-
-const useStyles = tss.withName(ClassName.BOTTOM_BAR).create(({ theme }) => ({
-    root: {
-        alignItems: 'center',
-        display: 'flex',
-        justifyContent: 'flex-end',
-        paddingLeft: '16px',
-        paddingRight: '8px',
-        [theme.breakpoints.down('sm')]: {
-            alignItems: 'end',
-            flexDirection: 'column',
-            marginTop: '1em'
-        }
-    }
-}))
