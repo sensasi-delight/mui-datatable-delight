@@ -61,7 +61,7 @@ export default function getNewStateOnDataChange<T>(
 
     const data =
         status === TABLE_LOAD.INITIAL
-            ? transformData(columns, dataParam as T[], options)
+            ? transformData(columns, dataParam as T[])
             : dataParam
 
     const rowsPerPage = options.rowsPerPage ?? state.rowsPerPage

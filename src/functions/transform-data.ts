@@ -1,22 +1,16 @@
 import type { DataTableProps } from '@src/data-table.props'
 import type { ColumnState } from '@src/types/state/column'
 import type { Primitive } from '@src/types/values/primitive'
-import type { DataTableOptions } from '../types/options'
 
 export default function transformData<T>(
     columns: ColumnState<T>[],
-    data: DataTableProps<T>['data'],
-    options: DataTableOptions<T>
+    data: DataTableProps<T>['data']
 ): Record<number, T[keyof T]>[] {
-    const { enableNestedDataAccess } = options
-
     /**
      * Retrieves the leaf value from a nested object using a specified path.
      */
     const getLeafValue = (object: T, path: string): Primitive => {
-        const pathSegments = enableNestedDataAccess
-            ? path.split(enableNestedDataAccess)
-            : path.split('.')
+        const pathSegments = path.split('.')
 
         return pathSegments.reduce<Primitive>(
             (value, segment) =>
