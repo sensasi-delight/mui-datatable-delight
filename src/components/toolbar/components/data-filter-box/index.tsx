@@ -143,13 +143,6 @@ const useStyles = tss
             width: '100%'
         },
 
-        /**
-         * @deprecated FOUND BUT UNUSED
-         */
-        // noMargin: {
-        //     marginLeft: '0px'
-        // },
-
         reset: {
             alignSelf: 'left'
         },
@@ -170,13 +163,6 @@ const useStyles = tss
             fontWeight: 500,
             marginLeft: '7px'
         }
-
-        /**
-         * @deprecated FOUND BUT UNUSED
-         */
-        // checkboxFormGroup: {
-        //     marginTop: '8px'
-        // },
     }))
 
 type FilterListType = string[][]

@@ -218,9 +218,6 @@ export interface ColumnDefinitionOptions<T> {
      */
     sortThirdClickReset?: boolean | undefined
 
-    /** @deprecated use `sortOrder` instead */
-    sortDirection?: 'asc' | 'desc' | 'none' | undefined
-
     /**
      * Allow user to toggle column visibility through 'View Column' list.
      *
