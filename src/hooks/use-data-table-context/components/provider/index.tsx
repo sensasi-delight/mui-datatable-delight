@@ -144,7 +144,7 @@ export default function DataTableContextProvider<Row>({
         }
     }, [forwardTableChange])
 
-    handleDeprecatedOptions(datatableProps, options.current)
+    handleDeprecatedOptions(options.current)
 
     const _DataTableContext = DataTableContext as react.Context<
         ContextValue<Row>

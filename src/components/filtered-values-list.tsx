@@ -34,14 +34,9 @@ export default function FilteredValuesList<T>({
         return column.customFilterListOptions?.update
     })
 
-    const filterListRenderers = state.columns.map(column => {
-        if (column.customFilterListOptions?.render) {
-            return column.customFilterListOptions.render
-        }
-
-        // DEPRECATED: This option is being replaced with customFilterListOptions.render
-        return column.customFilterListRender ?? (<T,>(f: T) => f)
-    })
+    const filterListRenderers = state.columns.map(
+        column => column.customFilterListOptions?.render ?? (<T,>(f: T) => f)
+    )
 
     function removeFilter<T>(
         index: number,

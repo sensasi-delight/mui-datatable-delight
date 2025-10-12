@@ -2454,7 +2454,6 @@ describe('<MUIDataTable />', function () {
         newCols[0].options = Object.assign({}, newCols[0].options)
         newCols[0].options.sortDirection = 'asc'
         newCols[0].options.filterOptions = []
-        newCols[0].options.customFilterListRender = () => {}
 
         const shallowWrapper = shallow(
             <MUIDataTable columns={newCols} data={data} options={options} />
