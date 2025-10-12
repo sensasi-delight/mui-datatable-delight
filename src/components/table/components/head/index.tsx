@@ -18,7 +18,6 @@ import {
 import type { DataTableState } from '@src/types/state'
 // vendors
 import type { ReactNode } from 'react'
-import { tss } from 'tss-react/mui'
 import CheckboxCell from '../_shared/checkbox-cell'
 import { TableHeadCell } from './components/cell'
 import type { Props } from './types/props'
@@ -29,7 +28,6 @@ import type { Props } from './types/props'
  * @category  Component
  */
 export default function TableHead({ selectRowUpdate }: Props): ReactNode {
-    const { classes, cx } = useStyles()
     const { onAction, options, state, updateCellValueRef } =
         useDataTableContext()
 
@@ -183,12 +181,18 @@ export default function TableHead({ selectRowUpdate }: Props): ReactNode {
 
     return (
         <MuiTableHead
-            className={cx(classes.root, {
-                [classes.responsiveStacked]: options.responsive === 'vertical',
-                [classes.responsiveSimple]: options.responsive === 'simple'
+            className={ComponentClassName.TABLE__HEAD}
+            sx={theme => ({
+                [theme.breakpoints.down('md')]: {
+                    display:
+                        options.responsive === 'simple' ||
+                        options.responsive === 'vertical'
+                            ? 'none'
+                            : undefined
+                }
             })}
         >
-            <TableRow className={classes.row}>
+            <TableRow>
                 <CheckboxCell
                     checked={isChecked}
                     indeterminate={isIndeterminate}
@@ -236,20 +240,3 @@ export default function TableHead({ selectRowUpdate }: Props): ReactNode {
         </MuiTableHead>
     )
 }
-
-const useStyles = tss
-    .withName(ComponentClassName.TABLE__HEAD)
-    .create(({ theme }) => ({
-        responsiveSimple: {
-            [theme.breakpoints.down('sm')]: {
-                display: 'none'
-            }
-        },
-        responsiveStacked: {
-            [theme.breakpoints.down('md')]: {
-                display: 'none'
-            }
-        },
-        root: {},
-        row: {}
-    }))

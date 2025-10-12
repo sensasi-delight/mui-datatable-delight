@@ -1,5 +1,7 @@
 'use client'
 
+import Box from '@mui/material/Box'
+import type { SxProps } from '@mui/material/styles'
 import TableCell, { type TableCellProps } from '@mui/material/TableCell'
 import ComponentClassName from '@src/enums/class-name'
 // globals
@@ -7,7 +9,6 @@ import useDataTableContext from '@src/hooks/use-data-table-context'
 import type { ColumnState } from '@src/types/state/column'
 // vendors
 import { type ReactElement, type ReactNode } from 'react'
-import { tss } from 'tss-react/mui'
 
 /**
  * Table Body Cell.
@@ -35,40 +36,57 @@ export function TableBodyCell<T>({
     print: boolean
 } & TableCellProps): ReactElement {
     const { options, textLabels } = useDataTableContext<T>()
-    const { classes, cx } = useStyles()
+
+    const constructedClassName = [
+        className,
+        colIndex === 2 ? 'lastColumn' : '',
+        !print ? 'datatables-noprint' : ''
+    ].join(' ')
 
     const cells = [
-        <div
-            className={cx(
-                {
-                    lastColumn: colIndex === 2,
-                    [classes.root]: true,
-                    [classes.cellHide]: true,
-                    [classes.stackedHeader]: true,
-                    [classes.stackedCommon]: options?.responsive === 'vertical',
-                    [classes.simpleHeader]: options?.responsive === 'simple',
-                    'datatables-noprint': !print
-                },
-                className
-            )}
+        <Box
+            className={constructedClassName}
             key={1}
+            style={{
+                display: 'none',
+                verticalAlign: 'top'
+            }}
+            sx={theme => ({
+                [theme.breakpoints.down('sm')]: {
+                    ...(options?.responsive === 'vertical'
+                        ? SXS_BREAKPOINT_MD.stackedCommon
+                        : {}),
+
+                    ...(options?.responsive === 'simple'
+                        ? SXS_BREAKPOINT_MD.simpleHeader
+                        : {})
+                }
+            })}
         >
             {columnHeader}
-        </div>,
-        <div
-            className={cx(
-                {
-                    [classes.root]: true,
-                    [classes.stackedCommon]: options?.responsive === 'vertical',
-                    [classes.simpleCell]: options?.responsive === 'simple',
-                    'datatables-noprint': !print
-                },
-                className
-            )}
+        </Box>,
+        <Box
+            className={className}
             key={2}
+            sx={theme => ({
+                [theme.breakpoints.down('sm')]: {
+                    ...(options?.responsive === 'vertical'
+                        ? SXS_BREAKPOINT_MD.stackedCommon
+                        : {}),
+
+                    ...(options?.responsive === 'simple'
+                        ? SXS_BREAKPOINT_MD.simpleCell
+                        : {})
+                }
+
+                // TODO: add print support
+                // '@media print': {
+                //     display: !print ? 'none' : undefined
+                // }
+            })}
         >
             {typeof value === 'function' ? value(dataIndex, rowIndex) : value}
-        </div>
+        </Box>
     ]
 
     const innerCells =
@@ -83,24 +101,19 @@ export function TableBodyCell<T>({
             ? cells.slice(1, 2)
             : cells
 
-    /** NOTE: NOT SURE WITH VAR NAME */
-    const isAppendStackedParentClassName = options?.responsive === 'vertical'
+    const isStackedParent = options?.responsive === 'vertical'
+    const isResponsiveStackedSmallParent =
+        isStackedParent &&
+        (options.setTableProps?.().padding === 'none' ||
+            options.setTableProps?.().size === 'small')
 
     return (
         <TableCell
-            className={cx(
-                classes.root,
-                {
-                    [classes.simpleCell]: options?.responsive === 'simple',
-                    [classes.stackedParent]: isAppendStackedParentClassName,
-                    [classes.responsiveStackedSmallParent]:
-                        isAppendStackedParentClassName &&
-                        (options.setTableProps?.().padding === 'none' ||
-                            options.setTableProps?.().size === 'small'),
-                    'datatables-noprint': !print
-                },
-                className
-            )}
+            className={[
+                ComponentClassName.TABLE__BODY__CELL,
+                className,
+                print === false && 'datatables-noprint'
+            ].join(' ')}
             data-column-index={colIndex}
             onClick={event => {
                 options?.onCellClick?.(value, {
@@ -111,71 +124,63 @@ export function TableBodyCell<T>({
                 })
             }}
             {...otherProps}
+            sx={theme => ({
+                ...otherProps.sx,
+
+                [theme.breakpoints.down('sm')]: {
+                    ...(options?.responsive === 'simple'
+                        ? SXS_BREAKPOINT_MD.simpleCell
+                        : {}),
+
+                    ...(isStackedParent ? SXS_BREAKPOINT_MD.stackedParent : {}),
+
+                    ...(isResponsiveStackedSmallParent
+                        ? SXS_BREAKPOINT_MD.responsiveStackedSmallParent
+                        : {})
+                }
+            })}
         >
             {innerCells}
         </TableCell>
     )
 }
 
-const useStyles = tss
-    .withName(ComponentClassName.TABLE__BODY__CELL)
-    .create(({ theme }) => ({
-        cellHide: {
-            display: 'none'
+const SXS_BREAKPOINT_MD: {
+    [key: string]: SxProps
+} = {
+    responsiveStackedSmallParent: {
+        boxSizing: 'border-box',
+        width: '100%'
+    },
+    simpleCell: {
+        boxSizing: 'border-box',
+        display: 'inline-block',
+        width: '100%'
+    },
+    simpleHeader: {
+        boxSizing: 'border-box',
+        display: 'inline-block',
+        fontWeight: 'bold',
+        width: '100%'
+    },
+    stackedCommon: {
+        '&:last-child': {
+            borderBottom: 'none'
         },
-        cellStackedSmall: {
-            [theme.breakpoints.down('md')]: {
-                boxSizing: 'border-box',
-                width: '50%'
-            }
+        '&:nth-last-of-type(2)': {
+            borderBottom: 'none'
         },
-        responsiveStackedSmallParent: {
-            [theme.breakpoints.down('md')]: {
-                boxSizing: 'border-box',
-                width: '100%'
-            }
-        },
-        root: {},
-        simpleCell: {
-            [theme.breakpoints.down('sm')]: {
-                boxSizing: 'border-box',
-                display: 'inline-block',
-                width: '100%'
-            }
-        },
-        simpleHeader: {
-            [theme.breakpoints.down('sm')]: {
-                boxSizing: 'border-box',
-                display: 'inline-block',
-                fontWeight: 'bold',
-                width: '100%'
-            }
-        },
-        stackedCommon: {
-            [theme.breakpoints.down('md')]: {
-                '&:last-child': {
-                    borderBottom: 'none'
-                },
-                '&:nth-last-of-type(2)': {
-                    borderBottom: 'none'
-                },
-                boxSizing: 'border-box',
-                display: 'inline-block',
-                fontSize: '16px',
-                height: 'auto',
-                width: 'calc(50%)'
-            }
-        },
-        stackedHeader: {
-            verticalAlign: 'top'
-        },
-        stackedParent: {
-            [theme.breakpoints.down('md')]: {
-                boxSizing: 'border-box',
-                display: 'inline-block',
-                fontSize: '16px',
-                height: 'auto',
-                width: 'calc(100%)'
-            }
-        }
-    }))
+        boxSizing: 'border-box',
+        display: 'inline-block',
+        fontSize: '16px',
+        height: 'auto',
+        width: 'calc(50%)'
+    },
+    stackedParent: {
+        boxSizing: 'border-box',
+        display: 'inline-block',
+        fontSize: '16px',
+        height: 'auto',
+        width: 'calc(100%)'
+    }
+}

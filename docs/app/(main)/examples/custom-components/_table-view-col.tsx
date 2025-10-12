@@ -1,17 +1,15 @@
-// vendors
+'use client'
 
-// materials
 import Button from '@mui/material/Button'
 import Checkbox from '@mui/material/Checkbox'
 import FormControl from '@mui/material/FormControl'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import FormGroup from '@mui/material/FormGroup'
 import Typography from '@mui/material/Typography'
-//
 import { type DataTableState, useDataTableContext } from '@src'
-import { tss } from 'tss-react/mui'
+import ComponentClassName from '@/src/enums/class-name'
 
-function TableViewCol<T>({
+export default function TableViewCol<T>({
     onColumnUpdate,
     updateColumns
 }: {
@@ -19,7 +17,6 @@ function TableViewCol<T>({
     updateColumns: (columns: DataTableState<T>['columns']) => void
 }) {
     const { state, textLabels: allTextLabels } = useDataTableContext<T>()
-    const { classes } = useStyles()
     const textLabels = allTextLabels.viewColumns
 
     const handleColChange = (index: number) => {
@@ -41,14 +38,32 @@ function TableViewCol<T>({
     return (
         <FormControl
             aria-label={textLabels.titleAria}
-            className={classes.root}
+            className={ComponentClassName.TABLE__VIEW_COL}
             component="fieldset"
+            sx={{
+                fontFamily: 'Roboto',
+                padding: '16px 24px 16px 24px'
+            }}
         >
-            <Typography className={classes.title} variant="caption">
+            <Typography
+                sx={{
+                    color: 'var(--mui-palette-text-secondary)',
+                    fontSize: '14px',
+                    fontWeight: 500,
+                    marginLeft: '-7px',
+                    marginRight: '24px',
+                    textAlign: 'left'
+                }}
+                variant="caption"
+            >
                 {textLabels.title}
             </Typography>
 
-            <FormGroup className={classes.formGroup}>
+            <FormGroup
+                sx={{
+                    marginTop: '8px'
+                }}
+            >
                 <Button onClick={selectAll}>Show All</Button>
 
                 {state.columns.map((column, index) => {
@@ -56,25 +71,29 @@ function TableViewCol<T>({
                         column.display !== 'excluded' &&
                         column.viewColumns !== false && (
                             <FormControlLabel
-                                classes={{
-                                    label: classes.label,
-                                    root: classes.formControl
-                                }}
                                 control={
                                     <Checkbox
                                         checked={column.display}
-                                        classes={{
-                                            checked: classes.checked,
-                                            root: classes.checkboxRoot
-                                        }}
-                                        className={classes.checkbox}
                                         color="primary"
                                         onChange={() => handleColChange(index)}
+                                        sx={{
+                                            height: '32px',
+                                            padding: '0px',
+                                            width: '32px'
+                                        }}
                                         value={column.name}
                                     />
                                 }
                                 key={index}
                                 label={column.label}
+                                slotProps={{
+                                    typography: {
+                                        sx: {
+                                            fontSize: '15px',
+                                            marginLeft: '8px'
+                                        }
+                                    }
+                                }}
                             />
                         )
                     )
@@ -83,36 +102,3 @@ function TableViewCol<T>({
         </FormControl>
     )
 }
-
-export default TableViewCol
-
-const useStyles = tss.withName('MUIDataTableViewCol').create(({ theme }) => ({
-    checkbox: {
-        height: '32px',
-        padding: '0px',
-        width: '32px'
-    },
-    checkboxRoot: {},
-    checked: {},
-    formControl: {},
-    formGroup: {
-        marginTop: '8px'
-    },
-    label: {
-        color: theme.palette.text.primary,
-        fontSize: '15px',
-        marginLeft: '8px'
-    },
-    root: {
-        fontFamily: 'Roboto',
-        padding: '16px 24px 16px 24px'
-    },
-    title: {
-        color: theme.palette.text.secondary,
-        fontSize: '14px',
-        fontWeight: 500,
-        marginLeft: '-7px',
-        marginRight: '24px',
-        textAlign: 'left'
-    }
-}))

@@ -7,8 +7,6 @@ import ComponentClassName from '@src/enums/class-name'
 import useDataTableContext from '@src/hooks/use-data-table-context'
 import type { ReactElement } from 'react'
 import { useReactToPrint } from 'react-to-print'
-// vendors
-import { tss } from 'tss-react/mui'
 // globals
 import { ICON_BUTTON_DEFAULT_SX } from './statics/icon-button-default-sx'
 
@@ -21,7 +19,6 @@ import { ICON_BUTTON_DEFAULT_SX } from './statics/icon-button-default-sx'
  * @category  Component
  */
 export function ToolbarPrintButton(): ReactElement {
-    const { classes } = useStyles()
     const {
         icons,
         options,
@@ -38,7 +35,7 @@ export function ToolbarPrintButton(): ReactElement {
             <span>
                 <IconButton
                     aria-label={toolbarTextLabels.print}
-                    className={classes.root}
+                    className={ComponentClassName.TOOLBAR__PRINT_BUTTON}
                     disabled={options.print === 'disabled'}
                     onClick={() => handlePrint()}
                     sx={ICON_BUTTON_DEFAULT_SX}
@@ -49,9 +46,3 @@ export function ToolbarPrintButton(): ReactElement {
         </Tooltip>
     )
 }
-
-const useStyles = tss
-    .withName(ComponentClassName.TOOLBAR__PRINT_BUTTON)
-    .create({
-        root: {}
-    })

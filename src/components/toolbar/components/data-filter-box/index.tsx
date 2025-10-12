@@ -13,7 +13,6 @@ import useDataTableContext from '@src/hooks/use-data-table-context'
 import type { FilterUpdateType } from '@src/types/filter-update'
 import { type ReactNode, useState } from 'react'
 // materials
-import { tss } from 'tss-react/mui'
 import ToolbarDataFilterBoxFilters from './components/filter-inputs'
 
 /**
@@ -36,8 +35,6 @@ export default function ToolbarDataFilterBox<T>({
 
     handleClose: () => void
 }): ReactNode {
-    const { classes, cx } = useStyles()
-
     const { onAction, options, state, textLabels, updateCellValueRef } =
         useDataTableContext()
 
@@ -68,13 +65,34 @@ export default function ToolbarDataFilterBox<T>({
     }
 
     return (
-        <div className={classes.root}>
-            <div className={classes.header}>
-                <div className={classes.reset}>
+        <div
+            className={ComponentClassName.TOOLBAR__DATA_FILTER_BOX}
+            style={{
+                fontFamily: 'Roboto',
+                padding: '24px 24px 36px 24px'
+            }}
+        >
+            <div
+                style={{
+                    display: 'flex',
+                    flex: '0 0 auto',
+                    justifyContent: 'space-between',
+                    marginBottom: '16px',
+                    width: '100%'
+                }}
+            >
+                <div
+                    style={{
+                        alignSelf: 'left'
+                    }}
+                >
                     <Typography
-                        className={cx({
-                            [classes.title]: true
-                        })}
+                        sx={{
+                            display: 'inline-block',
+                            fontSize: '14px',
+                            fontWeight: 500,
+                            marginLeft: '7px'
+                        }}
                         variant="body2"
                     >
                         {textLabels.filter.title}
@@ -82,7 +100,6 @@ export default function ToolbarDataFilterBox<T>({
 
                     <Button
                         aria-label={textLabels.filter.reset}
-                        className={classes.resetLink}
                         color="primary"
                         onClick={() => {
                             if (options.confirmFilters !== true) {
@@ -90,13 +107,22 @@ export default function ToolbarDataFilterBox<T>({
                                 handleFilterReset()
                             }
                         }}
+                        style={{
+                            cursor: 'pointer',
+                            fontSize: '12px',
+                            marginLeft: '16px'
+                        }}
                         tabIndex={0}
                     >
                         {textLabels.filter.reset}
                     </Button>
                 </div>
 
-                <div className={classes.filtersSelected} />
+                <div
+                    style={{
+                        alignSelf: 'right'
+                    }}
+                />
             </div>
 
             <ToolbarDataFilterBoxFilters
@@ -127,43 +153,6 @@ export default function ToolbarDataFilterBox<T>({
         </div>
     )
 }
-
-const useStyles = tss
-    .withName(ComponentClassName.TOOLBAR__DATA_FILTER_BOX)
-    .create(() => ({
-        filtersSelected: {
-            alignSelf: 'right'
-        },
-
-        header: {
-            display: 'flex',
-            flex: '0 0 auto',
-            justifyContent: 'space-between',
-            marginBottom: '16px',
-            width: '100%'
-        },
-
-        reset: {
-            alignSelf: 'left'
-        },
-
-        resetLink: {
-            cursor: 'pointer',
-            fontSize: '12px',
-            marginLeft: '16px'
-        },
-        root: {
-            fontFamily: 'Roboto',
-            padding: '24px 24px 36px 24px'
-        },
-
-        title: {
-            display: 'inline-block',
-            fontSize: '14px',
-            fontWeight: 500,
-            marginLeft: '7px'
-        }
-    }))
 
 type FilterListType = string[][]
 

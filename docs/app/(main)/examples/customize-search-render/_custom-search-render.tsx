@@ -10,7 +10,6 @@ import TextField from '@mui/material/TextField'
 import { useDataTableContext } from '@src'
 // vendors
 import { type ChangeEvent, useEffect } from 'react'
-import { tss } from 'tss-react/mui'
 
 export default function CustomSearchRender(props: {
     onHide: () => void
@@ -19,7 +18,6 @@ export default function CustomSearchRender(props: {
 }) {
     const { textLabels } = useDataTableContext()
     const { onHide, searchText } = props
-    const { classes } = useStyles()
 
     const handleTextChange = (event: ChangeEvent<HTMLInputElement>) => {
         props.onSearch(event.target.value)
@@ -42,39 +40,36 @@ export default function CustomSearchRender(props: {
     return (
         <Grow appear in={true} timeout={300}>
             <div
-                className={classes.main}
+                style={{
+                    display: 'flex',
+                    flex: '1 0 auto'
+                }}
                 // ref={el => (rootRef = el)} // CAN'T FOUND THE `rootRef` VAR
             >
                 <TextField
-                    className={classes.searchText}
                     fullWidth={true}
                     InputProps={{
                         'aria-label': textLabels.toolbar.search
                     }}
                     onChange={handleTextChange}
                     placeholder={'Custom TableSearch without search icon'}
+                    sx={{
+                        flex: '0.8 0'
+                    }}
                     value={searchText ?? ''}
                     // inputRef={el => (searchField = el)} // CAN'T FOUND THE `searchField` VAR
                 />
-                <IconButton className={classes.clearIcon} onClick={onHide}>
+                <IconButton
+                    onClick={onHide}
+                    sx={{
+                        '&:hover': {
+                            color: 'var(--mui-palette-error-main)'
+                        }
+                    }}
+                >
                     <ClearIcon />
                 </IconButton>
             </div>
         </Grow>
     )
 }
-
-const useStyles = tss.create(({ theme }) => ({
-    clearIcon: {
-        '&:hover': {
-            color: theme.palette.error.main
-        }
-    },
-    main: {
-        display: 'flex',
-        flex: '1 0 auto'
-    },
-    searchText: {
-        flex: '0.8 0'
-    }
-}))

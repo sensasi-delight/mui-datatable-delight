@@ -228,12 +228,6 @@ function DataTableToolbarFilterCheckbox<T>({
                     {filterData[index]?.map((filterValue, filterIndex) => (
                         <Grid key={filterIndex}>
                             <FormControlLabel
-                                sx={SXS.checkboxFormControl}
-                                slotProps={{
-                                    typography: {
-                                        sx: SXS.checkboxFormControlLabel
-                                    }
-                                }}
                                 control={
                                     <_Checkbox
                                         checked={filterList[index]?.includes(
@@ -253,6 +247,12 @@ function DataTableToolbarFilterCheckbox<T>({
                                 }
                                 key={filterIndex}
                                 label={renderItem(filterValue)}
+                                slotProps={{
+                                    typography: {
+                                        sx: SXS.checkboxFormControlLabel
+                                    }
+                                }}
+                                sx={SXS.checkboxFormControl}
                             />
                         </Grid>
                     ))}

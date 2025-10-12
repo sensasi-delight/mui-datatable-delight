@@ -1,17 +1,15 @@
 'use client'
 
-import Chip from '@mui/material/Chip'
+import Box from '@mui/material/Box'
+import Chip, { type ChipProps } from '@mui/material/Chip'
 import ComponentClassName from '@src/enums/class-name'
 import type { FilterUpdateType } from '@src/types/filter-update'
 // vendors
 import type { ReactNode } from 'react'
-import { tss } from 'tss-react/mui'
 import useDataTableContext from '../hooks/use-data-table-context'
 import type { FilterTypeType } from '../types/shared/filter-type-type'
 // local types
 import type { DataTableState } from '../types/state'
-
-const CLASS_ID = 'datatable-delight--filter-list'
 
 /**
  * Display a list of currently applied filters.
@@ -21,7 +19,6 @@ const CLASS_ID = 'datatable-delight--filter-list'
 export default function FilteredValuesList<T>({
     filterUpdate
 }: TableFilterListProps<T>): ReactNode {
-    const { classes, cx } = useStyles()
     const { options, state } = useDataTableContext<T>()
     const { serverSide } = options
 
@@ -88,7 +85,6 @@ export default function FilteredValuesList<T>({
 
         return (
             <Chip
-                className={classes.chip}
                 key={customFilterItemIndex}
                 label={customFilterItem}
                 onDelete={() =>
@@ -100,6 +96,7 @@ export default function FilteredValuesList<T>({
                         // customFilterListUpdate[index]
                     )
                 }
+                sx={CHIP_SX}
                 // itemKey={customFilterItemIndex}
                 // index={index}
                 // data={item}
@@ -119,12 +116,12 @@ export default function FilteredValuesList<T>({
 
     const filterChip = (index: number, data: string, colIndex: number) => (
         <Chip
-            className={classes.chip}
             key={colIndex}
             label={filterListRenderers[index]?.(data)}
             onDelete={() =>
                 removeFilter(index, data, columnNames[index]?.name, 'chip')
             }
+            sx={CHIP_SX}
             // itemKey={colIndex}
             // index={index}
             // data={data}
@@ -179,9 +176,17 @@ export default function FilteredValuesList<T>({
     }
 
     return (
-        <div className={cx(CLASS_ID, classes.root)}>
+        <Box
+            className={ComponentClassName.FILTERED_VALUES_LIST}
+            sx={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                justifyContent: 'left',
+                margin: '0px 16px 0px 16px'
+            }}
+        >
             {serverSide && getFilterList(state.filterList)}
-        </div>
+        </Box>
     )
 }
 
@@ -189,14 +194,6 @@ export interface TableFilterListProps<T = unknown> {
     filterUpdate: FilterUpdateType<T>
 }
 
-const useStyles = tss.withName(ComponentClassName.FILTERED_VALUES_LIST).create({
-    chip: {
-        margin: '8px 8px 0px 0px'
-    },
-    root: {
-        display: 'flex',
-        flexWrap: 'wrap',
-        justifyContent: 'left',
-        margin: '0px 16px 0px 16px'
-    }
-})
+const CHIP_SX: ChipProps['sx'] = {
+    margin: '8px 8px 0px 0px'
+}

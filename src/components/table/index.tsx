@@ -6,8 +6,7 @@ import MuiTable from '@mui/material/Table'
 import ClassName from '@src/enums/class-name'
 import useDataTableContext from '@src/hooks/use-data-table-context'
 // vendors
-import type { ReactNode } from 'react'
-import { tss } from 'tss-react/mui'
+import { type ReactNode } from 'react'
 import TableBody from './components/body'
 import TableHead from './components/head'
 //
@@ -19,7 +18,6 @@ import type { Props } from './types/props'
  * @category  Component
  */
 export default function Table({ selectRowUpdate }: Props): ReactNode {
-    const { classes, cx } = useStyles()
     const {
         components,
         options,
@@ -39,7 +37,13 @@ export default function Table({ selectRowUpdate }: Props): ReactNode {
             role="grid"
             tabIndex={0}
             {...tablePropsFromOption}
-            className={cx(classes.root, tablePropsFromOption.className)}
+            className={[ClassName.TABLE, tablePropsFromOption.className].join(
+                ' '
+            )}
+            sx={{
+                outline: 'none',
+                ...tablePropsFromOption.sx
+            }}
         >
             {datatableRootProps?.title && (
                 <caption
@@ -60,9 +64,3 @@ export default function Table({ selectRowUpdate }: Props): ReactNode {
         </MuiTable>
     )
 }
-
-const useStyles = tss.withName(ClassName.TABLE).create({
-    root: {
-        outline: 'none'
-    }
-})

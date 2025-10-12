@@ -1,6 +1,7 @@
 'use client'
 
 import DeleteIcon from '@mui/icons-material/Delete'
+import Box from '@mui/material/Box'
 // materials
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
@@ -10,7 +11,6 @@ import getNewStateOnDataChange from '@src/functions/get-new-state-on-data-change
 import type { SelectRowUpdateType } from '@src/types/select-row-update'
 // vendors
 import type { ReactNode } from 'react'
-import { tss } from 'tss-react/mui'
 // enums
 import ClassName from '../enums/class-name'
 import TableAction from '../enums/table-action'
@@ -40,7 +40,6 @@ export default function SelectedRowsToolbar({
         textLabels: { selectedRows: selectedRowsTextLabels },
         updateCellValueRef
     } = useDataTableContext()
-    const { classes } = useStyles()
 
     function onRowsDelete() {
         const { selectedRows, data } = state
@@ -77,9 +76,28 @@ export default function SelectedRowsToolbar({
     const _Tooltip = components.Tooltip ?? Tooltip
 
     return (
-        <div className={classes.root}>
+        <Box
+            className={ClassName.SELECTED_ROWS_TOOLBAR}
+            sx={theme => ({
+                '@media print': {
+                    display: 'none'
+                },
+                alignItems: 'center',
+                display: 'flex',
+                flex: '1 1 100%',
+                justifyContent: 'space-between',
+                paddingBottom: theme.spacing(1),
+                paddingTop: theme.spacing(1),
+                position: 'relative'
+            })}
+        >
             <div>
-                <Typography className={classes.title} variant="subtitle1">
+                <Typography
+                    sx={{
+                        paddingLeft: '26px'
+                    }}
+                    variant="subtitle1"
+                >
                     {state.selectedRows.data.length}{' '}
                     {selectedRowsTextLabels.text}
                 </Typography>
@@ -95,40 +113,18 @@ export default function SelectedRowsToolbar({
                 <_Tooltip title={selectedRowsTextLabels.delete}>
                     <IconButton
                         aria-label={selectedRowsTextLabels.deleteAria}
-                        className={classes.iconButton}
                         onClick={() => onRowsDelete()}
+                        sx={{
+                            marginRight: '24px'
+                        }}
                     >
-                        <DeleteIcon className={classes.deleteIcon} />
+                        <DeleteIcon />
                     </IconButton>
                 </_Tooltip>
             )}
-        </div>
+        </Box>
     )
 }
-
-const useStyles = tss
-    .withName(ClassName.SELECTED_ROWS_TOOLBAR)
-    .create(({ theme }) => ({
-        deleteIcon: {},
-        iconButton: {
-            marginRight: '24px'
-        },
-        root: {
-            '@media print': {
-                display: 'none'
-            },
-            alignItems: 'center',
-            display: 'flex',
-            flex: '1 1 100%',
-            justifyContent: 'space-between',
-            paddingBottom: theme.spacing(1),
-            paddingTop: theme.spacing(1),
-            position: 'relative'
-        },
-        title: {
-            paddingLeft: '26px'
-        }
-    }))
 
 export interface TableToolbarSelectProps {
     selectRowUpdate: SelectRowUpdateType

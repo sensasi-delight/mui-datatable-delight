@@ -12,8 +12,6 @@ import ComponentClassName from '@src/enums/class-name'
 // globals
 import useDataTableContext from '@src/hooks/use-data-table-context'
 import { type ReactElement, useState } from 'react'
-// vendors
-import { tss } from 'tss-react/mui'
 // locals
 import type Props from './types/props'
 
@@ -30,7 +28,7 @@ export function TableHeadCell<T>({
     sortDirection,
     toggleSort
 }: Props<T>): ReactElement {
-    const { classes, cx } = useStyles()
+    // const { classes, cx } = useStyles()
     const { components, options, textLabels } = useDataTableContext()
     const [sortTooltipOpen, setSortTooltipOpen] = useState(false)
     const [hintTooltipOpen, setHintTooltipOpen] = useState(false)
@@ -50,16 +48,13 @@ export function TableHeadCell<T>({
 
     const sortLabelProps: TableSortLabelProps = {
         active: sortActive,
-        classes: { root: classes.sortLabelRoot },
         direction: sortDirection,
         hideSortIcon: true,
+        style: {
+            height: '20px'
+        },
         tabIndex: -1
     }
-
-    const cellClass = cx(className, classes.root, {
-        [classes.fixedHeader]: options.fixedHeader,
-        'datatables-noprint': !column.print
-    })
 
     const showHintTooltip = () => {
         setSortTooltipOpen(false)
@@ -79,41 +74,91 @@ export function TableHeadCell<T>({
 
     return (
         <TableCell
-            className={cellClass}
+            className={[
+                ComponentClassName.TABLE__HEAD__CELL,
+                className,
+                !column.print === false ? 'datatables-noprint' : ''
+            ].join(' ')}
             data-column-index={index + 1}
             onMouseDown={closeTooltip}
             scope="col"
             sortDirection={sortDirection}
             {...otherProps}
+            sx={{
+                backgroundColor: 'var(--mui-palette-background-paper)',
+
+                ...(options.fixedHeader
+                    ? {
+                          position: 'sticky',
+                          top: 0
+                      }
+                    : {}),
+
+                ...otherProps.sx
+            }}
         >
             {options.sort && column.sort ? (
-                <span className={classes.contentWrapper}>
+                <span
+                    style={{
+                        alignItems: 'center',
+                        display: 'flex'
+                    }}
+                >
                     <_Tooltip
-                        classes={{
-                            popper: classes.myPopper,
-                            tooltip: classes.tooltip
-                        }}
                         onClose={() => setSortTooltipOpen(false)}
                         open={sortTooltipOpen}
                         placement="bottom"
+                        slotProps={{
+                            popper: {
+                                sx: {
+                                    '&[data-x-out-of-boundaries]': {
+                                        display: 'none'
+                                    }
+                                }
+                            },
+                            tooltip: {
+                                sx: {
+                                    cursor: 'pointer'
+                                }
+                            }
+                        }}
                         title={tooltipTitle}
                     >
                         <Button
-                            className={classes.toolButton}
                             color="inherit"
                             onClick={handleSortClick}
                             onKeyUp={handleKeyboardSortInput}
+                            sx={{
+                                marginLeft: '-8px',
+                                marginRight: '8px',
+                                minWidth: 0,
+                                paddingLeft: '8px',
+                                paddingRight: '8px',
+                                textTransform: 'none'
+                            }}
                         >
-                            <div className={classes.sortAction}>
+                            <div
+                                style={{
+                                    cursor: 'pointer',
+                                    display: 'flex'
+                                }}
+                            >
                                 <div
-                                    className={cx({
-                                        [classes.data]: true,
-                                        [classes.sortActive]: sortActive
-                                    })}
+                                    style={{
+                                        color: sortActive
+                                            ? 'var(--mui-palette-text-primary)'
+                                            : undefined,
+                                        display: 'inline-block'
+                                    }}
                                 >
                                     {children}
                                 </div>
-                                <div className={classes.sortAction}>
+                                <div
+                                    style={{
+                                        cursor: 'pointer',
+                                        display: 'flex'
+                                    }}
+                                >
                                     <TableSortLabel {...sortLabelProps} />
                                 </div>
                             </div>
@@ -123,35 +168,62 @@ export function TableHeadCell<T>({
                     {column.hint && (
                         <_Tooltip title={column.hint}>
                             <HelpIcon
-                                className={
-                                    !sortActive
-                                        ? classes.hintIconAlone
-                                        : classes.hintIconWithSortIcon
-                                }
                                 fontSize="small"
+                                sx={
+                                    !sortActive
+                                        ? {
+                                              marginLeft: '3px',
+                                              marginTop: '-3px'
+                                          }
+                                        : {
+                                              marginTop: '-3px'
+                                          }
+                                }
                             />
                         </_Tooltip>
                     )}
                 </span>
             ) : (
-                <div className={column.hint ? classes.sortAction : undefined}>
+                <div
+                    style={
+                        column.hint
+                            ? {
+                                  cursor: 'pointer',
+                                  display: 'flex'
+                              }
+                            : {}
+                    }
+                >
                     {children}
                     {column.hint && (
                         <_Tooltip
-                            classes={{
-                                popper: classes.myPopper,
-                                tooltip: classes.tooltip
-                            }}
                             enterDelay={300}
                             onClose={() => setHintTooltipOpen(false)}
                             onOpen={() => showHintTooltip()}
                             open={hintTooltipOpen}
                             placement="bottom-end"
+                            slotProps={{
+                                popper: {
+                                    sx: {
+                                        '&[data-x-out-of-boundaries]': {
+                                            display: 'none'
+                                        }
+                                    }
+                                },
+                                tooltip: {
+                                    sx: {
+                                        cursor: 'pointer'
+                                    }
+                                }
+                            }}
                             title={column.hint}
                         >
                             <HelpIcon
-                                className={classes.hintIconAlone}
                                 fontSize="small"
+                                style={{
+                                    marginLeft: '3px',
+                                    marginTop: '-3px'
+                                }}
                             />
                         </_Tooltip>
                     )}
@@ -160,53 +232,3 @@ export function TableHeadCell<T>({
         </TableCell>
     )
 }
-
-const useStyles = tss.withName(ComponentClassName.TABLE__HEAD__CELL).create({
-    contentWrapper: {
-        alignItems: 'center',
-        display: 'flex'
-    },
-    data: {
-        display: 'inline-block'
-    },
-    fixedHeader: {
-        position: 'sticky',
-        top: '0px'
-    },
-    hintIconAlone: {
-        marginLeft: '3px',
-        marginTop: '-3px'
-    },
-    hintIconWithSortIcon: {
-        marginTop: '-3px'
-    },
-    myPopper: {
-        '&[data-x-out-of-boundaries]': {
-            display: 'none'
-        }
-    },
-    root: {
-        backgroundColor: 'var(--mui-palette-background-paper)'
-    },
-    sortAction: {
-        cursor: 'pointer',
-        display: 'flex'
-    },
-    sortActive: {
-        color: 'var(--mui-palette-text-primary)'
-    },
-    sortLabelRoot: {
-        height: '20px'
-    },
-    toolButton: {
-        marginLeft: '-8px',
-        marginRight: '8px',
-        minWidth: 0,
-        paddingLeft: '8px',
-        paddingRight: '8px',
-        textTransform: 'none'
-    },
-    tooltip: {
-        cursor: 'pointer'
-    }
-})
