@@ -111,9 +111,6 @@ export interface ColumnDefinitionOptions<T> {
         ) => FilterList
     }
 
-    /** @deprecated use customFilterListOptions.render */
-    customFilterListRender?: ((value: unknown) => string) | undefined
-
     /** Function that returns a string or React component. Used as display for column header. */
     customHeadRender?:
         | ((

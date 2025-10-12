@@ -73,16 +73,9 @@ describe('<TableFilterList />', function () {
         const wrapper = mount(
             <TableFilterList
                 options={options}
-                filterListRenderers={columns.map(c => {
-                    if (
-                        c.customFilterListOptions &&
-                        c.customFilterListOptions.render
-                    )
-                        return c.customFilterListOptions.render
-                    if (c.customFilterListRender)
-                        return c.customFilterListRender
-                    return f => f
-                })}
+                filterListRenderers={columns.map(c => 
+                    c.customFilterListOptions.render
+                )}
                 customFilterListUpdate={columns.map(c => {
                     return c.customFilterListOptions &&
                         c.customFilterListOptions.update
@@ -120,16 +113,9 @@ describe('<TableFilterList />', function () {
         const wrapper = mount(
             <TableFilterList
                 options={options}
-                filterListRenderers={columns.map(c => {
-                    if (
-                        c.customFilterListOptions &&
-                        c.customFilterListOptions.render
-                    )
-                        return c.customFilterListOptions.render
-                    if (c.customFilterListRender)
-                        return c.customFilterListRender
-                    return f => f
-                })}
+                filterListRenderers={columns.map(
+                    c => c.customFilterListOptions?.render ?? (f => f)
+                )}
                 customFilterListUpdate={columns.map(c => {
                     return c.customFilterListOptions &&
                         c.customFilterListOptions.update
@@ -172,16 +158,9 @@ describe('<TableFilterList />', function () {
         const wrapper = mount(
             <TableFilterList
                 options={options}
-                filterListRenderers={columns.map(c => {
-                    if (
-                        c.customFilterListOptions &&
-                        c.customFilterListOptions.render
-                    )
-                        return c.customFilterListOptions.render
-                    if (c.customFilterListRender)
-                        return c.customFilterListRender
-                    return f => f
-                })}
+                filterListRenderers={columns.map(
+                    c => c.customFilterListOptions.render ?? (f => f)
+                )}
                 customFilterListUpdate={columns.map(c => {
                     return c.customFilterListOptions &&
                         c.customFilterListOptions.update
@@ -278,16 +257,7 @@ describe('<TableFilterList />', function () {
             <TableFilterList
                 options={options}
                 filterListRenderers={columnsWithCustomFilterListOptions.map(
-                    c => {
-                        if (
-                            c.customFilterListOptions &&
-                            c.customFilterListOptions.render
-                        )
-                            return c.customFilterListOptions.render
-                        if (c.customFilterListRender)
-                            return c.customFilterListRender
-                        return f => f
-                    }
+                    c => c.customFilterListOptions?.render ?? (f => f)
                 )}
                 customFilterListUpdate={columnsWithCustomFilterListOptions.map(
                     c => {

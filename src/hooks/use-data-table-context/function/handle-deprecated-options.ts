@@ -1,13 +1,8 @@
-// globals
-import { type DataTableProps } from '@src/data-table.props'
 import { warnDeprecated, warnInfo } from '@src/functions'
 import SELECT_TOOLBAR_PLACEMENT from '@src/statics/select-toolbar-placement'
 import { type DataTableOptions } from '@src/types/options'
 
-export function handleDeprecatedOptions<T>(
-    props: DataTableProps<T>,
-    options: DataTableOptions<T>
-) {
+export function handleDeprecatedOptions<T>(options: DataTableOptions<T>) {
     if (typeof options?.selectableRows === 'boolean') {
         warnDeprecated(
             'Using a boolean for selectableRows has been deprecated. Please use string option: multiple | single | none'
@@ -77,17 +72,6 @@ export function handleDeprecatedOptions<T>(
             'serverSideFilterList will still work but has been deprecated in favor of the confirmFilters option. See this example for details: https://github.com/gregnb/mui-datatables/blob/master/examples/serverside-filters/index.js More info here: https://github.com/gregnb/mui-datatables/tree/master/docs/v2_to_v3_guide.md'
         )
     }
-
-    props.columns.map(column => {
-        if (
-            typeof column === 'object' &&
-            column.options?.customFilterListRender
-        ) {
-            warnDeprecated(
-                'The `customFilterListRender` option has been deprecated. It is being replaced by `customFilterListOptions.render` (Specify customFilterListOptions: { render: Function } in column options.)'
-            )
-        }
-    })
 
     // only give this warning message in newer browsers
     if (
