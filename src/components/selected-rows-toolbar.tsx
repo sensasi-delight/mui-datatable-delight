@@ -85,13 +85,13 @@ export default function SelectedRowsToolbar({
                 </Typography>
             </div>
 
-            {options.customToolbarSelect?.(
+            {options.customSelectedRowsToolbar?.(
                 state.selectedRows,
                 state.displayData ?? [],
                 rows => handleCustomSelectedRows(rows, options, selectRowUpdate)
             )}
 
-            {!options.customToolbarSelect && (
+            {!options.customSelectedRowsToolbar && (
                 <_Tooltip title={selectedRowsTextLabels.delete}>
                     <IconButton
                         aria-label={selectedRowsTextLabels.deleteAria}

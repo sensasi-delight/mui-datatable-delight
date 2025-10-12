@@ -36,11 +36,11 @@ export default function Page() {
             // })
             console.log(changedColumn, direction)
         },
+        onColumnVisibilityChange: console.log,
         onDownload: () => {
             return false
         },
         onRowClick: () => console.log('aswd'),
-        onViewColumnsChange: console.log,
         print: false,
         // serverSide: true,
         responsive: 'standard',

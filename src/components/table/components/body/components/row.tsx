@@ -36,9 +36,7 @@ export function DataTableBodyRow({
                         options.expandableRowsOnClick,
                     [classes.responsiveSimple]: options.responsive === 'simple',
                     [classes.responsiveStacked]:
-                        options.responsive === 'vertical' ||
-                        options.responsive === 'stacked' ||
-                        options.responsive === 'stackedFullWidth',
+                        options.responsive === 'vertical',
                     'mui-row-selected': rowSelected
                 },
                 className

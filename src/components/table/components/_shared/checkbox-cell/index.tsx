@@ -157,10 +157,7 @@ export default function CheckboxCell({
             padding="checkbox"
             sx={{
                 borderBottom:
-                    !isHeaderCell &&
-                    (options?.responsive === 'vertical' ||
-                        options?.responsive === 'stacked' ||
-                        options?.responsive === 'stackedFullWidth')
+                    !isHeaderCell && options?.responsive === 'vertical'
                         ? {
                               md: '1px solid var(--mui-palette-TableCell-border)',
                               sm: 'none',

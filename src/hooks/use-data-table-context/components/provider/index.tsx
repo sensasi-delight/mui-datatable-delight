@@ -13,7 +13,6 @@ import type { DataTableState } from '@src/types/state'
 import react from 'react' // this is special import that not spread to prevent ts error on build
 import isEqual from 'react-fast-compare'
 import DataTableContext from '../../context'
-import { handleDeprecatedOptions } from '../../function/handle-deprecated-options'
 import { processTextLabels } from '../../function/process-text-labels'
 import { DEFAULT_ICONS } from '../../statics/default-icons'
 import { DEFAULT_OPTIONS } from '../../statics/default-options'
@@ -143,8 +142,6 @@ export default function DataTableContextProvider<Row>({
             setForwardTableChange(undefined)
         }
     }, [forwardTableChange])
-
-    handleDeprecatedOptions(options.current)
 
     const _DataTableContext = DataTableContext as react.Context<
         ContextValue<Row>

@@ -180,9 +180,7 @@ export default function FilteredValuesList<T>({
 
     return (
         <div className={cx(CLASS_ID, classes.root)}>
-            {serverSide && options.serverSideFilterList
-                ? getFilterList(options.serverSideFilterList)
-                : getFilterList(state.filterList)}
+            {serverSide && getFilterList(state.filterList)}
         </div>
     )
 }

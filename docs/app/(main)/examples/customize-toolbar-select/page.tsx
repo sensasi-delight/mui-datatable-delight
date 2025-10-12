@@ -60,7 +60,11 @@ function Example() {
     ]
 
     const options: DataTableProps['options'] = {
-        customToolbarSelect: (selectedRows, displayData, setSelectedRows) => (
+        customSelectedRowsToolbar: (
+            selectedRows,
+            displayData,
+            setSelectedRows
+        ) => (
             <CustomToolbarSelect
                 displayData={displayData}
                 selectedRows={selectedRows}
