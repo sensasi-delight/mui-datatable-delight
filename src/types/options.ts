@@ -421,7 +421,6 @@ export interface DataTableOptions<Row = DefaultRow>
         | 'vertical'
         | 'standard'
         | 'simple'
-        | 'verticalAlways' // deprecated in `/examples/simple`
         | 'scroll' // deprecated in `/examples/simple`
         | 'scrollMaxHeight' // deprecated in `/examples/simple`
         | 'stacked' // ?? FOUND in `./body.cell.tsx`

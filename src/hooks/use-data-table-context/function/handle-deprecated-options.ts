@@ -18,9 +18,7 @@ export function handleDeprecatedOptions<T>(
 
     if (
         options?.responsive !== undefined &&
-        !['standard', 'vertical', 'verticalAlways', 'simple'].includes(
-            options.responsive
-        )
+        !['standard', 'vertical', 'simple'].includes(options.responsive)
     ) {
         if (
             [
