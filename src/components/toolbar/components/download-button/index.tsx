@@ -13,7 +13,6 @@ import type { DataItemState } from '@src/types/state/data-item'
 import type { DisplayDataState } from '@src/types/state/display-data'
 import type { ReactElement } from 'react'
 // materials
-import { tss } from 'tss-react/mui'
 import { ICON_BUTTON_DEFAULT_SX } from '../statics/icon-button-default-sx'
 import { createCsvDownload } from './functions/create-csv-download'
 
@@ -21,7 +20,6 @@ import { createCsvDownload } from './functions/create-csv-download'
  * A component that renders a button for downloading the data as a CSV file.
  */
 export function ToolbarDownloadButton(): ReactElement {
-    const { classes } = useStyles()
     const {
         icons,
         options,
@@ -33,7 +31,7 @@ export function ToolbarDownloadButton(): ReactElement {
         <Tooltip disableFocusListener title={toolbarTextLabels.downloadCsv}>
             <span>
                 <IconButton
-                    className={classes.root}
+                    className={ComponentClassName.TOOLBAR__DOWNLOAD_BUTTON}
                     disabled={options.download === 'disabled'}
                     onClick={() => handleCSVDownload(state, options)}
                     sx={ICON_BUTTON_DEFAULT_SX}
@@ -44,12 +42,6 @@ export function ToolbarDownloadButton(): ReactElement {
         </Tooltip>
     )
 }
-
-const useStyles = tss
-    .withName(ComponentClassName.TOOLBAR__DOWNLOAD_BUTTON)
-    .create({
-        root: {}
-    })
 
 function handleCSVDownload<T>(
     { columns, columnOrder, data, displayData }: DataTableState<T>,

@@ -282,27 +282,7 @@ describe('get-new-state-on-data-change', () => {
 
     it('should return new state', () => {
         const props: DataTableProps<(typeof data)[number]> = {
-            // appended from legacy code
-            className: 'tss-1x5mjc5-MUIDataTable-root',
             columns,
-            // classes: {
-            //     root: 'tss-1x5mjc5-MUIDataTable-root',
-            //     paper: 'tss-11quiee-MUIDataTable-paper',
-            //     paperResponsiveScrollFullHeightFullWidth:
-            //         'tss-1nfo58d-MUIDataTable-paperResponsiveScrollFullHeightFullWidth',
-            //     tableRoot: 'tss-900muf-MUIDataTable-tableRoot',
-            //     responsiveBase: 'tss-1cdcmys-MUIDataTable-responsiveBase',
-            //     responsiveScroll: 'tss-131sses-MUIDataTable-responsiveScroll',
-            //     responsiveScrollMaxHeight:
-            //         'tss-1acbflw-MUIDataTable-responsiveScrollMaxHeight',
-            //     responsiveScrollFullHeight:
-            //         'tss-1dm1iyi-MUIDataTable-responsiveScrollFullHeight',
-            //     responsiveStacked: 'tss-r6c9w6-MUIDataTable-responsiveStacked',
-            //     responsiveStackedFullWidth:
-            //         'tss-1rzqjie-MUIDataTable-responsiveStackedFullWidth',
-            //     caption: 'tss-1opebqo-MUIDataTable-caption',
-            //     liveAnnounce: 'tss-hwdp7s-MUIDataTable-liveAnnounce'
-            // },
             components: {
                 // TableBody: {},
                 // TableFilter: {},
@@ -372,7 +352,6 @@ describe('get-new-state-on-data-change', () => {
 
     it('should return new state when props update', () => {
         const props: DataTableProps<(typeof data)[number]> = {
-            className: 'tss-1x5mjc5-MUIDataTable-root',
             columns: [
                 {
                     name: 'Name',
@@ -414,35 +393,7 @@ describe('get-new-state-on-data-change', () => {
                 tableBodyMaxHeight: '',
                 viewColumns: true
             },
-            // classes: {
-            //     root: 'tss-1x5mjc5-MUIDataTable-root',
-            //     paper: 'tss-11quiee-MUIDataTable-paper',
-            //     paperResponsiveScrollFullHeightFullWidth:
-            //         'tss-1nfo58d-MUIDataTable-paperResponsiveScrollFullHeightFullWidth',
-            //     tableRoot: 'tss-900muf-MUIDataTable-tableRoot',
-            //     responsiveBase: 'tss-1cdcmys-MUIDataTable-responsiveBase',
-            //     responsiveScroll: 'tss-131sses-MUIDataTable-responsiveScroll',
-            //     responsiveScrollMaxHeight:
-            //         'tss-1acbflw-MUIDataTable-responsiveScrollMaxHeight',
-            //     responsiveScrollFullHeight:
-            //         'tss-1dm1iyi-MUIDataTable-responsiveScrollFullHeight',
-            //     responsiveStacked: 'tss-r6c9w6-MUIDataTable-responsiveStacked',
-            //     responsiveStackedFullWidth:
-            //         'tss-1rzqjie-MUIDataTable-responsiveStackedFullWidth',
-            //     caption: 'tss-1opebqo-MUIDataTable-caption',
-            //     liveAnnounce: 'tss-hwdp7s-MUIDataTable-liveAnnounce'
-            // },
             title: 'ACME Employee list'
-            // components: {
-            //     TableBody: {},
-            //     TableFilter: {},
-            //     TableToolbar: {},
-            //     TableToolbarSelect: {},
-            //     Tooltip: {
-            //         propTypes: {}
-            //     },
-            //     icons: {}
-            // }
         }
 
         const result = getNewStateOnDataChange(
