@@ -15,6 +15,7 @@
         "ignoreUnknown": false,
         "includes": [
             "**",
+            "!.*/**",
             "!node_modules/**",
             "!dist/**",
             "!docs/.next/**",
