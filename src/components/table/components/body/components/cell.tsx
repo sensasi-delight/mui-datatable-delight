@@ -45,15 +45,7 @@ export function TableBodyCell<T>({
                     [classes.root]: true,
                     [classes.cellHide]: true,
                     [classes.stackedHeader]: true,
-                    [classes.stackedCommon]:
-                        options?.responsive === 'vertical' ||
-                        options?.responsive === 'stacked' ||
-                        options?.responsive === 'stackedFullWidth',
-                    [classes.cellStackedSmall]:
-                        options?.responsive === 'stacked' ||
-                        (options?.responsive === 'stackedFullWidth' &&
-                            (options.setTableProps?.().padding === 'none' ||
-                                options.setTableProps?.().size === 'small')),
+                    [classes.stackedCommon]: options?.responsive === 'vertical',
                     [classes.simpleHeader]: options?.responsive === 'simple',
                     'datatables-noprint': !print
                 },
@@ -67,15 +59,7 @@ export function TableBodyCell<T>({
             className={cx(
                 {
                     [classes.root]: true,
-                    [classes.stackedCommon]:
-                        options?.responsive === 'vertical' ||
-                        options?.responsive === 'stacked' ||
-                        options?.responsive === 'stackedFullWidth',
-                    [classes.responsiveStackedSmall]:
-                        options?.responsive === 'stacked' ||
-                        (options?.responsive === 'stackedFullWidth' &&
-                            (options.setTableProps?.().padding === 'none' ||
-                                options.setTableProps?.().size === 'small')),
+                    [classes.stackedCommon]: options?.responsive === 'vertical',
                     [classes.simpleCell]: options?.responsive === 'simple',
                     'datatables-noprint': !print
                 },
@@ -100,10 +84,7 @@ export function TableBodyCell<T>({
             : cells
 
     /** NOTE: NOT SURE WITH VAR NAME */
-    const isAppendStackedParentClassName =
-        options?.responsive === 'vertical' ||
-        options?.responsive === 'stacked' ||
-        options?.responsive === 'stackedFullWidth'
+    const isAppendStackedParentClassName = options?.responsive === 'vertical'
 
     return (
         <TableCell
@@ -143,12 +124,6 @@ const useStyles = tss
             display: 'none'
         },
         cellStackedSmall: {
-            [theme.breakpoints.down('md')]: {
-                boxSizing: 'border-box',
-                width: '50%'
-            }
-        },
-        responsiveStackedSmall: {
             [theme.breakpoints.down('md')]: {
                 boxSizing: 'border-box',
                 width: '50%'

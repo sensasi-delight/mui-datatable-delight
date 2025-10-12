@@ -107,6 +107,9 @@ class Example extends React.Component<
             onColumnSortChange: (column, direction) => {
                 console.log(column, direction)
             },
+            onColumnVisibilityChange: (column, action) => {
+                console.log(column, action)
+            },
             onFilterChange: (column, filters) => {
                 console.log(column, filters)
             },
@@ -134,9 +137,6 @@ class Example extends React.Component<
             },
             onSearchChange: searchText => {
                 console.log(searchText)
-            },
-            onViewColumnsChange: (column, action) => {
-                console.log(column, action)
             },
             responsive: 'vertical',
             rowsPerPage: 10,

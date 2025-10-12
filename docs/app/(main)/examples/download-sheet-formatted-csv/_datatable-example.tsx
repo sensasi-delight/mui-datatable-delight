@@ -123,6 +123,9 @@ class Example extends React.Component<
             onColumnSortChange: (column, direction) => {
                 console.log(column, direction)
             },
+            onColumnVisibilityChange: (column, action) => {
+                console.log(column, action)
+            },
             onDownload: (buildHead, buildBody, columns, data) => {
                 if (this.state.downloadFile) {
                     return `${buildHead(columns)}${buildBody(data)}`.trim()
@@ -148,9 +151,6 @@ class Example extends React.Component<
             },
             onSearchChange: searchText => {
                 console.log(searchText)
-            },
-            onViewColumnsChange: (column, action) => {
-                console.log(column, action)
             },
             responsive: 'vertical',
             rowsPerPage: 10,

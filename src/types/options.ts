@@ -165,14 +165,6 @@ export interface DataTableOptions<Row = DefaultRow>
      */
     fixedHeader: boolean
 
-    /** @deprecated use `fixedHeader` for **X** axis and `fixedSelectColumn` for **Y** axis */
-    fixedHeaderOptions?: {
-        /** @deprecated use `fixedHeader` */
-        xAxis: boolean
-        /** @deprecated use `fixedSelectColumn` */
-        yAxis: boolean
-    }
-
     /**
      * Enable/disable fixed select column.
      *
@@ -238,11 +230,6 @@ export interface DataTableOptions<Row = DefaultRow>
         /** New sort order direction (`asc` or `desc`) */
         direction: DataTableSortOrderOption['direction']
     ) => void
-
-    /**
-     * @deprecated  Use {@link DataTableOptions.onColumnVisibilityChange | `onColumnVisibilityChange`} instead
-     */
-    onColumnViewChange?: never
 
     /**
      * A callback function that triggers when the user downloads the CSV file.
@@ -358,14 +345,7 @@ export interface DataTableOptions<Row = DefaultRow>
     onTableInit?: (action: TableAction, tableState: DataTableState<Row>) => void
 
     /**
-     * @deprecated  Use {@link DataTableOptions.onColumnVisibilityChange | `onColumnVisibilityChange`} instead
-     */
-    onViewColumnsChange?: (changedColumn: string, action: string) => void
-
-    /**
      * Callback function that triggers when a column view has been changed.
-     *
-     * Previously known as {@link DataTableOptions.onColumnViewChange | `onColumnViewChange`} or {@link DataTableOptions.onViewColumnsChange | `onViewColumnsChange`}.
      */
     onColumnVisibilityChange?: (
         /** Name of the column that was changed */
@@ -417,16 +397,7 @@ export interface DataTableOptions<Row = DefaultRow>
      *
      * @default 'vertical'
      */
-    responsive:
-        | 'vertical'
-        | 'standard'
-        | 'simple'
-        | 'scroll' // deprecated in `/examples/simple`
-        | 'scrollMaxHeight' // deprecated in `/examples/simple`
-        | 'stacked' // ?? FOUND in `./body.cell.tsx`
-        | 'stackedFullWidth' // ?? FOUND in `./body.cell.tsx`
-        | 'scrollFullHeight' // ?? FOUND in `./body.cell.tsx`
-        | 'scrollFullHeightFullWidth' // ?? FOUND in `./body.cell.tsx`
+    responsive: 'vertical' | 'standard' | 'simple'
 
     /**
      * Enable/disable hover style over row.
@@ -577,13 +548,6 @@ export interface DataTableOptions<Row = DefaultRow>
     tableBodyMaxHeight?: string
 
     /**
-     * User provided labels to localize text.
-     *
-     * @deprecated Set `textLabels` prop from main component instead.
-     */
-    textLabels?: never
-
-    /**
      * Possible Values:
      * - true       = Button visible and clickable
      * - false      = Button not visible
@@ -597,25 +561,6 @@ export interface DataTableOptions<Row = DefaultRow>
      * Local storage key used to store the table state.
      */
     storageKey?: string
-
-    /**
-     * @deprecated  Use `onRowExpansionChange` instead.
-     *
-     * @see  {@link onRowExpansionChange}
-     */
-    onRowsExpand?: DataTableOptions<Row>['onRowExpansionChange']
-
-    /**
-     * @deprecated Use `onRowSelectionChange` instead.
-     *
-     * @see  {@link onRowSelectionChange}
-     */
-    onRowsSelect?: DataTableOptions<Row>['onRowSelectionChange']
-
-    /**
-     * @deprecated  in favor of the {@link confirmFilters} option.
-     */
-    serverSideFilterList?: DataTableState<Row>['filterList']
 }
 
 interface DataTableCustomsOptions<Row> {
@@ -699,23 +644,6 @@ interface DataTableCustomsOptions<Row> {
      * @see  {@link https://mui-datatable-delight.vercel.app/examples/customize-toolbar-select|Custom Selected Rows ToolBar Example}
      */
     customSelectedRowsToolbar?: (
-        selectedRows: {
-            data: SelectedRowDataState[]
-            lookup: Record<number, boolean>
-        },
-        displayData: DisplayDataState<Row>,
-        setSelectedRows: (rows: number[]) => void
-    ) => ReactNode
-
-    /**
-     * Render a custom selected row ToolBar.
-     *
-     * @deprecated  Use `customSelectedRowsToolbar` instead
-     *
-     * @see  {@link https://mui-datatable-delight.vercel.app/examples/customize-toolbar-select|Custom Selected Rows ToolBar Example}
-     *
-     */
-    customToolbarSelect?: (
         selectedRows: {
             data: SelectedRowDataState[]
             lookup: Record<number, boolean>

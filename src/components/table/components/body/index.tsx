@@ -362,10 +362,10 @@ function RenderRow<Row>({
 
         onAction?.(TableAction.ROW_EXPANSION_CHANGE, newState)
 
-        const expandCallback =
-            options.onRowExpansionChange ?? options.onRowsExpand
-
-        expandCallback?.(newState.curExpandedRows, newState.expandedRows.data)
+        options.onRowExpansionChange?.(
+            newState.curExpandedRows,
+            newState.expandedRows.data
+        )
     }
 
     return (
@@ -374,9 +374,7 @@ function RenderRow<Row>({
                 className={cx(
                     {
                         [classes.lastStackedCell]:
-                            options.responsive === 'vertical' ||
-                            options.responsive === 'stacked' ||
-                            options.responsive === 'stackedFullWidth',
+                            options.responsive === 'vertical',
                         [classes.lastSimpleCell]:
                             options.responsive === 'simple'
                     },

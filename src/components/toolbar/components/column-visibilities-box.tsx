@@ -47,10 +47,7 @@ export default function ColumnVisibilitiesBox(): ReactNode {
             columns: newColumns
         })
 
-        const cb =
-            options.onColumnVisibilityChange ?? options.onViewColumnsChange
-
-        cb?.(
+        options.onColumnVisibilityChange?.(
             changedColumn.name,
             changedColumn.display === true ? 'add' : 'remove'
         )

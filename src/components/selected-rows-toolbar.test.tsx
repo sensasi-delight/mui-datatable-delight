@@ -37,16 +37,16 @@ describe('<SelectedRowsToolbar />', function () {
         ).toBe(1)
     })
 
-    test('should call customToolbarSelect with 3 arguments', () => {
-        const customToolbarSelect = vi.fn()
+    test('should call customSelectedRowsToolbar with 3 arguments', () => {
+        const customSelectedRowsToolbar = vi.fn()
 
         setup({
             options: {
-                customToolbarSelect
+                customSelectedRowsToolbar
             }
         })
 
-        expect(customToolbarSelect).toBeCalledWith(
+        expect(customSelectedRowsToolbar).toBeCalledWith(
             {
                 data: [],
                 lookup: {}
@@ -68,7 +68,7 @@ describe('<SelectedRowsToolbar />', function () {
     test('should success calls `setSelectedRows`', () => {
         const { selectRowUpdate } = setup({
             options: {
-                customToolbarSelect(_, __, setSelectedRows) {
+                customSelectedRowsToolbar(_, __, setSelectedRows) {
                     setSelectedRows([0])
 
                     return <></>
@@ -88,7 +88,7 @@ describe('<SelectedRowsToolbar />', function () {
         expect(() =>
             setup({
                 options: {
-                    customToolbarSelect(_, __, setSelectedRows) {
+                    customSelectedRowsToolbar(_, __, setSelectedRows) {
                         // @ts-expect-error   INTENTIONALLY PASSING INVALID TYPE
                         setSelectedRows('')
 
@@ -101,8 +101,8 @@ describe('<SelectedRowsToolbar />', function () {
         expect(() =>
             setup({
                 options: {
-                    customToolbarSelect(_, __, setSelectedRows) {
-                        // @ts-expect-error   INTENTIONALLY PASSING INVALID TYPE
+                    customSelectedRowsToolbar(_, __, setSelectedRows) {
+                        // @ts-ignore   INTENTIONALLY PASSING INVALID TYPE
                         setSelectedRows(['1'])
 
                         return <></>
@@ -116,7 +116,7 @@ describe('<SelectedRowsToolbar />', function () {
         expect(() =>
             setup({
                 options: {
-                    customToolbarSelect: (_, __, setSelectedRows) => {
+                    customSelectedRowsToolbar: (_, __, setSelectedRows) => {
                         setSelectedRows([1, 2])
 
                         return <></>

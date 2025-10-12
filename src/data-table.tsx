@@ -191,10 +191,7 @@ function DataTable_<T>({
 
             onAction?.(TableAction.ROW_SELECTION_CHANGE, newState)
 
-            const onChangeForwarder =
-                options.onRowSelectionChange ?? options.onRowsSelect
-
-            onChangeForwarder?.(
+            options.onRowSelectionChange?.(
                 newState.curSelectedRows,
                 newState.selectedRows.data,
                 newState.selectedRows.data.map(item => item.dataIndex)
@@ -259,10 +256,7 @@ function DataTable_<T>({
 
             onAction?.(TableAction.ROW_SELECTION_CHANGE, newState)
 
-            const onChange =
-                options.onRowSelectionChange ?? options.onRowsSelect
-
-            onChange?.(
+            options.onRowSelectionChange?.(
                 [value],
                 newState.selectedRows.data,
                 newState.selectedRows.data.map(item => item.dataIndex)
@@ -280,10 +274,7 @@ function DataTable_<T>({
                 selectedRows
             })
 
-            const onRowSelectionChange =
-                options.onRowSelectionChange ?? options.onRowsSelect
-
-            onRowSelectionChange?.(
+            options.onRowSelectionChange?.(
                 selectedRows.data,
                 selectedRows.data,
                 selectedRows.data.map(item => item.dataIndex)
@@ -431,59 +422,16 @@ function getTableHeightAndResponsiveClasses<T>(
     options: DataTableOptions<T>,
     classes: ReturnType<typeof useStyles>['classes']
 ) {
-    const responsiveOption = options.responsive
-
-    let maxHeight = options.tableBodyMaxHeight
-    let responsiveClass
-
-    switch (responsiveOption) {
-        // deprecated
-        case 'scroll':
-            responsiveClass = classes.responsiveScroll
-            maxHeight = '499px'
-            break
-        // deprecated
-        case 'scrollMaxHeight':
-            responsiveClass = classes.responsiveScrollMaxHeight
-            maxHeight = '499px'
-            break
-        // deprecated
-        case 'scrollFullHeight':
-            responsiveClass = classes.responsiveScrollFullHeight
-            maxHeight = 'none'
-            break
-        // deprecated
-        case 'scrollFullHeightFullWidth':
-            responsiveClass = classes.responsiveScrollFullHeight
-            break
-        // deprecated
-        case 'stacked':
-            responsiveClass = classes.responsiveStacked
-            maxHeight = 'none'
-            break
-        // deprecated
-        case 'stackedFullWidth':
-            responsiveClass = classes.responsiveStackedFullWidth
-            maxHeight = 'none'
-            break
-
-        default:
-            responsiveClass = classes.responsiveBase
-            break
-    }
-
-    const tableHeightVal = {
-        height: options.tableBodyHeight,
-        maxHeight: maxHeight
-    }
-
     return {
-        responsiveClass,
-        tableHeightVal
+        responsiveClass: classes.responsiveBase,
+        tableHeightVal: {
+            height: options.tableBodyHeight,
+            maxHeight: options.tableBodyMaxHeight
+        }
     }
 }
 
-const useStyles = tss.withName(ClassName.ROOT).create(({ theme }) => ({
+const useStyles = tss.withName(ClassName.ROOT).create(() => ({
     paper: {
         isolation: 'isolate'
     },
@@ -498,30 +446,6 @@ const useStyles = tss.withName(ClassName.ROOT).create(({ theme }) => ({
         },
         overflow: 'auto'
     },
-
-    // deprecated, but continuing support through v3.x
-    responsiveScroll: {
-        height: '100%',
-        overflow: 'auto'
-    },
-    // deprecated, but continuing support through v3.x
-    responsiveScrollFullHeight: {
-        height: '100%'
-    },
-    // deprecated, but continuing support through v3.x
-    responsiveScrollMaxHeight: {
-        height: '100%',
-        overflow: 'auto'
-    },
-    // deprecated, but continuing support through v3.x
-    responsiveStacked: {
-        overflow: 'auto',
-        [theme.breakpoints.down('md')]: {
-            overflow: 'hidden'
-        }
-    },
-    // deprecated, but continuing support through v3.x
-    responsiveStackedFullWidth: {},
     root: {
         '& .datatables-no-print': {
             '@media print': {

@@ -184,10 +184,7 @@ export default function TableHead({ selectRowUpdate }: Props): ReactNode {
     return (
         <MuiTableHead
             className={cx(classes.root, {
-                [classes.responsiveStacked]:
-                    options.responsive === 'vertical' ||
-                    options.responsive === 'stacked' ||
-                    options.responsive === 'stackedFullWidth',
+                [classes.responsiveStacked]: options.responsive === 'vertical',
                 [classes.responsiveSimple]: options.responsive === 'simple'
             })}
         >
