@@ -1,7 +1,6 @@
 import type { DataTableProps } from '@src/data-table.props'
 import type { DataTableState } from '@src/types/state'
 import type { ColumnState } from '@src/types/state/column'
-import { warnDeprecated } from '.'
 
 /*
  * Build the source table data
@@ -56,12 +55,6 @@ export default function buildColumns<T>(
             const options = {
                 ...column.options,
                 display: column.options?.display
-            }
-
-            if (options.sortDirection === null || options.sortDirection) {
-                warnDeprecated(
-                    'The sortDirection column field has been deprecated. Please use the sortOrder option on the options object. More info: https://github.com/gregnb/mui-datatables/tree/master/docs/v2_to_v3_guide.md'
-                )
             }
 
             if (

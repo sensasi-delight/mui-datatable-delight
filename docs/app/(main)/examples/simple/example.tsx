@@ -24,20 +24,6 @@ export function Example() {
 
     return (
         <>
-            {/* <Radios
-                label="Responsive"
-                options={[
-                    'vertical',
-                    'standard',
-                    'simple',
-                    'scroll',
-                    'scrollMaxHeight',
-                    'stacked'
-                ]}
-                value={responsive}
-                onChange={setResponsive}
-            /> */}
-
             <FormControl>
                 <InputLabel id="demo-simple-select-label">
                     Responsive Option
@@ -54,11 +40,6 @@ export function Example() {
                     <MenuItem value="vertical">vertical</MenuItem>
                     <MenuItem value="standard">standard</MenuItem>
                     <MenuItem value="simple">simple</MenuItem>
-                    <MenuItem value="scroll">scroll (deprecated)</MenuItem>
-                    <MenuItem value="scrollMaxHeight">
-                        scrollMaxHeight (deprecated)
-                    </MenuItem>
-                    <MenuItem value="stacked">stacked (deprecated)</MenuItem>
                 </Select>
             </FormControl>
             <FormControl>

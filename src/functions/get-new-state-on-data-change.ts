@@ -16,7 +16,6 @@ import { getCollatorComparator } from './get-collator-comparator'
 import getDisplayData from './get-new-state-on-data-change/get-display-data'
 import sortTable from './sort-table'
 import transformData from './transform-data'
-import { warnDeprecated } from './warn-deprecated'
 
 enum TABLE_LOAD {
     INITIAL = 1,
@@ -171,9 +170,6 @@ export default function getNewStateOnDataChange<T>(
         if (column.filterOptions) {
             if (Array.isArray(column.filterOptions)) {
                 filterData[colIndex] = column.filterOptions
-                warnDeprecated(
-                    'filterOptions must now be an object. see https://github.com/gregnb/mui-datatables/tree/master/examples/customize-filter example'
-                )
             } else if (Array.isArray(column.filterOptions.names)) {
                 filterData[colIndex] = column.filterOptions.names
             }
