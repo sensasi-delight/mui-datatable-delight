@@ -9,7 +9,6 @@ export const DEFAULT_OPTIONS = {
         separator: ','
     },
     elevation: 4,
-    enableNestedDataAccess: '',
     expandableRows: false,
     expandableRowsHeader: true,
     expandableRowsOnClick: false,

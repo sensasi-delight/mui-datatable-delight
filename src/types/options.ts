@@ -89,19 +89,6 @@ export interface DataTableOptions<Row = DefaultRow>
     elevation: number
 
     /**
-     * If a non-empty string (ex: `"."`) is provided, it will use that value in the column's names to access nested data.
-     *
-     * For example, given a value of `"."` for `enableNestedDataAccess` and a column name of `"phone.cell"`, the column would use the value found in phone: `{ cell:"555-5555" }`
-     *
-     * Any amount of nesting will work.
-     *
-     * @deprecated  TODO: remove this and default behavior is always read nested data
-     *
-     * @see https://mui-datatable-delight.vercel.app/examples/data-as-objects
-     */
-    enableNestedDataAccess: string
-
-    /**
      * Enable/disable expandable rows.
      *
      * @see https://mui-datatable-delight.vercel.app/examples/expandable-rows
