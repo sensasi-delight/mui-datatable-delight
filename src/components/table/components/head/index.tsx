@@ -188,8 +188,6 @@ export default function TableHead({ selectRowUpdate }: Props): ReactNode {
                     options.responsive === 'vertical' ||
                     options.responsive === 'stacked' ||
                     options.responsive === 'stackedFullWidth',
-                [classes.responsiveStackedAlways]:
-                    options.responsive === 'verticalAlways',
                 [classes.responsiveSimple]: options.responsive === 'simple'
             })}
         >
@@ -254,9 +252,6 @@ const useStyles = tss
             [theme.breakpoints.down('md')]: {
                 display: 'none'
             }
-        },
-        responsiveStackedAlways: {
-            display: 'none'
         },
         root: {},
         row: {}

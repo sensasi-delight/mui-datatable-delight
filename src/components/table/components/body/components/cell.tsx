@@ -49,8 +49,6 @@ export function TableBodyCell<T>({
                         options?.responsive === 'vertical' ||
                         options?.responsive === 'stacked' ||
                         options?.responsive === 'stackedFullWidth',
-                    [classes.stackedCommonAlways]:
-                        options?.responsive === 'verticalAlways',
                     [classes.cellStackedSmall]:
                         options?.responsive === 'stacked' ||
                         (options?.responsive === 'stackedFullWidth' &&
@@ -73,8 +71,6 @@ export function TableBodyCell<T>({
                         options?.responsive === 'vertical' ||
                         options?.responsive === 'stacked' ||
                         options?.responsive === 'stackedFullWidth',
-                    [classes.stackedCommonAlways]:
-                        options?.responsive === 'verticalAlways',
                     [classes.responsiveStackedSmall]:
                         options?.responsive === 'stacked' ||
                         (options?.responsive === 'stackedFullWidth' &&
@@ -115,8 +111,6 @@ export function TableBodyCell<T>({
                 classes.root,
                 {
                     [classes.simpleCell]: options?.responsive === 'simple',
-                    [classes.stackedParentAlways]:
-                        options?.responsive === 'verticalAlways',
                     [classes.stackedParent]: isAppendStackedParentClassName,
                     [classes.responsiveStackedSmallParent]:
                         isAppendStackedParentClassName &&
@@ -197,19 +191,6 @@ const useStyles = tss
                 width: 'calc(50%)'
             }
         },
-        stackedCommonAlways: {
-            '&:last-child': {
-                borderBottom: 'none'
-            },
-            '&:nth-last-of-type(2)': {
-                borderBottom: 'none'
-            },
-            boxSizing: 'border-box',
-            display: 'inline-block',
-            fontSize: '16px',
-            height: 'auto',
-            width: 'calc(50%)'
-        },
         stackedHeader: {
             verticalAlign: 'top'
         },
@@ -221,12 +202,5 @@ const useStyles = tss
                 height: 'auto',
                 width: 'calc(100%)'
             }
-        },
-        stackedParentAlways: {
-            boxSizing: 'border-box',
-            display: 'inline-block',
-            fontSize: '16px',
-            height: 'auto',
-            width: 'calc(100%)'
         }
     }))
