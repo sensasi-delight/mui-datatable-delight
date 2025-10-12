@@ -3,7 +3,6 @@
 import Paper, { type PaperProps } from '@mui/material/Paper'
 // vendors
 import type { ReactNode } from 'react'
-import { tss } from 'tss-react/mui'
 // components
 import AnnounceText from './components/announce-text'
 import BottomBar from './components/bottom-bar'
@@ -46,7 +45,7 @@ export function DataTable<Row = DefaultRow>({
     return (
         <DataTableContextProvider datatableProps={props}>
             <DataTable_
-                className={className}
+                className={`${ClassName.ROOT} ${className}`}
                 paperProps={paperProps}
                 ref={ref}
             />
@@ -63,8 +62,6 @@ function DataTable_<T>({
     ref: PaperProps['ref']
     paperProps?: PaperProps
 }): ReactNode {
-    const { classes, cx } = useStyles()
-
     const { components, onAction, options, state, updateCellValueRef } =
         useDataTableContext<T>()
 
@@ -293,20 +290,6 @@ function DataTable_<T>({
         options.selectToolbarPlacement !== SELECT_TOOLBAR_PLACEMENT.ABOVE &&
         options.selectToolbarPlacement !== SELECT_TOOLBAR_PLACEMENT.NONE
 
-    const paperClasses = cx(
-        classes.paper,
-        ['scrollFullHeightFullWidth', 'stackedFullWidth'].some(
-            responsive => options?.responsive === responsive
-        )
-            ? classes.paperResponsiveScrollFullHeightFullWidth
-            : '',
-        classes.root,
-        className
-    )
-
-    const { tableHeightVal, responsiveClass } =
-        getTableHeightAndResponsiveClasses(options, classes)
-
     // ####### COMPONENT HANDLER ###########
     const _SelectedRowsToolbar =
         components.SelectedRowsToolbar ?? SelectedRowsToolbar
@@ -317,9 +300,12 @@ function DataTable_<T>({
 
     return (
         <Paper
-            className={paperClasses}
+            className={className}
             elevation={options?.elevation}
             ref={ref}
+            sx={{
+                isolation: 'isolate'
+            }}
             {...paperProps}
         >
             {isShowToolbarSelect && (
@@ -331,8 +317,12 @@ function DataTable_<T>({
             <_FilteredValuesList filterUpdate={filterUpdate} />
 
             <div
-                className={responsiveClass}
-                style={{ position: 'relative', ...tableHeightVal }}
+                style={{
+                    height: options.tableBodyHeight,
+                    maxHeight: options.tableBodyMaxHeight,
+                    overflow: 'auto',
+                    position: 'relative'
+                }}
             >
                 <Table selectRowUpdate={selectRowUpdate} />
             </div>
@@ -417,40 +407,3 @@ function updateFilterByType(
             filterList[index] = typeof value === 'string' ? [value] : value
     }
 }
-
-function getTableHeightAndResponsiveClasses<T>(
-    options: DataTableOptions<T>,
-    classes: ReturnType<typeof useStyles>['classes']
-) {
-    return {
-        responsiveClass: classes.responsiveBase,
-        tableHeightVal: {
-            height: options.tableBodyHeight,
-            maxHeight: options.tableBodyMaxHeight
-        }
-    }
-}
-
-const useStyles = tss.withName(ClassName.ROOT).create(() => ({
-    paper: {
-        isolation: 'isolate'
-    },
-
-    paperResponsiveScrollFullHeightFullWidth: {
-        position: 'absolute'
-    },
-
-    responsiveBase: {
-        '@media print': {
-            height: 'auto !important'
-        },
-        overflow: 'auto'
-    },
-    root: {
-        '& .datatables-no-print': {
-            '@media print': {
-                display: 'none'
-            }
-        }
-    }
-}))

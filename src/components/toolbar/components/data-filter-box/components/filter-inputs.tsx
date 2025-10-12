@@ -11,6 +11,7 @@ import InputLabel from '@mui/material/InputLabel'
 import ListItemText from '@mui/material/ListItemText'
 import MenuItem from '@mui/material/MenuItem'
 import Select, { type SelectProps } from '@mui/material/Select'
+import type { SxProps } from '@mui/material/styles'
 import TextField, { type TextFieldProps } from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 // global enums
@@ -23,8 +24,6 @@ import type { ColumnState } from '@src/types/state/column'
 import type { Primitive } from '@src/types/values/primitive'
 // vendors
 import type { ReactElement, ReactNode } from 'react'
-import { tss } from 'tss-react/mui'
-//
 
 /**
  * A component that renders a list of filters in a form.
@@ -39,7 +38,6 @@ export default function ToolbarDataFilterBoxFilters<T>({
     innerFilterList: string[][]
 }): ReactElement {
     const { textLabels, options, state } = useDataTableContext<T>()
-    const { classes } = useStyles()
 
     const renderedColumns = state.columns.map((column, index) => {
         if (!column.filter) return
@@ -162,7 +160,6 @@ export default function ToolbarDataFilterBoxFilters<T>({
     return (
         <Grid
             alignItems="center"
-            className={classes.root}
             container
             direction="row"
             justifyContent="flex-start"
@@ -173,29 +170,25 @@ export default function ToolbarDataFilterBoxFilters<T>({
     )
 }
 
-const useStyles = tss
-    // .withName()
-    .create(() => ({
-        checkbox: {},
+const SXS: {
+    [key: string]: SxProps
+} = {
+    checkboxFormControl: { margin: '0px' },
 
-        checkboxFormControl: { margin: '0px' },
-
-        checkboxFormControlLabel: {
-            fontSize: '15px',
-            marginLeft: '8px'
-        },
-        checkboxIcon: { height: '32px', width: '32px' },
-        checkboxListTitle: {
-            color: 'var(--mui-palette-text-secondary)',
-            fontSize: '14px',
-            fontWeight: 500,
-            marginBottom: '8px',
-            marginLeft: '7px',
-            textAlign: 'left'
-        },
-        checked: {},
-        root: {}
-    }))
+    checkboxFormControlLabel: {
+        fontSize: '15px',
+        marginLeft: '8px'
+    },
+    // checkboxIcon: { height: '32px', width: '32px' },
+    checkboxListTitle: {
+        color: 'var(--mui-palette-text-secondary)',
+        fontSize: '14px',
+        fontWeight: 500,
+        marginBottom: '8px',
+        marginLeft: '7px',
+        textAlign: 'left'
+    }
+}
 
 function DataTableToolbarFilterCheckbox<T>({
     index,
@@ -211,7 +204,6 @@ function DataTableToolbarFilterCheckbox<T>({
     handleCheckboxChange: (value: Primitive) => void
 }) {
     const { components } = useDataTableContext()
-    const { classes } = useStyles()
     const renderItem = column?.filterOptions?.renderValue ?? (v => v)
 
     const _Checkbox = components.Checkbox ?? Checkbox
@@ -228,10 +220,7 @@ function DataTableToolbarFilterCheckbox<T>({
                         xs: 12
                     }}
                 >
-                    <Typography
-                        className={classes.checkboxListTitle}
-                        variant="body2"
-                    >
+                    <Typography sx={SXS.checkboxListTitle} variant="body2">
                         {column.label}
                     </Typography>
                 </Grid>
@@ -239,20 +228,17 @@ function DataTableToolbarFilterCheckbox<T>({
                     {filterData[index]?.map((filterValue, filterIndex) => (
                         <Grid key={filterIndex}>
                             <FormControlLabel
-                                classes={{
-                                    label: classes.checkboxFormControlLabel,
-                                    root: classes.checkboxFormControl
+                                sx={SXS.checkboxFormControl}
+                                slotProps={{
+                                    typography: {
+                                        sx: SXS.checkboxFormControlLabel
+                                    }
                                 }}
                                 control={
                                     <_Checkbox
                                         checked={filterList[index]?.includes(
                                             filterValue as string
                                         )}
-                                        classes={{
-                                            checked: classes.checked,
-                                            root: classes.checkbox
-                                        }}
-                                        className={classes.checkboxIcon}
                                         color="primary"
                                         data-description="table-filter"
                                         onChange={() =>
@@ -290,7 +276,6 @@ function DataTableToolbarFilterMultiselect<T>({
     filterData: DataTableState<T>['filterData']
 }) {
     const { components } = useDataTableContext()
-    const { classes } = useStyles()
 
     const renderItem =
         column.filterOptions?.renderValue ?? (v => v as ReactNode)
@@ -332,11 +317,6 @@ function DataTableToolbarFilterMultiselect<T>({
                                 checked={filterList[index]?.includes(
                                     filterValue as string
                                 )}
-                                classes={{
-                                    checked: classes.checked,
-                                    root: classes.checkbox
-                                }}
-                                className={classes.checkboxIcon}
                                 color="primary"
                                 data-description="table-filter"
                                 value={
