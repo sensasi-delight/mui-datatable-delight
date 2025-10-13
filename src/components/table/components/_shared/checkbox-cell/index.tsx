@@ -165,7 +165,7 @@ type IsHeaderCell =
           onExpand: () => void
       }
 
-export interface DataTableTableSelectCellProps {
+interface DataTableTableSelectCellProps {
     /** Select cell checked on/off */
     checked: boolean
 

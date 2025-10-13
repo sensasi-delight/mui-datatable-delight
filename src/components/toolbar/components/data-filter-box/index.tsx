@@ -153,11 +153,3 @@ export default function ToolbarDataFilterBox<T>({
         </div>
     )
 }
-
-type FilterListType = string[][]
-
-export type CustomUpdateType = (
-    filterList: FilterListType,
-    filterPos: FilterListType,
-    index: number
-) => FilterListType

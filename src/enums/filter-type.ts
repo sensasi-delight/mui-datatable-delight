@@ -1,4 +1,4 @@
-export enum FilterType {
+enum FilterType {
     CHECKBOX = 'checkbox',
     TEXTFIELD = 'textField',
     MULTISELECT = 'multiselect',
