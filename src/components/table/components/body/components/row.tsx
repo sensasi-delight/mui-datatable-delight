@@ -53,7 +53,7 @@ export function DataTableBodyRow({
         </TableRow>
     )
 }
-export interface DataTableBodyRowProps extends TableRowProps {
+interface DataTableBodyRowProps extends TableRowProps {
     isRowSelectable: boolean
 
     /** Current row selected or not */
