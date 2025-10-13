@@ -3,7 +3,7 @@
 </div> -->
 
 > [!NOTE]
-> As a passionate fan of MUI Datatables, I’ve continued the development of this project out of appreciation for its simplicity and power, especially after the original repository was no longer maintained. This is not a claim to the original work, but a tribute to the community and the power of Material-UI v6!.
+> As a passionate fan of MUI Datatables, I’ve continued the development of this project out of appreciation for its simplicity and power, especially after the original repository was no longer maintained. This is not a claim to the original work, but a tribute to the community and the power of latest `@mui/material` package.
 >
 > Sincerely,\
 > @sensasi-delight 🍕
@@ -14,7 +14,7 @@
 [![NPM Downloads](https://img.shields.io/npm/dw/mui-datatable-delight)](https://www.npmjs.com/package/mui-datatable-delight?activeTab=versions)
 [![NPM License](https://img.shields.io/npm/l/mui-datatable-delight)](https://raw.githubusercontent.com/sensasi-delight/mui-datatable-delight/refs/heads/next/LICENSE)
 
-**MUI `<DataTable />` Delight** is a modern revival of the popular [gregnb/mui-datatables](https://github.com/gregnb/mui-datatables), offering a sleek, feature-rich table component built with the latest [Material UI](https://mui.com/material-ui/getting-started/). Designed for effortless data handling, it includes robust support for sorting, filtering, pagination, and row selection. With its intuitive interface and responsive design, **MUI `<DataTable />` Delight** is perfect for enhancing any modern web application. Experience the power of Material-UI v6 with this versatile and easy-to-use data table solution!
+**MUI `<DataTable />` Delight** is a modern revival of the popular [gregnb/mui-datatables](https://github.com/gregnb/mui-datatables), offering a sleek, feature-rich table component built with the latest [`@mui/material`](https://mui.com/material-ui/getting-started/). Designed for effortless data handling, it includes robust support for sorting, filtering, pagination, and row selection. With its intuitive interface and responsive design, **MUI `<DataTable />` Delight** is perfect for enhancing any modern web application. Experience the power of latest `@mui/material` with this versatile and easy-to-use data table solution!
 
 <div align="center">
 	<img src="https://user-images.githubusercontent.com/19170080/38026128-eac9d506-3258-11e8-92a7-b0d06e5faa82.gif" />

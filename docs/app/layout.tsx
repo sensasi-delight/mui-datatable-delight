@@ -19,7 +19,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             <head>
                 <title>
                     MUI DataTable Delight — A responsive DataTable component
-                    built with Material UI for React-based project
+                    built with @mui/material for React-based project
                 </title>
 
                 <meta
@@ -33,7 +33,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                 />
 
                 <meta
-                    content="A responsive DataTable component built with Material UI for React-based project"
+                    content="A responsive DataTable component built with `@mui/material` for React-based project"
                     name="description"
                 />
                 <meta

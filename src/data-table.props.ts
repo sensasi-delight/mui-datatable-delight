@@ -70,7 +70,7 @@ export interface DataTableProps<Row = DefaultRow> {
     ref?: PaperProps['ref']
 
     /**
-     * Override Material UI's `<Paper />` props that wrap the `<DataTable />`
+     * Override @mui's `<Paper />` props that wrap the `<DataTable />`
      */
     paperProps?: Exclude<PaperProps, 'ref'>
 }

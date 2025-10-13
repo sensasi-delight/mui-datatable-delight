@@ -797,7 +797,7 @@ describe('<MUIDataTable />', function () {
     TODO: simulating a click on #pagination-rows no longer seems to bring up the menu.
           doing "document.querySelector('#pagination-rows').click()" in the console doesn't
           work either. However, that method does work for #pagination-back and #pagination-next.
-          Something was probably updated in Material UI, it's unclear at the moment how to simulate
+          Something was probably updated in `@mui/material`, it's unclear at the moment how to simulate
           an event to bring up the select menu.
 
     // simulate changing pagination to set `rowsPerPage`

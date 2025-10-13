@@ -30,7 +30,7 @@ import type { FilterList } from './types/state/filter-list'
 import type { SelectedRowDataState } from './types/state/selected-row-data'
 
 /**
- * A responsive DataTable component built with Material UI for React-based project.
+ * A responsive DataTable component built with `@mui/material` for React-based project.
  *
  * @category  Component
  *
