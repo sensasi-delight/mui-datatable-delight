@@ -47,7 +47,7 @@ export default function sortTable<T>(
         : data
 
     // reset the order by index
-    let noSortData
+    let noSortData: DataItemState[] = []
 
     if (order === 'none') {
         noSortData = data.reduce<DataItemState[]>((r, dataItem) => {
@@ -62,7 +62,7 @@ export default function sortTable<T>(
             data: row.data[col],
             position: sIndex,
             rowData: row.data,
-            rowSelected: state.selectedRows.lookup[row.index] ? true : false
+            rowSelected: !!state.selectedRows.lookup[row.index]
         })) ?? []
 
     if (!isSortByCustomSortOption) {
@@ -88,7 +88,7 @@ export default function sortTable<T>(
     })
 
     return {
-        data: order === 'none' ? (noSortData ?? []) : tableData,
+        data: order === 'none' ? noSortData : tableData,
         selectedRows: {
             data: selectedRows,
             lookup: buildMap(selectedRows)

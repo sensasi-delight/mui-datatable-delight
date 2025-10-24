@@ -27,7 +27,7 @@ export function DataTableFooterPagination({
     const handleRowChange: TablePaginationProps['onRowsPerPageChange'] = ({
         target: { value }
     }) => {
-        changeRowsPerPage(parseInt(value))
+        changeRowsPerPage(parseInt(value, 10))
     }
 
     const handlePageChange: TablePaginationProps['onPageChange'] = (

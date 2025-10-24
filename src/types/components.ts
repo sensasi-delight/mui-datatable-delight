@@ -1,26 +1,26 @@
 // materials
-import Checkbox from '@mui/material/Checkbox'
-import Tooltip from '@mui/material/Tooltip'
+import type Checkbox from '@mui/material/Checkbox'
+import type Tooltip from '@mui/material/Tooltip'
 
 // ########## <Datatable /> sub-components ##########
-import AnnounceText from '../components/announce-text'
+import type AnnounceText from '../components/announce-text'
 
-import BottomBar from '../components/bottom-bar'
+import type BottomBar from '../components/bottom-bar'
 
-import FilteredValuesList from '../components/filtered-values-list'
+import type FilteredValuesList from '../components/filtered-values-list'
 
-import SelectedRowsToolbar from '../components/selected-rows-toolbar'
+import type SelectedRowsToolbar from '../components/selected-rows-toolbar'
 
-import Table from '../components/table'
+import type Table from '../components/table'
 // ########## <Table /> sub-components ##########
-import RowExpansionButton from '../components/table/components/_shared/checkbox-cell/components/row-expansion-button'
-import TableBody from '../components/table/components/body'
-import TableHead from '../components/table/components/head'
+import type RowExpansionButton from '../components/table/components/_shared/checkbox-cell/components/row-expansion-button'
+import type TableBody from '../components/table/components/body'
+import type TableHead from '../components/table/components/head'
 
-import Toolbar from '../components/toolbar'
-import ColumnVisibilitiesBox from '../components/toolbar/components/column-visibilities-box'
+import type Toolbar from '../components/toolbar'
+import type ColumnVisibilitiesBox from '../components/toolbar/components/column-visibilities-box'
 // ########## <Toolbar /> sub-components ##########
-import DataFilterBox from '../components/toolbar/components/data-filter-box'
+import type DataFilterBox from '../components/toolbar/components/data-filter-box'
 
 export interface DataTableComponents {
     AnnounceText: typeof AnnounceText

@@ -122,9 +122,7 @@ export default function SideTopBar() {
 
                         <Tooltip
                             arrow
-                            title={
-                                (mode === 'light' ? 'Dark' : 'Light') + ' Mode'
-                            }
+                            title={`${mode === 'light' ? 'Dark' : 'Light'} Mode`}
                         >
                             <IconButton
                                 color="inherit"

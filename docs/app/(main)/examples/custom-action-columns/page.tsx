@@ -199,6 +199,7 @@ class Example extends React.Component<
                                     data.shift()
                                     this.setState({ data })
                                 }}
+                                type="button"
                             >
                                 Delete
                             </button>
@@ -220,6 +221,7 @@ class Example extends React.Component<
                                         `Clicked "Edit" for row ${rowIndex} with dataIndex of ${dataIndex}`
                                     )
                                 }
+                                type="button"
                             >
                                 Edit
                             </button>
@@ -279,6 +281,7 @@ class Example extends React.Component<
                                     ])
                                     this.setState({ data })
                                 }}
+                                type="button"
                             >
                                 Add
                             </button>

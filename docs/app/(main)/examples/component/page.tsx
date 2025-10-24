@@ -89,9 +89,7 @@ class Example extends React.Component {
                                         color="primary"
                                         onChange={event => {
                                             updateValue(
-                                                event.target.value === 'Yes'
-                                                    ? false
-                                                    : true
+                                                event.target.value !== 'Yes'
                                             )
                                         }}
                                         value={value ? 'Yes' : 'No'}

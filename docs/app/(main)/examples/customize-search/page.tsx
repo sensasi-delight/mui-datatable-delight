@@ -154,7 +154,10 @@ class Example extends React.Component {
 
         return (
             <Fragment>
-                <button onClick={() => this.setState({ searchText: '' })}>
+                <button
+                    onClick={() => this.setState({ searchText: '' })}
+                    type="button"
+                >
                     Reset Search
                 </button>
                 <DataTable

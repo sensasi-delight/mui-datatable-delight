@@ -15,7 +15,7 @@ export function Breadcrumbs() {
     const isExamplePages = pathname.startsWith('/examples')
 
     const pathsWithoutDocs = (
-        isExamplePages ? '/docs/getting-started' + pathname : pathname
+        isExamplePages ? `/docs/getting-started${pathname}` : pathname
     )
         .substring(1) // remove leading slash
         .split('/')
@@ -36,7 +36,7 @@ export function Breadcrumbs() {
                         : `/docs/${pathsWithoutDocs.slice(0, i + 1).join('/')}`
 
                 return (
-                    <React.Fragment key={i}>
+                    <React.Fragment key={path}>
                         <NavigateNext
                             fontSize="small"
                             sx={{

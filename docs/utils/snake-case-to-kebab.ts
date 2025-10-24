@@ -1,3 +1,3 @@
 export function snakeCaseToKebab(scString: string): string {
-    return scString.replaceAll('_', '-').toLowerCase()
+    return scString.replace(/_/g, '-').toLowerCase()
 }

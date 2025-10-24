@@ -2,7 +2,7 @@ import DataTable, { type DataTableProps } from '@src/index'
 import { fireEvent, render } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 
-describe('<TableBodyCell />', function () {
+describe('<TableBodyCell />', () => {
     const data = [
         ['Joe James', 'Test Corp', 'Yonkers', 'NY'],
         ['John Walsh', 'Test Corp', 'Hartford', null],
@@ -43,7 +43,9 @@ describe('<TableBodyCell />', function () {
 
     it('should execute `onCellClick` prop when clicked if provided', () => {
         let clickCount = 0
-        let rowIndex, colIndex, cellData
+        let rowIndex: number | null = null
+        let colIndex: number | null = null
+        let cellData: string | null = null
 
         const result = setup({
             options: {
@@ -51,7 +53,7 @@ describe('<TableBodyCell />', function () {
                     clickCount++
                     colIndex = colMeta.colIndex
                     rowIndex = colMeta.rowIndex
-                    cellData = val
+                    cellData = val as string
                 }
             }
         })

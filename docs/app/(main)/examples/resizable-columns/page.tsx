@@ -23,7 +23,11 @@ function Example() {
         {
             name: 'Counter',
             options: {
-                customBodyRender: () => <button onClick={incrCount}>+</button>,
+                customBodyRender: () => (
+                    <button onClick={incrCount} type="button">
+                        +
+                    </button>
+                ),
                 empty: true,
                 sort: false
             }
@@ -97,7 +101,9 @@ function Example() {
                 <FormControl>
                     <TextField
                         label="Left Margin"
-                        onChange={e => setMarginLeft(parseInt(e.target.value))}
+                        onChange={e =>
+                            setMarginLeft(parseInt(e.target.value, 10))
+                        }
                         type="number"
                         value={marginLeft}
                     />
@@ -119,12 +125,12 @@ function Example() {
                 />
             </FormGroup>
 
-            <div style={{ marginLeft: marginLeft + 'px' }}>
+            <div style={{ marginLeft: `${marginLeft}px` }}>
                 <DataTable
                     columns={columns}
                     data={data}
                     options={options}
-                    title={'ACME Employee list' + ' [' + counter + ']'}
+                    title={`ACME Employee list [${counter}]`}
                 />
 
                 <div>

@@ -4,7 +4,7 @@ import { render } from '@testing-library/react'
 import { describe, expect, test, vi } from 'vitest'
 import SelectedRowsToolbar from './selected-rows-toolbar'
 
-describe('<SelectedRowsToolbar />', function () {
+describe('<SelectedRowsToolbar />', () => {
     function setup(props?: Partial<DataTableProps>) {
         const selectRowUpdate = vi.fn()
 
@@ -71,7 +71,7 @@ describe('<SelectedRowsToolbar />', function () {
                 customSelectedRowsToolbar(_, __, setSelectedRows) {
                     setSelectedRows([0])
 
-                    return <></>
+                    return null
                 }
             }
         })
@@ -92,7 +92,7 @@ describe('<SelectedRowsToolbar />', function () {
                         // @ts-expect-error   INTENTIONALLY PASSING INVALID TYPE
                         setSelectedRows('')
 
-                        return <></>
+                        return null
                     }
                 }
             })
@@ -102,10 +102,10 @@ describe('<SelectedRowsToolbar />', function () {
             setup({
                 options: {
                     customSelectedRowsToolbar(_, __, setSelectedRows) {
-                        // @ts-ignore   INTENTIONALLY PASSING INVALID TYPE
+                        // @ts-expect-error   INTENTIONALLY PASSING INVALID TYPE
                         setSelectedRows(['1'])
 
-                        return <></>
+                        return null
                     }
                 }
             })
@@ -119,7 +119,7 @@ describe('<SelectedRowsToolbar />', function () {
                     customSelectedRowsToolbar: (_, __, setSelectedRows) => {
                         setSelectedRows([1, 2])
 
-                        return <></>
+                        return null
                     },
                     selectableRows: 'single'
                 }

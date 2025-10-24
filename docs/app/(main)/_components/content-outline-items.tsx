@@ -20,6 +20,7 @@ export default function ContentOutlineItems({
         >
             <ListItemText inset={heading.tagName === 'H3'}>
                 <span
+                    // biome-ignore lint/security/noDangerouslySetInnerHtml: intentionally setting innerHTML
                     dangerouslySetInnerHTML={{
                         __html: heading.innerHTML
                     }}

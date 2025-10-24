@@ -18,8 +18,8 @@ function Cities({
                 style={{ fontSize: 'inherit' }}
                 value={value}
             >
-                {cities.map((city, index) => (
-                    <MenuItem key={index} value={city}>
+                {cities.map(city => (
+                    <MenuItem key={city} value={city}>
                         {city}
                     </MenuItem>
                 ))}

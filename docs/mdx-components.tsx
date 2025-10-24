@@ -132,5 +132,5 @@ function toText(children: JSX.Element): string {
         .toLowerCase()
         .replace(/[^0-9A-Z ]+/gi, '')
         .trim()
-        .replaceAll(' ', '-')
+        .replace(/ /g, '-')
 }

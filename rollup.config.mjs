@@ -27,6 +27,7 @@ const PLUGINS = [
     babel({
         babelHelpers: 'bundled',
         exclude: /node_modules/,
+        plugins: ['babel-plugin-react-compiler'],
         presets: ['@babel/preset-react', '@babel/preset-typescript']
     }),
 

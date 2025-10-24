@@ -73,7 +73,7 @@ export default function SelectedRowsToolbar({
         onAction?.(TableAction.ROW_DELETE, newState)
     }
 
-    const _Tooltip = components.Tooltip ?? Tooltip
+    const HandleTooltip = components.Tooltip ?? Tooltip
 
     return (
         <Box
@@ -110,7 +110,7 @@ export default function SelectedRowsToolbar({
             )}
 
             {!options.customSelectedRowsToolbar && (
-                <_Tooltip title={selectedRowsTextLabels.delete}>
+                <HandleTooltip title={selectedRowsTextLabels.delete}>
                     <IconButton
                         aria-label={selectedRowsTextLabels.deleteAria}
                         onClick={() => onRowsDelete()}
@@ -120,7 +120,7 @@ export default function SelectedRowsToolbar({
                     >
                         <DeleteIcon />
                     </IconButton>
-                </_Tooltip>
+                </HandleTooltip>
             )}
         </Box>
     )

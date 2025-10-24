@@ -42,6 +42,7 @@ export function CodeSnippet({
                     }}
                 >
                     <code
+                        // biome-ignore lint/security/noDangerouslySetInnerHtml: intentionally setting innerHTML
                         dangerouslySetInnerHTML={{
                             __html: highlightedCode
                         }}
