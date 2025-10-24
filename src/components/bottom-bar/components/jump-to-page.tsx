@@ -71,10 +71,6 @@ export default function JumpToPage({
             }
             style={{ marginRight: 0 }}
             sx={{
-                paddingBottom: 7,
-                paddingLeft: 8,
-                paddingRight: 24,
-                paddingTop: 6,
                 textAlign: 'right',
                 textAlignLast: 'right'
             }}
