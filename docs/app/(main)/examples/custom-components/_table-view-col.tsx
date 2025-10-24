@@ -84,7 +84,7 @@ export default function TableViewCol<T>({
                                         value={column.name}
                                     />
                                 }
-                                key={index}
+                                key={column.name}
                                 label={column.label}
                                 slotProps={{
                                     typography: {

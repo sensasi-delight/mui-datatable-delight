@@ -8,7 +8,7 @@ import ComponentClassName from '@src/enums/class-name'
 import useDataTableContext from '@src/hooks/use-data-table-context'
 import type { ColumnState } from '@src/types/state/column'
 // vendors
-import { type ReactElement, type ReactNode } from 'react'
+import type { ReactElement, ReactNode } from 'react'
 
 /**
  * Table Body Cell.

@@ -96,7 +96,7 @@ class Example extends React.Component<
                     return false
 
                 //prevents selection of row with title "Attorney"
-                return data[dataIndex]?.[1] != 'Attorney'
+                return data[dataIndex]?.[1] !== 'Attorney'
             },
             onCellClick: (cellData, cellMeta) => {
                 console.log(cellData, cellMeta)

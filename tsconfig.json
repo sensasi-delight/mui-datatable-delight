@@ -3,9 +3,8 @@
         "esModuleInterop": true,
         "isolatedModules": true,
         "jsx": "react-jsx",
-        "lib": ["ES2022", "DOM", "DOM.Iterable"],
+        "lib": ["ES2017", "DOM", "DOM.Iterable"],
         "module": "ESNext",
-        "moduleDetection": "force",
         "moduleResolution": "bundler",
         "noEmit": true,
         "noFallthroughCasesInSwitch": true,
@@ -20,7 +19,7 @@
         },
         "skipLibCheck": true,
         "strict": true,
-        "target": "ES2022",
+        "target": "ES2017",
         "verbatimModuleSyntax": true
     },
     "exclude": [

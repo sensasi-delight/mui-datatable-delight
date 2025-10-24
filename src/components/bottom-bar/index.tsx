@@ -49,7 +49,7 @@ export default function BottomBar(): ReactNode {
         )
 
     /** Render nothing */
-    if (!jumpToPage && !pagination) return <></>
+    if (!jumpToPage && !pagination) return null
 
     return (
         <Box

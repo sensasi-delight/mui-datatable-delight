@@ -51,7 +51,7 @@ export default function ColumnVisibilitiesBox(): ReactNode {
         )
     }
 
-    const _Checkbox = components.Checkbox ?? Checkbox
+    const HandleCheckbox = components.Checkbox ?? Checkbox
 
     return (
         <FormControl
@@ -84,13 +84,13 @@ export default function ColumnVisibilitiesBox(): ReactNode {
             >
                 {state.columns.map((column, index) => {
                     if (column.display === 'excluded' || !column.viewColumns) {
-                        return
+                        return null
                     }
 
                     return (
                         <FormControlLabel
                             control={
-                                <_Checkbox
+                                <HandleCheckbox
                                     checked={column.display === true}
                                     color="primary"
                                     onChange={() => handleColChange(index)}
@@ -102,7 +102,7 @@ export default function ColumnVisibilitiesBox(): ReactNode {
                                     value={column.name}
                                 />
                             }
-                            key={index}
+                            key={column.name}
                             label={column.label}
                             slotProps={{
                                 typography: {

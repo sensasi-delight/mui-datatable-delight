@@ -10,8 +10,8 @@ import { usePathname } from 'next/navigation'
 const BASE_URL =
     'https://github.com/sensasi-delight/mui-datatable-delight/edit/alpha'
 
-const DOCS_PATH = BASE_URL + '/docs/app/(main)/docs/_mds'
-const EXAMPLES_PATH = BASE_URL + '/docs/app/(main)'
+const DOCS_PATH = `${BASE_URL}/docs/app/(main)/docs/_mds`
+const EXAMPLES_PATH = `${BASE_URL}/docs/app/(main)`
 
 export default function EditPageButton({ iconOnly }: { iconOnly?: boolean }) {
     const pathname = usePathname()
@@ -19,7 +19,7 @@ export default function EditPageButton({ iconOnly }: { iconOnly?: boolean }) {
     const isExamplePages = pathname.startsWith('/examples')
 
     const mdxPath = isExamplePages
-        ? pathname + '/page.mdx'
+        ? `${pathname}/page.mdx`
         : pathname.replace('/docs', '') +
           (pathname.split('/').length === 3 ? '/index.mdx' : '.mdx')
 

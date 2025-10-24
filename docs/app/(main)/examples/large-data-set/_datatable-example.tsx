@@ -121,7 +121,7 @@ function getGenerateData(): Row[] {
             LAST_NAMES[getRandomNumber(LAST_NAMES.length)]
 
         data.push({
-            email: name.replace(/ /g, '_').toLowerCase() + '@example.com',
+            email: `${name.replace(/ /g, '_').toLowerCase()}@example.com`,
             location: LOCATIONS[getRandomNumber(LOCATIONS.length)] ?? '',
             name: name,
             phone: '555-5555',

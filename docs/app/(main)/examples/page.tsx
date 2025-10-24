@@ -13,7 +13,7 @@ import { snakeCaseToKebab, snakeCaseToTitle } from '@/docs/utils'
 import { Route } from './_route--enum'
 
 const SORTED_EXAMPLES = Object.keys(Route)
-    .filter(key => isNaN(parseInt(key)))
+    .filter(key => Number.isNaN(parseInt(key, 10)))
     .sort()
 
 export default function Page() {
@@ -23,7 +23,7 @@ export default function Page() {
         ? SORTED_EXAMPLES.filter(item =>
               item
                   .toLowerCase()
-                  .replaceAll('_', ' ')
+                  .replace(/_/g, ' ')
                   .includes(searchVal.toLowerCase())
           )
         : SORTED_EXAMPLES
@@ -37,9 +37,9 @@ export default function Page() {
             />
 
             <Grid container spacing={1} sx={{ mt: 4 }}>
-                {examplesSortedKeys.map((enumKey, i) => (
+                {examplesSortedKeys.map(enumKey => (
                     <Grid
-                        key={i}
+                        key={enumKey}
                         size={{
                             md: 2
                         }}

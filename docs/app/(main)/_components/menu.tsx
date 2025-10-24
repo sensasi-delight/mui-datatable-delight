@@ -85,8 +85,8 @@ export default function Menu({
 function Nav() {
     return (
         <List component="nav" disablePadding>
-            {Object.values(Section).map((section, i) => (
-                <MenuSection key={i} sectionId={section} />
+            {Object.values(Section).map(section => (
+                <MenuSection key={section} sectionId={section} />
             ))}
         </List>
     )
@@ -163,14 +163,14 @@ function MenuSection({ sectionId }: { sectionId: Section }) {
             </ListSubheader>
 
             <CustomListItem
-                href={'/docs/' + snakeCaseToKebab(sectionId)}
+                href={`/docs/${snakeCaseToKebab(sectionId)}`}
                 text="Overview"
             />
 
-            {routes.slice(1).map((route, i) => (
+            {routes.slice(1).map(route => (
                 <CustomListItem
-                    href={'/docs/' + route.href}
-                    key={i}
+                    href={`/docs/${route.href}`}
+                    key={`/docs/${route.href}`}
                     text={route.title}
                 />
             ))}

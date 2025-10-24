@@ -1,5 +1,5 @@
 {
-    "$schema": "https://biomejs.dev/schemas/2.2.5/schema.json",
+    "$schema": "https://biomejs.dev/schemas/2.3.0/schema.json",
     "assist": {
         "actions": {
             "source": {
@@ -15,14 +15,14 @@
         "ignoreUnknown": false,
         "includes": [
             "**",
-            "!.*/**",
-            "!node_modules/**",
-            "!dist/**",
-            "!docs/.next/**",
+            "!.*",
+            "!node_modules",
+            "!dist",
+            "!docs/.next",
             "!docs/next-env.d.ts",
-            "!docs/out/**",
-            "!docs/public/api-docs/**",
-            "!test/**"
+            "!docs/out",
+            "!docs/public/api-docs",
+            "!test"
         ]
     },
     "formatter": {
@@ -53,6 +53,9 @@
         }
     },
     "linter": {
+        "domains": {
+            "react": "recommended"
+        },
         "enabled": true,
         "rules": {
             "a11y": { "noAutofocus": "error" },
@@ -96,7 +99,7 @@
                 "useValidTypeof": "error",
                 "useYield": "error"
             },
-            "recommended": false,
+            "recommended": true,
             "style": {
                 "noCommonJs": "error",
                 "noInferrableTypes": "error",

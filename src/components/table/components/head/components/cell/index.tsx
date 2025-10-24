@@ -70,7 +70,7 @@ export function TableHeadCell<T>({
      */
     const tooltipTitle = textLabels.body.toolTip
 
-    const _Tooltip = components.Tooltip ?? Tooltip
+    const HandleTooltip = components.Tooltip ?? Tooltip
 
     return (
         <TableCell
@@ -104,7 +104,7 @@ export function TableHeadCell<T>({
                         display: 'flex'
                     }}
                 >
-                    <_Tooltip
+                    <HandleTooltip
                         onClose={() => setSortTooltipOpen(false)}
                         open={sortTooltipOpen}
                         placement="bottom"
@@ -163,10 +163,10 @@ export function TableHeadCell<T>({
                                 </div>
                             </div>
                         </Button>
-                    </_Tooltip>
+                    </HandleTooltip>
 
                     {column.hint && (
-                        <_Tooltip title={column.hint}>
+                        <HandleTooltip title={column.hint}>
                             <HelpIcon
                                 fontSize="small"
                                 sx={
@@ -180,7 +180,7 @@ export function TableHeadCell<T>({
                                           }
                                 }
                             />
-                        </_Tooltip>
+                        </HandleTooltip>
                     )}
                 </span>
             ) : (
@@ -196,7 +196,7 @@ export function TableHeadCell<T>({
                 >
                     {children}
                     {column.hint && (
-                        <_Tooltip
+                        <HandleTooltip
                             enterDelay={300}
                             onClose={() => setHintTooltipOpen(false)}
                             onOpen={() => showHintTooltip()}
@@ -225,7 +225,7 @@ export function TableHeadCell<T>({
                                     marginTop: '-3px'
                                 }}
                             />
-                        </_Tooltip>
+                        </HandleTooltip>
                     )}
                 </div>
             )}

@@ -5,7 +5,9 @@ export function buildMap(
 ): Record<number, boolean> {
     const map: Record<number, boolean> = {}
 
-    rows.forEach(({ dataIndex }) => (map[dataIndex] = true))
+    rows.forEach(({ dataIndex }) => {
+        map[dataIndex] = true
+    })
 
     return map
 }

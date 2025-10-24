@@ -152,10 +152,10 @@ export default function Toolbar<T>(props: ToolbarProps<T>): ReactNode {
 
     const [isDialogFilterOpen, setIsDialogFilterOpen] = useState(false)
 
-    const _Tooltip = components.Tooltip ?? Tooltip
-    const _ColumnVisibilityBox =
+    const HandleTooltip = components.Tooltip ?? Tooltip
+    const HandleColumnVisibilityBox =
         components.ColumnVisibilitiesBox ?? ColumnVisibilitiesBox
-    const _DataFilterBox = components.DataFilterBox ?? DataFilterBox
+    const HandleDataFilterBox = components.DataFilterBox ?? DataFilterBox
 
     if (
         !datatableRootProps?.title &&
@@ -165,7 +165,7 @@ export default function Toolbar<T>(props: ToolbarProps<T>): ReactNode {
         !options.download &&
         !options.print
     ) {
-        return <></>
+        return null
     }
 
     return (
@@ -220,7 +220,7 @@ export default function Toolbar<T>(props: ToolbarProps<T>): ReactNode {
                     options.search === false ||
                     options.searchAlwaysOpen === true
                 ) && (
-                    <_Tooltip
+                    <HandleTooltip
                         disableFocusListener
                         title={toolbarTextLabels.search}
                     >
@@ -233,7 +233,7 @@ export default function Toolbar<T>(props: ToolbarProps<T>): ReactNode {
                                 <icons.SearchIcon />
                             </IconButton>
                         </span>
-                    </_Tooltip>
+                    </HandleTooltip>
                 )}
 
                 {options.download && <ToolbarDownloadButton />}
@@ -252,7 +252,7 @@ export default function Toolbar<T>(props: ToolbarProps<T>): ReactNode {
                         onPopoverExited={() => setActiveIcon(undefined)}
                         title={toolbarTextLabels.viewColumns}
                     >
-                        <_ColumnVisibilityBox />
+                        <HandleColumnVisibilityBox />
                     </ToolbarPopover>
                 )}
 
@@ -282,7 +282,7 @@ export default function Toolbar<T>(props: ToolbarProps<T>): ReactNode {
                         }}
                         title={toolbarTextLabels.filterTable}
                     >
-                        <_DataFilterBox
+                        <HandleDataFilterBox
                             filterUpdate={props.filterUpdate}
                             handleClose={() => {
                                 setIsDialogFilterOpen(false)

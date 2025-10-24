@@ -19,7 +19,7 @@ export function CustomFooter(props: {
 
     return (
         <div style={footerStyle}>
-            <button>Custom Option</button>
+            <button type="button">Custom Option</button>
 
             <MuiTablePagination
                 backIconButtonProps={{
@@ -38,7 +38,7 @@ export function CustomFooter(props: {
                     props.changePage(page)
                 }}
                 onRowsPerPageChange={event => {
-                    props.changeRowsPerPage(parseInt(event.target.value))
+                    props.changeRowsPerPage(parseInt(event.target.value, 10))
                 }}
                 page={page}
                 rowsPerPage={rowsPerPage}

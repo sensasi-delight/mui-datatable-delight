@@ -291,12 +291,12 @@ function DataTable_<T>({
         options.selectToolbarPlacement !== SELECT_TOOLBAR_PLACEMENT.NONE
 
     // ####### COMPONENT HANDLER ###########
-    const _SelectedRowsToolbar =
+    const HandleSelectedRowsToolbar =
         components.SelectedRowsToolbar ?? SelectedRowsToolbar
-    const _Toolbar = components.Toolbar ?? Toolbar
-    const _FilteredValuesList =
+    const HandleToolbar = components.Toolbar ?? Toolbar
+    const HandleFilteredValuesList =
         components.FilteredValuesList ?? FilteredValuesList
-    const _BottomBar = components.BottomBar ?? BottomBar
+    const HandleBottomBar = components.BottomBar ?? BottomBar
 
     return (
         <Paper
@@ -314,12 +314,12 @@ function DataTable_<T>({
             {...paperProps}
         >
             {isShowToolbarSelect && (
-                <_SelectedRowsToolbar selectRowUpdate={selectRowUpdate} />
+                <HandleSelectedRowsToolbar selectRowUpdate={selectRowUpdate} />
             )}
 
-            {isShowToolbar && <_Toolbar filterUpdate={filterUpdate} />}
+            {isShowToolbar && <HandleToolbar filterUpdate={filterUpdate} />}
 
-            <_FilteredValuesList filterUpdate={filterUpdate} />
+            <HandleFilteredValuesList filterUpdate={filterUpdate} />
 
             <div
                 style={{
@@ -332,7 +332,7 @@ function DataTable_<T>({
                 <Table selectRowUpdate={selectRowUpdate} />
             </div>
 
-            <_BottomBar />
+            <HandleBottomBar />
 
             <AnnounceText />
         </Paper>
@@ -368,7 +368,9 @@ function updateFilterByType(
     ) => string[][]
 ) {
     const filterIndexPosition: number =
-        filterList[index]?.findIndex(filter => filter === value) ?? -1
+        filterList[index]?.indexOf(
+            typeof value === 'string' ? value : (value[0] ?? '')
+        ) ?? -1
 
     switch (type) {
         case 'checkbox':
