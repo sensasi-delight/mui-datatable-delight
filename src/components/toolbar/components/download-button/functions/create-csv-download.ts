@@ -42,7 +42,7 @@ const buildHead = <T>(
     columns: ColumnState<T>[],
     options: DataTableOptions<T>
 ) =>
-    columns
+    `${columns
         .reduce(
             (soFar, column) =>
                 column.download
@@ -54,7 +54,7 @@ const buildHead = <T>(
                     : soFar,
             ''
         )
-        .slice(0, -1) + '\r\n'
+        .slice(0, -1)}\r\n`
 
 const buildBody = <T>(
     data: DataItemState[],

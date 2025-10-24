@@ -243,7 +243,7 @@ function getStateFromDataTableOptionsProp<T>({
         if (
             options.rowsSelected &&
             Array.isArray(options.rowsSelected) &&
-            options.rowsSelected.some(isNaN)
+            options.rowsSelected.some(Number.isNaN)
         ) {
             warnInfo(
                 'When using the rowsSelected option, must be provided an array of numbers only.'

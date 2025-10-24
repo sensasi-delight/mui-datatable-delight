@@ -1,4 +1,4 @@
-import SvgIcon from '@mui/material/SvgIcon'
+import type SvgIcon from '@mui/material/SvgIcon'
 
 type SvgIconComponent = typeof SvgIcon
 

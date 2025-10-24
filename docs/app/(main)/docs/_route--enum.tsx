@@ -1,12 +1,12 @@
 export enum Route {
     GETTING_STARTED = 'getting-started',
-    GETTING_STARTED__ANATOMY = GETTING_STARTED + '/anatomy',
-    GETTING_STARTED__SSR = GETTING_STARTED + '/ssr',
+    GETTING_STARTED__ANATOMY = 'getting-started/anatomy',
+    GETTING_STARTED__SSR = 'getting-started/ssr',
 
     FEATURES = 'features',
-    FEATURES__CUSTOM_COMPONENTS = FEATURES + '/custom-components',
-    FEATURES__CUSTOMIZE_STYLING = FEATURES + '/customize-styling',
-    FEATURES__DEBOUNCE_SEARCH = FEATURES + '/debounce-search',
-    FEATURES__LOCALIZATION = FEATURES + '/localization',
-    FEATURES__REMOTE_DATA = FEATURES + '/remote-data'
+    FEATURES__CUSTOM_COMPONENTS = 'features/custom-components',
+    FEATURES__CUSTOMIZE_STYLING = 'features/customize-styling',
+    FEATURES__DEBOUNCE_SEARCH = 'features/debounce-search',
+    FEATURES__LOCALIZATION = 'features/localization',
+    FEATURES__REMOTE_DATA = 'features/remote-data'
 }

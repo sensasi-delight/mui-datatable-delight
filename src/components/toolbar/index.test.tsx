@@ -14,7 +14,7 @@ import { DEFAULT_TEXT_LABELS } from '../../hooks/use-data-table-context/function
 // locals
 import Toolbar from '.'
 
-describe('<Toolbar />', function () {
+describe('<Toolbar />', () => {
     function setup(override?: Partial<DataTableProps>) {
         const DATA = [
             ['Joe James', 'Test Corp', 'Yonkers', 'NY'],
@@ -583,7 +583,7 @@ describe('<Toolbar />', function () {
         expect(onDownload).toHaveBeenCalledOnce()
     })
 
-    describe('<Toolbar /> with custom icons', function () {
+    describe('<Toolbar /> with custom icons', () => {
         const CustomChip = ({
             label,
             testId
@@ -607,14 +607,14 @@ describe('<Toolbar />', function () {
                     [iconName]: () => (
                         <CustomChip
                             label="Custom"
-                            testId={'custom-icon-' + iconName}
+                            testId={`custom-icon-${iconName}`}
                         />
                     )
                 }
             })
 
             expect(result.getAllByRole('button').length).toBe(5)
-            expect(result.getByTestId('custom-icon-' + iconName)).toBeDefined()
+            expect(result.getByTestId(`custom-icon-${iconName}`)).toBeDefined()
         }
 
         ;[
@@ -623,9 +623,9 @@ describe('<Toolbar />', function () {
             'DownloadIcon',
             'PrintIcon',
             'ViewColumnIcon'
-        ].forEach(iconName =>
+        ].forEach(iconName => {
             test(`should render a toolbar with a custom chip in place of the ${iconName} icon`, () =>
                 testCustomIcon(iconName))
-        )
+        })
     })
 })

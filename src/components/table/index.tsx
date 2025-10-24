@@ -6,7 +6,7 @@ import MuiTable from '@mui/material/Table'
 import ClassName from '@src/enums/class-name'
 import useDataTableContext from '@src/hooks/use-data-table-context'
 // vendors
-import { type ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import TableBody from './components/body'
 import TableHead from './components/head'
 //
@@ -28,8 +28,8 @@ export default function Table({ selectRowUpdate }: Props): ReactNode {
 
     const tablePropsFromOption = options.setTableProps?.() ?? {}
 
-    const _TableHead = components.TableHead ?? TableHead
-    const _TableBody = components.TableBody ?? TableBody
+    const HandleTableHead = components.TableHead ?? TableHead
+    const HandleTableBody = components.TableBody ?? TableBody
 
     return (
         <MuiTable
@@ -56,9 +56,9 @@ export default function Table({ selectRowUpdate }: Props): ReactNode {
                 </caption>
             )}
 
-            <_TableHead selectRowUpdate={selectRowUpdate} />
+            <HandleTableHead selectRowUpdate={selectRowUpdate} />
 
-            <_TableBody selectRowUpdate={selectRowUpdate} />
+            <HandleTableBody selectRowUpdate={selectRowUpdate} />
 
             {options.customTableBodyFooterRender?.(state, options)}
         </MuiTable>

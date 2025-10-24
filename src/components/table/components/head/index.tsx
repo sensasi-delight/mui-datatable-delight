@@ -11,9 +11,9 @@ import getDisplayData from '@src/functions/get-new-state-on-data-change/get-disp
 import sortTable from '@src/functions/sort-table'
 // globals
 import useDataTableContext from '@src/hooks/use-data-table-context'
-import {
-    type DataTableOptions,
-    type DataTableSortOrderOption
+import type {
+    DataTableOptions,
+    DataTableSortOrderOption
 } from '@src/types/options'
 import type { DataTableState } from '@src/types/state'
 // vendors

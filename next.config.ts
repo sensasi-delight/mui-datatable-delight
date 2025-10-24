@@ -4,6 +4,7 @@ import type { NextConfig } from 'next'
 const nextConfig: NextConfig = {
     output: 'export',
     pageExtensions: ['md', 'mdx', 'ts', 'tsx'],
+    reactCompiler: true,
     reactStrictMode: true
 }
 

@@ -6,7 +6,7 @@ import type SELECT_TOOLBAR_PLACEMENT from '@src/statics/select-toolbar-placement
 import type { MouseEvent, ReactElement, ReactNode } from 'react'
 // enums
 import type TableAction from '../enums/table-action'
-import { DEFAULT_TEXT_LABELS } from '../hooks/use-data-table-context/function/statics/default-text-labels'
+import type { DEFAULT_TEXT_LABELS } from '../hooks/use-data-table-context/function/statics/default-text-labels'
 import type { DefaultRow } from './default-row'
 import type DataTableSearchOptions from './options/search'
 import type { SelectableRowsType } from './options/selectable-rows'

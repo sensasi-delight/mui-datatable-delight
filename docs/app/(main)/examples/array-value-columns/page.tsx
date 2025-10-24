@@ -59,9 +59,7 @@ function Example() {
                         return <Chip key={value} label={value} />
                     }
 
-                    return value?.map((val, key) => (
-                        <Chip key={key} label={val} />
-                    ))
+                    return value?.map(val => <Chip key={val} label={val} />)
                 },
                 filter: true,
                 filterType: 'multiselect',

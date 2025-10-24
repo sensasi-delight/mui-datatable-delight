@@ -12,7 +12,7 @@ export default function Example() {
 
     return (
         <>
-            <button onClick={() => setCounter(counter + 1)}>
+            <button onClick={() => setCounter(counter + 1)} type="button">
                 Re-render - {counter}
             </button>
 

@@ -16,7 +16,8 @@ import type { DataTableState } from '@src/types/state'
 import type { ColumnState } from '@src/types/state/column'
 import type { DisplayDataState } from '@src/types/state/display-data'
 import type { SelectedRowDataState } from '@src/types/state/selected-row-data'
-import React, { type ReactNode } from 'react'
+import type React from 'react'
+import type { ReactNode } from 'react'
 // vendors
 import CheckboxCell from '../_shared/checkbox-cell'
 // locals
@@ -53,7 +54,7 @@ export default function TableBody({
                         columnOrder={columnOrder}
                         columns={state.columns}
                         data={data}
-                        key={rowIndex}
+                        key={data.dataIndex}
                         rowIndex={rowIndex}
                         selectedRows={state.selectedRows}
                         selectRowUpdate={selectRowUpdate}

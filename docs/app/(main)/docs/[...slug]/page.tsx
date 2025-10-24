@@ -29,7 +29,7 @@ function getRoutes() {
                 )
         )
         .map(enumKey => ({
-            slug: enumKey.toLowerCase().replaceAll('_', '-').split('--')
+            slug: enumKey.toLowerCase().replace(/_/g, '-').split('--')
         }))
 }
 

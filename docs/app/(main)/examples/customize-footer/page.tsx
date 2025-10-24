@@ -99,7 +99,7 @@ function Example() {
                 />
             )
         },
-        customTableBodyFooterRender: function (state, options) {
+        customTableBodyFooterRender: (state, options) => {
             const avgAge =
                 state.data.reduce((accumulator, item) => {
                     const age = item.data[3]
@@ -128,23 +128,26 @@ function Example() {
                         {options.selectableRows !== 'none' ? (
                             <TableCell sx={footerSx} />
                         ) : null}
-                        {state.columns.map((col, index) => {
+                        {state.columns.map(col => {
                             if (col.display) {
                                 if (col.name === 'Age') {
                                     return (
-                                        <TableCell key={index} sx={footerSx}>
+                                        <TableCell key={col.name} sx={footerSx}>
                                             Avg: {avgAge}
                                         </TableCell>
                                     )
                                 } else if (col.name === 'Salary') {
                                     return (
-                                        <TableCell key={index} sx={footerSx}>
+                                        <TableCell key={col.name} sx={footerSx}>
                                             Avg: {avgSalary}
                                         </TableCell>
                                     )
                                 } else {
                                     return (
-                                        <TableCell key={index} sx={footerSx} />
+                                        <TableCell
+                                            key={col.name}
+                                            sx={footerSx}
+                                        />
                                     )
                                 }
                             }

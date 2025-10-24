@@ -19,7 +19,7 @@ import FilterType from '@src/enums/filter-type'
 import useDataTableContext from '@src/hooks/use-data-table-context'
 import type { FilterUpdateType } from '@src/types/filter-update'
 // locals
-import { type DataTableState } from '@src/types/state'
+import type { DataTableState } from '@src/types/state'
 import type { ColumnState } from '@src/types/state/column'
 import type { Primitive } from '@src/types/values/primitive'
 // vendors
@@ -40,7 +40,7 @@ export default function ToolbarDataFilterBoxFilters<T>({
     const { textLabels, options, state } = useDataTableContext<T>()
 
     const renderedColumns = state.columns.map((column, index) => {
-        if (!column.filter) return
+        if (!column.filter) return null
 
         const filterType = column.filterType ?? options.filterType
 
@@ -61,7 +61,7 @@ export default function ToolbarDataFilterBoxFilters<T>({
                         }
                     }}
                     index={index}
-                    key={index}
+                    key={column.name}
                 />
             )
         }
@@ -73,7 +73,7 @@ export default function ToolbarDataFilterBoxFilters<T>({
                     filterData={state.filterData}
                     filterList={filterList}
                     index={index}
-                    key={index}
+                    key={column.name}
                     onSelectChange={event => {
                         if (options.confirmFilters !== true) {
                             filterUpdate?.(
@@ -94,7 +94,7 @@ export default function ToolbarDataFilterBoxFilters<T>({
                     column={column}
                     filterList={filterList}
                     index={index}
-                    key={index}
+                    key={column.name}
                     onChange={event => {
                         if (options.confirmFilters !== true) {
                             filterUpdate?.(
@@ -126,7 +126,7 @@ export default function ToolbarDataFilterBoxFilters<T>({
                         }
                     }}
                     index={index}
-                    key={index}
+                    key={column.name}
                 />
             )
         }
@@ -137,7 +137,7 @@ export default function ToolbarDataFilterBoxFilters<T>({
                 filterData={state.filterData}
                 filterList={filterList}
                 index={index}
-                key={index}
+                key={column.name}
                 onChange={event => {
                     const value =
                         event.target.value === textLabels.filter.all
@@ -206,7 +206,7 @@ function DataTableToolbarFilterCheckbox<T>({
     const { components } = useDataTableContext()
     const renderItem = column?.filterOptions?.renderValue ?? (v => v)
 
-    const _Checkbox = components.Checkbox ?? Checkbox
+    const HandleCheckbox = components.Checkbox ?? Checkbox
 
     return (
         <Grid
@@ -225,11 +225,11 @@ function DataTableToolbarFilterCheckbox<T>({
                     </Typography>
                 </Grid>
                 <Grid container>
-                    {filterData[index]?.map((filterValue, filterIndex) => (
-                        <Grid key={filterIndex}>
+                    {filterData[index]?.map(filterValue => (
+                        <Grid key={filterValue as string}>
                             <FormControlLabel
                                 control={
-                                    <_Checkbox
+                                    <HandleCheckbox
                                         checked={filterList[index]?.includes(
                                             filterValue as string
                                         )}
@@ -245,7 +245,7 @@ function DataTableToolbarFilterCheckbox<T>({
                                         }
                                     />
                                 }
-                                key={filterIndex}
+                                key={filterValue as string}
                                 label={renderItem(filterValue)}
                                 slotProps={{
                                     typography: {
@@ -282,7 +282,7 @@ function DataTableToolbarFilterMultiselect<T>({
 
     const width = column.filterOptions?.fullWidth ? 12 : 6
 
-    const _Checkbox = components.Checkbox ?? Checkbox
+    const HandleCheckbox = components.Checkbox ?? Checkbox
 
     return (
         <Grid
@@ -308,12 +308,12 @@ function DataTableToolbarFilterMultiselect<T>({
                     }
                     value={filterList[index] ?? []}
                 >
-                    {filterData[index]?.map((filterValue, filterIndex) => (
+                    {filterData[index]?.map(filterValue => (
                         <MenuItem
-                            key={filterIndex + 1}
+                            key={filterValue as string}
                             value={filterValue as string}
                         >
-                            <_Checkbox
+                            <HandleCheckbox
                                 checked={filterList[index]?.includes(
                                     filterValue as string
                                 )}
@@ -479,9 +479,9 @@ function RenderSelect<T>({
                         {textLabels.filter.all}
                     </MenuItem>
 
-                    {filterData[index]?.map((filterValue, filterIndex) => (
+                    {filterData[index]?.map(filterValue => (
                         <MenuItem
-                            key={filterIndex + 1}
+                            key={filterValue as string}
                             value={filterValue as string}
                         >
                             {renderItem(filterValue)}

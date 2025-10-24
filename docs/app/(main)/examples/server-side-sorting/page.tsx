@@ -44,7 +44,7 @@ class Example extends React.Component<
         let page = 0
         let order = ''
         let column = ''
-        if (url != undefined) {
+        if (url !== undefined) {
             page = url.page
             order = url.order
             column = url.column

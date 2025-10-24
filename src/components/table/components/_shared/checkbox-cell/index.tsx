@@ -37,7 +37,7 @@ export default function CheckboxCell({
         return state.expandedRows.data.length === state.data.length
     }
 
-    const _Checkbox = components.Checkbox ?? Checkbox
+    const HandleCheckbox = components.Checkbox ?? Checkbox
 
     const renderCheckBox = () => {
         if (
@@ -49,7 +49,7 @@ export default function CheckboxCell({
             return null
         }
         return (
-            <_Checkbox
+            <HandleCheckbox
                 color="primary"
                 data-description={
                     isHeaderCell ? 'row-select-header' : 'row-select'

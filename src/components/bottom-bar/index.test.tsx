@@ -12,7 +12,7 @@ import { render } from '@testing-library/react'
 import { describe, expect, test } from 'vitest'
 import BottomBar from './'
 
-describe('<BottomBar />', function () {
+describe('<BottomBar />', () => {
     function setup(props?: Partial<DataTableProps>) {
         const {
             columns = [],
@@ -46,7 +46,7 @@ describe('<BottomBar />', function () {
 
         expect(
             result.container.children[0]?.className.includes(
-                ComponentClassName.BOTTOM_BAR + '-root'
+                `${ComponentClassName.BOTTOM_BAR}-root`
             )
         ).toBe(true)
 
@@ -85,7 +85,7 @@ describe('<BottomBar />', function () {
                 labelRowsPerPage={textLabels.rowsPerPage}
                 onPageChange={(_, page) => changePage(page)}
                 onRowsPerPageChange={event =>
-                    changeRowsPerPage(parseInt(event.target.value))
+                    changeRowsPerPage(parseInt(event.target.value, 10))
                 }
                 page={page}
                 rowsPerPage={rowsPerPage}

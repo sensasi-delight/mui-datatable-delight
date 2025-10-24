@@ -12,13 +12,11 @@ export default class CustomToolbar extends React.Component {
 
     render() {
         return (
-            <React.Fragment>
-                <Tooltip title={'custom icon'}>
-                    <IconButton onClick={this.handleClick}>
-                        <AddIcon />
-                    </IconButton>
-                </Tooltip>
-            </React.Fragment>
+            <Tooltip title={'custom icon'}>
+                <IconButton onClick={this.handleClick}>
+                    <AddIcon />
+                </IconButton>
+            </Tooltip>
         )
     }
 }

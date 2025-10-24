@@ -82,7 +82,7 @@ class Example extends React.Component {
                                     ret &&
                                     Boolean(
                                         filterList[ii]?.filter(ff => {
-                                            return row[ii] == ff
+                                            return row[ii] === ff
                                         }).length
                                     )
                             }
