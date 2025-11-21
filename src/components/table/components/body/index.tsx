@@ -465,7 +465,7 @@ function handleRowClick<Row>(
         rowIndex: number
         dataIndex: number
     },
-    event: React.MouseEvent<HTMLTableRowElement, globalThis.MouseEvent>,
+    event: React.MouseEvent<HTMLTableRowElement>,
     options: DataTableOptions<Row>,
     toggleExpandRow: (params: { index: number; dataIndex: number }) => void,
     selectedRows: DataTableState<Row>['selectedRows'],

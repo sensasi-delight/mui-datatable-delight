@@ -3,7 +3,6 @@ import type { ChipProps } from '@mui/material/Chip'
 import type { TableProps } from '@mui/material/Table'
 import type { TableRowProps } from '@mui/material/TableRow'
 import type SELECT_TOOLBAR_PLACEMENT from '@src/statics/select-toolbar-placement'
-import type { MouseEvent, ReactElement, ReactNode } from 'react'
 // enums
 import type TableAction from '../enums/table-action'
 import type { DEFAULT_TEXT_LABELS } from '../hooks/use-data-table-context/function/statics/default-text-labels'
@@ -192,7 +191,7 @@ export interface DataTableOptions<Row = DefaultRow>
             colIndex: number
             rowIndex: number
             dataIndex: number
-            event: MouseEvent
+            event: React.MouseEvent<HTMLTableCellElement>
         }
     ) => void
     onChangePage?: (currentPage: number) => void
@@ -280,7 +279,7 @@ export interface DataTableOptions<Row = DefaultRow>
     onRowClick?: (
         rowData: DisplayDataState<Row>[number]['data'],
         rowMeta: { dataIndex: number; rowIndex: number },
-        event: React.MouseEvent<HTMLTableRowElement, globalThis.MouseEvent>
+        event: React.MouseEvent<HTMLTableRowElement>
     ) => void
 
     /**
@@ -371,7 +370,7 @@ export interface DataTableOptions<Row = DefaultRow>
     renderExpandableRow?: (
         rowData: DisplayDataState<Row>[number]['data'],
         rowMeta: { dataIndex: number; rowIndex: number }
-    ) => ReactNode
+    ) => React.ReactNode
 
     /**
      * Enable/disable responsive table view.
@@ -555,7 +554,7 @@ interface DataTableCustomsOptions<Row> {
     customFilterDialogFooter?: (
         filterList: DataTableState<Row>['filterList'],
         applyNewFilters: (...args: unknown[]) => unknown
-    ) => ReactNode
+    ) => React.ReactNode
 
     /**
      * Render a custom table footer.
@@ -569,7 +568,7 @@ interface DataTableCustomsOptions<Row> {
         changeRowsPerPage: (rowPerPage: number) => void,
         changePage: (newPage: number) => void,
         textLabels: typeof DEFAULT_TEXT_LABELS.pagination
-    ) => ReactElement
+    ) => React.ReactElement
 
     /**
      * Override default row rendering with custom function.
@@ -591,7 +590,7 @@ interface DataTableCustomsOptions<Row> {
          * The rowIndex of the row
          */
         rowIndex: number
-    ) => ReactNode
+    ) => React.ReactNode
 
     /**
      * Override default sorting with custom function.
@@ -616,14 +615,16 @@ interface DataTableCustomsOptions<Row> {
     customTableBodyFooterRender?: (
         state: DataTableState<Row>,
         options: DataTableOptions<Row>
-    ) => ReactNode
+    ) => React.ReactNode
 
     /**
      * Render a custom Toolbar.
      *
      * @see https://mui-datatable-delight.vercel.app/examples/customize-toolbar/CustomToolbar.tsx
      */
-    customToolbar?: (data: { displayData: DisplayDataState<Row> }) => ReactNode
+    customToolbar?: (data: {
+        displayData: DisplayDataState<Row>
+    }) => React.ReactNode
 
     /**
      * Render a custom selected rows ToolBar.
@@ -637,5 +638,5 @@ interface DataTableCustomsOptions<Row> {
         },
         displayData: DisplayDataState<Row>,
         setSelectedRows: (rows: number[]) => void
-    ) => ReactNode
+    ) => React.ReactNode
 }
