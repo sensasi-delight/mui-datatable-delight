@@ -1,174 +1,143 @@
 'use client'
 
 import DataTable, { type DataTableProps } from '@src'
-import React, { Fragment } from 'react'
+import { Fragment, useState } from 'react'
 
-class Example extends React.Component {
-    state = {
-        searchText: 'Computer'
-    }
+function Example() {
+    const [searchText, setSearchText] = useState('Computer')
 
-    render() {
-        const columns: DataTableProps['columns'] = [
-            {
-                name: 'Name',
-                options: {
-                    display: 'excluded',
-                    filter: true
-                }
-            },
-            {
-                label: 'Modified Title Label',
-                name: 'Title',
-                options: {
-                    filter: true
-                }
-            },
-            {
-                name: 'Location',
-                options: {
-                    filter: false
-                }
-            },
-            {
-                name: 'Age',
-                options: {
-                    filter: true
-                }
-            },
-            {
-                name: 'Salary',
-                options: {
-                    filter: true,
-                    sort: false
-                }
+    const columns: DataTableProps['columns'] = [
+        {
+            name: 'Name',
+            options: {
+                display: 'excluded',
+                filter: true
             }
-        ]
-
-        const data = [
-            ['Gabby George', 'Business Analyst', 'Minneapolis', 30, '$100,000'],
-            ['Aiden Lloyd', 'Business Consultant', 'Dallas', 55, '$200,000'],
-            ['Jaden Collins', 'Attorney', 'Santa Ana', 27, '$500,000'],
-            [
-                'Franky Rees',
-                'Business Analyst',
-                'St. Petersburg',
-                22,
-                '$50,000'
-            ],
-            ['Aaren Rose', 'Business Consultant', 'Toledo', 28, '$75,000'],
-            [
-                'Blake Duncan',
-                'Business Management Analyst',
-                'San Diego',
-                65,
-                '$94,000'
-            ],
-            [
-                'Frankie Parry',
-                'Agency Legal Counsel',
-                'Jacksonville',
-                71,
-                '$210,000'
-            ],
-            ['Lane Wilson', 'Commercial Specialist', 'Omaha', 19, '$65,000'],
-            ['Robin Duncan', 'Business Analyst', 'Los Angeles', 20, '$77,000'],
-            [
-                'Mel Brooks',
-                'Business Consultant',
-                'Oklahoma City',
-                37,
-                '$135,000'
-            ],
-            ['Harper White', 'Attorney', 'Pittsburgh', 52, '$420,000'],
-            ['Kris Humphrey', 'Agency Legal Counsel', 'Laredo', 30, '$150,000'],
-            ['Frankie Long', 'Industrial Analyst', 'Austin', 31, '$170,000'],
-            ['Brynn Robbins', 'Business Analyst', 'Norfolk', 22, '$90,000'],
-            ['Justice Mann', 'Business Consultant', 'Chicago', 24, '$133,000'],
-            [
-                'Addison Navarro',
-                'Business Management Analyst',
-                'New York',
-                50,
-                '$295,000'
-            ],
-            ['Jesse Welch', 'Agency Legal Counsel', 'Seattle', 28, '$200,000'],
-            [
-                'Eli Mejia',
-                'Commercial Specialist',
-                'Long Beach',
-                65,
-                '$400,000'
-            ],
-            ['Gene Leblanc', 'Industrial Analyst', 'Hartford', 34, '$110,000'],
-            ['Danny Leon', 'Computer Scientist', 'Newark', 60, '$220,000'],
-            ['Lane Lee', 'Corporate Counselor', 'Cincinnati', 52, '$180,000'],
-            ['Jesse Hall', 'Business Analyst', 'Baltimore', 44, '$99,000'],
-            ['Danni Hudson', 'Agency Legal Counsel', 'Tampa', 37, '$90,000'],
-            [
-                'Terry Macdonald',
-                'Commercial Specialist',
-                'Miami',
-                39,
-                '$140,000'
-            ],
-            ['Justice Mccarthy', 'Attorney', 'Tucson', 26, '$330,000'],
-            ['Silver Carey', 'Computer Scientist', 'Memphis', 47, '$250,000'],
-            ['Franky Miles', 'Industrial Analyst', 'Buffalo', 49, '$190,000'],
-            ['Glen Nixon', 'Corporate Counselor', 'Arlington', 44, '$80,000'],
-            [
-                'Gabby Strickland',
-                'Business Process Consultant',
-                'Scottsdale',
-                26,
-                '$45,000'
-            ],
-            ['Mason Ray', 'Computer Scientist', 'San Francisco', 39, '$142,000']
-        ]
-
-        const options: DataTableProps['options'] = {
-            customSearch: (searchQuery, currentRow) => {
-                let isFound = false
-                currentRow.forEach(col => {
-                    if (col?.toString().includes(searchQuery)) {
-                        isFound = true
-                    }
-                })
-                return isFound
-            },
-            filter: true,
-            filterType: 'dropdown',
-            page: 0,
-            responsive: 'vertical',
-            searchPlaceholder: 'Your Custom Search Placeholder',
-            searchProps: {
-                onBlur: () => {
-                    console.log('onBlur!')
-                },
-                onKeyUp: () => {
-                    console.log('onKeyUp!')
-                }
-            },
-            searchText: this.state.searchText
+        },
+        {
+            label: 'Modified Title Label',
+            name: 'Title',
+            options: {
+                filter: true
+            }
+        },
+        {
+            name: 'Location',
+            options: {
+                filter: false
+            }
+        },
+        {
+            name: 'Age',
+            options: {
+                filter: true
+            }
+        },
+        {
+            name: 'Salary',
+            options: {
+                filter: true,
+                sort: false
+            }
         }
+    ]
 
-        return (
-            <Fragment>
-                <button
-                    onClick={() => this.setState({ searchText: '' })}
-                    type="button"
-                >
-                    Reset Search
-                </button>
-                <DataTable
-                    columns={columns}
-                    data={data}
-                    options={options}
-                    title={'ACME Employee list'}
-                />
-            </Fragment>
-        )
+    const data = [
+        ['Gabby George', 'Business Analyst', 'Minneapolis', 30, '$100,000'],
+        ['Aiden Lloyd', 'Business Consultant', 'Dallas', 55, '$200,000'],
+        ['Jaden Collins', 'Attorney', 'Santa Ana', 27, '$500,000'],
+        ['Franky Rees', 'Business Analyst', 'St. Petersburg', 22, '$50,000'],
+        ['Aaren Rose', 'Business Consultant', 'Toledo', 28, '$75,000'],
+        [
+            'Blake Duncan',
+            'Business Management Analyst',
+            'San Diego',
+            65,
+            '$94,000'
+        ],
+        [
+            'Frankie Parry',
+            'Agency Legal Counsel',
+            'Jacksonville',
+            71,
+            '$210,000'
+        ],
+        ['Lane Wilson', 'Commercial Specialist', 'Omaha', 19, '$65,000'],
+        ['Robin Duncan', 'Business Analyst', 'Los Angeles', 20, '$77,000'],
+        ['Mel Brooks', 'Business Consultant', 'Oklahoma City', 37, '$135,000'],
+        ['Harper White', 'Attorney', 'Pittsburgh', 52, '$420,000'],
+        ['Kris Humphrey', 'Agency Legal Counsel', 'Laredo', 30, '$150,000'],
+        ['Frankie Long', 'Industrial Analyst', 'Austin', 31, '$170,000'],
+        ['Brynn Robbins', 'Business Analyst', 'Norfolk', 22, '$90,000'],
+        ['Justice Mann', 'Business Consultant', 'Chicago', 24, '$133,000'],
+        [
+            'Addison Navarro',
+            'Business Management Analyst',
+            'New York',
+            50,
+            '$295,000'
+        ],
+        ['Jesse Welch', 'Agency Legal Counsel', 'Seattle', 28, '$200,000'],
+        ['Eli Mejia', 'Commercial Specialist', 'Long Beach', 65, '$400,000'],
+        ['Gene Leblanc', 'Industrial Analyst', 'Hartford', 34, '$110,000'],
+        ['Danny Leon', 'Computer Scientist', 'Newark', 60, '$220,000'],
+        ['Lane Lee', 'Corporate Counselor', 'Cincinnati', 52, '$180,000'],
+        ['Jesse Hall', 'Business Analyst', 'Baltimore', 44, '$99,000'],
+        ['Danni Hudson', 'Agency Legal Counsel', 'Tampa', 37, '$90,000'],
+        ['Terry Macdonald', 'Commercial Specialist', 'Miami', 39, '$140,000'],
+        ['Justice Mccarthy', 'Attorney', 'Tucson', 26, '$330,000'],
+        ['Silver Carey', 'Computer Scientist', 'Memphis', 47, '$250,000'],
+        ['Franky Miles', 'Industrial Analyst', 'Buffalo', 49, '$190,000'],
+        ['Glen Nixon', 'Corporate Counselor', 'Arlington', 44, '$80,000'],
+        [
+            'Gabby Strickland',
+            'Business Process Consultant',
+            'Scottsdale',
+            26,
+            '$45,000'
+        ],
+        ['Mason Ray', 'Computer Scientist', 'San Francisco', 39, '$142,000']
+    ]
+
+    const options: DataTableProps['options'] = {
+        customSearch: (searchQuery, currentRow) => {
+            let isFound = false
+            currentRow.forEach(col => {
+                if (col?.toString().includes(searchQuery)) {
+                    isFound = true
+                }
+            })
+            return isFound
+        },
+        filter: true,
+        filterType: 'dropdown',
+        page: 0,
+        responsive: 'vertical',
+        searchPlaceholder: 'Your Custom Search Placeholder',
+        searchProps: {
+            onBlur: () => {
+                console.log('onBlur!')
+            },
+            onKeyUp: () => {
+                console.log('onKeyUp!')
+            }
+        },
+        searchText: searchText
     }
+
+    return (
+        <Fragment>
+            <button onClick={() => setSearchText('')} type="button">
+                Reset Search
+            </button>
+            <DataTable
+                columns={columns}
+                data={data}
+                options={options}
+                title={'ACME Employee list'}
+            />
+        </Fragment>
+    )
 }
 
 export default Example

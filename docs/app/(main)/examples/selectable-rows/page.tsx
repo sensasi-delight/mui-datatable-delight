@@ -4,7 +4,7 @@ import FormControlLabel from '@mui/material/FormControlLabel'
 import FormGroup from '@mui/material/FormGroup'
 import Switch from '@mui/material/Switch'
 import DataTable, { type DataTableProps } from '@src'
-import React from 'react'
+import { Fragment, useState } from 'react'
 
 const data = [
     ['Gabby George', 'Business Analyst', 'Minneapolis', 30, 100000],
@@ -45,143 +45,118 @@ const data = [
     ['Mason Ray', 'Computer Scientist', 'San Francisco', 39, 142000]
 ]
 
-class Example extends React.Component<
-    unknown,
-    {
-        data: typeof data
-        selectableRowsHideCheckboxes: boolean
-        rowsSelected: number[]
+function Example() {
+    const [tableData, setTableData] = useState(data)
+    const [rowsSelected, setRowsSelected] = useState<number[]>([])
+    const [selectableRowsHideCheckboxes, setSelectableRowsHideCheckboxes] =
+        useState(false)
+
+    const columns = [
+        'Name',
+        'Title',
+        'Location',
+        'Age',
+        { name: 'Salary', options: { hint: 'USD / year' } }
+    ]
+
+    const options: DataTableProps<(typeof data)[number]>['options'] = {
+        // textLabels: {
+        //     body: {
+        //         noMatch: ''
+        //     }
+        // },
+        filter: true,
+        filterType: 'dropdown',
+        isRowSelectable: (dataIndex, selectedRows) => {
+            //prevents selection of any additional row after the third
+            if (
+                selectedRows.data.length > 2 &&
+                selectedRows.data.filter(d => d.dataIndex === dataIndex)
+                    .length === 0
+            )
+                return false
+
+            //prevents selection of row with title "Attorney"
+            return data[dataIndex]?.[1] !== 'Attorney'
+        },
+        onCellClick: (cellData, cellMeta) => {
+            console.log(cellData, cellMeta)
+        },
+        onChangePage: numberRows => {
+            console.log(numberRows)
+        },
+        onColumnSortChange: (column, direction) => {
+            console.log(column, direction)
+        },
+        onColumnVisibilityChange: (column, action) => {
+            console.log(column, action)
+        },
+        onFilterChange: (column, filters) => {
+            console.log(column, filters)
+        },
+        onRowClick: (rowData, rowState) => {
+            console.log(rowData, rowState)
+        },
+        onRowSelectionChange: (rowsSelectedData, allRows, rowsSelected) => {
+            console.log(rowsSelectedData, allRows, rowsSelected)
+            setRowsSelected(rowsSelected ?? [])
+        },
+        onRowsDelete: (rowsDeleted, newData) => {
+            console.log('rowsDeleted')
+            console.dir(rowsDeleted)
+            console.dir(newData)
+            if (rowsDeleted?.data?.[0]?.dataIndex === 0) {
+                window.alert("Can't delete this!")
+                return false
+            }
+
+            setTableData(newData)
+            setRowsSelected([])
+            console.log(rowsDeleted, 'were deleted!')
+        },
+        onSearchChange: searchText => {
+            console.log(searchText)
+        },
+        responsive: 'vertical',
+        rowsPerPage: 10,
+        rowsSelected: rowsSelected,
+        selectableRows: 'multiple',
+        selectableRowsHeader: false,
+        selectableRowsHideCheckboxes: selectableRowsHideCheckboxes,
+        selectableRowsOnClick: true
     }
-> {
-    constructor(props: unknown) {
-        super(props)
 
-        this.state = {
-            data,
-            rowsSelected: [],
-            selectableRowsHideCheckboxes: false
-        }
-    }
-
-    updateSelectableRowsHideCheckboxes = (isChecked: boolean) => {
-        this.setState({
-            selectableRowsHideCheckboxes: isChecked
-        })
-    }
-
-    render() {
-        const columns = [
-            'Name',
-            'Title',
-            'Location',
-            'Age',
-            { name: 'Salary', options: { hint: 'USD / year' } }
-        ]
-
-        const options: DataTableProps<(typeof data)[number]>['options'] = {
-            // textLabels: {
-            //     body: {
-            //         noMatch: ''
-            //     }
-            // },
-            filter: true,
-            filterType: 'dropdown',
-            isRowSelectable: (dataIndex, selectedRows) => {
-                //prevents selection of any additional row after the third
-                if (
-                    selectedRows.data.length > 2 &&
-                    selectedRows.data.filter(d => d.dataIndex === dataIndex)
-                        .length === 0
-                )
-                    return false
-
-                //prevents selection of row with title "Attorney"
-                return data[dataIndex]?.[1] !== 'Attorney'
-            },
-            onCellClick: (cellData, cellMeta) => {
-                console.log(cellData, cellMeta)
-            },
-            onChangePage: numberRows => {
-                console.log(numberRows)
-            },
-            onColumnSortChange: (column, direction) => {
-                console.log(column, direction)
-            },
-            onColumnVisibilityChange: (column, action) => {
-                console.log(column, action)
-            },
-            onFilterChange: (column, filters) => {
-                console.log(column, filters)
-            },
-            onRowClick: (rowData, rowState) => {
-                console.log(rowData, rowState)
-            },
-            onRowSelectionChange: (rowsSelectedData, allRows, rowsSelected) => {
-                console.log(rowsSelectedData, allRows, rowsSelected)
-                this.setState({ rowsSelected: rowsSelected ?? [] })
-            },
-            onRowsDelete: (rowsDeleted, newData) => {
-                console.log('rowsDeleted')
-                console.dir(rowsDeleted)
-                console.dir(newData)
-                if (rowsDeleted?.data?.[0]?.dataIndex === 0) {
-                    window.alert("Can't delete this!")
-                    return false
-                }
-
-                this.setState({
-                    data: newData,
-                    rowsSelected: []
-                })
-                console.log(rowsDeleted, 'were deleted!')
-            },
-            onSearchChange: searchText => {
-                console.log(searchText)
-            },
-            responsive: 'vertical',
-            rowsPerPage: 10,
-            rowsSelected: this.state.rowsSelected,
-            selectableRows: 'multiple',
-            selectableRowsHeader: false,
-            selectableRowsHideCheckboxes:
-                this.state.selectableRowsHideCheckboxes,
-            selectableRowsOnClick: true
-        }
-
-        return (
-            <>
-                <div>
-                    Note: Example code is setup to limit the number of
-                    selections to 3
-                </div>
-                <FormGroup row>
-                    <FormControlLabel
-                        control={
-                            <Switch
-                                checked={
-                                    this.state.selectableRowsHideCheckboxes
-                                }
-                                color="primary"
-                                onChange={event =>
-                                    this.updateSelectableRowsHideCheckboxes(
-                                        event.target.checked
-                                    )
-                                }
-                                value="selectableRowsHideCheckboxes"
-                            />
-                        }
-                        label="Hide Checkboxes"
-                    />
-                </FormGroup>
-                <DataTable
-                    columns={columns}
-                    data={this.state.data}
-                    options={options}
-                    title={'ACME Employee list'}
+    return (
+        <Fragment>
+            <div>
+                Note: Example code is setup to limit the number of selections to
+                3
+            </div>
+            <FormGroup row>
+                <FormControlLabel
+                    control={
+                        <Switch
+                            checked={selectableRowsHideCheckboxes}
+                            color="primary"
+                            onChange={event =>
+                                setSelectableRowsHideCheckboxes(
+                                    event.target.checked
+                                )
+                            }
+                            value="selectableRowsHideCheckboxes"
+                        />
+                    }
+                    label="Hide Checkboxes"
                 />
-            </>
-        )
-    }
+            </FormGroup>
+            <DataTable
+                columns={columns}
+                data={tableData}
+                options={options}
+                title={'ACME Employee list'}
+            />
+        </Fragment>
+    )
 }
 
 export default Example

@@ -3,20 +3,17 @@
 import AddIcon from '@mui/icons-material/Add'
 import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
-import React from 'react'
 
-export default class CustomToolbar extends React.Component {
-    handleClick = () => {
+export default function CustomToolbar() {
+    const handleClick = () => {
         console.log('clicked on icon!')
     }
 
-    render() {
-        return (
-            <Tooltip title={'custom icon'}>
-                <IconButton onClick={this.handleClick}>
-                    <AddIcon />
-                </IconButton>
-            </Tooltip>
-        )
-    }
+    return (
+        <Tooltip title={'custom icon'}>
+            <IconButton onClick={handleClick}>
+                <AddIcon />
+            </IconButton>
+        </Tooltip>
+    )
 }

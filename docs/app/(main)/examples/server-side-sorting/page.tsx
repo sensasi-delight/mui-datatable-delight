@@ -3,49 +3,30 @@
 import CircularProgress from '@mui/material/CircularProgress'
 import Typography from '@mui/material/Typography'
 import DataTable, { type DataTableOptions, type DataTableProps } from '@src'
-import React from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import Cities from '../_shared-components/cities'
 
-class Example extends React.Component<
-    unknown,
-    {
-        page: number
-        count: number
-        data: (string | number)[][]
-        sortOrder: DataTableOptions['sortOrder']
-        loading: boolean
-    }
-> {
-    constructor(props: unknown) {
-        super(props)
-
-        this.state = {
-            count: 26,
-            data: [['Loading Data...']],
-            loading: false,
-            page: 0,
-            sortOrder: undefined
-        }
-    }
-
-    componentDidMount() {
-        this.getData()
-    }
-
-    getData = () => {
-        this.setState({ loading: true })
-        this.xhrRequest().then(data => {
-            this.setState({ data, loading: false })
-        })
-    }
+function Example() {
+    const [page, setPage] = useState(0)
+    const [count] = useState(26)
+    const [data, setData] = useState<(string | number)[][]>([
+        ['Loading Data...']
+    ])
+    const [sortOrder, setSortOrder] =
+        useState<DataTableOptions['sortOrder']>(undefined)
+    const [loading, setLoading] = useState(false)
 
     // mock async function
-    xhrRequest = (url?: { page: number; order: string; column: string }) => {
-        let page = 0
+    const xhrRequest = (url?: {
+        page: number
+        order: string
+        column: string
+    }) => {
+        let requestPage = 0
         let order = ''
         let column = ''
         if (url !== undefined) {
-            page = url.page
+            requestPage = url.page
             order = url.order
             column = url.column
         }
@@ -196,8 +177,8 @@ class Example extends React.Component<
 
             // here we're faking the sorting that would happen on the server-side
 
-            const offset = page * 10
-            let data: (string | number)[][] = []
+            const offset = requestPage * 10
+            let resultData: (string | number)[][] = []
 
             if (order !== '') {
                 let sortCol = [
@@ -217,7 +198,7 @@ class Example extends React.Component<
                         return 0
                     })
 
-                    data =
+                    resultData =
                         offset + 10 >= srcData.length
                             ? tempData.slice(offset, srcData.length)
                             : tempData.slice(offset, offset + 10)
@@ -229,138 +210,135 @@ class Example extends React.Component<
                         return 0
                     })
 
-                    data =
+                    resultData =
                         offset + 10 >= srcData.length
                             ? tempData.slice(offset, srcData.length)
                             : tempData.slice(offset, offset + 10)
                 }
             } else {
-                data =
+                resultData =
                     offset + 10 >= srcData.length
                         ? srcData.slice(offset, srcData.length)
                         : srcData.slice(offset, offset + 10)
             }
 
             setTimeout(() => {
-                resolve(data)
+                resolve(resultData)
             }, 250)
         })
     }
 
-    sort: Required<DataTableOptions>['onColumnSortChange'] = (
+    const getData = useCallback(() => {
+        setLoading(true)
+        xhrRequest().then(responseData => {
+            setData(responseData)
+            setLoading(false)
+        })
+    }, [])
+
+    const sort: Required<DataTableOptions>['onColumnSortChange'] = (
         column,
         order
     ) => {
-        this.xhrRequest({
+        xhrRequest({
             column,
             order,
-            page: this.state.page
-        }).then(data => {
-            this.setState({
-                data,
-                sortOrder: {
-                    direction: order,
-                    name: column
-                }
+            page
+        }).then(responseData => {
+            setData(responseData)
+            setSortOrder({
+                direction: order,
+                name: column
             })
         })
     }
 
-    render() {
-        const columns: DataTableProps['columns'] = [
-            {
-                name: 'Name',
-                options: {
-                    customFilterListOptions: {
-                        render: v => `Name: ${v}`
-                    }
+    useEffect(() => {
+        getData()
+    }, [getData])
+
+    const columns: DataTableProps['columns'] = [
+        {
+            name: 'Name',
+            options: {
+                customFilterListOptions: {
+                    render: v => `Name: ${v}`
                 }
-            },
-            {
-                name: 'Title',
-                options: {
-                    customFilterListOptions: {
-                        render: v => `Title: ${v}`
-                    }
-                }
-            },
-            {
-                name: 'Location',
-                options: {
-                    customBodyRender: (
-                        value,
-                        _,
-                        columnIndex,
-                        __,
-                        updateValue
-                    ) => {
-                        return (
-                            <Cities
-                                change={event => updateValue(event)}
-                                index={columnIndex}
-                                value={value ?? ''}
-                            />
-                        )
-                    },
-                    customFilterListOptions: {
-                        render: v => `Location: ${v}`
-                    }
-                }
-            },
-            {
-                name: 'Age'
-            },
-            {
-                name: 'Salary'
             }
-        ]
-        const { page, count, data } = this.state
-
-        const options: DataTableProps['options'] = {
-            count: count,
-            filter: true,
-            filterType: 'dropdown',
-            onChangePage: page => {
-                this.setState({ page }, () => {
-                    if (this.state.sortOrder) {
-                        this.sort(
-                            this.state.sortOrder.name,
-                            this.state.sortOrder.direction
-                        )
-                    }
-                })
-            },
-            onColumnSortChange: this.sort,
-            page: page,
-            responsive: 'standard',
-            serverSide: true
+        },
+        {
+            name: 'Title',
+            options: {
+                customFilterListOptions: {
+                    render: v => `Title: ${v}`
+                }
+            }
+        },
+        {
+            name: 'Location',
+            options: {
+                customBodyRender: (value, _, columnIndex, __, updateValue) => {
+                    return (
+                        <Cities
+                            change={event => updateValue(event)}
+                            index={columnIndex}
+                            value={value ?? ''}
+                        />
+                    )
+                },
+                customFilterListOptions: {
+                    render: v => `Location: ${v}`
+                }
+            }
+        },
+        {
+            name: 'Age'
+        },
+        {
+            name: 'Salary'
         }
+    ]
 
-        return (
-            <div>
-                <DataTable
-                    columns={columns}
-                    data={data}
-                    options={options}
-                    title={
-                        <Typography variant="subtitle2">
-                            ACME Employee list{' '}
-                            {this.state.loading && (
-                                <CircularProgress
-                                    size={24}
-                                    style={{
-                                        marginLeft: 15,
-                                        position: 'relative',
-                                        top: 4
-                                    }}
-                                />
-                            )}
-                        </Typography>
-                    }
-                />
-            </div>
-        )
+    const options: DataTableProps['options'] = {
+        count: count,
+        filter: true,
+        filterType: 'dropdown',
+        onChangePage: newPage => {
+            setPage(newPage)
+            if (sortOrder) {
+                sort(sortOrder.name, sortOrder.direction)
+            }
+        },
+        onColumnSortChange: sort,
+        page: page,
+        responsive: 'standard',
+        serverSide: true
     }
+
+    return (
+        <div>
+            <DataTable
+                columns={columns}
+                data={data}
+                options={options}
+                title={
+                    <Typography variant="subtitle2">
+                        ACME Employee list{' '}
+                        {loading && (
+                            <CircularProgress
+                                size={24}
+                                style={{
+                                    marginLeft: 15,
+                                    position: 'relative',
+                                    top: 4
+                                }}
+                            />
+                        )}
+                    </Typography>
+                }
+            />
+        </div>
+    )
 }
 
 export default Example
