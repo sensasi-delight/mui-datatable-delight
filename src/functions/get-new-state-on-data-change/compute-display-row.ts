@@ -51,7 +51,7 @@ export default function computeDisplayRow<T>(
                 typeof funcResult === 'object' &&
                 'props' in funcResult
             ) {
-                columnValue = funcResult.props.value ?? columnValue
+                columnValue = (funcResult as any).props.value ?? columnValue
             }
 
             displayRow.push(columnDisplay)

@@ -9,11 +9,13 @@ import type {
 } from '@src/types/options'
 import type { DataTableState } from '@src/types/state'
 import type { DataItemState } from '@src/types/state/data-item'
-import type { Primitive } from '@src/types/values/primitive'
-import { isValidElement } from 'react'
+import type React from 'react'
 import buildColumns from './build-columns'
 import { getCollatorComparator } from './get-collator-comparator'
 import getDisplayData from './get-new-state-on-data-change/get-display-data'
+import { initializeExpandedRows } from './get-new-state-on-data-change/initialize-expanded-rows'
+import { initializeSelectedRows } from './get-new-state-on-data-change/initialize-selected-rows'
+import { processColumnFilter } from './get-new-state-on-data-change/process-column-filter'
 import sortTable from './sort-table'
 import transformData from './transform-data'
 
@@ -111,60 +113,14 @@ export default function getNewStateOnDataChange<T>(
                 }
             }
 
-            if (column.filter !== false) {
-                if (typeof column.customBodyRender === 'function') {
-                    const funcResult = column.customBodyRender(
-                        value,
-                        rowIndex,
-                        colIndex,
-                        state,
-                        () => undefined
-                    )
-
-                    if (
-                        isValidElement(funcResult) &&
-                        typeof funcResult.props === 'object' &&
-                        funcResult.props &&
-                        'value' in funcResult.props
-                    ) {
-                        value = funcResult.props?.value
-                    } else if (typeof funcResult === 'string') {
-                        value = funcResult
-                    }
-                }
-
-                if (
-                    typeof value === 'object' &&
-                    !Array.isArray(value) &&
-                    value !== null
-                ) {
-                    value = value.toString ? value.toString() : ''
-                }
-
-                if (
-                    !filterData[colIndex]?.includes(value as Primitive) &&
-                    !Array.isArray(value)
-                ) {
-                    filterData[colIndex]?.push(value as Primitive)
-                } else if (Array.isArray(value)) {
-                    value.forEach(element => {
-                        let elmVal: string
-
-                        if (
-                            (typeof element === 'object' && element !== null) ||
-                            typeof element === 'function'
-                        ) {
-                            elmVal = element.toString ? element.toString() : ''
-                        } else {
-                            elmVal = element
-                        }
-
-                        if (!filterData[colIndex]?.includes(elmVal)) {
-                            filterData[colIndex]?.push(elmVal)
-                        }
-                    })
-                }
-            }
+            processColumnFilter(
+                column,
+                value,
+                rowIndex,
+                colIndex,
+                state,
+                filterData
+            )
         }
 
         if (column.filterOptions) {
@@ -211,104 +167,8 @@ export default function getNewStateOnDataChange<T>(
     }
 
     if (status === TABLE_LOAD.INITIAL) {
-        if (
-            options.rowsSelected?.length &&
-            options.selectableRows === 'multiple'
-        ) {
-            options.rowsSelected
-                .filter(
-                    selectedRowIndex =>
-                        selectedRowIndex === 0 ||
-                        (Number(selectedRowIndex) && selectedRowIndex > 0)
-                )
-                .forEach(row => {
-                    let rowPos = row
-
-                    for (
-                        let cIndex = 0;
-                        cIndex < state.displayData.length;
-                        cIndex++
-                    ) {
-                        if (state.displayData[cIndex]?.dataIndex === row) {
-                            rowPos = cIndex
-                            break
-                        }
-                    }
-
-                    selectedRowsData.data.push({
-                        dataIndex: row,
-                        index: rowPos
-                    })
-                    selectedRowsData.lookup[row] = true
-                })
-        } else if (
-            options.rowsSelected &&
-            options.rowsSelected.length === 1 &&
-            options.selectableRows === 'single'
-        ) {
-            const dataIndex = options.rowsSelected[0] ?? -1
-
-            let rowPos = dataIndex
-
-            for (let cIndex = 0; cIndex < state.displayData.length; cIndex++) {
-                if (state.displayData[cIndex]?.dataIndex === dataIndex) {
-                    rowPos = cIndex
-
-                    break
-                }
-            }
-
-            selectedRowsData.data.push({
-                dataIndex,
-                index: rowPos
-            })
-
-            selectedRowsData.lookup[dataIndex] = true
-        } else if (
-            options.rowsSelected &&
-            options.rowsSelected.length > 1 &&
-            options.selectableRows === 'single'
-        ) {
-            console.error(
-                'Multiple values provided for selectableRows, but selectableRows set to "single". Either supply only a single value or use "multiple".'
-            )
-        } else if (
-            typeof options.rowsSelected === 'undefined' &&
-            dataUpdated === false
-        ) {
-            if (state.selectedRows) {
-                selectedRowsData = { ...state.selectedRows }
-            }
-        }
-
-        if (options.rowsExpanded?.length && options.expandableRows) {
-            options.rowsExpanded.forEach(row => {
-                let rowPos = row
-
-                for (
-                    let cIndex = 0;
-                    cIndex < state.displayData.length;
-                    cIndex++
-                ) {
-                    if (state.displayData[cIndex]?.dataIndex === row) {
-                        rowPos = cIndex
-                        break
-                    }
-                }
-
-                expandedRowsData.data.push({
-                    dataIndex: row,
-                    index: rowPos
-                })
-                expandedRowsData.lookup[row] = true
-            })
-        } else if (
-            typeof options.rowsExpanded === 'undefined' &&
-            dataUpdated === false &&
-            state.expandedRows
-        ) {
-            expandedRowsData = { ...state.expandedRows }
-        }
+        selectedRowsData = initializeSelectedRows(options, state, dataUpdated)
+        expandedRowsData = initializeExpandedRows(options, state, dataUpdated)
     }
 
     if (!options.serverSide && sortIndex !== null) {
