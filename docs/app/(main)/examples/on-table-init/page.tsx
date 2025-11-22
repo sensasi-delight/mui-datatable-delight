@@ -6,7 +6,7 @@ import { useState } from 'react'
 type RowType = (number | string)[]
 
 function Example() {
-    const [table, setTable] = useState<Partial<DataTableState<RowType>>>({})
+    const [, setTable] = useState<Partial<DataTableState<RowType>>>({})
 
     const columns = ['Name', 'Title', 'Location', 'Age', 'Salary']
 
@@ -84,7 +84,7 @@ function Example() {
             columns={columns}
             data={data}
             options={options}
-            title={'ACME Employee list'}
+            title="ACME Employee list"
         />
     )
 }

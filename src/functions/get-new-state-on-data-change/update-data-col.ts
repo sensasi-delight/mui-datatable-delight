@@ -48,6 +48,7 @@ export default function updateDataCol<T>(
     let filterValue = prevState.data?.[row]?.data[index]
 
     if (typeof funcResult === 'object' && funcResult && 'props' in funcResult) {
+        // biome-ignore lint/suspicious/noExplicitAny: will fix this later
         filterValue = (funcResult as any).props.value
     }
 

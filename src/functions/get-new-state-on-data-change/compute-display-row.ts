@@ -51,6 +51,7 @@ export default function computeDisplayRow<T>(
                 typeof funcResult === 'object' &&
                 'props' in funcResult
             ) {
+                // biome-ignore lint/suspicious/noExplicitAny: will fix this later
                 columnValue = (funcResult as any).props.value ?? columnValue
             }
 
