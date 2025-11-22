@@ -3,7 +3,6 @@ import Alert from '@mui/material/Alert'
 import Link from '@mui/material/Link'
 import Typography, { type TypographyProps } from '@mui/material/Typography'
 import type { MDXComponents } from 'mdx/types'
-import type { JSX } from 'react'
 import { Mermaid } from './app/(main)/_components/mermaid'
 import { CodeSnippet, InlineCode } from './components'
 
@@ -72,7 +71,7 @@ function HeadingLink({
     variant,
     component
 }: {
-    children: JSX.Element
+    children: React.ReactNode
     variant: TypographyProps['variant']
     component: Exclude<TypographyProps['component'], undefined>
 }) {
@@ -119,11 +118,14 @@ function HeadingLink({
     )
 }
 
-function toText(children: JSX.Element): string {
+function toText(children: React.ReactNode): string {
     return (
         typeof children === 'string'
             ? children
-            : children.props &&
+            : children &&
+                typeof children === 'object' &&
+                'props' in children &&
+                children.props &&
                 typeof children.props === 'object' &&
                 'children' in children.props
               ? (children.props.children as string)

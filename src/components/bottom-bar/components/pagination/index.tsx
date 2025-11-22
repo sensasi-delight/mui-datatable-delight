@@ -9,7 +9,6 @@ import ClassName from '@src/enums/class-name'
 import { getPageValue } from '@src/functions/_shared/get-page-value'
 import useDataTableContext from '@src/hooks/use-data-table-context'
 // vendors
-import type { ReactElement } from 'react'
 import type { DataTableFooterPaginationProps } from './types/props'
 
 /**
@@ -21,7 +20,7 @@ export function DataTableFooterPagination({
     rowsPerPage,
     changeRowsPerPage,
     changePage
-}: DataTableFooterPaginationProps): ReactElement {
+}: DataTableFooterPaginationProps): React.ReactElement {
     const { state, textLabels } = useDataTableContext()
 
     const handleRowChange: TablePaginationProps['onRowsPerPageChange'] = ({

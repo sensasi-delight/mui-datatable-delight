@@ -13,7 +13,7 @@ import getDisplayData from '@src/functions/get-new-state-on-data-change/get-disp
 import useDataTableContext from '@src/hooks/use-data-table-context'
 // sub-components
 import type { FilterUpdateType } from '@src/types/filter-update'
-import { type ReactNode, useState } from 'react'
+import { useState } from 'react'
 // vendors
 import ColumnVisibilitiesBox from './components/column-visibilities-box'
 import DataFilterBox from './components/data-filter-box'
@@ -29,7 +29,7 @@ import { DataTableToolbarSearch } from './components/search-text-field'
  *
  * @see  {@link http://mui-datatable-delight.vercel.app/examples/customize-toolbar | Customize Toolbar Example}.
  */
-export default function Toolbar<T>(props: ToolbarProps<T>): ReactNode {
+export default function Toolbar<T>(props: ToolbarProps<T>): React.ReactNode {
     const {
         components,
         icons,

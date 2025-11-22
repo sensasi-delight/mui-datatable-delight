@@ -10,7 +10,7 @@ import ClassName from '@src/enums/class-name'
 // globals
 import useDataTableContext from '@src/hooks/use-data-table-context'
 // vendors
-import { type ReactElement, useState } from 'react'
+import { useState } from 'react'
 
 /**
  * Component handling the jump to page feature.
@@ -21,7 +21,7 @@ export default function JumpToPage({
     changePage
 }: {
     changePage: (pageNo: number) => void
-}): ReactElement {
+}): React.ReactElement {
     const { state, textLabels } = useDataTableContext()
 
     const pages = getPageOptions(state.count, state.rowsPerPage)

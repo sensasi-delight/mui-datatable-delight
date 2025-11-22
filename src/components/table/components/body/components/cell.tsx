@@ -8,7 +8,6 @@ import ComponentClassName from '@src/enums/class-name'
 import useDataTableContext from '@src/hooks/use-data-table-context'
 import type { ColumnState } from '@src/types/state/column'
 // vendors
-import type { ReactElement, ReactNode } from 'react'
 
 /**
  * Table Body Cell.
@@ -25,16 +24,16 @@ export function TableBodyCell<T>({
     print,
     ...otherProps
 }: {
-    value: ReactNode | ColumnState<T>['customBodyRenderLite']
+    value: React.ReactNode | ColumnState<T>['customBodyRenderLite']
     classes?: object | undefined
     className?: string | undefined
     colIndex: number
-    columnHeader?: ReactNode
+    columnHeader?: React.ReactNode
     dataIndex: number
     otherProps?: unknown
     rowIndex: number
     print: boolean
-} & TableCellProps): ReactElement {
+} & TableCellProps): React.ReactElement {
     const { options, textLabels } = useDataTableContext<T>()
 
     const constructedClassName = [

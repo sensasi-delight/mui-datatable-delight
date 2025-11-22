@@ -1,5 +1,4 @@
 import type { TextFieldProps } from '@mui/material/TextField'
-import type { ReactNode } from 'react'
 import type { ColumnState } from '../state/column'
 import type { BooleanOrDisabled } from '../values/boolean-or-disabled'
 
@@ -12,7 +11,7 @@ export default interface DataTableSearchOptions<T> {
      */
     customSearch?: (
         searchText: string,
-        currentRow: ReactNode[],
+        currentRow: React.ReactNode[],
         columns: ColumnState<T>[]
     ) => boolean
 

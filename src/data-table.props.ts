@@ -2,7 +2,6 @@
 
 import type { PaperProps } from '@mui/material/Paper'
 import type { TextLabelsType } from '@src/hooks/use-data-table-context/function/statics/default-text-labels'
-import type { ReactNode } from 'react'
 import type { DataTableComponents } from './types/components'
 import type { DefaultRow } from './types/default-row'
 import type { DataTableIcons } from './types/icons'
@@ -49,7 +48,7 @@ export interface DataTableProps<Row = DefaultRow> {
     /**
      * Title of the table
      */
-    title?: string | ReactNode
+    title?: string | React.ReactNode
 
     options?: Partial<DataTableOptions<Row>>
 

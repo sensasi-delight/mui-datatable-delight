@@ -1,7 +1,6 @@
 import type { TableCellProps } from '@mui/material/TableCell'
 import type { DisplayDataState } from '@src/types/state/display-data'
 import type { Primitive } from '@src/types/values/primitive'
-import type { JSX, ReactNode } from 'react'
 import type { DataTableSortOrderOption } from '../../options'
 import type { FilterTypeType } from '../../shared/filter-type-type'
 import type { DataTableState } from '../../state'
@@ -48,7 +47,7 @@ export interface ColumnDefinitionOptions<T> {
          * A function to update the value of the cell
          */
         updateValue: (value: unknown) => void
-    ) => JSX.Element | ReactNode
+    ) => React.ReactNode
 
     /**
      * Similar to and performing better than {@link ColumnDefinitionOptions.customBodyRender | `customBodyRender`}, however with the following caveats:
@@ -69,7 +68,7 @@ export interface ColumnDefinitionOptions<T> {
          * The index of the row in the current page table.
          */
         rowIndex: number
-    ) => JSX.Element | ReactNode
+    ) => React.ReactNode
 
     /**
      * Function that returns a string or React component.
@@ -82,7 +81,7 @@ export interface ColumnDefinitionOptions<T> {
                   index: number
                   colPos: number
               } & ColumnState<T>
-          ) => string | ReactNode)
+          ) => string | React.ReactNode)
         | undefined
 
     /**
@@ -96,7 +95,7 @@ export interface ColumnDefinitionOptions<T> {
          * @see
          * [Example](https://mui-datatable-delight.vercel.app/examples/customize-filter)
          */
-        render?: (value: ReactNode) => ReactNode
+        render?: (value: React.ReactNode) => React.ReactNode
         /**
          * Function that returns a filterList allowing for custom filter updates
          * when removing the filter chip. FilterType must be set to 'custom'.
@@ -117,7 +116,7 @@ export interface ColumnDefinitionOptions<T> {
               columnMeta: CustomHeadRenderer<T>,
               handleToggleColumn: (columnIndex: number) => void,
               sortOrder?: DataTableSortOrderOption
-          ) => string | ReactNode)
+          ) => string | React.ReactNode)
         | undefined
 
     /**
@@ -289,7 +288,7 @@ export interface DataTableStateColumnFilterOptions<T> {
         index: number,
         column: ColumnState<T>,
         filterData: DataTableState<T>['filterData']
-    ) => ReactNode
+    ) => React.ReactNode
 
     /**
      * custom filter logic.
@@ -305,7 +304,7 @@ export interface DataTableStateColumnFilterOptions<T> {
      *
      * @see {@link https://mui-datatable-delight.vercel.app/examples/customize-filter | Customize Filter Example}.
      */
-    renderValue?: (value: Primitive) => ReactNode
+    renderValue?: (value: Primitive) => React.ReactNode
 
     /** Will force a filter option to take up the grid's full width. */
     fullWidth?: boolean | undefined

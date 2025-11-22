@@ -2,7 +2,6 @@
 
 import Paper, { type PaperProps } from '@mui/material/Paper'
 // vendors
-import type { ReactNode } from 'react'
 // components
 import AnnounceText from './components/announce-text'
 import BottomBar from './components/bottom-bar'
@@ -41,7 +40,7 @@ export function DataTable<Row = DefaultRow>({
     ref,
     paperProps,
     ...props
-}: DataTableProps<Row>): ReactNode {
+}: DataTableProps<Row>): React.ReactNode {
     return (
         <DataTableContextProvider datatableProps={props}>
             <DataTable_
@@ -61,7 +60,7 @@ function DataTable_<T>({
     className?: string
     ref: PaperProps['ref']
     paperProps?: PaperProps
-}): ReactNode {
+}): React.ReactNode {
     const { components, onAction, options, state, updateCellValueRef } =
         useDataTableContext<T>()
 

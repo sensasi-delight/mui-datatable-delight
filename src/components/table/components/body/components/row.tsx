@@ -3,7 +3,6 @@
 import TableRow, { type TableRowProps } from '@mui/material/TableRow'
 import ComponentClassName from '@src/enums/class-name'
 import useDataTableContext from '@src/hooks/use-data-table-context'
-import type { ReactElement } from 'react'
 
 /**
  * Table row component.
@@ -17,7 +16,7 @@ export function DataTableBodyRow({
     children,
     className,
     ...restProps
-}: DataTableBodyRowProps): ReactElement {
+}: DataTableBodyRowProps): React.ReactElement {
     const { options } = useDataTableContext()
 
     const isHoverCursor =

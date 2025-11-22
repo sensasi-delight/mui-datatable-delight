@@ -5,7 +5,6 @@ import Chip, { type ChipProps } from '@mui/material/Chip'
 import ComponentClassName from '@src/enums/class-name'
 import type { FilterUpdateType } from '@src/types/filter-update'
 // vendors
-import type { ReactNode } from 'react'
 import useDataTableContext from '../hooks/use-data-table-context'
 import type { FilterTypeType } from '../types/shared/filter-type-type'
 // local types
@@ -18,7 +17,7 @@ import type { DataTableState } from '../types/state'
  */
 export default function FilteredValuesList<T>({
     filterUpdate
-}: TableFilterListProps<T>): ReactNode {
+}: TableFilterListProps<T>): React.ReactNode {
     const { options, state } = useDataTableContext<T>()
     const { serverSide } = options
 
@@ -69,7 +68,7 @@ export default function FilteredValuesList<T>({
     }
 
     const customFilterChip = (
-        customFilterItem: ReactNode,
+        customFilterItem: React.ReactNode,
         index: number,
         customFilterItemIndex: number,
         item: string[],

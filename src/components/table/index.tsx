@@ -6,7 +6,6 @@ import MuiTable from '@mui/material/Table'
 import ClassName from '@src/enums/class-name'
 import useDataTableContext from '@src/hooks/use-data-table-context'
 // vendors
-import type { ReactNode } from 'react'
 import TableBody from './components/body'
 import TableHead from './components/head'
 //
@@ -17,7 +16,7 @@ import type { Props } from './types/props'
  *
  * @category  Component
  */
-export default function Table({ selectRowUpdate }: Props): ReactNode {
+export default function Table({ selectRowUpdate }: Props): React.ReactNode {
     const {
         components,
         options,

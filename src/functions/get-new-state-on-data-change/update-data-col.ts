@@ -1,7 +1,6 @@
 import type { DataTableOptions } from '@src/types/options'
 import type { DataTableState } from '@src/types/state'
 import type { Primitive } from '@src/types/values/primitive'
-import type { ReactNode } from 'react'
 import { getCollatorComparator } from '../get-collator-comparator'
 
 /**
@@ -26,7 +25,7 @@ import { getCollatorComparator } from '../get-collator-comparator'
 export default function updateDataCol<T>(
     row: number,
     index: number,
-    value: ReactNode,
+    value: React.ReactNode,
     prevState: DataTableState<T>,
     options: DataTableOptions<T>
 ) {

@@ -11,7 +11,7 @@ import Tooltip from '@mui/material/Tooltip'
 import ComponentClassName from '@src/enums/class-name'
 // globals
 import useDataTableContext from '@src/hooks/use-data-table-context'
-import { type ReactElement, useState } from 'react'
+import { useState } from 'react'
 // locals
 import type Props from './types/props'
 
@@ -27,7 +27,7 @@ export function TableHeadCell<T>({
     index,
     sortDirection,
     toggleSort
-}: Props<T>): ReactElement {
+}: Props<T>): React.ReactElement {
     // const { classes, cx } = useStyles()
     const { components, options, textLabels } = useDataTableContext()
     const [sortTooltipOpen, setSortTooltipOpen] = useState(false)

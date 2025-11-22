@@ -4,14 +4,13 @@ import ClassName from '@src/enums/class-name'
 // globals
 import useDataTableContext from '@src/hooks/use-data-table-context'
 // vendors
-import type { ReactNode } from 'react'
 
 /**
  * Announce text
  *
  * @category  Component
  */
-export default function AnnounceText(): ReactNode {
+export default function AnnounceText(): React.ReactNode {
     const { state } = useDataTableContext()
 
     if (!state.announceText) return null

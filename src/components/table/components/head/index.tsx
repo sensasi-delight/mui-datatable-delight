@@ -17,7 +17,6 @@ import type {
 } from '@src/types/options'
 import type { DataTableState } from '@src/types/state'
 // vendors
-import type { ReactNode } from 'react'
 import CheckboxCell from '../_shared/checkbox-cell'
 import { TableHeadCell } from './components/cell'
 import type { Props } from './types/props'
@@ -27,7 +26,7 @@ import type { Props } from './types/props'
  *
  * @category  Component
  */
-export default function TableHead({ selectRowUpdate }: Props): ReactNode {
+export default function TableHead({ selectRowUpdate }: Props): React.ReactNode {
     const { onAction, options, state, updateCellValueRef } =
         useDataTableContext()
 
