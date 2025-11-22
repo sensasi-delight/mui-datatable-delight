@@ -1,27 +1,16 @@
 'use client'
 
 import DataTable, { type DataTableProps, type DataTableState } from '@src'
-import React from 'react'
+import { useState } from 'react'
 
 type RowType = (number | string)[]
 
-class Example extends React.Component<
-    unknown,
-    {
-        table: Partial<DataTableState<RowType>>
-    }
-> {
-    constructor(props: unknown) {
-        super(props)
+function Example() {
+    const [table, setTable] = useState<Partial<DataTableState<RowType>>>({})
 
-        this.state = {
-            table: {}
-        }
-    }
+    const columns = ['Name', 'Title', 'Location', 'Age', 'Salary']
 
-    columns = ['Name', 'Title', 'Location', 'Age', 'Salary']
-
-    data = [
+    const data = [
         ['Gabby George', 'Business Analyst', 'Minneapolis', 30, 100000],
         ['Aiden Lloyd', 'Business Consultant', 'Dallas', 55, 200000],
         ['Jaden Collins', 'Attorney', 'Santa Ana', 27, 500000],
@@ -66,14 +55,14 @@ class Example extends React.Component<
         ['Mason Ray', 'Computer Scientist', 'San Francisco', 39, 142000]
     ]
 
-    options: DataTableProps<RowType>['options'] = {
+    const options: DataTableProps<RowType>['options'] = {
         download: false, // hide csv download option
         filter: true,
         filterType: 'dropdown',
 
         onTableChange: (_, tableState) => {
             console.log('handleTableChange: ', tableState)
-            this.setState({ table: tableState })
+            setTable(tableState)
         },
 
         /** onTableInit gives access to initial MuiDataTable state
@@ -83,23 +72,21 @@ class Example extends React.Component<
          */
         onTableInit: (_, tableState) => {
             console.log('handleTableInit: ', tableState)
-            this.setState({ table: tableState })
+            setTable(tableState)
         },
         responsive: 'standard',
         rowsPerPage: 10,
         selectableRows: 'multiple'
     }
 
-    render() {
-        return (
-            <DataTable
-                columns={this.columns}
-                data={this.data}
-                options={this.options}
-                title={'ACME Employee list'}
-            />
-        )
-    }
+    return (
+        <DataTable
+            columns={columns}
+            data={data}
+            options={options}
+            title={'ACME Employee list'}
+        />
+    )
 }
 
 export default Example

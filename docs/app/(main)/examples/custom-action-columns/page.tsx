@@ -1,325 +1,191 @@
 'use client'
 
 import DataTable, { type DataTableProps } from '@src'
-import React from 'react'
+import { useState } from 'react'
 
-class Example extends React.Component<
-    unknown,
-    {
-        data: (string | number)[][]
-    }
-> {
-    constructor(props: unknown) {
-        super(props)
+const initialData = [
+    ['Gabby George', 'Business Analyst', 'Minneapolis', 30, '$100,000'],
+    ['Aiden Lloyd', 'Business Consultant', 'Dallas', 55, '$200,000'],
+    ['Jaden Collins', 'Attorney', 'Santa Ana', 27, '$500,000'],
+    ['Franky Rees', 'Business Analyst', 'St. Petersburg', 22, '$50,000'],
+    ['Aaren Rose', 'Business Consultant', 'Toledo', 28, '$75,000'],
+    ['Blake Duncan', 'Business Management Analyst', 'San Diego', 65, '$94,000'],
+    ['Frankie Parry', 'Agency Legal Counsel', 'Jacksonville', 71, '$210,000'],
+    ['Lane Wilson', 'Commercial Specialist', 'Omaha', 19, '$65,000'],
+    ['Robin Duncan', 'Business Analyst', 'Los Angeles', 20, '$77,000'],
+    ['Mel Brooks', 'Business Consultant', 'Oklahoma City', 37, '$135,000'],
+    ['Harper White', 'Attorney', 'Pittsburgh', 52, '$420,000'],
+    ['Kris Humphrey', 'Agency Legal Counsel', 'Laredo', 30, '$150,000'],
+    ['Frankie Long', 'Industrial Analyst', 'Austin', 31, '$170,000'],
+    ['Brynn Robbins', 'Business Analyst', 'Norfolk', 22, '$90,000'],
+    ['Justice Mann', 'Business Consultant', 'Chicago', 24, '$133,000'],
+    [
+        'Addison Navarro',
+        'Business Management Analyst',
+        'New York',
+        50,
+        '$295,000'
+    ],
+    ['Jesse Welch', 'Agency Legal Counsel', 'Seattle', 28, '$200,000'],
+    ['Eli Mejia', 'Commercial Specialist', 'Long Beach', 65, '$400,000'],
+    ['Gene Leblanc', 'Industrial Analyst', 'Hartford', 34, '$110,000'],
+    ['Danny Leon', 'Computer Scientist', 'Newark', 60, '$220,000'],
+    ['Lane Lee', 'Corporate Counselor', 'Cincinnati', 52, '$180,000'],
+    ['Jesse Hall', 'Business Analyst', 'Baltimore', 44, '$99,000'],
+    ['Danni Hudson', 'Agency Legal Counsel', 'Tampa', 37, '$90,000'],
+    ['Terry Macdonald', 'Commercial Specialist', 'Miami', 39, '$140,000'],
+    ['Justice Mccarthy', 'Attorney', 'Tucson', 26, '$330,000'],
+    ['Silver Carey', 'Computer Scientist', 'Memphis', 47, '$250,000'],
+    ['Franky Miles', 'Industrial Analyst', 'Buffalo', 49, '$190,000'],
+    ['Glen Nixon', 'Corporate Counselor', 'Arlington', 44, '$80,000'],
+    [
+        'Gabby Strickland',
+        'Business Process Consultant',
+        'Scottsdale',
+        26,
+        '$45,000'
+    ],
+    ['Mason Ray', 'Computer Scientist', 'San Francisco', 39, '$142,000']
+]
 
-        this.state = {
-            data: [
-                [
-                    'Gabby George',
-                    'Business Analyst',
-                    'Minneapolis',
-                    30,
-                    '$100,000'
-                ],
-                [
-                    'Aiden Lloyd',
-                    'Business Consultant',
-                    'Dallas',
-                    55,
-                    '$200,000'
-                ],
-                ['Jaden Collins', 'Attorney', 'Santa Ana', 27, '$500,000'],
-                [
-                    'Franky Rees',
-                    'Business Analyst',
-                    'St. Petersburg',
-                    22,
-                    '$50,000'
-                ],
-                ['Aaren Rose', 'Business Consultant', 'Toledo', 28, '$75,000'],
-                [
-                    'Blake Duncan',
-                    'Business Management Analyst',
-                    'San Diego',
-                    65,
-                    '$94,000'
-                ],
-                [
-                    'Frankie Parry',
-                    'Agency Legal Counsel',
-                    'Jacksonville',
-                    71,
-                    '$210,000'
-                ],
-                [
-                    'Lane Wilson',
-                    'Commercial Specialist',
-                    'Omaha',
-                    19,
-                    '$65,000'
-                ],
-                [
-                    'Robin Duncan',
-                    'Business Analyst',
-                    'Los Angeles',
-                    20,
-                    '$77,000'
-                ],
-                [
-                    'Mel Brooks',
-                    'Business Consultant',
-                    'Oklahoma City',
-                    37,
-                    '$135,000'
-                ],
-                ['Harper White', 'Attorney', 'Pittsburgh', 52, '$420,000'],
-                [
-                    'Kris Humphrey',
-                    'Agency Legal Counsel',
-                    'Laredo',
-                    30,
-                    '$150,000'
-                ],
-                [
-                    'Frankie Long',
-                    'Industrial Analyst',
-                    'Austin',
-                    31,
-                    '$170,000'
-                ],
-                ['Brynn Robbins', 'Business Analyst', 'Norfolk', 22, '$90,000'],
-                [
-                    'Justice Mann',
-                    'Business Consultant',
-                    'Chicago',
-                    24,
-                    '$133,000'
-                ],
-                [
-                    'Addison Navarro',
-                    'Business Management Analyst',
-                    'New York',
-                    50,
-                    '$295,000'
-                ],
-                [
-                    'Jesse Welch',
-                    'Agency Legal Counsel',
-                    'Seattle',
-                    28,
-                    '$200,000'
-                ],
-                [
-                    'Eli Mejia',
-                    'Commercial Specialist',
-                    'Long Beach',
-                    65,
-                    '$400,000'
-                ],
-                [
-                    'Gene Leblanc',
-                    'Industrial Analyst',
-                    'Hartford',
-                    34,
-                    '$110,000'
-                ],
-                ['Danny Leon', 'Computer Scientist', 'Newark', 60, '$220,000'],
-                [
-                    'Lane Lee',
-                    'Corporate Counselor',
-                    'Cincinnati',
-                    52,
-                    '$180,000'
-                ],
-                ['Jesse Hall', 'Business Analyst', 'Baltimore', 44, '$99,000'],
-                [
-                    'Danni Hudson',
-                    'Agency Legal Counsel',
-                    'Tampa',
-                    37,
-                    '$90,000'
-                ],
-                [
-                    'Terry Macdonald',
-                    'Commercial Specialist',
-                    'Miami',
-                    39,
-                    '$140,000'
-                ],
-                ['Justice Mccarthy', 'Attorney', 'Tucson', 26, '$330,000'],
-                [
-                    'Silver Carey',
-                    'Computer Scientist',
-                    'Memphis',
-                    47,
-                    '$250,000'
-                ],
-                [
-                    'Franky Miles',
-                    'Industrial Analyst',
-                    'Buffalo',
-                    49,
-                    '$190,000'
-                ],
-                [
-                    'Glen Nixon',
-                    'Corporate Counselor',
-                    'Arlington',
-                    44,
-                    '$80,000'
-                ],
-                [
-                    'Gabby Strickland',
-                    'Business Process Consultant',
-                    'Scottsdale',
-                    26,
-                    '$45,000'
-                ],
-                [
-                    'Mason Ray',
-                    'Computer Scientist',
-                    'San Francisco',
-                    39,
-                    '$142,000'
-                ]
-            ]
-        }
-    }
+function Example() {
+    const [data, setData] = useState<(string | number)[][]>(initialData)
 
-    render() {
-        const columns: DataTableProps['columns'] = [
-            {
-                name: 'Delete',
-                options: {
-                    customBodyRenderLite: () => {
-                        return (
-                            <button
-                                onClick={() => {
-                                    const { data } = this.state
-                                    data.shift()
-                                    this.setState({ data })
-                                }}
-                                type="button"
-                            >
-                                Delete
-                            </button>
-                        )
-                    },
-                    empty: true,
-                    filter: false,
-                    sort: false
-                }
-            },
-            {
-                name: 'Edit',
-                options: {
-                    customBodyRenderLite: (dataIndex, rowIndex) => {
-                        return (
-                            <button
-                                onClick={() =>
-                                    window.alert(
-                                        `Clicked "Edit" for row ${rowIndex} with dataIndex of ${dataIndex}`
-                                    )
-                                }
-                                type="button"
-                            >
-                                Edit
-                            </button>
-                        )
-                    },
-                    empty: true,
-                    filter: false,
-                    sort: false
-                }
-            },
-            {
-                name: 'Name',
-                options: {
-                    filter: true
-                }
-            },
-            {
-                label: 'Modified Title Label',
-                name: 'Title',
-                options: {
-                    filter: true
-                }
-            },
-            {
-                name: 'Location',
-                options: {
-                    filter: false
-                }
-            },
-            {
-                name: 'Age',
-                options: {
-                    filter: true
-                }
-            },
-            {
-                name: 'Salary',
-                options: {
-                    filter: true,
-                    sort: false
-                }
-            },
-            {
-                name: 'Add',
-                options: {
-                    customBodyRenderLite: () => {
-                        return (
-                            <button
-                                onClick={() => {
-                                    const { data } = this.state
-                                    data.unshift([
+    const columns: DataTableProps['columns'] = [
+        {
+            name: 'Delete',
+            options: {
+                customBodyRenderLite: () => {
+                    return (
+                        <button
+                            onClick={() => {
+                                setData(prevData => {
+                                    const newData = [...prevData]
+                                    newData.shift()
+                                    return newData
+                                })
+                            }}
+                            type="button"
+                        >
+                            Delete
+                        </button>
+                    )
+                },
+                empty: true,
+                filter: false,
+                sort: false
+            }
+        },
+        {
+            name: 'Edit',
+            options: {
+                customBodyRenderLite: (dataIndex, rowIndex) => {
+                    return (
+                        <button
+                            onClick={() =>
+                                window.alert(
+                                    `Clicked "Edit" for row ${rowIndex} with dataIndex of ${dataIndex}`
+                                )
+                            }
+                            type="button"
+                        >
+                            Edit
+                        </button>
+                    )
+                },
+                empty: true,
+                filter: false,
+                sort: false
+            }
+        },
+        {
+            name: 'Name',
+            options: {
+                filter: true
+            }
+        },
+        {
+            label: 'Modified Title Label',
+            name: 'Title',
+            options: {
+                filter: true
+            }
+        },
+        {
+            name: 'Location',
+            options: {
+                filter: false
+            }
+        },
+        {
+            name: 'Age',
+            options: {
+                filter: true
+            }
+        },
+        {
+            name: 'Salary',
+            options: {
+                filter: true,
+                sort: false
+            }
+        },
+        {
+            name: 'Add',
+            options: {
+                customBodyRenderLite: () => {
+                    return (
+                        <button
+                            onClick={() => {
+                                setData(prevData => {
+                                    const newData = [...prevData]
+                                    newData.unshift([
                                         'Mason Ray',
                                         'Computer Scientist',
                                         'San Francisco',
                                         39,
                                         '$142,000'
                                     ])
-                                    this.setState({ data })
-                                }}
-                                type="button"
-                            >
-                                Add
-                            </button>
-                        )
-                    },
-                    empty: true,
-                    filter: false,
-                    sort: false
-                }
+                                    return newData
+                                })
+                            }}
+                            type="button"
+                        >
+                            Add
+                        </button>
+                    )
+                },
+                empty: true,
+                filter: false,
+                sort: false
             }
-        ]
-
-        const options: DataTableProps['options'] = {
-            filter: true,
-            filterType: 'dropdown',
-            onChangePage: currentPage =>
-                console.log('currentPage: ', currentPage),
-            onChangeRowsPerPage: numberOfRows =>
-                console.log('numberOfRows: ', numberOfRows),
-            onColumnSortChange: (changedColumn, direction) =>
-                console.log(
-                    'changedColumn: ',
-                    changedColumn,
-                    'direction: ',
-                    direction
-                ),
-            responsive: 'vertical'
         }
+    ]
 
-        return (
-            <DataTable
-                columns={columns}
-                data={this.state.data}
-                options={options}
-                title="ACME Employee list"
-            />
-        )
+    const options: DataTableProps['options'] = {
+        filter: true,
+        filterType: 'dropdown',
+        onChangePage: currentPage => console.log('currentPage: ', currentPage),
+        onChangeRowsPerPage: numberOfRows =>
+            console.log('numberOfRows: ', numberOfRows),
+        onColumnSortChange: (changedColumn, direction) =>
+            console.log(
+                'changedColumn: ',
+                changedColumn,
+                'direction: ',
+                direction
+            ),
+        responsive: 'vertical'
     }
+
+    return (
+        <DataTable
+            columns={columns}
+            data={data}
+            options={options}
+            title="ACME Employee list"
+        />
+    )
 }
 
 export default Example

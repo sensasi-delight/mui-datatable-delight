@@ -3,7 +3,7 @@
 import Button from '@mui/material/Button'
 import CircularProgress from '@mui/material/CircularProgress'
 import DataTable, { type DataTableProps } from '@src'
-import React from 'react'
+import { Fragment, useCallback, useState } from 'react'
 
 const theData = [
     ['Gabby George', 'Business Analyst', 'Minneapolis', 30, '$100,000'],
@@ -50,14 +50,12 @@ const theData = [
     ['Mason Ray', 'Computer Scientist', 'San Francisco', 39, '$142,000']
 ]
 
-class Example extends React.Component {
-    state = {
-        data: theData,
-        isLoading: false
-    }
+function Example() {
+    const [data, setData] = useState(theData)
+    const [isLoading, setIsLoading] = useState(false)
 
     // mock async function
-    xhrRequest = (_: string, filterList: string[][]) => {
+    const xhrRequest = useCallback((_: string, filterList: string[][]) => {
         return new Promise<{
             data: typeof theData
         }>(resolve => {
@@ -94,127 +92,127 @@ class Example extends React.Component {
                 }
             }, 2000)
         })
-    }
+    }, [])
 
-    handleFilterSubmit = (applyFilters: (...args: unknown[]) => unknown) => {
-        const filterList = applyFilters()
+    const handleFilterSubmit = useCallback(
+        (applyFilters: (...args: unknown[]) => unknown) => {
+            const filterList = applyFilters()
 
-        this.setState({ isLoading: true })
+            setIsLoading(true)
 
-        // fake async request
-        this.xhrRequest(
-            `/myApiServer?filters=${filterList}`,
-            filterList as string[][]
-        ).then(res => {
-            this.setState({ data: res.data, isLoading: false })
-        })
-    }
+            // fake async request
+            xhrRequest(
+                `/myApiServer?filters=${filterList}`,
+                filterList as string[][]
+            ).then(res => {
+                setData(res.data)
+                setIsLoading(false)
+            })
+        },
+        [xhrRequest]
+    )
 
-    render() {
-        const columns = [
-            {
-                name: 'Name',
-                options: {
-                    filter: true
-                }
-            },
-            {
-                label: 'Title',
-                name: 'Title',
-                options: {
-                    filter: true
-                }
-            },
-            {
-                name: 'Location',
-                options: {
-                    filter: true
-                }
-            },
-            {
-                name: 'Age',
-                options: {
-                    filter: true
-                }
-            },
-            {
-                name: 'Salary',
-                options: {
-                    filter: true
-                }
+    const columns = [
+        {
+            name: 'Name',
+            options: {
+                filter: true
             }
-        ]
-
-        const options: DataTableProps['options'] = {
-            // makes it so filters have to be "confirmed" before being applied to the
-            // table's internal filterList
-            confirmFilters: true,
-
-            // Calling the applyNewFilters parameter applies the selected filters to the table
-            customFilterDialogFooter: (_, applyNewFilters) => {
-                return (
-                    <div style={{ marginTop: '40px' }}>
-                        <Button
-                            onClick={() =>
-                                this.handleFilterSubmit(applyNewFilters)
-                            }
-                            variant="contained"
-                        >
-                            Apply Filters
-                        </Button>
-                    </div>
-                )
-            },
-            filter: true, // show the filter icon in the toolbar (true by default)
-            filterType: 'dropdown',
-            onFilterChange: (_, filterList, type) => {
-                if (type === 'chip') {
-                    const newFilters = () => filterList
-                    console.log('updating filters via chip')
-                    this.handleFilterSubmit(newFilters)
-                }
-            },
-
-            // callback that gets executed when filters are confirmed
-            onFilterConfirm: filterList => {
-                console.log('onFilterConfirm')
-                console.dir(filterList)
-            },
-            onFilterDialogClose: () => {
-                console.log('filter dialog closed')
-            },
-
-            onFilterDialogOpen: () => {
-                console.log('filter dialog opened')
-            },
-            responsive: 'standard',
-            rowsPerPage: 50,
-            rowsPerPageOptions: [50],
-            serverSide: true
+        },
+        {
+            label: 'Title',
+            name: 'Title',
+            options: {
+                filter: true
+            }
+        },
+        {
+            name: 'Location',
+            options: {
+                filter: true
+            }
+        },
+        {
+            name: 'Age',
+            options: {
+                filter: true
+            }
+        },
+        {
+            name: 'Salary',
+            options: {
+                filter: true
+            }
         }
+    ]
 
-        return (
-            <React.Fragment>
-                {this.state.isLoading && (
-                    <div
-                        style={{
-                            left: '50%',
-                            position: 'absolute',
-                            top: '50%'
-                        }}
+    const options: DataTableProps['options'] = {
+        // makes it so filters have to be "confirmed" before being applied to the
+        // table's internal filterList
+        confirmFilters: true,
+
+        // Calling the applyNewFilters parameter applies the selected filters to the table
+        customFilterDialogFooter: (_, applyNewFilters) => {
+            return (
+                <div style={{ marginTop: '40px' }}>
+                    <Button
+                        onClick={() => handleFilterSubmit(applyNewFilters)}
+                        variant="contained"
                     >
-                        <CircularProgress />
-                    </div>
-                )}
-                <DataTable
-                    columns={columns}
-                    data={this.state.data}
-                    options={options}
-                    title={'ACME Employee list'}
-                />
-            </React.Fragment>
-        )
+                        Apply Filters
+                    </Button>
+                </div>
+            )
+        },
+        filter: true, // show the filter icon in the toolbar (true by default)
+        filterType: 'dropdown',
+        onFilterChange: (_, filterList, type) => {
+            if (type === 'chip') {
+                const newFilters = () => filterList
+                console.log('updating filters via chip')
+                handleFilterSubmit(newFilters)
+            }
+        },
+
+        // callback that gets executed when filters are confirmed
+        onFilterConfirm: filterList => {
+            console.log('onFilterConfirm')
+            console.dir(filterList)
+        },
+        onFilterDialogClose: () => {
+            console.log('filter dialog closed')
+        },
+
+        onFilterDialogOpen: () => {
+            console.log('filter dialog opened')
+        },
+        responsive: 'standard',
+        rowsPerPage: 50,
+        rowsPerPageOptions: [50],
+        serverSide: true
     }
+
+    return (
+        <Fragment>
+            {isLoading && (
+                <div
+                    style={{
+                        left: '50%',
+                        position: 'absolute',
+                        top: '50%'
+                    }}
+                >
+                    <CircularProgress />
+                </div>
+            )}
+            <DataTable
+                columns={columns}
+                data={data}
+                options={options}
+                title={'ACME Employee list'}
+            />
+        </Fragment>
+    )
 }
 
 export default Example
