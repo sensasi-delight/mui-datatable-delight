@@ -87,7 +87,7 @@ describe('<Toolbar />', () => {
         expect(result.getByText(title)).toBeDefined()
     })
 
-    test('should render a toolbar with custom title (JSX.Element)', () => {
+    test('should render a toolbar with custom title', () => {
         const titleString = 'custom title'
         const title = <h1>{titleString}</h1>
 

@@ -5,7 +5,6 @@ import RemoveIcon from '@mui/icons-material/Remove'
 import IconButton from '@mui/material/IconButton'
 import type { SxProps } from '@mui/material/styles'
 import useDataTableContext from '@src/hooks/use-data-table-context'
-import type { ReactNode } from 'react'
 
 /**
  * The row expansion button component.
@@ -23,7 +22,7 @@ export default function RowExpansionButton({
     isHeaderCell: boolean
     isRowExpanded: boolean
     onExpand?: (...args: unknown[]) => unknown
-}): ReactNode {
+}): React.ReactNode {
     const { options, state } = useDataTableContext()
 
     const isNotExpand =

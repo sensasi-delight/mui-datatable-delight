@@ -1,7 +1,6 @@
 import type { HandleUpdateCellValue } from '@src/hooks/use-data-table-context/components/provider/types/handle-update-cell-value'
 import type { DataTableOptions } from '@src/types/options'
 import type { DataTableState } from '@src/types/state'
-import type { RefObject } from 'react'
 import computeDisplayRow from './compute-display-row'
 
 /**
@@ -30,7 +29,7 @@ export default function getDisplayData<T>(
     searchText: DataTableState<T>['searchText'],
     state: DataTableState<T>,
     options: DataTableOptions<T>,
-    updateCellValueRef: RefObject<HandleUpdateCellValue | undefined>
+    updateCellValueRef: React.RefObject<HandleUpdateCellValue | undefined>
 ): DataTableState<T>['displayData'] {
     const newRows: DataTableState<T>['displayData'] = []
 

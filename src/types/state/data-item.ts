@@ -1,6 +1,5 @@
-import type { ReactNode } from 'react'
 
 export interface DataItemState {
-    data: ReactNode[]
+    data: React.ReactNode[]
     index: number
 }

@@ -11,7 +11,7 @@ import getDisplayData from '@src/functions/get-new-state-on-data-change/get-disp
 import useDataTableContext from '@src/hooks/use-data-table-context'
 // locals
 import type { FilterUpdateType } from '@src/types/filter-update'
-import { type ReactNode, useState } from 'react'
+import { useState } from 'react'
 // materials
 import ToolbarDataFilterBoxFilters from './components/filter-inputs'
 
@@ -34,7 +34,7 @@ export default function ToolbarDataFilterBox<T>({
     filterUpdate: FilterUpdateType<T>
 
     handleClose: () => void
-}): ReactNode {
+}): React.ReactNode {
     const { onAction, options, state, textLabels, updateCellValueRef } =
         useDataTableContext()
 

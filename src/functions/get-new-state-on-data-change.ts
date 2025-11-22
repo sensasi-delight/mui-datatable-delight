@@ -10,7 +10,7 @@ import type {
 import type { DataTableState } from '@src/types/state'
 import type { DataItemState } from '@src/types/state/data-item'
 import type { Primitive } from '@src/types/values/primitive'
-import { isValidElement, type RefObject } from 'react'
+import { isValidElement } from 'react'
 import buildColumns from './build-columns'
 import { getCollatorComparator } from './get-collator-comparator'
 import getDisplayData from './get-new-state-on-data-change/get-display-data'
@@ -47,7 +47,7 @@ export default function getNewStateOnDataChange<T>(
     dataUpdated: boolean,
     options: DataTableOptions<T>,
     state: DataTableState<T>,
-    updateCellValueRef: RefObject<HandleUpdateCellValue | undefined>
+    updateCellValueRef: React.RefObject<HandleUpdateCellValue | undefined>
 ): DataTableState<T> {
     const { columns, filterData, filterList, columnOrder } = buildColumns<T>(
         props.columns,

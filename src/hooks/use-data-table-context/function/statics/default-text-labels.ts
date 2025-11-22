@@ -1,4 +1,3 @@
-import type { ReactNode } from 'react'
 
 /*
  * Default text labels.
@@ -40,7 +39,7 @@ export const DEFAULT_TEXT_LABELS: TextLabelsType = {
 
 export interface TextLabelsType {
     body: {
-        noMatch: string | ReactNode
+        noMatch: string | React.ReactNode
         toolTip: string
     }
     filter: {

@@ -3,7 +3,6 @@ import type { DataTableOptions } from '@src/types/options'
 import type { DataTableState } from '@src/types/state'
 import type { DisplayDataState } from '@src/types/state/display-data'
 import type { FilterList } from '@src/types/state/filter-list'
-import type { ReactNode, RefObject } from 'react'
 import hasSearchText from './has-search-text'
 
 /*
@@ -11,13 +10,13 @@ import hasSearchText from './has-search-text'
  */
 export default function computeDisplayRow<T>(
     columns: DataTableState<T>['columns'],
-    row: ReactNode[],
+    row: React.ReactNode[],
     rowIndex: number,
     filterList: FilterList,
     searchText: string,
     options: DataTableOptions<T>,
     state: DataTableState<T>,
-    updateCellValue: RefObject<HandleUpdateCellValue | undefined>
+    updateCellValue: React.RefObject<HandleUpdateCellValue | undefined>
 ): DisplayDataState<T>[number]['data'] | undefined {
     let isFiltered = false
     let isSearchFound = false

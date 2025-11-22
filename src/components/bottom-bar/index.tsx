@@ -5,7 +5,6 @@ import ClassName from '@src/enums/class-name'
 import TableAction from '@src/enums/table-action'
 import { getPageValue } from '@src/functions/_shared/get-page-value'
 import useDataTableContext from '@src/hooks/use-data-table-context'
-import type { ReactNode } from 'react'
 import JumpToPage from './components/jump-to-page'
 import { DataTableFooterPagination } from './components/pagination'
 
@@ -14,7 +13,7 @@ import { DataTableFooterPagination } from './components/pagination'
  *
  * @category  Component
  */
-export default function BottomBar(): ReactNode {
+export default function BottomBar(): React.ReactNode {
     const { options, state, textLabels, onAction } = useDataTableContext()
     const { customFooter, pagination = true, jumpToPage } = options
 

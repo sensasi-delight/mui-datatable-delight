@@ -10,7 +10,6 @@ import getNewStateOnDataChange from '@src/functions/get-new-state-on-data-change
 // globals
 import type { SelectRowUpdateType } from '@src/types/select-row-update'
 // vendors
-import type { ReactNode } from 'react'
 // enums
 import ClassName from '../enums/class-name'
 import TableAction from '../enums/table-action'
@@ -31,7 +30,7 @@ import type { DataTableOptions } from '../types/options'
  */
 export default function SelectedRowsToolbar({
     selectRowUpdate
-}: TableToolbarSelectProps): ReactNode {
+}: TableToolbarSelectProps): React.ReactNode {
     const {
         components,
         onAction,

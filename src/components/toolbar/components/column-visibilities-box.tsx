@@ -11,7 +11,6 @@ import TableAction from '@src/enums/table-action'
 // globals
 import useDataTableContext from '@src/hooks/use-data-table-context'
 // vendors
-import type { ReactNode } from 'react'
 
 /**
  * @import Toolbar from ".."
@@ -23,7 +22,7 @@ import type { ReactNode } from 'react'
  *
  * @category  Component
  */
-export default function ColumnVisibilitiesBox(): ReactNode {
+export default function ColumnVisibilitiesBox(): React.ReactNode {
     const { components, onAction, options, state, textLabels } =
         useDataTableContext()
 

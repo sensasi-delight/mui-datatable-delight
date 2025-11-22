@@ -11,7 +11,6 @@ import type { DataTableState } from '@src/types/state'
 import type { ColumnState } from '@src/types/state/column'
 import type { DataItemState } from '@src/types/state/data-item'
 import type { DisplayDataState } from '@src/types/state/display-data'
-import type { ReactElement } from 'react'
 // materials
 import { ICON_BUTTON_DEFAULT_SX } from '../statics/icon-button-default-sx'
 import { createCsvDownload } from './functions/create-csv-download'
@@ -19,7 +18,7 @@ import { createCsvDownload } from './functions/create-csv-download'
 /**
  * A component that renders a button for downloading the data as a CSV file.
  */
-export function ToolbarDownloadButton(): ReactElement {
+export function ToolbarDownloadButton(): React.ReactElement {
     const {
         icons,
         options,

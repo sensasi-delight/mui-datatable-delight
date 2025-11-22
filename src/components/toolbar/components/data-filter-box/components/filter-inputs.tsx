@@ -23,7 +23,6 @@ import type { DataTableState } from '@src/types/state'
 import type { ColumnState } from '@src/types/state/column'
 import type { Primitive } from '@src/types/values/primitive'
 // vendors
-import type { ReactElement, ReactNode } from 'react'
 
 /**
  * A component that renders a list of filters in a form.
@@ -36,7 +35,7 @@ export default function ToolbarDataFilterBoxFilters<T>({
 }: {
     filterUpdate: FilterUpdateType<T>
     innerFilterList: string[][]
-}): ReactElement {
+}): React.ReactElement {
     const { textLabels, options, state } = useDataTableContext<T>()
 
     const renderedColumns = state.columns.map((column, index) => {
@@ -278,7 +277,7 @@ function DataTableToolbarFilterMultiselect<T>({
     const { components } = useDataTableContext()
 
     const renderItem =
-        column.filterOptions?.renderValue ?? (v => v as ReactNode)
+        column.filterOptions?.renderValue ?? (v => v as React.ReactNode)
 
     const width = column.filterOptions?.fullWidth ? 12 : 6
 

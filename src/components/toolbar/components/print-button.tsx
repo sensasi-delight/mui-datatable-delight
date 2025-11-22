@@ -5,7 +5,6 @@ import IconButton from '@mui/material/IconButton'
 import Tooltip from '@mui/material/Tooltip'
 import ComponentClassName from '@src/enums/class-name'
 import useDataTableContext from '@src/hooks/use-data-table-context'
-import type { ReactElement } from 'react'
 import { useReactToPrint } from 'react-to-print'
 // globals
 import { ICON_BUTTON_DEFAULT_SX } from './statics/icon-button-default-sx'
@@ -18,7 +17,7 @@ import { ICON_BUTTON_DEFAULT_SX } from './statics/icon-button-default-sx'
  *
  * @category  Component
  */
-export function ToolbarPrintButton(): ReactElement {
+export function ToolbarPrintButton(): React.ReactElement {
     const {
         icons,
         options,

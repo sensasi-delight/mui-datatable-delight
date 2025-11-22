@@ -13,7 +13,7 @@ import TableAction from '@src/enums/table-action'
 import getDisplayData from '@src/functions/get-new-state-on-data-change/get-display-data'
 import useDataTableContext from '@src/hooks/use-data-table-context'
 // vendors
-import { type ReactElement, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 
 /**
  * A component to render a search bar in the DataTable toolbar.
@@ -24,7 +24,7 @@ export function DataTableToolbarSearch({
     onHide
 }: {
     onHide: () => void
-}): ReactElement {
+}): React.ReactElement {
     const { onAction, options, state, textLabels, updateCellValueRef } =
         useDataTableContext()
 
