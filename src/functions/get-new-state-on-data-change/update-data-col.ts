@@ -48,7 +48,7 @@ export default function updateDataCol<T>(
     let filterValue = prevState.data?.[row]?.data[index]
 
     if (typeof funcResult === 'object' && funcResult && 'props' in funcResult) {
-        filterValue = funcResult.props.value
+        filterValue = (funcResult as any).props.value
     }
 
     const prevFilterIndex = filterData[index]?.indexOf(filterValue as Primitive)
