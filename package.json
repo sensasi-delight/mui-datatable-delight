@@ -8,8 +8,6 @@
         "@emotion/styled": "^11.14.1",
         "@mui/icons-material": "^7.3.6",
         "@mui/material": "^7.3.6",
-        "react": "^19.2.1",
-        "react-dom": "^19.2.1",
         "react-fast-compare": "^3.2.2",
         "react-to-print": "^3.2.0"
     },
@@ -23,7 +21,7 @@
         "@mdx-js/react": "^3.1.1",
         "@mdx-js/rollup": "^3.1.1",
         "@mui/material-nextjs": "^7.3.6",
-        "@next/mdx": "^16.0.7",
+        "@next/mdx": "^16.0.10",
         "@rollup/plugin-babel": "^6.1.0",
         "@rollup/plugin-commonjs": "^28.0.9",
         "@rollup/plugin-node-resolve": "^16.0.3",
@@ -31,17 +29,19 @@
         "@testing-library/dom": "^10.4.1",
         "@testing-library/react": "^16.3.0",
         "@types/mdx": "^2.0.13",
-        "@types/node": "^22.19.1",
+        "@types/node": "^22.19.2",
         "@types/prismjs": "^1.26.5",
         "@types/react": "^19.2.7",
         "@vitejs/plugin-react-swc": "^3.11.0",
         "@vitest/coverage-v8": "^3.2.4",
         "babel-plugin-react-compiler": "^1.0.0",
         "jsdom": "^26.1.0",
-        "knip": "^5.71.0",
+        "knip": "^5.73.3",
         "mermaid": "^11.12.2",
-        "next": "^16.0.7",
+        "next": "^16.0.10",
         "prismjs": "^1.30.0",
+        "react": "^19.2.3",
+        "react-dom": "^19.2.3",
         "rollup": "^4.53.3",
         "rollup-plugin-delete": "^2.2.0",
         "rollup-plugin-dts": "^6.3.0",
@@ -58,6 +58,10 @@
     "main": "./dist/cjs/index.js",
     "module": "./dist/esm/index.js",
     "name": "mui-datatable-delight",
+    "peerDependencies": {
+        "react": "^19.2.3",
+        "react-dom": "^19.2.3"
+    },
     "repository": {
         "type": "git",
         "url": "git+https://github.com/sensasi-delight/mui-datatable-delight.git"
@@ -74,5 +78,5 @@
         "test:watch": "vitest watch --silent=false"
     },
     "types": "./dist/types.d.ts",
-    "version": "2.0.0-experimental.20"
+    "version": "2.0.0-experimental.21"
 }
