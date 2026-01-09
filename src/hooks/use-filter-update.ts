@@ -3,6 +3,7 @@ import { updateFilterByType } from '@src/functions/update-filter-by-type'
 import useDataTableContext from '@src/hooks/use-data-table-context'
 import type { FilterUpdateType } from '@src/types/filter-update'
 import getDisplayData from '../functions/get-new-state-on-data-change/get-display-data'
+import type { DataTableState } from '../types/state'
 
 export function useFilterUpdate<T>(): FilterUpdateType<T> {
     const { onAction, options, state, updateCellValueRef } =
@@ -16,19 +17,17 @@ export function useFilterUpdate<T>(): FilterUpdateType<T> {
         customUpdate,
         next
     ) => {
-        const prevState = state
-
-        const newFilterList = updateFilterByType(
-            prevState.filterList,
-            index,
-            value,
-            type,
-            customUpdate
-        )
+        const prevState = JSON.parse(JSON.stringify(state)) as DataTableState<T>
 
         const newState = {
             ...prevState,
-            filterList: newFilterList,
+            filterList: updateFilterByType(
+                prevState.filterList,
+                index,
+                value,
+                type,
+                customUpdate
+            ),
             page: 0
         }
 
@@ -37,7 +36,7 @@ export function useFilterUpdate<T>(): FilterUpdateType<T> {
             : getDisplayData(
                   prevState.columns,
                   prevState.data,
-                  prevState.filterList,
+                  newState.filterList,
                   prevState.searchText,
                   newState,
                   options,

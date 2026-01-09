@@ -240,11 +240,13 @@ export interface ColumnDefinitionOptions<T> {
      *
      * Use 'custom' is you are supplying your own rendering via filterOptions.
      *
+     * `chip` is only for removing filters.
+     *
      * @default 'dropdown'
      *
      * @see  {@link FilterTypeType}
      */
-    filterType?: FilterTypeType
+    filterType?: Exclude<FilterTypeType, 'chip'>
 
     /**
      * Filter value list.

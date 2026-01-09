@@ -31,10 +31,12 @@ import type { Primitive } from '@src/types/values/primitive'
  */
 export default function ToolbarDataFilterBoxFilters<T>({
     filterUpdate,
-    innerFilterList: filterList
+    innerFilterList: filterList,
+    setInnerFilterList
 }: {
     filterUpdate: FilterUpdateType<T>
     innerFilterList: string[][]
+    setInnerFilterList: React.Dispatch<React.SetStateAction<string[][]>>
 }): React.ReactElement {
     const { textLabels, options, state } = useDataTableContext<T>()
 
@@ -50,6 +52,14 @@ export default function ToolbarDataFilterBoxFilters<T>({
                     filterData={state.filterData}
                     filterList={filterList}
                     handleCheckboxChange={value => {
+                        setInnerFilterList(prev => {
+                            prev[index] = Array.isArray(value)
+                                ? value
+                                : [value as string]
+
+                            return [...prev]
+                        })
+
                         if (options.confirmFilters !== true) {
                             filterUpdate?.(
                                 index,
@@ -74,6 +84,14 @@ export default function ToolbarDataFilterBoxFilters<T>({
                     index={index}
                     key={column.name}
                     onSelectChange={event => {
+                        setInnerFilterList(prev => {
+                            prev[index] = Array.isArray(event.target.value)
+                                ? event.target.value
+                                : [event.target.value]
+
+                            return [...prev]
+                        })
+
                         if (options.confirmFilters !== true) {
                             filterUpdate?.(
                                 index,
@@ -95,6 +113,12 @@ export default function ToolbarDataFilterBoxFilters<T>({
                     index={index}
                     key={column.name}
                     onChange={event => {
+                        setInnerFilterList(prev => {
+                            prev[index] = [event.target.value]
+
+                            return [...prev]
+                        })
+
                         if (options.confirmFilters !== true) {
                             filterUpdate?.(
                                 index,
@@ -115,6 +139,19 @@ export default function ToolbarDataFilterBoxFilters<T>({
                     filterData={state.filterData}
                     filterList={filterList}
                     handleCustomChange={(value, index, column) => {
+                        const values =
+                            value === textLabels.filter.all
+                                ? []
+                                : Array.isArray(value)
+                                  ? value
+                                  : [value]
+
+                        setInnerFilterList(prev => {
+                            prev[index] = values
+
+                            return [...prev]
+                        })
+
                         if (options.confirmFilters !== true) {
                             filterUpdate?.(
                                 index,
@@ -138,15 +175,21 @@ export default function ToolbarDataFilterBoxFilters<T>({
                 index={index}
                 key={column.name}
                 onChange={event => {
-                    const value =
+                    const values =
                         event.target.value === textLabels.filter.all
                             ? []
                             : [event.target.value]
 
+                    setInnerFilterList(prev => {
+                        prev[index] = values
+
+                        return [...prev]
+                    })
+
                     if (options.confirmFilters !== true) {
                         filterUpdate?.(
                             index,
-                            value,
+                            values,
                             column,
                             FilterType.DROPDOWN
                         )

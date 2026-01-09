@@ -255,7 +255,7 @@ export interface DataTableOptions<Row = DefaultRow>
      */
     onFilterChipClose?: (
         index: number,
-        removedFilter: string | string[],
+        value: string,
         filterList: DataTableState<Row>['filterList']
     ) => void
 

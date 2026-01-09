@@ -128,6 +128,7 @@ export default function ToolbarDataFilterBox<T>({
             <ToolbarDataFilterBoxFilters
                 filterUpdate={filterUpdate}
                 innerFilterList={filterList}
+                setInnerFilterList={setFilterList}
             />
 
             {options.customFilterDialogFooter?.(filterList, () => {

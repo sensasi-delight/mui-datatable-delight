@@ -4,6 +4,7 @@ import Box from '@mui/material/Box'
 import Chip, { type ChipProps } from '@mui/material/Chip'
 import ComponentClassName from '@src/enums/class-name'
 import type { FilterUpdateType } from '@src/types/filter-update'
+import { Activity } from 'react'
 // vendors
 import useDataTableContext from '../hooks/use-data-table-context'
 import type { FilterTypeType } from '../types/shared/filter-type-type'
@@ -19,7 +20,6 @@ export default function FilteredValuesList<T>({
     filterUpdate
 }: TableFilterListProps<T>): React.ReactNode {
     const { options, state } = useDataTableContext<T>()
-    const { serverSide } = options
 
     const columnNames = state.columns.map(column => ({
         filterType: column.filterType ?? options.filterType,
@@ -36,14 +36,14 @@ export default function FilteredValuesList<T>({
 
     function removeFilter<T>(
         index: number,
-        filterValue: string,
+        filterValueThatWillBeRemoved: string,
         columnName: string | undefined,
         filterType: FilterTypeType
     ) {
-        const removedFilter =
-            Array.isArray(filterValue) && filterValue.length === 0
-                ? state.filterList[index]
-                : filterValue
+        const newFilterValues =
+            state.filterList[index]?.filter(
+                filter => filter !== filterValueThatWillBeRemoved
+            ) ?? []
 
         const column = state.columns.find(column => column.name === columnName)
 
@@ -53,14 +53,14 @@ export default function FilteredValuesList<T>({
 
         filterUpdate(
             index,
-            filterValue,
+            newFilterValues,
             column,
             filterType,
             column.customFilterListOptions?.update,
             (filterList: DataTableState<T>['filterList']) => {
                 options.onFilterChipClose?.(
                     index,
-                    removedFilter ?? [],
+                    filterValueThatWillBeRemoved,
                     filterList
                 )
             }
@@ -117,9 +117,9 @@ export default function FilteredValuesList<T>({
         <Chip
             key={colIndex}
             label={filterListRenderers[index]?.(data)}
-            onDelete={() =>
+            onDelete={() => {
                 removeFilter(index, data, columnNames[index]?.name, 'chip')
-            }
+            }}
             sx={CHIP_SX}
             // itemKey={colIndex}
             // index={index}
@@ -174,18 +174,24 @@ export default function FilteredValuesList<T>({
         })
     }
 
+    const isHasFilter = state.filterList.some(filter =>
+        Array.isArray(filter) ? filter.length > 0 : !!filter
+    )
+
     return (
-        <Box
-            className={ComponentClassName.FILTERED_VALUES_LIST}
-            sx={{
-                display: 'flex',
-                flexWrap: 'wrap',
-                justifyContent: 'left',
-                margin: '8px 16px 8px 16px'
-            }}
-        >
-            {serverSide && getFilterList(state.filterList)}
-        </Box>
+        <Activity mode={isHasFilter ? 'visible' : 'hidden'}>
+            <Box
+                className={ComponentClassName.FILTERED_VALUES_LIST}
+                sx={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    justifyContent: 'left',
+                    margin: '0px 16px 16px 16px'
+                }}
+            >
+                {getFilterList(state.filterList)}
+            </Box>
+        </Activity>
     )
 }
 
