@@ -12,52 +12,51 @@ export function updateFilterByType(
         index: number
     ) => string[][]
 ) {
+    let newFilterList = JSON.parse(JSON.stringify(filterList))
+
     const filterIndexPosition: number =
-        filterList[index]?.indexOf(
+        newFilterList[index]?.indexOf(
             typeof value === 'string' ? value : (value[0] ?? '')
         ) ?? -1
 
     switch (type) {
         case 'checkbox':
             if (filterIndexPosition >= 0) {
-                filterList[index]?.splice(filterIndexPosition, 1)
+                newFilterList[index]?.splice(filterIndexPosition, 1)
             } else if (typeof value === 'string') {
-                filterList[index]?.push(value)
+                newFilterList[index]?.push(value)
             }
 
             break
 
         case 'chip':
-            if (filterIndexPosition >= 0) {
-                filterList[index]?.splice(filterIndexPosition, 1)
-            } else if (typeof value === 'string') {
-                filterList[index]?.push(value)
-            }
+            newFilterList[index] = value
+
             break
 
         case 'multiselect':
-            filterList[index] = typeof value === 'string' ? [] : value
+            newFilterList[index] = typeof value === 'string' ? [] : value
             break
 
         case 'dropdown':
-            filterList[index] = typeof value === 'string' ? [] : value
+            newFilterList[index] = typeof value === 'string' ? [] : value
             break
 
         case 'custom':
             if (customUpdate) {
-                filterList = customUpdate(
-                    filterList,
+                newFilterList = customUpdate(
+                    newFilterList,
                     filterIndexPosition,
                     index
                 )
             } else {
-                filterList[index] = typeof value === 'string' ? [] : value
+                newFilterList[index] = typeof value === 'string' ? [] : value
             }
             break
 
         default:
-            filterList[index] = typeof value === 'string' ? [value] : value
+            newFilterList[index] = typeof value === 'string' ? [value] : value
     }
 
-    return filterList
+    return newFilterList
 }
