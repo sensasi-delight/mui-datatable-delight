@@ -181,7 +181,7 @@ export default function FilteredValuesList<T>({
                 display: 'flex',
                 flexWrap: 'wrap',
                 justifyContent: 'left',
-                margin: '0px 16px 0px 16px'
+                margin: '8px 16px 8px 16px'
             }}
         >
             {serverSide && getFilterList(state.filterList)}
