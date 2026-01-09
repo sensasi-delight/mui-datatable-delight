@@ -58,4 +58,6 @@ export function updateFilterByType(
         default:
             filterList[index] = typeof value === 'string' ? [value] : value
     }
+
+    return filterList
 }

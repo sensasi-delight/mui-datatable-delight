@@ -18,7 +18,7 @@ export function useFilterUpdate<T>(): FilterUpdateType<T> {
     ) => {
         const prevState = state
 
-        updateFilterByType(
+        const newFilterList = updateFilterByType(
             prevState.filterList,
             index,
             value,
@@ -28,6 +28,7 @@ export function useFilterUpdate<T>(): FilterUpdateType<T> {
 
         const newState = {
             ...prevState,
+            filterList: newFilterList,
             page: 0
         }
 
